@@ -47,6 +47,95 @@
   - 3ª evolução (nível 8 do 2º grau): Cofre-Fortaleza (contra-ataque), Baú Espinhoso (espinhos),
     Grimório Vivo (eco grátis), Relicário Estelar (regenera PM).
 
+  ESTRUTURA: TEMPORADA 1 DE UMA TRILOGIA (meta: 10-15 h de jogo no total)
+  Esta temporada se passa inteira dentro da Masmorra de Velhágua. Fecha o arco do Catálogo e deixa
+  um gancho forte para a Temporada 2. Duração-alvo por capítulo, sem enchimento: história principal
+  ~1h15-1h45 + 20-30 min de conteúdo opcional que vale a pena (missões paralelas, chefes secretos,
+  baús escondidos, Fragmentos de Âmbar, completar o Bestiário da Ofélia).
+    1. Tente não ser aberto ............ Andar 1 ................ ~45 min (feito)
+    2. Herói Número 30 ................. Andar 2 ................ ~1h20 (feito)
+    3. Quem Escreve o Catálogo ......... Andar 3, Fortaleza dos Invocados; sacrifício da Brida; 4º grau
+    4. A Primeira Viagem ............... Arquivo Profundo (abaixo do Andar 1); passado da Ofélia
+    5. O Motorista ..................... Linha de frente da guerra; alma nº 0; Tiago dividido
+    6. Almas do 31 ..................... Reencontrar outras almas do ônibus espalhadas pela masmorra
+                                         (cada uma vira aliado ou inimigo conforme as escolhas)
+    7. O Selado ........................ O que a masmorra prende; 5º grau; decisões sem volta
+    8. A Tampa se Fecha (final) ........ Chefe final: o próprio Catálogo. Escolha final.
+  Total estimado: ~11 h de história + 2-3 h opcionais = 13-14 h.
+  CONTEÚDO OPCIONAL RECORRENTE (a partir do Cap. 3): 2-3 missões paralelas por capítulo ligadas às
+  almas do ônibus; 1 chefe secreto a cada 2 capítulos; Bestiário da Ofélia (avaliar todo monstro dá
+  recompensas); arena de desafio na biblioteca; runas raras escondidas.
+  FINAL DA TEMPORADA 1: o arco do Catálogo se resolve, mas a escolha final abre a tampa da masmorra
+  para a superfície. Algo do que estava selado sobe junto. Última cena: o protagonista vê o céu
+  pela primeira vez desde o ônibus. "FIM DA TEMPORADA 1".
+  TRILOGIA (títulos provisórios):
+    T1 "Renasci como Baú" .... a masmorra; tema: identidade.
+    T2 ...................... a superfície e o Reino de Auren; política, heróis contra monstros, o
+                               selado à solta; Tiago e o motorista com papéis maiores; tema: pertencimento.
+    T3 ...................... o caminho de volta para a Terra (ou não); quem chamou o ônibus 31 e por quê;
+                               tema: luto e despedida. As escolhas da T1 e da T2 importam (save herdado).
+  O save da T1 deve guardar as escolhas-chave em G.flags para serem herdadas pela T2.
+
+  ÁRVORE DE EVOLUÇÃO FUTURA (cada grau reinicia o nível; 4º grau por volta do nv 8 do 3º grau, Cap. 3-4)
+  - Cofre-Fortaleza -> ARCA BASTIÃO (puxa para si os golpes contra a Lume; contra-ataque em área)
+                    -> COFRE-ABISMO (engole inimigos com menos de 15% de PV; cura ao engolir)
+  - Baú Espinhoso   -> FERRÃO-RELICÁRIO (mordidas causam sangramento acumulativo)
+                    -> BAÚ CARNICEIRO (mordidas roubam vida; fica mais forte com PV baixo)
+  - Grimório Vivo   -> BIBLIOTECA AMBULANTE (feitiços inimigos ENGOLIDOS viram runas aprendidas:
+                       Tinta, Sombra, Vento... é aqui que o jogador ganha as magias dos chefes)
+                    -> GRIMÓRIO PROIBIDO (feitiços com 2 modificadores; custam PV além de PM)
+  - Relicário Estelar -> RELICÁRIO ECLIPSE (runa Sombra; feitiços mais fortes no escuro)
+                      -> CONSTELAÇÃO VIVA (invoca estrelas que atacam sozinhas por 3 turnos)
+  - 5º grau (final, Cap. 6+): forma única definida pelas ESCOLHAS da história, não por atributos:
+    ARCA DA ORIGEM (aceitar ser o novo Catálogo) ou MÍMICO VAZIO (abrir mão do poder e das memórias).
+  - PREÇO DA EVOLUÇÃO (a partir do Cap. 3): cada evolução apaga uma memória da Terra do protagonista.
+    Mostrar com sutileza: o sabor do pastel some, depois o rosto de alguém, depois o próprio nome antigo.
+    As canções da Lume guardam essas memórias; perder a Lume teria um custo real.
+
+  TÉCNICAS EXCLUSIVAS POR LINHA EVOLUTIVA (implementar a partir do Cap. 3)
+  O caminho escolhido muda O QUE o jogador faz em batalha, não só os números.
+  - Interface: o botão MORDER vira um submenu (Mordida + técnicas aprendidas). Magias continuam em MAGIA.
+  - Linha de FERRO usa RECARGA (turnos de espera), sem gastar PM. Linha ARCANA usa PM.
+  - Aprendizado: 1 técnica ao evoluir, outra no nível 3 e outra no nível 6 de cada grau. Algumas só
+    por história ou missão paralela (ex.: "Escudo da Guilda", ensinada pela Brida antes do sacrifício).
+  - Ao chegar no Cap. 3, quem já tem forma de 3º grau recebe a primeira técnica dela na hora.
+    Cofre-Fortaleza ... FECHAR TAMPA (postura: dano ×0.4 por 1 rodada; defesa perfeita contra-ataca em dobro)
+                        INVESTIDA DE COFRE (mordida que atordoa 40%)
+      Arca Bastião .... PROTEGER (recebe no lugar da Lume) · MURALHA (todo o grupo -30% de dano por 3 turnos)
+      Cofre-Abismo .... ENGOLIR INTEIRO (executa inimigo comum com menos de 20% PV e cura)
+    Baú Espinhoso ..... RAJADA DE ESPINHOS (acerta todos e causa sangramento) · MORDIDA DILACERANTE
+      Ferrão-Relicário  VENENO CONCENTRADO (sangramento vira veneno que se acumula)
+      Baú Carniceiro .. DEVORAR (rouba vida; mais forte quanto menor o seu PV)
+    Grimório Vivo ..... RELEITURA (repete o último feitiço pela metade do custo)
+                        MARCADOR DE PÁGINA (o próximo feitiço sai ×1.8)
+      Biblioteca Amb. . COPIAR (o próximo feitiço inimigo engolido vira runa permanente)
+      Grimório Proib. . PACTO (converte PV em PM; feitiços com 2 modificadores)
+    Relicário Estelar . CHUVA DE ESTRELAS (vários golpes aleatórios) · ÓRBITA (estrela que absorve 1 golpe)
+      Relicário Eclipse ESCURIDÃO (inimigos erram mais; janelas de desvio maiores por 3 turnos)
+      Constelação Viva  INVOCAR ESTRELA (aliado que ataca sozinho por 3 turnos)
+  - Técnica comum a todos, liberada no Cap. 3: IMITAR MOBÍLIA EM BATALHA (vira baú: inimigos comuns
+    perdem o alvo por 1 turno; não funciona com chefes, que "já sabem").
+  - Chefes do Cap. 3 em diante devem ter fraquezas que premiam técnicas diferentes, para cada linha
+    ter seu momento de brilhar.
+
+  ARCO DE TOM (a história fica mais profunda e séria a cada capítulo)
+  - Cap. 1-2: humor leve, mistério, "isso é um isekai". Ninguém morre de verdade.
+  - Cap. 3 "Quem Escreve o Catálogo": a guerra deixa de ser abstrata. Heróis recrutados à força;
+    um personagem querido se sacrifica (candidata: Brida, protegendo os aprendizes). Descoberta: "ser
+    arquivado" pelo Catálogo significa ter a alma DIGERIDA pela masmorra, e é isso que a mantém viva.
+  - Cap. 4 "A Primeira Viagem": Ofélia foi a alma nº 1 de uma viagem séculos atrás (uma carruagem).
+    Ela escolheu esquecer quem era para não enlouquecer. A bibliotecária sarcástica é uma máscara.
+  - Cap. 5 "O Motorista": o motorista do ônibus 31 (alma nº 0) é quem recruta os heróis no Andar 3.
+    Ele carrega a culpa do acidente e quer destruir a masmorra para "devolver" todos para casa, mas
+    destruí-la libertaria o que ela mantém selado embaixo. Não é vilão: é luto mal resolvido.
+  - Cap. 6+: escolha final. Não existe lado certo: monstros e heróis são vítimas do mesmo ônibus.
+  - TEMAS: identidade (o que sobra de você quando muda de corpo e de memória), luto (todos morreram;
+    há famílias na Terra que nunca vão saber), escolha (proteger ou destruir), amizade como âncora.
+  - REGRAS DE ESCRITA: o humor continua, mas como alívio, cada vez mais raro nos momentos graves.
+    Cenas sérias têm texto mais lento, pausas (|) e silêncio musical. Nada de violência gráfica. As
+    escolhas do jogador têm consequência visível (quem sobrevive, que forma final fica disponível).
+    Plantar pistas cedo e pagar depois (o Catálogo "nervoso", a contagem da Ofélia, a música da Lume).
+
   GANCHOS PARA O CAP. 3 ("Quem Escreve o Catálogo"): subir ao Andar 3; a pessoa que recruta heróis
   (talvez o MOTORISTA do ônibus, alma nº 1?); revelar pistas de que Ofélia veio de uma "viagem" antiga;
   novo aliado monstro do ônibus; runas Sombra/Vento; 4ª evolução por volta do nível 10 do 3º grau.
@@ -55,6 +144,18 @@
   3 goles (45% PV + 30% PM cada); Fragmentos de Âmbar em baús escondidos dão +1 gole (Poço, Acampamento,
   Teatro). Subir de nível cura só 25%. Evoluir cura tudo. Perder volta à última Lanterna com tudo cheio.
   Dano recebido = ATQ x poder x 60/(60+DEF) (defesa proporcional, não subtrai valor fixo).
+
+  COMBATE v2 (combat.js): cada golpe inimigo tem um TIPO de defesa:
+  anel (A no círculo) · desvio (seta certa no fim da trajetória) · sequência (repetir setas) ·
+  agarrão (apertar A rápido; alguns prendem e roubam o turno) · feitiço (A no anel para ENGOLIR e ganhar PM).
+  Inimigos também se fortalecem (ATQ↑), se protegem (CASCA, Faísca quebra), somem (SOME, magia acerta),
+  curam aliados e causam VENENO, QUEIMADURA, SILÊNCIO ou CEGUEIRA. Frasco e Véu de Seiva curam status.
+  Escada de complexidade: Galeria = só anel + 1 habilidade simples; Poço = estreia desvio, agarrão e o
+  1º feitiço inimigo; Cap. 2 = sequências, carapaça, silêncio, combos com aliado; Veteranos = sequências
+  rápidas e flechas triplas. Chefes misturam tudo e usam feitiços feitos de RUNAS do jogador
+  (Véu de Seiva, Onda de Geada, Corrente de Tinta, Dardo de Faísca Selado).
+  Dificuldade: DESAFIO (padrão: ATQ ×1.35, PV ×1.3, chefes ×1.15, golpes preparados, fúria, fintas)
+  ou HISTÓRIA (valores originais), trocável no MENU.
 
   CURVA DE DIFICULDADE (testada com piloto automático, defesa certa em 50-60% das vezes):
   áreas comuns custam 5-40% da vida por luta; mini-chefe deixa o jogador com 30-80%;

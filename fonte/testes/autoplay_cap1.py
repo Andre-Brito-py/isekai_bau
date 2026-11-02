@@ -6,7 +6,7 @@ SPECIES=sys.argv[2] if len(sys.argv)>2 else 'ferro'
 EVO=1 if SPECIES=='arcano' else 0
 AUTO = """
 window.EVOIDX=__EVO__; window.AUTOP = {act:0, on:true, skill:%s, log:[]};
-setInterval(()=>{ if(!AUTOP.on) return; release('a'); if(V.scene==='battle') AUTOP.minhp=Math.min(AUTOP.minhp??999, G.hp);
+setInterval(()=>{ if(!AUTOP.on) return; release('a'); release('b'); ['up','down','left','right'].forEach(release); if(V.scene==='battle') AUTOP.minhp=Math.min(AUTOP.minhp??999, G.hp);
   const ov=!document.getElementById('ov').hidden;
   if(ov){ const i=document.querySelector('#ti'); if(i){ i.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter'})); } return; }
   const top=UI.top();
@@ -23,6 +23,9 @@ setInterval(()=>{ if(!AUTOP.on) return; release('a'); if(V.scene==='battle') AUT
       else BT.menuIdx = (G.spells.length && G.mp>=6 && AUTOP.act%%3!==2)?1:0; AUTOP.act++; press('a'); }
     else if(m==='target'){ const hi=BT.en.findIndex(e=>e.alive&&e.id==='hound'); if(hi>=0) BT.tgt=hi; press('a'); }
     else if(m==='timing' && Math.abs(BT.tm.x-120)<14) press('a');
+    else if(m==='dodge' && BT.dg.state===0){ const g=BT.dg, p=g.t/g.T; if(g.dec===undefined) g.dec=Math.random()<AUTOP.skill+0.1; if(g.dec && p>0.8) press(g.dir); else if(!g.dec && p>0.58 && Math.random()<0.5) press(g.dir==='up'?'down':'up'); }
+    else if(m==='seq' && BT.sq.state===0){ const q=BT.sq; q.cd=(q.cd||0)+1; if(q.cd>=12){ q.cd=0; const k=q.keys[q.i]; press(Math.random()<AUTOP.skill+0.25 ? k : (k==='up'?'down':'up')); } }
+    else if(m==='mash' && BT.ms.state===0){ if(Math.random()<AUTOP.skill*0.33) press('a'); }
     else if(m==='guard' && BT.ring.state===0){ if(BT.ring.dec===undefined) BT.ring.dec=Math.random()<AUTOP.skill; if(BT.ring.dec && BT.ring.r<=12 && BT.ring.r>=9) press('a'); }
   }
 }, 16);
@@ -54,7 +57,7 @@ async def main():
         await pg.evaluate(AUTO)
         await pg.evaluate(SEQ)
         shots={'mercado':0,'acampamento':0,'teatro':0,'ponte':0}
-        for i in range(2400):
+        for i in range(9000):
             d = await pg.evaluate("[DONE, WD.id, V.scene, RUNLOG.length]")
             if d[0]: break
             if d[2]=='world' and d[1] in shots and shots[d[1]]<1 and not await pg.evaluate("UI.stack.length"):

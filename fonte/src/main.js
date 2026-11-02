@@ -15,10 +15,15 @@ let G = newState();
 function newState() {
   return {
     name: 'Davi', species: 'caixote', lv: 1, xp: 0, hp: 30, mp: 12, st: { mhp: 30, mmp: 12, atk: 6, def: 2, mag: 4 },
-    runes: [], spells: [], items: {}, flask: { n: 3, max: 3 }, flags: {}, gone: {}, map: 'despertar', x: 7, y: 6, dir: 'down', time: 0, battles: 0
+    runes: [], spells: [], items: {}, diff: 'desafio', flask: { n: 3, max: 3 }, flags: {}, gone: {}, map: 'despertar', x: 7, y: 6, dir: 'down', time: 0, battles: 0
   };
 }
 const spec = () => SPECIES[G.species];
+const DIFF = {
+  desafio: { name: 'Desafio', atk: 1.25, hp: 1.25, boss: 1.15, ring: 1.12, perfect: [8.8, 11.6], good: [6.8, 13.6], flask: 0.35, flee: 0.5, bite: 3.6, tricks: true },
+  historia: { name: 'História', atk: 1, hp: 1, boss: 1, ring: 1, perfect: [8, 12.5], good: [6, 15], flask: 0.45, flee: 0.7, bite: 3.2, tricks: false }
+};
+const DF = () => DIFF[G.diff] || DIFF.desafio;
 
 // ---------- tela ----------
 function resize() {
@@ -711,9 +716,9 @@ function fmtTime(t) { t = Math.floor(t); const h = Math.floor(t / 3600), m = Mat
 async function pauseMenu() {
   sfx('select'); let idx = 0;
   while (true) {
-    const r = await list({ title: G.name, x: 8, y: 8, w: 98, idx, items: [{ label: 'Grimório' }, { label: 'Runas' }, { label: 'Itens' }, { label: 'Status' }, { label: 'Backup' }, { label: 'Fechar' }], extra: miniStatus });
-    if (r < 0 || r === 5) return; idx = r;
-    if (r === 0) await grimoire(); else if (r === 1) await runesMenu(); else if (r === 2) await itemsMenu(); else if (r === 3) await statusPanel(); else if (r === 4) await backupOverlay();
+    const r = await list({ title: G.name, x: 8, y: 8, w: 98, idx, items: [{ label: 'Grimório' }, { label: 'Runas' }, { label: 'Itens' }, { label: 'Status' }, { label: 'Dificuldade' }, { label: 'Backup' }, { label: 'Fechar' }], extra: miniStatus });
+    if (r < 0 || r === 6) return; idx = r;
+    if (r === 0) await grimoire(); else if (r === 1) await runesMenu(); else if (r === 2) await itemsMenu(); else if (r === 3) await statusPanel(); else if (r === 4) await diffMenu(); else if (r === 5) await backupOverlay();
   }
 }
 function spellCost(sp) { return Math.max(1, RUNES[sp.form].cost + (sp.mod ? RUNES[sp.mod].cost : 0) - (spec().discount || 0)); }
@@ -739,6 +744,13 @@ function suggestName(el, form, mod) {
   const fem = form === 'onda' || form === 'corrente'; const base = `${RUNES[form].name} de ${RUNES[el].name}`;
   if (mod === 'selo') return base + (fem ? ' Selada' : ' Selado');
   return mod === 'eco' ? base + ' em Eco' : mod === 'foco' ? base + (fem ? ' Focada' : ' Focado') : base;
+}
+async function diffMenu() {
+  const c = await list({ title: 'Dificuldade', x: 8, y: 8, w: 224, idx: G.diff === 'historia' ? 1 : 0, items: [{ label: 'Desafio', right: G.diff !== 'historia' ? 'atual' : '' }, { label: 'História', right: G.diff === 'historia' ? 'atual' : '' }],
+    desc: i => i === 0 ? 'Inimigos mais fortes e espertos: preparam golpes, ficam furiosos e às vezes fingem o ataque. Defesa mais justa. O frasco cura 35%.' : 'Para curtir a história. Inimigos mais fracos, defesa mais fácil e o frasco cura 45%.' });
+  if (c < 0) return;
+  G.diff = c === 0 ? 'desafio' : 'historia';
+  await say(`* Dificuldade: {y}${DF().name}{/}. Vale a partir da próxima batalha.`);
 }
 async function grimoire() {
   let idx = 0;
@@ -795,13 +807,14 @@ async function itemsMenu() {
     useItemOut(ks[r]); sfx('heal'); await say(`* Você comeu ${it.name}. ${it.hp ? 'PV' : 'PM'} recuperados.`);
   }
 }
-const FLASK_DESC = () => `Cura ${Math.round(FLASK_HP * 100)}% dos PV e ${Math.round(FLASK_MP * 100)}% dos PM. As Lanternas enchem de novo.`;
-const FLASK_HP = 0.45, FLASK_MP = 0.3;
+const FLASK_DESC = () => `Cura ${Math.round(DF().flask * 100)}% dos PV e ${Math.round(FLASK_MP * 100)}% dos PM. As Lanternas enchem de novo.`;
+const FLASK_MP = 0.3;
 function flaskItem() { return { label: 'Frasco de Âmbar', right: `${G.flask.n}/${G.flask.max}`, col: '#f2b544', disabled: !G.flask.n }; }
 function drinkFlask() {
   G.flask.n--; const h0 = G.hp, m0 = G.mp;
-  G.hp = Math.min(G.st.mhp, G.hp + Math.round(G.st.mhp * FLASK_HP)); G.mp = Math.min(G.st.mmp, G.mp + Math.round(G.st.mmp * FLASK_MP));
-  return `* Um gole de âmbar morno. +${G.hp - h0} PV, +${G.mp - m0} PM. (${G.flask.n}/${G.flask.max} goles)`;
+  G.hp = Math.min(G.st.mhp, G.hp + Math.round(G.st.mhp * DF().flask)); G.mp = Math.min(G.st.mmp, G.mp + Math.round(G.st.mmp * FLASK_MP));
+  const st = BT.on && BT.ps && (BT.ps.poison > 0 || BT.ps.burn > 0); if (BT.on && BT.ps) { BT.ps.poison = 0; BT.ps.burn = 0; }
+  return `* Um gole de âmbar morno. +${G.hp - h0} PV, +${G.mp - m0} PM.${st ? ' O veneno e a queimadura passaram.' : ''} (${G.flask.n}/${G.flask.max} goles)`;
 }
 function useItemOut(k) { const it = ITEMS[k]; G.items[k]--; if (it.hp) G.hp = Math.min(G.st.mhp, G.hp + it.hp); if (it.mp) G.mp = Math.min(G.st.mmp, G.mp + it.mp); }
 function statusPanel() {
@@ -814,7 +827,7 @@ function statusPanel() {
     `ATQ ${s.atk}   DEF ${s.def}   MAG ${s.mag}`,
     spec().passive ? `{c}${spec().tag}{/}: ${spec().desc[0]}` : spec().bite ? '{c}Mordida Férrea{/}: +25% de mordida' : spec().discount ? '{c}Boca de Runas{/}: feitiços -1 PM' : '{d}Evolui no nível 5{/}',
     `Batalhas vencidas: ${G.battles}`,
-    `Tempo de jogo: ${fmtTime(G.time)}`
+    `Tempo de jogo: ${fmtTime(G.time)} · ${DF().name}`
   ], { title: 'Status', h: 118 });
 }
 
@@ -824,7 +837,8 @@ const SIL = new Map();
 function silhouette(c, col) { const k = col; let m = SIL.get(c); if (!m) { m = {}; SIL.set(c, m); } if (m[k]) return m[k]; const s = mk(c.width, c.height), x = s.getContext('2d'); x.drawImage(c, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, s.width, s.height); return m[k] = s; }
 function mkEnemy(id, i, n) {
   const d = ENEMIES[id], xs = n === 1 ? [120] : n === 2 ? [78, 162] : [48, 120, 192];
-  return { id, d, name: d.name, hp: d.hp, mhp: d.hp, atk: d.atk, def: d.def, x: xs[i], y: d.boss ? 58 : 66, sc: d.sc || (d.boss ? 3 : n >= 3 ? 3 : 4), shake: 0, flash: 0, hpShow: 0, alive: true, alpha: 1, frozen: 0, weak: { ...d.weak }, phase: 1, charge: false, turns: 0, sp: d.sp };
+  const D = DF(), hm = D.hp * (d.boss ? D.boss : 1), hp = Math.round(d.hp * hm);
+  return { id, d, name: d.name, hp, mhp: hp, atk: Math.round(d.atk * D.atk), def: d.def, x: xs[i], y: d.boss ? 58 : 66, sc: d.sc || (d.boss ? 3 : n >= 3 ? 3 : 4), shake: 0, flash: 0, hpShow: 0, alive: true, alpha: 1, frozen: 0, weak: { ...d.weak }, phase: 1, charge: false, turns: 0, sp: d.sp };
 }
 function bWait(mode, extra) { return new Promise(r => { BT.mode = mode; Object.assign(BT, extra || {}); BT.res = v => { BT.mode = 'none'; r(v); }; }); }
 function bSay(text, o = {}) {
@@ -837,7 +851,7 @@ async function battle(group, opts = {}) {
   const prev = AU.curName; playMusic(null);
   for (let i = 0; i < 3; i++) { V.flashW = 1; await wait(4); V.flashW = 0; await wait(4); }
   await fadeOut(8);
-  Object.assign(BT, { on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 });
+  Object.assign(BT, { ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 });
   V.scene = 'battle'; playMusic(opts.music || 'battle');
   await fadeIn(10);
   const names = BT.en.map(e => e.name);
@@ -864,6 +878,7 @@ async function battle(group, opts = {}) {
       await killDead();
       if (BT.en.every(x => !x.alive)) { result = 'win'; break; }
     }
+    if (result !== 'lose' && !result) { await tickStatus(); }
     if (spec().passive === 'regen' && G.mp < G.st.mmp && result !== 'lose') { G.mp = Math.min(G.st.mmp, G.mp + 4); BT.nums.push({ x: 206, y: 184, s: '+4 PM', col: '#8fe3ff', t: 40 }); }
     if (BT.buff.atkT > 0 && --BT.buff.atkT === 0) { BT.buff.atkM = 1; await bSay('* A Fúria se apagou.', { auto: 30 }); }
     if (BT.buff.defT > 0 && --BT.buff.defT === 0) { BT.buff.defM = 1; await bSay('* A casca de gelo derreteu.', { auto: 30 }); }
@@ -885,6 +900,7 @@ async function playerTurn() {
     const c = await bWait('main');
     if (c === 0) { const t = await pickTarget(); if (t < 0) continue; await doBite(BT.en[t]); return 'acted'; }
     if (c === 1) {
+      if (BT.ps && BT.ps.silence > 0) { await bSay('* Você está silenciado! As runas não saem da sua boca.'); continue; }
       if (!G.spells.length) { await bSay('* Você ainda não tem feitiços. Crie um no {y}Grimório{/} (MENU), fora da batalha.'); continue; }
       const items = G.spells.map(s => ({ label: s.name, right: spellCost(s) + ' PM', disabled: spellCost(s) > G.mp, col: RUNES[s.el].col }));
       const i = await list({ x: 8, y: 116, w: 224, items, maxVis: 5, title: `Feitiços · PM ${G.mp}/${G.st.mmp}`, h: 74, desc: k => spellDesc(G.spells[k]), descY: 40 });
@@ -913,7 +929,7 @@ async function playerTurn() {
     }
     if (c === 4) {
       if (BT.opts.noFlee) { await bSay(WD.id === 'antessala' ? '* Não dá pra fugir. O Guarda-Musgo tapa a saída com o próprio corpo.' : '* Não dá pra fugir desta luta!'); continue; }
-      if (Math.random() < 0.7) { sfx('flee'); await bSay('* Você fechou a tampa e saiu quicando. Fuga bem-sucedida!', { auto: 40 }); return 'fled'; }
+      if (Math.random() < DF().flee) { sfx('flee'); await bSay('* Você fechou a tampa e saiu quicando. Fuga bem-sucedida!', { auto: 40 }); return 'fled'; }
       await bSay('* Você tentou fugir, mas tropeçou na própria dobradiça.', { auto: 50 }); return 'acted';
     }
   }
@@ -926,11 +942,12 @@ function pickTarget() {
 }
 const elTag = el => ({ brasa: 'o', geada: 'c', seiva: 'g', faisca: 'y' })[el];
 async function doBite(e) {
-  const t = await bWait('timing', { tm: { x: 24, v: BT.inked ? 5 : 3.2, done: false } }); BT.inked = false;
+  const t = await bWait('timing', { tm: { x: 24, v: BT.inked ? 5 : DF().bite, done: false } }); BT.inked = false;
   if (!t) { sfx('miss'); popNum(e, 'ERROU', '#bbbbbb'); await bSay('* Você mordeu o ar.', { auto: 40 }); return; }
   const crit = t >= 2;
   BT.biteFx = { e, t: 0 }; await wait(10); sfx('bite'); await wait(6); BT.biteFx = null;
-  if (e.d.evade && !crit && Math.random() < e.d.evade) { sfx('miss'); popNum(e, 'DESVIOU', '#bbbbbb'); await bSay(`* O ${e.name} desviou da mordida!`, { auto: 40 }); return; }
+  const ev = e.hide > 0 ? 0.7 : e.d.evade;
+  if (ev && !crit && Math.random() < ev) { sfx('miss'); popNum(e, 'DESVIOU', '#bbbbbb'); await bSay(`* O ${e.name} desviou da mordida!`, { auto: 40 }); return; }
   let dmg = G.st.atk * t * (spec().bite || 1) * BT.buff.atkM - e.def;
   dmg *= (e.weak.bite ?? 1); dmg = Math.max(1, Math.round(dmg * rand(0.9, 1.1)));
   hitEnemy(e, dmg, crit ? 'crit' : 'hit');
@@ -939,6 +956,7 @@ async function doBite(e) {
   await bSay(msg, { auto: 45 });
 }
 function hitEnemy(e, dmg, kind, col) {
+  if (e.shell > 0) dmg = Math.max(1, Math.round(dmg * 0.5));
   e.hp = Math.max(0, e.hp - dmg); e.shake = 16; e.flash = 8; e.hpShow = 90;
   popNum(e, String(dmg), col || (kind === 'crit' ? '#ffe066' : '#ff6b6b'));
   sfx(kind === 'crit' ? 'crit' : 'hit');
@@ -964,7 +982,8 @@ async function castSpell(sp, target) {
     else {
       let h = Math.round(healAmt(sp) * rand(0.95, 1.05)); const before = G.hp; G.hp = Math.min(G.st.mhp, G.hp + h);
       if (ec) { await wait(14); sfx('heal'); burst(120, 196, el.col, 20); G.hp = Math.min(G.st.mhp, G.hp + Math.round(h * 0.6)); }
-      await bSay(`* A seiva fecha suas rachaduras. +${G.hp - before} PV.`, { auto: 50 });
+      const hadSt = BT.ps && Object.values(BT.ps).some(v => v > 0); cureStatus();
+      await bSay(`* A seiva fecha suas rachaduras. +${G.hp - before} PV.${hadSt ? ' Os efeitos ruins sumiram.' : ''}`, { auto: 50 });
     }
     return;
   }
@@ -985,6 +1004,7 @@ async function castSpell(sp, target) {
     let drained = 0;
     targets.forEach((t, k) => {
       const wk = t.weak[sp.el] ?? 1;
+      if (sp.el === 'faisca' && t.shell > 0) { t.shell = 0; log.push(`* A Faísca racha a proteção do ${t.name}!`); }
       const dmg = Math.max(1, Math.round(spellPower(sp) * pm * mults[k] * wk * rand(0.9, 1.1)));
       hitEnemy(t, dmg, wk > 1 ? 'crit' : 'hit', RUNES[sp.el].col);
       if (sp.el === 'seiva') drained += Math.round(dmg * 0.5);
@@ -1023,74 +1043,6 @@ function spellFx(sp, targets) {
 }
 function burst(x, y, col, n) { for (let i = 0; i < n; i++) { const a = rand(0, Math.PI * 2), s = rand(0.5, 2.2); BT.parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rand(18, 34), col: Math.random() < 0.3 ? '#ffffff' : col, sz: Math.random() < 0.5 ? 2 : 1 }); } }
 function popNum(e, s, col) { BT.nums.push({ x: e.x, y: e.y - 14 * e.sc / 3, s, col, t: 50 }); }
-async function guardAndHit(e, pow, label, o = {}) {
-  const res = await bWait('guard', { ring: { r: 46, v: (o.fast ? 1.25 : rand(0.75, 1.05)) * (e.d.boss ? 1.1 : 1), state: 0, res: null } });
-  let dmg = e.atk * pow * rand(0.85, 1.15) * 60 / (60 + G.st.def);
-  let gm = res === 'perfect' ? 0.3 : res === 'good' ? 0.5 : 1; if (gm < 1 && spec().guard) gm *= spec().guard;
-  dmg = Math.max(1, Math.round(dmg * gm * BT.buff.defM));
-  G.hp = Math.max(0, G.hp - dmg);
-  if (res === 'fail') { sfx('hurt'); BT.hurt = 14; shake(10); } else sfx('guard');
-  let extra = '';
-  if (spec().passive === 'counter' && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.6)); hitEnemy(e, c, 'hit'); extra = ` {c}Contra-ataque!{/} ${c} no ${e.name}.`; }
-  if (spec().passive === 'thorns' && e.alive) { const c = Math.max(1, Math.round(dmg * 0.3)); hitEnemy(e, c, 'hit', '#ffa94d'); extra = ` Os espinhos devolvem ${c}.`; }
-  BT.nums.push({ x: 120, y: 184, s: '-' + dmg, col: res === 'fail' ? '#ff6b6b' : '#8fe3ff', t: 50 });
-  const head = res === 'perfect' ? '* {c}DEFESA PERFEITA!{/} A tampa nem tremeu.' : res === 'good' ? '* Você fechou a tampa a tempo!' : '* Ai!';
-  return { dmg, text: `${head} ${dmg} de dano.${extra}` };
-}
-async function enemyTurn(e) {
-  e.turns++;
-  if (e.dot && e.dot.t > 0) { e.dot.t--; hitEnemy(e, e.dot.d, 'hit', '#ff8fa8'); await bSay(`* O selo queima o ${e.name}: ${e.dot.d} de dano.`, { auto: 30 }); if (e.hp <= 0) return; }
-  if (e.frozen > 0) { e.frozen--; await bSay(`* O ${e.name} está congelado e não consegue se mexer.`, { auto: 40 }); return; }
-  if (e.stunned > 0) { e.stunned--; await bSay(`* O ${e.name} está atordoado, vendo estrelinhas.`, { auto: 40 }); return; }
-  if (e.d.ai) return AI[e.d.ai](e);
-  if (e.d.boss) return bossTurn(e);
-  const mv = pickOne(e.d.moves);
-  await bSay(mv.t, { auto: 18 });
-  let r = { dmg: 0, text: '' };
-  for (let h = 0; h < (mv.hits || 1); h++) { const x = await guardAndHit(e, mv.p, mv.t); r.dmg += x.dmg; r.text = x.text; if (G.hp <= 0) break; }
-  if (mv.hits > 1) r.text = `* ${mv.hits} golpes: ${r.dmg} de dano no total.`;
-  if (mv.ink) { BT.inked = true; r.text += ' Tinta nos olhos: sua próxima mordida vai ser mais difícil.'; }
-  let txt_ = r.text;
-  if (mv.mp && G.mp > 0) { const l = Math.min(G.mp, 2); G.mp -= l; txt_ += ` Os esporos roubaram ${l} PM.`; }
-  await bSay(txt_, { auto: 45 });
-}
-async function bossTurn(e) {
-  if (e.pendingPhase) {
-    e.pendingPhase = null; e.phase = 2; e.sp = 'bossStone'; shake(40); sfx('rumble');
-    burst(e.x, e.y - 10, '#4a9a4a', 40);
-    await bSay(e.lastFire ? '* O musgo do Guarda-Musgo pega fogo e vira cinza!' : '* O musgo se solta em pedaços, revelando pedra nua por baixo.', { auto: 60 });
-    await bSay('A... CASCA... É SÓ... A PRIMEIRA... PÁGINA.', { fx: 'shake', col: '#d8f0b8' });
-    e.weak = { brasa: 0.5, geada: 1.3, bite: 1.25, seiva: 1 }; e.atk += 2; e.def += 2; e.charge = false; e.turns = 0;
-    await bSay('* O Guarda-Musgo agora é só pedra. Fogo não vai adiantar muito. Mordidas, por outro lado...', { auto: 70 });
-    return;
-  }
-  if (e.charge) {
-    e.charge = false;
-    await bSay(e.phase === 1 ? '* PEDREGULHO! Os punhos descem com tudo!' : '* AVALANCHE! O teto inteiro vem junto!', { auto: 14, fx: 'shake' });
-    const r = await guardAndHit(e, e.phase === 1 ? 2.0 : 2.3, '', { fast: true });
-    await bSay(r.text, { auto: 50 }); return;
-  }
-  if (e.turns % 3 === 0) { e.charge = true; await bSay('* O Guarda-Musgo ergue os punhos acima da cabeça. Algo GRANDE vem aí! (Prepare a defesa.)', { auto: 70 }); return; }
-  if (e.phase === 1) {
-    if (Math.random() < 0.35) {
-      await bSay('* O Guarda-Musgo sacode as costas. Uma nuvem de esporos!', { auto: 18 });
-      const r = await guardAndHit(e, 0.8, ''); const l = Math.min(G.mp, 3); G.mp -= l;
-      await bSay(r.text + (l ? ` Você perdeu ${l} PM.` : ''), { auto: 50 });
-    } else {
-      await bSay('* O Guarda-Musgo dá um soco coberto de musgo!', { auto: 18 });
-      const r = await guardAndHit(e, 1, ''); await bSay(r.text, { auto: 45 });
-    }
-  } else {
-    if (Math.random() < 0.45) {
-      await bSay('* Chuva de cascalho! Duas pedras vêm na sua direção!', { auto: 18 });
-      const a = await guardAndHit(e, 0.65, ''); if (G.hp <= 0) return;
-      const b = await guardAndHit(e, 0.65, ''); await bSay(`* Total: ${a.dmg + b.dmg} de dano.`, { auto: 45 });
-    } else {
-      await bSay('* O Guarda-Musgo desce uma pancada de pedra!', { auto: 18 });
-      const r = await guardAndHit(e, 1.2, ''); await bSay(r.text, { auto: 45 });
-    }
-  }
-}
 async function victory() {
   playMusic(null); J.victory();
   let xp = 0; const drops = [];
@@ -1146,11 +1098,13 @@ function updateBattle() {
     const t = BT.tm; t.x += t.v;
     if (btnp('a')) { const d = Math.abs(t.x - 120) / 96; BT.res(d < 0.06 ? 2.0 : Math.max(0.45, 1.75 - 1.3 * d)); }
     else if (t.x > 218) BT.res(0);
-  } else if (m === 'guard') {
+  } else if (DEFMODES[m]) DEFMODES[m].update();
+  else if (m === 'guard') {
     const g = BT.ring;
     if (g.state === 0) {
-      g.r -= g.v;
-      if (btnp('a')) { if (g.r >= 8 && g.r <= 12.5) g.res = 'perfect'; else if (g.r >= 6 && g.r <= 15) g.res = 'good'; else g.res = 'fail'; g.state = 1; g.t = 14; }
+      if (g.fake && !g.hold && g.r <= g.fake) { g.hold = Math.round(rand(14, 26)); g.fake = 0; }
+      if (g.hold > 0) g.hold--; else g.r -= g.v;
+      if (btnp('a')) { const P = DF().perfect, Gd = DF().good; if (g.r >= P[0] && g.r <= P[1]) g.res = 'perfect'; else if (g.r >= Gd[0] && g.r <= Gd[1]) g.res = 'good'; else g.res = 'fail'; g.state = 1; g.t = 14; }
       else if (g.r < 4) { g.res = 'fail'; g.state = 1; g.t = 10; }
     } else if (--g.t <= 0) BT.res(g.res);
   }
@@ -1211,14 +1165,15 @@ function drawBattle() {
     bx.fillStyle = '#000'; bx.fillRect(119, 144, 2, 18);
     const tx = Math.round(BT.tm.x); bx.fillStyle = '#000'; bx.fillRect(tx - 2, 141, 5, 24); bx.fillStyle = '#ffffff'; bx.fillRect(tx - 1, 142, 3, 22);
     txt('Aperte A no centro', 120, 170, { align: 'center', col: '#8a8099' });
-  } else if (m === 'guard') {
+  } else if (DEFMODES[m]) DEFMODES[m].draw();
+  else if (m === 'guard') {
     const g = BT.ring, cx = 120, cy = 150;
     circlePx(cx, cy, 10, '#5a5070'); circlePx(cx, cy, 11, '#5a5070');
-    const col = g.state === 1 ? (g.res === 'fail' ? '#ff6b6b' : g.res === 'perfect' ? '#8fe3ff' : '#ffe066') : '#ffffff';
+    const col = g.state === 1 ? (g.res === 'fail' ? '#ff6b6b' : g.res === 'perfect' ? '#8fe3ff' : '#ffe066') : (g.col || '#ffffff');
     if (g.state === 0) { circlePx(cx, cy, g.r, col); circlePx(cx, cy, g.r - 1, col); }
     else { circlePx(cx, cy, 10, col); circlePx(cx, cy, 11, col); circlePx(cx, cy, 12, col); }
     bx.fillStyle = '#f2ecdc'; bx.fillRect(cx - 4, cy - 3, 8, 6); bx.fillStyle = '#7a4a2a'; bx.fillRect(cx - 3, cy - 2, 6, 4);
-    txt(g.state === 1 ? (g.res === 'fail' ? 'Tarde demais!' : g.res === 'perfect' ? 'PERFEITO!' : 'DEFENDEU!') : 'DEFENDA!', 120, 124, { align: 'center', col: g.state === 1 ? col : '#ffe066' });
+    txt(g.state === 1 ? (g.res === 'fail' ? 'Tarde demais!' : g.res === 'perfect' ? 'PERFEITO!' : 'DEFENDEU!') : (g.label || 'DEFENDA!'), 120, 124, { align: 'center', col: g.state === 1 ? col : '#ffe066' });
     txt('A quando o anel tocar o círculo', 120, 170, { align: 'center', col: '#8a8099' });
   }
   if (m === 'text' && BT.tw.done && !BT.auto && FRAME % 40 < 26) txt('▼', 220, 174, { col: '#8a8099' });
@@ -1238,6 +1193,8 @@ function drawBattle() {
   if (BT.buff.atkT > 0) txt('FÚRIA', 10, 178, { col: '#ffa94d' });
   if (BT.buff.defT > 0) txt('GELO', 52, 178, { col: '#8fe3ff' });
   if (BT.marked) txt('MARCADO', 90, 178, { col: '#ff6b6b' });
+  { let sx2 = 10; for (const st in (BT.ps || {})) if (BT.ps[st] > 0) { txt(ST_NAME[st], sx2, 104, { col: { poison: '#9be58a', burn: '#ffa94d', silence: '#d0a8ff' }[st] }); sx2 += ST_NAME[st].length * 6 + 6; } }
+  for (const e of BT.en) if (e.alive && (e.shell > 0 || e.hide > 0 || (e.atkBuff && e.atkBuff.t > 0))) { const fr = SP[e.sp][0]; const yy = e.y - fr.height * e.sc / 2 - 12; txt([e.shell > 0 ? 'CASCA' : '', e.hide > 0 ? 'SOME' : '', e.atkBuff && e.atkBuff.t > 0 ? 'ATQ↑' : ''].filter(Boolean).join(' '), e.x, yy, { col: '#ffe066', align: 'center', shadow: true }); }
   if (BT.netted) txt('PRESO', 150, 178, { col: '#ff6b6b' });
 }
 
@@ -1327,7 +1284,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–2', 6, 226, { col: '#5a5070' }); txt('v1.3', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–2', 6, 226, { col: '#5a5070' }); txt('v1.4', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
@@ -1438,50 +1395,4 @@ function drawPatrolVision(ox, oy) {
 }
 
 // ================= IA DOS CHEFES =================
-async function multiHit(e, n, pow, intro, o = {}) {
-  await bSay(intro, { auto: 16, fx: o.fx });
-  let tot = 0, last = '';
-  for (let i = 0; i < n; i++) { const r = await guardAndHit(e, pow, '', o); tot += r.dmg; last = r.text; if (G.hp <= 0) return; }
-  await bSay(n > 1 ? `* ${n} golpes: ${tot} de dano no total.` : last, { auto: 45 });
-}
-const AI = {
-  golem: e => bossTurn(e),
-  async octo(e) {
-    if (!e.p2 && e.hp <= e.mhp * 0.5) {
-      e.p2 = true; e.phase = 2; shake(30); sfx('rumble'); e.atk += 4;
-      await bSay('O PÚBLICO... NÃO APLAUDIU?! SEGUNDO ATO!', { fx: 'shake', col: '#ffb0b0' });
-      await bSay('* O Polvo do Camarote fica vermelho-vivo. Ele ataca mais rápido agora.', { auto: 60 }); return;
-    }
-    if (e.charge) { e.charge = false; return multiHit(e, 1, 2.1, '* GRANDE FINALE! Todos os tentáculos descem de uma vez!', { fast: true, fx: 'shake' }); }
-    if (e.turns % 4 === 0) { e.charge = true; await bSay('* O Polvo do Camarote puxa a cortina com os oito braços. Vai vir um golpe enorme! (Prepare a defesa.)', { auto: 70 }); return; }
-    const k = Math.random();
-    if (k < 0.4) return multiHit(e, e.p2 ? 4 : 3, 0.42, `* ABRAÇO DE ${e.p2 ? 'QUATRO' : 'TRÊS'} BRAÇOS! Defenda cada tentáculo!`);
-    if (k < 0.7) { await multiHit(e, 1, 0.85, '* O Polvo esguicha um jato de tinta!'); BT.inked = true; await bSay('* Tinta nos olhos! Sua próxima mordida vai ser mais difícil.', { auto: 40 }); return; }
-    return multiHit(e, 1, 1.25, '* Tentaclada em cheio!');
-  },
-  async hound(e) {
-    const brida = BT.en.find(x => x.id === 'brida' && x.alive);
-    if (brida && !BT.marked && Math.random() < 0.55) { BT.marked = true; sfx('encounter'); await bSay('* O Farejador fareja você e uiva! Você está {r}MARCADO{/}: o próximo golpe da Brida será muito mais forte.', { auto: 60 }); return; }
-    return multiHit(e, 1, Math.random() < 0.5 ? 1 : 1.2, pickOne(['* O Farejador morde sua dobradiça!', '* O Farejador avança rosnando!']));
-  },
-  async brida(e) {
-    const mk = BT.marked ? 1.6 : 1; if (BT.marked) BT.marked = false;
-    if (!e.p2 && e.hp <= e.mhp * 0.5) {
-      e.p2 = true; e.phase = 2; G.flags.bridaP2 = true;
-      const h = Math.round(e.mhp * 0.18); e.hp += h; burst(e.x, e.y, '#9be58a', 24); sfx('heal');
-      await bSay('Você é bom, baú. Mas eu sou MELHOR.', { col: '#ffd0d0' });
-      await bSay(`* A Capitã Brida bebe uma poção. +${h} PV. Ela tira a capa e fica mais rápida.`, { auto: 60 }); e.atk += 3; return;
-    }
-    if (e.charge) { e.charge = false; return multiHit(e, 1, 2.2 * mk, '* INVESTIDA DA GUILDA! A Brida atravessa a ponte com o escudo na frente!', { fast: true, fx: 'shake' }); }
-    if (e.turns % 4 === 3) { e.charge = true; await bSay('* A Capitã Brida recua e abaixa o escudo. Ela vai investir! (Prepare a defesa.)', { auto: 70 }); return; }
-    if (Math.random() < (e.p2 ? 0.3 : 0.2) && !BT.netted) {
-      await bSay('* A Brida joga uma REDE de caçador!', { auto: 16 });
-      const r = await bWait('guard', { ring: { r: 46, v: 1.15, state: 0, res: null } });
-      if (r === 'fail') { BT.netted = true; sfx('hurt'); BT.hurt = 14; await bSay('* A rede te pegou! Você vai perder o próximo turno.', { auto: 50 }); }
-      else { sfx('guard'); await bSay('* Você fechou a tampa e a rede escorregou. Ufa!', { auto: 45 }); }
-      return;
-    }
-    if (e.p2 && Math.random() < 0.4) return multiHit(e, 2, 0.65 * mk, '* Golpe de escudo e estocada, em sequência!');
-    return multiHit(e, 1, 1.1 * mk, mk > 1 ? '* A Brida mira exatamente onde o Farejador marcou!' : '* A Capitã Brida desce a espada!');
-  }
-};
+

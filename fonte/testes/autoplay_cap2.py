@@ -5,7 +5,7 @@ SKILL=float(sys.argv[1]) if len(sys.argv)>1 else 0.6
 SPECIES=sys.argv[2] if len(sys.argv)>2 else 'ferro'
 AUTO = """
 window.AUTOP = {act:0, on:true, skill:%s, log:[]};
-setInterval(()=>{ if(!AUTOP.on) return; release('a'); if(V.scene==='battle') AUTOP.minhp=Math.min(AUTOP.minhp??999, G.hp);
+setInterval(()=>{ if(!AUTOP.on) return; release('a'); release('b'); ['up','down','left','right'].forEach(release); if(V.scene==='battle') AUTOP.minhp=Math.min(AUTOP.minhp??999, G.hp);
   const ov=!document.getElementById('ov').hidden;
   if(ov){ const i=document.querySelector('#ti'); if(i){ i.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter'})); } return; }
   const top=UI.top();
@@ -22,6 +22,9 @@ setInterval(()=>{ if(!AUTOP.on) return; release('a'); if(V.scene==='battle') AUT
       else BT.menuIdx = (G.spells.length && G.mp>=6 && AUTOP.act%%3!==2)?1:0; AUTOP.act++; press('a'); }
     else if(m==='target'){ const hi=BT.en.findIndex(e=>e.alive&&e.id==='hound'); if(hi>=0) BT.tgt=hi; press('a'); }
     else if(m==='timing' && Math.abs(BT.tm.x-120)<14) press('a');
+    else if(m==='dodge' && BT.dg.state===0){ const g=BT.dg, p=g.t/g.T; if(g.dec===undefined) g.dec=Math.random()<AUTOP.skill+0.1; if(g.dec && p>0.8) press(g.dir); else if(!g.dec && p>0.58 && Math.random()<0.5) press(g.dir==='up'?'down':'up'); }
+    else if(m==='seq' && BT.sq.state===0){ const q=BT.sq; q.cd=(q.cd||0)+1; if(q.cd>=12){ q.cd=0; const k=q.keys[q.i]; press(Math.random()<AUTOP.skill+0.25 ? k : (k==='up'?'down':'up')); } }
+    else if(m==='mash' && BT.ms.state===0){ if(Math.random()<AUTOP.skill*0.33) press('a'); }
     else if(m==='guard' && BT.ring.state===0){ if(BT.ring.dec===undefined) BT.ring.dec=Math.random()<AUTOP.skill; if(BT.ring.dec && BT.ring.r<=12 && BT.ring.r>=9) press('a'); }
   }
 }, 16);
@@ -45,6 +48,7 @@ window.RUNLOG=[]; window.DONE=false; const heal = () => { while (G.hp < G.st.mhp
  DONE=true;
 })();
 """
+PRINTED=[0]
 async def main():
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path='/usr/bin/google-chrome')
@@ -59,15 +63,17 @@ async def main():
         await pg.evaluate(AUTO)
         await pg.evaluate(SEQ)
         shots={'mercado':0,'acampamento':0,'teatro':0,'ponte':0}
-        for i in range(2400):
+        for i in range(9000):
             d = await pg.evaluate("[DONE, WD.id, V.scene, RUNLOG.length]")
+            if d[3] > PRINTED[0]:
+                for l in (await pg.evaluate("RUNLOG"))[PRINTED[0]:]: print(l, flush=True)
+                PRINTED[0] = d[3]
+            if i % 600 == 599: print('...', await pg.evaluate("[WD.id, V.scene, BT.mode, UI.top()?.type||'', G.hp, BT.en.map(e=>e.name+':'+e.hp).join(',')]"), flush=True)
             if d[0]: break
             if d[2]=='world' and d[1] in shots and shots[d[1]]<1 and not await pg.evaluate("UI.stack.length"):
                 await pg.wait_for_timeout(200); await pg.screenshot(path=OUT+f'c2_{d[1]}.png'); shots[d[1]]+=1
             if d[2]=='battle' and i%120==60: await pg.screenshot(path=OUT+f'c2_battle_{i}.png')
             await pg.wait_for_timeout(100)
-        log = await pg.evaluate("RUNLOG")
-        for l in log: print(l)
         print('final', await pg.evaluate("[G.species, G.lv, G.st, G.flags.ch2done, fmtTime(G.time)]"))
         print('\n'.join(errs[:10]))
         await b.close()

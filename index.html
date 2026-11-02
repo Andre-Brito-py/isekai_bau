@@ -52,6 +52,95 @@
   - 3ª evolução (nível 8 do 2º grau): Cofre-Fortaleza (contra-ataque), Baú Espinhoso (espinhos),
     Grimório Vivo (eco grátis), Relicário Estelar (regenera PM).
 
+  ESTRUTURA: TEMPORADA 1 DE UMA TRILOGIA (meta: 10-15 h de jogo no total)
+  Esta temporada se passa inteira dentro da Masmorra de Velhágua. Fecha o arco do Catálogo e deixa
+  um gancho forte para a Temporada 2. Duração-alvo por capítulo, sem enchimento: história principal
+  ~1h15-1h45 + 20-30 min de conteúdo opcional que vale a pena (missões paralelas, chefes secretos,
+  baús escondidos, Fragmentos de Âmbar, completar o Bestiário da Ofélia).
+    1. Tente não ser aberto ............ Andar 1 ................ ~45 min (feito)
+    2. Herói Número 30 ................. Andar 2 ................ ~1h20 (feito)
+    3. Quem Escreve o Catálogo ......... Andar 3, Fortaleza dos Invocados; sacrifício da Brida; 4º grau
+    4. A Primeira Viagem ............... Arquivo Profundo (abaixo do Andar 1); passado da Ofélia
+    5. O Motorista ..................... Linha de frente da guerra; alma nº 0; Tiago dividido
+    6. Almas do 31 ..................... Reencontrar outras almas do ônibus espalhadas pela masmorra
+                                         (cada uma vira aliado ou inimigo conforme as escolhas)
+    7. O Selado ........................ O que a masmorra prende; 5º grau; decisões sem volta
+    8. A Tampa se Fecha (final) ........ Chefe final: o próprio Catálogo. Escolha final.
+  Total estimado: ~11 h de história + 2-3 h opcionais = 13-14 h.
+  CONTEÚDO OPCIONAL RECORRENTE (a partir do Cap. 3): 2-3 missões paralelas por capítulo ligadas às
+  almas do ônibus; 1 chefe secreto a cada 2 capítulos; Bestiário da Ofélia (avaliar todo monstro dá
+  recompensas); arena de desafio na biblioteca; runas raras escondidas.
+  FINAL DA TEMPORADA 1: o arco do Catálogo se resolve, mas a escolha final abre a tampa da masmorra
+  para a superfície. Algo do que estava selado sobe junto. Última cena: o protagonista vê o céu
+  pela primeira vez desde o ônibus. "FIM DA TEMPORADA 1".
+  TRILOGIA (títulos provisórios):
+    T1 "Renasci como Baú" .... a masmorra; tema: identidade.
+    T2 ...................... a superfície e o Reino de Auren; política, heróis contra monstros, o
+                               selado à solta; Tiago e o motorista com papéis maiores; tema: pertencimento.
+    T3 ...................... o caminho de volta para a Terra (ou não); quem chamou o ônibus 31 e por quê;
+                               tema: luto e despedida. As escolhas da T1 e da T2 importam (save herdado).
+  O save da T1 deve guardar as escolhas-chave em G.flags para serem herdadas pela T2.
+
+  ÁRVORE DE EVOLUÇÃO FUTURA (cada grau reinicia o nível; 4º grau por volta do nv 8 do 3º grau, Cap. 3-4)
+  - Cofre-Fortaleza -> ARCA BASTIÃO (puxa para si os golpes contra a Lume; contra-ataque em área)
+                    -> COFRE-ABISMO (engole inimigos com menos de 15% de PV; cura ao engolir)
+  - Baú Espinhoso   -> FERRÃO-RELICÁRIO (mordidas causam sangramento acumulativo)
+                    -> BAÚ CARNICEIRO (mordidas roubam vida; fica mais forte com PV baixo)
+  - Grimório Vivo   -> BIBLIOTECA AMBULANTE (feitiços inimigos ENGOLIDOS viram runas aprendidas:
+                       Tinta, Sombra, Vento... é aqui que o jogador ganha as magias dos chefes)
+                    -> GRIMÓRIO PROIBIDO (feitiços com 2 modificadores; custam PV além de PM)
+  - Relicário Estelar -> RELICÁRIO ECLIPSE (runa Sombra; feitiços mais fortes no escuro)
+                      -> CONSTELAÇÃO VIVA (invoca estrelas que atacam sozinhas por 3 turnos)
+  - 5º grau (final, Cap. 6+): forma única definida pelas ESCOLHAS da história, não por atributos:
+    ARCA DA ORIGEM (aceitar ser o novo Catálogo) ou MÍMICO VAZIO (abrir mão do poder e das memórias).
+  - PREÇO DA EVOLUÇÃO (a partir do Cap. 3): cada evolução apaga uma memória da Terra do protagonista.
+    Mostrar com sutileza: o sabor do pastel some, depois o rosto de alguém, depois o próprio nome antigo.
+    As canções da Lume guardam essas memórias; perder a Lume teria um custo real.
+
+  TÉCNICAS EXCLUSIVAS POR LINHA EVOLUTIVA (implementar a partir do Cap. 3)
+  O caminho escolhido muda O QUE o jogador faz em batalha, não só os números.
+  - Interface: o botão MORDER vira um submenu (Mordida + técnicas aprendidas). Magias continuam em MAGIA.
+  - Linha de FERRO usa RECARGA (turnos de espera), sem gastar PM. Linha ARCANA usa PM.
+  - Aprendizado: 1 técnica ao evoluir, outra no nível 3 e outra no nível 6 de cada grau. Algumas só
+    por história ou missão paralela (ex.: "Escudo da Guilda", ensinada pela Brida antes do sacrifício).
+  - Ao chegar no Cap. 3, quem já tem forma de 3º grau recebe a primeira técnica dela na hora.
+    Cofre-Fortaleza ... FECHAR TAMPA (postura: dano ×0.4 por 1 rodada; defesa perfeita contra-ataca em dobro)
+                        INVESTIDA DE COFRE (mordida que atordoa 40%)
+      Arca Bastião .... PROTEGER (recebe no lugar da Lume) · MURALHA (todo o grupo -30% de dano por 3 turnos)
+      Cofre-Abismo .... ENGOLIR INTEIRO (executa inimigo comum com menos de 20% PV e cura)
+    Baú Espinhoso ..... RAJADA DE ESPINHOS (acerta todos e causa sangramento) · MORDIDA DILACERANTE
+      Ferrão-Relicário  VENENO CONCENTRADO (sangramento vira veneno que se acumula)
+      Baú Carniceiro .. DEVORAR (rouba vida; mais forte quanto menor o seu PV)
+    Grimório Vivo ..... RELEITURA (repete o último feitiço pela metade do custo)
+                        MARCADOR DE PÁGINA (o próximo feitiço sai ×1.8)
+      Biblioteca Amb. . COPIAR (o próximo feitiço inimigo engolido vira runa permanente)
+      Grimório Proib. . PACTO (converte PV em PM; feitiços com 2 modificadores)
+    Relicário Estelar . CHUVA DE ESTRELAS (vários golpes aleatórios) · ÓRBITA (estrela que absorve 1 golpe)
+      Relicário Eclipse ESCURIDÃO (inimigos erram mais; janelas de desvio maiores por 3 turnos)
+      Constelação Viva  INVOCAR ESTRELA (aliado que ataca sozinho por 3 turnos)
+  - Técnica comum a todos, liberada no Cap. 3: IMITAR MOBÍLIA EM BATALHA (vira baú: inimigos comuns
+    perdem o alvo por 1 turno; não funciona com chefes, que "já sabem").
+  - Chefes do Cap. 3 em diante devem ter fraquezas que premiam técnicas diferentes, para cada linha
+    ter seu momento de brilhar.
+
+  ARCO DE TOM (a história fica mais profunda e séria a cada capítulo)
+  - Cap. 1-2: humor leve, mistério, "isso é um isekai". Ninguém morre de verdade.
+  - Cap. 3 "Quem Escreve o Catálogo": a guerra deixa de ser abstrata. Heróis recrutados à força;
+    um personagem querido se sacrifica (candidata: Brida, protegendo os aprendizes). Descoberta: "ser
+    arquivado" pelo Catálogo significa ter a alma DIGERIDA pela masmorra, e é isso que a mantém viva.
+  - Cap. 4 "A Primeira Viagem": Ofélia foi a alma nº 1 de uma viagem séculos atrás (uma carruagem).
+    Ela escolheu esquecer quem era para não enlouquecer. A bibliotecária sarcástica é uma máscara.
+  - Cap. 5 "O Motorista": o motorista do ônibus 31 (alma nº 0) é quem recruta os heróis no Andar 3.
+    Ele carrega a culpa do acidente e quer destruir a masmorra para "devolver" todos para casa, mas
+    destruí-la libertaria o que ela mantém selado embaixo. Não é vilão: é luto mal resolvido.
+  - Cap. 6+: escolha final. Não existe lado certo: monstros e heróis são vítimas do mesmo ônibus.
+  - TEMAS: identidade (o que sobra de você quando muda de corpo e de memória), luto (todos morreram;
+    há famílias na Terra que nunca vão saber), escolha (proteger ou destruir), amizade como âncora.
+  - REGRAS DE ESCRITA: o humor continua, mas como alívio, cada vez mais raro nos momentos graves.
+    Cenas sérias têm texto mais lento, pausas (|) e silêncio musical. Nada de violência gráfica. As
+    escolhas do jogador têm consequência visível (quem sobrevive, que forma final fica disponível).
+    Plantar pistas cedo e pagar depois (o Catálogo "nervoso", a contagem da Ofélia, a música da Lume).
+
   GANCHOS PARA O CAP. 3 ("Quem Escreve o Catálogo"): subir ao Andar 3; a pessoa que recruta heróis
   (talvez o MOTORISTA do ônibus, alma nº 1?); revelar pistas de que Ofélia veio de uma "viagem" antiga;
   novo aliado monstro do ônibus; runas Sombra/Vento; 4ª evolução por volta do nível 10 do 3º grau.
@@ -60,6 +149,18 @@
   3 goles (45% PV + 30% PM cada); Fragmentos de Âmbar em baús escondidos dão +1 gole (Poço, Acampamento,
   Teatro). Subir de nível cura só 25%. Evoluir cura tudo. Perder volta à última Lanterna com tudo cheio.
   Dano recebido = ATQ x poder x 60/(60+DEF) (defesa proporcional, não subtrai valor fixo).
+
+  COMBATE v2 (combat.js): cada golpe inimigo tem um TIPO de defesa:
+  anel (A no círculo) · desvio (seta certa no fim da trajetória) · sequência (repetir setas) ·
+  agarrão (apertar A rápido; alguns prendem e roubam o turno) · feitiço (A no anel para ENGOLIR e ganhar PM).
+  Inimigos também se fortalecem (ATQ↑), se protegem (CASCA, Faísca quebra), somem (SOME, magia acerta),
+  curam aliados e causam VENENO, QUEIMADURA, SILÊNCIO ou CEGUEIRA. Frasco e Véu de Seiva curam status.
+  Escada de complexidade: Galeria = só anel + 1 habilidade simples; Poço = estreia desvio, agarrão e o
+  1º feitiço inimigo; Cap. 2 = sequências, carapaça, silêncio, combos com aliado; Veteranos = sequências
+  rápidas e flechas triplas. Chefes misturam tudo e usam feitiços feitos de RUNAS do jogador
+  (Véu de Seiva, Onda de Geada, Corrente de Tinta, Dardo de Faísca Selado).
+  Dificuldade: DESAFIO (padrão: ATQ ×1.35, PV ×1.3, chefes ×1.15, golpes preparados, fúria, fintas)
+  ou HISTÓRIA (valores originais), trocável no MENU.
 
   CURVA DE DIFICULDADE (testada com piloto automático, defesa certa em 50-60% das vezes):
   áreas comuns custam 5-40% da vida por luta; mini-chefe deixa o jogador com 30-80%;
@@ -1206,10 +1307,15 @@ let G = newState();
 function newState() {
   return {
     name: 'Davi', species: 'caixote', lv: 1, xp: 0, hp: 30, mp: 12, st: { mhp: 30, mmp: 12, atk: 6, def: 2, mag: 4 },
-    runes: [], spells: [], items: {}, flask: { n: 3, max: 3 }, flags: {}, gone: {}, map: 'despertar', x: 7, y: 6, dir: 'down', time: 0, battles: 0
+    runes: [], spells: [], items: {}, diff: 'desafio', flask: { n: 3, max: 3 }, flags: {}, gone: {}, map: 'despertar', x: 7, y: 6, dir: 'down', time: 0, battles: 0
   };
 }
 const spec = () => SPECIES[G.species];
+const DIFF = {
+  desafio: { name: 'Desafio', atk: 1.25, hp: 1.25, boss: 1.15, ring: 1.12, perfect: [8.8, 11.6], good: [6.8, 13.6], flask: 0.35, flee: 0.5, bite: 3.6, tricks: true },
+  historia: { name: 'História', atk: 1, hp: 1, boss: 1, ring: 1, perfect: [8, 12.5], good: [6, 15], flask: 0.45, flee: 0.7, bite: 3.2, tricks: false }
+};
+const DF = () => DIFF[G.diff] || DIFF.desafio;
 
 // ---------- tela ----------
 function resize() {
@@ -1902,9 +2008,9 @@ function fmtTime(t) { t = Math.floor(t); const h = Math.floor(t / 3600), m = Mat
 async function pauseMenu() {
   sfx('select'); let idx = 0;
   while (true) {
-    const r = await list({ title: G.name, x: 8, y: 8, w: 98, idx, items: [{ label: 'Grimório' }, { label: 'Runas' }, { label: 'Itens' }, { label: 'Status' }, { label: 'Backup' }, { label: 'Fechar' }], extra: miniStatus });
-    if (r < 0 || r === 5) return; idx = r;
-    if (r === 0) await grimoire(); else if (r === 1) await runesMenu(); else if (r === 2) await itemsMenu(); else if (r === 3) await statusPanel(); else if (r === 4) await backupOverlay();
+    const r = await list({ title: G.name, x: 8, y: 8, w: 98, idx, items: [{ label: 'Grimório' }, { label: 'Runas' }, { label: 'Itens' }, { label: 'Status' }, { label: 'Dificuldade' }, { label: 'Backup' }, { label: 'Fechar' }], extra: miniStatus });
+    if (r < 0 || r === 6) return; idx = r;
+    if (r === 0) await grimoire(); else if (r === 1) await runesMenu(); else if (r === 2) await itemsMenu(); else if (r === 3) await statusPanel(); else if (r === 4) await diffMenu(); else if (r === 5) await backupOverlay();
   }
 }
 function spellCost(sp) { return Math.max(1, RUNES[sp.form].cost + (sp.mod ? RUNES[sp.mod].cost : 0) - (spec().discount || 0)); }
@@ -1930,6 +2036,13 @@ function suggestName(el, form, mod) {
   const fem = form === 'onda' || form === 'corrente'; const base = `${RUNES[form].name} de ${RUNES[el].name}`;
   if (mod === 'selo') return base + (fem ? ' Selada' : ' Selado');
   return mod === 'eco' ? base + ' em Eco' : mod === 'foco' ? base + (fem ? ' Focada' : ' Focado') : base;
+}
+async function diffMenu() {
+  const c = await list({ title: 'Dificuldade', x: 8, y: 8, w: 224, idx: G.diff === 'historia' ? 1 : 0, items: [{ label: 'Desafio', right: G.diff !== 'historia' ? 'atual' : '' }, { label: 'História', right: G.diff === 'historia' ? 'atual' : '' }],
+    desc: i => i === 0 ? 'Inimigos mais fortes e espertos: preparam golpes, ficam furiosos e às vezes fingem o ataque. Defesa mais justa. O frasco cura 35%.' : 'Para curtir a história. Inimigos mais fracos, defesa mais fácil e o frasco cura 45%.' });
+  if (c < 0) return;
+  G.diff = c === 0 ? 'desafio' : 'historia';
+  await say(`* Dificuldade: {y}${DF().name}{/}. Vale a partir da próxima batalha.`);
 }
 async function grimoire() {
   let idx = 0;
@@ -1986,13 +2099,14 @@ async function itemsMenu() {
     useItemOut(ks[r]); sfx('heal'); await say(`* Você comeu ${it.name}. ${it.hp ? 'PV' : 'PM'} recuperados.`);
   }
 }
-const FLASK_DESC = () => `Cura ${Math.round(FLASK_HP * 100)}% dos PV e ${Math.round(FLASK_MP * 100)}% dos PM. As Lanternas enchem de novo.`;
-const FLASK_HP = 0.45, FLASK_MP = 0.3;
+const FLASK_DESC = () => `Cura ${Math.round(DF().flask * 100)}% dos PV e ${Math.round(FLASK_MP * 100)}% dos PM. As Lanternas enchem de novo.`;
+const FLASK_MP = 0.3;
 function flaskItem() { return { label: 'Frasco de Âmbar', right: `${G.flask.n}/${G.flask.max}`, col: '#f2b544', disabled: !G.flask.n }; }
 function drinkFlask() {
   G.flask.n--; const h0 = G.hp, m0 = G.mp;
-  G.hp = Math.min(G.st.mhp, G.hp + Math.round(G.st.mhp * FLASK_HP)); G.mp = Math.min(G.st.mmp, G.mp + Math.round(G.st.mmp * FLASK_MP));
-  return `* Um gole de âmbar morno. +${G.hp - h0} PV, +${G.mp - m0} PM. (${G.flask.n}/${G.flask.max} goles)`;
+  G.hp = Math.min(G.st.mhp, G.hp + Math.round(G.st.mhp * DF().flask)); G.mp = Math.min(G.st.mmp, G.mp + Math.round(G.st.mmp * FLASK_MP));
+  const st = BT.on && BT.ps && (BT.ps.poison > 0 || BT.ps.burn > 0); if (BT.on && BT.ps) { BT.ps.poison = 0; BT.ps.burn = 0; }
+  return `* Um gole de âmbar morno. +${G.hp - h0} PV, +${G.mp - m0} PM.${st ? ' O veneno e a queimadura passaram.' : ''} (${G.flask.n}/${G.flask.max} goles)`;
 }
 function useItemOut(k) { const it = ITEMS[k]; G.items[k]--; if (it.hp) G.hp = Math.min(G.st.mhp, G.hp + it.hp); if (it.mp) G.mp = Math.min(G.st.mmp, G.mp + it.mp); }
 function statusPanel() {
@@ -2005,7 +2119,7 @@ function statusPanel() {
     `ATQ ${s.atk}   DEF ${s.def}   MAG ${s.mag}`,
     spec().passive ? `{c}${spec().tag}{/}: ${spec().desc[0]}` : spec().bite ? '{c}Mordida Férrea{/}: +25% de mordida' : spec().discount ? '{c}Boca de Runas{/}: feitiços -1 PM' : '{d}Evolui no nível 5{/}',
     `Batalhas vencidas: ${G.battles}`,
-    `Tempo de jogo: ${fmtTime(G.time)}`
+    `Tempo de jogo: ${fmtTime(G.time)} · ${DF().name}`
   ], { title: 'Status', h: 118 });
 }
 
@@ -2015,7 +2129,8 @@ const SIL = new Map();
 function silhouette(c, col) { const k = col; let m = SIL.get(c); if (!m) { m = {}; SIL.set(c, m); } if (m[k]) return m[k]; const s = mk(c.width, c.height), x = s.getContext('2d'); x.drawImage(c, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, s.width, s.height); return m[k] = s; }
 function mkEnemy(id, i, n) {
   const d = ENEMIES[id], xs = n === 1 ? [120] : n === 2 ? [78, 162] : [48, 120, 192];
-  return { id, d, name: d.name, hp: d.hp, mhp: d.hp, atk: d.atk, def: d.def, x: xs[i], y: d.boss ? 58 : 66, sc: d.sc || (d.boss ? 3 : n >= 3 ? 3 : 4), shake: 0, flash: 0, hpShow: 0, alive: true, alpha: 1, frozen: 0, weak: { ...d.weak }, phase: 1, charge: false, turns: 0, sp: d.sp };
+  const D = DF(), hm = D.hp * (d.boss ? D.boss : 1), hp = Math.round(d.hp * hm);
+  return { id, d, name: d.name, hp, mhp: hp, atk: Math.round(d.atk * D.atk), def: d.def, x: xs[i], y: d.boss ? 58 : 66, sc: d.sc || (d.boss ? 3 : n >= 3 ? 3 : 4), shake: 0, flash: 0, hpShow: 0, alive: true, alpha: 1, frozen: 0, weak: { ...d.weak }, phase: 1, charge: false, turns: 0, sp: d.sp };
 }
 function bWait(mode, extra) { return new Promise(r => { BT.mode = mode; Object.assign(BT, extra || {}); BT.res = v => { BT.mode = 'none'; r(v); }; }); }
 function bSay(text, o = {}) {
@@ -2028,7 +2143,7 @@ async function battle(group, opts = {}) {
   const prev = AU.curName; playMusic(null);
   for (let i = 0; i < 3; i++) { V.flashW = 1; await wait(4); V.flashW = 0; await wait(4); }
   await fadeOut(8);
-  Object.assign(BT, { on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 });
+  Object.assign(BT, { ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 });
   V.scene = 'battle'; playMusic(opts.music || 'battle');
   await fadeIn(10);
   const names = BT.en.map(e => e.name);
@@ -2055,6 +2170,7 @@ async function battle(group, opts = {}) {
       await killDead();
       if (BT.en.every(x => !x.alive)) { result = 'win'; break; }
     }
+    if (result !== 'lose' && !result) { await tickStatus(); }
     if (spec().passive === 'regen' && G.mp < G.st.mmp && result !== 'lose') { G.mp = Math.min(G.st.mmp, G.mp + 4); BT.nums.push({ x: 206, y: 184, s: '+4 PM', col: '#8fe3ff', t: 40 }); }
     if (BT.buff.atkT > 0 && --BT.buff.atkT === 0) { BT.buff.atkM = 1; await bSay('* A Fúria se apagou.', { auto: 30 }); }
     if (BT.buff.defT > 0 && --BT.buff.defT === 0) { BT.buff.defM = 1; await bSay('* A casca de gelo derreteu.', { auto: 30 }); }
@@ -2076,6 +2192,7 @@ async function playerTurn() {
     const c = await bWait('main');
     if (c === 0) { const t = await pickTarget(); if (t < 0) continue; await doBite(BT.en[t]); return 'acted'; }
     if (c === 1) {
+      if (BT.ps && BT.ps.silence > 0) { await bSay('* Você está silenciado! As runas não saem da sua boca.'); continue; }
       if (!G.spells.length) { await bSay('* Você ainda não tem feitiços. Crie um no {y}Grimório{/} (MENU), fora da batalha.'); continue; }
       const items = G.spells.map(s => ({ label: s.name, right: spellCost(s) + ' PM', disabled: spellCost(s) > G.mp, col: RUNES[s.el].col }));
       const i = await list({ x: 8, y: 116, w: 224, items, maxVis: 5, title: `Feitiços · PM ${G.mp}/${G.st.mmp}`, h: 74, desc: k => spellDesc(G.spells[k]), descY: 40 });
@@ -2104,7 +2221,7 @@ async function playerTurn() {
     }
     if (c === 4) {
       if (BT.opts.noFlee) { await bSay(WD.id === 'antessala' ? '* Não dá pra fugir. O Guarda-Musgo tapa a saída com o próprio corpo.' : '* Não dá pra fugir desta luta!'); continue; }
-      if (Math.random() < 0.7) { sfx('flee'); await bSay('* Você fechou a tampa e saiu quicando. Fuga bem-sucedida!', { auto: 40 }); return 'fled'; }
+      if (Math.random() < DF().flee) { sfx('flee'); await bSay('* Você fechou a tampa e saiu quicando. Fuga bem-sucedida!', { auto: 40 }); return 'fled'; }
       await bSay('* Você tentou fugir, mas tropeçou na própria dobradiça.', { auto: 50 }); return 'acted';
     }
   }
@@ -2117,11 +2234,12 @@ function pickTarget() {
 }
 const elTag = el => ({ brasa: 'o', geada: 'c', seiva: 'g', faisca: 'y' })[el];
 async function doBite(e) {
-  const t = await bWait('timing', { tm: { x: 24, v: BT.inked ? 5 : 3.2, done: false } }); BT.inked = false;
+  const t = await bWait('timing', { tm: { x: 24, v: BT.inked ? 5 : DF().bite, done: false } }); BT.inked = false;
   if (!t) { sfx('miss'); popNum(e, 'ERROU', '#bbbbbb'); await bSay('* Você mordeu o ar.', { auto: 40 }); return; }
   const crit = t >= 2;
   BT.biteFx = { e, t: 0 }; await wait(10); sfx('bite'); await wait(6); BT.biteFx = null;
-  if (e.d.evade && !crit && Math.random() < e.d.evade) { sfx('miss'); popNum(e, 'DESVIOU', '#bbbbbb'); await bSay(`* O ${e.name} desviou da mordida!`, { auto: 40 }); return; }
+  const ev = e.hide > 0 ? 0.7 : e.d.evade;
+  if (ev && !crit && Math.random() < ev) { sfx('miss'); popNum(e, 'DESVIOU', '#bbbbbb'); await bSay(`* O ${e.name} desviou da mordida!`, { auto: 40 }); return; }
   let dmg = G.st.atk * t * (spec().bite || 1) * BT.buff.atkM - e.def;
   dmg *= (e.weak.bite ?? 1); dmg = Math.max(1, Math.round(dmg * rand(0.9, 1.1)));
   hitEnemy(e, dmg, crit ? 'crit' : 'hit');
@@ -2130,6 +2248,7 @@ async function doBite(e) {
   await bSay(msg, { auto: 45 });
 }
 function hitEnemy(e, dmg, kind, col) {
+  if (e.shell > 0) dmg = Math.max(1, Math.round(dmg * 0.5));
   e.hp = Math.max(0, e.hp - dmg); e.shake = 16; e.flash = 8; e.hpShow = 90;
   popNum(e, String(dmg), col || (kind === 'crit' ? '#ffe066' : '#ff6b6b'));
   sfx(kind === 'crit' ? 'crit' : 'hit');
@@ -2155,7 +2274,8 @@ async function castSpell(sp, target) {
     else {
       let h = Math.round(healAmt(sp) * rand(0.95, 1.05)); const before = G.hp; G.hp = Math.min(G.st.mhp, G.hp + h);
       if (ec) { await wait(14); sfx('heal'); burst(120, 196, el.col, 20); G.hp = Math.min(G.st.mhp, G.hp + Math.round(h * 0.6)); }
-      await bSay(`* A seiva fecha suas rachaduras. +${G.hp - before} PV.`, { auto: 50 });
+      const hadSt = BT.ps && Object.values(BT.ps).some(v => v > 0); cureStatus();
+      await bSay(`* A seiva fecha suas rachaduras. +${G.hp - before} PV.${hadSt ? ' Os efeitos ruins sumiram.' : ''}`, { auto: 50 });
     }
     return;
   }
@@ -2176,6 +2296,7 @@ async function castSpell(sp, target) {
     let drained = 0;
     targets.forEach((t, k) => {
       const wk = t.weak[sp.el] ?? 1;
+      if (sp.el === 'faisca' && t.shell > 0) { t.shell = 0; log.push(`* A Faísca racha a proteção do ${t.name}!`); }
       const dmg = Math.max(1, Math.round(spellPower(sp) * pm * mults[k] * wk * rand(0.9, 1.1)));
       hitEnemy(t, dmg, wk > 1 ? 'crit' : 'hit', RUNES[sp.el].col);
       if (sp.el === 'seiva') drained += Math.round(dmg * 0.5);
@@ -2214,74 +2335,6 @@ function spellFx(sp, targets) {
 }
 function burst(x, y, col, n) { for (let i = 0; i < n; i++) { const a = rand(0, Math.PI * 2), s = rand(0.5, 2.2); BT.parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rand(18, 34), col: Math.random() < 0.3 ? '#ffffff' : col, sz: Math.random() < 0.5 ? 2 : 1 }); } }
 function popNum(e, s, col) { BT.nums.push({ x: e.x, y: e.y - 14 * e.sc / 3, s, col, t: 50 }); }
-async function guardAndHit(e, pow, label, o = {}) {
-  const res = await bWait('guard', { ring: { r: 46, v: (o.fast ? 1.25 : rand(0.75, 1.05)) * (e.d.boss ? 1.1 : 1), state: 0, res: null } });
-  let dmg = e.atk * pow * rand(0.85, 1.15) * 60 / (60 + G.st.def);
-  let gm = res === 'perfect' ? 0.3 : res === 'good' ? 0.5 : 1; if (gm < 1 && spec().guard) gm *= spec().guard;
-  dmg = Math.max(1, Math.round(dmg * gm * BT.buff.defM));
-  G.hp = Math.max(0, G.hp - dmg);
-  if (res === 'fail') { sfx('hurt'); BT.hurt = 14; shake(10); } else sfx('guard');
-  let extra = '';
-  if (spec().passive === 'counter' && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.6)); hitEnemy(e, c, 'hit'); extra = ` {c}Contra-ataque!{/} ${c} no ${e.name}.`; }
-  if (spec().passive === 'thorns' && e.alive) { const c = Math.max(1, Math.round(dmg * 0.3)); hitEnemy(e, c, 'hit', '#ffa94d'); extra = ` Os espinhos devolvem ${c}.`; }
-  BT.nums.push({ x: 120, y: 184, s: '-' + dmg, col: res === 'fail' ? '#ff6b6b' : '#8fe3ff', t: 50 });
-  const head = res === 'perfect' ? '* {c}DEFESA PERFEITA!{/} A tampa nem tremeu.' : res === 'good' ? '* Você fechou a tampa a tempo!' : '* Ai!';
-  return { dmg, text: `${head} ${dmg} de dano.${extra}` };
-}
-async function enemyTurn(e) {
-  e.turns++;
-  if (e.dot && e.dot.t > 0) { e.dot.t--; hitEnemy(e, e.dot.d, 'hit', '#ff8fa8'); await bSay(`* O selo queima o ${e.name}: ${e.dot.d} de dano.`, { auto: 30 }); if (e.hp <= 0) return; }
-  if (e.frozen > 0) { e.frozen--; await bSay(`* O ${e.name} está congelado e não consegue se mexer.`, { auto: 40 }); return; }
-  if (e.stunned > 0) { e.stunned--; await bSay(`* O ${e.name} está atordoado, vendo estrelinhas.`, { auto: 40 }); return; }
-  if (e.d.ai) return AI[e.d.ai](e);
-  if (e.d.boss) return bossTurn(e);
-  const mv = pickOne(e.d.moves);
-  await bSay(mv.t, { auto: 18 });
-  let r = { dmg: 0, text: '' };
-  for (let h = 0; h < (mv.hits || 1); h++) { const x = await guardAndHit(e, mv.p, mv.t); r.dmg += x.dmg; r.text = x.text; if (G.hp <= 0) break; }
-  if (mv.hits > 1) r.text = `* ${mv.hits} golpes: ${r.dmg} de dano no total.`;
-  if (mv.ink) { BT.inked = true; r.text += ' Tinta nos olhos: sua próxima mordida vai ser mais difícil.'; }
-  let txt_ = r.text;
-  if (mv.mp && G.mp > 0) { const l = Math.min(G.mp, 2); G.mp -= l; txt_ += ` Os esporos roubaram ${l} PM.`; }
-  await bSay(txt_, { auto: 45 });
-}
-async function bossTurn(e) {
-  if (e.pendingPhase) {
-    e.pendingPhase = null; e.phase = 2; e.sp = 'bossStone'; shake(40); sfx('rumble');
-    burst(e.x, e.y - 10, '#4a9a4a', 40);
-    await bSay(e.lastFire ? '* O musgo do Guarda-Musgo pega fogo e vira cinza!' : '* O musgo se solta em pedaços, revelando pedra nua por baixo.', { auto: 60 });
-    await bSay('A... CASCA... É SÓ... A PRIMEIRA... PÁGINA.', { fx: 'shake', col: '#d8f0b8' });
-    e.weak = { brasa: 0.5, geada: 1.3, bite: 1.25, seiva: 1 }; e.atk += 2; e.def += 2; e.charge = false; e.turns = 0;
-    await bSay('* O Guarda-Musgo agora é só pedra. Fogo não vai adiantar muito. Mordidas, por outro lado...', { auto: 70 });
-    return;
-  }
-  if (e.charge) {
-    e.charge = false;
-    await bSay(e.phase === 1 ? '* PEDREGULHO! Os punhos descem com tudo!' : '* AVALANCHE! O teto inteiro vem junto!', { auto: 14, fx: 'shake' });
-    const r = await guardAndHit(e, e.phase === 1 ? 2.0 : 2.3, '', { fast: true });
-    await bSay(r.text, { auto: 50 }); return;
-  }
-  if (e.turns % 3 === 0) { e.charge = true; await bSay('* O Guarda-Musgo ergue os punhos acima da cabeça. Algo GRANDE vem aí! (Prepare a defesa.)', { auto: 70 }); return; }
-  if (e.phase === 1) {
-    if (Math.random() < 0.35) {
-      await bSay('* O Guarda-Musgo sacode as costas. Uma nuvem de esporos!', { auto: 18 });
-      const r = await guardAndHit(e, 0.8, ''); const l = Math.min(G.mp, 3); G.mp -= l;
-      await bSay(r.text + (l ? ` Você perdeu ${l} PM.` : ''), { auto: 50 });
-    } else {
-      await bSay('* O Guarda-Musgo dá um soco coberto de musgo!', { auto: 18 });
-      const r = await guardAndHit(e, 1, ''); await bSay(r.text, { auto: 45 });
-    }
-  } else {
-    if (Math.random() < 0.45) {
-      await bSay('* Chuva de cascalho! Duas pedras vêm na sua direção!', { auto: 18 });
-      const a = await guardAndHit(e, 0.65, ''); if (G.hp <= 0) return;
-      const b = await guardAndHit(e, 0.65, ''); await bSay(`* Total: ${a.dmg + b.dmg} de dano.`, { auto: 45 });
-    } else {
-      await bSay('* O Guarda-Musgo desce uma pancada de pedra!', { auto: 18 });
-      const r = await guardAndHit(e, 1.2, ''); await bSay(r.text, { auto: 45 });
-    }
-  }
-}
 async function victory() {
   playMusic(null); J.victory();
   let xp = 0; const drops = [];
@@ -2337,11 +2390,13 @@ function updateBattle() {
     const t = BT.tm; t.x += t.v;
     if (btnp('a')) { const d = Math.abs(t.x - 120) / 96; BT.res(d < 0.06 ? 2.0 : Math.max(0.45, 1.75 - 1.3 * d)); }
     else if (t.x > 218) BT.res(0);
-  } else if (m === 'guard') {
+  } else if (DEFMODES[m]) DEFMODES[m].update();
+  else if (m === 'guard') {
     const g = BT.ring;
     if (g.state === 0) {
-      g.r -= g.v;
-      if (btnp('a')) { if (g.r >= 8 && g.r <= 12.5) g.res = 'perfect'; else if (g.r >= 6 && g.r <= 15) g.res = 'good'; else g.res = 'fail'; g.state = 1; g.t = 14; }
+      if (g.fake && !g.hold && g.r <= g.fake) { g.hold = Math.round(rand(14, 26)); g.fake = 0; }
+      if (g.hold > 0) g.hold--; else g.r -= g.v;
+      if (btnp('a')) { const P = DF().perfect, Gd = DF().good; if (g.r >= P[0] && g.r <= P[1]) g.res = 'perfect'; else if (g.r >= Gd[0] && g.r <= Gd[1]) g.res = 'good'; else g.res = 'fail'; g.state = 1; g.t = 14; }
       else if (g.r < 4) { g.res = 'fail'; g.state = 1; g.t = 10; }
     } else if (--g.t <= 0) BT.res(g.res);
   }
@@ -2402,14 +2457,15 @@ function drawBattle() {
     bx.fillStyle = '#000'; bx.fillRect(119, 144, 2, 18);
     const tx = Math.round(BT.tm.x); bx.fillStyle = '#000'; bx.fillRect(tx - 2, 141, 5, 24); bx.fillStyle = '#ffffff'; bx.fillRect(tx - 1, 142, 3, 22);
     txt('Aperte A no centro', 120, 170, { align: 'center', col: '#8a8099' });
-  } else if (m === 'guard') {
+  } else if (DEFMODES[m]) DEFMODES[m].draw();
+  else if (m === 'guard') {
     const g = BT.ring, cx = 120, cy = 150;
     circlePx(cx, cy, 10, '#5a5070'); circlePx(cx, cy, 11, '#5a5070');
-    const col = g.state === 1 ? (g.res === 'fail' ? '#ff6b6b' : g.res === 'perfect' ? '#8fe3ff' : '#ffe066') : '#ffffff';
+    const col = g.state === 1 ? (g.res === 'fail' ? '#ff6b6b' : g.res === 'perfect' ? '#8fe3ff' : '#ffe066') : (g.col || '#ffffff');
     if (g.state === 0) { circlePx(cx, cy, g.r, col); circlePx(cx, cy, g.r - 1, col); }
     else { circlePx(cx, cy, 10, col); circlePx(cx, cy, 11, col); circlePx(cx, cy, 12, col); }
     bx.fillStyle = '#f2ecdc'; bx.fillRect(cx - 4, cy - 3, 8, 6); bx.fillStyle = '#7a4a2a'; bx.fillRect(cx - 3, cy - 2, 6, 4);
-    txt(g.state === 1 ? (g.res === 'fail' ? 'Tarde demais!' : g.res === 'perfect' ? 'PERFEITO!' : 'DEFENDEU!') : 'DEFENDA!', 120, 124, { align: 'center', col: g.state === 1 ? col : '#ffe066' });
+    txt(g.state === 1 ? (g.res === 'fail' ? 'Tarde demais!' : g.res === 'perfect' ? 'PERFEITO!' : 'DEFENDEU!') : (g.label || 'DEFENDA!'), 120, 124, { align: 'center', col: g.state === 1 ? col : '#ffe066' });
     txt('A quando o anel tocar o círculo', 120, 170, { align: 'center', col: '#8a8099' });
   }
   if (m === 'text' && BT.tw.done && !BT.auto && FRAME % 40 < 26) txt('▼', 220, 174, { col: '#8a8099' });
@@ -2429,6 +2485,8 @@ function drawBattle() {
   if (BT.buff.atkT > 0) txt('FÚRIA', 10, 178, { col: '#ffa94d' });
   if (BT.buff.defT > 0) txt('GELO', 52, 178, { col: '#8fe3ff' });
   if (BT.marked) txt('MARCADO', 90, 178, { col: '#ff6b6b' });
+  { let sx2 = 10; for (const st in (BT.ps || {})) if (BT.ps[st] > 0) { txt(ST_NAME[st], sx2, 104, { col: { poison: '#9be58a', burn: '#ffa94d', silence: '#d0a8ff' }[st] }); sx2 += ST_NAME[st].length * 6 + 6; } }
+  for (const e of BT.en) if (e.alive && (e.shell > 0 || e.hide > 0 || (e.atkBuff && e.atkBuff.t > 0))) { const fr = SP[e.sp][0]; const yy = e.y - fr.height * e.sc / 2 - 12; txt([e.shell > 0 ? 'CASCA' : '', e.hide > 0 ? 'SOME' : '', e.atkBuff && e.atkBuff.t > 0 ? 'ATQ↑' : ''].filter(Boolean).join(' '), e.x, yy, { col: '#ffe066', align: 'center', shadow: true }); }
   if (BT.netted) txt('PRESO', 150, 178, { col: '#ff6b6b' });
 }
 
@@ -2518,7 +2576,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–2', 6, 226, { col: '#5a5070' }); txt('v1.3', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–2', 6, 226, { col: '#5a5070' }); txt('v1.4', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
@@ -2629,53 +2687,7 @@ function drawPatrolVision(ox, oy) {
 }
 
 // ================= IA DOS CHEFES =================
-async function multiHit(e, n, pow, intro, o = {}) {
-  await bSay(intro, { auto: 16, fx: o.fx });
-  let tot = 0, last = '';
-  for (let i = 0; i < n; i++) { const r = await guardAndHit(e, pow, '', o); tot += r.dmg; last = r.text; if (G.hp <= 0) return; }
-  await bSay(n > 1 ? `* ${n} golpes: ${tot} de dano no total.` : last, { auto: 45 });
-}
-const AI = {
-  golem: e => bossTurn(e),
-  async octo(e) {
-    if (!e.p2 && e.hp <= e.mhp * 0.5) {
-      e.p2 = true; e.phase = 2; shake(30); sfx('rumble'); e.atk += 4;
-      await bSay('O PÚBLICO... NÃO APLAUDIU?! SEGUNDO ATO!', { fx: 'shake', col: '#ffb0b0' });
-      await bSay('* O Polvo do Camarote fica vermelho-vivo. Ele ataca mais rápido agora.', { auto: 60 }); return;
-    }
-    if (e.charge) { e.charge = false; return multiHit(e, 1, 2.1, '* GRANDE FINALE! Todos os tentáculos descem de uma vez!', { fast: true, fx: 'shake' }); }
-    if (e.turns % 4 === 0) { e.charge = true; await bSay('* O Polvo do Camarote puxa a cortina com os oito braços. Vai vir um golpe enorme! (Prepare a defesa.)', { auto: 70 }); return; }
-    const k = Math.random();
-    if (k < 0.4) return multiHit(e, e.p2 ? 4 : 3, 0.42, `* ABRAÇO DE ${e.p2 ? 'QUATRO' : 'TRÊS'} BRAÇOS! Defenda cada tentáculo!`);
-    if (k < 0.7) { await multiHit(e, 1, 0.85, '* O Polvo esguicha um jato de tinta!'); BT.inked = true; await bSay('* Tinta nos olhos! Sua próxima mordida vai ser mais difícil.', { auto: 40 }); return; }
-    return multiHit(e, 1, 1.25, '* Tentaclada em cheio!');
-  },
-  async hound(e) {
-    const brida = BT.en.find(x => x.id === 'brida' && x.alive);
-    if (brida && !BT.marked && Math.random() < 0.55) { BT.marked = true; sfx('encounter'); await bSay('* O Farejador fareja você e uiva! Você está {r}MARCADO{/}: o próximo golpe da Brida será muito mais forte.', { auto: 60 }); return; }
-    return multiHit(e, 1, Math.random() < 0.5 ? 1 : 1.2, pickOne(['* O Farejador morde sua dobradiça!', '* O Farejador avança rosnando!']));
-  },
-  async brida(e) {
-    const mk = BT.marked ? 1.6 : 1; if (BT.marked) BT.marked = false;
-    if (!e.p2 && e.hp <= e.mhp * 0.5) {
-      e.p2 = true; e.phase = 2; G.flags.bridaP2 = true;
-      const h = Math.round(e.mhp * 0.18); e.hp += h; burst(e.x, e.y, '#9be58a', 24); sfx('heal');
-      await bSay('Você é bom, baú. Mas eu sou MELHOR.', { col: '#ffd0d0' });
-      await bSay(`* A Capitã Brida bebe uma poção. +${h} PV. Ela tira a capa e fica mais rápida.`, { auto: 60 }); e.atk += 3; return;
-    }
-    if (e.charge) { e.charge = false; return multiHit(e, 1, 2.2 * mk, '* INVESTIDA DA GUILDA! A Brida atravessa a ponte com o escudo na frente!', { fast: true, fx: 'shake' }); }
-    if (e.turns % 4 === 3) { e.charge = true; await bSay('* A Capitã Brida recua e abaixa o escudo. Ela vai investir! (Prepare a defesa.)', { auto: 70 }); return; }
-    if (Math.random() < (e.p2 ? 0.3 : 0.2) && !BT.netted) {
-      await bSay('* A Brida joga uma REDE de caçador!', { auto: 16 });
-      const r = await bWait('guard', { ring: { r: 46, v: 1.15, state: 0, res: null } });
-      if (r === 'fail') { BT.netted = true; sfx('hurt'); BT.hurt = 14; await bSay('* A rede te pegou! Você vai perder o próximo turno.', { auto: 50 }); }
-      else { sfx('guard'); await bSay('* Você fechou a tampa e a rede escorregou. Ufa!', { auto: 45 }); }
-      return;
-    }
-    if (e.p2 && Math.random() < 0.4) return multiHit(e, 2, 0.65 * mk, '* Golpe de escudo e estocada, em sequência!');
-    return multiHit(e, 1, 1.1 * mk, mk > 1 ? '* A Brida mira exatamente onde o Farejador marcou!' : '* A Capitã Brida desce a espada!');
-  }
-};
+
 
 // ================= CAPÍTULO 2: HERÓI NÚMERO 30 =================
 Object.assign(RUNES, {
@@ -3000,6 +3012,378 @@ Object.assign(STORY, {
     if (G.flags.lumeJoined && pick === 'estelar') await say('Ninguém brilha mais que a Lume.', 'lume');
   }
 });
+
+// ================= COMBATE INIMIGO v2: defesas variadas, status, habilidades e magias =================
+const DIRK = ['up', 'down', 'left', 'right'], ARROW = { up: '▲', down: '▼', left: '◄', right: '►' };
+const EL_COL = { brasa: '#f07830', geada: '#7ad0f0', seiva: '#8ac85a', faisca: '#ffe066', tinta: '#5a6ad0' };
+const isHist = () => G.diff === 'historia';
+function drawArrow(dir, cx, cy, r, col) {
+  bx.fillStyle = col;
+  for (let i = 0; i <= r; i++) {
+    const w = i * 2 + 1;
+    if (dir === 'up') bx.fillRect(cx - i, cy - r + i, w, 1);
+    if (dir === 'down') bx.fillRect(cx - i, cy + r - i, w, 1);
+    if (dir === 'left') bx.fillRect(cx - r + i, cy - i, 1, w);
+    if (dir === 'right') bx.fillRect(cx + r - i, cy - i, 1, w);
+  }
+  const [dx, dy] = DIRS[dir]; bx.fillRect(cx - (dy ? 1 : (dx > 0 ? r : 0)), cy - (dx ? 1 : (dy > 0 ? r : 0)), dy ? 3 : r, dx ? 3 : r);
+}
+const TUTS = {
+  dodge: '[DESVIO: aperte a direção da seta quando o golpe estiver PERTO. Cedo demais também erra.]',
+  seq: '[SEQUÊNCIA: repita as setas na ordem antes do tempo acabar. Cada erro é um golpe que entra.]',
+  mash: '[AGARRÃO: aperte A o mais rápido que puder para se soltar.]',
+  swallow: '[FEITIÇO INIMIGO: aperte A quando o anel tocar o círculo para ENGOLIR a magia. Mímicos comem palavras: perfeito devolve PM.]'
+};
+async function tut(k) { if (G.flags['tut_' + k]) return; G.flags['tut_' + k] = true; sfx('catalog'); await bSay(TUTS[k], { cat: true }); }
+
+// ---------- minijogos de defesa ----------
+async function ring(e, o = {}) {
+  const elite = e.d.boss || e.d.elite;
+  const fake = DF().tricks && o.fakeable !== false && elite && Math.random() < (e.d.boss ? 0.3 : 0.22) ? rand(18, 30) : 0;
+  return bWait('guard', { ring: { r: 46, v: (o.fast ? 1.25 : rand(0.75, 1.05)) * (e.d.boss ? 1.1 : 1) * DF().ring * (o.spd || 1), state: 0, res: null, fake, hold: 0, label: o.label, col: o.col } });
+}
+async function dodge(spd = 1) {
+  await tut('dodge');
+  const dir = pickOne(DIRK), from = pickOne(['left', 'right', 'top']);
+  const T = Math.round(60 / spd * (isHist() ? 1.25 : 1) / (DF().tricks ? 1.08 : 1));
+  return bWait('dodge', { dg: { dir, from, T, t: 0, state: 0, res: null, hold: 0 } });
+}
+async function seq(n, spd = 1) {
+  await tut('seq');
+  const keys = Array.from({ length: n }, () => pickOne(DIRK));
+  const per = (isHist() ? 30 : DF().tricks ? 20 : 24) / spd;
+  return bWait('seq', { sq: { keys, i: 0, ok: [], T: Math.round(per * n + 30), t: 0, state: 0 } });
+}
+async function mash(need, T = 120) {
+  await tut('mash');
+  return bWait('mash', { ms: { n: 0, need: Math.round(need * (isHist() ? 0.7 : 1)), T, t: 0, state: 0 } });
+}
+const DEFMODES = {
+  dodge: {
+    update() {
+      const g = BT.dg;
+      if (g.state === 0) {
+        g.t++; const p = g.t / g.T;
+        for (const k of DIRK) if (btnp(k)) {
+          const good = isHist() ? 0.4 : 0.5;
+          g.res = k !== g.dir || p < good ? 'fail' : p >= 0.78 ? 'perfect' : 'good';
+          g.state = 1; g.hold = 18; sfx(g.res === 'fail' ? 'cancel' : 'guard'); return;
+        }
+        if (p >= 1) { g.res = 'fail'; g.state = 1; g.hold = 14; }
+      } else if (--g.hold <= 0) BT.res(g.res);
+    },
+    draw() {
+      const g = BT.dg, cx = 120, cy = 152, p = Math.min(1, g.t / g.T);
+      const sx = g.from === 'left' ? 20 : g.from === 'right' ? 220 : cx, sy = g.from === 'top' ? 124 : cy;
+      const px = sx + (cx - sx) * p, py = sy + (cy - sy) * p;
+      const ok = g.state === 1 && g.res !== 'fail', [dx, dy] = DIRS[g.dir];
+      const mx = cx + (ok ? dx * 16 : 0), my = cy + (ok ? dy * 10 : 0);
+      bx.fillStyle = '#f2ecdc'; bx.fillRect(mx - 5, my - 4, 10, 8); bx.fillStyle = '#7a4a2a'; bx.fillRect(mx - 4, my - 3, 8, 6);
+      if (!(g.state === 1)) { bx.fillStyle = '#ff6b6b'; bx.fillRect(Math.round(px) - 3, Math.round(py) - 3, 6, 6); bx.fillStyle = '#ffffff'; bx.fillRect(Math.round(px) - 1, Math.round(py) - 1, 2, 2); }
+      const zone = isHist() ? 0.4 : 0.5;
+      bar(40, 178, 160, 3, p, p < zone ? '#5a5070' : p < 0.78 ? '#ffe066' : '#8fe3ff');
+      txt(g.state === 1 ? (g.res === 'fail' ? 'Acertou você!' : g.res === 'perfect' ? 'DESVIO PERFEITO!' : 'DESVIOU!') : 'DESVIE! Aperte a seta na hora certa', 120, 124, { align: 'center', col: g.state === 1 && g.res === 'fail' ? '#ff6b6b' : '#ffe066' });
+      drawArrow(g.dir, 194, 152, 8, g.state === 0 && p >= zone ? '#ffe066' : '#8a8099');
+    }
+  },
+  seq: {
+    update() {
+      const s = BT.sq;
+      if (s.state === 0) {
+        s.t++;
+        for (const k of DIRK) if (btnp(k)) { const ok = k === s.keys[s.i]; s.ok.push(ok); s.i++; sfx(ok ? 'move' : 'hurt'); if (!ok) { BT.hurt = 8; } break; }
+        if (s.i >= s.keys.length || s.t >= s.T) { while (s.ok.length < s.keys.length) s.ok.push(false); s.state = 1; s.hold = 20; }
+      } else if (--s.hold <= 0) BT.res(s.ok.filter(x => !x).length);
+    },
+    draw() {
+      const s = BT.sq, n = s.keys.length, w = Math.min(28, Math.floor(200 / n)), x0 = 120 - (n * w) / 2;
+      txt(s.state === 1 ? (s.ok.every(x => x) ? 'SEQUÊNCIA PERFEITA!' : `${s.ok.filter(x => !x).length} golpe(s) entraram`) : 'REPITA A SEQUÊNCIA!', 120, 124, { align: 'center', col: '#ffe066' });
+      s.keys.forEach((k, i) => {
+        const done = i < s.ok.length, col = done ? (s.ok[i] ? '#9be58a' : '#ff6b6b') : i === s.i ? '#ffffff' : '#6a6078';
+        box(x0 + i * w, 136, w - 3, 26, { bw: i === s.i && s.state === 0 ? 2 : 1, edge: col, fill: '#000' });
+        drawArrow(k, Math.round(x0 + i * w + (w - 3) / 2), 149, 7, col);
+      });
+      bar(40, 170, 160, 3, 1 - s.t / s.T, '#f28c28');
+    }
+  },
+  mash: {
+    update() {
+      const m = BT.ms;
+      if (m.state === 0) {
+        m.t++; if (btnp('a') || btnp('b')) { m.n++; sfx('move'); BT.shakeBox = 3; }
+        if (m.n >= m.need || m.t >= m.T) { m.state = 1; m.hold = 16; }
+      } else if (--m.hold <= 0) BT.res(Math.min(1, m.n / m.need));
+    },
+    draw() {
+      const m = BT.ms, f = Math.min(1, m.n / m.need), j = BT.shakeBox > 0 ? (BT.shakeBox--, rand(-2, 2)) : 0;
+      txt(m.state === 1 ? (f >= 1 ? 'SE SOLTOU!' : 'Não deu tempo...') : 'SACUDA! Aperte A rápido!', 120, 124, { align: 'center', col: '#ffe066' });
+      bx.fillStyle = '#f2ecdc'; bx.fillRect(114 + j, 142, 12, 10); bx.fillStyle = '#7a4a2a'; bx.fillRect(115 + j, 143, 10, 8);
+      bx.fillStyle = '#4a9a4a'; for (let i = 0; i < 3; i++) bx.fillRect(110, 144 + i * 3, 20, 1);
+      bar(40, 160, 160, 6, f, f >= 1 ? '#9be58a' : '#ffe066');
+      bar(40, 170, 160, 3, 1 - m.t / m.T, '#f28c28');
+    }
+  }
+};
+
+// ---------- dano e status no jogador ----------
+const ST_NAME = { poison: 'VENENO', burn: 'QUEIMADO', silence: 'SILÊNCIO', blind: 'CEGO' };
+const ST_TXT = {
+  poison: 'Você está {g}envenenado{/}: perde PV a cada turno. (O frasco e a Seiva curam.)',
+  burn: 'Sua tampa está {o}queimando{/}: perde PV a cada turno. (O frasco e a Seiva curam.)',
+  silence: 'Você foi {p}silenciado{/}: não pode usar magia no próximo turno.',
+  blind: 'Você está {c}cego de tinta{/}: a próxima mordida fica mais difícil.'
+};
+function giveStatus(st, turns = 3) {
+  if (st === 'blind') { BT.inked = true; return ST_TXT.blind; }
+  BT.ps = BT.ps || {}; BT.ps[st] = st === 'silence' ? 1 : turns; return ST_TXT[st];
+}
+function cureStatus() { BT.ps = {}; BT.inked = false; }
+async function tickStatus() {
+  if (!BT.ps) return;
+  for (const st of ['poison', 'burn']) if (BT.ps[st] > 0 && G.hp > 0) {
+    BT.ps[st]--; const d = Math.max(1, Math.round(G.st.mhp * (st === 'poison' ? 0.06 : 0.05)));
+    G.hp = Math.max(1, G.hp - d); BT.nums.push({ x: 120, y: 184, s: '-' + d, col: st === 'poison' ? '#9be58a' : '#ffa94d', t: 40 }); sfx('hurt');
+    await bSay(st === 'poison' ? `* O veneno arde. -${d} PV.` : `* A queimadura arde. -${d} PV.`, { auto: 28 });
+  }
+  if (BT.ps.silence > 0) BT.ps.silence--;
+}
+function hurt(e, pow, mult, res) {
+  const am = e.atkBuff && e.atkBuff.t > 0 ? e.atkBuff.m : 1;
+  let gm = mult; if (gm < 1 && gm > 0 && spec().guard) gm *= spec().guard;
+  if (gm <= 0) return 0;
+  let dmg = e.atk * am * pow * rand(0.85, 1.15) * 60 / (60 + G.st.def);
+  dmg = Math.max(1, Math.round(dmg * gm * BT.buff.defM));
+  G.hp = Math.max(0, G.hp - dmg);
+  BT.nums.push({ x: 120, y: 184, s: '-' + dmg, col: res === 'fail' ? '#ff6b6b' : '#8fe3ff', t: 50 });
+  if (res === 'fail') { sfx('hurt'); BT.hurt = 14; shake(8); } else sfx('guard');
+  return dmg;
+}
+function passives(e, dmg, res) {
+  let extra = '';
+  if (spec().passive === 'counter' && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.6)); hitEnemy(e, c, 'hit'); extra = ` {c}Contra-ataque!{/} ${c} no ${e.name}.`; }
+  if (spec().passive === 'thorns' && dmg > 0 && e.alive) { const c = Math.max(1, Math.round(dmg * 0.3)); hitEnemy(e, c, 'hit', '#ffa94d'); extra = ` Os espinhos devolvem ${c}.`; }
+  return extra;
+}
+const gmult = r => r === 'perfect' ? 0.3 : r === 'good' ? 0.5 : 1;
+// mantém compatibilidade com código antigo
+async function guardAndHit(e, pow, label, o = {}) {
+  const res = await ring(e, o); const dmg = hurt(e, pow, gmult(res), res);
+  const head = res === 'perfect' ? '* {c}DEFESA PERFEITA!{/} A tampa nem tremeu.' : res === 'good' ? '* Você fechou a tampa a tempo!' : '* Ai!';
+  return { dmg, res, text: `${head} ${dmg} de dano.${passives(e, dmg, res)}` };
+}
+
+// ---------- executor de golpes ----------
+function allyOf(e) { return BT.en.filter(x => x !== e && x.alive); }
+async function runMove(e, mv) {
+  if (mv.t) await bSay(mv.t, { auto: mv.k === 'buff' || mv.k === 'heal' ? 40 : 16, fx: mv.fx });
+  let total = 0, msg = '', worst = 'perfect';
+  const rank = { perfect: 0, good: 1, fail: 2 };
+  const note = r => { if (rank[r] > rank[worst]) worst = r; };
+  switch (mv.k) {
+    case 'ring': {
+      for (let h = 0; h < (mv.hits || 1); h++) { const r = await ring(e, mv); note(r); const d = hurt(e, mv.p, gmult(r), r); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
+      const head = worst === 'perfect' ? '* {c}DEFESA PERFEITA!{/}' : worst === 'good' ? '* Você fechou a tampa a tempo!' : '* Ai!';
+      msg = `${head} ${total} de dano.` + msg; break;
+    }
+    case 'dodge': {
+      for (let h = 0; h < (mv.hits || 1); h++) { const r = await dodge(mv.spd || 1); note(r); const d = hurt(e, mv.p, r === 'perfect' ? 0.15 : r === 'good' ? 0.45 : 1, r); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
+      msg = (worst === 'perfect' ? `* Desvio perfeito! Só um arranhão: ${total}.` : worst === 'fail' ? `* Acertou em cheio! ${total} de dano.` : `* Raspou de leve. ${total} de dano.`) + msg; break;
+    }
+    case 'seq': {
+      const miss = await seq(mv.n, mv.spd || 1);
+      for (let h = 0; h < miss; h++) { total += hurt(e, mv.p, 1, 'fail'); if (G.hp <= 0) return; }
+      if (mv.n - miss > 0) total += hurt(e, mv.p * (mv.n - miss), 0.15, 'good');
+      worst = miss ? 'fail' : 'perfect';
+      msg = miss === 0 ? `* Você bloqueou os ${mv.n} golpes! Só ${total} de dano.` : `* ${miss} de ${mv.n} golpes entraram: ${total} de dano.`;
+      if (miss === 0 && spec().passive === 'counter') msg += passives(e, 0, 'perfect');
+      break;
+    }
+    case 'mash': {
+      const f = await mash(mv.need || 12, mv.T || 110);
+      total = hurt(e, mv.p, f >= 1 ? 0.25 : 1 - 0.6 * f, f >= 1 ? 'good' : 'fail'); worst = f >= 1 ? 'good' : 'fail';
+      msg = f >= 1 ? `* Você se soltou! Só ${total} de dano.` : `* Te apertou! ${total} de dano.`;
+      if (mv.bind && f < 0.6) { BT.netted = true; msg += ' Você ainda está PRESO e vai perder o próximo turno.'; }
+      break;
+    }
+    case 'spell': {
+      await tut('swallow');
+      const r = await ring(e, { label: 'ENGULA!', col: EL_COL[mv.el], spd: mv.spd, fakeable: false, fast: mv.fast });
+      worst = r;
+      for (let i = 0; i < 18; i++) BT.parts.push({ x: e.x + rand(-6, 6), y: e.y, vx: (120 - e.x) / 18 + rand(-0.4, 0.4), vy: (150 - e.y) / 18, life: 18, col: EL_COL[mv.el] || '#fff', sz: 2, then: true });
+      if (r === 'perfect') { const g = Math.max(2, Math.round(G.st.mmp * 0.15)); G.mp = Math.min(G.st.mmp, G.mp + g); sfx('rune'); msg = `* NHAC! Você {y}ENGOLIU{/} ${mv.name}! +${g} PM.`; break; }
+      const hits = mv.hits || 1;
+      for (let h = 0; h < hits; h++) total += hurt(e, mv.p, r === 'good' ? 0.5 : 1, r);
+      msg = r === 'good' ? `* Você mordeu metade do feitiço. ${total} de dano.` : `* ${mv.name} acertou em cheio! ${total} de dano.`;
+      if (mv.heal) { const h = Math.round(total * mv.heal); e.hp = Math.min(e.mhp, e.hp + h); msg += ` O ${e.name} recuperou ${h} PV.`; }
+      break;
+    }
+    case 'buff': {
+      const tgt = mv.ally ? (pickOne(allyOf(e)) || e) : e;
+      if (mv.stat === 'atk') { tgt.atkBuff = { m: mv.v || 1.3, t: mv.turns || 3 }; msg = `* O ataque do ${tgt.name} aumentou!`; }
+      if (mv.stat === 'shell') { tgt.shell = mv.turns || 2; msg = `* O ${tgt.name} está protegido: dano recebido pela metade. (FAÍSCA quebra.)`; }
+      if (mv.stat === 'hide') { tgt.hide = mv.turns || 2; msg = `* O ${tgt.name} ficou difícil de acertar com mordidas. Magia acerta normal.`; }
+      sfx('buff'); tgt.flash = 10; await bSay(msg, { auto: 50 }); return;
+    }
+    case 'heal': {
+      const pool = [e, ...allyOf(e)].sort((a, b) => a.hp / a.mhp - b.hp / b.mhp), tgt = pool[0];
+      const h = Math.round(tgt.mhp * (mv.frac || 0.25)); tgt.hp = Math.min(tgt.mhp, tgt.hp + h); sfx('heal'); burst(tgt.x, tgt.y, '#9be58a', 18);
+      await bSay(`* ${mv.name ? mv.name + ': o' : 'O'} ${tgt.name} recuperou ${h} PV.`, { auto: 50 }); return;
+    }
+  }
+  if (mv.st && G.hp > 0 && (worst === 'fail' || (worst === 'good' && mv.st !== 'silence' && Math.random() < 0.4)) && !(mv.k === 'spell' && worst === 'perfect')) msg += '\n* ' + giveStatus(mv.st);
+  if (mv.drain && G.mp > 0 && worst !== 'perfect') { const l = Math.min(G.mp, mv.drain); G.mp -= l; msg += ` Você perdeu ${l} PM.`; }
+  await bSay(msg, { auto: 50 });
+}
+function pickMove(e, list) {
+  const ok = list.filter(m => {
+    if (m.k === 'buff' && m.stat === 'atk' && !m.ally && e.atkBuff && e.atkBuff.t > 0) return false;
+    if (m.k === 'buff' && m.stat === 'shell' && e.shell > 0) return false;
+    if (m.k === 'buff' && m.stat === 'hide' && e.hide > 0) return false;
+    if (m.k === 'buff' && m.ally && !allyOf(e).length) return false;
+    if (m.k === 'heal' && ![e, ...allyOf(e)].some(x => x.hp < x.mhp * 0.6)) return false;
+    if (m.once && e['used_' + m.once]) return false;
+    if (m.st && m.st !== 'blind' && BT.ps && BT.ps[m.st] > 0) return false;
+    return true;
+  });
+  let tot = ok.reduce((a, m) => a + (m.w || 1), 0), r = Math.random() * tot;
+  for (const m of ok) { r -= (m.w || 1); if (r <= 0) { if (m.once) e['used_' + m.once] = true; return m; } }
+  return ok[0];
+}
+async function enemyTurn(e) {
+  e.turns++;
+  if (e.atkBuff && e.atkBuff.t > 0) e.atkBuff.t--;
+  if (e.shell > 0) e.shell--;
+  if (e.hide > 0) e.hide--;
+  if (e.dot && e.dot.t > 0) { e.dot.t--; hitEnemy(e, e.dot.d, 'hit', '#ff8fa8'); await bSay(`* O selo queima o ${e.name}: ${e.dot.d} de dano.`, { auto: 30 }); if (e.hp <= 0) return; }
+  if (e.frozen > 0) { e.frozen--; await bSay(`* O ${e.name} está congelado e não consegue se mexer.`, { auto: 40 }); return; }
+  if (e.stunned > 0) { e.stunned--; await bSay(`* O ${e.name} está atordoado, vendo estrelinhas.`, { auto: 40 }); return; }
+  if (e.d.ai) return AI[e.d.ai](e);
+  if (DF().tricks) {
+    if (!e.enraged && e.hp > 0 && e.hp < e.mhp * 0.4) { e.enraged = true; e.atk = Math.round(e.atk * 1.25); e.flash = 10; sfx('encounter'); await bSay(`* O ${e.name} fica {r}furioso{/}! O ataque dele aumentou.`, { auto: 40 }); }
+    if (e.charge) { e.charge = false; const big = e.d.big || { k: 'ring', p: 1.8, fast: true }; return runMove(e, { ...big, t: `* O ${e.name} solta o golpe que estava preparando!`, fx: 'shake' }); }
+    if (e.turns > 1 && Math.random() < 0.15) { e.charge = true; await bSay(`* O ${e.name} está se preparando para um golpe forte! (Prepare a defesa.)`, { auto: 55 }); return; }
+  }
+  return runMove(e, pickMove(e, e.d.moves));
+}
+
+// ---------- golpes dos monstros (complexidade cresce por área) ----------
+Object.assign(ENEMIES.rat, { moves: [
+  { k: 'ring', p: 1, w: 3, t: '* O Rato-de-Vela avança com a vela acesa!' },
+  { k: 'ring', p: 1.25, w: 2, t: '* O Rato-de-Vela sacode o corpo. Respingos de cera quente!' },
+  { k: 'buff', stat: 'atk', v: 1.3, turns: 3, w: 1, once: 'vela', t: '* A chama nas costas do Rato cresce e estala!' }] });
+Object.assign(ENEMIES.mush, { moves: [
+  { k: 'ring', p: 1.1, w: 2, t: '* O Cogumelo cabeceia você com o chapéu!' },
+  { k: 'ring', p: 0.7, st: 'poison', w: 2, t: '* O Cogumelo tosse uma nuvem de esporos roxos!' },
+  { k: 'heal', frac: 0.3, w: 2, name: 'Esporos curativos', t: '* O Cogumelo espalha esporos dourados no aliado.' }] });
+Object.assign(ENEMIES.bat, { elite: false, big: { k: 'dodge', p: 1.7, spd: 1.2 }, moves: [
+  { k: 'dodge', p: 1, w: 3, t: '* O Morcego de Papel mergulha num rasante!' },
+  { k: 'dodge', p: 0.65, hits: 2, w: 2, t: '* Rasante duplo! Ele vai e volta!' },
+  { k: 'buff', stat: 'hide', turns: 2, w: 1, t: '* O Morcego se dobra até ficar fino como uma folha.' }] });
+Object.assign(ENEMIES.slime, { moves: [
+  { k: 'ring', p: 1, w: 2, t: '* O Lodo de Tinta te cobre de tinta!' },
+  { k: 'mash', p: 1.3, need: 10, w: 2, t: '* O Lodo se estica e tenta te ENGOLIR!' },
+  { k: 'spell', p: 0.9, el: 'tinta', name: 'Onda de Tinta', st: 'blind', w: 1, t: '* O Lodo borbulha palavras... e lança uma {c}Onda de Tinta{/}!' }] });
+Object.assign(ENEMIES.crab, { big: { k: 'seq', n: 4, p: 0.6 }, moves: [
+  { k: 'ring', p: 1, w: 2, t: '* O Caranguejo-Balança belisca com a pinça grande!' },
+  { k: 'seq', n: 2, p: 0.65, w: 2, t: '* Pinçada dupla! Esquerda, direita!' },
+  { k: 'buff', stat: 'shell', turns: 2, w: 1, t: '* O Caranguejo se fecha dentro da carapaça.' }] });
+Object.assign(ENEMIES.lamp, { moves: [
+  { k: 'spell', p: 1, el: 'brasa', name: 'Dardo de Brasa', st: 'burn', w: 2, t: '* A Lamparina conjura um {o}Dardo de Brasa{/}!' },
+  { k: 'ring', p: 0.6, hits: 2, fast: true, w: 2, t: '* A Lamparina gira e solta faíscas em espiral!' },
+  { k: 'buff', stat: 'hide', turns: 2, w: 1, t: '* A Lamparina apaga a própria chama e some no escuro.' }] });
+Object.assign(ENEMIES.hunter, { elite: true, moves: [
+  { k: 'ring', p: 1, w: 2, t: '* O Caçador golpeia com a espada!' },
+  { k: 'seq', n: 3, p: 0.5, w: 2, t: '* Combo de espada! Três golpes rápidos!' },
+  { k: 'ring', p: 1.3, w: 1, t: '* O Caçador enfia o PÉ DE CABRA na sua tampa!' },
+  { k: 'buff', stat: 'atk', ally: true, v: 1.3, turns: 3, w: 1, t: '* "Pega ele!" O Caçador anima o parceiro.' }] });
+Object.assign(ENEMIES.archer, { elite: true, moves: [
+  { k: 'dodge', p: 0.6, hits: 2, w: 2, t: '* A Arqueira dispara duas flechas!' },
+  { k: 'dodge', p: 0.7, st: 'silence', w: 1, t: '* {p}Flecha do Silêncio{/}! Tem uma runa amarrada nela.' },
+  { k: 'dodge', p: 1.15, spd: 1.3, w: 1, t: '* A Arqueira mira com calma... e solta.' }] });
+Object.assign(ENEMIES.polvo, { big: { k: 'seq', n: 6, p: 0.4 }, moves: [
+  { k: 'seq', n: 4, p: 0.4, w: 2, t: '* Quatro tentáculos, quatro tapas!' },
+  { k: 'ring', p: 0.8, st: 'blind', w: 1, t: '* O Polvo espirra tinta na sua cara!' },
+  { k: 'mash', p: 1.1, need: 12, w: 1, t: '* O Polvo te dá um ABRAÇO apertado!' }] });
+Object.assign(ENEMIES.lampBig, { moves: [
+  { k: 'spell', p: 0.85, el: 'brasa', name: 'Onda de Brasa', st: 'burn', w: 2, t: '* A Lamparina Grande ergue uma {o}Onda de Brasa{/}!' },
+  { k: 'ring', p: 0.5, hits: 3, fast: true, w: 2, t: '* Chuva de brasas! Três de uma vez!' },
+  { k: 'buff', stat: 'atk', ally: true, v: 1.3, turns: 3, w: 1, t: '* A Lamparina Grande aquece o aliado. Ele ferve de raiva.' }] });
+Object.assign(ENEMIES.vet, { elite: true, big: { k: 'seq', n: 6, p: 0.45, spd: 1.2 }, moves: [
+  { k: 'seq', n: 4, p: 0.45, spd: 1.15, w: 2, t: '* O Veterano encadeia golpes com a espada!' },
+  { k: 'ring', p: 1.2, w: 2, t: '* O Veterano desce a espada com as duas mãos!' },
+  { k: 'buff', stat: 'shell', turns: 2, w: 1, t: '* O Veterano ergue o escudo. Postura defensiva.' },
+  { k: 'buff', stat: 'atk', ally: true, v: 1.35, turns: 3, w: 1, t: '* "Agora!" O Veterano dá cobertura à parceira.' }] });
+Object.assign(ENEMIES.archerVet, { elite: true, big: { k: 'dodge', p: 0.6, hits: 4, spd: 1.3 }, moves: [
+  { k: 'dodge', p: 0.5, hits: 3, spd: 1.25, w: 2, t: '* Três flechas, quase ao mesmo tempo!' },
+  { k: 'dodge', p: 0.7, st: 'silence', spd: 1.2, w: 1, t: '* {p}Flecha do Silêncio{/}! Mirada na sua boca.' },
+  { k: 'spell', p: 1.1, el: 'faisca', name: 'Dardo de Faísca', w: 1, spd: 1.1, t: '* A Arqueira Veterana encanta a flecha: {y}Dardo de Faísca{/}!' }] });
+
+// ---------- chefes ----------
+async function bossPhase(e) {
+  if (e.pendingPhase !== undefined && e.pendingPhase !== null && e.d.ai === 'golem') {
+    e.pendingPhase = null; e.phase = 2; e.sp = 'bossStone'; shake(40); sfx('rumble'); burst(e.x, e.y - 10, '#4a9a4a', 40);
+    await bSay(e.lastFire ? '* O musgo do Guarda-Musgo pega fogo e vira cinza!' : '* O musgo se solta em pedaços, revelando pedra nua por baixo.', { auto: 60 });
+    await bSay('A... CASCA... É SÓ... A PRIMEIRA... PÁGINA.', { fx: 'shake', col: '#d8f0b8' });
+    e.weak = { brasa: 0.5, geada: 1.3, bite: 1.25, seiva: 1 }; e.atk += 2; e.def += 2; e.charge = false; e.turns = 0;
+    await bSay('* O Guarda-Musgo agora é só pedra. Fogo não vai adiantar muito. Mordidas, por outro lado...', { auto: 70 });
+    return true;
+  }
+  return false;
+}
+const AI = {
+  async golem(e) {
+    if (await bossPhase(e)) return;
+    if (e.charge) { e.charge = false; return e.phase === 1 ? runMove(e, { k: 'dodge', p: 2.0, spd: 1.1, t: '* PEDREGULHO! Uma pedra enorme vem rolando!', fx: 'shake' }) : runMove(e, { k: 'seq', n: 5, p: 0.55, spd: 1.1, t: '* AVALANCHE! O teto inteiro desaba em pedaços!', fx: 'shake' }); }
+    if (e.turns % 3 === 0) { e.charge = true; await bSay('* O Guarda-Musgo ergue os punhos acima da cabeça. Algo GRANDE vem aí! (Prepare a defesa.)', { auto: 70 }); return; }
+    if (e.phase === 1) return runMove(e, pickMove(e, [
+      { k: 'ring', p: 1, w: 3, t: '* O Guarda-Musgo dá um soco coberto de musgo!' },
+      { k: 'ring', p: 0.7, st: 'poison', drain: 3, w: 2, t: '* O Guarda-Musgo sacode as costas. Esporos venenosos!' },
+      { k: 'mash', p: 0.9, need: 12, bind: true, w: 2, t: '* Raízes saem do chão e te AMARRAM!' },
+      { k: 'heal', frac: 0.12, name: 'Véu de Seiva', w: 1, once: 'veu', t: '* O musgo brilha verde. O Guarda-Musgo conjura {g}Véu de Seiva{/}!' }]));
+    return runMove(e, pickMove(e, [
+      { k: 'seq', n: 3, p: 0.55, w: 3, t: '* Chuva de cascalho! Três pedras!' },
+      { k: 'ring', p: 1.2, w: 2, t: '* O Guarda-Musgo desce uma pancada de pedra!' },
+      { k: 'spell', p: 1, el: 'geada', name: 'Onda de Geada', w: 2, t: '* A runa do peito gela. {c}Onda de Geada{/}!' }]));
+  },
+  async octo(e) {
+    if (!e.p2 && e.hp <= e.mhp * 0.5) {
+      e.p2 = true; e.phase = 2; shake(30); sfx('rumble'); e.atk += 4;
+      await bSay('O PÚBLICO... NÃO APLAUDIU?! SEGUNDO ATO!', { fx: 'shake', col: '#ffb0b0' });
+      await bSay('* O Polvo do Camarote fica vermelho-vivo. Ele ataca mais rápido agora.', { auto: 60 }); return;
+    }
+    if (e.charge) { e.charge = false; return runMove(e, { k: 'seq', n: e.p2 ? 7 : 6, p: 0.42, spd: 1.15, t: '* GRANDE FINALE! Todos os tentáculos descem de uma vez!', fx: 'shake' }); }
+    if (e.turns % 4 === 0) { e.charge = true; await bSay('* O Polvo do Camarote puxa a cortina com os oito braços. Vai vir um golpe enorme! (Prepare a defesa.)', { auto: 70 }); return; }
+    return runMove(e, pickMove(e, [
+      { k: 'seq', n: e.p2 ? 5 : 4, p: 0.42, w: 3, t: `* ABRAÇO DE ${e.p2 ? 'CINCO' : 'QUATRO'} BRAÇOS! Bloqueie cada tentáculo!` },
+      { k: 'mash', p: 1.1, need: 14, bind: true, w: 2, t: '* O Polvo te agarra e te ergue até o lustre!' },
+      { k: 'ring', p: 0.85, st: 'blind', w: 1, t: '* O Polvo esguicha um jato de tinta!' },
+      { k: 'spell', p: 0.6, hits: 2, el: 'tinta', name: 'Corrente de Tinta', w: 2, t: '* O Polvo rege a orquestra: {c}Corrente de Tinta{/}!' }]));
+  },
+  async hound(e) {
+    const brida = BT.en.find(x => x.id === 'brida' && x.alive);
+    if (brida && !BT.marked && Math.random() < 0.45) { BT.marked = true; sfx('encounter'); await bSay('* O Farejador fareja você e uiva! Você está {r}MARCADO{/}: o próximo golpe da Brida será muito mais forte.', { auto: 60 }); return; }
+    return runMove(e, pickMove(e, [
+      { k: 'dodge', p: 1.1, spd: 1.15, w: 2, t: '* O Farejador dá um bote!' },
+      { k: 'ring', p: 1, w: 2, t: '* O Farejador morde sua dobradiça!' },
+      { k: 'buff', stat: 'atk', ally: true, v: 1.25, turns: 2, w: 1, t: '* O Farejador uiva para a Brida. Ela sorri.' }]));
+  },
+  async brida(e) {
+    const mk = BT.marked ? 1.6 : 1; if (BT.marked) BT.marked = false;
+    if (!e.p2 && e.hp <= e.mhp * 0.5) {
+      e.p2 = true; e.phase = 2; G.flags.bridaP2 = true;
+      const h = Math.round(e.mhp * 0.18); e.hp += h; burst(e.x, e.y, '#9be58a', 24); sfx('heal');
+      await bSay('Você é bom, baú. Mas eu sou MELHOR.', { col: '#ffd0d0' });
+      await bSay(`* A Capitã Brida bebe uma poção. +${h} PV. Ela tira a capa e fica mais rápida.`, { auto: 60 }); e.atk += 3; return;
+    }
+    if (e.charge) { e.charge = false; return runMove(e, { k: 'dodge', p: 2.2 * mk, spd: 1.3, t: '* INVESTIDA DA GUILDA! A Brida atravessa a ponte com o escudo na frente!', fx: 'shake' }); }
+    if (e.turns % 4 === 3) { e.charge = true; await bSay('* A Capitã Brida recua e abaixa o escudo. Ela vai investir! (Prepare-se para desviar.)', { auto: 70 }); return; }
+    return runMove(e, pickMove(e, [
+      { k: 'ring', p: 1.1 * mk, w: 2, t: mk > 1 ? '* A Brida mira exatamente onde o Farejador marcou!' : '* A Capitã Brida desce a espada!' },
+      { k: 'seq', n: e.p2 ? 5 : 3, p: 0.6 * mk, spd: e.p2 ? 1.2 : 1, w: 2, t: '* Golpe de escudo, estocada, rasteira!' },
+      { k: 'mash', p: 0.5, need: 15, bind: true, w: e.p2 ? 2 : 1, t: '* A Brida joga uma REDE de caçador!' },
+      { k: 'spell', p: 1.1 * mk, el: 'faisca', name: 'Dardo de Faísca Selado', st: 'silence', w: 2, t: '* A Brida encanta a espada com runas: {y}Dardo de Faísca Selado{/}!' }]));
+  }
+};
 
 boot();
 </script>
