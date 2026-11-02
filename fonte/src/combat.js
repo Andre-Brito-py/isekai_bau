@@ -132,11 +132,18 @@ async function tickStatus() {
   }
   if (BT.ps.silence > 0) BT.ps.silence--;
 }
-function hurt(e, pow, mult, res) {
+function hurt(e, pow, mult, res, o = {}) {
   const am = e.atkBuff && e.atkBuff.t > 0 ? e.atkBuff.m : 1;
   let gm = mult; if (gm < 1 && gm > 0 && spec().guard) gm *= spec().guard;
   if (gm <= 0) return 0;
-  let dmg = e.atk * am * pow * rand(0.85, 1.15) * 60 / (60 + G.st.def);
+  if (BT.orbit > 0) { BT.orbit--; BT.nums.push({ x: 120, y: 184, s: 'ÓRBITA', col: '#ffe066', t: 50 }); sfx('guard'); return 0; }
+  if (e.blinded) { gm *= 0.5; e.blinded = 0; }
+  if (BT.stance > 0) gm *= 0.4;
+  if (BT.dark > 0) gm *= 0.75;
+  if (BT.guildShield > 0) gm *= 0.5;
+  if (spec().passive2 === 'guardian') gm *= 0.85;
+  const dstat = o.magic ? G.st.mag * 1.1 : o.pierce ? G.st.def * 0.5 : G.st.def;
+  let dmg = e.atk * am * pow * rand(0.85, 1.15) * 60 / (60 + dstat);
   dmg = Math.max(1, Math.round(dmg * gm * BT.buff.defM));
   G.hp = Math.max(0, G.hp - dmg);
   BT.nums.push({ x: 120, y: 184, s: '-' + dmg, col: res === 'fail' ? '#ff6b6b' : '#8fe3ff', t: 50 });
@@ -145,7 +152,7 @@ function hurt(e, pow, mult, res) {
 }
 function passives(e, dmg, res) {
   let extra = '';
-  if (spec().passive === 'counter' && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.6)); hitEnemy(e, c, 'hit'); extra = ` {c}Contra-ataque!{/} ${c} no ${e.name}.`; }
+  if (spec().passive === 'counter' && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.6 * (BT.stance > 0 ? 2 : 1))); hitEnemy(e, c, 'hit'); extra = ` {c}Contra-ataque!{/} ${c} no ${e.name}.`; }
   if (spec().passive === 'thorns' && dmg > 0 && e.alive) { const c = Math.max(1, Math.round(dmg * 0.3)); hitEnemy(e, c, 'hit', '#ffa94d'); extra = ` Os espinhos devolvem ${c}.`; }
   return extra;
 }
@@ -166,18 +173,18 @@ async function runMove(e, mv) {
   const note = r => { if (rank[r] > rank[worst]) worst = r; };
   switch (mv.k) {
     case 'ring': {
-      for (let h = 0; h < (mv.hits || 1); h++) { const r = await ring(e, mv); note(r); const d = hurt(e, mv.p, gmult(r), r); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
+      for (let h = 0; h < (mv.hits || 1); h++) { const r = await ring(e, mv); note(r); const d = hurt(e, mv.p, gmult(r), r, mv); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
       const head = worst === 'perfect' ? '* {c}DEFESA PERFEITA!{/}' : worst === 'good' ? '* Você fechou a tampa a tempo!' : '* Ai!';
       msg = `${head} ${total} de dano.` + msg; break;
     }
     case 'dodge': {
-      for (let h = 0; h < (mv.hits || 1); h++) { const r = await dodge(mv.spd || 1); note(r); const d = hurt(e, mv.p, r === 'perfect' ? 0.15 : r === 'good' ? 0.45 : 1, r); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
+      for (let h = 0; h < (mv.hits || 1); h++) { const r = await dodge(mv.spd || 1); note(r); const d = hurt(e, mv.p, r === 'perfect' ? 0.15 : r === 'good' ? 0.45 : 1, r, mv); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
       msg = (worst === 'perfect' ? `* Desvio perfeito! Só um arranhão: ${total}.` : worst === 'fail' ? `* Acertou em cheio! ${total} de dano.` : `* Raspou de leve. ${total} de dano.`) + msg; break;
     }
     case 'seq': {
       const miss = await seq(mv.n, mv.spd || 1);
-      for (let h = 0; h < miss; h++) { total += hurt(e, mv.p, 1, 'fail'); if (G.hp <= 0) return; }
-      if (mv.n - miss > 0) total += hurt(e, mv.p * (mv.n - miss), 0.15, 'good');
+      for (let h = 0; h < miss; h++) { total += hurt(e, mv.p, 1, 'fail', mv); if (G.hp <= 0) return; }
+      if (mv.n - miss > 0) total += hurt(e, mv.p * (mv.n - miss), 0.15, 'good', mv);
       worst = miss ? 'fail' : 'perfect';
       msg = miss === 0 ? `* Você bloqueou os ${mv.n} golpes! Só ${total} de dano.` : `* ${miss} de ${mv.n} golpes entraram: ${total} de dano.`;
       if (miss === 0 && spec().passive === 'counter') msg += passives(e, 0, 'perfect');
@@ -185,9 +192,9 @@ async function runMove(e, mv) {
     }
     case 'mash': {
       const f = await mash(mv.need || 12, mv.T || 110);
-      total = hurt(e, mv.p, f >= 1 ? 0.25 : 1 - 0.6 * f, f >= 1 ? 'good' : 'fail'); worst = f >= 1 ? 'good' : 'fail';
+      total = hurt(e, mv.p, f >= 1 ? 0.25 : 1 - 0.6 * f, f >= 1 ? 'good' : 'fail', mv); worst = f >= 1 ? 'good' : 'fail';
       msg = f >= 1 ? `* Você se soltou! Só ${total} de dano.` : `* Te apertou! ${total} de dano.`;
-      if (mv.bind && f < 0.6) { BT.netted = true; msg += ' Você ainda está PRESO e vai perder o próximo turno.'; }
+      if (mv.bind && f < 0.6 && !(BT.guildShield > 0)) { BT.netted = true; msg += ' Você ainda está PRESO e vai perder o próximo turno.'; }
       break;
     }
     case 'spell': {
@@ -195,9 +202,9 @@ async function runMove(e, mv) {
       const r = await ring(e, { label: 'ENGULA!', col: EL_COL[mv.el], spd: mv.spd, fakeable: false, fast: mv.fast });
       worst = r;
       for (let i = 0; i < 18; i++) BT.parts.push({ x: e.x + rand(-6, 6), y: e.y, vx: (120 - e.x) / 18 + rand(-0.4, 0.4), vy: (150 - e.y) / 18, life: 18, col: EL_COL[mv.el] || '#fff', sz: 2, then: true });
-      if (r === 'perfect') { const g = Math.max(2, Math.round(G.st.mmp * 0.15)); G.mp = Math.min(G.st.mmp, G.mp + g); sfx('rune'); msg = `* NHAC! Você {y}ENGOLIU{/} ${mv.name}! +${g} PM.`; break; }
+      if (r === 'perfect') { const g = Math.max(2, Math.round(G.st.mmp * 0.15)); G.mp = Math.min(G.st.mmp, G.mp + g); sfx('rune'); msg = `* NHAC! Você {y}ENGOLIU{/} ${mv.name}! +${g} PM.`; if (BT.copy) msg += copySpell(mv); break; }
       const hits = mv.hits || 1;
-      for (let h = 0; h < hits; h++) total += hurt(e, mv.p, r === 'good' ? 0.5 : 1, r);
+      for (let h = 0; h < hits; h++) total += hurt(e, mv.p, r === 'good' ? 0.5 : 1, r, { magic: true });
       msg = r === 'good' ? `* Você mordeu metade do feitiço. ${total} de dano.` : `* ${mv.name} acertou em cheio! ${total} de dano.`;
       if (mv.heal) { const h = Math.round(total * mv.heal); e.hp = Math.min(e.mhp, e.hp + h); msg += ` O ${e.name} recuperou ${h} PV.`; }
       break;
@@ -242,6 +249,7 @@ async function enemyTurn(e) {
   if (e.dot && e.dot.t > 0) { e.dot.t--; hitEnemy(e, e.dot.d, 'hit', '#ff8fa8'); await bSay(`* O selo queima o ${e.name}: ${e.dot.d} de dano.`, { auto: 30 }); if (e.hp <= 0) return; }
   if (e.frozen > 0) { e.frozen--; await bSay(`* O ${e.name} está congelado e não consegue se mexer.`, { auto: 40 }); return; }
   if (e.stunned > 0) { e.stunned--; await bSay(`* O ${e.name} está atordoado, vendo estrelinhas.`, { auto: 40 }); return; }
+  if (e.confused > 0) { e.confused--; await bSay(`* O ${e.name} procura você... e só encontra um baú comum. Ele perdeu o turno.`, { auto: 45 }); return; }
   if (e.d.ai) return AI[e.d.ai](e);
   if (DF().tricks) {
     if (!e.enraged && e.hp > 0 && e.hp < e.mhp * 0.4) { e.enraged = true; e.atk = Math.round(e.atk * 1.25); e.flash = 10; sfx('encounter'); await bSay(`* O ${e.name} fica {r}furioso{/}! O ataque dele aumentou.`, { auto: 40 }); }
@@ -369,3 +377,25 @@ const AI = {
       { k: 'spell', p: 1.1 * mk, el: 'faisca', name: 'Dardo de Faísca Selado', st: 'silence', w: 2, t: '* A Brida encanta a espada com runas: {y}Dardo de Faísca Selado{/}!' }]));
   }
 };
+
+// ---------- técnicas: utilidades ----------
+function techCost(T) { return T.pmFn ? T.pmFn() : (T.pm || 0); }
+async function roundEnd() {
+  for (const k in BT.cd) if (BT.cd[k] > 0) BT.cd[k]--;
+  if (BT.stance > 0) BT.stance--;
+  if (BT.dark > 0) BT.dark--;
+  if (BT.guildShield > 0) BT.guildShield--;
+  if (BT.star > 0 && BT.en.some(e => e.alive)) {
+    BT.star--; const t = pickOne(BT.en.filter(e => e.alive)); const d = Math.round((10 + G.st.mag * 1.1) * rand(0.9, 1.1));
+    burst(t.x, t.y - 20, '#ffe066', 14); hitEnemy(t, d, 'hit', '#ffe066'); await bSay(`* A estrela invocada mergulha no ${t.name}: ${d} de dano.${BT.star ? '' : ' Ela se apaga.'}`, { auto: 35 });
+    await killDead();
+  }
+}
+function copySpell(mv) {
+  BT.copy = false;
+  const el = ({ tinta: 'sombra', brasa: 'brasa', geada: 'geada', faisca: 'faisca', seiva: 'seiva', sombra: 'sombra', vento: 'vento' })[mv.el] || 'sombra';
+  if (G.spells.some(s => s.name === mv.name)) return ' Você já conhecia esse feitiço.';
+  if (G.spells.length >= 8) return ' O grimório está cheio demais para copiar.';
+  G.spells.push({ el, form: mv.hits > 1 ? 'corrente' : /Onda/.test(mv.name) ? 'onda' : 'dardo', mod: /Selad/.test(mv.name) ? 'selo' : null, name: mv.name, copied: true });
+  return ` {p}Você COPIOU ${mv.name} para o grimório!{/}`;
+}

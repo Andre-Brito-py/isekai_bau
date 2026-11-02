@@ -29,7 +29,7 @@ const SPECIES = {
   }
 };
 const XP_NEED = [0, 10, 18, 28, 40, 55, 72, 90, 110, 132, 156, 182, 210];
-function xpNeed(lv) { const base = XP_NEED[lv] || (210 + (lv - 12) * 30); const tier = (typeof spec === 'function' && spec().tier) || 1; return Math.round(base * [1, 1, 1.6, 2.5][tier]); }
+function xpNeed(lv) { const base = XP_NEED[lv] || (210 + (lv - 12) * 30); const tier = (typeof spec === 'function' && spec().tier) || 1; return Math.round(base * [1, 1, 1.6, 2.5, 7, 9][tier]); }
 
 const ENEMIES = {
   rat: {
