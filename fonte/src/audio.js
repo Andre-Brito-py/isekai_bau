@@ -226,3 +226,30 @@ const TRACKS = {
     leadWave: 'triangle', leadVol: 0.11, arp: { rate: 2, vol: 0.022 }, pad: true, padVol: 0.025
   }
 };
+
+Object.assign(TRACKS, {
+  mercado: {
+    bpm: 112, bars: 8, chords: 'Dm G Dm G C F Gm A', bass: 'walk', bassVol: 0.13,
+    lead: 'D5:2 F5:2 A5:2 G5:2 F5:2 E5:2 D5:4 | B4:2 D5:2 G5:4 F5:2 E5:2 D5:4 | A5:3 G5:1 F5:2 E5:2 D5:2 F5:2 A5:4 | G5:6 .:2 B5:4 A5:4 | G5:2 E5:2 C5:2 E5:2 G5:4 C6:4 | A5:4 F5:2 C5:2 F5:8 | Bb5:4 A5:2 G5:2 D5:4 G5:4 | C#5:4 E5:4 A5:4 .:4',
+    leadVol: 0.06, arp: { rate: 2, vol: 0.018, pat: [0, 2, 1, 3] }, drums: 'k.h.s.h.k.hks.h.', hatVol: 0.03
+  },
+  acampamento: {
+    bpm: 120, bars: 8, chords: 'Am Am F E Am Am Dm E', bass: 'pulse', bassVol: 0.14,
+    lead: '.:4 E5:1 .:3 E5:1 .:1 F5:1 .:1 E5:4 | .:4 C5:1 .:3 D5:1 .:1 E5:1 .:1 A4:4 | .:4 F5:1 .:3 F5:1 .:1 G5:1 .:1 A5:4 | G#5:2 .:2 E5:2 .:2 B4:2 .:2 G#4:4 | .:4 E5:1 .:3 E5:1 .:1 F5:1 .:1 E5:4 | A5:2 .:2 G5:2 .:2 E5:2 .:2 C5:4 | D5:2 F5:2 A5:2 D6:2 C6:4 A5:4 | B5:4 G#5:4 E5:8',
+    leadWave: 0.125, leadVol: 0.055, drums: 'h...s...h.h.s...', hatVol: 0.035
+  },
+  teatro: {
+    bpm: 72, bars: 8, chords: 'F C Dm Bb F C Bb C', bass: 'whole', bassVol: 0.1,
+    lead: 'A4:4 C5:4 F5:6 E5:2 | E5:4 D5:4 C5:8 | D5:4 F5:4 A5:4 G5:2 F5:2 | F5:8 D5:8 | A5:4 G5:2 F5:2 C5:8 | G5:4 F5:2 E5:2 C5:8 | D5:4 F5:4 Bb5:4 A5:4 | G5:12 .:4',
+    leadWave: 'triangle', leadVol: 0.1, arp: { rate: 2, vol: 0.03, wave: 'triangle', oct: 1, pat: [0, 2, 3, 2] }, pad: true, padVol: 0.02
+  },
+  ponte: {
+    bpm: 66, bars: 4, chords: 'Em Em C B', bass: 'whole', bassVol: 0.11,
+    lead: 'B4:8 .:8 | G5:8 F#5:8 | E5:16 | D#5:12 .:4', leadWave: 'triangle', leadVol: 0.06, arp: { rate: 4, vol: 0.02, pat: [0, 2, 1, 3] }, pad: true, padVol: 0.03
+  },
+  boss2: {
+    bpm: 172, bars: 8, chords: 'Em F Em F Am Bb B B', bass: 'oct8', bassVol: 0.18,
+    lead: 'E5:2 E5:2 F5:2 E5:2 B5:4 A5:2 G5:2 | A5:2 G5:2 F5:2 E5:2 F5:4 C6:4 | B5:2 G5:2 E5:2 G5:2 B5:4 E6:4 | D6:4 C6:2 A5:2 F5:8 | A5:2 C6:2 E6:4 D6:2 C6:2 B5:4 | Bb5:2 A5:2 G5:2 F5:2 D5:4 F5:4 | D#5:4 F#5:4 B5:8 | A5:2 G5:2 F#5:2 D#5:2 B4:8',
+    leadVol: 0.07, arp: { rate: 1, vol: 0.016, pat: [0, 1, 2, 1] }, drums: 'k.hsk.hsk.hsk.ss', hatVol: 0.04
+  }
+});

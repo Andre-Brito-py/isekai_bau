@@ -56,8 +56,50 @@ const MIMIC_OPEN = [
 const RECOLOR = {
   base: null,
   ferro: { o: 'l', n: 'm', b: 'd', l: 'y' },
-  arcano: { o: 'L', n: 'q', b: 'P', l: 'c', y: 'c' }
+  arcano: { o: 'L', n: 'q', b: 'P', l: 'c', y: 'c' },
+  fortaleza: { o: 'm', n: 'd', b: 'k', l: 'y' },
+  espinho: { o: 'l', n: 'm', b: 'd', l: 'r', y: 'f' },
+  grimorio: { o: 'w', n: 's', b: 'q', l: 'P', y: 'p' },
+  estelar: { o: 'u', n: 'B', b: 'k', l: 'c', y: 'w' }
 };
+const SIDE = [
+  "................",
+  "...kkkkkkkkkk...",
+  "..kmoooooooooook",
+  "..kmnnnnnnnnnnk.",
+  "..kmnnnnnnnnnnk.",
+  "..kbbbbbbbbbbbk.",
+  "..kkkkkkkkwkwkw.",
+  "..kkkkkkkkkyykk.",
+  "..kkkkkkkkkwkwk.",
+  "..kbbbbbbbbbbbk.",
+  "..kmnnnnnnnnnnk.",
+  "..konnnnnnnnnnk.",
+  "..konnnnnnnnnnk.",
+  "..kmnnnnnnnnnnk.",
+  "...kkkkkkkkkkk..",
+  "................"];
+const SIDE_OPEN = [
+  "...kkkkkkkkkk...", "..kmoooooooooook", "..kmnnnnnnnnnnk.", "..kmnnnnnnnnnnk.", "..kbbbbbbbbbbbk.",
+  "..kkkkkkkkwkwkw.", "..kkkkkkkkkyykk.", "..kkkkkkkkkpppp.", "..kkkkkkkkkwkwk.",
+  "..kbbbbbbbbbbbk.", "..kmnnnnnnnnnnk.", "..konnnnnnnnnnk.", "..konnnnnnnnnnk.", "..kmnnnnnnnnnnk.", "...kkkkkkkkkkk..", "....kk......kk.."];
+const SIDE_STEP_A = SIDE.map((r, i) => i === 15 ? "....kk.....kk..." : r);
+const SIDE_STEP_B = SIDE.map((r, i) => i === 15 ? "......kk.kk....." : r);
+const SIDE_BLINK = SIDE.map((r, i) => i === 7 ? "..kkkkkkkkkkkkk." : r);
+// [parado, piscando, boca aberta, passo A, passo B, pulo com boca aberta]
+const SIDE_FRAMES = [SIDE, SIDE_BLINK, SIDE_OPEN, SIDE_STEP_A, SIDE_STEP_B, SIDE_OPEN];
+function flipH(c) { const o = mk(c.width, c.height), x = o.getContext('2d'); x.translate(c.width, 0); x.scale(-1, 1); x.drawImage(c, 0, 0); return o; }
+function makeMimicSet(key, map) {
+  SP[key] = [spr(MIMIC, map), spr(MIMIC_BLINK, map), spr(MIMIC_OPEN, map)];
+  const eyes = (rows, r, row) => rows.map((x, i) => i === r ? row : x);
+  const L = '.kkyykkkkyykkkk.', R = '.kkkkyykkkkyykk.';
+  SPD[key] = {
+    down: SP[key],
+    right: SIDE_FRAMES.map(f => spr(f, map)),
+    left: SIDE_FRAMES.map(f => flipH(spr(f, map))),
+    up: [spr(MIMIC_BACK, map), spr(MIMIC_BACK, map), spr(MIMIC_BACK_OPEN, map)]
+  };
+}
 const OFELIA = [
   "......kkkk......",
   ".....kLLLLk.....",
@@ -169,18 +211,15 @@ const MIMIC_BACK = [MIMIC[0], MIMIC[1], MIMIC[2], MIMIC[3], MIMIC[4], '.kbbmbbbb
 const MIMIC_BACK_OPEN = [MIMIC[1], MIMIC[2], MIMIC[3], MIMIC[4], '.kbbmbbbbbbmbbk.', '.kkkkkkkkkkkkkk.', '.kkkkkkkkkkkkkk.', ...MIMIC_BACK.slice(7)];
 function buildSprites() {
   for (const [k, map] of Object.entries(RECOLOR)) {
-    const key = k === 'base' ? 'mimic' : k === 'ferro' ? 'mimicIron' : 'mimicArc';
-    SP[key] = [spr(MIMIC, map), spr(MIMIC_BLINK, map), spr(MIMIC_OPEN, map)];
-    const eyes = (rows, r, row) => rows.map((x, i) => i === r ? row : x);
-    const L = '.kkyykkkkyykkkk.', R = '.kkkkyykkkkyykk.';
-    SPD[key] = {
-      down: SP[key],
-      left: [spr(eyes(MIMIC, 7, L), map), spr(MIMIC_BLINK, map), spr(eyes(MIMIC_OPEN, 5, L), map)],
-      right: [spr(eyes(MIMIC, 7, R), map), spr(MIMIC_BLINK, map), spr(eyes(MIMIC_OPEN, 5, R), map)],
-      up: [spr(MIMIC_BACK, map), spr(MIMIC_BACK, map), spr(MIMIC_BACK_OPEN, map)]
-    };
+    const key = { base: 'mimic', ferro: 'mimicIron', arcano: 'mimicArc', fortaleza: 'mimicFort', espinho: 'mimicSpike', grimorio: 'mimicBook', estelar: 'mimicStar' }[k];
+    makeMimicSet(key, map);
   }
   // detalhes extras das evoluções
+  const deco = (key, fn) => { const all = new Set([...SP[key], ...Object.values(SPD[key]).flat()]); for (const c of all) fn(c.getContext('2d')); };
+  deco('mimicFort', x => { x.fillStyle = PAL.y; for (const [i, j] of [[3, 3], [12, 3], [3, 12], [12, 12]]) x.fillRect(i, j, 1, 1); x.fillStyle = PAL.l; x.fillRect(1, 0, 14, 1); x.fillStyle = PAL.k; x.fillRect(0, 0, 1, 2); x.fillRect(15, 0, 1, 2); });
+  deco('mimicSpike', x => { x.fillStyle = PAL.k; for (const i of [3, 6, 9, 12]) { x.fillRect(i, 0, 1, 1); } x.fillStyle = PAL.w; for (const i of [3, 6, 9, 12]) x.fillRect(i, 1, 1, 1); x.fillStyle = PAL.l; x.fillRect(0, 9, 1, 1); x.fillRect(15, 9, 1, 1); x.fillRect(0, 12, 1, 1); x.fillRect(15, 12, 1, 1); });
+  deco('mimicBook', x => { x.fillStyle = PAL.k; for (let j = 2; j < 5; j++) x.fillRect(4 + j, j, 5, 1); x.fillStyle = '#d0c0a0'; x.fillRect(3, 11, 10, 1); x.fillRect(3, 13, 10, 1); x.fillStyle = PAL.q; x.fillRect(7, 1, 2, 1); });
+  deco('mimicStar', x => { x.fillStyle = PAL.y; for (const [i, j] of [[4, 3], [10, 2], [12, 4], [5, 11], [10, 12], [7, 3]]) x.fillRect(i, j, 1, 1); x.fillStyle = PAL.w; x.fillRect(8, 11, 1, 1); });
   { const c = SP.mimicIron; for (const s of c) { const x = s.getContext('2d'); x.fillStyle = PAL.l; x.fillRect(2, 1, 1, 1); x.fillRect(13, 1, 1, 1); x.fillStyle = PAL.k; x.fillRect(2, 0, 1, 1); x.fillRect(13, 0, 1, 1); x.fillStyle = PAL.y; x.fillRect(7, 12, 2, 1); } }
   { const c = SP.mimicArc; for (const s of c) { const x = s.getContext('2d'); x.fillStyle = PAL.c; x.fillRect(4, 3, 1, 1); x.fillRect(7, 2, 2, 1); x.fillRect(11, 3, 1, 1); x.fillRect(4, 11, 1, 2); x.fillRect(11, 11, 1, 2); } }
   SP.ofelia = [spr(OFELIA)];
@@ -193,6 +232,7 @@ function buildSprites() {
   SP.lantern = [makeLantern(0), makeLantern(1)];
   SP.chest = [makeChest(false), makeChest(true)];
   SP.pedestal = [makePedestal()];
+  buildSprites2();
 }
 
 function makeGolem(burned, frame) {
@@ -269,6 +309,7 @@ function floorPaint(x, R, base = '#2b2535', speck = '#342c41', dark = '#211b2b')
 }
 function buildTiles(theme) {
   const T = theme || {};
+  buildTiles2(T);
   const base = T.floor || '#2b2535', speck = T.speck || '#342c41', dark = T.dark || '#211b2b';
   for (let v = 0; v < 4; v++) TILE['.' + v] = tileCanvas((x, R) => floorPaint(x, R, base, speck, dark), 11 + v * 7);
   for (let v = 0; v < 2; v++) TILE[',' + v] = tileCanvas((x, R) => {
@@ -315,4 +356,54 @@ function buildTiles(theme) {
     for (let n = 0; n < 30; n++) px(x, R() * 16 | 0, R() * 16 | 0, R() < .5 ? '#3c7240' : '#6aa84e');
   }, 94);
   TILE['Gopen'] = tileCanvas((x, R) => { floorPaint(x, R, base, speck, dark); x.fillStyle = '#4a3a22'; x.fillRect(0, 12, 3, 4); x.fillRect(13, 12, 3, 4); for (let n = 0; n < 8; n++) px(x, R() * 16 | 0, 12 + (R() * 4 | 0), '#3c7240'); }, 95);
+}
+
+// ================= CAPÍTULO 2: SPRITES =================
+const CRAB = ["................", "................", "..kk........kk..", ".knnk......knnk.", ".knok.k..k.konk.", "..kk..w..w..kk..", "...k.kkkkkk.k...", "...kknnoonnkk...", "..knnnoooonnnk..", "..knonnnnnnonk..", "..knnnnnnnnnnk..", "...kkkkkkkkkk...", "..k.k.k..k.k.k..", ".k..k......k..k.", "................", "................"];
+const CRAB2 = CRAB.map((r, i) => i === 3 ? ".knnk......knnk." : i === 4 ? "..kok.k..k.kok.." : i === 12 ? "...k.k.kk.k.k..." : i === 13 ? "..k..k....k..k.." : r);
+const LAMP = ["................", ".......y........", "......yy....y...", "......yfy..yy...", ".....yffy.yfy...", ".....yfffyffy...", "....yffffffffy..", "...yffwwfwwffy..", "...yffkwfkwffy..", "...yfffffffffy..", "....yfffkkffy...", ".....yffffy.....", "......yyyy......", ".......yy.......", "................", "................"];
+const LAMP2 = LAMP.map((r, i) => i === 1 ? "........y......." : i === 2 ? ".......yy..y...." : i === 3 ? "......yfy.yy...." : r);
+const POLVO = ["................", "....kkkkkkkk....", "...krwrwrwrwk...", "..krwrwrwrwrwk..", "..kkkkkkkkkkkk..", "...kqqqqqqqqk...", "..kqqwkqqwkqqk..", "..kqqkkqqkkqqk..", "..kqqqqqqqqqqk..", "...kqqqppqqqk...", "..kqkqkqqkqkqk..", ".kqk.kqkkqk.kqk.", ".kk..kk..kk..kk.", "................", "................", "................"];
+const POLVO2 = POLVO.map((r, i) => i === 11 ? "..kqk.kqqk.kqk.." : i === 12 ? "..kk..kk.kk..kk." : r);
+const HUMAN = ["......kkkk......", ".....kmmmmk.....", "....kmllllmk....", "....kmmmmmmk....", "....kskssksk....", "....kssssssk....", ".....kssssk.....", "...kkGGGGGGkk...", "..kGGGGyyGGGGk..", "..ksGGGGGGGGsk..", "..kkGGnnnnGGkk..", "...kGGGGGGGGk...", "...kbbk..kbbk...", "...kbbk..kbbk...", "...kkkk..kkkk...", "................"];
+const HOUND = ["................", "................", "................", "................", "..kk............", ".kmmk...........", "kmmmmkkkkkkkk.k.", "kkmkmmmmmmmmmkk.", "kpmmmmmmmmmmmmk.", ".kkmmmmmmmmmmmk.", "..kmmrmmmmmmmk..", "..kmk...kmk.kmk.", "..kkk...kkk.kkk.", "................", "................", "................"];
+const BRIDA = ["........rr......", ".......rr.......", ".....kkkkkk.....", "....kllllllk....", "....kkkkkkkk....", "....kskssksk....", "....kssrrssk....", ".....kssssk.....", "..kkkllllllkkk..", ".kyykllyyllkmmk.", ".kyyklllllllkmk.", ".kyykllllllkssk.", "..kkkbbbbbbkkk..", "....kbbk.kbbk...", "....kkkk.kkkk...", "................"];
+const LUME = [".......kk.......", ".......yy.......", "..f....yy....f..", "..w..f.yy.f..w..", "..w..w.yy.w..w..", ".kyyyyyyyyyyyyk.", "..kyyykyykyyyk..", "...kyyyppyyyk...", "....kyyyyyyk....", "...c.kyyyyk.c...", "...c..kyyk..c...", "......c..c......", ".......cc.......", "................", "................", "................"];
+const LUME2 = LUME.map((r, i) => i === 2 ? "..y....yy....y.." : i === 9 ? "..c..kyyyyk..c.." : i === 10 ? "..c...kyyk...c.." : r);
+function buildSprites2() {
+  SP.crab = [spr(CRAB), spr(CRAB2)];
+  SP.lamp = [spr(LAMP), spr(LAMP2)];
+  SP.lampBig = [spr(LAMP, { f: 'r', y: 'f' }), spr(LAMP2, { f: 'r', y: 'f' })];
+  SP.polvo = [spr(POLVO), spr(POLVO2)];
+  SP.octo = [spr(POLVO, { q: 'r', r: 'y', w: 'w' }), spr(POLVO2, { q: 'r', r: 'y' })];
+  const hunter = spr(HUMAN), hunter2 = spr(HUMAN);
+  for (const c of [hunter, hunter2]) { const x = c.getContext('2d'); x.fillStyle = PAL.l; x.fillRect(14, 3, 1, 7); x.fillStyle = PAL.y; x.fillRect(13, 9, 3, 1); x.fillStyle = PAL.b; x.fillRect(14, 10, 1, 2); }
+  hunter2.getContext('2d').clearRect(3, 12, 10, 3); { const x = hunter2.getContext('2d'); x.fillStyle = PAL.k; x.fillRect(3, 12, 4, 2); x.fillRect(9, 12, 4, 2); x.fillStyle = PAL.b; x.fillRect(4, 12, 2, 1); x.fillRect(10, 12, 2, 1); }
+  SP.hunter = [hunter, hunter2];
+  SP.vet = [spr(HUMAN, { G: 'u', m: 'd', l: 'm' }), spr(HUMAN, { G: 'u', m: 'd', l: 'm' })];
+  for (const c of SP.vet) { const x = c.getContext('2d'); x.fillStyle = PAL.l; x.fillRect(14, 2, 1, 8); x.fillStyle = PAL.y; x.fillRect(13, 9, 3, 1); }
+  const archer = (m) => { const c = spr(HUMAN, m); const x = c.getContext('2d'); x.fillStyle = PAL.n; for (let j = 4; j < 13; j++) x.fillRect(j < 6 || j > 10 ? 2 : 1, j, 1, 1); x.fillStyle = PAL.w; x.fillRect(3, 5, 1, 7); return c; };
+  SP.archer = [archer({ m: 'G', l: 'g', G: 'n' }), archer({ m: 'G', l: 'g', G: 'n' })];
+  SP.archerVet = [archer({ m: 'P', l: 'q', G: 'B' }), archer({ m: 'P', l: 'q', G: 'B' })];
+  SP.hound = [spr(HOUND), spr(HOUND.map((r, i) => i === 11 ? "..kmk..kmk..kmk." : i === 12 ? "..kkk..kkk..kkk." : r))];
+  SP.brida = [spr(BRIDA), spr(BRIDA.map((r, i) => i === 0 ? ".........rr....." : i === 1 ? "........rr......" : r))];
+  SP.lume = [spr(LUME), spr(LUME2)];
+  SP.door = [makeDoor(false), makeDoor(true)];
+}
+function makeDoor(dark) {
+  const c = mk(16, 16), x = c.getContext('2d');
+  if (dark) { x.fillStyle = '#05030a'; x.fillRect(0, 0, 16, 16); x.fillStyle = '#2a2236'; x.fillRect(0, 0, 16, 2); x.fillRect(0, 0, 2, 16); x.fillRect(14, 0, 2, 16); return c; }
+  x.fillStyle = PAL.k; x.fillRect(0, 0, 16, 16); x.fillStyle = '#5a3420'; x.fillRect(1, 1, 14, 15); x.fillStyle = '#4a2a1c'; for (let i = 3; i < 16; i += 4) x.fillRect(i, 1, 1, 15);
+  x.fillStyle = PAL.m; x.fillRect(1, 4, 14, 2); x.fillRect(1, 11, 14, 2); x.fillStyle = PAL.y; x.fillRect(11, 7, 2, 3);
+  return c;
+}
+function buildTiles2(T) {
+  const base = T.floor || '#2b2535', speck = T.speck || '#342c41', dark = T.dark || '#211b2b';
+  TILE['w'] = tileCanvas((x, R) => { x.fillStyle = '#5a3a24'; x.fillRect(0, 0, 16, 16); x.fillStyle = '#3e2618'; for (let j = 3; j < 16; j += 4) x.fillRect(0, j, 16, 1); x.fillStyle = '#6e4a30'; for (let j = 0; j < 16; j += 4) for (let i = 0; i < 16; i++) if (R() < .25) x.fillRect(i, j, 1, 1); x.fillStyle = '#2a1a10'; x.fillRect((R() * 14 | 0) + 1, 1, 1, 1); x.fillRect((R() * 14 | 0) + 1, 9, 1, 1); }, 120);
+  TILE['T'] = tileCanvas((x, R) => { floorPaint(x, R, base, speck, dark); for (let i = 0; i < 16; i++) { x.fillStyle = (i >> 2) % 2 ? '#e8dcc0' : '#b83a3a'; x.fillRect(i, 0, 1, 7 + (i % 4 === 1 || i % 4 === 2 ? 1 : 0)); } x.fillStyle = PAL.k; x.fillRect(0, 8, 16, 1); x.fillStyle = '#4a2a1c'; x.fillRect(1, 9, 2, 7); x.fillRect(13, 9, 2, 7); x.fillStyle = '#7a4a2a'; x.fillRect(3, 11, 10, 4); x.fillStyle = '#f0c040'; x.fillRect(5, 10, 2, 1); x.fillStyle = '#8ac85a'; x.fillRect(8, 10, 3, 1); }, 121);
+  TILE['K'] = tileCanvas((x, R) => { floorPaint(x, R, base, speck, dark); x.fillStyle = PAL.k; x.fillRect(1, 2, 14, 13); x.fillStyle = '#9a6a3a'; x.fillRect(2, 3, 12, 11); x.fillStyle = '#6a4424'; x.fillRect(2, 3, 12, 1); x.fillRect(2, 13, 12, 1); x.fillRect(2, 3, 1, 11); x.fillRect(13, 3, 1, 11); for (let k = 0; k < 10; k++) x.fillRect(3 + k, 4 + k, 1, 1); }, 122);
+  TILE['N'] = tileCanvas((x, R) => { x.fillStyle = T.wall || '#3d3550'; x.fillRect(0, 0, 16, 16); x.fillStyle = PAL.k; x.fillRect(1, 2, 14, 12); x.fillStyle = '#7a4a2a'; x.fillRect(2, 3, 12, 10); x.fillStyle = '#e8dcc0'; x.fillRect(3, 4, 4, 5); x.fillRect(9, 5, 4, 6); x.fillStyle = '#8a8099'; x.fillRect(4, 5, 2, 1); x.fillRect(4, 7, 2, 1); x.fillRect(10, 6, 2, 1); x.fillRect(10, 8, 2, 1); x.fillStyle = '#c83838'; x.fillRect(5, 4, 1, 1); x.fillRect(11, 5, 1, 1); }, 123);
+  TILE['P'] = tileCanvas((x, R) => { x.fillStyle = '#1e1418'; x.fillRect(0, 0, 16, 16); for (const o of [0, 8]) { x.fillStyle = PAL.k; x.fillRect(o, 3, 8, 12); x.fillStyle = '#8a2a3a'; x.fillRect(o + 1, 4, 6, 7); x.fillStyle = '#a83a4a'; x.fillRect(o + 1, 4, 6, 1); x.fillStyle = '#5a1a24'; x.fillRect(o + 1, 11, 6, 3); } }, 124);
+  TILE['D'] = tileCanvas((x, R) => { for (let i = 0; i < 16; i++) { x.fillStyle = i % 4 === 0 ? '#5a1424' : i % 4 === 2 ? '#a8283c' : '#801c30'; x.fillRect(i, 0, 1, 16); } x.fillStyle = '#f0c040'; x.fillRect(0, 0, 16, 1); }, 125);
+  TILE['H'] = tileCanvas((x, R) => { floorPaint(x, R, base, speck, dark); x.fillStyle = PAL.k; x.fillRect(3, 1, 10, 14); x.fillStyle = '#b8862a'; x.fillRect(4, 2, 8, 11); x.fillStyle = '#e0b040'; x.fillRect(5, 3, 2, 8); x.fillStyle = '#7a5418'; x.fillRect(4, 12, 8, 2); x.fillStyle = PAL.k; x.fillRect(7, 14, 2, 1); }, 126);
 }

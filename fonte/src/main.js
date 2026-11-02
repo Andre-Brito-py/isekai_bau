@@ -337,7 +337,7 @@ function readSave() { try { const s = localStorage.getItem(SAVE_KEY); return s ?
 function applySave(d) { G = Object.assign(newState(), d); loadMap(G.map, G.x, G.y, G.dir || 'down'); V.scene = 'world'; }
 
 // ---------- mundo ----------
-const WD = { land: 0, bump: 0, idle: 0, dust: [], map: null, id: null, w: 0, h: 0, x: 0, y: 0, fx: 0, fy: 0, dir: 'down', moving: 0, ents: [], cx: 0, cy: 0, step: 0, bumpCd: 0 };
+const WD = { trail: [], disg: false, land: 0, bump: 0, idle: 0, dust: [], map: null, id: null, w: 0, h: 0, x: 0, y: 0, fx: 0, fy: 0, dir: 'down', moving: 0, ents: [], cx: 0, cy: 0, step: 0, bumpCd: 0 };
 const TILESETS = {};
 function loadMap(id, tx, ty, dir) {
   const m = MAPS[id]; WD.map = m; WD.id = id; WD.w = m.rows[0].length; WD.h = m.rows.length;
@@ -348,18 +348,29 @@ function loadMap(id, tx, ty, dir) {
   V.scene = 'world';
   if (id === 'antessala') playMusic(G.flags.bossDone ? 'ending' : null); else playMusic(m.music);
   V.banner = { text: m.name, t: 150 };
+  WD.trail = []; WD.lume = null; WD.disg = false;
 }
 function refreshEnts() {
   const m = WD.map;
   WD.ents = m.ents.filter(e => {
     if (e.kind === 'enemy' && G.gone[e.id]) return false;
     if (e.kind === 'boss' && G.flags.bossDone) return false;
+    if (e.kind === 'patrol' && G.gone[e.id]) return false;
+    if (e.kind === 'lume' && G.flags.lumeJoined) return false;
+    if (e.kind === 'brida' && G.flags.bridaDone) return false;
     return true;
-  }).map(e => ({ ...e, px: e.x * TS, py: e.y * TS, tx: e.x, ty: e.y, mv: 0, t: 60 + Math.random() * 90, stun: 0 }));
+  }).map(e => ({ ...e, px: e.x * TS, py: e.y * TS, tx: e.x, ty: e.y, mv: 0, t: 60 + Math.random() * 90, stun: 0, dir: e.turn ? e.turn[0] : 'down', wp: 1, wait: 30, ti: 0 }));
 }
 const tileAt = (x, y) => (x < 0 || y < 0 || x >= WD.w || y >= WD.h) ? '#' : WD.map.rows[y][x];
-function solidTile(c) { if (c === 'G') return !G.flags.gateOpen; return '#~Bcxr '.includes(c); }
-function entAt(x, y, ignoreEnemies) { return WD.ents.find(e => (e.kind === 'enemy' ? !ignoreEnemies && e.tx === x && e.ty === y : e.x === x && e.y === y) || (e.kind === 'boss' && (e.x === x || e.x + 1 === x) && e.y === y)); }
+function solidTile(c) { if (c === 'G') return !G.flags.gateOpen; return '#~Bcxr TKNPDH'.includes(c); }
+function entAt(x, y, ignoreEnemies) {
+  return WD.ents.find(e => {
+    if (e.kind === 'enemy' || e.kind === 'patrol') return !ignoreEnemies && e.tx === x && e.ty === y;
+    if (e.kind === 'door') return !G.flags[e.cond] && e.x === x && e.y === y;
+    if (e.kind === 'boss' || e.kind === 'brida') return (e.x === x || e.x + 1 === x) && e.y === y;
+    return e.x === x && e.y === y;
+  });
+}
 function passable(x, y, forEnemy) {
   if (solidTile(tileAt(x, y))) return false;
   if (forEnemy && WD.map.exits.some(ex => ex.x === x && ex.y === y)) return false;
@@ -388,6 +399,8 @@ function updateWorld() {
     }
   } else if (!blocked) {
     let d = null; for (const k of ['up', 'down', 'left', 'right']) if (KEYS[k]) { d = k; break; }
+    if (btnp('b') && G.flags.canDisguise) { WD.disg = !WD.disg; sfx(WD.disg ? 'guard' : 'move'); WD.land = 6; for (let i = 0; i < 6; i++) WD.dust.push({ x: WD.fx + 8 + rand(-7, 7), y: WD.fy + rand(4, 14), vx: rand(-0.5, 0.5), vy: -rand(0.1, 0.4), t: 18 }); }
+    if (d && WD.disg) { WD.disg = false; WD.land = 4; }
     if (d) {
       WD.dir = d; const [dx, dy] = DIRS[d], nx = WD.x + dx, ny = WD.y + dy;
       if (passable(nx, ny, false)) { WD.x = nx; WD.y = ny; WD.moving = TS; if ((WD.step++) % 2 === 0) sfx('step'); }
@@ -421,18 +434,26 @@ function updateWorld() {
     }
     if (e.stun === 0 && !blocked && Math.abs(e.px - WD.fx) < 12 && Math.abs(e.py - WD.fy) < 12) { runScript(() => encounter(e)); break; }
   }
+  if (!blocked) updatePatrols();
+  // seguidora
+  if (G.flags.lumeJoined) { const tgt = WD.trail.length > 10 ? WD.trail[WD.trail.length - 10] : [WD.fx, WD.fy]; WD.lume = WD.lume || [WD.fx, WD.fy]; WD.lume[0] += (tgt[0] - WD.lume[0]) * 0.2; WD.lume[1] += (tgt[1] - WD.lume[1]) * 0.2; }
+  if (WD.moving > 0) { WD.trail.push([WD.fx, WD.fy]); if (WD.trail.length > 40) WD.trail.shift(); }
   // câmera
   const mw = WD.w * TS, mh = WD.h * TS;
   WD.cx = mw <= W ? -(W - mw) / 2 : clamp(WD.fx + 8 - W / 2, 0, mw - W);
   WD.cy = mh <= H ? -(H - mh) / 2 : clamp(WD.fy + 8 - H / 2, 0, mh - H);
 }
 function onStep() {
-  const ex = WD.map.exits.find(e => e.x === WD.x && e.y === WD.y);
+  const ex = WD.map.exits.find(e => e.x === WD.x && e.y === WD.y && (!e.cond || G.flags[e.cond]));
   if (ex) { runScript(async () => { await fadeOut(10); loadMap(ex.to, ex.tx, ex.ty); await fadeIn(10); await onEnter(ex.to); }); return; }
   if (WD.id === 'antessala' && !G.flags.bossDone && WD.y <= 7) { runScript(STORY.bossIntro); return; }
+  if (WD.id === 'teatro' && !G.flags.octoDone && WD.y <= 5) { runScript(async () => { await STORY.octo(); await checkEvo(); }); return; }
+  if (WD.id === 'ponte' && !G.flags.bridaDone && WD.y >= 18) { runScript(STORY.brida); return; }
   if (tileAt(WD.x, WD.y) === '^') { runScript(async () => { await STORY.stairs(); WD.y++; WD.fy = WD.y * TS; G.y = WD.y; WD.dir = 'down'; }); }
 }
 async function onEnter(id) {
+  const firsts = { patamar: 'patamarFirst', mercado: 'mercadoFirst', acampamento: 'acampFirst', teatro: 'teatroFirst', ponte: 'ponteFirst' };
+  if (firsts[id] && !G.flags['seen_' + id]) { G.flags['seen_' + id] = true; await STORY[firsts[id]](); }
   if (id === 'galeria' && !G.flags.galeriaSeen) { G.flags.galeriaSeen = true; await STORY.galeriaFirst(); }
   if (id === 'poco' && !G.flags.pocoSeen) { G.flags.pocoSeen = true; await STORY.poçoFirst(); }
   if (id === 'galeria' && G.flags.gateOpen && !G.flags.gateAnim) {
@@ -449,7 +470,11 @@ function interact() {
     if (e.kind === 'rune') return runScript(() => absorbRune(e));
     if (e.kind === 'chest') return runScript(() => openChest(e));
     if (e.kind === 'boss') return runScript(STORY.bossIntro);
-    if (e.kind === 'enemy') return runScript(() => encounter(e));
+    if (e.kind === 'enemy' || e.kind === 'patrol') return runScript(() => encounter(e));
+    if (e.kind === 'door') return runScript(() => STORY.doorMsg(e));
+    if (e.kind === 'keychest') return runScript(() => STORY.keyChest(e));
+    if (e.kind === 'lume') return runScript(async () => { await STORY.octo(); await checkEvo(); });
+    if (e.kind === 'brida') return runScript(STORY.brida);
   }
   const c = tileAt(x, y);
   if (c === 'G') return runScript(STORY.gate);
@@ -489,8 +514,11 @@ async function encounter(e) {
   if (!WD.ents.includes(e)) return;
   const r = await battle(e.group);
   if (r === 'win') { G.gone[e.id] = true; refreshEnts(); }
-  else if (r === 'flee') { e.stun = 180; }
-  if (r === 'win' && spec().evos && G.lv >= spec().evoLv) await STORY.evolve();
+  else if (r === 'flee') { e.stun = e.kind === 'patrol' ? 300 : 180; }
+  if (r === 'win') await checkEvo();
+}
+async function checkEvo() {
+  if (spec().evos && G.lv >= spec().evoLv) { if (G.species === 'caixote') await STORY.evolve(); else await STORY.evolve2(); }
 }
 
 // ---------- render do mundo ----------
@@ -518,6 +546,7 @@ function drawWorld() {
     if (c === 'c') { const f = (FRAME >> 3) + tx * 3 & 3; bx.fillStyle = f === 0 ? '#ffd060' : '#ff9a30'; bx.fillRect(sx + 7, sy + 4, 2, 3); bx.fillStyle = '#fff4c0'; bx.fillRect(sx + 7 + (f === 2 ? 1 : 0), sy + 5, 1, 1); lights.push([sx + 8, sy + 5, 34 + (f & 1) * 3, 'rgba(255,170,80,0.18)']); }
     if (c === 'g') lights.push([sx + 8, sy + 8, 20, 'rgba(120,220,255,0.14)']);
   }
+  drawPatrolVision(ox, oy);
   // entidades (ordenadas por y)
   const list_ = [...WD.ents, { kind: 'player', px: WD.fx, py: WD.fy }].sort((a, b) => a.py - b.py);
   for (const e of list_) {
@@ -528,7 +557,11 @@ function drawWorld() {
         const set = SPD[spec().sp][WD.dir];
         const prog = WD.moving > 0 ? 1 - WD.moving / TS : 0, hop = Math.sin(prog * Math.PI);
         let fr = set[0], w = 16, h = 16, lift = 0, ox = 0;
-        if (WD.moving > 0) {
+        const side = WD.dir === 'left' || WD.dir === 'right';
+        if (WD.moving > 0 && side) {
+          lift = Math.round(hop * 2); fr = set[3 + (Math.floor((TS - WD.moving) / 4) % 2)];
+          if (hop > 0.85) fr = set[5];
+        } else if (WD.moving > 0) {
           lift = Math.round(hop * 5); fr = hop > 0.55 ? set[2] : set[0];
           if (prog < 0.2) { w = 14; h = 18; } else if (hop > 0.55) { w = 15; h = 17; }
         } else if (WD.land > 0) { w = 18 + (WD.land > 3 ? 1 : 0); h = 14 - (WD.land > 3 ? 1 : 0); }
@@ -543,7 +576,8 @@ function drawWorld() {
         for (const d of WD.dust) { bx.fillStyle = d.t > 8 ? '#6a6080' : '#4a4060'; const z = d.t > 8 ? 2 : 1; bx.fillRect(Math.round(d.x - ox_(WD.cx)), Math.round(d.y - oy_(WD.cy)), z, z); }
         const shw = 12 - Math.round(hop * 4);
         bx.fillStyle = 'rgba(0,0,0,0.35)'; bx.fillRect(sx + 8 - shw / 2, sy + 14, shw, 2);
-        bx.drawImage(fr, sx + Math.round((16 - w) / 2) + ox, sy + 15 - h + 1 - lift, w, h);
+        if (WD.disg) { bx.drawImage(SP.chest[0], sx + Math.round((16 - w) / 2), sy + 16 - h, w, h); if (FRAME % 90 < 6) { bx.fillStyle = '#f0c040'; bx.fillRect(sx + 6, sy + 9, 1, 1); bx.fillRect(sx + 9, sy + 9, 1, 1); } }
+        else bx.drawImage(fr, sx + Math.round((16 - w) / 2) + ox, sy + 15 - h + 1 - lift, w, h);
         if (WD.idle > 420) { const zt = (FRAME % 120) / 120; txt('z', (sx + 13 + zt * 6), sy - 4 - zt * 12, { col: '#b8aecb', alpha: 1 - zt }); if (FRAME % 120 > 60) txt('z', sx + 10 + (zt - .5) * 6, sy - 2 - (zt - .5) * 12, { col: '#8a8099', alpha: 1.5 - zt }); }
         lights.push([sx + 8, sy + 8, 70, null]);
         if (G.species === 'arcano') lights.push([sx + 8, sy + 8, 26, 'rgba(120,220,255,0.12)']);
@@ -587,6 +621,36 @@ function drawWorld() {
         }
         break;
       }
+      case 'patrol': {
+        const sp = SP[e.sp], fr = e.mv > 0 ? Math.floor(FRAME / 6) % 2 : 0;
+        const bob = e.mv > 0 ? -(Math.floor(FRAME / 6) % 2) : 0;
+        bx.fillStyle = 'rgba(0,0,0,0.3)'; bx.fillRect(sx + 3, sy + 14, 10, 2);
+        if (e.dir === 'left') { bx.save(); bx.translate(sx + 16, sy + bob); bx.scale(-1, 1); bx.drawImage(sp[fr], 0, 0); bx.restore(); } else bx.drawImage(sp[fr], sx, sy + bob);
+        if (e.alert) txt('!', sx + 6, sy - 12, { col: '#ff6b6b', shadow: true });
+        else if (e.stun > 0) txt('?', sx + 6, sy - 12, { col: '#b8aecb', shadow: true });
+        else if (e.bubble && e.bubble.t > 0) txt(e.bubble.s, sx + 8, sy - 12, { align: 'center', col: '#ffffff', shadow: true });
+        lights.push([sx + 8, sy + 8, 30, null]);
+        break;
+      }
+      case 'door': {
+        if (G.flags[e.cond]) break;
+        bx.drawImage(SP.door[e.dark ? 1 : 0], sx, sy); break;
+      }
+      case 'keychest': bx.drawImage(SP.chest[G.flags.teatroKey ? 1 : 0], sx, sy); if (!G.flags.teatroKey) lights.push([sx + 8, sy + 8, 24, 'rgba(255,224,102,0.18)']); break;
+      case 'lume': {
+        const sw = Math.round(Math.sin(FRAME * 0.04) * 2);
+        bx.fillStyle = '#5a5070'; bx.fillRect(sx + 7 + sw, sy - 16, 2, 16);
+        bx.drawImage(SP.lume[Math.floor(FRAME / 20) % 2], sx + sw, sy);
+        lights.push([sx + 8, sy + 8, 46, 'rgba(255,220,140,0.2)']);
+        if (!G.flags.octoDone) { const f = Math.floor(FRAME / 24) % 2; bx.drawImage(SP.octo[f], sx - 8, sy + 22 + Math.round(Math.sin(FRAME * 0.05) * 2), 32, 32); }
+        break;
+      }
+      case 'brida': {
+        const f = Math.floor(FRAME / 30) % 2;
+        bx.drawImage(SP.brida[f], sx, sy); bx.drawImage(SP.hound[f], sx + 16, sy + 2);
+        lights.push([sx + 16, sy + 8, 40, 'rgba(255,120,120,0.12)']);
+        break;
+      }
       case 'boss': {
         const f = Math.floor(FRAME / 30) % 2;
         bx.drawImage(SP.boss[f], sx - 8, sy - 16);
@@ -594,6 +658,11 @@ function drawWorld() {
         break;
       }
     }
+  }
+  if (G.flags.lumeJoined && WD.lume) {
+    const lxp = Math.round(WD.lume[0] - ox - 6), lyp = Math.round(WD.lume[1] - oy - 12 + Math.sin(FRAME * 0.08) * 2);
+    bx.drawImage(SP.lume[Math.floor(FRAME / 20) % 2], lxp, lyp);
+    lights.push([lxp + 8, lyp + 8, WD.id === 'ponte' ? 92 : 56, 'rgba(255,220,140,0.16)']);
   }
   // luz
   const amb = WD.map.dark || 0;
@@ -642,6 +711,7 @@ function spellPower(sp) { return RUNES[sp.el].pow * (RUNES[sp.form].mult || 1) *
 function veuText(sp) {
   const f = sp.mod === 'foco', e = sp.mod === 'eco';
   if (sp.el === 'brasa') return `Fúria: ataque ×${f ? 1.8 : 1.5} por ${e ? 5 : 3} turnos.`;
+  if (sp.el === 'faisca') return `Estática: ataque ×${f ? 1.6 : 1.35} e -20% de dano recebido por ${e ? 5 : 3} turnos.`;
   if (sp.el === 'geada') return `Casca de gelo: dano recebido ×${f ? 0.35 : 0.5} por ${e ? 5 : 3} turnos.`;
   return `Cura cerca de ${Math.round(healAmt(sp) * (e ? 1.6 : 1))} PV.`;
 }
@@ -649,13 +719,15 @@ const healAmt = sp => (8 + G.st.mag * 2.2) * (sp.mod === 'foco' ? 1.6 : 1);
 function spellDesc(sp) {
   const el = RUNES[sp.el];
   if (sp.form === 'veu') return `${spellCost(sp)} PM · Em você. ${veuText(sp)}`;
-  const alvo = sp.form === 'onda' ? 'Todos os inimigos' : 'Um inimigo';
-  let extra = sp.el === 'geada' ? ' Pode congelar.' : sp.el === 'seiva' ? ' Rouba metade do dano como PV.' : '';
+  const alvo = sp.form === 'onda' ? 'Todos os inimigos' : sp.form === 'corrente' ? 'Salta entre até 3' : 'Um inimigo';
+  let extra = sp.el === 'geada' ? ' Pode congelar.' : sp.el === 'seiva' ? ' Rouba metade do dano como PV.' : sp.el === 'faisca' ? ' Pode atordoar.' : '';
+  if (sp.mod === 'selo') extra += ' Selo: dano extra por 3 turnos.';
   if (sp.mod === 'eco') extra += ' Repete com 60%.';
   return `${spellCost(sp)} PM · ${alvo} · ${el.name}, poder ~${Math.round(spellPower(sp))}.${extra}`;
 }
 function suggestName(el, form, mod) {
-  const fem = form === 'onda'; const base = `${RUNES[form].name} de ${RUNES[el].name}`;
+  const fem = form === 'onda' || form === 'corrente'; const base = `${RUNES[form].name} de ${RUNES[el].name}`;
+  if (mod === 'selo') return base + (fem ? ' Selada' : ' Selado');
   return mod === 'eco' ? base + ' em Eco' : mod === 'foco' ? base + (fem ? ' Focada' : ' Focado') : base;
 }
 async function grimoire() {
@@ -721,7 +793,7 @@ function statusPanel() {
     `EXP ${G.xp} / ${xpNeed(G.lv)}`,
     `PV ${G.hp}/${s.mhp}    PM ${G.mp}/${s.mmp}`,
     `ATQ ${s.atk}   DEF ${s.def}   MAG ${s.mag}`,
-    spec().bite ? '{c}Mordida Férrea{/}: +25% de mordida' : spec().discount ? '{c}Boca de Runas{/}: feitiços -1 PM' : '{d}Evolui no nível 5{/}',
+    spec().passive ? `{c}${spec().tag}{/}: ${spec().desc[0]}` : spec().bite ? '{c}Mordida Férrea{/}: +25% de mordida' : spec().discount ? '{c}Boca de Runas{/}: feitiços -1 PM' : '{d}Evolui no nível 5{/}',
     `Batalhas vencidas: ${G.battles}`,
     `Tempo de jogo: ${fmtTime(G.time)}`
   ], { title: 'Status', h: 118 });
@@ -733,7 +805,7 @@ const SIL = new Map();
 function silhouette(c, col) { const k = col; let m = SIL.get(c); if (!m) { m = {}; SIL.set(c, m); } if (m[k]) return m[k]; const s = mk(c.width, c.height), x = s.getContext('2d'); x.drawImage(c, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, s.width, s.height); return m[k] = s; }
 function mkEnemy(id, i, n) {
   const d = ENEMIES[id], xs = n === 1 ? [120] : n === 2 ? [78, 162] : [48, 120, 192];
-  return { id, d, name: d.name, hp: d.hp, mhp: d.hp, atk: d.atk, def: d.def, x: xs[i], y: d.boss ? 58 : 66, sc: d.boss ? 3 : n >= 3 ? 3 : 4, shake: 0, flash: 0, hpShow: 0, alive: true, alpha: 1, frozen: 0, weak: { ...d.weak }, phase: 1, charge: false, turns: 0, sp: d.sp };
+  return { id, d, name: d.name, hp: d.hp, mhp: d.hp, atk: d.atk, def: d.def, x: xs[i], y: d.boss ? 58 : 66, sc: d.sc || (d.boss ? 3 : n >= 3 ? 3 : 4), shake: 0, flash: 0, hpShow: 0, alive: true, alpha: 1, frozen: 0, weak: { ...d.weak }, phase: 1, charge: false, turns: 0, sp: d.sp };
 }
 function bWait(mode, extra) { return new Promise(r => { BT.mode = mode; Object.assign(BT, extra || {}); BT.res = v => { BT.mode = 'none'; r(v); }; }); }
 function bSay(text, o = {}) {
@@ -746,11 +818,11 @@ async function battle(group, opts = {}) {
   const prev = AU.curName; playMusic(null);
   for (let i = 0; i < 3; i++) { V.flashW = 1; await wait(4); V.flashW = 0; await wait(4); }
   await fadeOut(8);
-  Object.assign(BT, { on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0 });
+  Object.assign(BT, { on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 });
   V.scene = 'battle'; playMusic(opts.music || 'battle');
   await fadeIn(10);
   const names = BT.en.map(e => e.name);
-  const intro = opts.boss ? '* O Guarda-Musgo bloqueia a escada!' : names.length === 1 ? `* Um ${names[0]} bloqueia o caminho!` : `* ${names.slice(0, -1).join(', ')} e ${names[names.length - 1]} aparecem!`;
+  const intro = opts.intro ? opts.intro : (opts.boss && group[0] === 'boss') ? '* O Guarda-Musgo bloqueia a escada!' : names.length === 1 ? `* Um ${names[0]} bloqueia o caminho!` : `* ${names.slice(0, -1).join(', ')} e ${names[names.length - 1]} aparecem!`;
   await bSay(intro);
   if (!G.flags.tutBattle) {
     G.flags.tutBattle = true;
@@ -764,6 +836,7 @@ async function battle(group, opts = {}) {
     const act = await playerTurn();
     if (act === 'fled') { result = 'flee'; break; }
     await killDead();
+    if (G.flags.lumeJoined && BT.en.some(e => e.alive) && BT.turn % 3 === 0) { await lumeSing(); await killDead(); }
     if (BT.en.every(e => !e.alive)) { result = 'win'; break; }
     for (const e of BT.en) {
       if (!e.alive) continue;
@@ -772,6 +845,7 @@ async function battle(group, opts = {}) {
       await killDead();
       if (BT.en.every(x => !x.alive)) { result = 'win'; break; }
     }
+    if (spec().passive === 'regen' && G.mp < G.st.mmp && result !== 'lose') { G.mp = Math.min(G.st.mmp, G.mp + 4); BT.nums.push({ x: 206, y: 184, s: '+4 PM', col: '#8fe3ff', t: 40 }); }
     if (BT.buff.atkT > 0 && --BT.buff.atkT === 0) { BT.buff.atkM = 1; await bSay('* A Fúria se apagou.', { auto: 30 }); }
     if (BT.buff.defT > 0 && --BT.buff.defT === 0) { BT.buff.defM = 1; await bSay('* A casca de gelo derreteu.', { auto: 30 }); }
   }
@@ -780,10 +854,12 @@ async function battle(group, opts = {}) {
   await fadeOut(12);
   BT.on = false; V.scene = 'world';
   if (WD.id === 'antessala') playMusic(G.flags.bossDone || result === 'win' ? 'ending' : null); else playMusic(WD.map.music || prev);
+  BT.netted = BT.marked = BT.inked = false;
   await fadeIn(12);
   return result;
 }
 async function playerTurn() {
+  if (BT.netted) { BT.netted = false; await bSay('* Você está preso na rede da Brida! Perdeu o turno se debatendo.', { auto: 50 }); return 'acted'; }
   while (true) {
     BT.flavor = pickOne(BT.en.find(e => e.alive && e.phase === 2)?.d.flavor2 || pickOne(BT.en.filter(e => e.alive)).d.flavor);
     BT.tw.set(BT.flavor, 35, { instant: false });
@@ -796,7 +872,7 @@ async function playerTurn() {
       if (i < 0) continue;
       const sp = G.spells[i];
       let target = null;
-      if (sp.form === 'dardo') { const t = await pickTarget(); if (t < 0) continue; target = BT.en[t]; }
+      if (sp.form === 'dardo' || sp.form === 'corrente') { const t = await pickTarget(); if (t < 0) continue; target = BT.en[t]; }
       G.mp -= spellCost(sp); await castSpell(sp, target); return 'acted';
     }
     if (c === 2) {
@@ -817,7 +893,7 @@ async function playerTurn() {
       continue;
     }
     if (c === 4) {
-      if (BT.opts.noFlee) { await bSay('* Não dá pra fugir. O Guarda-Musgo tapa a saída com o próprio corpo.'); continue; }
+      if (BT.opts.noFlee) { await bSay(WD.id === 'antessala' ? '* Não dá pra fugir. O Guarda-Musgo tapa a saída com o próprio corpo.' : '* Não dá pra fugir desta luta!'); continue; }
       if (Math.random() < 0.7) { sfx('flee'); await bSay('* Você fechou a tampa e saiu quicando. Fuga bem-sucedida!', { auto: 40 }); return 'fled'; }
       await bSay('* Você tentou fugir, mas tropeçou na própria dobradiça.', { auto: 50 }); return 'acted';
     }
@@ -829,9 +905,9 @@ function pickTarget() {
   if (!BT.en[BT.tgt] || !BT.en[BT.tgt].alive) BT.tgt = alive[0];
   return bWait('target');
 }
-const elTag = el => ({ brasa: 'o', geada: 'c', seiva: 'g' })[el];
+const elTag = el => ({ brasa: 'o', geada: 'c', seiva: 'g', faisca: 'y' })[el];
 async function doBite(e) {
-  const t = await bWait('timing', { tm: { x: 24, v: 3.2, done: false } });
+  const t = await bWait('timing', { tm: { x: 24, v: BT.inked ? 5 : 3.2, done: false } }); BT.inked = false;
   if (!t) { sfx('miss'); popNum(e, 'ERROU', '#bbbbbb'); await bSay('* Você mordeu o ar.', { auto: 40 }); return; }
   const crit = t >= 2;
   BT.biteFx = { e, t: 0 }; await wait(10); sfx('bite'); await wait(6); BT.biteFx = null;
@@ -863,7 +939,8 @@ async function castSpell(sp, target) {
   if (sp.form === 'veu') {
     sfx(sp.el === 'seiva' ? 'heal' : 'buff'); burst(120, 196, el.col, 30);
     const f = sp.mod === 'foco', ec = sp.mod === 'eco';
-    if (sp.el === 'brasa') { BT.buff.atkM = f ? 1.8 : 1.5; BT.buff.atkT = (ec ? 5 : 3) + 1; await bSay(`* Uma Fúria de brasa envolve sua tampa. Ataque ×${BT.buff.atkM} por ${BT.buff.atkT - 1} turnos.`, { auto: 50 }); }
+    if (sp.el === 'faisca') { BT.buff.atkM = f ? 1.6 : 1.35; BT.buff.atkT = (ec ? 5 : 3) + 1; BT.buff.defM = Math.min(BT.buff.defM, 0.8); BT.buff.defT = Math.max(BT.buff.defT, BT.buff.atkT); await bSay(`* Faíscas dançam na sua tampa. Ataque ×${BT.buff.atkM} e dano recebido -20% por ${BT.buff.atkT - 1} turnos.`, { auto: 50 }); }
+    else if (sp.el === 'brasa') { BT.buff.atkM = f ? 1.8 : 1.5; BT.buff.atkT = (ec ? 5 : 3) + 1; await bSay(`* Uma Fúria de brasa envolve sua tampa. Ataque ×${BT.buff.atkM} por ${BT.buff.atkT - 1} turnos.`, { auto: 50 }); }
     else if (sp.el === 'geada') { BT.buff.defM = f ? 0.35 : 0.5; BT.buff.defT = (ec ? 5 : 3) + 1; await bSay(`* Uma casca de gelo cobre você. Dano recebido reduzido por ${BT.buff.defT - 1} turnos.`, { auto: 50 }); }
     else {
       let h = Math.round(healAmt(sp) * rand(0.95, 1.05)); const before = G.hp; G.hp = Math.min(G.st.mhp, G.hp + h);
@@ -873,26 +950,46 @@ async function castSpell(sp, target) {
     return;
   }
   const passes = sp.mod === 'eco' ? [1, 0.6] : [1];
+  if (spec().passive === 'echo' && Math.random() < 0.3) passes.push(0.5);
   const log = [];
-  for (const pm of passes) {
-    let targets = sp.form === 'onda' ? BT.en.filter(e => e.alive && e.hp > 0) : [target && target.hp > 0 ? target : BT.en.find(e => e.alive && e.hp > 0)];
-    targets = targets.filter(Boolean); if (!targets.length) break;
+  for (let pi = 0; pi < passes.length; pi++) {
+    const pm = passes[pi];
+    if (pi > 0 && pi === passes.length - 1 && spec().passive === 'echo' && !(sp.mod === 'eco' && pi === 1)) log.push('* {p}O grimório ecoa o feitiço de graça!{/}');
+    let alive = BT.en.filter(e => e.alive && e.hp > 0);
+    let first = target && target.hp > 0 ? target : alive[0];
+    let targets, mults;
+    if (sp.form === 'onda') { targets = alive; mults = alive.map(() => 1); }
+    else if (sp.form === 'corrente') { targets = first ? [first, ...alive.filter(e => e !== first)].slice(0, 3) : []; mults = [1, 0.7, 0.5]; }
+    else { targets = first ? [first] : []; mults = [1]; }
+    if (!targets.length) break;
     sfx(sp.el); spellFx(sp, targets); await wait(24);
     let drained = 0;
-    for (const t of targets) {
+    targets.forEach((t, k) => {
       const wk = t.weak[sp.el] ?? 1;
-      const dmg = Math.max(1, Math.round(spellPower(sp) * pm * wk * rand(0.9, 1.1)));
-      hitEnemy(t, dmg, wk > 1 ? 'crit' : 'hit', el.col);
+      const dmg = Math.max(1, Math.round(spellPower(sp) * pm * mults[k] * wk * rand(0.9, 1.1)));
+      hitEnemy(t, dmg, wk > 1 ? 'crit' : 'hit', RUNES[sp.el].col);
       if (sp.el === 'seiva') drained += Math.round(dmg * 0.5);
       if (sp.el === 'geada' && t.hp > 0 && Math.random() < (t.d.boss ? 0.1 : sp.mod === 'foco' ? 0.4 : 0.25)) { t.frozen = 1; log.push(`* O ${t.name} congelou!`); }
+      if (sp.el === 'faisca' && t.hp > 0 && !t.frozen && Math.random() < (t.d.boss ? 0.12 : sp.mod === 'foco' ? 0.35 : 0.2)) { t.stunned = 1; log.push(`* O ${t.name} ficou atordoado!`); }
+      if (sp.mod === 'selo' && t.hp > 0) { t.dot = { d: Math.max(1, Math.round(dmg * 0.35)), t: 3 }; log.push(`* Um selo rosa queima no ${t.name}.`); }
       log.unshift(`* ${t.name}: ${dmg} de dano${wk > 1 ? ' {y}(ponto fraco!){/}' : wk < 1 ? ' (resistiu)' : ''}.`);
       if (t.d.boss && sp.el === 'brasa') t.lastFire = true;
-    }
+    });
     if (drained) { G.hp = Math.min(G.st.mhp, G.hp + drained); log.push(`* Você absorveu ${drained} PV.`); sfx('heal'); }
     await wait(16);
   }
-  const uniq = [...new Set(log)].slice(0, 4);
+  const uniq = [...new Set(log)].slice(0, 5);
   await bSay(uniq.join('\n'), { auto: 60 });
+}
+async function lumeSing() {
+  sfx('blipTri', 1250);
+  const hurt = G.hp < G.st.mhp * 0.55;
+  const opts = hurt ? ['heal', 'heal', 'buff'] : ['buff', 'stun', 'heal', 'stun'];
+  const k = pickOne(opts);
+  BT.lumeT = 60; burst(220, 100, '#ffe066', 16);
+  if (k === 'heal') { const h = Math.round(G.st.mhp * 0.22); G.hp = Math.min(G.st.mhp, G.hp + h); sfx('heal'); await bSay(`* {y}Lume{/} canta uma balada morna. +${h} PV.`, { auto: 50 }); }
+  else if (k === 'buff') { BT.buff.atkM = Math.max(BT.buff.atkM, 1.4); BT.buff.atkT = Math.max(BT.buff.atkT, 3); sfx('buff'); await bSay('* {y}Lume{/} toca um refrão animado. Ataque ×1.4 por 2 turnos!', { auto: 50 }); }
+  else { const t = pickOne(BT.en.filter(e => e.alive)); const dmg = Math.round(10 + G.lv * 3 + G.st.mag); hitEnemy(t, dmg, 'hit', '#ffe066'); if (!t.d.boss) t.stunned = 1; await bSay(`* {y}Lume{/} solta uma nota aguda! ${t.name}: ${dmg} de dano${t.d.boss ? '' : ' e atordoado'}.`, { auto: 50 }); }
 }
 function spellFx(sp, targets) {
   const col = RUNES[sp.el].col;
@@ -914,17 +1011,26 @@ async function guardAndHit(e, pow, label, o = {}) {
   dmg = Math.max(1, Math.round(dmg * gm * BT.buff.defM));
   G.hp = Math.max(0, G.hp - dmg);
   if (res === 'fail') { sfx('hurt'); BT.hurt = 14; shake(10); } else sfx('guard');
+  let extra = '';
+  if (spec().passive === 'counter' && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.6)); hitEnemy(e, c, 'hit'); extra = ` {c}Contra-ataque!{/} ${c} no ${e.name}.`; }
+  if (spec().passive === 'thorns' && e.alive) { const c = Math.max(1, Math.round(dmg * 0.3)); hitEnemy(e, c, 'hit', '#ffa94d'); extra = ` Os espinhos devolvem ${c}.`; }
   BT.nums.push({ x: 120, y: 184, s: '-' + dmg, col: res === 'fail' ? '#ff6b6b' : '#8fe3ff', t: 50 });
   const head = res === 'perfect' ? '* {c}DEFESA PERFEITA!{/} A tampa nem tremeu.' : res === 'good' ? '* Você fechou a tampa a tempo!' : '* Ai!';
-  return { dmg, text: `${head} ${dmg} de dano.` };
+  return { dmg, text: `${head} ${dmg} de dano.${extra}` };
 }
 async function enemyTurn(e) {
   e.turns++;
+  if (e.dot && e.dot.t > 0) { e.dot.t--; hitEnemy(e, e.dot.d, 'hit', '#ff8fa8'); await bSay(`* O selo queima o ${e.name}: ${e.dot.d} de dano.`, { auto: 30 }); if (e.hp <= 0) return; }
   if (e.frozen > 0) { e.frozen--; await bSay(`* O ${e.name} está congelado e não consegue se mexer.`, { auto: 40 }); return; }
+  if (e.stunned > 0) { e.stunned--; await bSay(`* O ${e.name} está atordoado, vendo estrelinhas.`, { auto: 40 }); return; }
+  if (e.d.ai) return AI[e.d.ai](e);
   if (e.d.boss) return bossTurn(e);
   const mv = pickOne(e.d.moves);
   await bSay(mv.t, { auto: 18 });
-  const r = await guardAndHit(e, mv.p, mv.t);
+  let r = { dmg: 0, text: '' };
+  for (let h = 0; h < (mv.hits || 1); h++) { const x = await guardAndHit(e, mv.p, mv.t); r.dmg += x.dmg; r.text = x.text; if (G.hp <= 0) break; }
+  if (mv.hits > 1) r.text = `* ${mv.hits} golpes: ${r.dmg} de dano no total.`;
+  if (mv.ink) { BT.inked = true; r.text += ' Tinta nos olhos: sua próxima mordida vai ser mais difícil.'; }
   let txt_ = r.text;
   if (mv.mp && G.mp > 0) { const l = Math.min(G.mp, 2); G.mp -= l; txt_ += ` Os esporos roubaram ${l} PM.`; }
   await bSay(txt_, { auto: 45 });
@@ -1040,7 +1146,7 @@ function circlePx(cx, cy, r, col) {
 }
 function drawBattle() {
   bx.fillStyle = '#07050c'; bx.fillRect(0, 0, W, H);
-  const gcol = BT.opts?.boss ? '#16301f' : WD.id === 'poco' ? '#16233a' : '#201833';
+  const gcol = WD.map?.battleBg || (BT.opts?.boss ? '#16301f' : WD.id === 'poco' ? '#16233a' : '#201833');
   bx.fillStyle = gcol; const off = Math.floor(FRAME / 4) % 24;
   for (let y = 8; y < 108; y += 24) for (let x = -24 + off; x < 240; x += 24) { bx.fillRect(x, y, 24, 1); bx.fillRect(x, y, 1, 24); }
   bx.fillStyle = '#07050c'; bx.fillRect(0, 104, 240, 4);
@@ -1057,6 +1163,8 @@ function drawBattle() {
     if (e.alive && (e.hpShow > 0 || e.d.boss)) { const bw = e.d.boss ? 90 : 40; bar(e.x - bw / 2, dy + h + 3, bw, 4, e.hp / e.mhp, '#4ad04a'); bx.fillStyle = '#000'; }
     if (BT.mode === 'target' && BT.tgt === BT.en.indexOf(e) && FRAME % 30 < 20) txt('▼', e.x - 3, dy - 14, { col: '#ffe066' });
     if (e.charge && FRAME % 20 < 12) txt('!!', e.x - 6, dy - 12, { col: '#ff6b6b' });
+    if (e.alive && e.dot && e.dot.t > 0) txt('SELO', e.x, dy + h + 8, { align: 'center', col: '#ff8fa8' });
+    if (e.alive && e.stunned) txt('★', e.x - 6, dy - 12, { col: '#ffe066' });
   }
   if (BT.biteFx) {
     const e = BT.biteFx.e, p = Math.min(1, (BT.biteFx.t = (BT.biteFx.t || 0) + 1) / 10), gap = 40 * (1 - p);
@@ -1066,6 +1174,7 @@ function drawBattle() {
       bx.fillStyle = '#f2ecdc'; for (let i = -32; i < 32; i += 8) for (let k = 0; k < 6; k++) { const ww = 6 - k; bx.fillRect(e.x + i + (8 - ww) / 2 - 4 + 4, s < 0 ? y0 - 6 + k : y0 + 5 - k, ww, 1); }
     }
   }
+  if (G.flags.lumeJoined) { const ly = 92 + Math.round(Math.sin(FRAME * 0.07) * 2); bx.drawImage(SP.lume[Math.floor(FRAME / 20) % 2], 216, ly); if (BT.lumeT > 0) { BT.lumeT--; txt('♪', 206, ly - 6 - (60 - BT.lumeT) / 6, { col: '#ffe066', alpha: BT.lumeT / 60 }); } }
   for (const p of BT.parts) { bx.fillStyle = p.col; bx.fillRect(Math.round(p.x), Math.round(p.y), p.sz, p.sz); }
   // caixa
   box(8, 116, 224, 72, { edge: BT.hurt > 0 && BT.hurt % 4 < 2 ? '#ff6b6b' : '#ffffff' });
@@ -1109,11 +1218,13 @@ function drawBattle() {
   for (const n of BT.nums) txt(n.s, n.x, n.y, { align: 'center', col: n.col, shadow: true, alpha: Math.min(1, n.t / 15) });
   if (BT.buff.atkT > 0) txt('FÚRIA', 10, 178, { col: '#ffa94d' });
   if (BT.buff.defT > 0) txt('GELO', 52, 178, { col: '#8fe3ff' });
+  if (BT.marked) txt('MARCADO', 90, 178, { col: '#ff6b6b' });
+  if (BT.netted) txt('PRESO', 150, 178, { col: '#ff6b6b' });
 }
 
 // ================= EVOLUÇÃO / FIM / TÍTULO =================
 function evolveScreen() {
-  const opts = SPECIES.caixote.evos;
+  const opts = spec().evos;
   const w = {
     type: 'evolve', idx: 0, conf: false,
     update() {
@@ -1163,8 +1274,9 @@ function drawEvo() {
   if (e.flash > 0) { bx.fillStyle = `rgba(255,255,255,${e.flash / 30})`; bx.fillRect(0, 0, W, H); e.flash--; }
   for (let i = 0; i < 3; i++) { const a = FRAME * 0.05 + i * 2.1, r = 70; bx.fillStyle = '#ffe066'; bx.fillRect(120 + Math.cos(a) * r, 120 + Math.sin(a) * r, 2, 2); }
 }
-function endScreen() {
+function endScreen(ch = 1) {
   playMusic('ending');
+  const CH = { 1: ['FIM DO CAPÍTULO 1', 'Tente não ser aberto', 'Próximo: Capítulo 2 — Herói Número 30'], 2: ['FIM DO CAPÍTULO 2', 'Herói Número 30', 'Próximo: Capítulo 3 — Quem Escreve o Catálogo'] }[ch];
   const w = {
     type: 'end', t: 0,
     update() { this.t++; if (this.t > 90 && btnp('a')) { sfx('select'); closeWin(this); } },
@@ -1173,11 +1285,11 @@ function endScreen() {
       for (let i = 0; i < 40; i++) { const x = (hash(i, 1) % 240 + FRAME * (0.1 + (i % 3) * 0.05)) % 240, y = hash(i, 2) % 240; bx.fillStyle = i % 4 ? '#3a3150' : '#8a8099'; bx.fillRect(x | 0, y, 1, 1); }
       const a = Math.min(1, this.t / 60);
       bx.globalAlpha = a; bx.drawImage(SP[spec().sp][Math.floor(FRAME / 40) % 2 ? 0 : 2], 96, 26, 48, 48); bx.globalAlpha = 1;
-      txt('FIM DO CAPÍTULO 1', 120, 84, { align: 'center', sz: 1.5, col: '#ffe066', alpha: a });
-      txt('Tente não ser aberto', 120, 104, { align: 'center', col: '#b8aecb', alpha: a });
+      txt(CH[0], 120, 84, { align: 'center', sz: 1.5, col: '#ffe066', alpha: a });
+      txt(CH[1], 120, 104, { align: 'center', col: '#b8aecb', alpha: a });
       const L = [`${G.name} · ${spec().name} nv ${G.lv}`, `Feitiços criados: ${G.spells.length}`, `Batalhas vencidas: ${G.battles}`, `Tempo: ${fmtTime(G.time)}`];
       L.forEach((l, i) => txt(l, 120, 128 + i * 12, { align: 'center', alpha: clamp((this.t - 40) / 40, 0, 1) }));
-      txt('Próximo: Capítulo 2 — Herói Número 30', 120, 186, { align: 'center', col: '#8fe3ff', alpha: clamp((this.t - 70) / 40, 0, 1) });
+      txt(CH[2], 120, 186, { align: 'center', col: '#8fe3ff', alpha: clamp((this.t - 70) / 40, 0, 1) });
       if (this.t > 90 && FRAME % 50 < 34) txt('A para continuar', 120, 214, { align: 'center', col: '#8a8099' });
     }
   };
@@ -1196,7 +1308,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulo 1', 6, 226, { col: '#5a5070' }); txt('v1.0', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–2', 6, 226, { col: '#5a5070' }); txt('v1.2', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
@@ -1254,4 +1366,103 @@ function boot() {
   requestAnimationFrame(frame);
   titleFlow();
 }
-boot();
+
+// ================= PATRULHAS / DISFARCE =================
+function patrolVision(e) {
+  const out = [], [dx, dy] = DIRS[e.dir];
+  for (let i = 1; i <= e.range; i++) {
+    const x = e.tx + dx * i, y = e.ty + dy * i;
+    if (solidTile(tileAt(x, y))) break;
+    const o = entAt(x, y, true); if (o && o.kind !== 'patrol') break;
+    out.push([x, y]);
+  }
+  return out;
+}
+function updatePatrols() {
+  for (const e of WD.ents) {
+    if (e.kind !== 'patrol') continue;
+    if (e.stun > 0) e.stun--;
+    if (e.alert > 0) continue;
+    if (e.mv > 0) { e.px += Math.sign(e.tx * TS - e.px); e.py += Math.sign(e.ty * TS - e.py); e.mv--; }
+    else if (--e.wait <= 0) {
+      e.wait = e.delay;
+      if (e.turn) { e.ti = (e.ti + 1) % e.turn.length; e.dir = e.turn[e.ti]; }
+      else {
+        const [gx, gy] = e.path[e.wp];
+        if (e.tx === gx && e.ty === gy) { e.wp = (e.wp + 1) % e.path.length; e.wait = 50; }
+        else {
+          const dx = Math.sign(gx - e.tx), dy = Math.sign(gy - e.ty);
+          e.dir = dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up';
+          const nx = e.tx + dx, ny = e.ty + dy;
+          if ((nx === WD.x && ny === WD.y) || !passable(nx, ny, true)) { e.wp = (e.wp + 1) % e.path.length; e.wait = 40; if (WD.disg && nx === WD.x && ny === WD.y && !e.saidBox) { e.saidBox = true; e.bubble = { t: 90, s: 'Só um baú.' }; } }
+          else { e.tx = nx; e.ty = ny; e.mv = TS; }
+        }
+      }
+    }
+    if (e.bubble && e.bubble.t > 0) e.bubble.t--;
+    if (e.stun > 0 || WD.disg) continue;
+    const seen = patrolVision(e).some(([x, y]) => x === WD.x && y === WD.y) || (Math.abs(e.px - WD.fx) < 12 && Math.abs(e.py - WD.fy) < 12);
+    if (seen) {
+      e.alert = 1; sfx('encounter');
+      runScript(async () => { await wait(36); await STORY.spotted(e); e.alert = 0; await encounter(e); });
+      break;
+    }
+  }
+}
+function drawPatrolVision(ox, oy) {
+  for (const e of WD.ents) {
+    if (e.kind !== 'patrol') continue;
+    const col = e.stun > 0 ? 'rgba(140,140,170,0.10)' : e.alert ? 'rgba(255,80,80,0.30)' : WD.disg ? 'rgba(160,220,255,0.10)' : 'rgba(255,224,102,0.16)';
+    bx.fillStyle = col;
+    for (const [x, y] of patrolVision(e)) bx.fillRect(x * TS - ox, y * TS - oy, TS, TS);
+  }
+}
+
+// ================= IA DOS CHEFES =================
+async function multiHit(e, n, pow, intro, o = {}) {
+  await bSay(intro, { auto: 16, fx: o.fx });
+  let tot = 0, last = '';
+  for (let i = 0; i < n; i++) { const r = await guardAndHit(e, pow, '', o); tot += r.dmg; last = r.text; if (G.hp <= 0) return; }
+  await bSay(n > 1 ? `* ${n} golpes: ${tot} de dano no total.` : last, { auto: 45 });
+}
+const AI = {
+  golem: e => bossTurn(e),
+  async octo(e) {
+    if (!e.p2 && e.hp <= e.mhp * 0.5) {
+      e.p2 = true; e.phase = 2; shake(30); sfx('rumble'); e.atk += 4;
+      await bSay('O PÚBLICO... NÃO APLAUDIU?! SEGUNDO ATO!', { fx: 'shake', col: '#ffb0b0' });
+      await bSay('* O Polvo do Camarote fica vermelho-vivo. Ele ataca mais rápido agora.', { auto: 60 }); return;
+    }
+    if (e.charge) { e.charge = false; return multiHit(e, 1, 2.1, '* GRANDE FINALE! Todos os tentáculos descem de uma vez!', { fast: true, fx: 'shake' }); }
+    if (e.turns % 4 === 0) { e.charge = true; await bSay('* O Polvo do Camarote puxa a cortina com os oito braços. Vai vir um golpe enorme! (Prepare a defesa.)', { auto: 70 }); return; }
+    const k = Math.random();
+    if (k < 0.4) return multiHit(e, e.p2 ? 4 : 3, 0.42, `* ABRAÇO DE ${e.p2 ? 'QUATRO' : 'TRÊS'} BRAÇOS! Defenda cada tentáculo!`);
+    if (k < 0.7) { await multiHit(e, 1, 0.85, '* O Polvo esguicha um jato de tinta!'); BT.inked = true; await bSay('* Tinta nos olhos! Sua próxima mordida vai ser mais difícil.', { auto: 40 }); return; }
+    return multiHit(e, 1, 1.25, '* Tentaclada em cheio!');
+  },
+  async hound(e) {
+    const brida = BT.en.find(x => x.id === 'brida' && x.alive);
+    if (brida && !BT.marked && Math.random() < 0.55) { BT.marked = true; sfx('encounter'); await bSay('* O Farejador fareja você e uiva! Você está {r}MARCADO{/}: o próximo golpe da Brida será muito mais forte.', { auto: 60 }); return; }
+    return multiHit(e, 1, Math.random() < 0.5 ? 1 : 1.2, pickOne(['* O Farejador morde sua dobradiça!', '* O Farejador avança rosnando!']));
+  },
+  async brida(e) {
+    const mk = BT.marked ? 1.6 : 1; if (BT.marked) BT.marked = false;
+    if (!e.p2 && e.hp <= e.mhp * 0.5) {
+      e.p2 = true; e.phase = 2; G.flags.bridaP2 = true;
+      const h = Math.round(e.mhp * 0.18); e.hp += h; burst(e.x, e.y, '#9be58a', 24); sfx('heal');
+      await bSay('Você é bom, baú. Mas eu sou MELHOR.', { col: '#ffd0d0' });
+      await bSay(`* A Capitã Brida bebe uma poção. +${h} PV. Ela tira a capa e fica mais rápida.`, { auto: 60 }); e.atk += 3; return;
+    }
+    if (e.charge) { e.charge = false; return multiHit(e, 1, 2.2 * mk, '* INVESTIDA DA GUILDA! A Brida atravessa a ponte com o escudo na frente!', { fast: true, fx: 'shake' }); }
+    if (e.turns % 4 === 3) { e.charge = true; await bSay('* A Capitã Brida recua e abaixa o escudo. Ela vai investir! (Prepare a defesa.)', { auto: 70 }); return; }
+    if (Math.random() < (e.p2 ? 0.3 : 0.2) && !BT.netted) {
+      await bSay('* A Brida joga uma REDE de caçador!', { auto: 16 });
+      const r = await bWait('guard', { ring: { r: 46, v: 1.15, state: 0, res: null } });
+      if (r === 'fail') { BT.netted = true; sfx('hurt'); BT.hurt = 14; await bSay('* A rede te pegou! Você vai perder o próximo turno.', { auto: 50 }); }
+      else { sfx('guard'); await bSay('* Você fechou a tampa e a rede escorregou. Ufa!', { auto: 45 }); }
+      return;
+    }
+    if (e.p2 && Math.random() < 0.4) return multiHit(e, 2, 0.65 * mk, '* Golpe de escudo e estocada, em sequência!');
+    return multiHit(e, 1, 1.1 * mk, mk > 1 ? '* A Brida mira exatamente onde o Farejador marcou!' : '* A Capitã Brida desce a espada!');
+  }
+};
