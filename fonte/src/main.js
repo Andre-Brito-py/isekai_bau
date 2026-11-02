@@ -15,7 +15,7 @@ let G = newState();
 function newState() {
   return {
     name: 'Davi', species: 'caixote', lv: 1, xp: 0, hp: 30, mp: 12, st: { mhp: 30, mmp: 12, atk: 6, def: 2, mag: 4 },
-    runes: [], spells: [], items: {}, flags: {}, gone: {}, map: 'despertar', x: 7, y: 6, dir: 'down', time: 0, battles: 0
+    runes: [], spells: [], items: {}, flask: { n: 3, max: 3 }, flags: {}, gone: {}, map: 'despertar', x: 7, y: 6, dir: 'down', time: 0, battles: 0
   };
 }
 const spec = () => SPECIES[G.species];
@@ -334,7 +334,9 @@ function decodeSave(s) { try { if (!s.startsWith('RCB1.')) return null; const d 
 function writeSave() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(snapshot())); return true; } catch (e) { return false; } }
 function saveGame() { return writeSave(); }
 function readSave() { try { const s = localStorage.getItem(SAVE_KEY); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
-function applySave(d) { G = Object.assign(newState(), d); loadMap(G.map, G.x, G.y, G.dir || 'down'); V.scene = 'world'; }
+function applySave(d) {
+  if (!d.flask) { const extra = ['c_p2', 'c_a1', 'c_t2'].filter(k => d.gone && d.gone[k]).length; d.flask = { n: 3 + extra, max: 3 + extra }; d.flags = d.flags || {}; }
+  G = Object.assign(newState(), d); loadMap(G.map, G.x, G.y, G.dir || 'down'); V.scene = 'world'; }
 
 // ---------- mundo ----------
 const WD = { trail: [], disg: false, land: 0, bump: 0, idle: 0, dust: [], map: null, id: null, w: 0, h: 0, x: 0, y: 0, fx: 0, fy: 0, dir: 'down', moving: 0, ents: [], cx: 0, cy: 0, step: 0, bumpCd: 0 };
@@ -482,11 +484,17 @@ function interact() {
 }
 async function lantern() {
   await say('* Uma Lanterna de Âmbar. A luz é morna como cozinha em dia de chuva.');
-  G.hp = G.st.mhp; G.mp = G.st.mmp; sfx('heal');
+  if (!G.flags.flaskTut) {
+    G.flags.flaskTut = true; sfx('catalog');
+    await say('[Você recebeu o {y}FRASCO DE ÂMBAR{/}. Cada gole cura parte dos PV e PM, dentro ou fora da batalha.]', 'cat');
+    await say('[As Lanternas não curam. Elas guardam sua história e enchem o frasco de novo.]', 'cat');
+    await say('[Procure {y}Fragmentos de Âmbar{/} em baús escondidos para aumentar o frasco.]', 'cat');
+  }
+  G.flask.n = G.flask.max; sfx('heal');
   const respawn = Object.keys(G.gone).some(k => k.startsWith('e_'));
   for (const k of Object.keys(G.gone)) if (k.startsWith('e_')) delete G.gone[k];
   refreshEnts();
-  await say('* PV e PM totalmente restaurados.');
+  await say(`* O Frasco de Âmbar se enche de luz. (${G.flask.n}/${G.flask.max} goles)`);
   const c = await choose('* Registrar sua história? (salvar o jogo)', ['Salvar', 'Agora não'], 'n', 1);
   if (c === 0) { if (saveGame()) { sfx('save'); await say('[Registro atualizado.]', 'cat'); } else await say('* Não foi possível salvar neste navegador. Use o Backup no MENU.'); }
   if (respawn) await say('* Ao longe, monstros da masmorra se espreguiçam e acordam.');
@@ -506,7 +514,9 @@ async function giveRune(id, quiet) {
 async function openChest(e) {
   if (G.gone[e.id]) { await say('* Um baú comum, aberto e vazio. Você fica com pena dele.'); return; }
   await say('* Um baú comum. Não se mexe. Não respira. É só... um baú.');
-  G.gone[e.id] = true; giveItem(e.item, e.n); sfx('item');
+  G.gone[e.id] = true; sfx('item');
+  if (e.item === 'frag') { G.flask.max++; G.flask.n++; J.level(); await say(`* Dentro tinha: {y}Fragmento de Âmbar{/}!\n* O frasco agora tem ${G.flask.max} goles.`); return; }
+  giveItem(e.item, e.n);
   await say(`* Dentro tinha: {y}${ITEMS[e.item].name}{/} ×${e.n}.`);
 }
 function giveItem(k, n = 1) { G.items[k] = (G.items[k] || 0) + n; }
@@ -693,7 +703,7 @@ function miniStatus() {
   txt(`NV ${G.lv}   EXP ${G.xp}/${xpNeed(G.lv)}`, x + 8, y + 19);
   txt(`PV ${G.hp}/${G.st.mhp}`, x + 8, y + 33); bar(x + 70, y + 36, 40, 5, G.hp / G.st.mhp, '#4ad04a');
   txt(`PM ${G.mp}/${G.st.mmp}`, x + 8, y + 47); bar(x + 70, y + 50, 40, 5, G.mp / G.st.mmp, '#5fa8ff');
-  txt(`Feitiços ${G.spells.length}/6`, x + 8, y + 61, { col: '#b8aecb' });
+  txt(`Frasco ${G.flask.n}/${G.flask.max}  Feitiços ${G.spells.length}`, x + 8, y + 61, { col: '#b8aecb' });
   txt(`Tempo ${fmtTime(G.time)}`, x + 8, y + 75, { col: '#b8aecb' });
 }
 function bar(x, y, w, h, p, col) { bx.fillStyle = '#2a2236'; bx.fillRect(x, y, w, h); bx.fillStyle = col; bx.fillRect(x, y, Math.round(w * clamp(p, 0, 1)), h); }
@@ -776,13 +786,22 @@ async function runesMenu() {
 async function itemsMenu() {
   let idx = 0;
   while (true) {
-    const ks = Object.keys(G.items).filter(k => G.items[k] > 0);
-    const r = await list({ title: 'Itens', x: 8, y: 8, w: 224, idx, empty: 'Sua tampa está vazia.', items: ks.map(k => ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: i => ITEMS[ks[i]].desc });
+    const ks = ['flask', ...Object.keys(G.items).filter(k => G.items[k] > 0)];
+    const r = await list({ title: 'Itens', x: 8, y: 8, w: 224, idx, items: ks.map(k => k === 'flask' ? flaskItem() : ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: i => ks[i] === 'flask' ? FLASK_DESC() : ITEMS[ks[i]].desc });
     if (r < 0) return; idx = r;
+    if (ks[r] === 'flask') { if (!G.flask.n) { await say('* O frasco está vazio. Descanse numa Lanterna de Âmbar.'); continue; } if (G.hp >= G.st.mhp && G.mp >= G.st.mmp) { await say('* Você está inteiro. Melhor guardar o gole.'); continue; } const t = drinkFlask(); sfx('heal'); await say(t); continue; }
     const it = ITEMS[ks[r]];
     if ((it.hp && G.hp >= G.st.mhp) || (it.mp && G.mp >= G.st.mmp)) { await say('* Você já está cheio disso. Melhor guardar.'); continue; }
     useItemOut(ks[r]); sfx('heal'); await say(`* Você comeu ${it.name}. ${it.hp ? 'PV' : 'PM'} recuperados.`);
   }
+}
+const FLASK_DESC = () => `Cura ${Math.round(FLASK_HP * 100)}% dos PV e ${Math.round(FLASK_MP * 100)}% dos PM. As Lanternas enchem de novo.`;
+const FLASK_HP = 0.45, FLASK_MP = 0.3;
+function flaskItem() { return { label: 'Frasco de Âmbar', right: `${G.flask.n}/${G.flask.max}`, col: '#f2b544', disabled: !G.flask.n }; }
+function drinkFlask() {
+  G.flask.n--; const h0 = G.hp, m0 = G.mp;
+  G.hp = Math.min(G.st.mhp, G.hp + Math.round(G.st.mhp * FLASK_HP)); G.mp = Math.min(G.st.mmp, G.mp + Math.round(G.st.mmp * FLASK_MP));
+  return `* Um gole de âmbar morno. +${G.hp - h0} PV, +${G.mp - m0} PM. (${G.flask.n}/${G.flask.max} goles)`;
 }
 function useItemOut(k) { const it = ITEMS[k]; G.items[k]--; if (it.hp) G.hp = Math.min(G.st.mhp, G.hp + it.hp); if (it.mp) G.mp = Math.min(G.st.mmp, G.mp + it.mp); }
 function statusPanel() {
@@ -876,10 +895,10 @@ async function playerTurn() {
       G.mp -= spellCost(sp); await castSpell(sp, target); return 'acted';
     }
     if (c === 2) {
-      const ks = Object.keys(G.items).filter(k => G.items[k] > 0);
-      if (!ks.length) { await bSay('* Sua tampa está vazia. Nenhum item.'); continue; }
-      const i = await list({ x: 8, y: 116, w: 224, h: 74, title: 'Itens', maxVis: 4, items: ks.map(k => ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: k => ITEMS[ks[k]].desc, descY: 40 });
+      const ks = ['flask', ...Object.keys(G.items).filter(k => G.items[k] > 0)];
+      const i = await list({ x: 8, y: 116, w: 224, h: 74, title: 'Itens', maxVis: 4, items: ks.map(k => k === 'flask' ? flaskItem() : ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: k => ks[k] === 'flask' ? FLASK_DESC() : ITEMS[ks[k]].desc, descY: 40 });
       if (i < 0) continue;
+      if (ks[i] === 'flask') { if (!G.flask.n) { await bSay('* O frasco está vazio.'); continue; } const t = drinkFlask(); sfx('heal'); burst(120, 196, '#f2b544', 22); await bSay(t, { auto: 50 }); return 'acted'; }
       const it = ITEMS[ks[i]]; useItemOut(ks[i]); sfx('heal'); burst(120, 196, it.hp ? '#9be58a' : '#5fa8ff', 18);
       await bSay(`* Você comeu ${it.name}. ${it.hp ? `PV: ${G.hp}/${G.st.mhp}` : `PM: ${G.mp}/${G.st.mmp}`}.`, { auto: 50 });
       return 'acted';
@@ -1006,7 +1025,7 @@ function burst(x, y, col, n) { for (let i = 0; i < n; i++) { const a = rand(0, M
 function popNum(e, s, col) { BT.nums.push({ x: e.x, y: e.y - 14 * e.sc / 3, s, col, t: 50 }); }
 async function guardAndHit(e, pow, label, o = {}) {
   const res = await bWait('guard', { ring: { r: 46, v: (o.fast ? 1.25 : rand(0.75, 1.05)) * (e.d.boss ? 1.1 : 1), state: 0, res: null } });
-  let dmg = e.atk * pow * rand(0.85, 1.15) - G.st.def * 0.5;
+  let dmg = e.atk * pow * rand(0.85, 1.15) * 60 / (60 + G.st.def);
   let gm = res === 'perfect' ? 0.3 : res === 'good' ? 0.5 : 1; if (gm < 1 && spec().guard) gm *= spec().guard;
   dmg = Math.max(1, Math.round(dmg * gm * BT.buff.defM));
   G.hp = Math.max(0, G.hp - dmg);
@@ -1081,8 +1100,8 @@ async function victory() {
   while (G.xp >= xpNeed(G.lv)) {
     G.xp -= xpNeed(G.lv); G.lv++;
     const g = spec().grow; for (const k in g) G.st[k] += g[k];
-    G.hp = G.st.mhp; G.mp = G.st.mmp; J.level(); burst(120, 196, '#ffe066', 30);
-    await bSay(`[Nível ${G.lv} alcançado! PV +${g.mhp}, PM +${g.mmp}, ATQ +${g.atk}, DEF +${g.def}, MAG +${g.mag}. PV e PM restaurados.]`, { cat: true });
+    G.hp = Math.min(G.st.mhp, G.hp + Math.round(G.st.mhp * 0.25)); G.mp = Math.min(G.st.mmp, G.mp + Math.round(G.st.mmp * 0.25)); J.level(); burst(120, 196, '#ffe066', 30);
+    await bSay(`[Nível ${G.lv} alcançado! PV +${g.mhp}, PM +${g.mmp}, ATQ +${g.atk}, DEF +${g.def}, MAG +${g.mag}. +25% de PV e PM.]`, { cat: true });
   }
 }
 async function gameOver() {
@@ -1093,7 +1112,7 @@ async function gameOver() {
   await say('* ...mas a sua história ainda não terminou.', 'void');
   const sv = readSave();
   const c = await choose('* O que você faz?', [sv ? 'Voltar à última Lanterna' : 'Recomeçar do despertar', 'Tela de título'], 'n');
-  if (c === 0) { if (sv) applySave(sv); else { const nm = G.name; G = newState(); G.name = nm; G.flags.introDone = true; loadMap('despertar', 7, 6, 'down'); } G.hp = G.st.mhp; G.mp = G.st.mmp; V.fade = 1; fadeIn(30); }
+  if (c === 0) { if (sv) applySave(sv); else { const nm = G.name; G = newState(); G.name = nm; G.flags.introDone = true; loadMap('despertar', 7, 6, 'down'); } G.hp = G.st.mhp; G.mp = G.st.mmp; G.flask.n = G.flask.max; V.fade = 1; fadeIn(30); }
   else { setTimeout(titleFlow, 0); }
 }
 
@@ -1308,7 +1327,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–2', 6, 226, { col: '#5a5070' }); txt('v1.2', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–2', 6, 226, { col: '#5a5070' }); txt('v1.3', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;

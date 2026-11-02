@@ -18,7 +18,7 @@ setInterval(()=>{ if(!AUTOP.on) return; release('a'); if(V.scene==='battle') AUT
     const m=BT.mode;
     if(m==='text') press('a');
     else if(m==='main'){
-      if(G.hp < G.st.mhp*0.35 && Object.values(G.items).some(v=>v>0)) BT.menuIdx=2;
+      if(G.hp < G.st.mhp*0.35 && (G.flask.n>0 || Object.values(G.items).some(v=>v>0))) BT.menuIdx=2;
       else BT.menuIdx = (G.spells.length && G.mp>=6 && AUTOP.act%%3!==2)?1:0; AUTOP.act++; press('a'); }
     else if(m==='target'){ const hi=BT.en.findIndex(e=>e.alive&&e.id==='hound'); if(hi>=0) BT.tgt=hi; press('a'); }
     else if(m==='timing' && Math.abs(BT.tm.x-120)<14) press('a');
@@ -27,21 +27,21 @@ setInterval(()=>{ if(!AUTOP.on) return; release('a'); if(V.scene==='battle') AUT
 }, 16);
 """ % SKILL
 SEQ = """
-window.RUNLOG=[]; window.DONE=false; const heal = () => { G.hp=G.st.mhp; G.mp=G.st.mmp; };
+window.RUNLOG=[]; window.DONE=false; const heal = () => { while (G.hp < G.st.mhp*0.6 && G.flask.n>0) drinkFlask(); }; const rest = () => { G.flask.n = G.flask.max; }; const top = () => { while (G.hp < G.st.mhp*0.85 && G.flask.n>0) drinkFlask(); };
 (async()=>{
- const fight = async (map) => { for (let k=0;k<12;k++) { const e = WD.ents.find(e=>(e.kind==='enemy'||e.kind==='patrol')); if(!e || WD.id!==map) break; heal(); const hp0=G.hp; await runScript(()=>encounter(e)); RUNLOG.push([map,e.id,hp0,G.hp,Math.round(100*(hp0-G.hp)/hp0)+'%',G.lv,G.species]); if(WD.id!==map) { RUNLOG.push(['LOST',e.id]); break; } } };
+ const fight = async (map) => { for (let k=0;k<12;k++) { const e = WD.ents.find(e=>(e.kind==='enemy'||e.kind==='patrol')); if(!e || WD.id!==map) break; heal(); const hp0=G.hp; await runScript(()=>encounter(e)); RUNLOG.push([map,e.id,hp0+'/'+G.st.mhp,'->',G.hp,'frasco',G.flask.n,G.lv,G.species]); if(WD.id!==map) { RUNLOG.push(['LOST',e.id]); break; } } };
  
  const go = async (m,x,y) => { loadMap(m,x,y,'down'); await runScript(()=>onEnter(m)); };
  await go('patamar',6,6);
- await go('mercado',12,2); await fight('mercado');
+ rest(); await go('mercado',12,2); await fight('mercado');
  { const r=WD.ents.find(e=>e.kind==='rune'); if(r) await runScript(()=>absorbRune(r)); }
  await runScript(async()=>{ G.spells.push({el:'faisca',form:'dardo',mod:null,name:'Raio Teimoso'}); });
- heal(); await go('acampamento',27,8); await fight('acampamento');
+ rest(); await go('acampamento',27,8); await fight('acampamento');
  await runScript(()=>STORY.keyChest()); { const r=WD.ents.find(e=>e.kind==='rune'); if(r) await runScript(()=>absorbRune(r)); }
- heal(); await go('teatro',1,9); await fight('teatro');
- heal(); loadMap('teatro',11,6,'up'); AUTOP.minhp=999; const hpo=G.hp; await runScript(async()=>{ await STORY.octo(); await checkEvo(); }); RUNLOG.push(['OCTO',hpo,'min',AUTOP.minhp,G.lv,G.species, !!G.flags.lumeJoined]);
- heal(); await go('ponte',7,1); await fight('ponte');
- heal(); loadMap('ponte',7,18,'down'); AUTOP.minhp=999; const hpb=G.hp; await runScript(STORY.brida); RUNLOG.push(['BRIDA',hpb,'min',AUTOP.minhp,G.lv,G.species, !!G.flags.ch2done]);
+ rest(); await go('teatro',1,9); await fight('teatro');
+ rest(); top(); loadMap('teatro',11,6,'up'); AUTOP.minhp=999; const hpo=G.hp; await runScript(async()=>{ await STORY.octo(); await checkEvo(); }); RUNLOG.push(['OCTO',hpo,'min',AUTOP.minhp,G.lv,G.species, !!G.flags.lumeJoined]);
+ rest(); await go('ponte',7,1); await fight('ponte');
+ rest(); top(); loadMap('ponte',7,18,'down'); AUTOP.minhp=999; const hpb=G.hp; await runScript(STORY.brida); RUNLOG.push(['BRIDA',hpb,'min',AUTOP.minhp,G.lv,G.species, !!G.flags.ch2done]);
  DONE=true;
 })();
 """
@@ -55,7 +55,7 @@ async def main():
         await pg.goto('file:///home/claude/rpg/Renasci-como-Bau-offline.html')
         await pg.wait_for_timeout(400)
         st = {'ferro': "{mhp:77,mmp:24,atk:16,def:12,mag:10}", 'arcano': "{mhp:63,mmp:38,atk:12,def:8,mag:15}"}[SPECIES]
-        await pg.evaluate("V.titleTok=null; UI.stack.length=0; G=newState(); G.name='Ravi'; Object.assign(G.flags,{introDone:true,ch1done:true,bossDone:true,gateOpen:true,tutBattle:true,metOfelia:true}); G.species='%s'; G.lv=2; G.st=%s; G.hp=G.st.mhp; G.mp=G.st.mmp; G.runes=['brasa','dardo','seiva','veu','geada','onda','eco'%s]; G.spells=[{el:'brasa',form:'dardo',mod:null,name:'Chama'},{el:'geada',form:'dardo',mod:null,name:'Gelo'},{el:'seiva',form:'veu',mod:null,name:'Cura'}]; G.items={pao:3,tinta:2}; applySave(G); V.fade=0;" % (SPECIES, st, ",'foco'" if SPECIES=='arcano' else ''))
+        await pg.evaluate("V.titleTok=null; UI.stack.length=0; G=newState(); G.name='Ravi'; Object.assign(G.flags,{introDone:true,ch1done:true,bossDone:true,gateOpen:true,tutBattle:true,metOfelia:true}); G.species='%s'; G.lv=2; G.st=%s; G.hp=G.st.mhp; G.mp=G.st.mmp; G.runes=['brasa','dardo','seiva','veu','geada','onda','eco'%s]; G.spells=[{el:'brasa',form:'dardo',mod:null,name:'Chama'},{el:'geada',form:'dardo',mod:null,name:'Gelo'},{el:'seiva',form:'veu',mod:null,name:'Cura'}]; G.items={pao:3,tinta:2}; G.flask={n:4,max:4}; applySave(G); V.fade=0;" % (SPECIES, st, ",'foco'" if SPECIES=='arcano' else ''))
         await pg.evaluate(AUTO)
         await pg.evaluate(SEQ)
         shots={'mercado':0,'acampamento':0,'teatro':0,'ponte':0}

@@ -171,7 +171,8 @@ const MAPS = {
       { id: 'r_onda', kind: 'rune', x: 14, y: 1, rune: 'onda' },
       { id: 'r_eco', kind: 'rune', x: 18, y: 12, rune: 'eco' },
       { id: 'c_p1', kind: 'chest', x: 19, y: 2, item: 'pao', n: 2 },
-      { id: 'c_p2', kind: 'chest', x: 2, y: 4, item: 'tinta', n: 2 },
+      { id: 'c_p2', kind: 'chest', x: 2, y: 4, item: 'frag', n: 1 },
+      { id: 'save_p', kind: 'save', x: 2, y: 6 },
       { id: 'e_p1', kind: 'enemy', x: 10, y: 2, group: ['bat'] },
       { id: 'e_p2', kind: 'enemy', x: 4, y: 10, group: ['slime'] },
       { id: 'e_p3', kind: 'enemy', x: 17, y: 4, group: ['bat'] },
@@ -197,7 +198,7 @@ const MAPS = {
       "######....######",
       "#######..#######"],
     exits: [{ x: 7, y: 13, to: 'galeria', tx: 11, ty: 2 }, { x: 8, y: 13, to: 'galeria', tx: 12, ty: 2 }],
-    ents: [{ id: 'boss', kind: 'boss', x: 7, y: 3 }]
+    ents: [{ id: 'boss', kind: 'boss', x: 7, y: 3 }, { id: 'save_as', kind: 'save', x: 4, y: 10 }]
   }
 };
 
@@ -311,7 +312,7 @@ const STORY = {
       'Rato-de-Vela: a chama nas costas é a alma dele. Fogo não adianta muito. Tente frio.',
       'Morcegos de papel queimam. Óbvio, não? É papel.',
       'O Lodo de Tinta engole mordidas. Use magia. Gelo, de preferência.',
-      'As Lanternas de Âmbar curam e guardam sua história. Também acordam os monstros de novo. Tudo tem um preço.',
+      'As Lanternas de Âmbar guardam sua história e enchem seu frasco. Também acordam os monstros de novo. Tudo tem um preço.',
       'Um feitiço com {y}Eco{/} se repete. Um com {y}Véu{/} vira sobre você. Combine, experimente, erre. Eu anoto.',
       'Sabe o Catálogo? Aquela voz chata? Ninguém sabe quem escreve aquilo. Nem eu. E eu sei de tudo.',
       'O Guarda-Musgo existe para impedir que coisas de baixo subam. Se você é uma coisa de baixo... bem.'];

@@ -121,7 +121,7 @@ Object.assign(MAPS, {
       { id: 'save_a', kind: 'save', x: 27, y: 11 },
       { id: 'r_corrente', kind: 'rune', x: 2, y: 2, rune: 'corrente' },
       { id: 'kc', kind: 'keychest', x: 1, y: 12 },
-      { id: 'c_a1', kind: 'chest', x: 26, y: 2, item: 'vela', n: 2 },
+      { id: 'c_a1', kind: 'chest', x: 26, y: 2, item: 'frag', n: 1 },
       { id: 'p_a1', kind: 'patrol', x: 23, y: 2, path: [[23, 2], [23, 14]], delay: 26, range: 3, group: ['hunter'], sp: 'hunter' },
       { id: 'p_a2', kind: 'patrol', x: 14, y: 4, path: [[14, 4], [14, 13]], delay: 18, range: 4, group: ['archer'], sp: 'archer' },
       { id: 'p_a3', kind: 'patrol', x: 6, y: 9, turn: ['left', 'down', 'right', 'up'], delay: 70, range: 4, group: ['hunter'], sp: 'hunter' },
@@ -136,7 +136,7 @@ Object.assign(MAPS, {
     ents: [
       { id: 'save_t', kind: 'save', x: 2, y: 10 },
       { id: 'r_selo', kind: 'rune', x: 9, y: 17, rune: 'selo' },
-      { id: 'c_t1', kind: 'chest', x: 20, y: 18, item: 'vela', n: 2 }, { id: 'c_t2', kind: 'chest', x: 19, y: 16, item: 'eter', n: 1 },
+      { id: 'c_t1', kind: 'chest', x: 20, y: 18, item: 'vela', n: 2 }, { id: 'c_t2', kind: 'chest', x: 19, y: 16, item: 'frag', n: 1 },
       { id: 'lume', kind: 'lume', x: 11, y: 2 },
       { id: 'e_t1', kind: 'enemy', x: 5, y: 7, group: ['polvo'] }, { id: 'e_t2', kind: 'enemy', x: 17, y: 7, group: ['lampBig'] },
       { id: 'e_t3', kind: 'enemy', x: 16, y: 12, group: ['polvo'] }, { id: 'e_t4', kind: 'enemy', x: 6, y: 12, group: ['polvo', 'lampBig'] },
