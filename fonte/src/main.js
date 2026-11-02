@@ -15,7 +15,7 @@ let G = newState();
 function newState() {
   return {
     name: 'Davi', species: 'caixote', lv: 1, xp: 0, hp: 30, mp: 12, st: { mhp: 30, mmp: 12, atk: 6, def: 2, mag: 4 },
-    runes: [], spells: [], tech: [], items: {}, diff: 'desafio', flask: { n: 3, max: 3 }, flags: {}, gone: {}, map: 'despertar', x: 7, y: 6, dir: 'down', time: 0, battles: 0
+    runes: [], rq: {}, spells: [], tech: [], items: {}, diff: 'desafio', flask: { n: 3, max: 3 }, flags: {}, gone: {}, map: 'despertar', x: 7, y: 6, dir: 'down', time: 0, battles: 0
   };
 }
 const spec = () => SPECIES[G.species];
@@ -341,7 +341,7 @@ function saveGame() { return writeSave(); }
 function readSave() { try { const s = localStorage.getItem(SAVE_KEY); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
 function applySave(d) {
   if (!d.flask) { const extra = ['c_p2', 'c_a1', 'c_t2'].filter(k => d.gone && d.gone[k]).length; d.flask = { n: 3 + extra, max: 3 + extra }; d.flags = d.flags || {}; }
-  G = Object.assign(newState(), d); loadMap(G.map, G.x, G.y, G.dir || 'down'); V.scene = 'world'; }
+  G = Object.assign(newState(), d); migrateRunes(d); loadMap(G.map, G.x, G.y, G.dir || 'down'); V.scene = 'world'; }
 
 // ---------- mundo ----------
 const WD = { trail: [], disg: false, land: 0, bump: 0, idle: 0, dust: [], map: null, id: null, w: 0, h: 0, x: 0, y: 0, fx: 0, fy: 0, dir: 'down', moving: 0, ents: [], cx: 0, cy: 0, step: 0, bumpCd: 0 };
@@ -514,26 +514,104 @@ async function lantern() {
   for (const k of Object.keys(G.gone)) if (k.startsWith('e_')) delete G.gone[k];
   refreshEnts();
   await say(`* O Frasco de Âmbar se enche de luz. (${G.flask.n}/${G.flask.max} goles)`);
-  const c = await choose('* Registrar sua história? (salvar o jogo)', ['Salvar', 'Agora não'], 'n', 1);
-  if (c === 0) { if (saveGame()) { sfx('save'); await say('[Registro atualizado.]', 'cat'); } else await say('* Não foi possível salvar neste navegador. Use o Backup no MENU.'); }
+  while (true) {
+    const c = await choose('* A Lanterna espera. O que você faz?', ['Salvar o jogo', 'Fundir runas', 'Seguir viagem'], 'n', 2);
+    if (c === 1) { await fuseMenu(); continue; }
+    if (c === 0) { if (saveGame()) { sfx('save'); await say('[Registro atualizado.]', 'cat'); } else await say('* Não foi possível salvar neste navegador. Use o Backup no MENU.'); }
+    break;
+  }
   if (respawn) await say('* Ao longe, monstros da masmorra se espreguiçam e acordam.');
 }
 async function absorbRune(e) {
-  if (G.runes.includes(e.rune)) { await say('* O pedestal está vazio agora. Só sobrou o cheiro de tinta.'); return; }
+  if (G.gone[e.id]) { await say('* O pedestal está vazio agora. Só sobrou o cheiro de tinta.'); return; }
   await say('* Uma pedra coberta de símbolos flutua sobre o pedestal.');
   await say('* Você abre a tampa e...| {y}NHAC{/}.');
-  await giveRune(e.rune);
+  G.gone[e.id] = true;
+  await giveRune(e.rune, false, e.n);
 }
-async function giveRune(id, quiet) {
-  if (G.runes.includes(id)) return;
-  G.runes.push(id); sfx('rune');
-  const r = RUNES[id];
-  await say(`* Runa absorvida: {${r.col}}${r.name.toUpperCase()}{/} (${TYPE_LABEL[r.type]}).\n* ${r.desc}`);
+// ---------- runas consumíveis e raridade (v1.6) ----------
+const RARITY = {
+  comum: { name: 'Comum', col: '#d8d0e4', n: 2 }, incomum: { name: 'Incomum', col: '#8ad06a', n: 2 },
+  rara: { name: 'Rara', col: '#6ab0ff', n: 1 }, epica: { name: 'Épica', col: '#e08aff', n: 1 }
+};
+const RAR_ORDER = ['comum', 'incomum', 'rara', 'epica'];
+const RUNE_RAR = { brasa: 'comum', geada: 'comum', seiva: 'comum', dardo: 'comum', onda: 'incomum', veu: 'incomum', faisca: 'incomum', vento: 'incomum', corrente: 'rara', eco: 'rara', selo: 'rara', sombra: 'rara', dreno: 'rara', foco: 'epica' };
+// dificuldade de cada área (1 a 9): decide a raridade dos drops
+const MAP_D = { despertar: 1, galeria: 1, biblioteca: 2, poco: 3, antessala: 3, patamar: 4, mercado: 4, acampamento: 5, teatro: 6, ponte: 6, escadaria3: 7, muralhas: 7, patio: 8, jaula: 8, scriptorium: 9 };
+function rar(id) { return RUNES[id].rar || RUNE_RAR[id] || 'comum'; }
+function rq(id) { return (G.rq && G.rq[id]) || 0; }
+function addRune(id, n = 1) { if (!G.rq) G.rq = {}; G.rq[id] = rq(id) + n; if (!G.runes.includes(id)) G.runes.push(id); }
+function useRune(id) { G.rq[id] = Math.max(0, rq(id) - 1); }
+function runeTotal() { return G.runes.reduce((a, r) => a + rq(r), 0); }
+function rarTag(id) { const k = RARITY[rar(id)]; return `{${k.col}}${k.name}{/}`; }
+async function giveRune(id, quiet, n) {
+  const r = RUNES[id], isNew = !G.runes.includes(id); n = n || RARITY[rar(id)].n;
+  addRune(id, n); sfx('rune');
+  if (isNew) await say(`* Runa absorvida: {${r.col}}${r.name.toUpperCase()}{/} ×${n} (${TYPE_LABEL[r.type]}, ${rarTag(id)}).\n* ${r.desc}`);
+  else if (!quiet) await say(`* Runa {${r.col}}${r.name}{/} ×${n} (${rarTag(id)}). Agora você tem ${rq(id)}.`);
+}
+function pickRuneOf(k) { const ks = G.runes.filter(r => rar(r) === k); return ks.length ? pickOne(ks) : null; }
+function rollRune(d, boss) {
+  const w = boss ? { comum: 0, incomum: d < 6 ? 4 : 0, rara: d >= 6 ? 4 : d >= 3 ? 1 : 0, epica: d >= 8 ? 1 : 0 } : { comum: 10, incomum: d >= 3 ? d : 0, rara: d >= 6 ? (d - 5) * 1.5 : 0, epica: 0 };
+  let tot = 0; for (const k in w) tot += w[k]; let x = Math.random() * tot, k = 'comum';
+  for (const kk of RAR_ORDER) { if (x < w[kk]) { k = kk; break; } x -= w[kk]; }
+  for (let i = RAR_ORDER.indexOf(k); i >= 0; i--) { const id = pickRuneOf(RAR_ORDER[i]); if (id) return id; }
+  return null;
+}
+function runeDrops() {
+  const d = MAP_D[WD.id] || 6, out = [], boss = BT.en.some(e => e.d.boss);
+  if (boss) { const a = rollRune(d, true), b = rollRune(d); if (a) out.push(a); if (b) out.push(b); }
+  else if (Math.random() < 0.12 + 0.02 * d + 0.05 * (BT.en.length - 1) + (BT.en.some(e => e.d.elite) ? 0.05 : 0)) { const a = rollRune(d); if (a) out.push(a); }
+  out.forEach(id => addRune(id, 1));
+  return out;
+}
+async function fuseMenu() {
+  if (!G.flags.tut_fuse) {
+    G.flags.tut_fuse = true; sfx('catalog');
+    await say('[FUSÃO RÚNICA: o âmbar da Lanterna derrete runas e molda outras.]', 'cat');
+    await say('[TROCAR: 2 runas da mesma raridade viram 1 runa que você já conhece, da mesma raridade.]', 'cat');
+    await say('[ELEVAR: 3 runas da mesma raridade viram 1 runa conhecida da raridade de cima.]', 'cat');
+  }
+  while (true) {
+    const m = await list({ title: 'Fundir runas', x: 8, y: 8, w: 224, items: [{ label: 'Trocar', right: '2 → 1' }, { label: 'Elevar', right: '3 → 1 acima' }],
+      desc: i => i === 0 ? 'Gaste 2 runas da mesma raridade e escolha 1 runa conhecida dessa raridade.' : 'Gaste 3 runas da mesma raridade e escolha 1 runa conhecida da raridade seguinte.' });
+    if (m < 0) return;
+    const need = m === 0 ? 2 : 3;
+    const opts = RAR_ORDER.filter((k, i) => m === 0 || i < 3).map(k => {
+      const target = m === 0 ? k : RAR_ORDER[RAR_ORDER.indexOf(k) + 1];
+      const have = G.runes.filter(r => rar(r) === k).reduce((a, r) => a + rq(r), 0);
+      return { k, target, have, outs: G.runes.filter(r => rar(r) === target) };
+    });
+    const ri = await list({ title: m === 0 ? 'Trocar qual raridade?' : 'Elevar qual raridade?', x: 8, y: 8, w: 224,
+      items: opts.map(o => ({ label: RARITY[o.k].name + (m === 1 ? ' → ' + RARITY[o.target].name : ''), col: RARITY[o.k].col, right: `${o.have} runas`, disabled: o.have < need || !o.outs.length })),
+      desc: i => { const o = opts[i]; return !o.outs.length ? `Você ainda não conhece nenhuma runa ${RARITY[o.target].name.toLowerCase()}.` : o.have < need ? `Precisa de ${need} runas ${RARITY[o.k].name.toLowerCase()}s.` : `Gasta ${need} runas ${RARITY[o.k].name.toLowerCase()}s. Resultado: 1 runa ${RARITY[o.target].name.toLowerCase()}.`; } });
+    if (ri < 0) continue;
+    const o = opts[ri], pool = {}, used = [];
+    G.runes.forEach(r => { if (rar(r) === o.k) pool[r] = rq(r); });
+    let ok = true;
+    for (let j = 0; j < need; j++) {
+      const ks = Object.keys(pool);
+      const pi = await list({ title: `Ingrediente ${j + 1}/${need}`, x: 8, y: 8, w: 224, idx: Math.max(0, ks.findIndex(r => pool[r] > 0)), items: ks.map(r => ({ label: RUNES[r].name, col: RUNES[r].col, right: '×' + pool[r], disabled: !pool[r] })), desc: i => RUNES[ks[i]].desc });
+      if (pi < 0) { ok = false; break; }
+      pool[ks[pi]]--; used.push(ks[pi]);
+    }
+    if (!ok) continue;
+    const oi = await list({ title: 'Moldar qual runa?', x: 8, y: 8, w: 224, items: o.outs.map(r => ({ label: RUNES[r].name, col: RUNES[r].col, right: `tem ${rq(r)}` })), desc: i => `${TYPE_LABEL[RUNES[o.outs[i]].type]} · ${RARITY[o.target].name}. ${RUNES[o.outs[i]].desc}` });
+    if (oi < 0) continue;
+    used.forEach(useRune); addRune(o.outs[oi], 1); sfx('rune'); J.level();
+    await say(`* O âmbar borbulha e engole ${used.map(r => RUNES[r].name).join(', ')}.\n* Sobra uma runa nova: {${RUNES[o.outs[oi]].col}}${RUNES[o.outs[oi]].name}{/}! (agora ${rq(o.outs[oi])})`);
+  }
+}
+function migrateRunes(d) {
+  if (d && d.rq) return;
+  G.rq = {}; G.runes.forEach(r => G.rq[r] = 1);
+  for (const k in MAPS) for (const e of MAPS[k].ents) if (e.kind === 'rune' && G.runes.includes(e.rune)) G.gone[e.id] = true;
 }
 async function openChest(e) {
   if (G.gone[e.id]) { await say('* Um baú comum, aberto e vazio. Você fica com pena dele.'); return; }
   await say('* Um baú comum. Não se mexe. Não respira. É só... um baú.');
   G.gone[e.id] = true; sfx('item');
+  if (e.rune) { await say('* Dentro tinha uma pedra rúnica. Você abre a tampa e...| {y}NHAC{/}.'); await giveRune(e.rune, false, e.n || 1); return; }
   if (e.item === 'frag') { G.flask.max++; G.flask.n++; J.level(); await say(`* Dentro tinha: {y}Fragmento de Âmbar{/}!\n* O frasco agora tem ${G.flask.max} goles.`); return; }
   giveItem(e.item, e.n);
   await say(`* Dentro tinha: {y}${ITEMS[e.item].name}{/} ×${e.n}.`);
@@ -640,7 +718,7 @@ function drawWorld() {
       case 'chest': bx.drawImage(SP.chest[G.gone[e.id] ? 1 : 0], sx, sy); break;
       case 'rune': {
         bx.drawImage(SP.pedestal[0], sx, sy);
-        if (!G.runes.includes(e.rune)) {
+        if (!G.gone[e.id]) {
           const col = RUNES[e.rune].col, fy = Math.round(Math.sin(FRAME * 0.08 + e.x) * 1.5);
           const cx_ = sx + 8, cy_ = sy + 4 + fy;
           bx.fillStyle = '#120e1a'; for (let i = -4; i <= 4; i++) { const w = 4 - Math.abs(i); bx.fillRect(cx_ - w - 1, cy_ + i, w * 2 + 2, 1); }
@@ -786,25 +864,32 @@ async function grimoire() {
     if (r === G.spells.length) { await craft(); idx = G.spells.length - 1; continue; }
     const a = await list({ x: 130, y: 40, w: 96, items: [{ label: 'Renomear' }, { label: 'Esquecer' }, { label: 'Voltar' }] });
     if (a === 0) { const nm = await textInput('Novo nome do feitiço', G.spells[r].name, 18); if (nm) G.spells[r].name = nm; }
-    else if (a === 1) { const c = await choose(`* Esquecer "${G.spells[r].name}"? As runas continuam com você.`, ['Esquecer', 'Manter'], 'n', 1); if (c === 0) { G.spells.splice(r, 1); idx = 0; } }
+    else if (a === 1) { const c = await choose(`* Esquecer "${G.spells[r].name}"? As runas usadas nele se perdem.`, ['Esquecer', 'Manter'], 'n', 1); if (c === 0) { G.spells.splice(r, 1); idx = 0; } }
   }
 }
 async function craft() {
   const els = G.runes.filter(r => RUNES[r].type === 'el'), forms = G.runes.filter(r => RUNES[r].type === 'form'), mods = G.runes.filter(r => RUNES[r].type === 'mod');
-  if (!els.length || !forms.length) { await say('* Você precisa de pelo menos uma runa de ELEMENTO e uma de FORMA.'); return; }
   if (G.spells.length >= 6) { await say('* O grimório está cheio. Esqueça um feitiço antes de criar outro.'); return; }
+  if (!els.some(rq) || !forms.some(rq)) { await say('* Faltam runas. Um feitiço gasta 1 runa de ELEMENTO e 1 de FORMA.\n* Procure pedestais e baús, vença monstros ou funda runas numa Lanterna.'); return; }
+  if (!G.flags.tut_rq) {
+    G.flags.tut_rq = true; sfx('catalog');
+    await say('[Atenção: criar um feitiço CONSOME 1 de cada runa usada. O feitiço fica no grimório, mas as runas vão embora.]', 'cat');
+    await say('[Runas raras são poucas. Mais runas: pedestais, baús, monstros vencidos, feitiços engolidos e a fusão nas Lanternas.]', 'cat');
+  }
+  const rit = r => ({ label: RUNES[r].name, col: RUNES[r].col, right: '×' + rq(r), disabled: !rq(r) });
   while (true) {
-    const e = await list({ title: '1/3 · Elemento', x: 8, y: 8, w: 224, items: els.map(r => ({ label: RUNES[r].name, col: RUNES[r].col })), desc: i => RUNES[els[i]].desc });
+    const e = await list({ title: '1/3 · Elemento', x: 8, y: 8, w: 224, items: els.map(rit), desc: i => `${RARITY[rar(els[i])].name}. ${RUNES[els[i]].desc}` });
     if (e < 0) return;
-    const f = await list({ title: '2/3 · Forma', x: 8, y: 8, w: 224, items: forms.map(r => ({ label: RUNES[r].name })), desc: i => RUNES[forms[i]].desc });
+    const f = await list({ title: '2/3 · Forma', x: 8, y: 8, w: 224, items: forms.map(rit), desc: i => `${RARITY[rar(forms[i])].name}. ${RUNES[forms[i]].desc}` });
     if (f < 0) continue;
-    const m = await list({ title: '3/3 · Modificador', x: 8, y: 8, w: 224, items: [{ label: 'Nenhum' }, ...mods.map(r => ({ label: RUNES[r].name, col: RUNES[r].col }))], desc: i => i === 0 ? 'Sem modificador. Mais barato.' : RUNES[mods[i - 1]].desc });
+    const m = await list({ title: '3/3 · Modificador', x: 8, y: 8, w: 224, items: [{ label: 'Nenhum' }, ...mods.map(rit)], desc: i => i === 0 ? 'Sem modificador. Mais barato e não gasta runa.' : `${RARITY[rar(mods[i - 1])].name}. ${RUNES[mods[i - 1]].desc}` });
     if (m < 0) continue;
     const sp = { el: els[e], form: forms[f], mod: m === 0 ? null : mods[m - 1] };
     sp.name = suggestName(sp.el, sp.form, sp.mod);
-    const c = await list({ title: 'Prévia do feitiço', x: 8, y: 8, w: 224, head: [`{${RUNES[sp.el].col}}${RUNES[sp.el].name}{/} + ${RUNES[sp.form].name}${sp.mod ? ' + ' + RUNES[sp.mod].name : ''}`], items: [{ label: 'Dar nome e gravar' }, { label: 'Recomeçar' }, { label: 'Cancelar' }], desc: () => spellDesc(sp) });
+    const c = await list({ title: 'Prévia do feitiço', x: 8, y: 8, w: 224, head: [`{${RUNES[sp.el].col}}${RUNES[sp.el].name}{/} + ${RUNES[sp.form].name}${sp.mod ? ' + ' + RUNES[sp.mod].name : ''}`, '{d}Gasta 1 de cada runa.{/}'], items: [{ label: 'Gastar runas e gravar' }, { label: 'Recomeçar' }, { label: 'Cancelar' }], desc: () => spellDesc(sp) });
     if (c === 1) continue; if (c !== 0) return;
     sp.name = await textInput('Dê um nome ao feitiço', sp.name, 18, 'O nome aparece na batalha. Seja criativo.');
+    useRune(sp.el); useRune(sp.form); if (sp.mod) useRune(sp.mod);
     G.spells.push(sp); sfx('rune');
     await say(`* {y}${sp.name}{/} foi gravado no grimório.`);
     if (!G.flags.firstSpell) { G.flags.firstSpell = true; sfx('catalog'); await say('[Primeiro feitiço registrado. O Catálogo está levemente impressionado.]', 'cat'); }
@@ -812,10 +897,10 @@ async function craft() {
   }
 }
 async function runesMenu() {
-  const rs = G.runes;
+  const ord = { el: 0, form: 1, mod: 2 }, rs = G.runes.slice().sort((a, b) => ord[RUNES[a].type] - ord[RUNES[b].type]);
   let idx = 0;
   while (true) {
-    const r = await list({ title: `Runas (${rs.length})`, x: 8, y: 8, w: 224, idx, empty: 'Nenhuma runa ainda.', items: rs.map(k => ({ label: RUNES[k].name, right: TYPE_LABEL[RUNES[k].type], col: RUNES[k].col })), desc: i => RUNES[rs[i]].desc });
+    const r = await list({ title: `Runas (${runeTotal()})`, x: 8, y: 8, w: 224, idx, empty: 'Nenhuma runa ainda.', items: rs.map(k => ({ label: RUNES[k].name, right: `×${rq(k)} ${RARITY[rar(k)].name}`, col: rq(k) ? RUNES[k].col : null, disabled: !rq(k) })), allowDisabled: true, desc: i => `${TYPE_LABEL[RUNES[rs[i]].type]} · ${RARITY[rar(rs[i])].name}. ${RUNES[rs[i]].desc}` });
     if (r < 0) return; idx = r;
   }
 }
@@ -1095,6 +1180,7 @@ async function victory0() {
   let xp = 0; const drops = [];
   for (const e of BT.en) { xp += e.d.xp; for (const [k, p] of (e.d.drops || [])) if (Math.random() < p) { giveItem(k); drops.push(ITEMS[k].name); break; } }
   G.xp += xp; G.battles++;
+  const rds = runeDrops(); if (rds.length) drops.push(...rds.map(id => `{${RUNES[id].col}}runa ${RUNES[id].name}{/}`));
   await bSay(`* VOCÊ VENCEU!\n* Ganhou {y}${xp} EXP{/}.` + (drops.length ? `\n* Encontrou: ${drops.join(', ')}.` : ''));
   while (G.xp >= xpNeed(G.lv)) {
     G.xp -= xpNeed(G.lv); G.lv++;
@@ -1332,7 +1418,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–3', 6, 226, { col: '#5a5070' }); txt('v1.5', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–3', 6, 226, { col: '#5a5070' }); txt('v1.6', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;

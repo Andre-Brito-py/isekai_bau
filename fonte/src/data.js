@@ -293,6 +293,7 @@ const STORY = {
       await say('[Runas absorvidas. {y}Grimório{/} desbloqueado.]', 'cat');
       await say('Runa de ELEMENTO diz o que o feitiço é. Runa de FORMA diz como ele sai. Junte as duas e dê um nome.', 'of');
       await say('Abra o {y}MENU{/}, entre no {y}Grimório{/} e crie seu primeiro feitiço. O nome importa. Feitiço sem nome é só barulho.', 'of');
+      await say('E escute bem: runa usada é runa digerida. Cada feitiço que você cria {y}gasta{/} as runas dele. Não desperdice.', 'of');
       await say('Tem mais runas por aí. Duas nesta sala mesmo, se você tiver olhos. E você tem. Dois. Amarelos.', 'of');
       await say('E se um dia atravessar o Portão de Musgo... volte para me contar como é lá em cima.', 'of');
       await say('Você não pode sair daqui?', 'me');

@@ -632,3 +632,29 @@ Object.assign(STORY, {
         txt('Próximo: Capítulo 4 — A Primeira Viagem', 120, 186, { align: 'center', col: '#8fe3ff', alpha: clamp((this.t - 70) / 40, 0, 1) });
         if (this.t > 90 && FRAME % 50 < 34) txt('A para continuar', 120, 214, { align: 'center', col: '#8a8099' }); } };
     return openWin(w); }; }
+
+// ---------- v1.6: runas consumíveis espalhadas por raridade e dificuldade da área ----------
+// comuns no começo; incomuns a partir do Poço; raras em lugares escondidos ou no fim do Cap. 2 em diante; a épica só no Scriptorium.
+[['galeria', 'cr_g1', 19, 3, 'dardo', 1],
+ ['biblioteca', 'cr_b1', 16, 2, 'brasa', 1],
+ ['poco', 'cr_p1', 20, 5, 'seiva', 1],
+ ['antessala', 'cr_a1', 14, 4, 'geada', 1],
+ ['patamar', 'cr_pt1', 12, 7, 'dardo', 2],
+ ['mercado', 'cr_m1', 26, 2, 'brasa', 1],
+ ['mercado', 'cr_m2', 2, 18, 'veu', 1],
+ ['acampamento', 'cr_ac1', 1, 14, 'onda', 1],
+ ['acampamento', 'cr_ac2', 17, 13, 'geada', 1],
+ ['teatro', 'cr_t1', 18, 15, 'eco', 1],
+ ['ponte', 'cr_po1', 11, 18, 'faisca', 1],
+ ['ponte', 'cr_po2', 3, 22, 'seiva', 1],
+ ['escadaria3', 'cr_e1', 10, 8, 'geada', 1],
+ ['escadaria3', 'cr_e2', 9, 11, 'brasa', 1],
+ ['muralhas', 'cr_w1', 25, 15, 'faisca', 1],
+ ['muralhas', 'cr_w2', 2, 14, 'dardo', 2],
+ ['muralhas', 'cr_w3', 25, 6, 'selo', 1],
+ ['patio', 'cr_c1', 28, 3, 'onda', 1],
+ ['patio', 'cr_c2', 1, 17, 'eco', 1],
+ ['jaula', 'cr_j1', 16, 14, 'onda', 1],
+ ['scriptorium', 'cr_s1', 18, 2, 'foco', 1],
+ ['scriptorium', 'cr_s2', 1, 9, 'corrente', 1]].forEach(([m, id, x, y, rune, n]) => MAPS[m].ents.push({ id, kind: 'chest', x, y, rune, n }));
+MAPS.jaula.ents.push({ id: 'r_dreno', kind: 'rune', x: 6, y: 14, rune: 'dreno' });

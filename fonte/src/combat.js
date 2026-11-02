@@ -202,7 +202,7 @@ async function runMove(e, mv) {
       const r = await ring(e, { label: 'ENGULA!', col: EL_COL[mv.el], spd: mv.spd, fakeable: false, fast: mv.fast });
       worst = r;
       for (let i = 0; i < 18; i++) BT.parts.push({ x: e.x + rand(-6, 6), y: e.y, vx: (120 - e.x) / 18 + rand(-0.4, 0.4), vy: (150 - e.y) / 18, life: 18, col: EL_COL[mv.el] || '#fff', sz: 2, then: true });
-      if (r === 'perfect') { const g = Math.max(2, Math.round(G.st.mmp * 0.15)); G.mp = Math.min(G.st.mmp, G.mp + g); sfx('rune'); msg = `* NHAC! Você {y}ENGOLIU{/} ${mv.name}! +${g} PM.`; if (BT.copy) msg += copySpell(mv); break; }
+      if (r === 'perfect') { const g = Math.max(2, Math.round(G.st.mmp * 0.15)); G.mp = Math.min(G.st.mmp, G.mp + g); sfx('rune'); msg = `* NHAC! Você {y}ENGOLIU{/} ${mv.name}! +${g} PM.`; msg += crystallize(mv); if (BT.copy) msg += copySpell(mv); break; }
       const hits = mv.hits || 1;
       for (let h = 0; h < hits; h++) total += hurt(e, mv.p, r === 'good' ? 0.5 : 1, r, { magic: true });
       msg = r === 'good' ? `* Você mordeu metade do feitiço. ${total} de dano.` : `* ${mv.name} acertou em cheio! ${total} de dano.`;
@@ -390,6 +390,11 @@ async function roundEnd() {
     burst(t.x, t.y - 20, '#ffe066', 14); hitEnemy(t, d, 'hit', '#ffe066'); await bSay(`* A estrela invocada mergulha no ${t.name}: ${d} de dano.${BT.star ? '' : ' Ela se apaga.'}`, { auto: 35 });
     await killDead();
   }
+}
+function crystallize(mv) {
+  const el = ({ tinta: 'sombra', brasa: 'brasa', geada: 'geada', faisca: 'faisca', seiva: 'seiva', sombra: 'sombra', vento: 'vento' })[mv.el];
+  if (!el || !G.runes.includes(el) || Math.random() >= 0.35) return '';
+  addRune(el, 1); return ` A magia {${RUNES[el].col}}cristalizou{/}: +1 runa ${RUNES[el].name}!`;
 }
 function copySpell(mv) {
   BT.copy = false;
