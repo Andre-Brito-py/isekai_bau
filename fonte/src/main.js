@@ -858,9 +858,12 @@ const healAmt = sp => (8 + G.st.mag * 2.2) * (sp.mod === 'foco' ? 1.6 : 1);
 function spellDesc(sp) {
   const el = RUNES[sp.el];
   if (sp.form === 'veu') return `${spellCost(sp)} PM · Em você. ${veuText(sp)}`;
-  const alvo = sp.form === 'onda' ? 'Todos os inimigos' : sp.form === 'corrente' ? 'Salta entre até 3' : sp.form === 'ancora' ? 'Um inimigo, fura proteções' : 'Um inimigo';
+  const alvo = sp.form === 'onda' ? 'Todos os inimigos' : sp.form === 'corrente' ? 'Salta entre até 3' : sp.form === 'ancora' ? 'Um inimigo, fura proteções' : sp.form === 'mina' ? 'Um inimigo, mina' : 'Um inimigo';
   let extra = sp.el === 'sombra' ? ' Pode enfraquecer o próximo golpe do alvo.' : sp.el === 'vento' ? ' Remove proteções do alvo.' : sp.el === 'geada' ? ' Pode congelar.' : sp.el === 'seiva' ? ' Rouba metade do dano como PV.' : sp.el === 'faisca' ? ' Pode atordoar.' : sp.el === 'sal' ? ' Corrói a defesa do alvo.' : '';
   if (sp.form === 'ancora') extra += ' Afunda golpes preparados.';
+  if (sp.form === 'mina') extra += ' Planta uma mina que explode quando o alvo agir.';
+  if (sp.el === 'polvora') extra += ' Explode de novo em todos no fim da rodada.';
+  if (sp.mod === 'bandeira') extra += ' Depois: ataque e magia +20%.';
   if (sp.mod === 'mare') extra += ' Volta no fim da rodada com 60%.';
   if (sp.mod === 'selo') extra += ' Selo: dano extra por 3 turnos.';
   if (sp.mod === 'dreno') extra += ' Drena PM.';
@@ -868,10 +871,11 @@ function spellDesc(sp) {
   return `${spellCost(sp)} PM · ${alvo} · ${el.name}, poder ~${Math.round(spellPower(sp))}.${extra}`;
 }
 function suggestName(el, form, mod) {
-  const fem = form === 'onda' || form === 'corrente' || form === 'ancora'; const base = `${RUNES[form].name} de ${RUNES[el].name}`;
+  const fem = form === 'onda' || form === 'corrente' || form === 'ancora' || form === 'mina'; const base = `${RUNES[form].name} de ${RUNES[el].name}`;
   if (mod === 'selo') return base + (fem ? ' Selada' : ' Selado');
   if (mod === 'dreno') return base + ' Sedent' + (fem ? 'a' : 'o');
   if (mod === 'mare') return base + ' da Maré';
+  if (mod === 'bandeira') return base + (fem ? ' Hasteada' : ' Hasteado');
   return mod === 'eco' ? base + ' em Eco' : mod === 'foco' ? base + (fem ? ' Focada' : ' Focado') : base;
 }
 async function diffMenu() {
@@ -939,6 +943,7 @@ async function itemsMenu() {
     if (r < 0) return; idx = r;
     if (ks[r] === 'flask') { if (!G.flask.n) { await say('* O frasco está vazio. Descanse numa Lanterna de Âmbar.'); continue; } if (G.hp >= G.st.mhp && G.mp >= G.st.mmp) { await say('* Você está inteiro. Melhor guardar o gole.'); continue; } const t = drinkFlask(); sfx('heal'); await say(t); continue; }
     const it = ITEMS[ks[r]];
+    if (it.world) { const ok = await it.world(); if (ok) return; continue; }
     if (it.fx) { await say('* Isso só funciona no meio de uma batalha.'); continue; }
     if ((it.hp && G.hp >= G.st.mhp) || (it.mp && G.mp >= G.st.mmp)) { await say('* Você já está cheio disso. Melhor guardar.'); continue; }
     useItemOut(ks[r]); sfx('heal'); await say(`* Você comeu ${it.name}. ${it.hp ? 'PV' : 'PM'} recuperados.`);
@@ -999,7 +1004,7 @@ async function battle(group, opts = {}) {
   const prev = AU.curName; playMusic(null);
   for (let i = 0; i < 3; i++) { V.flashW = 1; await wait(4); V.flashW = 0; await wait(4); }
   await fadeOut(8);
-  Object.assign(BT, { cd: {}, saltCrust: 0, reflect: 0, tideQ: null, tideRecast: false, acts: {}, lastAct: null, forgot: null, foneSaid: false, stance: 0, orbit: 0, dark: 0, star: 0, guildShield: 0, nextSpellM: 1, lastSpell: null, copy: false, ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 });
+  Object.assign(BT, { cd: {}, freeSpell: 0, bloodM: 1, magT: 0, bulwark: 0, frenzy: 0, starHeal: 0, powder: [], saltCrust: 0, reflect: 0, tideQ: null, tideRecast: false, acts: {}, lastAct: null, forgot: null, foneSaid: false, stance: 0, orbit: 0, dark: 0, star: 0, guildShield: 0, nextSpellM: 1, lastSpell: null, copy: false, ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 });
   V.scene = 'battle'; playMusic(opts.music || 'battle');
   await fadeIn(10);
   const names = BT.en.map(e => e.name);
@@ -1066,13 +1071,13 @@ async function playerTurn() {
     if (c === 1) {
       if (BT.ps && BT.ps.silence > 0) { await bSay('* Você está silenciado! As runas não saem da sua boca.'); continue; }
       if (!G.spells.length) { await bSay('* Você ainda não tem feitiços. Crie um no {y}Grimório{/} (MENU), fora da batalha.'); continue; }
-      const items = G.spells.map((s, k) => ({ label: s.name, right: forgot('sp:' + k) ? 'esquecido' : spellCost(s) + ' PM', disabled: spellCost(s) > G.mp || forgot('sp:' + k), col: RUNES[s.el].col }));
+      const items = G.spells.map((s, k) => ({ label: s.name, right: forgot('sp:' + k) ? 'esquecido' : BT.freeSpell ? 'grátis' : spellCost(s) + ' PM', disabled: (spellCost(s) > G.mp && !BT.freeSpell) || forgot('sp:' + k), col: RUNES[s.el].col }));
       const i = await list({ x: 8, y: 116, w: 224, items, maxVis: 5, title: `Feitiços · PM ${G.mp}/${G.st.mmp}`, h: 74, desc: k => spellDesc(G.spells[k]), descY: 40 });
       if (i < 0) continue;
       const sp = G.spells[i];
       let target = null;
-      if (sp.form === 'dardo' || sp.form === 'corrente' || sp.form === 'ancora') { const t = await pickTarget(); if (t < 0) continue; target = BT.en[t]; }
-      G.mp -= spellCost(sp); markAct('spell'); await castSpell(sp, target); return 'acted';
+      if (sp.form === 'dardo' || sp.form === 'corrente' || sp.form === 'ancora' || sp.form === 'mina') { const t = await pickTarget(); if (t < 0) continue; target = BT.en[t]; }
+      if (BT.freeSpell > 0) BT.freeSpell--; else G.mp -= spellCost(sp); markAct('spell'); await castSpell(sp, target); return 'acted';
     }
     if (c === 2) {
       const ks = ['flask', ...Object.keys(G.items).filter(k => G.items[k] > 0)];
@@ -1081,6 +1086,7 @@ async function playerTurn() {
       if (ks[i] === 'flask') { if (!G.flask.n) { await bSay('* O frasco está vazio.'); continue; } markAct('item'); const t = drinkFlask(); sfx('heal'); burst(120, 196, '#f2b544', 22); await bSay(t, { auto: 50 }); return 'acted'; }
       const it = ITEMS[ks[i]]; markAct('item');
       if (it.fx) { G.items[ks[i]]--; await it.fx(); return 'acted'; }
+      if (it.world) { await bSay('* Isso não funciona no meio de uma batalha.'); continue; }
       useItemOut(ks[i]); sfx('heal'); burst(120, 196, it.hp ? '#9be58a' : '#5fa8ff', 18);
       if (it.cure) cureStatus();
       await bSay(`* Você comeu ${it.name}. ${it.hp ? `PV: ${G.hp}/${G.st.mhp}` : `PM: ${G.mp}/${G.st.mmp}`}.${it.cure ? ' Os efeitos ruins sumiram.' : ''}`, { auto: 50 });
@@ -1130,6 +1136,7 @@ async function doBite(e, o = {}) {
 }
 function hitEnemy(e, dmg, kind, col) {
   if (e.shell > 0) dmg = Math.max(1, Math.round(dmg * 0.5));
+  if (!e.d.guardian && BT.en.some(g => g !== e && g.alive && g.hp > 0 && g.d.guardian)) { dmg = Math.max(1, Math.round(dmg * 0.5)); e.guarded = 12; }
   e.hp = Math.max(0, e.hp - dmg); e.shake = 16; e.flash = 8; e.hpShow = 90;
   popNum(e, String(dmg), col || (kind === 'crit' ? '#ffe066' : '#ff6b6b'));
   sfx(kind === 'crit' ? 'crit' : 'hit');
@@ -1144,7 +1151,7 @@ async function killDead() {
   }
 }
 async function castSpell(sp, target) {
-  const el = RUNES[sp.el]; BT.lastSpell = sp; const markM = BT.nextSpellM || 1; BT.nextSpellM = 1;
+  const el = RUNES[sp.el]; BT.lastSpell = sp; const markM = (BT.nextSpellM || 1) * (BT.bloodM || 1) * (BT.magT > 0 ? 1.2 : 1); BT.nextSpellM = 1; BT.bloodM = 1;
   if (sp.mod === 'mare' && !BT.tideRecast) BT.tideQ = { sp, target };
   await bSay(`* Você conjura {${elTag(sp.el)}}${sp.name}{/}!`, { auto: 22 });
   if (sp.form === 'veu') {
@@ -1192,14 +1199,17 @@ async function castSpell(sp, target) {
       if (sp.el === 'seiva') drained += Math.round(dmg * 0.5);
       if (sp.el === 'geada' && t.hp > 0 && Math.random() < (t.d.boss ? 0.1 : sp.mod === 'foco' ? 0.4 : 0.25)) { t.frozen = 1; log.push(`* O ${t.name} congelou!`); }
       if (sp.el === 'faisca' && t.hp > 0 && !t.frozen && Math.random() < (t.d.boss ? 0.12 : sp.mod === 'foco' ? 0.35 : 0.2)) { t.stunned = 1; log.push(`* O ${t.name} ficou atordoado!`); }
+      if (sp.form === 'mina' && t.hp > 0) { t.mine = (t.mine || 0) + Math.round(dmg * 1.7); log.push(`* Uma mina rúnica gruda no ${t.name}. Ela explode quando ele agir.`); }
       if (sp.el === 'sal' && t.hp > 0) { if (!t.corrode) { t.def0 = t.def; t.def = Math.round(t.def * 0.65); log.push(`* O sal corrói a defesa do ${t.name}.`); } t.corrode = 3; }
       if (sp.mod === 'selo' && t.hp > 0) { t.dot = { d: Math.max(1, Math.round(dmg * 0.35)), t: 3 }; log.push(`* Um selo rosa queima no ${t.name}.`); }
       log.unshift(`* ${t.name}: ${dmg} de dano${wk > 1 ? ' {y}(ponto fraco!){/}' : wk < 1 ? ' (resistiu)' : ''}.`);
       if (t.d.boss && sp.el === 'brasa') t.lastFire = true;
     });
+    if (sp.el === 'polvora') BT.powder.push(Math.max(1, Math.round(spellPower(sp) * pm * 0.4 * markM)));
     if (drained) { G.hp = Math.min(G.st.mhp, G.hp + drained); log.push(`* Você absorveu ${drained} PV.`); sfx('heal'); }
     await wait(16);
   }
+  if (sp.mod === 'bandeira') { BT.magT = Math.max(BT.magT, 3); BT.buff.atkM = Math.max(BT.buff.atkM, 1.2); BT.buff.atkT = Math.max(BT.buff.atkT, 3); log.push('* {y}Bandeira hasteada!{/} Ataque e magia +20% por 2 turnos.'); }
   const uniq = [...new Set(log)].slice(0, 5);
   await bSay(uniq.join('\n'), { auto: 60 });
 }
@@ -1488,7 +1498,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–4', 6, 226, { col: '#5a5070' }); txt('v1.7', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–5', 6, 226, { col: '#5a5070' }); txt('v1.8', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;

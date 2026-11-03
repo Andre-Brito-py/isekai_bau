@@ -154,6 +154,8 @@ function hurt(e, pow, mult, res, o = {}) {
   if (BT.stance > 0) gm *= 0.4;
   if (BT.dark > 0) gm *= 0.75;
   if (BT.guildShield > 0) gm *= 0.5;
+  if (BT.bulwark > 0) gm *= 0.6;
+  if (BT.frenzy > 0) gm *= 1.2;
   if (spec().passive2 === 'guardian') gm *= 0.85;
   const dstat = o.magic ? G.st.mag * 1.1 : o.pierce ? G.st.def * 0.5 : G.st.def;
   let dmg = e.atk * am * pow * rand(0.85, 1.15) * 60 / (60 + dstat);
@@ -166,6 +168,7 @@ function hurt(e, pow, mult, res, o = {}) {
 function passives(e, dmg, res) {
   let extra = '';
   if (spec().passive === 'counter' && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.6 * (BT.stance > 0 ? 2 : 1))); hitEnemy(e, c, 'hit'); extra = ` {c}Contra-ataque!{/} ${c} no ${e.name}.`; }
+  if (BT.bulwark > 0 && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.8)); hitEnemy(e, c, 'hit', '#f0c040'); extra += ` {y}Baluarte!{/} ${c} no ${e.name}.`; }
   if (spec().passive === 'thorns' && dmg > 0 && e.alive) { const c = Math.max(1, Math.round(dmg * 0.3)); hitEnemy(e, c, 'hit', '#ffa94d'); extra = ` Os espinhos devolvem ${c}.`; }
   return extra;
 }
@@ -262,6 +265,7 @@ function pickMove(e, list) {
 }
 async function enemyTurn(e) {
   e.turns++;
+  if (e.mine > 0) { const d = e.mine; e.mine = 0; hitEnemy(e, d, 'crit', '#f07830'); sfx('crit'); burst(e.x, e.y, '#f07830', 18); await bSay(`* O ${e.name} se mexe e a mina explode: ${d} de dano!`, { auto: 40 }); if (e.hp <= 0) return; }
   if (e.atkBuff && e.atkBuff.t > 0) e.atkBuff.t--;
   if (e.shell > 0) e.shell--;
   if (e.hide > 0) e.hide--;
@@ -403,6 +407,15 @@ async function roundEnd() {
   for (const k in BT.cd) if (BT.cd[k] > 0) BT.cd[k]--;
   for (const e of BT.en) if (e.corrode > 0 && --e.corrode === 0) { e.def = e.def0; }
   if (BT.saltCrust > 0) BT.saltCrust--;
+  if (BT.bulwark > 0) BT.bulwark--;
+  if (BT.frenzy > 0) BT.frenzy--;
+  if (BT.magT > 0) BT.magT--;
+  if (BT.starHeal > 0 && G.hp > 0) { BT.starHeal--; const h = Math.round(G.st.mhp * 0.06); G.hp = Math.min(G.st.mhp, G.hp + h); BT.nums.push({ x: 120, y: 184, s: '+' + h, col: '#ffe066', t: 40 }); }
+  if (BT.powder && BT.powder.length && BT.en.some(e => e.alive && e.hp > 0)) {
+    const p = BT.powder.reduce((a, b) => a + b, 0); BT.powder = []; sfx('crit'); shake(10); const log = [];
+    for (const e of BT.en.filter(e => e.alive && e.hp > 0)) { const d = Math.max(1, Math.round(p * (e.weak.polvora ?? 1))); hitEnemy(e, d, 'hit', '#f07830'); burst(e.x, e.y, '#f07830', 14); log.push(`* ${e.name}: ${d}.`); }
+    await bSay('* {o}A pólvora explode!{/}\n' + log.join('\n'), { auto: 45 }); await killDead();
+  }
   if (BT.reflect > 0) BT.reflect--;
   if (BT.tideQ && BT.en.some(e => e.alive && e.hp > 0)) {
     const q = BT.tideQ; BT.tideQ = null; BT.tideRecast = true; BT.nextSpellM = 0.6;
