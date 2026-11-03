@@ -2254,13 +2254,15 @@ function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >
 
 // ---------- MENU / GRIMÓRIO ----------
 function miniStatus() {
-  const x = 112, y = 8; box(x, y, 120, 92, { bw: 1, edge: '#8a8099' });
-  txt(spec().name, x + 8, y + 5, { col: '#ffe066' });
-  txt(`NV ${G.lv}   EXP ${G.xp}/${xpNeed(G.lv)}`, x + 8, y + 19);
-  txt(`PV ${G.hp}/${G.st.mhp}`, x + 8, y + 33); bar(x + 70, y + 36, 40, 5, G.hp / G.st.mhp, '#4ad04a');
-  txt(`PM ${G.mp}/${G.st.mmp}`, x + 8, y + 47); bar(x + 70, y + 50, 40, 5, G.mp / G.st.mmp, '#5fa8ff');
-  txt(`Frasco ${G.flask.n}/${G.flask.max}  Feitiços ${G.spells.length}`, x + 8, y + 61, { col: '#b8aecb' });
-  txt(`Tempo ${fmtTime(G.time)}`, x + 8, y + 75, { col: '#b8aecb' });
+  // painel do MENU: tudo cabe na largura (nomes longos quebram em duas linhas)
+  const x = 112, y = 8, nl = lineW(rich(spec().name), 1) > 104 ? 2 : 1, h = 134 + (nl - 1) * 12;
+  box(x, y, 120, h, { bw: 1, edge: '#8a8099' });
+  txt(spec().name, x + 8, y + 5, { col: '#ffe066', w: 17, lh: 12 });
+  let yy = y + 5 + nl * 12 + 2; const line = (t, col) => { txt(t, x + 8, yy, { col }); yy += 14; };
+  line(`Nível ${G.lv}`); line(`EXP ${G.xp}/${xpNeed(G.lv)}`, '#b8aecb');
+  txt(`PV ${G.hp}/${G.st.mhp}`, x + 8, yy); bar(x + 8, yy + 11, 104, 2, G.hp / G.st.mhp, '#4ad04a'); yy += 16;
+  txt(`PM ${G.mp}/${G.st.mmp}`, x + 8, yy); bar(x + 8, yy + 11, 104, 2, G.mp / G.st.mmp, '#5fa8ff'); yy += 16;
+  line(`Frasco ${G.flask.n}/${G.flask.max}`, '#b8aecb'); line(`Feitiços ${G.spells.length}/6`, '#b8aecb'); line(`Tempo ${fmtTime(G.time)}`, '#b8aecb');
 }
 function bar(x, y, w, h, p, col) { bx.fillStyle = '#2a2236'; bx.fillRect(x, y, w, h); bx.fillStyle = col; bx.fillRect(x, y, Math.round(w * clamp(p, 0, 1)), h); }
 function fmtTime(t) { t = Math.floor(t); const h = Math.floor(t / 3600), m = Math.floor(t / 60) % 60; return h + ':' + String(m).padStart(2, '0'); }
@@ -2318,9 +2320,11 @@ async function diffMenu() {
 async function grimoire() {
   let idx = 0;
   while (true) {
+    const full = G.spells.length >= 6;
     const items = G.spells.map(s => ({ label: s.name, right: spellCost(s) + ' PM', col: RUNES[s.el].col }));
-    items.push({ label: '+ Criar feitiço', col: '#ffe066' });
-    const r = await list({ title: `Grimório ${G.spells.length}/6`, x: 8, y: 8, w: 224, idx, items, desc: i => i < G.spells.length ? spellDesc(G.spells[i]) : 'Combine runas para criar um feitiço novo. Você escolhe o nome.' });
+    items.push({ label: '+ Criar feitiço', right: full ? 'cheio' : '', col: '#ffe066', disabled: full });
+    const r = await list({ title: `Grimório ${G.spells.length}/6`, x: 8, y: 8, w: 224, idx, items, allowDisabled: true,
+      desc: i => i < G.spells.length ? spellDesc(G.spells[i]) : full ? 'O grimório está cheio. Escolha um feitiço e use ESQUECER para abrir espaço.' : 'Combine runas para criar um feitiço novo. Você escolhe o nome.' });
     if (r < 0) return; idx = r;
     if (r === G.spells.length) { await craft(); idx = G.spells.length - 1; continue; }
     const a = await list({ x: 130, y: 40, w: 96, items: [{ label: 'Renomear' }, { label: 'Esquecer' }, { label: 'Voltar' }] });
