@@ -286,16 +286,22 @@ body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));
 #screen{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;
   box-shadow:0 0 0 2px #000,0 0 0 4px #2a2236,0 12px 40px rgba(0,0,0,.6);border-radius:2px}
 #pad{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 4px 10px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box}
-#dpad{position:relative;width:150px;height:150px;touch-action:none}
-#dpad .arm{position:absolute;background:var(--btn);border:2px solid var(--btn-edge);box-shadow:inset 0 -4px 0 rgba(0,0,0,.35)}
-#dpad .h{left:0;top:50px;width:146px;height:46px;border-radius:8px}
-#dpad .v{left:50px;top:0;width:46px;height:146px;border-radius:8px}
-#dpad .hub{position:absolute;left:62px;top:62px;width:26px;height:26px;border-radius:50%;background:var(--btn-edge);opacity:.5}
-#dpad .tri{position:absolute;width:0;height:0;border:8px solid transparent;opacity:.55}
-#dpad .tu{left:67px;top:12px;border-bottom:10px solid var(--dim)} #dpad .td{left:67px;bottom:12px;border-top:10px solid var(--dim)}
-#dpad .tl{top:67px;left:12px;border-right:10px solid var(--dim)} #dpad .tr{top:67px;right:12px;border-left:10px solid var(--dim)}
-#dpad.on-up .tu{border-bottom-color:var(--amber);opacity:1} #dpad.on-down .td{border-top-color:var(--amber);opacity:1}
-#dpad.on-left .tl{border-right-color:var(--amber);opacity:1} #dpad.on-right .tr{border-left-color:var(--amber);opacity:1}
+#dzone{padding:14px;margin:-14px;touch-action:none;flex:none}
+#dpad{position:relative;width:172px;height:172px;border-radius:50%;touch-action:none;
+  background:radial-gradient(circle at 50% 45%,var(--btn-hi) 0,var(--btn) 62%,var(--btn) 100%);
+  border:2px solid var(--btn-edge);box-shadow:inset 0 -6px 0 rgba(0,0,0,.35),0 4px 12px rgba(0,0,0,.35)}
+#dpad .seg{position:absolute;inset:0;border-radius:50%;transition:background .05s}
+#dpad .su{clip-path:polygon(50% 50%,8% 0,92% 0)} #dpad .sd{clip-path:polygon(50% 50%,8% 100%,92% 100%)}
+#dpad .sl{clip-path:polygon(50% 50%,0 8%,0 92%)} #dpad .sr{clip-path:polygon(50% 50%,100% 8%,100% 92%)}
+#dpad .gap{position:absolute;left:50%;top:50%;width:96%;height:2px;background:var(--btn-edge);opacity:.55;transform-origin:0 0}
+#dpad .g1{transform:translate(-50%,-50%) rotate(45deg);left:50%;top:50%;transform-origin:center} #dpad .g2{transform:translate(-50%,-50%) rotate(-45deg);left:50%;top:50%;transform-origin:center}
+#dpad .hub{position:absolute;left:62px;top:62px;width:44px;height:44px;border-radius:50%;background:var(--bg);border:2px solid var(--btn-edge);opacity:.9}
+#dpad .tri{position:absolute;width:0;height:0;border:11px solid transparent}
+#dpad .tu{left:73px;top:14px;border-bottom:14px solid var(--dim)} #dpad .td{left:73px;bottom:14px;border-top:14px solid var(--dim)}
+#dpad .tl{top:73px;left:14px;border-right:14px solid var(--dim)} #dpad .tr{top:73px;right:14px;border-left:14px solid var(--dim)}
+#dpad.on-up .su,#dpad.on-down .sd,#dpad.on-left .sl,#dpad.on-right .sr{background:rgba(242,181,68,.28)}
+#dpad.on-up .tu{border-bottom-color:var(--amber)} #dpad.on-down .td{border-top-color:var(--amber)}
+#dpad.on-left .tl{border-right-color:var(--amber)} #dpad.on-right .tr{border-left-color:var(--amber)}
 #mid{display:flex;flex-direction:column;align-items:center;gap:8px}
 .pill{font:600 11px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);background:var(--btn);border:2px solid var(--btn-edge);
   border-radius:999px;padding:8px 12px;touch-action:none}
@@ -309,7 +315,7 @@ body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));
 @media (orientation:landscape) and (min-aspect-ratio:4/3){
   #app{grid-template-columns:auto 1fr auto;grid-template-rows:1fr}
   #pad{display:contents}
-  #dpad{grid-column:1;grid-row:1;align-self:center}
+  #dzone{grid-column:1;grid-row:1;align-self:center}
   #stage{grid-column:2;grid-row:1}
   #right{grid-column:3;grid-row:1;align-self:center}
 }
@@ -332,8 +338,9 @@ body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));
 <div id="app">
   <div id="stage"><canvas id="screen" width="240" height="240" aria-label="Tela do jogo"></canvas></div>
   <div id="pad">
-    <div id="dpad" aria-label="Direcional"><div class="arm h"></div><div class="arm v"></div><div class="hub"></div>
-      <div class="tri tu"></div><div class="tri td"></div><div class="tri tl"></div><div class="tri tr"></div></div>
+    <div id="dzone"><div id="dpad" aria-label="Direcional"><div class="seg su"></div><div class="seg sd"></div><div class="seg sl"></div><div class="seg sr"></div>
+      <div class="gap g1"></div><div class="gap g2"></div><div class="hub"></div>
+      <div class="tri tu"></div><div class="tri td"></div><div class="tri tl"></div><div class="tri tr"></div></div></div>
     <div id="right"><div id="mid"><div class="pill" data-k="menu" id="bm">Menu</div><div class="pill" data-k="mute" id="bs">Som</div></div><div id="ab"><div class="rb" id="ba" data-k="a">A</div><div class="rb" id="bb" data-k="b">B</div></div></div>
   </div>
 </div>

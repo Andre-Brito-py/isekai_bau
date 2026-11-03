@@ -164,13 +164,28 @@ function navp(k) {
 }
 function toggleMute() { unlockAudio(); setMuted(!AU.muted); document.getElementById('bs').textContent = AU.muted ? 'Mudo' : 'Som'; }
 function setupTouch() {
-  const dp = document.getElementById('dpad'); let pid = null;
-  const dirOf = e => { const r = dp.getBoundingClientRect(); const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2); if (Math.hypot(dx, dy) < 10) return null; return Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); };
-  const setDir = d => { for (const k of ['up', 'down', 'left', 'right']) { if (k === d) press(k); else release(k); } dp.className = d ? 'on-' + d : ''; };
-  dp.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); pid = e.pointerId; try { dp.setPointerCapture(pid); } catch (_) { } setDir(dirOf(e)); });
-  dp.addEventListener('pointermove', e => { if (e.pointerId === pid) setDir(dirOf(e)); });
+  // direcional redondo: área de toque maior que o desenho, setores de 90° com margem (o dedo pode escorregar
+  // para a diagonal sem trocar de direção) e vibração curta a cada troca
+  const dp = document.getElementById('dpad'), dz = document.getElementById('dzone') || dp; let pid = null, cur = null;
+  const ANG = { right: 0, down: 90, left: 180, up: -90 };
+  const angDiff = (a, b) => { let d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
+  const dirOf = e => {
+    const r = dp.getBoundingClientRect(); const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), dist = Math.hypot(dx, dy);
+    if (dist < (cur ? 8 : 14)) return cur && dist >= 8 ? cur : null;
+    const a = Math.atan2(dy, dx) * 180 / Math.PI;
+    if (cur && angDiff(a, ANG[cur]) < 45 + 14) return cur;
+    let best = 'right', bd = 999; for (const k in ANG) { const d = angDiff(a, ANG[k]); if (d < bd) { bd = d; best = k; } } return best;
+  };
+  const setDir = d => {
+    if (d === cur) return;
+    for (const k of ['up', 'down', 'left', 'right']) { if (k === d) press(k); else release(k); }
+    cur = d; dp.className = d ? 'on-' + d : '';
+    if (d && navigator.vibrate) { try { navigator.vibrate(8); } catch (_) { } }
+  };
+  dz.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); pid = e.pointerId; try { dz.setPointerCapture(pid); } catch (_) { } cur = null; setDir(dirOf(e)); });
+  dz.addEventListener('pointermove', e => { if (e.pointerId === pid) setDir(dirOf(e)); });
   const end = e => { if (e.pointerId === pid) { pid = null; setDir(null); } };
-  dp.addEventListener('pointerup', end); dp.addEventListener('pointercancel', end); dp.addEventListener('lostpointercapture', end);
+  dz.addEventListener('pointerup', end); dz.addEventListener('pointercancel', end); dz.addEventListener('lostpointercapture', end);
   document.querySelectorAll('[data-k]').forEach(el => {
     const k = el.dataset.k;
     el.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); el.classList.add('down'); if (k === 'mute') toggleMute(); else press(k); });
