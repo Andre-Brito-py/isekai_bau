@@ -376,7 +376,9 @@ Object.assign(STORY, {
     await say('* Atrás do sino, a pedra se abre numa passagem estreita.');
     sfx('catalog');
     await say('[Lembranças do corpo recuperadas. Sua forma conhece TÉCNICAS próprias.]', 'cat');
-    await say('[Na batalha, {y}MORDER{/} agora abre a lista de técnicas. Algumas usam PM, outras precisam de tempo para recarregar.]', 'cat');
+    await say('[Na batalha, o botão {y}MORDER{/} agora se chama {y}TÉCNICA{/}. A Mordida comum continua lá, em primeiro na lista.]', 'cat');
+    await say('[Algumas técnicas gastam PM. Outras precisam de alguns turnos para recarregar.]', 'cat');
+    G.flags.tut_tecnica = true;
     await grantTechs(false);
     saveGame();
   },

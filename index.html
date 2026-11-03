@@ -2364,6 +2364,10 @@ async function battle(group, opts = {}) {
     await bSay('[Na vez do inimigo, aperte {y}A{/} quando o anel encostar no círculo. Isso é DEFENDER.]', { cat: true });
     await bSay('[AVALIAR mostra os pontos fracos do inimigo e não gasta o seu turno.]', { cat: true });
   }
+  if (G.tech && G.tech.length && !G.flags.tut_tecnica) {
+    G.flags.tut_tecnica = true; sfx('catalog');
+    await bSay('[O botão MORDER agora se chama {y}TÉCNICA{/}. A Mordida comum continua lá, em primeiro na lista.]', { cat: true });
+  }
   let result = null;
   while (!result) {
     BT.turn++;
@@ -2406,7 +2410,7 @@ async function playerTurn() {
       if (G.tech && G.tech.length) {
         const ids = G.tech.filter(k => TECH[k]);
         const items = [{ label: 'Mordida', right: '' }, ...ids.map(k => { const T = TECH[k], cd = BT.cd[k] || 0, cost = T.pm ? techCost(T) : 0; return { label: T.name, right: forgot('tc:' + k) ? 'esquecida' : (T.need && !T.need()) ? '—' : cd ? `espera ${cd}` : T.pm ? cost + ' PM' : 'pronta', disabled: cd > 0 || (T.pm && cost > G.mp) || (T.need && !T.need()) || forgot('tc:' + k), col: T.pm ? '#8fe3ff' : '#ffa94d' }; })];
-        const i = await list({ x: 8, y: 116, w: 224, h: 74, title: 'Morder · Técnicas', maxVis: 4, items, desc: k => k === 0 ? 'Mordida comum com a barra de tempo.' : TECH[ids[k - 1]].desc, descY: 40 });
+        const i = await list({ x: 8, y: 116, w: 224, h: 74, title: 'Técnicas', maxVis: 4, items, desc: k => k === 0 ? 'Mordida comum com a barra de tempo.' : TECH[ids[k - 1]].desc, descY: 40 });
         if (i < 0) continue;
         if (i > 0) { const k = ids[i - 1], T = TECH[k]; let tgt = null; if (T.target) { const t = await pickTarget(); if (t < 0) continue; tgt = BT.en[t]; } if (T.pm) G.mp -= techCost(T); if (T.cd) BT.cd[k] = T.cd + 1; markAct('tech'); await bSay(`* Técnica: {o}${T.name}{/}!`, { auto: 18 }); await T.use(tgt); return 'acted'; }
       }
@@ -2608,6 +2612,8 @@ async function gameOver() {
 
 // ---------- update / render da batalha ----------
 const BTN = ['MORDER', 'MAGIA', 'ITEM', 'AVALIAR', 'FUGIR'];
+// depois da primeira técnica, MORDER vira TÉCNICA (a Mordida comum fica no topo da lista)
+const btnLabel = i => i === 0 && G.tech && G.tech.length ? 'TÉCNICA' : BTN[i];
 function updateBattle() {
   for (const p of BT.parts) { p.x += p.vx; p.y += p.vy; p.life--; if (!p.then) p.vy += 0.03; }
   BT.parts = BT.parts.filter(p => p.life > 0);
@@ -2725,7 +2731,7 @@ function drawBattle() {
     const x = 8 + i * 45, sel = m === 'main' && BT.menuIdx === i;
     const col = sel ? '#ffe066' : '#f28c28';
     box(x, 208, 44, 22, { bw: 1, edge: col, fill: '#000' });
-    txt(BTN[i], x + 22, 213, { align: 'center', col });
+    txt(btnLabel(i), x + 22, 213, { align: 'center', col });
   }
   for (const n of BT.nums) txt(n.s, n.x, n.y, { align: 'center', col: n.col, shadow: true, alpha: Math.min(1, n.t / 15) });
   if (BT.buff.atkT > 0) txt('FÚRIA', 10, 178, { col: '#ffa94d' });
@@ -4084,7 +4090,9 @@ Object.assign(STORY, {
     await say('* Atrás do sino, a pedra se abre numa passagem estreita.');
     sfx('catalog');
     await say('[Lembranças do corpo recuperadas. Sua forma conhece TÉCNICAS próprias.]', 'cat');
-    await say('[Na batalha, {y}MORDER{/} agora abre a lista de técnicas. Algumas usam PM, outras precisam de tempo para recarregar.]', 'cat');
+    await say('[Na batalha, o botão {y}MORDER{/} agora se chama {y}TÉCNICA{/}. A Mordida comum continua lá, em primeiro na lista.]', 'cat');
+    await say('[Algumas técnicas gastam PM. Outras precisam de alguns turnos para recarregar.]', 'cat');
+    G.flags.tut_tecnica = true;
     await grantTechs(false);
     saveGame();
   },
