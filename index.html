@@ -1618,6 +1618,9 @@ function say(text, who = 'n', opt = {}) {
   return openWin(w);
 }
 function choose(text, options, who = 'n', cancel = null) { return say(text, who, { choices: options, cancel }); }
+// quantas linhas cabem na lista: respeita maxVis e, se a caixa tiver altura fixa, nunca passa da borda
+function listHead(o) { const head = o.head || []; return (o.title ? 16 : 6) + head.length * 12 + (head.length ? 4 : 0); }
+function listVis(o) { let mv = o.maxVis || 8; if (o.h) mv = Math.min(mv, Math.max(1, Math.floor((o.h - listHead(o) - 4) / 12))); return mv; }
 function list(o) {
   const w = {
     type: 'list', o, idx: o.idx || 0, scroll: 0,
@@ -1627,11 +1630,11 @@ function list(o) {
       if (navp('down')) { this.idx = (this.idx + 1) % it.length; sfx('move'); }
       if (btnp('a')) { if (it[this.idx].disabled && !o.allowDisabled) sfx('cancel'); else { sfx('select'); closeWin(this, this.idx); } }
       else if (btnp('b') && o.cancel !== false) { sfx('cancel'); closeWin(this, -1); }
-      const mv = o.maxVis || 8; if (this.idx < this.scroll) this.scroll = this.idx; if (this.idx >= this.scroll + mv) this.scroll = this.idx - mv + 1;
+      const mv = listVis(o); if (this.idx < this.scroll) this.scroll = this.idx; if (this.idx >= this.scroll + mv) this.scroll = this.idx - mv + 1;
     },
     draw() {
-      const it = o.items, mv = Math.min(o.maxVis || 8, it.length || 1), head = o.head || [];
-      const hh = (o.title ? 16 : 6) + head.length * 12 + (head.length ? 4 : 0);
+      const it = o.items, mv = Math.min(listVis(o), it.length || 1), head = o.head || [];
+      const hh = listHead(o);
       const h = o.h || hh + mv * 12 + 6;
       box(o.x, o.y, o.w, h, { edge: o.edge || '#ffffff' });
       if (o.title) txt(o.title, o.x + 8, o.y + 4, { col: '#ffe066' });
@@ -1645,8 +1648,13 @@ function list(o) {
         txt(item.label, o.x + 16, yy, { col });
         if (item.right) txt(item.right, o.x + o.w - 8, yy, { align: 'right', col: item.disabled ? '#6a6078' : '#b8aecb' });
       }
-      if (this.scroll > 0) txt('▲', o.x + o.w - 14, o.y + hh - 10, { col: '#8a8099' });
-      if (this.scroll + mv < it.length) txt('▼', o.x + o.w - 14, o.y + h - 12, { col: '#8a8099' });
+      // setas de rolagem na linha do título (não cobrem nenhum item) e um contador
+      const more = it.length > mv, ay = o.title ? o.y + 4 : o.y + h - 12;
+      if (more) {
+        if (this.scroll > 0) txt('▲', o.x + o.w - 22, ay, { col: '#ffe066' });
+        if (this.scroll + mv < it.length) txt('▼', o.x + o.w - 12, ay, { col: '#ffe066' });
+        if (o.title) txt(`${this.idx + 1}/${it.length}`, o.x + o.w - 28, ay, { align: 'right', col: '#8a8099' });
+      }
       if (o.desc && it.length) { const d = o.desc(this.idx); if (d) { const dy = o.descY ?? 182; box(o.x, dy, o.w, 52, { bw: 1, edge: '#8a8099' }); txt(d, o.x + 8, dy + 5, { w: Math.floor((o.w - 16) / 6) }); } }
       if (o.extra) o.extra(this.idx);
     }
@@ -2397,7 +2405,7 @@ async function playerTurn() {
     if (c === 0) {
       if (G.tech && G.tech.length) {
         const ids = G.tech.filter(k => TECH[k]);
-        const items = [{ label: 'Mordida', right: '' }, ...ids.map(k => { const T = TECH[k], cd = BT.cd[k] || 0, cost = T.pm ? techCost(T) : 0; return { label: T.name, right: forgot('tc:' + k) ? 'esquecida' : cd ? `espera ${cd}` : T.pm ? cost + ' PM' : 'pronta', disabled: cd > 0 || (T.pm && cost > G.mp) || (T.need && !T.need()) || forgot('tc:' + k), col: T.pm ? '#8fe3ff' : '#ffa94d' }; })];
+        const items = [{ label: 'Mordida', right: '' }, ...ids.map(k => { const T = TECH[k], cd = BT.cd[k] || 0, cost = T.pm ? techCost(T) : 0; return { label: T.name, right: forgot('tc:' + k) ? 'esquecida' : (T.need && !T.need()) ? '—' : cd ? `espera ${cd}` : T.pm ? cost + ' PM' : 'pronta', disabled: cd > 0 || (T.pm && cost > G.mp) || (T.need && !T.need()) || forgot('tc:' + k), col: T.pm ? '#8fe3ff' : '#ffa94d' }; })];
         const i = await list({ x: 8, y: 116, w: 224, h: 74, title: 'Morder · Técnicas', maxVis: 4, items, desc: k => k === 0 ? 'Mordida comum com a barra de tempo.' : TECH[ids[k - 1]].desc, descY: 40 });
         if (i < 0) continue;
         if (i > 0) { const k = ids[i - 1], T = TECH[k]; let tgt = null; if (T.target) { const t = await pickTarget(); if (t < 0) continue; tgt = BT.en[t]; } if (T.pm) G.mp -= techCost(T); if (T.cd) BT.cd[k] = T.cd + 1; markAct('tech'); await bSay(`* Técnica: {o}${T.name}{/}!`, { auto: 18 }); await T.use(tgt); return 'acted'; }
