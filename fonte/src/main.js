@@ -1048,7 +1048,7 @@ async function battle(group, opts = {}) {
   const prev = AU.curName; playMusic(null);
   for (let i = 0; i < 3; i++) { V.flashW = 1; await wait(4); V.flashW = 0; await wait(4); }
   await fadeOut(8);
-  Object.assign(BT, { cd: {}, freeSpell: 0, bloodM: 1, magT: 0, bulwark: 0, frenzy: 0, starHeal: 0, powder: [], saltCrust: 0, reflect: 0, tideQ: null, tideRecast: false, acts: {}, lastAct: null, forgot: null, foneSaid: false, stance: 0, orbit: 0, dark: 0, star: 0, guildShield: 0, nextSpellM: 1, lastSpell: null, copy: false, ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 }); FXL.length = 0; BT.flashT = 0; BT.dimT = 0;
+  Object.assign(BT, { cd: {}, freeSpell: 0, bloodM: 1, magT: 0, bulwark: 0, frenzy: 0, starHeal: 0, powder: [], saltCrust: 0, reflect: 0, tideQ: null, tideRecast: false, acts: {}, lastAct: null, forgot: null, foneSaid: false, stance: 0, orbit: 0, dark: 0, star: 0, guildShield: 0, nextSpellM: 1, lastSpell: null, copy: false, ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0, choir: 0, ticketShield: 0 }); FXL.length = 0; BT.flashT = 0; BT.dimT = 0;
   V.scene = 'battle'; playMusic(opts.music || 'battle');
   await fadeIn(10);
   const names = BT.en.map(e => e.name);
@@ -1125,7 +1125,7 @@ async function playerTurn() {
     }
     if (c === 2) {
       const ks = ['flask', ...Object.keys(G.items).filter(k => G.items[k] > 0)];
-      const i = await list({ x: 8, y: 150, w: 224, h: 74, title: 'Itens', maxVis: 4, items: ks.map(k => k === 'flask' ? flaskItem() : ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: k => ks[k] === 'flask' ? FLASK_DESC() : ITEMS[ks[k]].desc, descY: 40 });
+      const i = await list({ x: 8, y: 150, w: 224, h: 74, title: 'Itens', maxVis: 4, idx: G.flask.n || ks.length < 2 ? 0 : 1, items: ks.map(k => k === 'flask' ? flaskItem() : ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: k => ks[k] === 'flask' ? FLASK_DESC() : ITEMS[ks[k]].desc, descY: 40 });
       if (i < 0) continue;
       if (ks[i] === 'flask') { if (!G.flask.n) { await bSay('* O frasco está vazio.'); continue; } markAct('item'); const t = drinkFlask(); sfx('heal'); pbPose('win', 20); burst(BPX, BPY - 14, '#f2b544', 22); await bSay(t, { auto: 50 }); return 'acted'; }
       const it = ITEMS[ks[i]]; markAct('item');
@@ -1206,6 +1206,7 @@ async function castSpell(sp, target) {
     else if (sp.el === 'faisca') { BT.buff.atkM = f ? 1.6 : 1.35; BT.buff.atkT = (ec ? 5 : 3) + 1; BT.buff.defM = Math.min(BT.buff.defM, 0.8); BT.buff.defT = Math.max(BT.buff.defT, BT.buff.atkT); await bSay(`* Faíscas dançam na sua tampa. Ataque ×${BT.buff.atkM} e dano recebido -20% por ${BT.buff.atkT - 1} turnos.`, { auto: 50 }); }
     else if (sp.el === 'brasa') { BT.buff.atkM = f ? 1.8 : 1.5; BT.buff.atkT = (ec ? 5 : 3) + 1; await bSay(`* Uma Fúria de brasa envolve sua tampa. Ataque ×${BT.buff.atkM} por ${BT.buff.atkT - 1} turnos.`, { auto: 50 }); }
     else if (sp.el === 'sal') { cureStatus(); BT.saltCrust = Math.max(BT.saltCrust || 0, ec ? 5 : 3); if (f) { BT.buff.defM = Math.min(BT.buff.defM, 0.8); BT.buff.defT = Math.max(BT.buff.defT, 4); } await bSay(`* Uma crosta de sal cobre a sua tampa. Efeitos ruins sumiram e não pegam em você por ${BT.saltCrust} turnos.`, { auto: 50 }); }
+    else if (sp.el === 'canto') { BT.choir = Math.max(BT.choir || 0, ec ? 5 : 3); if (f) { BT.buff.atkM = Math.max(BT.buff.atkM, 1.2); BT.buff.atkT = Math.max(BT.buff.atkT, 4); } await bSay(`* Um coro de vozes conhecidas te envolve. Você recupera um pouco de PV a cada turno, por ${BT.choir} turnos.`, { auto: 50 }); }
     else if (sp.el === 'geada') { BT.buff.defM = f ? 0.35 : 0.5; BT.buff.defT = (ec ? 5 : 3) + 1; await bSay(`* Uma casca de gelo cobre você. Dano recebido reduzido por ${BT.buff.defT - 1} turnos.`, { auto: 50 }); }
     else {
       let h = Math.round(healAmt(sp) * markM * rand(0.95, 1.05)); const before = G.hp; G.hp = Math.min(G.st.mhp, G.hp + h);
@@ -1224,7 +1225,7 @@ async function castSpell(sp, target) {
     let alive = BT.en.filter(e => e.alive && e.hp > 0);
     let first = target && target.hp > 0 ? target : alive[0];
     let targets, mults;
-    if (sp.form === 'onda') { targets = alive; mults = alive.map(() => 1); }
+    if (sp.form === 'onda' || sp.form === 'coro') { targets = alive; mults = alive.map(() => 1); }
     else if (sp.form === 'corrente') { targets = first ? [first, ...alive.filter(e => e !== first)].slice(0, 3) : []; mults = [1, 0.7, 0.5]; }
     else { targets = first ? [first] : []; mults = [1]; }
     if (!targets.length) break;
@@ -1240,6 +1241,7 @@ async function castSpell(sp, target) {
       if (sp.el === 'vento' && (t.shell > 0 || t.hide > 0 || (t.atkBuff && t.atkBuff.t > 0))) { t.shell = 0; t.hide = 0; t.atkBuff = null; log.push(`* O vento varre as proteções do ${t.name}!`); }
       if (sp.mod === 'dreno') { const g = Math.max(1, Math.round(dmg * 0.2)); G.mp = Math.min(G.st.mmp, G.mp + g); log.push(`* Você drenou ${g} PM.`); }
       hitEnemy(t, dmg, wk > 1 ? 'crit' : 'hit', RUNES[sp.el].col);
+      if (typeof calmHit === 'function') calmHit(t, sp.el, log);
       if (sp.el === 'seiva') drained += Math.round(dmg * 0.5);
       if (sp.el === 'geada' && t.hp > 0 && Math.random() < (t.d.boss ? 0.1 : sp.mod === 'foco' ? 0.4 : 0.25)) { t.frozen = 1; log.push(`* O ${t.name} congelou!`); }
       if (sp.el === 'faisca' && t.hp > 0 && !t.frozen && Math.random() < (t.d.boss ? 0.12 : sp.mod === 'foco' ? 0.35 : 0.2)) { t.stunned = 1; log.push(`* O ${t.name} ficou atordoado!`); }
@@ -1263,7 +1265,7 @@ async function lumeSing() {
   if (G.flags.lumeFone && !BT.foneSaid) { BT.foneSaid = true; await bSay('* A Lume ajeita o fone remendado e canta mais alto.', { auto: 30 }); }
   const opts = hurt ? ['heal', 'heal', 'buff'] : ['buff', 'stun', 'heal', 'stun'];
   const k = pickOne(opts);
-  BT.lumeT = 60; burst(220, 100, '#ffe066', 16);
+  BT.lumeT = 60; burst(BPX - 22, BPY - 50, '#ffe066', 16);
   if (k === 'heal') { const h = Math.round(G.st.mhp * (G.flags.lumeFone ? 0.3 : 0.22)); G.hp = Math.min(G.st.mhp, G.hp + h); sfx('heal'); await bSay(`* {y}Lume{/} canta uma balada morna. +${h} PV.`, { auto: 50 }); }
   else if (k === 'buff') { BT.buff.atkM = Math.max(BT.buff.atkM, 1.4); BT.buff.atkT = Math.max(BT.buff.atkT, 3); sfx('buff'); await bSay('* {y}Lume{/} toca um refrão animado. Ataque ×1.4 por 2 turnos!', { auto: 50 }); }
   else { const t = pickOne(BT.en.filter(e => e.alive)); const dmg = Math.round(10 + G.lv * 3 + G.st.mag); hitEnemy(t, dmg, 'hit', '#ffe066'); if (!t.d.boss) t.stunned = 1; await bSay(`* {y}Lume{/} solta uma nota aguda! ${t.name}: ${dmg} de dano${t.d.boss ? '' : ' e atordoado'}.`, { auto: 50 }); }
@@ -1535,7 +1537,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–5', 6, 226, { col: '#5a5070' }); txt('v2.0', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–6', 6, 226, { col: '#5a5070' }); txt('v2.0', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;

@@ -179,7 +179,7 @@ Object.assign(ENEMIES, {
   farol: { name: 'Portador de Farol', sp: 'farol', hp: 140, atk: 50, def: 14, xp: 70, elite: true, weak: { sombra: 1.5, vento: 1.3 }, drops: [['pao', .3]],
     flavor: ['* O Portador de Farol balança a lanterna. Não dá pra se esconder dessa luz.'], check: 'A luz dele revela disfarces. SOMBRA apaga.',
     moves: [
-      { k: 'ring', p: 0.85, st: 'blind', w: 2, t: '* CLARÃO! A lanterna explode em luz!' },
+      { k: 'ring', p: 0.85, st: 'blind', blindBy: 'luz', w: 2, t: '* CLARÃO! A lanterna explode em luz!' },
       { k: 'dodge', p: 1, hits: 2, w: 2, t: '* O Portador gira a lanterna como um mangual!' },
       { k: 'ring', p: 1.2, w: 1, t: '* O Portador dá com a lanterna na sua tampa!' }] },
   jailer: { name: 'Carcereiro de Ferro-Velho', sp: 'jailer', hp: 1300, atk: 66, def: 22, xp: 420, boss: true, ai: 'jailer', sc: 3, weak: { faisca: 1.6, geada: 1.2, bite: 0.8 },

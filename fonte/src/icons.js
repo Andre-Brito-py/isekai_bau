@@ -39,6 +39,8 @@ const ICON = {
   flag(x, y) { icR(x + 1, y, 1, 10, '#a89068'); icR(x + 2, y, 7, 5, '#ff6b6b'); icR(x + 2, y + 1, 7, 1, '#ffb0b0'); },
   blood(x, y) { icDrop(x, y, '#5a0a0a', '#c83838'); icPx(x + 7, y + 1, '#c0a0f0'); },
   heal(x, y) { icR(x + 4, y + 1, 2, 8, '#9be58a'); icR(x + 1, y + 4, 8, 2, '#9be58a'); },
+  flash(x, y) { const c = '#ffe066'; icR(x + 3, y + 3, 4, 4, '#fff4c0'); for (const [a, b] of [[4, 0], [4, 8], [0, 4], [8, 4], [1, 1], [7, 1], [1, 7], [7, 7]]) icR(x + a, y + b, 2, 2, c); },
+  note(x, y) { icR(x + 2, y + 6, 4, 3, '#ffb0d8'); icR(x + 5, y, 1, 8, '#ffb0d8'); icR(x + 6, y, 3, 1, '#ffb0d8'); icR(x + 8, y + 1, 1, 2, '#ffb0d8'); },
   crust(x, y) { ICON.salt(x, y); icR(x, y + 9, 10, 1, '#9ab8c8'); }
 };
 function icPx(x, y, c) { bx.fillStyle = c; bx.fillRect(x, y, 1, 1); }
@@ -64,6 +66,8 @@ function enemyIcons(e, dx, dy, w, h) {
   if (e.mine > 0) list.push(['mine']);
   if (e.blinded) list.push(['blind']);
   if (e.confused > 0) list.push(['confused']);
+  // calma das Lembranças: bolinhas rosadas embaixo do sprite
+  if (e.d.calm && !e.calmed) { const nd = e.d.calm.need, cx0 = Math.round(dx + w / 2 - nd * 3); for (let i = 0; i < nd; i++) { icR(cx0 + i * 6, dy + h + 9, 4, 4, '#120e1a'); icR(cx0 + i * 6 + 1, dy + h + 10, 2, 2, i < (e.calm || 0) ? '#ffb0d8' : '#3a3448'); } }
   if (!e.d.guardian && BT.en.some(g => g !== e && g.alive && g.hp > 0 && g.d.guardian)) list.push(['guarded']);
   // colunas de até 3 ícones à direita do sprite
   list.slice(0, 6).forEach(([k, c], i) => iconAt(k, Math.min(228, Math.round(dx + w + 2) + Math.floor(i / 3) * 12), Math.max(2, dy) + (i % 3) * 12, c));
@@ -85,9 +89,10 @@ function playerIcons() {
   if (BT.freeSpell > 0) L.push('free');
   if (BT.magT > 0) L.push('flag');
   if (BT.bloodM > 1) L.push('blood');
+  if (BT.ticketShield > 0) L.push('ticket'); if (BT.choir > 0) L.push('note');
   const ps = BT.ps || {};
   if (ps.poison > 0) L.push('poison'); if (ps.burn > 0) L.push('burn'); if (ps.silence > 0) L.push('silence'); if (ps.forget > 0) L.push('forget');
-  if (BT.inked) L.push('ink'); if (BT.netted) L.push('net');
+  if (BT.inked) L.push({ luz: 'flash', sombra: 'blind', sal: 'salt' }[BT.blindBy] || 'ink'); if (BT.netted) L.push('net');
     // em cima do baú, em fileiras de 7 (de baixo para cima)
   L.slice(0, 14).forEach((k, i) => iconAt(k, 4 + (i % 7) * 12, BPY - 48 - Math.floor(i / 7) * 12, null));
 }

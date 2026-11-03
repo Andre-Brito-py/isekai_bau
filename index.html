@@ -124,6 +124,69 @@
   - GANCHO CAP. 6 "Almas do 31": juntar as almas do ônibus espalhadas pela masmorra (Dona Cida nº 7, Lume
     nº 12, os heróis do Andar 3, o Musgo como aliado) para ir buscar o 31 antes que a coleção se complete.
 
+  CAPÍTULO 6 — "ALMAS DO 31" (feito; data6.js + maps6.js gerado por build/ch6/maps6.py)
+  Tema: o que você esquece não some; vira parte da masmorra. Lembrar quem se é = não poder ser colecionado.
+  REGRA NOVA DO MUNDO: a VOZ puxa pela LINHA 31 as almas do ônibus que esqueceram quem eram (DESBOTADAS) para o
+  Ponto Final. Quem LEMBRA do próprio nome resiste (prova: a Dona Cida, com os óculos, não foi puxada).
+  Início: a mancha de óleo na Garagem (cond ch5done) vira uma FAIXA AMARELA; o bilhete 31 brilha e o chão afunda.
+  A masmorra montou o TRAJETO DO 31 com a memória de cada passageiro. Mapas (itinerário):
+  1) PONTO DA PADARIA (hub; a parada do PROTAGONISTA, feita da memória dele, com pedaços borrados pelo que ele já
+     perdeu; Lanterna; quadro de itinerário: Feira, Escola, Coreto, Ponto Final). O caminho para o Ponto Final é
+     uma PORTA DE MEMÓRIA que só abre com as três canções de parada ("só passa quem sabe o caminho de cor").
+  2) FEIRA DE SEGUNDA (memória da DONA CIDA, nº 7, e do SEU OZÓRIO, nº 9, pasteleiro). Cida desce pela linha e
+     resiste; vira guia. Ozório virou TACHO FERVENTE, repete "Olha o pastel, três e cinquenta!". Memória perdida:
+     o CADERNO DE FIADO (dívida do protagonista: dois pastéis de queijo; última página: desenho da filha, BIA).
+     Com o caderno: ele LEMBRA (soul_ozorio='lembrou'), ensina o PREGÃO DA FEIRA e dá pastéis. Sem o caderno: luta
+     contra o Tacho; ele desbota e segue para o Ponto Final ('perdido'); o papagaio dele repete o pregão.
+  3) ESCOLA ESTADUAL (memória da PROFª NEIDE, nº 15). Mecânica CHAMADA: portas de sala perguntam o banco de cada
+     passageiro (Cida 7, Ozório 9, Lume 12, Neide 15, Duda 22, Tiago 30, Jorge 0); errar chama um Bedel. A última
+     porta pergunta "Quem é você?" e a resposta certa é o NOME do jogador (não "alma 31", não "um baú").
+     Neide virou a DIRETORA DE GIZ que obriga alunos desbotados a copiar para sempre. Memória: DIÁRIO DE CLASSE
+     (nomes dos alunos e o dela na capa). Lembrou = ensina SINAL DO RECREIO e a técnica CHAMADA. Senão, o sinal sai
+     do sino do pátio depois da última porta. DUDA, nº 22, 17 anos, heroína invocada que desertou, se esconde no
+     banheiro da escola: conta que os heróis do Andar 3 estão sendo puxados também (ela lembra; não corre perigo).
+  4) CORETO DA PRAÇA (o coreto que Velhágua perdeu, com a banda dentro: prova de que a masmorra agora come a
+     superfície). SEU VALDIR, nº 4, virou o JABUTI DO CORETO (o coreto está no casco dele: ele virou o lugar onde
+     dançaram). DONA MARLENE, nº 5, 78 anos, heroína invocada de bobes e espada, procura o marido. Mini-chefe
+     MAESTRO AFOGADO (morador de Velhágua; mantém a banda tocando para a praça nunca acabar). Vencido, a banda toca
+     a VALSA DO CORETO uma última vez; a Lume aprende; tocar a valsa acorda o Valdir. ESCOLHA: Valdir não sai do
+     lugar (ele É o coreto) e pede que levem a Marlene; ela quer ficar. marleneFate 'junto' (os dois ficam,
+     lembrados) ou 'conosco' (ela vem e luta ao seu lado no Ponto Final; o Valdir fica sozinho, em paz).
+  5) PONTO FINAL (chefe O PASSAGEIRO 32). Uma fila de passageiros desbotados entra num ônibus de névoa. O 32 é uma
+     figura de capa de chuva costurada com tudo o que os passageiros ESQUECERAM (o quepe do Jorge, a valsa, o
+     sabor do pastel...). Fala com frases roubadas. Fases: BILHETERIA (devolve o seu último feitiço contra você),
+     LOTAÇÃO (chama os desbotados como golpes; cada alma que você fez lembrar responde "Presente!" e bloqueia um),
+     COLEÇÃO (sequência de memória longa). Vencido, vira luzes que voltam aos donos.
+     ESCOLHA FINAL: duas luzes emaranhadas, só dá para segurar uma: O SABOR DO PASTEL (sua memória) ou O FIM DA
+     CANÇÃO DA LUME (ela canta a música do título a vida toda sem lembrar como termina). ch6Gift 'pastel'|'cancao'.
+  - GANCHO CAP. 7 "O Selado": a linha desce até uma porta redonda com 31 fechaduras. O 31 está estacionado na
+    frente, com os desbotados dentro (e o Jorge, e o Tiago se foi junto). Do outro lado, alguém bate três vezes.
+    A VOZ: "Obrigada por organizar a fila, trinta e um." O Musgo chega com a resistência; a Rita e os aprendizes
+    também, se você os ajudou. Os bilhetes carimbados (almas que lembraram) são chaves.
+  - MECÂNICAS: CANÇÕES (mapa): a Lume toca melodias (sequência de setas) em PORTAS DE MEMÓRIA; G.tunes guarda as
+    aprendidas (onibus, pregao, recreio, valsa). ACALMAR (batalha): Lembranças têm "calma" (Avaliar mostra o
+    elemento); feitiço do elemento certo enche a calma (CANTO enche em dobro); cheia = o inimigo vai embora em
+    paz (conta como vitória, G.flags.calmed). CHAMADA (história).
+  - RUNAS: CANTO (elemento incomum, rosa: acalma em dobro, 20% de encantar; Véu = Coro, cura 6%/turno por 3),
+    CORO (forma rara: todos os inimigos, mais forte para cada alma do 31 reunida), BILHETE (mod raro: o próximo
+    golpe inimigo contra você sai pela metade). Itens: Pastel de Feira, Caldo de Cana, Cordinha de Parada (fuga).
+  - Almas reunidas (contam para CORO, Chamada e o chefe): Lume, Cida, Tiago (se ficou), Ozório, Neide, Duda,
+    Marlene/Valdir. soulOk(k)/soulsCount()/lostSouls(); flags soul_ozorio/soul_neide/soul_cida ('lembrou'|'perdido').
+  - FATOS: OZÓRIO FERREIRA, pasteleiro, banco 9, filha BIA (ficou na Terra); o protagonista deve 2 pastéis de
+    queijo (anotado). NEIDE APARECIDA LINS, português, banco 15, levava 32 redações para corrigir. DUDA = MARIA
+    EDUARDA, 17, banco 22, Rua das Acácias 40, portão verde; heroína desertora. MARLENE (banco 5) e VALDIR SOUZA
+    (banco 4), casados há 52 anos; ele virou o jabuti do coreto. MAESTRO TEODORO PRATES, Banda Municipal de
+    Velhágua: "diga que a banda tocou até o fim" (G.flags.maestroBaton = gancho da T2 em Velhágua). LUME tem uma
+    irmã mais nova, LÍVIA; a música do título foi feita para ela dormir (só revelado se ch6Gift='cancao').
+  - As portas da padaria: a cena da Porta Final avisa quem ainda não lembrou e sela o destino (vira 'perdido').
+  - Balanceamento (piloto, Desafio): ver build/test17.py (argumento extra = caminho "perdido", luta contra o Tacho).
+  GANCHOS PARA O CAP. 7 "O SELADO": a Porta Redonda com 31 fechaduras no fim da escada do Ponto Final; o 31
+  estacionado (Jorge ao volante; Tiago junto se tiagoTaken); algo bate do outro lado três vezes; a Voz agradece por
+  "organizar a fila". A resistência desceu (Musgo, monstros, Rita se dateDone, aprendizes, almas que lembraram).
+  Bilhetes carimbados = chaves. Dilema: abrir (o que está selado sobe com eles) ou manter fechada (a coleção fica
+  presa para sempre). 5º grau (Arca da Origem / Mímico Vazio) entra aqui. Pagar o fiado do Ozório (piada que vira
+  cena). Se ch6Gift='cancao', a canção completa da Lume tem efeito no Cap. 8.
+
   HUMANIDADE E HUMOR (humor.js; vale para todos os capítulos)
   O baú foi uma pessoa comum e isso tem que aparecer: ele CORA (blush(): tampa rosada, vapor e coração no
   mapa) perto de mulheres que acha bonitas, fica sem jeito, lembra de besteiras da vida (suculenta Gerson,
@@ -2560,7 +2623,7 @@ async function battle(group, opts = {}) {
   const prev = AU.curName; playMusic(null);
   for (let i = 0; i < 3; i++) { V.flashW = 1; await wait(4); V.flashW = 0; await wait(4); }
   await fadeOut(8);
-  Object.assign(BT, { cd: {}, freeSpell: 0, bloodM: 1, magT: 0, bulwark: 0, frenzy: 0, starHeal: 0, powder: [], saltCrust: 0, reflect: 0, tideQ: null, tideRecast: false, acts: {}, lastAct: null, forgot: null, foneSaid: false, stance: 0, orbit: 0, dark: 0, star: 0, guildShield: 0, nextSpellM: 1, lastSpell: null, copy: false, ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 }); FXL.length = 0; BT.flashT = 0; BT.dimT = 0;
+  Object.assign(BT, { cd: {}, freeSpell: 0, bloodM: 1, magT: 0, bulwark: 0, frenzy: 0, starHeal: 0, powder: [], saltCrust: 0, reflect: 0, tideQ: null, tideRecast: false, acts: {}, lastAct: null, forgot: null, foneSaid: false, stance: 0, orbit: 0, dark: 0, star: 0, guildShield: 0, nextSpellM: 1, lastSpell: null, copy: false, ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0, choir: 0, ticketShield: 0 }); FXL.length = 0; BT.flashT = 0; BT.dimT = 0;
   V.scene = 'battle'; playMusic(opts.music || 'battle');
   await fadeIn(10);
   const names = BT.en.map(e => e.name);
@@ -2637,7 +2700,7 @@ async function playerTurn() {
     }
     if (c === 2) {
       const ks = ['flask', ...Object.keys(G.items).filter(k => G.items[k] > 0)];
-      const i = await list({ x: 8, y: 150, w: 224, h: 74, title: 'Itens', maxVis: 4, items: ks.map(k => k === 'flask' ? flaskItem() : ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: k => ks[k] === 'flask' ? FLASK_DESC() : ITEMS[ks[k]].desc, descY: 40 });
+      const i = await list({ x: 8, y: 150, w: 224, h: 74, title: 'Itens', maxVis: 4, idx: G.flask.n || ks.length < 2 ? 0 : 1, items: ks.map(k => k === 'flask' ? flaskItem() : ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: k => ks[k] === 'flask' ? FLASK_DESC() : ITEMS[ks[k]].desc, descY: 40 });
       if (i < 0) continue;
       if (ks[i] === 'flask') { if (!G.flask.n) { await bSay('* O frasco está vazio.'); continue; } markAct('item'); const t = drinkFlask(); sfx('heal'); pbPose('win', 20); burst(BPX, BPY - 14, '#f2b544', 22); await bSay(t, { auto: 50 }); return 'acted'; }
       const it = ITEMS[ks[i]]; markAct('item');
@@ -2718,6 +2781,7 @@ async function castSpell(sp, target) {
     else if (sp.el === 'faisca') { BT.buff.atkM = f ? 1.6 : 1.35; BT.buff.atkT = (ec ? 5 : 3) + 1; BT.buff.defM = Math.min(BT.buff.defM, 0.8); BT.buff.defT = Math.max(BT.buff.defT, BT.buff.atkT); await bSay(`* Faíscas dançam na sua tampa. Ataque ×${BT.buff.atkM} e dano recebido -20% por ${BT.buff.atkT - 1} turnos.`, { auto: 50 }); }
     else if (sp.el === 'brasa') { BT.buff.atkM = f ? 1.8 : 1.5; BT.buff.atkT = (ec ? 5 : 3) + 1; await bSay(`* Uma Fúria de brasa envolve sua tampa. Ataque ×${BT.buff.atkM} por ${BT.buff.atkT - 1} turnos.`, { auto: 50 }); }
     else if (sp.el === 'sal') { cureStatus(); BT.saltCrust = Math.max(BT.saltCrust || 0, ec ? 5 : 3); if (f) { BT.buff.defM = Math.min(BT.buff.defM, 0.8); BT.buff.defT = Math.max(BT.buff.defT, 4); } await bSay(`* Uma crosta de sal cobre a sua tampa. Efeitos ruins sumiram e não pegam em você por ${BT.saltCrust} turnos.`, { auto: 50 }); }
+    else if (sp.el === 'canto') { BT.choir = Math.max(BT.choir || 0, ec ? 5 : 3); if (f) { BT.buff.atkM = Math.max(BT.buff.atkM, 1.2); BT.buff.atkT = Math.max(BT.buff.atkT, 4); } await bSay(`* Um coro de vozes conhecidas te envolve. Você recupera um pouco de PV a cada turno, por ${BT.choir} turnos.`, { auto: 50 }); }
     else if (sp.el === 'geada') { BT.buff.defM = f ? 0.35 : 0.5; BT.buff.defT = (ec ? 5 : 3) + 1; await bSay(`* Uma casca de gelo cobre você. Dano recebido reduzido por ${BT.buff.defT - 1} turnos.`, { auto: 50 }); }
     else {
       let h = Math.round(healAmt(sp) * markM * rand(0.95, 1.05)); const before = G.hp; G.hp = Math.min(G.st.mhp, G.hp + h);
@@ -2736,7 +2800,7 @@ async function castSpell(sp, target) {
     let alive = BT.en.filter(e => e.alive && e.hp > 0);
     let first = target && target.hp > 0 ? target : alive[0];
     let targets, mults;
-    if (sp.form === 'onda') { targets = alive; mults = alive.map(() => 1); }
+    if (sp.form === 'onda' || sp.form === 'coro') { targets = alive; mults = alive.map(() => 1); }
     else if (sp.form === 'corrente') { targets = first ? [first, ...alive.filter(e => e !== first)].slice(0, 3) : []; mults = [1, 0.7, 0.5]; }
     else { targets = first ? [first] : []; mults = [1]; }
     if (!targets.length) break;
@@ -2752,6 +2816,7 @@ async function castSpell(sp, target) {
       if (sp.el === 'vento' && (t.shell > 0 || t.hide > 0 || (t.atkBuff && t.atkBuff.t > 0))) { t.shell = 0; t.hide = 0; t.atkBuff = null; log.push(`* O vento varre as proteções do ${t.name}!`); }
       if (sp.mod === 'dreno') { const g = Math.max(1, Math.round(dmg * 0.2)); G.mp = Math.min(G.st.mmp, G.mp + g); log.push(`* Você drenou ${g} PM.`); }
       hitEnemy(t, dmg, wk > 1 ? 'crit' : 'hit', RUNES[sp.el].col);
+      if (typeof calmHit === 'function') calmHit(t, sp.el, log);
       if (sp.el === 'seiva') drained += Math.round(dmg * 0.5);
       if (sp.el === 'geada' && t.hp > 0 && Math.random() < (t.d.boss ? 0.1 : sp.mod === 'foco' ? 0.4 : 0.25)) { t.frozen = 1; log.push(`* O ${t.name} congelou!`); }
       if (sp.el === 'faisca' && t.hp > 0 && !t.frozen && Math.random() < (t.d.boss ? 0.12 : sp.mod === 'foco' ? 0.35 : 0.2)) { t.stunned = 1; log.push(`* O ${t.name} ficou atordoado!`); }
@@ -2775,7 +2840,7 @@ async function lumeSing() {
   if (G.flags.lumeFone && !BT.foneSaid) { BT.foneSaid = true; await bSay('* A Lume ajeita o fone remendado e canta mais alto.', { auto: 30 }); }
   const opts = hurt ? ['heal', 'heal', 'buff'] : ['buff', 'stun', 'heal', 'stun'];
   const k = pickOne(opts);
-  BT.lumeT = 60; burst(220, 100, '#ffe066', 16);
+  BT.lumeT = 60; burst(BPX - 22, BPY - 50, '#ffe066', 16);
   if (k === 'heal') { const h = Math.round(G.st.mhp * (G.flags.lumeFone ? 0.3 : 0.22)); G.hp = Math.min(G.st.mhp, G.hp + h); sfx('heal'); await bSay(`* {y}Lume{/} canta uma balada morna. +${h} PV.`, { auto: 50 }); }
   else if (k === 'buff') { BT.buff.atkM = Math.max(BT.buff.atkM, 1.4); BT.buff.atkT = Math.max(BT.buff.atkT, 3); sfx('buff'); await bSay('* {y}Lume{/} toca um refrão animado. Ataque ×1.4 por 2 turnos!', { auto: 50 }); }
   else { const t = pickOne(BT.en.filter(e => e.alive)); const dmg = Math.round(10 + G.lv * 3 + G.st.mag); hitEnemy(t, dmg, 'hit', '#ffe066'); if (!t.d.boss) t.stunned = 1; await bSay(`* {y}Lume{/} solta uma nota aguda! ${t.name}: ${dmg} de dano${t.d.boss ? '' : ' e atordoado'}.`, { auto: 50 }); }
@@ -3047,7 +3112,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–5', 6, 226, { col: '#5a5070' }); txt('v2.0', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–6', 6, 226, { col: '#5a5070' }); txt('v2.0', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
@@ -3612,7 +3677,13 @@ const ST_TXT = {
   silence: 'Você foi {p}silenciado{/}: não pode usar magia no próximo turno.',
   blind: 'Você está {c}cego de tinta{/}: a próxima mordida fica mais difícil.'
 };
-function giveStatus(st, turns = 3) {
+// a cegueira diz de onde veio: tinta, luz, sombra ou sal
+function blindTxt(mv) {
+  const by = (mv && mv.blindBy) || (mv && mv.el === 'sombra' ? 'sombra' : mv && mv.el === 'sal' ? 'sal' : mv && /luz|clarão|farol/i.test(mv.t || '') ? 'luz' : 'tinta');
+  BT.blindBy = by;
+  return { tinta: 'Você está {c}cego de tinta{/}: a próxima mordida fica mais difícil.', luz: 'A luz te deixou {y}ofuscado{/}: a próxima mordida fica mais difícil.', sombra: 'A sombra cobriu seus olhos. Você está {p}no escuro{/}: a próxima mordida fica mais difícil.', sal: 'O sal ardeu nos seus olhos. Você está {w}cego de sal{/}: a próxima mordida fica mais difícil.' }[by];
+}
+function giveStatus(st, turns = 3, mv = null) {
   if (BT.saltCrust > 0) return 'A crosta de sal segurou o efeito. Nada pegou em você.';
   if (st === 'forget') {
     const pool = [...G.spells.map((s, i) => 'sp:' + i), ...(G.tech || []).filter(k => TECH[k]).map(k => 'tc:' + k)];
@@ -3621,7 +3692,7 @@ function giveStatus(st, turns = 3) {
     const nm = BT.forgot.startsWith('sp:') ? G.spells[+BT.forgot.slice(3)].name : TECH[BT.forgot.slice(3)].name;
     return `Você {c}esqueceu{/} como usar {y}${nm}{/} por 2 turnos.`;
   }
-  if (st === 'blind') { BT.inked = true; return ST_TXT.blind; }
+  if (st === 'blind') { BT.inked = true; return blindTxt(mv); }
   BT.ps = BT.ps || {}; BT.ps[st] = st === 'silence' ? 1 : turns; return ST_TXT[st];
 }
 function cureStatus() { BT.ps = {}; BT.inked = false; }
@@ -3737,7 +3808,7 @@ async function runMove(e, mv) {
       await bSay(`* ${mv.name ? mv.name + ': o' : 'O'} ${tgt.name} recuperou ${h} PV.`, { auto: 50 }); return;
     }
   }
-  if (mv.st && G.hp > 0 && (worst === 'fail' || (worst === 'good' && mv.st !== 'silence' && Math.random() < 0.4)) && !(mv.k === 'spell' && worst === 'perfect')) msg += '\n* ' + giveStatus(mv.st);
+  if (mv.st && G.hp > 0 && (worst === 'fail' || (worst === 'good' && mv.st !== 'silence' && Math.random() < 0.4)) && !(mv.k === 'spell' && worst === 'perfect')) msg += '\n* ' + giveStatus(mv.st, 3, mv);
   if (mv.drain && G.mp > 0 && worst !== 'perfect') { const l = Math.min(G.mp, mv.drain); G.mp -= l; msg += ` Você perdeu ${l} PM.`; }
   await bSay(msg, { auto: 50 });
 }
@@ -4119,7 +4190,7 @@ Object.assign(ENEMIES, {
   farol: { name: 'Portador de Farol', sp: 'farol', hp: 140, atk: 50, def: 14, xp: 70, elite: true, weak: { sombra: 1.5, vento: 1.3 }, drops: [['pao', .3]],
     flavor: ['* O Portador de Farol balança a lanterna. Não dá pra se esconder dessa luz.'], check: 'A luz dele revela disfarces. SOMBRA apaga.',
     moves: [
-      { k: 'ring', p: 0.85, st: 'blind', w: 2, t: '* CLARÃO! A lanterna explode em luz!' },
+      { k: 'ring', p: 0.85, st: 'blind', blindBy: 'luz', w: 2, t: '* CLARÃO! A lanterna explode em luz!' },
       { k: 'dodge', p: 1, hits: 2, w: 2, t: '* O Portador gira a lanterna como um mangual!' },
       { k: 'ring', p: 1.2, w: 1, t: '* O Portador dá com a lanterna na sua tampa!' }] },
   jailer: { name: 'Carcereiro de Ferro-Velho', sp: 'jailer', hp: 1300, atk: 66, def: 22, xp: 420, boss: true, ai: 'jailer', sc: 3, weak: { faisca: 1.6, geada: 1.2, bite: 0.8 },
@@ -6671,6 +6742,8 @@ const ICON = {
   flag(x, y) { icR(x + 1, y, 1, 10, '#a89068'); icR(x + 2, y, 7, 5, '#ff6b6b'); icR(x + 2, y + 1, 7, 1, '#ffb0b0'); },
   blood(x, y) { icDrop(x, y, '#5a0a0a', '#c83838'); icPx(x + 7, y + 1, '#c0a0f0'); },
   heal(x, y) { icR(x + 4, y + 1, 2, 8, '#9be58a'); icR(x + 1, y + 4, 8, 2, '#9be58a'); },
+  flash(x, y) { const c = '#ffe066'; icR(x + 3, y + 3, 4, 4, '#fff4c0'); for (const [a, b] of [[4, 0], [4, 8], [0, 4], [8, 4], [1, 1], [7, 1], [1, 7], [7, 7]]) icR(x + a, y + b, 2, 2, c); },
+  note(x, y) { icR(x + 2, y + 6, 4, 3, '#ffb0d8'); icR(x + 5, y, 1, 8, '#ffb0d8'); icR(x + 6, y, 3, 1, '#ffb0d8'); icR(x + 8, y + 1, 1, 2, '#ffb0d8'); },
   crust(x, y) { ICON.salt(x, y); icR(x, y + 9, 10, 1, '#9ab8c8'); }
 };
 function icPx(x, y, c) { bx.fillStyle = c; bx.fillRect(x, y, 1, 1); }
@@ -6696,6 +6769,8 @@ function enemyIcons(e, dx, dy, w, h) {
   if (e.mine > 0) list.push(['mine']);
   if (e.blinded) list.push(['blind']);
   if (e.confused > 0) list.push(['confused']);
+  // calma das Lembranças: bolinhas rosadas embaixo do sprite
+  if (e.d.calm && !e.calmed) { const nd = e.d.calm.need, cx0 = Math.round(dx + w / 2 - nd * 3); for (let i = 0; i < nd; i++) { icR(cx0 + i * 6, dy + h + 9, 4, 4, '#120e1a'); icR(cx0 + i * 6 + 1, dy + h + 10, 2, 2, i < (e.calm || 0) ? '#ffb0d8' : '#3a3448'); } }
   if (!e.d.guardian && BT.en.some(g => g !== e && g.alive && g.hp > 0 && g.d.guardian)) list.push(['guarded']);
   // colunas de até 3 ícones à direita do sprite
   list.slice(0, 6).forEach(([k, c], i) => iconAt(k, Math.min(228, Math.round(dx + w + 2) + Math.floor(i / 3) * 12), Math.max(2, dy) + (i % 3) * 12, c));
@@ -6717,9 +6792,10 @@ function playerIcons() {
   if (BT.freeSpell > 0) L.push('free');
   if (BT.magT > 0) L.push('flag');
   if (BT.bloodM > 1) L.push('blood');
+  if (BT.ticketShield > 0) L.push('ticket'); if (BT.choir > 0) L.push('note');
   const ps = BT.ps || {};
   if (ps.poison > 0) L.push('poison'); if (ps.burn > 0) L.push('burn'); if (ps.silence > 0) L.push('silence'); if (ps.forget > 0) L.push('forget');
-  if (BT.inked) L.push('ink'); if (BT.netted) L.push('net');
+  if (BT.inked) L.push({ luz: 'flash', sombra: 'blind', sal: 'salt' }[BT.blindBy] || 'ink'); if (BT.netted) L.push('net');
     // em cima do baú, em fileiras de 7 (de baixo para cima)
   L.slice(0, 14).forEach((k, i) => iconAt(k, 4 + (i % 7) * 12, BPY - 48 - Math.floor(i / 7) * 12, null));
 }
@@ -6939,7 +7015,8 @@ const BG_OF = {
   mercado: 'mercado', acampamento: 'acampamento', teatro: 'teatro', ponte: 'ponte',
   escadaria3: 'fortaleza', muralhas: 'fortaleza', patio: 'acampamento', jaula: 'jaula', scriptorium: 'scriptorium',
   devolucao: 'arquivo', achados: 'arquivo', fundo: 'arquivo', estrada: 'estrada', correio: 'correio',
-  terminal: 'terminal', manobras: 'terminal', garagem: 'garagem', trincheira: 'trincheira', oficina: 'trincheira'
+  terminal: 'terminal', manobras: 'terminal', garagem: 'garagem', trincheira: 'trincheira', oficina: 'trincheira',
+  padaria: 'padaria', feira: 'feira', escola: 'escola', coreto: 'coreto', pontofinal: 'pontofinal'
 };
 // d = sombra, m = meio, b = brilho, a = acento, f = chão
 const BG_PAL = {
@@ -6958,7 +7035,12 @@ const BG_PAL = {
   correio: { d: '#0e0a1a', m: '#2a1e48', b: '#6a8ae0', a: '#ff6b6b', f: '#18122c' },
   terminal: { d: '#0e0c08', m: '#3a3018', b: '#d0a030', a: '#ff8030', f: '#1c1810' },
   garagem: { d: '#0c0a0e', m: '#2e2632', b: '#a088b0', a: '#ffd040', f: '#1a161c' },
-  trincheira: { d: '#100c06', m: '#3a2a12', b: '#a88040', a: '#ff6030', f: '#1c160c' }
+  trincheira: { d: '#100c06', m: '#3a2a12', b: '#a88040', a: '#ff6030', f: '#1c160c' },
+  padaria: { d: '#140c1a', m: '#3a2448', b: '#e08a5a', a: '#ffd090', f: '#1e1426' },
+  feira: { d: '#0c1408', m: '#2a4418', b: '#e0a030', a: '#ff6a4a', f: '#16200e' },
+  escola: { d: '#08140e', m: '#1a3a2a', b: '#6ac89a', a: '#e8e4dc', f: '#0e1e16' },
+  coreto: { d: '#0a0e1e', m: '#1e2a4e', b: '#8aa0e0', a: '#ffb0d8', f: '#121830' },
+  pontofinal: { d: '#08080c', m: '#1e2230', b: '#8a9ab8', a: '#ffe066', f: '#0e1018' }
 };
 const BGC = {};
 function bgRand(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
@@ -7069,6 +7151,42 @@ function bgPaint(k) {
       break;
     }
   }
+  switch (k) {
+    case 'padaria': {
+      for (let i = 0; i < 14; i++) { x.globalAlpha = 0.5 - i * 0.03; r(0, i * 3, 240, 3, i < 6 ? '#2a1a3a' : '#5a2a4a'); } x.globalAlpha = 1;
+      for (let i = 0; i < 6; i++) { const bxp = i * 42 - 6, bh = 30 + (i % 3) * 10; block(bxp, SKY - bh, 38, bh, P.d, P.m); for (let wy = SKY - bh + 5; wy < SKY - 8; wy += 9) for (let wx = bxp + 4; wx < bxp + 34; wx += 9) r(wx, wy, 5, 5, R() < 0.4 ? P.a : '#1a1020'); }
+      block(84, SKY - 34, 72, 34, '#3a2030', P.b); r(90, SKY - 30, 60, 8, '#1a1020'); r(94, SKY - 28, 52, 4, P.a); r(92, SKY - 18, 26, 18, '#ffd090'); r(126, SKY - 18, 22, 12, '#1a1020'); for (let i = 0; i < 4; i++) r(130 + i * 4, SKY - 14, 2, 2, '#e8b860');
+      r(30, SKY - 22, 30, 3, '#3a70c0'); r(32, SKY - 19, 1, 19, '#9aa0aa'); r(57, SKY - 19, 1, 19, '#9aa0aa'); x.globalAlpha = 0.3; r(33, SKY - 19, 24, 12, '#bfe8f0'); x.globalAlpha = 1;
+      break;
+    }
+    case 'feira': {
+      for (let i = 0; i < 6; i++) { const sx = i * 42 - 8; const cols = [['#c83838', '#f2ecdc'], ['#3a70c0', '#f2ecdc'], ['#4a9a4a', '#f0c040'], ['#f07830', '#fff4c0']][i % 4]; r(sx, 20, 40, 14, '#07050c'); for (let j = 0; j < 40; j += 5) r(sx + j, 21, 5, 10, (j / 5) % 2 ? cols[1] : cols[0]); r(sx + 2, 34, 2, SKY - 34, P.m); r(sx + 36, 34, 2, SKY - 34, P.m); r(sx + 4, SKY - 14, 32, 10, '#5a3420'); for (let j = 0; j < 7; j++) r(sx + 6 + j * 4, SKY - 17, 3, 3, ['#f07830', '#4a9a4a', '#c83838', '#f0c040', '#e86890'][j % 5]); }
+      for (let i = 0; i < 12; i++) { const fx0 = R() * 240; line(fx0, 0, fx0 + 10, 18, '#3a3448'); r(fx0 + 10, 18, 2, 2, ['#f0c040', '#e86890', '#7ad0f0'][i % 3]); }
+      break;
+    }
+    case 'escola': {
+      block(0, 4, 240, SKY - 4, P.d, P.b); for (let i = 0; i < 4; i++) { const lx = 16 + i * 58; r(lx, 12, 44, 26, '#120e14'); r(lx + 1, 13, 42, 24, '#1f3a2a'); r(lx + 4, 17, 20, 1, '#9ab8a8'); r(lx + 4, 22, 30, 1, '#9ab8a8'); r(lx + 4, 27, 14, 1, '#9ab8a8'); r(lx, 38, 44, 2, '#7a4a2a'); }
+      for (let i = 0; i < 20; i++) r(i * 12 + 2, SKY - 16, 10, 16, ['#3a70c0', '#4a9a4a', '#c8962a', '#c83838'][i % 4]); for (let i = 0; i < 20; i++) { r(i * 12 + 4, SKY - 12, 6, 1, '#120e14'); r(i * 12 + 8, SKY - 8, 1, 2, '#e8e4dc'); }
+      r(108, 2, 24, 8, '#e8e4dc'); r(119, 3, 1, 4, '#120e14'); r(119, 6, 4, 1, '#120e14');
+      break;
+    }
+    case 'coreto': {
+      for (let i = 0; i < 40; i++) bgSpark(x, Math.round(R() * 240), Math.round(R() * 40), P.m);
+      for (const tx of [14, 52, 188, 226]) { ell(tx, 30, 16, 12, '#14301e'); ell(tx - 3, 27, 9, 6, '#24482e'); r(tx - 2, 40, 4, SKY - 40, '#2a1a10'); }
+      ell(120, SKY - 2, 52, 6, '#3a4a2a'); ell(120, SKY - 4, 46, 5, '#5a7a3a');
+      r(80, SKY - 30, 80, 24, '#07050c'); for (let i = 0; i < 9; i++) r(82 + i * 9, SKY - 28, 2, 22, '#e8e4dc'); r(78, SKY - 8, 84, 3, '#c8962a'); r(78, SKY - 30, 84, 3, '#c8962a');
+      for (let i = 0; i < 26; i++) { const hw = Math.round(i * 1.8); r(120 - hw, SKY - 56 + i, hw * 2, 1, i % 6 === 0 ? P.b : P.m); } r(118, SKY - 62, 4, 6, '#c8962a');
+      for (const lx of [62, 178]) { r(lx, 20, 2, SKY - 20, '#3a3448'); ell(lx + 1, 18, 4, 4, '#3a3448'); ell(lx + 1, 18, 2, 2, '#ffe9a0'); x.globalAlpha = 0.12; ell(lx + 1, 18, 12, 12, '#ffe9a0'); x.globalAlpha = 1; }
+      break;
+    }
+    case 'pontofinal': {
+      for (let i = 0; i < 8; i++) { x.globalAlpha = 0.18; ell(30 + i * 30, 26 + (i % 3) * 8, 28, 10, P.m); } x.globalAlpha = 1;
+      r(150, SKY - 30, 80, 26, '#07050c'); x.globalAlpha = 0.5; r(151, SKY - 29, 78, 24, '#3a4a5a'); x.globalAlpha = 1; for (let i = 0; i < 6; i++) r(156 + i * 12, SKY - 26, 8, 8, '#1a2030'); r(150, SKY - 12, 80, 3, '#3a70c0'); r(208, SKY - 36, 22, 6, '#2a1a10'); r(212, SKY - 35, 14, 4, P.a);
+      for (let i = 0; i < 8; i++) { const fx0 = 140 - i * 16, fh = 14 + (i % 3) * 2; x.globalAlpha = 0.85 - i * 0.08; r(fx0, SKY - fh, 8, fh, '#2a3240'); ell(fx0 + 4, SKY - fh - 3, 3, 3, '#2a3240'); x.globalAlpha = 1; }
+      r(20, SKY - 30, 2, 30, '#5a6070'); r(14, SKY - 34, 14, 6, '#e8e4dc'); r(16, SKY - 32, 10, 1, '#3a3448'); r(16, SKY - 30, 6, 1, '#c83838');
+      break;
+    }
+  }
   // chão: faixa escura com linhas em perspectiva e um disco iluminado onde as lutas acontecem
   r(0, SKY, 240, 136 - SKY, P.f);
   for (let i = -8; i <= 8; i++) line(120 + i * 6, SKY, 120 + i * 40, 136, P.d);
@@ -7119,6 +7237,7 @@ function fxRing(cx, cy, r, c, ry) { ry = ry ?? r; const n = Math.max(12, Math.ro
 function fxLine(x0, y0, x1, y1, c, th = 1) { const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) || 1; for (let i = 0; i <= n; i++) fxR(x0 + (x1 - x0) * i / n - (th - 1) / 2, y0 + (y1 - y0) * i / n - (th - 1) / 2, th, th, c); }
 function fxSpark(x, y, c, big) { fxP(x, y, '#ffffff'); fxR(x - 1, y, 3, 1, c); fxR(x, y - 1, 1, 3, c); if (big) { fxR(x - 3, y, 2, 1, c); fxR(x + 2, y, 2, 1, c); fxR(x, y - 3, 1, 2, c); fxR(x, y + 2, 1, 2, c); } }
 function fxGlow(cx, cy, r, c, a = 0.25) { bx.globalAlpha = a; fxDisc(cx, cy, r, c); bx.globalAlpha = a * 0.6; fxDisc(cx, cy, r * 1.5, c); bx.globalAlpha = 1; }
+function fxNote(x, y, c, big) { x = Math.round(x); y = Math.round(y); fxR(x - 2, y + 1, 3, 2, c); fxR(x, y - (big ? 6 : 4), 1, big ? 7 : 5, c); fxR(x + 1, y - (big ? 6 : 4), 2, 1, c); fxP(x + 2, y - (big ? 5 : 3), c); fxP(x - 2, y + 1, '#ffffff'); }
 function fxPart(x, y, vx, vy, life, col, sz = 1, grav = 0) { BT.parts.push({ x, y, vx, vy, life, col, sz, then: !grav }); }
 function fxBolt(x0, y0, x1, y1, seed) {
   const R = bgRand(seed), n = 7, pts = [[x0, y0]]; const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
@@ -7149,6 +7268,7 @@ function drawProj(el, x, y, t, dir, s) {
     case 'sal': for (let i = 0; i < 5; i++) { const ox = Math.cos(t * 0.2 + i * 1.3) * 3 * s - c * i * 2, oy = Math.sin(t * 0.25 + i * 1.7) * 3 * s - sn * i * 2; fxR(x + ox - 1, y + oy - 1, 3, 3, d); fxR(x + ox - 1, y + oy - 1, 2, 2, i % 2 ? b : w); } break;
     case 'tinta': fxDisc(x, y, 3.5 * s, d); fxDisc(x - 1, y - 1, 2.5 * s, m); fxP(x - 1, y - 2, w); if (t % 3 === 0) fxPart(x, y + 2, rand(-0.2, 0.2), 0.6, 14, m, 2, 1); break;
     case 'polvora': fxDisc(x, y, 3.5 * s, '#120e1a'); fxDisc(x - 1, y - 1, 1, '#5a5070'); fxLine(x + 2, y - 3, x + 4, y - 6, '#a89068'); fxSpark(x + 4, y - 7, t % 4 < 2 ? '#ffb040' : '#ffe066'); break;
+    case 'canto': fxGlow(x, y, 6 * s, b, 0.22); for (let i = 0; i < 3; i++) { const ox = -c * i * 6 + Math.sin(t * 0.4 + i) * 2, oy = -sn * i * 6 + Math.cos(t * 0.4 + i * 2) * 3; fxNote(x + ox, y + oy, i === 0 ? w : i === 1 ? b : m, i === 0 && s > 1.2); } if (t % 3 === 0) fxPart(x, y, rand(-0.3, 0.3), -0.4, 18, b, 1); break;
     default: fxGlow(x, y, 5, m); fxDisc(x, y, 3 * s, m); fxP(x, y, '#ffffff');
   }
 }
@@ -7165,6 +7285,7 @@ function drawImpact(el, x, y, p, s, fy) {
     case 'sal': { for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2 + 0.4, r = (4 + p * 8) * s, cx = x + Math.cos(a) * r, cy = y + Math.sin(a) * r * 0.8, hh = Math.min(1, p * 3) * 5 * s; fxR(cx - 1, cy - hh, 3, hh, d); fxR(cx - 1, cy - hh, 2, hh - 1, i % 2 ? b : w); } break; }
     case 'tinta': { for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2, r = (3 + p * 12) * s; fxDisc(x + Math.cos(a) * r, y + Math.sin(a) * r * 0.7 + p * 6, 2 * q + 1, i % 2 ? m : d); } fxDisc(x, y, 4 * q * s, m); break; }
     case 'polvora': { if (p < 0.2) fxDisc(x, y, 14 * s, '#ffffff'); fxDisc(x, y, q * 10 * s, b); fxRing(x, y, (5 + p * 20) * s, m); fxRing(x, y, (4 + p * 16) * s, '#ffe066'); bx.globalAlpha = q; for (let i = 0; i < 4; i++) fxDisc(x + (i - 1.5) * 8 * p, y - p * 16 - i * 2, 3 + p * 5, '#4a4450'); bx.globalAlpha = 1; break; }
+    case 'canto': { for (let k = 0; k < 3; k++) { const r = (4 + p * 16 - k * 4) * s; if (r > 0) fxRing(x, y, r, k === 0 ? b : m, r * 0.7); } for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2 + p * 2, r = (5 + p * 12) * s; fxNote(x + Math.cos(a) * r, y + Math.sin(a) * r * 0.7 - p * 8, i % 2 ? w : b); } break; }
     case 'estrela': { for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + p, r = (3 + p * 14) * s; fxSpark(x + Math.cos(a) * r, y + Math.sin(a) * r, '#ffe066', i % 2 === 0 && p < 0.5); } if (p < 0.25) fxDisc(x, y, 6 * s, '#fff4a0'); break; }
     default: fxRing(x, y, 3 + p * 12, m); fxRing(x, y, 2 + p * 9, '#ffffff');
   }
@@ -7207,6 +7328,7 @@ async function fxWave(el, ts, s) {
         case 'seiva': { const hh = (4 + (i % 3) * 3) * s; fxLine(xx, gy, xx + Math.sin(i) * 2, gy - hh, m); fxR(xx + Math.sin(i) * 2 - 1, gy - hh, 3, 2, b); break; }
         case 'tinta': { const hh = (6 + Math.sin(i * 0.8 + k * 0.3) * 4) * s; fxR(xx, gy - hh, 5, hh, m); fxR(xx, gy - hh, 5, 1, w); break; }
         case 'polvora': if (i % 3 === 0) { fxDisc(xx, gy - 4, 4 * a, b); fxDisc(xx, gy - 4, 2 * a, w); } break;
+        case 'canto': if (i % 2 === 0) fxNote(xx, gy - 6 - Math.abs(Math.sin(i + k * 0.3)) * 14, i % 4 ? b : w, i === 0); fxR(xx, gy - 1, 4, 1, m); break;
         default: fxR(xx, gy - 6, 4, 6, m);
       }
       bx.globalAlpha = 1;
@@ -7237,6 +7359,7 @@ async function fxAura(el) {
       case 'sombra': bx.globalAlpha = 0.5 * q; fxDisc(cx, cy, 20 * q, d); bx.globalAlpha = 1; for (let i = 0; i < 6; i++) { const a = -Math.PI / 2 + (i - 2.5) * 0.4, r = 14 + Math.sin(k * 0.3 + i) * 4; fxLine(cx + Math.cos(a) * 8, cy + Math.sin(a) * 6, cx + Math.cos(a) * r, cy + Math.sin(a) * r, m); fxP(cx + Math.cos(a) * r, cy + Math.sin(a) * r, b); } break;
       case 'vento': for (let j = 0; j < 30; j++) { const a = j * 0.45 + k * 0.4, r = 6 + j * 0.5; fxP(cx + Math.cos(a) * r, cy + 10 - j * 0.9, j % 3 ? b : w); } break;
       case 'sal': for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2, r = 18 - 8 * p, hh = 3 + (i % 3); fxR(cx + Math.cos(a) * r - 1, cy + Math.sin(a) * r * 0.7 - hh, 3, hh, i % 2 ? w : b); } break;
+      case 'canto': for (let i = 0; i < 7; i++) { const a = k * 0.12 + i * 0.9, r = 16 + Math.sin(k * 0.2 + i) * 3; fxNote(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.6 - p * 6, i % 2 ? b : w, i === 0); } fxGlow(cx, cy, 14 * q, m, 0.2); break;
       default: for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2 + k * 0.1, yy = cy + 10 - p * 26 + i * 2; fxR(cx + Math.cos(a) * 14 - 1, yy, 3, 1, b); fxR(cx + Math.cos(a) * 14, yy - 1, 1, 3, b); } fxGlow(cx, cy, 16 * q, m, 0.25);
     }
   });
@@ -7246,6 +7369,7 @@ async function spellAnim(sp, targets, pm = 1) {
   const el = sp.el, s = 1.2 * (sp.mod === 'foco' ? 1.45 : 1) * (pm < 1 ? 0.8 : 1);
   if (sp.mod === 'foco' && pm >= 1) await fxCharge(el);
   if (sp.form === 'onda') await fxWave(el, targets, s);
+  else if (sp.form === 'coro') { const n = Math.min(6, soulsCount()); fxSpawn(36, (k, p) => { for (let i = 0; i < n; i++) { const x = 6 + (i % 3) * 16, y = BPY - 30 - Math.floor(i / 3) * 16 - Math.sin(k * 0.3 + i) * 2; fxNote(x, y, ['#ffe066', '#ffb0d8', '#7ad0f0'][i % 3], true); } }); await fxWave(el, targets, s * 1.1); }
   else if (sp.form === 'corrente') await fxChain(el, targets, s);
   else if (sp.form === 'ancora') await fxAnchor(el, targets[0], s);
   else if (sp.form === 'mina') await fxMine(el, targets[0], s);
@@ -7254,6 +7378,7 @@ async function spellAnim(sp, targets, pm = 1) {
   if (sp.mod === 'selo') for (const t of targets) { const x = t.x, fy = feet(t), c = RUNES[el].col; fxSpawn(36, (k, p) => { const r = 6 + Math.min(1, p * 3) * 8; fxRing(x, fy, r, c, r * 0.35); fxRing(x, fy, r - 3, c, (r - 3) * 0.35); for (let i = 0; i < 4; i++) { const a = k * 0.1 + i * Math.PI / 2; fxP(x + Math.cos(a) * (r - 1.5), fy + Math.sin(a) * (r - 1.5) * 0.35, '#ffffff'); } }); }
   if (sp.mod === 'dreno') for (const t of targets) { const [mx, my] = MOUTH(), x0 = t.x, y0 = t.y; fxSpawn(26, (k, p) => { for (let i = 0; i < 4; i++) { const q = Math.min(1, Math.max(0, p * 1.4 - i * 0.12)); fxSpark(x0 + (mx - x0) * q, y0 + (my - y0) * q - Math.sin(q * Math.PI) * 10, '#60d0a0'); } }); }
   if (sp.mod === 'mare') { fxSpawn(28, (k, p) => { for (let x = 0; x < 240; x += 3) { const y = 122 - Math.max(0, Math.sin((x / 240 - p * 1.6 + 0.4) * Math.PI)) * 10; fxR(x, y, 3, 122 - y + 2, '#2a6a8a'); fxR(x, y, 3, 1, '#c8f4ff'); } }); }
+  if (sp.mod === 'bilhete') { fxSpawn(40, (k, p) => { const a = k * 0.2, x = BPX + Math.cos(a) * 18, y = BPY - 16 + Math.sin(a) * 7; fxR(x - 4, y - 2, 9, 5, '#120e1a'); fxR(x - 3, y - 1, 7, 3, '#e8dcc0'); fxR(x - 1, y - 1, 1, 3, '#c83838'); }); }
   if (sp.mod === 'bandeira') { fxSpawn(40, (k, p) => { const h = Math.min(1, p * 2.5) * 22, x = BPX - 18; fxR(x, BPY - h, 1, h, '#a89068'); fxR(x + 1, BPY - h, 9, 6, '#ff6b6b'); fxR(x + 1, BPY - h, 9, 1, '#ffb0b0'); fxR(x + 4, BPY - h + 2, 3, 2, '#f0c040'); }); }
 }
 
@@ -7434,6 +7559,1019 @@ Object.assign(STORY, {
     await say('[O Catálogo não tem registro de que alguém tenha mostrado essa parte a ele.]', 'cat');
   }
 });
+
+// gerado por build/ch6/maps6.py (não editar à mão)
+const TH_PAD = { floor: '#3a3036', speck: '#443a40', dark: '#2e262c', wall: '#5a4448', mortar: '#2e2226', wallHi: '#7a5a5a' };
+const TH_FEI = { floor: '#3a3428', speck: '#463e30', dark: '#2e2a20', wall: '#4e4434', mortar: '#2e2a20', wallHi: '#6e604a' };
+const TH_ESC = { floor: '#34383a', speck: '#3e4244', dark: '#2a2e30', wall: '#4a5a52', mortar: '#2a302c', wallHi: '#6a7a72' };
+const TH_COR = { floor: '#2e3440', speck: '#383e4a', dark: '#262a34', wall: '#3a4456', mortar: '#22283a', wallHi: '#5a6478' };
+const TH_FIN = { floor: '#22242c', speck: '#2a2c34', dark: '#1a1c22', wall: '#30323c', mortar: '#1a1c22', wallHi: '#4a4c58' };
+Object.assign(MAPS, {
+  padaria: { name: "Ponto da Padaria", music: 'padaria', dark: 0.3, theme: TH_PAD, rows: ["###########..###########", "#II...................I#", "#I..######....#######..#", "#...######....#######..#", "#...######....#######..#", "#......................#", "#..K......,.......K....#", "........................", "........................", "#...UUU..........Q.Q...#", "#......................#", "#..,.......I.......,...#", "#...K..............K...#", "#......................#", "#......................#", "###########..###########"],
+    exits: [{"x": 0, "y": 7, "to": "feira", "tx": 28, "ty": 7}, {"x": 0, "y": 8, "to": "feira", "tx": 28, "ty": 8}, {"x": 11, "y": 0, "to": "escola", "tx": 12, "ty": 18}, {"x": 12, "y": 0, "to": "escola", "tx": 13, "ty": 18}, {"x": 23, "y": 7, "to": "coreto", "tx": 1, "ty": 8}, {"x": 23, "y": 8, "to": "coreto", "tx": 1, "ty": 9}, {"x": 11, "y": 15, "to": "pontofinal", "tx": 10, "ty": 1, "cond": "finalOpen"}, {"x": 12, "y": 15, "to": "pontofinal", "tx": 11, "ty": 1, "cond": "finalOpen"}],
+    ents: [{"id": "save_pd", "kind": "save", "x": 8, "y": 10}, {"id": "itin6", "kind": "npc2", "x": 7, "y": 9, "sp": "itin", "talk": "itin6"}, {"id": "padeira6", "kind": "npc2", "x": 7, "y": 5, "sp": "padeira", "talk": "padeira6"}, {"id": "dfin1", "kind": "npc2", "x": 11, "y": 14, "sp": "door_final", "talk": "portaFinal", "hide": "finalOpen", "glow": "rgba(255,255,255,0.18)"}, {"id": "dfin2", "kind": "npc2", "x": 12, "y": 14, "sp": "door_final", "talk": "portaFinal", "hide": "finalOpen", "glow": "rgba(255,255,255,0.18)"}] },
+  feira: { name: "Feira de Segunda", music: 'feira', dark: 0.25, theme: TH_FEI, rows: ["##############################", "#AAAA..AAAA..AAAA..AAAA......#", "#...........................K#", "#..,.......,..........,......#", "#AAAA..AAAA..AAAA..AAAA..AAA.#", "#.......................,....#", "#K...........................#", "#..AAA..AAAA..AAAA..AAAA......", "#.............................", "#..AAA..AAAA..AAAA..AAAA.....#", "#............................#", "#...,..........,.............#", "#AAAA..AAAA..##.##..AAAA..AAA#", "#.............#...#..........#", "#.............#...#..........#", "#.............#####..........#", "#............................#", "##############################"],
+    exits: [{"x": 29, "y": 7, "to": "padaria", "tx": 1, "ty": 7}, {"x": 29, "y": 8, "to": "padaria", "tx": 1, "ty": 8}],
+    ents: [{"id": "cida6", "kind": "npc2", "x": 26, "y": 9, "sp": "cida", "talk": "cida6", "float": true, "glow": "rgba(200,180,255,0.15)"}, {"id": "ozorio6", "kind": "npc2", "x": 3, "y": 15, "sp": "tachoW", "talk": "ozorio6", "hide": "ozorioDone", "glow": "rgba(255,180,80,0.15)"}, {"id": "ozorioH", "kind": "npc2", "x": 3, "y": 15, "sp": "ozorio", "talk": "ozorio6", "cond": "ozorioLembrou"}, {"id": "papagaio6", "kind": "npc2", "x": 5, "y": 14, "sp": "papagaio", "talk": "papagaio6", "cond": "ozorioPerdido"}, {"id": "caderno6", "kind": "npc2", "x": 16, "y": 14, "sp": "caderno", "talk": "caderno6", "hide": "cadernoGot", "float": true, "glow": "rgba(255,224,160,0.2)"}, {"id": "dfe1", "kind": "npc2", "x": 15, "y": 12, "sp": "door_onibus", "talk": "tuneDoor", "tune": "onibus", "flag": "d_fe1", "hide": "d_fe1", "glow": "rgba(255,224,102,0.18)"}, {"id": "r_canto", "kind": "rune", "x": 24, "y": 10, "rune": "canto"}, {"id": "cr_fe1", "kind": "chest", "x": 1, "y": 13, "item": "frag", "n": 1}, {"id": "cr_fe2", "kind": "chest", "x": 28, "y": 1, "item": "pastel", "n": 2}, {"id": "cr_fe3", "kind": "chest", "x": 12, "y": 16, "rune": "seiva", "n": 2}, {"id": "e_fe1", "kind": "enemy", "x": 8, "y": 3, "group": ["pombo", "pombo"]}, {"id": "e_fe2", "kind": "enemy", "x": 17, "y": 5, "group": ["feirante"]}, {"id": "e_fe3", "kind": "enemy", "x": 10, "y": 10, "group": ["carrinho", "pombo"]}, {"id": "e_fe4", "kind": "enemy", "x": 21, "y": 8, "group": ["feirante", "carrinho"]}, {"id": "e_fe5", "kind": "enemy", "x": 8, "y": 16, "group": ["pombo", "pombo", "feirante"]}, {"id": "p_fe1", "kind": "patrol", "x": 2, "y": 11, "path": [[2, 11], [26, 11]], "delay": 16, "range": 4, "group": ["feirante", "pombo"], "sp": "feirante"}] },
+  escola: { name: "Escola Estadual", music: 'escola', dark: 0.35, theme: TH_ESC, rows: ["##########################", "#....EEEE........EEEE....#", "#..I..................I..#", "#........................#", "#........................#", "############..############", "#.SS.SS.SS.#..#..SS.SS.SS#", "#........................#", "#..........#..#..........#", "############..############", "#BB.BB.BB.B#..#..........#", "#.SS.SS.SS.#.....SS.SS.SS#", "#.............#..........#", "#..........#..#..........#", "############..############", "#..#..#....#..#.........K#", "#.S#.S#.SS.#.....SS.SS.SS#", "#.............#..........#", "#K.........#..#..........#", "############..############"],
+    exits: [{"x": 12, "y": 19, "to": "padaria", "tx": 11, "ty": 1}, {"x": 13, "y": 19, "to": "padaria", "tx": 12, "ty": 1}],
+    ents: [{"id": "d_es1a", "kind": "npc2", "x": 12, "y": 14, "sp": "classdoor", "talk": "chamada6", "q": 1, "hide": "cham1"}, {"id": "d_es1b", "kind": "npc2", "x": 13, "y": 14, "sp": "classdoor", "talk": "chamada6", "q": 1, "hide": "cham1"}, {"id": "d_es2a", "kind": "npc2", "x": 12, "y": 9, "sp": "classdoor", "talk": "chamada6", "q": 2, "hide": "cham2"}, {"id": "d_es2b", "kind": "npc2", "x": 13, "y": 9, "sp": "classdoor", "talk": "chamada6", "q": 2, "hide": "cham2"}, {"id": "d_es3a", "kind": "npc2", "x": 12, "y": 5, "sp": "classdoor", "talk": "chamada6", "q": 3, "hide": "cham3"}, {"id": "d_es3b", "kind": "npc2", "x": 13, "y": 5, "sp": "classdoor", "talk": "chamada6", "q": 3, "hide": "cham3"}, {"id": "duda6", "kind": "npc2", "x": 2, "y": 17, "sp": "duda", "talk": "duda6"}, {"id": "des1", "kind": "npc2", "x": 11, "y": 12, "sp": "door_pregao", "talk": "tuneDoor", "tune": "pregao", "flag": "d_es1", "hide": "d_es1", "glow": "rgba(240,120,48,0.18)"}, {"id": "diario6", "kind": "npc2", "x": 2, "y": 12, "sp": "diarioC", "talk": "diario6", "hide": "diarioGot", "float": true, "glow": "rgba(120,220,160,0.2)"}, {"id": "neide6", "kind": "npc2", "x": 7, "y": 3, "sp": "neide", "talk": "neide6", "float": true, "glow": "rgba(220,230,255,0.18)"}, {"id": "sino6", "kind": "npc2", "x": 18, "y": 3, "sp": "bell", "talk": "sino6", "glow": "rgba(122,208,240,0.15)"}, {"id": "cr_es1", "kind": "chest", "x": 24, "y": 12, "rune": "bilhete", "n": 1}, {"id": "cr_es2", "kind": "chest", "x": 24, "y": 7, "item": "caldo", "n": 2}, {"id": "cr_es3", "kind": "chest", "x": 1, "y": 7, "item": "cordinha", "n": 2}, {"id": "e_es1", "kind": "enemy", "x": 19, "y": 17, "group": ["lousa"]}, {"id": "e_es2", "kind": "enemy", "x": 19, "y": 12, "group": ["lousa", "saudade"]}, {"id": "e_es3", "kind": "enemy", "x": 5, "y": 8, "group": ["bedel", "lousa"]}, {"id": "e_es4", "kind": "enemy", "x": 20, "y": 8, "group": ["saudade", "saudade"]}, {"id": "p_es1", "kind": "patrol", "x": 12, "y": 18, "path": [[12, 15], [12, 18]], "delay": 20, "range": 3, "group": ["bedel"], "sp": "bedel"}] },
+  coreto: { name: "Coreto da Praça", music: 'coreto', dark: 0.45, theme: TH_COR, rows: ["##########################", "#I.....I.....,.....I....I#", "#........................#", "#..Q..Q...........Q..Q...#", "#........................#", "#.......,..........,.....#", "#I.........CCCCC........I#", "#..........CCCCC.........#", "...........CCCCC..........", "..........................", "#........................#", "#..I.................I...#", "#..Q...Q..........Q...Q..#", "#........................#", "#.....,..........,.......#", "#######..#######.#########", "#.......#................#", "##########################"],
+    exits: [{"x": 0, "y": 8, "to": "padaria", "tx": 22, "ty": 7}, {"x": 0, "y": 9, "to": "padaria", "tx": 22, "ty": 8}],
+    ents: [{"id": "save_co6", "kind": "save", "x": 3, "y": 9}, {"id": "maestroE", "kind": "boss3", "x": 13, "y": 4, "sp": "maestroW", "done": "maestroDone", "script": "maestro6", "glow": "rgba(122,208,240,0.18)"}, {"id": "valdir6", "kind": "npc2", "x": 13, "y": 9, "sp": "valdir", "talk": "valdir6", "glow": "rgba(150,220,120,0.12)"}, {"id": "marlene6", "kind": "npc2", "x": 4, "y": 13, "sp": "marlene", "talk": "marlene6", "hide": "marleneGone"}, {"id": "dco1", "kind": "npc2", "x": 16, "y": 15, "sp": "door_recreio", "talk": "tuneDoor", "tune": "recreio", "flag": "d_co1", "hide": "d_co1", "glow": "rgba(122,208,240,0.18)"}, {"id": "cr_co1", "kind": "chest", "x": 24, "y": 16, "item": "frag", "n": 1}, {"id": "cr_co2", "kind": "chest", "x": 1, "y": 16, "rune": "canto", "n": 2}, {"id": "cr_co3", "kind": "chest", "x": 24, "y": 2, "item": "caldo", "n": 1}, {"id": "e_co1", "kind": "enemy", "x": 6, "y": 5, "group": ["musico", "pombo"]}, {"id": "e_co2", "kind": "enemy", "x": 20, "y": 5, "group": ["saudade", "musico"]}, {"id": "e_co3", "kind": "enemy", "x": 9, "y": 13, "group": ["pombo", "pombo", "saudade"]}, {"id": "e_co4", "kind": "enemy", "x": 20, "y": 13, "group": ["musico", "musico"]}, {"id": "e_co5", "kind": "enemy", "x": 12, "y": 16, "group": ["saudade", "feirante"]}] },
+  pontofinal: { name: "Ponto Final", music: 'pontofinal', dark: 0.6, theme: TH_FIN, rows: ["##########..##########", "#....................#", "#..,.......,......,..#", "#....................#", "#.KK.............KK..#", "#....................#", "#.......,......,.....#", "#....................#", "#....................#", "#..,.............,...#", "#....................#", "#....................#", "#...VVVVVVVVVVVVVV...#", "#...VVVVVVVVVVVVVV...#", "#....................#", "######################"],
+    exits: [{"x": 10, "y": 0, "to": "padaria", "tx": 11, "ty": 13}, {"x": 11, "y": 0, "to": "padaria", "tx": 12, "ty": 13}],
+    ents: [{"id": "save_pf", "kind": "save", "x": 2, "y": 2}, {"id": "p32E", "kind": "boss3", "x": 11, "y": 10, "sp": "p32W", "done": "p32Done", "script": "p32", "glow": "rgba(192,208,232,0.18)"}, {"id": "fila1", "kind": "npc2", "x": 6, "y": 10, "sp": "semrosto", "talk": "fila6"}, {"id": "fila2", "kind": "npc2", "x": 7, "y": 11, "sp": "semrosto", "talk": "fila6"}, {"id": "fila3", "kind": "npc2", "x": 15, "y": 11, "sp": "semrosto", "talk": "fila6"}, {"id": "fila4", "kind": "npc2", "x": 16, "y": 10, "sp": "semrosto", "talk": "fila6"}, {"id": "cr_pf1", "kind": "chest", "x": 20, "y": 1, "item": "pastel", "n": 2}, {"id": "e_pf1", "kind": "enemy", "x": 5, "y": 6, "group": ["semrosto"]}, {"id": "e_pf2", "kind": "enemy", "x": 16, "y": 6, "group": ["semrosto", "saudade"]}] },
+});
+
+// ================= CAPÍTULO 6: ALMAS DO 31 =================
+// A Voz puxa pela Linha 31 as almas do ônibus que esqueceram quem eram. Quem lembra do próprio nome resiste.
+// Mecânicas: CANÇÕES (a Lume toca melodias em portas de memória), ACALMAR (Lembranças vão embora em paz com o
+// elemento certo), CHAMADA (portas da escola perguntam o banco de cada passageiro).
+
+// ---------- almas do 31 ----------
+const SOULS = ['lume', 'cida', 'tiago', 'ozorio', 'neide', 'duda', 'marlene', 'valdir'];
+function soulOk(k) {
+  const f = G.flags;
+  if (k === 'lume') return true;
+  if (k === 'tiago') return !!f.ch5done && !f.tiagoTaken;
+  if (k === 'cida') return f.soul_cida === 'lembrou' || (!!f.cidaDone && f.soul_cida !== 'perdida');
+  return f['soul_' + k] === 'lembrou';
+}
+function soulsCount() { return SOULS.filter(soulOk).length; }
+function soulsNames() { const N = { lume: 'Lume', cida: 'Dona Cida', tiago: 'Tiago', ozorio: 'Seu Ozório', neide: 'Profª Neide', duda: 'Duda', marlene: 'Dona Marlene', valdir: 'Seu Valdir' }; return SOULS.filter(soulOk).map(k => N[k]); }
+function lostSouls() { const f = G.flags; return ['ozorio', 'neide', 'cida'].filter(k => f['soul_' + k] === 'perdido' || f['soul_' + k] === 'perdida').length + (f.tiagoTaken ? 1 : 0); }
+
+// ---------- runas ----------
+Object.assign(RUNES, {
+  canto: { name: 'Canto', type: 'el', col: '#ffb0d8', pow: 9, desc: 'Som. Acalma Lembranças em dobro e pode encantar. Véu: o Coro cura um pouco por 3 turnos.' },
+  coro: { name: 'Coro', type: 'form', col: '#f2ecdc', cost: 6, get mult() { return 0.45 + 0.15 * Math.min(6, soulsCount()); }, desc: 'Atinge todos os inimigos. Mais forte para cada alma do 31 que você reuniu.' },
+  bilhete: { name: 'Bilhete', type: 'mod', col: '#e8dcc0', cost: 2, desc: 'Depois do feitiço, o próximo golpe inimigo contra você sai pela metade.' }
+});
+Object.assign(RUNE_RAR, { canto: 'incomum', coro: 'rara', bilhete: 'rara' });
+Object.assign(MAP_D, { padaria: 15, feira: 15, escola: 16, coreto: 16, pontofinal: 17 });
+EL_COL.canto = '#ffb0d8';
+EP.canto = ['#6a1a4a', '#e05a9a', '#ffb0d8', '#ffffff'];
+
+// ---------- itens ----------
+Object.assign(ITEMS, {
+  pastel: { name: 'Pastel de Feira', hp: 160, desc: 'Cura 160 PV. Queijo, três e cinquenta. Quente demais na primeira mordida, sempre.' },
+  caldo: { name: 'Caldo de Cana', mp: 50, desc: 'Recupera 50 PM. Com limão, do jeito que a Dona Cida pedia.' },
+  cordinha: { name: 'Cordinha de Parada', desc: 'Em batalha: PLIM! Todos os inimigos comuns perdem o próximo turno. Chefes não descem do ônibus.',
+    async fx() { let n = 0; for (const e of BT.en) if (e.alive && !e.d.boss) { e.confused = 1; n++; } sfx('catalog'); await bSay(n ? '* PLIM! Você puxa a cordinha. Os inimigos olham em volta, achando que é o ponto deles.' : '* PLIM! O chefe nem se mexe. Ele não desce aqui.', { auto: 50 }); } }
+});
+
+// ---------- técnica da Profª Neide ----------
+TECH.chamada = { name: 'Chamada', cd: 5, desc: 'Cada alma do 31 que você reuniu responde "Presente!": ataque e defesa +10% por alma (até +50%) por 3 turnos.',
+  async use() {
+    const names = soulsNames(), n = Math.min(5, names.length), m = 1 + n * 0.1;
+    BT.buff.atkM = Math.max(BT.buff.atkM, m); BT.buff.atkT = Math.max(BT.buff.atkT, 4);
+    BT.buff.defM = Math.min(BT.buff.defM, 2 - m); BT.buff.defT = Math.max(BT.buff.defT, 4);
+    sfx('buff'); await bSay(`* "Presente!" ${names.slice(0, 4).join(', ')}${names.length > 4 ? '...' : ''}\n* Ataque ×${m.toFixed(1)} e dano recebido -${Math.round((m - 1) * 100)}% por 3 turnos.`, { auto: 60 });
+  } };
+TECH_FX.chamada = async () => { const names = soulsNames(); await fxRun(40, (k, p) => { names.slice(0, 6).forEach((nm, i) => { const q = Math.min(1, Math.max(0, p * 2 - i * 0.18)); if (q <= 0) return; const x = 8 + (i % 3) * 30, y = 96 - Math.floor(i / 3) * 22 - q * 6; fxSpark(x + 6, y, '#ffe066', q < 0.4); if (q > 0.3) txt('!', x + 4, y - 14, { col: '#ffe066' }); }); }); };
+
+// ---------- efeitos das runas novas no feitiço ----------
+// Canto: 20% de encantar inimigos comuns. Bilhete: escudo para o próximo golpe.
+{ const _cs = castSpell; castSpell = async function (sp, target) {
+  await _cs(sp, target);
+  if (!BT.on) return;
+  if (sp.el === 'canto' && sp.form !== 'veu') { const al = BT.en.filter(e => e.alive && e.hp > 0 && !e.d.boss && !e.confused); if (al.length && Math.random() < 0.2) { const t = pickOne(al); t.confused = 1; await bSay(`* O ${t.name} fica parado, ouvindo. Ele perdeu o turno.`, { auto: 40 }); } }
+  if (sp.mod === 'bilhete') { BT.ticketShield = 1; await bSay('* Um bilhete carimbado gira em volta da sua tampa. O próximo golpe vai sair pela metade.', { auto: 45 }); }
+}; }
+{ const _h = hurt; hurt = function (e, pow, mult, res, o) {
+  if (BT.ticketShield > 0 && mult > 0) { BT.ticketShield = 0; mult *= 0.5; BT.nums.push({ x: BPX, y: BPY - 52, s: 'BILHETE', col: '#e8dcc0', t: 50 }); }
+  return _h(e, pow, mult, res, o);
+}; }
+{ const _re = roundEnd; roundEnd = async function () {
+  await _re();
+  if (BT.on && BT.choir > 0 && G.hp > 0) { BT.choir--; const h = Math.round(G.st.mhp * 0.06); G.hp = Math.min(G.st.mhp, G.hp + h); BT.nums.push({ x: BPX, y: BPY - 42, s: '+' + h, col: '#ffb0d8', t: 40 }); }
+}; }
+
+// ---------- ACALMAR: Lembranças que vão embora em paz ----------
+// ENEMIES[k].calm = { els: [...], need: n }. O feitiço do elemento certo enche a calma; CANTO enche em dobro.
+function calmHit(t, el, log) {
+  const c = t.d.calm; if (!c || !t.alive || t.calmed) return;
+  if (!c.els.includes(el)) return;
+  t.calm = (t.calm || 0) + (el === 'canto' ? 2 : 1);
+  if (t.calm >= c.need) { t.calmed = true; log.push(`* O ${t.name} ${c.msg || 'lembrou de alguma coisa boa'}.`); }
+  else log.push(`* O ${t.name} hesita, escutando. (Calma ${t.calm}/${c.need})`);
+}
+{ const _kd = killDead; killDead = async function () {
+  for (const e of BT.en) if (e.alive && e.calmed) {
+    e.alive = false; e.dying = 48; sfx('heal'); G.flags.calmed = (G.flags.calmed || 0) + 1;
+    for (let i = 0; i < 26; i++) BT.parts.push({ x: e.x + rand(-14, 14), y: e.y + rand(-14, 14), vx: rand(-0.3, 0.3), vy: rand(-1, -0.3), life: rand(40, 70), col: pickOne(['#ffb0d8', '#ffffff', '#ffe066']), sz: 1 });
+    await wait(16);
+    await bSay(`* O ${e.name} ${(e.d.calm && e.d.calm.bye) || 'desembarcou em paz'}.`, { auto: 40 });
+  }
+  return _kd();
+}; }
+// a canção da Lume também acalma quem escuta música
+{ const _ls = lumeSing; lumeSing = async function () {
+  await _ls();
+  if (!BT.on) return; const log = [];
+  for (const e of BT.en) if (e.alive && e.hp > 0 && e.d.calm && e.d.calm.els.includes('canto')) { e.calm = (e.calm || 0) + 1; if (e.calm >= e.d.calm.need) { e.calmed = true; log.push(`* O ${e.name} cantarola junto com a Lume.`); } }
+  if (log.length) { await bSay(log.join('\n'), { auto: 40 }); await killDead(); }
+}; }
+
+// ---------- CANÇÕES: portas de memória ----------
+// Cada melodia é uma sequência de setas. A Lume toca primeiro; você repete.
+const TUNES = {
+  onibus: { name: 'Canção do 31', col: '#ffe066', keys: ['up', 'right', 'up', 'left', 'down', 'right'], notes: [72, 76, 79, 77, 74, 72] },
+  pregao: { name: 'Pregão da Feira', col: '#f07830', keys: ['left', 'left', 'up', 'right', 'down', 'down', 'up'], notes: [67, 67, 72, 71, 69, 67, 72] },
+  recreio: { name: 'Sinal do Recreio', col: '#7ad0f0', keys: ['up', 'down', 'up', 'down', 'right', 'left', 'up'], notes: [79, 74, 79, 74, 76, 72, 79] },
+  valsa: { name: 'Valsa do Coreto', col: '#ffb0d8', keys: ['down', 'up', 'up', 'right', 'down', 'up', 'up', 'left'], notes: [65, 69, 72, 74, 67, 71, 74, 72] }
+};
+const ARR_N = { up: 0, right: 1, down: 2, left: 3 };
+function tunes() { if (!G.flags.tunes) G.flags.tunes = ['onibus']; return G.flags.tunes; }
+function learnTune(k) { const t = tunes(); if (!t.includes(k)) t.push(k); }
+function playNote(m, d = 0.28) { if (!AU.ctx || AU.muted) return; tone(AU.ctx.currentTime + 0.01, hz(m), d, { wave: 'triangle', vol: 0.09, out: AU.sfx, sus: 0.7 }); }
+// janela da melodia: a Lume toca, depois você repete. Errar só recomeça.
+function playTune(k, opts = {}) {
+  const T = TUNES[k], n = T.keys.length;
+  const w = { type: 'tune', keys: T.keys, t: 0, phase: 'demo', i: 0, ok: [], miss: 0, flash: 0, done: false,
+    update() {
+      this.t++;
+      if (this.phase === 'demo') { const step = Math.floor(this.t / 18); if (this.t % 18 === 1 && step < n) playNote(T.notes[step]); if (step >= n + 1) { this.phase = 'play'; this.t = 0; } return; }
+      if (this.phase === 'end') { if (this.t > 50) closeWin(this, true); return; }
+      if (this.phase === 'fail') { if (this.t > 40) { this.phase = 'demo'; this.t = 0; this.i = 0; this.ok = []; } return; }
+      if (btnp('b')) { closeWin(this, false); return; }
+      for (const d of DIRK) if (btnp(d)) {
+        if (d === T.keys[this.i]) { playNote(T.notes[this.i]); this.ok.push(true); this.i++; this.flash = 8; if (this.i >= n) { this.phase = 'end'; this.t = 0; sfx('rune'); } }
+        else { sfx('cancel'); this.phase = 'fail'; this.t = 0; this.miss++; }
+        return;
+      }
+    },
+    draw() {
+      box(16, 60, 208, 104, { edge: T.col });
+      txt(T.name, 120, 66, { align: 'center', col: T.col });
+      const msg = this.phase === 'demo' ? 'A Lume toca... escute' : this.phase === 'play' ? 'Sua vez! Repita as setas' : this.phase === 'end' ? 'A melodia ecoa!' : 'Desafinou... de novo';
+      txt(msg, 120, 140, { align: 'center', col: this.phase === 'fail' ? '#ff6b6b' : '#b8aecb' });
+      const bw = Math.min(24, Math.floor(196 / n)), x0 = 120 - n * bw / 2;
+      const demoStep = this.phase === 'demo' ? Math.floor(this.t / 18) : -1;
+      T.keys.forEach((d, i) => {
+        const x = x0 + i * bw, lit = i === demoStep, done = i < this.i, cur = this.phase === 'play' && i === this.i;
+        const col = lit ? '#ffffff' : done ? T.col : cur ? '#ffe066' : this.phase === 'play' ? '#3a3448' : '#6a6078';
+        box(x + 1, 92, bw - 3, 30, { bw: cur ? 2 : 1, edge: col, fill: lit || done ? '#1a1424' : '#000' });
+        if (this.phase !== 'play' || done || cur) drawArrow(d, Math.round(x + (bw - 2) / 2), 107, 6, col);
+        else txt('?', Math.round(x + (bw - 2) / 2), 101, { align: 'center', col: '#3a3448' });
+        if (lit || (done && this.flash > 0 && i === this.i - 1)) { bx.fillStyle = T.col; bx.fillRect(Math.round(x + (bw - 2) / 2) - 1, 84 - (this.t % 18) / 3, 2, 3); }
+      });
+      if (this.flash > 0) this.flash--;
+      if (this.phase === 'play') txt('B: desistir', 120, 152, { align: 'center', col: '#5a5070' });
+    } };
+  return openWin(w);
+}
+// porta de memória: só abre com a melodia certa
+STORY.tuneDoor = async function (e) {
+  const T = TUNES[e.tune];
+  if (G.flags[e.flag]) return;
+  await say(e.desc || `* Uma porta feita de luz ${T.col === '#ffe066' ? 'dourada' : T.col === '#f07830' ? 'laranja' : T.col === '#7ad0f0' ? 'azul' : 'rosada'}. Ela vibra, como uma corda esperando a nota certa.`);
+  const known = tunes();
+  if (!known.includes(e.tune)) { await say('Eu não conheço essa música, baú. Alguém daqui deve conhecer.', 'lume'); return; }
+  const names = known.map(k => TUNES[k].name);
+  const i = await choose('* Que melodia a Lume toca?', [...names, 'Nenhuma'], 'n', names.length);
+  if (i < 0 || i >= names.length) return;
+  if (known[i] !== e.tune) { sfx('cancel'); await say('* A porta treme e fica do mesmo jeito. Não era essa música.'); return; }
+  const ok = await playTune(e.tune);
+  if (!ok) return;
+  G.flags[e.flag] = true; refreshEnts(); sfx('rune'); shake(4);
+  await say(e.open || '* A porta de luz se desfaz em notas, que somem pelo ar.');
+};
+
+// ---------- sprites do mapa (16x16) ----------
+const S6 = {
+  pombo: f => cv4(16, 16, r => { r(2, 8, 4, 3, 'k'); r(3, 9, 3, 1, '#6a6a7a'); r(4, 6, 10, 8, 'k'); r(5, 7, 8, 6, '#8a8a9a'); r(5, 7 - f, 5, 2, '#6a6a7a'); r(10, 3, 5, 6, 'k'); r(11, 4, 3, 4, '#9a9aaa'); r(10, 8, 3, 2, '#5aa88a'); r(11, 9, 2, 1, '#a05aa8'); r(12, 5, 1, 1, '#ff8030'); r(15, 6, 1, 1, '#e8c890'); r(7, 14, 1, 2, '#e86890'); r(10, 14, 1, 2, '#e86890'); }),
+  carrinho: f => cv4(16, 16, r => { r(1, 4, 13, 8, 'k'); r(2, 5, 11, 6, '#7a8090'); for (let i = 3; i < 13; i += 2) r(i, 5, 1, 6, '#5a6070'); r(2, 7, 11, 1, '#5a6070'); r(3, 2, 3, 3, '#f07830'); r(6, 1, 3, 4, '#4a9a4a'); r(9, 2, 3, 3, '#c83838'); r(13, 2, 3, 2, 'k'); r(14, 2, 2, 1, '#9aa0aa'); const w = f ? '#9aa0aa' : '#5a6070'; r(2, 12, 3, 3, 'k'); r(3, 13, 1, 1, w); r(10, 12, 3, 3, 'k'); r(11, 13, 1, 1, w); r(5, 8, 2, 1, '#ffffff'); r(8, 8, 2, 1, '#ffffff'); r(6, 8, 1, 1, 'k'); r(9, 8, 1, 1, 'k'); }),
+  lousa: f => cv4(16, 16, r => { r(0, 1, 16, 11, 'k'); r(1, 2, 14, 9, '#7a4a2a'); r(2, 3, 12, 7, '#1f3a2a'); r(4, 5, 2, 2, '#e8e4dc'); r(10, 5, 2, 2, '#e8e4dc'); r(5, 8 + f, 6, 1, '#e8e4dc'); r(3, 3, 3, 1, '#9ab8a8'); r(9, 9, 4, 1, '#9ab8a8'); r(3, 11, 2, 5, 'k'); r(11, 11, 2, 5, 'k'); r(4, 12, 1, 3, '#7a4a2a'); r(12, 12, 1, 3, '#7a4a2a'); r(13, 11, 2, 2, '#e8e4dc'); }),
+  saudade: f => cv4(16, 16, r => { r(5, 1, 6, 2, 'k'); r(3, 3, 10, 9, 'k'); r(4, 3, 8, 8, '#8aa0c0'); r(6, 2, 4, 2, '#8aa0c0'); r(5, 4, 3, 2, '#c0d0e8'); r(5, 6, 2, 1, 'k'); r(9, 6, 2, 1, 'k'); r(5, 7, 1, 1, '#c0e8ff'); r(10, 7, 1, 1, '#c0e8ff'); r(7, 9, 2, 1, '#4a5a7a'); r(5 + f, 11, 3, 2, '#8aa0c0'); r(9 - f, 12, 2, 3, '#8aa0c0'); r(7, 13, 1, 2, '#c0d0e8'); }),
+  memdoor: (col, f) => cv4(16, 16, r => { r(2, 0, 12, 16, '#07050c'); r(2, 0, 12, 1, col); r(2, 0, 1, 16, col); r(13, 0, 1, 16, col); for (let y = 2; y < 16; y += 3) r(3, y + (f % 2), 10, 1, '#1a1424'); r(6, 5, 3, 3, col); r(8, 1, 1, 6, col); r(9, 1, 2, 1, col); r(4 + f * 4, 10, 1, 1, '#ffffff'); r(11 - f * 3, 13, 1, 1, '#ffffff'); }),
+  classdoor: f => cv4(16, 16, r => { r(1, 0, 14, 16, 'k'); r(2, 1, 12, 15, '#8a5a34'); r(2, 1, 12, 1, '#a87850'); r(4, 3, 8, 5, 'k'); r(5, 4, 6, 3, '#9ab8c8'); r(5, 4, 2, 1, '#ffffff'); r(5, 9, 6, 3, '#e8dcc0'); r(6, 10, 4, 1, '#3a3448'); r(11, 11, 2, 2, '#f0c040'); }),
+  itin: f => cv4(16, 16, r => { r(7, 8, 2, 8, 'k'); r(0, 0, 16, 9, 'k'); r(1, 1, 14, 7, '#1c3058'); r(1, 1, 14, 1, '#3a70c0'); r(2, 4, 12, 1, '#ffe066'); for (const [x, c] of [[2, '#f07830'], [6, '#7ad0f0'], [10, '#ffb0d8'], [13, '#c83838']]) r(x, 3, 2, 3, c); r(3, 6, 2, 1, '#e8e4dc'); }),
+  caderno: f => cv4(16, 16, r => { r(3, 3 + f, 10, 11, 'k'); r(4, 4 + f, 8, 9, '#c8a050'); for (let y = 5; y < 13; y += 2) r(3, y + f, 2, 1, '#9aa0aa'); r(6, 6 + f, 5, 1, '#5a3420'); r(6, 8 + f, 4, 1, '#5a3420'); r(7, 11 + f, 3, 1, '#c83838'); }),
+  diarioC: f => cv4(16, 16, r => { r(3, 3 + f, 10, 11, 'k'); r(4, 4 + f, 8, 9, '#2a6a3a'); r(4, 4 + f, 1, 9, '#1a4a2a'); r(6, 6 + f, 5, 3, '#e8dcc0'); r(7, 7 + f, 3, 1, '#3a3448'); r(9, 12 + f, 2, 3, '#c83838'); }),
+  papagaio: f => cv4(16, 16, r => { r(5, 2, 7, 11, 'k'); r(6, 3, 5, 9, '#4a9a4a'); r(6, 3, 5, 3, '#8ac85a'); r(9, 4, 1, 1, 'k'); r(10, 5, 3, 2, 'k'); r(11, 5, 2, 1, '#e8dcc0'); r(6, 7 + f, 3, 4, '#2a6a3a'); r(5, 12, 2, 3, '#c83838'); r(8, 12, 2, 4, '#f0c040'); r(3, 13, 10, 1, '#5a3420'); }),
+  valdir: f => cv4(16, 16, r => { r(3, 5, 10, 10, 'k'); r(4, 6, 8, 8, '#6a8a4a'); r(4, 6, 8, 2, '#8aaa6a'); r(5, 8, 2, f === 1 ? 1 : 2, f === 1 ? 'k' : '#ffffff'); r(9, 8, 2, f === 1 ? 1 : 2, f === 1 ? 'k' : '#ffffff'); if (f !== 1) { r(6, 9, 1, 1, 'k'); r(10, 9, 1, 1, 'k'); } r(4, 6, 3, 1, '#e8e4dc'); r(9, 6, 3, 1, '#e8e4dc'); r(6, 12, 4, 1, '#3a4a2a'); r(2, 13, 12, 2, '#5a4a3a'); }),
+  mancha: f => cv4(16, 16, r => { r(1, 7, 14, 7, '#120e14'); r(3, 6, 10, 9, '#120e14'); r(4, 8, 8, 4, '#1c1824'); r(5 + f, 9, 3, 1, '#3a3448'); r(6, 8, 5, 3, 'k'); r(7, 9, 3, 1, f ? '#ffe066' : '#f0c040'); }),
+  tachoW: f => cv4(16, 16, r => { r(1, 5, 14, 10, 'k'); r(2, 6, 12, 8, '#5a5a66'); r(2, 6, 12, 2, '#e0a030'); r(3 + f, 6, 2, 1, '#fff4c0'); r(9 - f, 7, 2, 1, '#fff4c0'); r(4, 9, 2, 2, '#ffffff'); r(10, 9, 2, 2, '#ffffff'); r(5, 10, 1, 1, 'k'); r(10, 10, 1, 1, 'k'); r(6, 12, 4, 1, 'k'); r(0, 8, 2, 2, 'k'); r(14, 8, 2, 2, 'k'); r(5, 2, 6, 3, '#e8dcc0'); r(6, 1, 4, 1, '#e8dcc0'); }),
+  p32W: f => cv4(16, 16, r => { r(3, 0, 10, 16, 'k'); r(4, 1, 8, 14, '#3a4a5a'); r(4, 1, 8, 2, '#5a6a7a'); r(5, 3, 6, 5, '#05030a'); r(6, 5, 1, 1, f ? '#ffe066' : '#05030a'); r(9, 5, 1, 1, f ? '#ffe066' : '#05030a'); r(5, 10, 6, 2, '#e8dcc0'); r(6, 10, 1, 2, '#3a3448'); r(8, 10, 2, 1, '#3a3448'); r(3, 2, 2, 2, '#3a70c0'); r(11, 12, 2, 3, '#ffb0d8'); })
+};
+const MAESTRO_C = { G: '#2a4a6a', m: '#1a2a3a', l: '#c8962a', y: '#f0c040', S: '#a8c0c8', h: '#5a7a7a', b: '#1a2a3a' };
+function buildSprites6() {
+  const add = (c, fn) => { fn(c.getContext('2d')); return c; };
+  const R = (x, a, b, w, h, col) => { x.fillStyle = PAL[col] || col; x.fillRect(a, b, w, h); };
+  for (const k of ['pombo', 'carrinho', 'lousa', 'saudade', 'classdoor', 'itin', 'caderno', 'diarioC', 'papagaio', 'valdir', 'mancha', 'tachoW', 'p32W']) SP[k] = [S6[k](0), S6[k](1)];
+  for (const [k, t] of Object.entries(TUNES)) SP['door_' + k] = [S6.memdoor(t.col, 0), S6.memdoor(t.col, 1)];
+  SP.door_final = [S6.memdoor('#ffffff', 0), S6.memdoor('#ffffff', 1)];
+  const two = (map, fn) => [0, 1].map(f => add(hum(map), x => fn && fn(x, f)));
+  SP.padeira = two({ fem: true, G: 'w', m: '#c8c0b8', l: '#e8e4dc', S: '#d8b090', h: '#8a7a6a', y: 'w' }, (x, f) => { R(x, 5, 2, 6, 2, 'w'); R(x, 3, 9, 2, 3, '#a87850'); });
+  SP.ozorio = two({ G: '#e8e4dc', m: '#d8a070', l: '#e8b890', S: '#d8a070', h: '#8a8a90', y: '#c83838' }, (x, f) => { R(x, 5, 6, 6, 1, '#6a6a70'); R(x, 6, 8, 4, 3, '#c83838'); R(x, 12, 8 + f, 3, 2, '#e8c890'); });
+  SP.neide = two({ fem: true, G: '#c0d0e0', m: '#b8b8c8', l: '#e8e8f0', S: '#d8e0e8', h: '#a8a8b8', y: '#e8e4dc' }, (x, f) => { R(x, 5, 5, 2, 1, '#5a6a7a'); R(x, 9, 5, 2, 1, '#5a6a7a'); R(x, 13, 7 - f, 1, 5, '#e8e4dc'); });
+  SP.duda = two({ fem: true, G: '#3a70c0', m: '#2a1410', l: '#5a3420', S: '#a86a40', h: '#2a1410', y: '#f0c040' }, (x, f) => { R(x, 1, 10 + f, 3, 3, '#6a7084'); R(x, 2, 11 + f, 1, 1, '#f0c040'); });
+  SP.marlene = two({ fem: true, G: '#c06a8a', m: '#e8e8f0', l: '#ffffff', S: '#e0b090', h: '#e8e8f0', y: '#f0c040' }, (x, f) => { for (const [a, b] of [[5, 1], [8, 1], [10, 2]]) R(x, a, b, 2, 2, '#ff9ab8'); R(x, 13, 3 - f, 1, 9, '#c0c8d0'); R(x, 12, 9 - f, 3, 1, '#f0c040'); });
+  SP.feirante = two({ G: '#7a8a9a', m: '#5a6a7a', l: '#7a8a9a', S: '#a8b0b8', h: '#6a7a8a', y: '#9aa0aa' }, (x, f) => { R(x, 5, 9, 6, 3, '#c8c8d0'); R(x, 13, 7 + f, 3, 3, '#c89060'); });
+  SP.bedel = two({ G: '#e8e4dc', m: '#d0ccc4', l: '#ffffff', S: '#e8e4dc', h: '#c0bcb4', y: '#8a8099' }, (x, f) => { R(x, 13, 5 + f, 1, 6, '#ffffff'); R(x, 5, 5, 6, 1, '#8a8099'); });
+  SP.musico = two({ G: '#2a4a6a', m: '#1a2a3a', l: '#3a5a7a', S: '#a8c0c8', h: '#5a7a7a', y: '#c8962a' }, (x, f) => { R(x, 9, 7, 6, 6, 'k'); R(x, 10, 8, 4, 4, '#e0a830'); R(x, 12, 4 - f, 3, 4, '#e0a830'); R(x, 11, 9, 2, 2, '#fff4c0'); R(x, 2, 12, 2, 2, '#4a7a6a'); });
+  SP.semrosto = two({ G: '#3a4a5a', m: '#3a4a5a', l: '#5a6a7a', S: '#2a3240', h: '#3a4a5a', y: '#5a6a7a' }, (x, f) => { R(x, 5, 4, 6, 3, '#05030a'); R(x, 6, 5, 1, 1, f ? '#8aa0c0' : '#05030a'); R(x, 9, 5, 1, 1, f ? '#8aa0c0' : '#05030a'); R(x, 4, 12, 8, 1, '#2a3240'); });
+  SP.maestroW = two(MAESTRO_C, (x, f) => { R(x, 12, 3 + f * 2, 1, 6, '#e8e4dc'); R(x, 4, 1, 8, 1, '#c8962a'); R(x, 3, 13, 2, 2, '#4a7a6a'); });
+}
+function buildTiles6(T) {
+  const base = T.floor || '#3a3440', speck = T.speck || '#443e4a', dark = T.dark || '#2e2834';
+  const AW = [['#c83838', '#f2ecdc'], ['#3a70c0', '#f2ecdc'], ['#4a9a4a', '#f0c040'], ['#f07830', '#fff4c0']];
+  TILE.A = tileCanvas((x, R) => { floorPaint(x, R, base, speck, dark); const [c1, c2] = AW[Math.floor(R() * 4)]; x.fillStyle = PAL.k; x.fillRect(0, 1, 16, 8); for (let i = 0; i < 16; i += 4) { x.fillStyle = i % 8 ? c2 : c1; x.fillRect(i, 2, 4, 5); } x.fillStyle = PAL.k; x.fillRect(0, 7, 16, 2); x.fillStyle = '#7a4a2a'; x.fillRect(1, 9, 14, 4); x.fillStyle = PAL.k; x.fillRect(0, 13, 16, 1); const fr = ['#f07830', '#4a9a4a', '#c83838', '#f0c040', '#e86890']; for (let i = 2; i < 14; i += 3) { x.fillStyle = fr[Math.floor(R() * fr.length)]; x.fillRect(i, 9, 2, 2); } x.fillStyle = '#5a3420'; x.fillRect(1, 14, 1, 2); x.fillRect(14, 14, 1, 2); }, 601);
+  TILE.S = tileCanvas((x, R) => { floorPaint(x, R, base, speck, dark); x.fillStyle = PAL.k; x.fillRect(2, 4, 12, 7); x.fillStyle = '#a87850'; x.fillRect(3, 5, 10, 4); x.fillStyle = '#c89868'; x.fillRect(3, 5, 10, 1); x.fillStyle = '#5a6070'; x.fillRect(3, 11, 1, 4); x.fillRect(12, 11, 1, 4); x.fillStyle = '#e8e4dc'; x.fillRect(5, 6, 4, 2); }, 602);
+  TILE.E = tileCanvas((x, R) => { x.fillStyle = T.wall || '#4a4456'; x.fillRect(0, 0, 16, 16); x.fillStyle = PAL.k; x.fillRect(0, 2, 16, 11); x.fillStyle = '#1f3a2a'; x.fillRect(0, 3, 16, 9); x.fillStyle = '#9ab8a8'; x.fillRect(2 + Math.floor(R() * 4), 5, 6, 1); x.fillRect(3, 8, 4 + Math.floor(R() * 6), 1); x.fillStyle = '#7a4a2a'; x.fillRect(0, 12, 16, 2); x.fillStyle = '#e8e4dc'; x.fillRect(11, 12, 3, 1); }, 603);
+  TILE.I = tileCanvas((x, R) => { floorPaint(x, R, base, speck, dark); x.fillStyle = PAL.k; x.fillRect(6, 9, 4, 7); x.fillStyle = '#5a3a24'; x.fillRect(7, 9, 2, 7); x.fillStyle = PAL.k; x.fillRect(1, 0, 14, 11); x.fillStyle = '#2a5a3a'; x.fillRect(2, 1, 12, 9); x.fillStyle = '#4a8a4a'; x.fillRect(3, 2, 7, 4); x.fillStyle = '#6aaa5a'; x.fillRect(4, 2, 3, 2); }, 604);
+  TILE.U = tileCanvas((x, R) => { floorPaint(x, R, base, speck, dark); x.fillStyle = PAL.k; x.fillRect(0, 1, 16, 4); x.fillStyle = '#3a70c0'; x.fillRect(0, 2, 16, 2); x.fillStyle = '#5a90e0'; x.fillRect(0, 2, 16, 1); x.fillStyle = '#9aa0aa'; x.fillRect(1, 5, 1, 11); x.fillRect(14, 5, 1, 11); x.fillStyle = 'rgba(191,232,240,0.35)'; x.fillRect(2, 5, 12, 7); x.fillStyle = '#8a5a34'; x.fillRect(2, 11, 12, 2); }, 605);
+  TILE.C = tileCanvas((x, R) => { x.fillStyle = base; x.fillRect(0, 0, 16, 16); x.fillStyle = PAL.k; x.fillRect(0, 0, 16, 16); x.fillStyle = '#e8e4dc'; x.fillRect(0, 1, 16, 14); x.fillStyle = '#b8b4ac'; for (let i = 1; i < 16; i += 3) x.fillRect(i, 4, 1, 8); x.fillStyle = '#c8962a'; x.fillRect(0, 1, 16, 2); x.fillRect(0, 12, 16, 2); x.fillStyle = '#6a8a4a'; x.fillRect(0, 14, 16, 1); }, 606);
+  TILE.R = tileCanvas((x, R) => { x.fillStyle = T.wall || '#4a4456'; x.fillRect(0, 0, 16, 16); x.fillStyle = PAL.k; x.fillRect(0, 1, 16, 15); for (let i = 0; i < 16; i += 5) { x.fillStyle = ['#3a70c0', '#4a9a4a', '#c8962a', '#c83838'][Math.floor(R() * 4)]; x.fillRect(i, 2, 4, 13); x.fillStyle = PAL.k; x.fillRect(i + 1, 4, 2, 1); x.fillRect(i + 1, 6, 2, 1); x.fillStyle = '#e8e4dc'; x.fillRect(i + 2, 9, 1, 2); } }, 607);
+}
+{ const _bs = buildSprites; buildSprites = function () { _bs(); buildSprites6(); buildBossSprites6(); buildPorts6(); }; }
+{ const _bt = buildTiles; buildTiles = function (theme) { _bt(theme); buildTiles6(theme || {}); }; }
+{ const _st = solidTile; solidTile = function (c) { if ('ASEIUCR'.includes(c)) return true; return _st(c); }; }
+Object.assign(LOOK, {
+  A: ['* Uma barraca de feira. Laranja a três por dois, alface murcha, um rádio de pilha tocando baixinho.', '* Toldo listrado e caixas de tomate. Alguém escreveu no papelão: "HOJE TEM, AMANHÃ NÃO SEI".', '* Uma barraca de temperos. Cheira a segunda-feira de manhã.'],
+  S: ['* Uma carteira escolar. Alguém riscou "D + R" com compasso.', '* Uma carteira com chiclete grudado embaixo. Fossilizado.', '* "Não esqueçam: prova na sexta." A data nunca chega.'],
+  E: ['* A lousa diz: "CHAMADA — copiar 100 vezes: EU SEI QUEM EU SOU". A letra vai tremendo até o fim.', '* Uma lousa cheia de contas. O resultado de todas é 31.'],
+  I: ['* Uma árvore de praça, com um banco de cimento embaixo. Tem um coração entalhado: "V + M".', '* Uma árvore torta. Os pombos têm opinião forte sobre ela.'],
+  U: ['* Um abrigo de ônibus. O itinerário está colado no vidro: PADARIA — FEIRA — ESCOLA — CORETO — PONTO FINAL.', '* Um abrigo de ônibus com propaganda de colchão. O modelo do cartaz não tem rosto.'],
+  C: ['* O gradil branco do coreto. A tinta está descascando em formato de nota musical.', '* O coreto. Embaixo dele alguma coisa enorme respira, devagar.'],
+  R: ['* Armários de metal, cada um com um número de 1 a 31.', '* Um armário trancado. Pelo vão, dá para ver um boné e uma marmita.']
+});
+Object.assign(LOOK_K, {
+  padaria: ['* Caixotes de pão francês. Ainda quentes. Você não lembra quem assava.', '* Engradados de leite em saquinho. Tem uma vaca desenhada que você jurava que sorria.'],
+  feira: ['* Caixotes de laranja-lima. "Docinha, freguesa!"', '* Um caixote de bananas que ninguém vai comer. Ficam perfeitas para sempre, como numa foto.', '* Caixas de pastel congelado. A etiqueta diz: "OZÓRIO — FEIRA DE SEGUNDA".'],
+  escola: ['* Caixas de giz. Um giz azul quebrado ao meio, como sempre.', '* Livros didáticos empilhados. Todos abertos na mesma página: "UNIDADE 3 — QUEM SOMOS".'],
+  coreto: ['* Estojos de instrumento, molhados. Um saxofone tem uma etiqueta: "BANDA MUNICIPAL DE VELHÁGUA".', '* Partituras encharcadas. A de cima se chama "Valsa para quem fica".'],
+  pontofinal: ['* Malas sem dono, em fila, como se esperassem a vez.', '* Caixotes com etiquetas de bagagem: 4, 5, 9, 15, 22... Faltam números.']
+});
+Object.assign(K_REGION, { padaria: 'padaria', feira: 'feira', escola: 'escola', coreto: 'coreto', pontofinal: 'pontofinal' });
+
+// ---------- chefes grandes (48x48, 4 quadros) ----------
+const BIGSP6 = {
+  // Tacho Fervente: o Seu Ozório virou o próprio tacho de fritura, com chapéu de papel e pastéis voando
+  tacho: () => big(48, 48, g => {
+    const { r, E, EO, L, f, s } = g, steel = '#6a6a76', stH = '#9a9aa6', stD = '#3a3a44', oil = '#e0a030', oilH = '#ffd060';
+    // cabos do tacho
+    r(0, 24, 8, 5, 'k'); r(1, 25, 6, 3, stD); r(40, 24, 8, 5, 'k'); r(41, 25, 6, 3, stD);
+    // corpo do tacho
+    EO(24, 32, 18, 12, steel); E(24, 35, 17, 9, stD); E(24, 30, 16, 8, steel); r(8, 26, 32, 2, stH);
+    // óleo fervendo na boca
+    EO(24, 22, 16, 5, oil); E(24, 22, 14, 3, oilH); for (let i = 0; i < 5; i++) { const bx0 = 13 + i * 5 + ((f + i) % 2), by = 21 - ((f + i * 2) % 3); E(bx0, by, 1, 1, '#fff4c0'); }
+    // rosto no metal
+    EO(17, 32, 3, 3, '#ffffff'); EO(31, 32, 3, 3, '#ffffff'); r(17, 32, 2, 2, 'k'); r(30, 32, 2, 2, 'k'); r(16, 31, 1, 1, '#ffffff');
+    L(13, 27, 20, 29, 'k', 2); L(35, 27, 28, 29, 'k', 2); EO(24, 38, 5, 2 + (f % 2), '#3a0a10'); r(21, 37, 6, 1, '#f2ecdc');
+    // chapéu de papel de pasteleiro
+    r(15, 2, 18, 10, 'k'); r(16, 3, 16, 8, '#f2ecdc'); r(16, 9, 16, 2, '#d8d0c0'); r(18, 0, 12, 4, 'k'); r(19, 1, 10, 3, '#f2ecdc'); r(26, 5, 3, 3, '#c83838');
+    // pastéis voando em volta
+    for (let i = 0; i < 3; i++) { const a = f * 0.9 + i * 2.1, px = 24 + Math.round(Math.cos(a) * 22), py = 12 + Math.round(Math.sin(a) * 6); r(px - 4, py - 2, 8, 5, 'k'); r(px - 3, py - 1, 6, 3, '#e8b860'); r(px - 3, py - 1, 6, 1, '#f8d890'); for (let j = -2; j < 3; j += 2) r(px + j, py + 2, 1, 1, '#c89040'); }
+    // respingos de óleo
+    if (f % 2) { r(6, 14, 2, 2, oilH); r(40, 12, 2, 2, oilH); } else { r(9, 10, 1, 1, oilH); r(37, 16, 1, 1, oilH); }
+    // avental amarrado
+    r(4, 30, 4, 2, '#c83838'); r(40, 30, 4, 2, '#c83838');
+  }),
+  // Maestro Afogado: farda da banda municipal, alga no ombro, batuta de osso e uma tuba que respira
+  maestro: () => big(48, 48, g => {
+    const { r, E, EO, L, f, s } = g, uni = '#2a4a6a', uniH = '#3a6a8a', uniD = '#1a2a3a', gold = '#c8962a', goldH = '#f0c040', skin = '#a8c0c8', skinD = '#7a9aa8';
+    // tuba atrás
+    EO(10, 30, 9, 9, '#c89030'); E(10, 30, 7, 7, '#e0a830'); E(10, 30, 4, 4, '#3a2a10'); E(8, 27, 2, 2, '#fff4c0'); L(16, 36, 22, 40, '#c89030', 3);
+    for (let i = 0; i < 3; i++) { const q = ((f + i) % 4) / 4; E(10 - q * 8, 22 - q * 14, 1 + i % 2, 1 + i % 2, '#bfe8f0'); }
+    // corpo de farda
+    r(18, 22, 18, 24, 'k'); r(19, 23, 16, 23, uni); r(19, 23, 3, 23, uniH); r(32, 23, 3, 23, uniD);
+    for (const y of [26, 31, 36]) { r(26, y, 2, 2, goldH); r(20, y, 12, 1, gold); }
+    r(18, 22, 5, 3, gold); r(31, 22, 5, 3, gold); for (let i = 0; i < 5; i++) r(18 + i, 25, 1, 2 + (i % 2), goldH);
+    // alga pendurada
+    L(33, 23, 36, 34, '#3a7a5a', 2); L(36, 34, 34, 40, '#3a7a5a', 2); r(34, 28, 2, 2, '#5aaa7a');
+    // cabeça afogada
+    EO(27, 14, 7, 8, skin); E(27, 18, 6, 3, skinD); r(23, 12, 3, 3, '#ffffff'); r(29, 12, 3, 3, '#ffffff'); r(24, 13, 2, 2, '#1c3058'); r(30, 13, 2, 2, '#1c3058');
+    r(23, 17, 9, 2, '#e8e4dc'); r(22, 16, 2, 1, '#e8e4dc'); r(31, 16, 2, 1, '#e8e4dc'); r(25, 20, 5, 1, '#3a5a6a');
+    // quepe da banda
+    r(19, 2, 16, 8, 'k'); r(20, 3, 14, 6, uni); r(20, 3, 14, 1, uniH); r(24, 4, 6, 4, gold); r(25, 5, 4, 2, goldH); r(18, 8, 18, 2, 'k'); r(19, 8, 8, 1, '#3a5a7a'); r(28, 0, 2, 3, '#e86890');
+    // braço com a batuta (marca o compasso)
+    const bt = [[44, 6], [46, 14], [44, 20], [40, 12]][f];
+    L(34, 26, 40, 20, 'k', 4); L(34, 26, 40, 20, uni, 2); r(39, 18, 4, 4, 'k'); r(40, 19, 2, 2, skin); L(41, 19, bt[0], bt[1], '#f2ecdc', 1); r(bt[0] - 1, bt[1] - 1, 2, 2, '#ffffff');
+    // notas que saem da batuta
+    for (let i = 0; i < 2; i++) { const nx = 40 + i * 4 - f, ny = 4 + ((f * 3 + i * 5) % 10); r(nx, ny, 2, 2, '#ffb0d8'); r(nx + 1, ny - 4, 1, 4, '#ffb0d8'); }
+    // pernas na poça
+    r(21, 44, 5, 4, uniD); r(28, 44, 5, 4, uniD); E(27, 47, 14, 2, 'rgba(122,208,240,0.4)');
+  }),
+  // O Passageiro 32: capa de chuva costurada com tudo o que o 31 esqueceu. Não tem rosto, só um bilhete.
+  p32: () => big(48, 48, g => {
+    const { r, E, EO, L, f, s } = g, coat = '#3a4a5a', coatH = '#5a6a7a', coatD = '#232c38';
+    // névoa embaixo
+    for (let i = 0; i < 6; i++) E(8 + i * 7, 45 + (i + f) % 2, 5, 2, 'rgba(192,208,232,0.35)');
+    // capa de chuva (corpo comprido)
+    r(12, 12, 24, 34, 'k'); r(13, 13, 22, 33, coat); r(13, 13, 4, 33, coatH); r(31, 13, 4, 33, coatD);
+    for (let y = 18; y < 44; y += 6) r(23, y, 2, 2, '#9aa0aa');
+    // remendos costurados: cada um é uma lembrança roubada
+    r(15, 22, 7, 6, 'k'); r(16, 23, 5, 4, '#e8b860'); r(16, 23, 5, 1, '#f8d890'); for (let i = 16; i < 21; i += 2) r(i, 27, 1, 1, '#c89040'); // o pastel
+    r(27, 28, 7, 6, 'k'); r(28, 29, 5, 4, '#c06a8a'); r(29, 30, 1, 2, '#ffb0d8'); r(31, 30, 1, 2, '#ffb0d8'); // a valsa (flor do vestido)
+    r(15, 34, 6, 5, 'k'); r(16, 35, 4, 3, '#2a6a3a'); r(17, 36, 2, 1, '#e8dcc0'); // o diário
+    for (const [a, b, w, h] of [[15, 22, 7, 6], [27, 28, 7, 6], [15, 34, 6, 5]]) for (let i = a; i < a + w; i += 2) r(i, b - 1, 1, 1, '#e8e4dc');
+    // braços longos, um segurando uma alça de ônibus
+    L(13, 16, 6, 30, 'k', 4); L(13, 16, 6, 30, coat, 2); L(35, 16, 42, 4 + f, 'k', 4); L(35, 16, 42, 4 + f, coat, 2);
+    r(39, 0, 8, 3, '#9aa0aa'); E(43, 5 + f, 3, 3, 'k'); E(43, 5 + f, 2, 2, '#e8e4dc');
+    // capuz e o vazio onde seria o rosto
+    EO(24, 9, 11, 9, coat); E(24, 11, 8, 7, '#05030a'); r(14, 5, 20, 2, coatH);
+    // quepe do Jorge por cima do capuz
+    r(15, 0, 18, 5, 'k'); r(16, 1, 16, 3, '#2a4a8a'); r(21, 1, 6, 2, '#f0c040'); r(13, 4, 22, 2, 'k');
+    // olhos que piscam de outras pessoas
+    const eyes = [['#3a2418', '#ffffff'], ['#ffe066', '#05030a'], ['#7ad0f0', '#ffffff'], ['#05030a', '#05030a']][f];
+    r(19, 10, 3, 2, eyes[1]); r(26, 10, 3, 2, eyes[1]); r(20, 10, 1, 2, eyes[0]); r(27, 10, 1, 2, eyes[0]);
+    // o bilhete "32" pendurado no peito
+    r(19, 15, 10, 6, 'k'); r(20, 16, 8, 4, '#e8dcc0'); r(21, 17, 2, 2, '#c83838'); r(24, 17, 3, 1, '#3a3448'); r(24, 19, 3, 1, '#3a3448');
+    // fone da Lume pendurado
+    L(30, 14, 33, 22, '#3a3448', 1); E(33, 23, 2, 2, '#ffb0d8');
+  })
+};
+function buildBossSprites6() { SP.tachoB = BIGSP6.tacho(); SP.maestroB = BIGSP6.maestro(); SP.p32B = BIGSP6.p32(); }
+
+// ---------- retratos ----------
+function buildPorts6() {
+  PORT.ozorio = bust({ skin: '#d8a070', hair: '#8a8a90', style: 'bald', cloth: '#e8e4dc', collar: '#c83838', eyes: '#3a2418', stache: '#6a6a70' });
+  PORT.neide = bust({ skin: '#e0c0a0', hair: '#a8a8b8', style: 'bun', cloth: '#5a7aa8', collar: '#e8e4dc', eyes: '#3a5a7a', glasses: '#8a6a3a', lips: '#a05050' });
+  PORT.duda = bust({ skin: '#a86a40', hair: '#2a1410', style: 'messy', cloth: '#3a70c0', vest: '#6a7084', badge: '#f0c040', eyes: '#3a2418' });
+  PORT.marlene = pcv((r, fr, x) => { const b = bust({ skin: '#e0b090', hair: '#e8e8f0', style: 'bun', cloth: '#c06a8a', collar: '#ffffff', eyes: '#5a4a3a', earring: '#f0c040', lips: '#c05070' })[fr]; x.drawImage(b, 0, 0); for (const [a, c] of [[9, 4], [14, 3], [19, 4]]) { r(a, c, 4, 3, 'k'); r(a + 1, c, 2, 2, '#ff9ab8'); } r(23, 18, 2, 1, '#ff9aaa'); r(8, 18, 2, 1, '#ff9aaa'); });
+  PORT.maestro = bust({ skin: '#a8c0c8', hair: '#5a7a7a', style: 'short', cloth: '#2a4a6a', collar: '#c8962a', badge: '#f0c040', eyes: '#1c3058', stache: '#e8e4dc' });
+  PORT.padeira = bust({ skin: '#d8b090', hair: '#8a7a6a', style: 'bun', cloth: '#f2ecdc', eyes: '#3a2418', blush: true });
+  PORT.valdir = pcv((r, fr) => { r(6, 10, 20, 22, 'k'); r(7, 11, 18, 21, '#6a8a4a'); r(7, 11, 18, 4, '#8aaa6a'); r(4, 28, 24, 4, '#5a4a3a'); r(8, 9, 7, 3, '#e8e4dc'); r(17, 9, 7, 3, '#e8e4dc'); if (fr === 2) { r(10, 15, 4, 1, 'k'); r(18, 15, 4, 1, 'k'); } else { r(10, 14, 4, 3, '#ffffff'); r(18, 14, 4, 3, '#ffffff'); r(11, 15, 2, 2, 'k'); r(19, 15, 2, 2, 'k'); } r(12, 23, 8, fr === 1 ? 3 : 1, '#3a4a2a'); r(14, 19, 4, 2, '#5a7a3a'); });
+  PORT.p32 = pcv((r, fr) => { r(4, 6, 24, 26, 'k'); r(5, 7, 22, 25, '#3a4a5a'); r(5, 7, 22, 3, '#5a6a7a'); r(8, 10, 16, 14, '#05030a'); const e = [['#3a2418', '#ffffff'], ['#ffe066', '#05030a'], ['#05030a', '#05030a']][fr]; r(11, 15, 3, 2, e[1]); r(18, 15, 3, 2, e[1]); r(12, 15, 1, 2, e[0]); r(19, 15, 1, 2, e[0]); r(6, 2, 20, 6, 'k'); r(7, 3, 18, 4, '#2a4a8a'); r(13, 3, 6, 3, '#f0c040'); r(12, 26, 8, 5, 'k'); r(13, 27, 6, 3, '#e8dcc0'); r(14, 28, 1, 1, '#c83838'); });
+}
+for (const k of ['ozorio', 'neide', 'duda', 'marlene', 'maestro', 'padeira', 'valdir', 'p32']) WHO[k] = { name: () => ({ ozorio: 'Seu Ozório', neide: 'Profª Neide', duda: 'Duda', marlene: 'Dona Marlene', maestro: 'Maestro', padeira: 'Padeira', valdir: 'Seu Valdir', p32: 'Passageiro 32' })[k], portrait: t => portFrame(k, t), voice: ({ ozorio: () => sfx('blipLow', 150), neide: () => sfx('blip', 560), duda: () => sfx('blip', 700), marlene: () => sfx('blip', 820), maestro: () => sfx('blipLow', 120), padeira: () => sfx('blip', 640), valdir: () => sfx('blipLow', 85), p32: () => sfx('blipTri', 300 + Math.random() * 900) })[k], col: ({ p32: '#c0d0e8', maestro: '#bfe8f0', valdir: '#d8f0b8' })[k] };
+WHO.p32.fx = 'shake';
+WHO.tacho = { name: () => 'Tacho Fervente', portrait: () => SP.tachoW[0], voice: () => sfx('blipLow', 140), col: '#ffd060' };
+WHO.papagaio = { name: () => 'Papagaio', portrait: () => SP.papagaio[0], voice: () => sfx('blipTri', 1400) };
+
+// ---------- música ----------
+Object.assign(TRACKS, {
+  padaria: { bpm: 84, bars: 4, chords: 'Fmaj7 Em7 Dm7 Cmaj7', bass: 'root5', bassVol: 0.09,
+    lead: 'A5:4 C6:2 A5:2 G5:8 | G5:4 B5:2 G5:2 E5:8 | F5:4 A5:2 F5:2 D5:4 F5:4 | E5:12 .:4', leadWave: 'triangle', leadVol: 0.07, arp: { rate: 2, vol: 0.016, pat: [0, 1, 2, 3] }, pad: true, padVol: 0.02 },
+  feira: { bpm: 126, bars: 4, chords: 'G C D G', bass: 'root5', bassVol: 0.13,
+    lead: 'D5:2 G5:2 B5:2 G5:2 A5:2 B5:2 G5:4 | E5:2 G5:2 C6:2 B5:2 A5:4 G5:4 | F#5:2 A5:2 D6:2 C6:2 B5:2 A5:2 F#5:4 | G5:4 B5:4 G5:8', leadWave: 0.25, leadVol: 0.06, arp: { rate: 1, vol: 0.014, pat: [0, 2, 1, 2] }, drums: 'k.hsk.h.k.hsk.hh', hatVol: 0.025 },
+  escola: { bpm: 100, bars: 4, chords: 'C G Am F', bass: 'pulse', bassVol: 0.1,
+    lead: 'E5:4 G5:4 C6:4 G5:4 | D5:4 G5:4 B5:8 | C5:4 E5:4 A5:4 E5:4 | F5:4 A5:4 C6:8', leadWave: 0.125, leadVol: 0.06, arp: { rate: 2, vol: 0.014, pat: [0, 1, 2, 1] }, drums: 'k...h...k...h.h.', hatVol: 0.02 },
+  coreto: { bpm: 90, bars: 4, chords: 'F C7 C7 F', bass: 'root5', bassVol: 0.1,
+    lead: 'A5:6 C6:2 F6:4 E6:4 | D6:6 C6:2 Bb5:4 G5:4 | Bb5:6 A5:2 G5:4 E5:4 | F5:12 .:4', leadWave: 'triangle', leadVol: 0.08, arp: { rate: 2, vol: 0.016, pat: [0, 1, 2, 1] }, pad: true, padVol: 0.02 },
+  pontofinal: { bpm: 60, bars: 4, chords: 'Am Fmaj7 Dm E', bass: 'whole', bassVol: 0.07,
+    lead: 'E5:8 C5:8 | A4:8 C5:4 B4:4 | D5:8 F5:4 E5:4 | E5:12 .:4', leadWave: 'triangle', leadVol: 0.06, pad: true, padVol: 0.03 },
+  boss6: { bpm: 150, bars: 8, chords: 'Dm Bb C A Dm Bb Gm A', bass: 'oct8', bassVol: 0.16,
+    lead: 'D5:2 F5:2 A5:2 D6:2 C6:4 A5:4 | Bb5:2 A5:2 F5:2 D5:2 F5:4 Bb5:4 | C6:4 G5:2 E5:2 C5:4 E5:4 | C#5:2 E5:2 A5:4 G5:2 E5:2 C#5:4 | D5:2 A5:2 D5:2 A5:2 F5:4 D5:4 | Bb5:4 F5:4 D5:4 Bb4:4 | G5:2 Bb5:2 D6:2 G6:2 F6:4 E6:4 | E6:4 C#6:4 A5:4 E5:4',
+    leadVol: 0.07, arp: { rate: 1, vol: 0.015, pat: [0, 1, 2, 1] }, drums: 'k.hsk.hsk.hsk.ss', hatVol: 0.04 },
+  valsa: { bpm: 96, bars: 4, chords: 'F C F C', bass: 'whole', bassVol: 0.08,
+    lead: 'F5:6 A5:2 C6:4 D6:4 | G5:6 B5:2 D6:4 C6:4 | A5:6 C6:2 F6:4 E6:4 | E6:4 D6:4 C6:8', leadWave: 'triangle', leadVol: 0.09, pad: true, padVol: 0.03 }
+});
+
+// ---------- inimigos: as Lembranças ----------
+// Todos são feitos de memória. Os com "calm" vão embora em paz com o elemento certo (o Avaliar diz qual).
+Object.assign(ENEMIES, {
+  pombo: { name: 'Pombo de Praça', sp: 'pombo', hp: 300, atk: 80, def: 16, evade: 0.15, xp: 150, weak: { brasa: 1.3, vento: 1.3 }, drops: [['pao', .25]],
+    calm: { els: ['canto', 'seiva'], need: 2, msg: 'ganhou migalhas de lembrança e ficou feliz', bye: 'voou para o telhado do coreto' },
+    flavor: ['* O Pombo de Praça estufa o peito. Ele já viu tudo nesta praça.', '* Ele bica o chão onde um dia teve pipoca.'],
+    check: 'Bicadas rápidas, em bando. ACALMAR: CANTO ou SEIVA (2). VENTO e BRASA espantam.',
+    moves: [
+      { k: 'dodge', p: 0.45, hits: 3, spd: 1.3, w: 3, t: '* Bicada, bicada, bicada!' },
+      { k: 'ring', p: 1, w: 2, t: '* O Pombo dá um rasante na sua tampa!' },
+      { k: 'buff', stat: 'hide', turns: 2, w: 1, t: '* O Pombo se mistura com os outros pombos. Qual era ele mesmo?' }] },
+  carrinho: { name: 'Carrinho de Feira', sp: 'carrinho', hp: 400, atk: 84, def: 36, xp: 170, weak: { faisca: 1.5, polvora: 1.3, bite: 0.7 }, drops: [['caldo', .2]],
+    flavor: ['* O Carrinho de Feira range. Uma roda gira para o lado errado, sempre.', '* Ele está cheio de compras de alguém que nunca chegou em casa.'],
+    check: 'Ferro e teimosia. Atropela e prende. FAÍSCA e PÓLVORA. Não tem lembrança para acalmar: é só um carrinho.',
+    moves: [
+      { k: 'ring', p: 1.2, w: 2, t: '* O Carrinho desce a ladeira na sua direção!' },
+      { k: 'mash', p: 0.9, need: 14, bind: true, w: 2, t: '* Sua tampa fica presa na grade do carrinho!' },
+      { k: 'buff', stat: 'shell', ally: true, turns: 2, w: 1, t: '* O Carrinho para na frente do aliado, de escudo.' }] },
+  feirante: { name: 'Feirante Desbotado', sp: 'feirante', hp: 420, atk: 86, def: 20, xp: 180, weak: { sombra: 1.3, brasa: 1.2 }, drops: [['pastel', .2]],
+    calm: { els: ['canto', 'seiva'], need: 3, msg: 'lembrou do nome da filha, que ajudava na barraca', bye: 'foi para casa com a sacola cheia' },
+    flavor: ['* O Feirante Desbotado grita preços que não existem mais.', '* "Olha a laranja!" A voz dele falha no meio.'],
+    check: 'Grita (silêncio) e joga fruta. ACALMAR: CANTO ou SEIVA (3). Ele só quer lembrar.',
+    moves: [
+      { k: 'ring', p: 0.85, st: 'silence', w: 1, t: '* "OLHA A LARANJA!" O pregão te deixa sem voz.' },
+      { k: 'dodge', p: 0.5, hits: 3, spd: 1.2, w: 3, t: '* Laranjas voando! Três por dois!' },
+      { k: 'heal', frac: 0.2, name: 'Chorinho', w: 1, t: '* O Feirante coloca um chorinho a mais na sacola do aliado.' }] },
+  lousa: { name: 'Lousa Viva', sp: 'lousa', hp: 440, atk: 84, def: 24, xp: 180, weak: { sal: 1.5, vento: 1.2 }, drops: [['caldo', .2]],
+    calm: { els: ['canto', 'tinta'], need: 2, msg: 'leu a resposta certa escrita nela e sorriu', bye: 'se apagou sozinha, como no fim da aula' },
+    flavor: ['* A Lousa Viva escreve uma pergunta que você não consegue ler.', '* Giz range. Todo mundo sente arrepio.'],
+    check: 'Mostra a matéria e apaga (memória). Faz esquecer. SAL apaga. ACALMAR: CANTO ou TINTA (2).',
+    moves: [
+      { k: 'seq', n: 5, p: 0.45, hide: true, w: 3, t: '* "Copiem do quadro!" As setas aparecem e somem. Decore!' },
+      { k: 'spell', p: 0.9, el: 'tinta', name: 'Ditado Surpresa', st: 'forget', w: 2, t: '* A Lousa dita um {b}Ditado Surpresa{/}. Sua cabeça esvazia.' },
+      { k: 'ring', p: 1.1, w: 1, t: '* O apagador voa na sua direção!' }] },
+  bedel: { name: 'Bedel de Giz', sp: 'bedel', hp: 400, atk: 90, def: 22, xp: 180, weak: { vento: 1.4, geada: 1.2 }, drops: [['cordinha', .2]],
+    flavor: ['* O Bedel de Giz anda pelo corredor contando passos.', '* "Fora da sala sem autorização?"'],
+    check: 'Pega pela orelha e manda calar. VENTO espalha o giz. Não tem calma: ele só cumpre ordens.',
+    moves: [
+      { k: 'ring', p: 0.9, st: 'silence', w: 1, t: '* "SILÊNCIO NO CORREDOR!"' },
+      { k: 'mash', p: 1, need: 15, bind: true, w: 2, t: '* O Bedel te pega pela alça e não solta!' },
+      { k: 'seq', n: 4, p: 0.55, spd: 1.2, w: 2, t: '* Ele bate o giz quatro vezes na sua tampa. Bem marcado.' }] },
+  musico: { name: 'Músico Afogado', sp: 'musico', hp: 420, atk: 88, def: 20, xp: 190, weak: { faisca: 1.3, sal: 1.2 }, drops: [['caldo', .2]],
+    calm: { els: ['canto'], need: 2, msg: 'reconheceu a melodia e baixou o instrumento', bye: 'guardou a tuba e foi descansar' },
+    flavor: ['* O Músico Afogado sopra a tuba. Sai água e uma nota triste.', '* Ele usa a farda da Banda Municipal de Velhágua.'],
+    check: 'Ondas de som e fanfarra para os aliados. ACALMAR: só CANTO (2). Ele toca há tempo demais.',
+    moves: [
+      { k: 'dodge', p: 0.55, hits: 3, spd: 1.25, w: 2, t: '* Ondas de som saem da tuba!' },
+      { k: 'buff', stat: 'atk', ally: true, v: 1.3, turns: 3, w: 1, t: '* FANFARRA! O aliado fica mais forte.' },
+      { k: 'spell', p: 1, el: 'canto', name: 'Marcha Fúnebre', w: 2, t: '* O Músico toca uma {p}Marcha Fúnebre{/}.' }] },
+  saudade: { name: 'Saudade', sp: 'saudade', hp: 360, atk: 84, def: 18, xp: 170, weak: { brasa: 1.4, bite: 0.5 }, drops: [['caldo', .25]],
+    biteMsg: 'Seus dentes passam por ela como por neblina. Pouco efeito.',
+    calm: { els: ['canto', 'brasa'], need: 2, msg: 'se aqueceu com uma lembrança boa', bye: 'virou um suspiro e foi embora' },
+    flavor: ['* A Saudade flutua devagar. Dá vontade de ligar para alguém.', '* Ela chora gotas que caem para cima.'],
+    check: 'Rouba PM e faz esquecer. Mordida quase não pega. ACALMAR: CANTO ou BRASA (2).',
+    moves: [
+      { k: 'ring', p: 0.8, drain: 10, w: 2, t: '* A Saudade te abraça. Dá um frio por dentro.' },
+      { k: 'spell', p: 0.9, el: 'geada', name: 'Lágrima ao Contrário', st: 'forget', w: 2, t: '* {c}Lágrima ao Contrário{/}! Ela cai para cima e leva uma lembrança junto.' },
+      { k: 'heal', frac: 0.25, name: 'Consolo', w: 1, t: '* A Saudade consola o aliado.' }] },
+  semrosto: { name: 'Passageiro Sem Rosto', sp: 'semrosto', hp: 600, atk: 96, def: 30, xp: 280, elite: true, weak: { canto: 1.3, faisca: 1.2 }, drops: [['pastel', .3]],
+    calm: { els: ['canto'], need: 4, msg: 'ouviu o próprio nome em algum lugar da música', bye: 'voltou a ter um rosto por um segundo, e sorriu' },
+    flavor: ['* O Passageiro Sem Rosto segura uma alça que não está presa em nada.', '* Ele já foi alguém do 31. Ele não lembra quem.'],
+    check: 'Alma do 31 que esqueceu tudo. Forte e preciso. ACALMAR: só CANTO (4). Não desista dele.',
+    big: { k: 'seq', n: 7, p: 0.45, hide: true, pierce: true, spd: 1.1 },
+    moves: [
+      { k: 'seq', n: 6, p: 0.45, hide: true, spd: 1.1, w: 2, t: '* O Passageiro mostra o itinerário e esconde. Ele não lembra; você precisa lembrar.' },
+      { k: 'ring', p: 1.35, pierce: true, fast: true, w: 2, t: '* Uma freada que não aconteceu te joga para a frente!' },
+      { k: 'mash', p: 1.05, need: 16, bind: true, w: 1, t: '* Ele te puxa pela alça para a fila!' }] },
+  tacho: { name: 'Tacho Fervente', sp: 'tachoB', hp: 2500, atk: 88, def: 22, xp: 900, boss: true, ai: 'tacho', weak: { geada: 1.4, sal: 1.2 },
+    flavor: ['* O Tacho Fervente borbulha. "Olha o pastel! Três e cinquenta!"', '* O óleo chia como chuva no toldo.'], flavor2: ['* O chapéu de papel dele está queimado na ponta.', '* "...Bia? Bia, cadê o troco?"'],
+    check: 'Óleo quente queima. Ele prepara uma FRITURA grande. GEADA esfria o óleo (e cancela a fritura).' },
+  maestro: { name: 'Maestro Afogado', sp: 'maestroB', hp: 3100, atk: 90, def: 24, xp: 1500, boss: true, ai: 'maestro', weak: { faisca: 1.2, sal: 1.2 },
+    flavor: ['* O Maestro Afogado bate a batuta na estante. A banda obedece.', '* "A praça não pode ficar em silêncio. Nunca."'], flavor2: ['* A farda dele escorre água.', '* Ele marca um compasso que ninguém mais escuta.'],
+    check: 'Marca o COMPASSO antes de cada golpe (rápido, pesado ou pausa). Com a banda tocando, bate mais forte: CANTO acalma os músicos. No SOLO, cante (CANTO) para cancelar.' },
+  p32: { name: 'O Passageiro 32', sp: 'p32B', hp: 4300, atk: 96, def: 28, xp: 2600, boss: true, ai: 'p32', weak: { canto: 1.25 },
+    flavor: ['* O Passageiro 32 fala com a voz do Seu Jorge: "Segura firme."', '* Ele cheira a chuva e a óleo de pastel.'], flavor2: ['* Os remendos do casaco brilham, um de cada vez.', '* "Eu sou tudo que vocês largaram no banco."'],
+    check: 'Feito do que o 31 esqueceu. BILHETERIA: devolve o seu último feitiço (engula!). LOTAÇÃO: cada alma que você fez lembrar responde "Presente!" e bloqueia um golpe. CANTO fere mais.' }
+});
+// tamanhos reais na batalha: pombo, carrinho e saudade são pequenos
+EN_TINY.add('pombo'); EN_TINY.add('carrinho');
+
+// ---------- chefes ----------
+const AI6 = {
+  async tacho(e) {
+    if (!e.p2 && e.hp <= e.mhp * 0.5) { e.p2 = true; e.phase = 2; shake(16); sfx('rumble'); await bSay('* O Tacho para de borbulhar por um segundo. "...Três e cinquenta. Era três e cinquenta, né?"', { auto: 55 }); e.atk += 5; return; }
+    if (e.charge) { e.charge = false; if (e.cooled) { e.cooled = false; await bSay('* O óleo esfriou. A fritura gigante sai murcha.', { auto: 45 }); return runMove(e, { k: 'ring', p: 0.9, t: '* Um pastel morno bate na sua tampa. Plof.' }); } return runMove(e, { k: 'dodge', p: 0.6, hits: 5, spd: 1.3, st: 'burn', t: '* FRITURA DE SEGUNDA! Óleo fervendo para todo lado!', fx: 'shake' }); }
+    if (e.turns % 3 === 0) { e.charge = true; await bSay('* O Tacho esquenta até o óleo ficar branco. (Uma fritura enorme vem aí. GEADA esfria.)', { auto: 55 }); return; }
+    return runMove(e, pickMove(e, [
+      { k: 'dodge', p: 0.45, hits: 3, spd: 1.25, w: 2, t: '* Pastéis voando! Cuidado que está quente!' },
+      { k: 'ring', p: 0.9, st: 'burn', w: 2, t: '* Uma concha de óleo quente!' },
+      { k: 'mash', p: 1, need: 15, bind: true, w: 1, t: '* O Tacho te embrulha em papel de pão!' },
+      { k: 'heal', frac: 0.08, name: 'Gole de Caldo de Cana', w: 1, t: '* O Tacho toma um gole de caldo de cana. "Esse é por conta da casa."' }]));
+  },
+  async maestro(e) {
+    const band = BT.en.filter(x => x !== e && x.alive && x.hp > 0);
+    if (!e.p2 && e.hp <= e.mhp * 0.5) {
+      e.p2 = true; e.phase = 2; shake(20); sfx('rumble');
+      await bSay('A praça engoliu a gente numa terça. A banda estava no meio da valsa.', { col: '#bfe8f0' });
+      await bSay('Se a música parar, a praça acaba. Então ela NÃO PARA.', { col: '#bfe8f0' });
+      if (!band.length) { BT.en.push(Object.assign(mkEnemy('musico', 1, 3), { x: 206, y: 126 - 16 })); await bSay('* Um Músico Afogado sobe da poça e pega a tuba de novo.', { auto: 50 }); }
+      e.atk += 6; return;
+    }
+    if (e.solo) {
+      e.solo = false;
+      if (BT.lastAct === 'spell' && BT.lastSpell && BT.lastSpell.el === 'canto') { sfx('rune'); await bSay('* Você canta por cima do solo! O Maestro perde o compasso e a batuta escorrega.', { auto: 55 }); e.shell = 0; e.def = Math.max(10, e.def - 3); return; }
+      return runMove(e, { k: 'seq', n: e.p2 ? 8 : 7, p: 0.5, spd: 1.15, t: '* SOLO DE TUBA! Cada nota é um golpe!', fx: 'shake' });
+    }
+    const amp = band.length ? 1.25 : 1;
+    if (e.turns % 4 === 0) { e.solo = true; await bSay('* O Maestro aponta a batuta para você: "SOLO!" (No seu turno, use CANTO para cantar por cima.)', { auto: 60 }); return; }
+    const tempo = e.turns % 4 === 1 ? 'allegro' : e.turns % 4 === 2 ? 'adagio' : 'fermata';
+    if (tempo === 'fermata') { await bSay('* FERMATA. O Maestro segura a batuta no ar. Tudo para... e a banda respira.', { auto: 45 }); for (const b of band) b.atkBuff = { m: 1.3, t: 2 }; if (band.length) await bSay('* A banda fica mais forte.', { auto: 30 }); return; }
+    if (tempo === 'allegro') return runMove(e, { k: 'dodge', p: 0.42 * amp, hits: band.length ? 5 : 4, spd: 1.35, t: `* ALLEGRO! Golpes rápidos no ritmo da batuta${band.length ? ', com a banda inteira' : ''}!` });
+    return runMove(e, { k: 'spell', p: 1.4 * amp, el: 'canto', name: 'Adagio', t: `* ADAGIO. Uma nota lenta e pesada, como um bumbo${band.length ? ', com a banda junto' : ''}. (Engula!)` });
+  },
+  async p32(e) {
+    // fase 2 e 3
+    if (!e.p2 && e.hp <= e.mhp * 0.6) {
+      e.p2 = true; e.phase = 2; shake(20); sfx('rumble');
+      await bSay('Vocês largam tudo no banco. Guarda-chuva, fone, o gosto das coisas, o nome dos filhos.', { col: '#c0d0e8' });
+      await bSay('Alguém tinha que guardar. EU GUARDEI. Eu sou o passageiro que faltava.', { col: '#c0d0e8' });
+      await bSay('* O 32 abre o casaco. Lá dentro, uma fila inteira de rostos apagados. LOTAÇÃO!', { auto: 60 }); return;
+    }
+    if (!e.p3 && e.hp <= e.mhp * 0.25) {
+      e.p3 = true; e.phase = 3; shake(26); sfx('rumble');
+      await bSay('Falta um. Falta você, trinta e um. Me dá o seu nome e a coleção fecha.', { col: '#c0d0e8' });
+      e.charge = true; await bSay('* O 32 começa a ler a sua ficha de trás para frente. (Prepare-se. Âncora ou Sino de Bolso cancelam.)', { auto: 60 }); return;
+    }
+    if (e.charge) { e.charge = false; return runMove(e, { k: 'seq', n: 8, p: 0.5, hide: true, pierce: true, spd: 1.1, t: `* COLEÇÃO! As letras de "${G.name}" aparecem, embaralham e somem. Lembre delas!`, fx: 'shake' }); }
+    // Bilheteria: devolve o seu último feitiço
+    if (e.turns % 3 === 1 && BT.lastSpell && BT.lastSpell.form !== 'veu') {
+      const sp = BT.lastSpell;
+      return runMove(e, { k: 'spell', p: 1.35, el: sp.el, name: sp.name, t: `* BILHETERIA! O 32 te devolve o seu próprio {${elTag(sp.el)}}${sp.name}{/}. (Engula!)` });
+    }
+    // Lotação: os desbotados vêm como golpes; quem lembrou responde "Presente!"
+    if (e.p2 && e.turns % 3 === 2) {
+      const lost = lostSouls(), ok = soulsNames(), hits = Math.max(1, 3 + lost - Math.min(4, ok.length));
+      const blockers = ok.slice(0, Math.min(4, ok.length));
+      if (blockers.length) await bSay(`* "PRESENTE!" ${blockers.join(', ')} ${blockers.length > 1 ? 'entram' : 'entra'} na frente da fila.`, { auto: 55 });
+      return runMove(e, { k: 'dodge', p: 0.5, hits, spd: 1.3, t: `* LOTAÇÃO! ${hits} passageiro${hits > 1 ? 's' : ''} sem rosto passa${hits > 1 ? 'm' : ''} por você!` });
+    }
+    if (e.turns % 4 === 3) { e.charge = true; await bSay('* O 32 ergue a alça do ônibus. "Próxima parada: o seu nome." (Prepare-se. Âncora cancela.)', { auto: 55 }); return; }
+    return runMove(e, pickMove(e, [
+      { k: 'ring', p: 1.2, pierce: true, w: 2, t: '* Ele bate com a alça, com a força do Seu Jorge.' },
+      { k: 'seq', n: 6, p: 0.45, spd: 1.15, w: 2, t: '* Ele imita a catraca: gira, gira, gira!' },
+      { k: 'spell', p: 1.25, el: 'canto', name: 'Canção Sem Final', st: 'forget', w: 2, t: '* Ele canta a música da Lume, mas para no meio. {p}Canção Sem Final{/}.' },
+      { k: 'mash', p: 1.05, need: 16, bind: true, w: 1, t: '* O casaco te engole até a metade!' }]));
+  }
+};
+Object.assign(AI, AI6);
+// GEADA esfria o tacho e cancela a fritura
+{ const _ch = calmHit; calmHit = function (t, el, log) { _ch(t, el, log); if (t.id === 'tacho' && el === 'geada' && t.charge && !t.cooled) { t.cooled = true; log.push('* O óleo do Tacho esfria com a Geada!'); } }; }
+
+// ---------- história ----------
+MAPS.garagem.ents.push({ id: 'mancha6', kind: 'npc2', x: 10, y: 4, sp: 'mancha', talk: 'mancha6', cond: 'ch5done', glow: 'rgba(255,224,102,0.22)' });
+Object.assign(STORY, {
+  async mancha6() {
+    if (G.flags.ch6open) { await say('* A mancha de óleo. A faixa amarela continua descendo pelo concreto, até onde a vista não alcança.'); return; }
+    await say('* A mancha de óleo onde o 31 afundou. No meio dela, o bilhete carimbado brilha, como se alguém estivesse soprando uma brasa.');
+    await say('Baú. Olha o chão.', 'lume');
+    await say('* Uma faixa amarela, igual às de corredor de ônibus, aparece no concreto e desce. Ela atravessa a parede como se a parede não estivesse ali.');
+    const c = await choose('* Seguir a faixa amarela? (Começa o Capítulo 6.)', ['Seguir', 'Ainda não'], 'n', 1);
+    if (c !== 0) return;
+    await STORY.ch6start();
+  },
+  async ch6start() {
+    await say('* Antes de você descer, o Musgo aparece na porta da garagem, com uma vela de rato acesa no ombro.');
+    await say('A LINHA ESTÁ PUXANDO GENTE, PEQUENO BAÚ. DO NOSSO LADO E DO LADO DE CIMA. QUEM NÃO LEMBRA QUEM É... VAI.', 'musgo');
+    await say('EU FICO E SEGURO A TRINCHEIRA. VOCÊ VAI E TRAZ TODO MUNDO DE VOLTA.', 'musgo');
+    playMusic(null); sfx('flee'); await fadeOut(16); V.scene = 'black'; await fadeIn(1);
+    await say('* Você pisa na faixa amarela. Ela te leva sem pedir licença.', 'void');
+    await say('* É como andar de ônibus de olhos fechados: você sente as curvas, as lombadas, as paradas.', 'void');
+    await say('* Uma cordinha toca. PLIM.', 'void');
+    G.flags.ch6open = true; tunes();
+    await fadeOut(10); loadMap('padaria', 11, 10, 'down'); V.scene = 'world'; await fadeIn(24);
+    await say('* Uma rua de manhã cedo. O céu tem aquela cor de quem acordou antes do despertador.');
+    await say('* Um abrigo de ônibus azul. Uma padaria com a vitrine embaçada. Um poste com um adesivo de "COMPRO OURO".');
+    await say('...É o meu ponto. O ponto da padaria. Eu descia aqui todo dia.', 'me');
+    await say('* Algumas coisas estão nítidas demais: o rachado no meio-fio, a lixeira laranja, o cheiro de pão.');
+    await say('* Outras estão borradas, como uma foto mexida. O letreiro da padaria. O rosto da moça do balcão.');
+    await say('A masmorra montou o trajeto do 31 com o que cada passageiro lembrava. Esse pedaço é seu, baú.', 'lume');
+    await say('Então por que tá borrado?', 'me');
+    await say('...Porque você nunca olhou direito. A gente nunca olha direito pro que vê todo dia.', 'lume');
+    sfx('catalog'); await say('[Linha 31 — itinerário restaurado: PADARIA, FEIRA, ESCOLA, CORETO, PONTO FINAL.]', 'cat');
+    await say('[Coleção no Ponto Final: 22 de 31 almas. Contagem em andamento.]', 'cat');
+    await say('Vinte e duas já estão lá. A gente precisa chegar antes que ela termine de contar.', 'lume');
+    await say('* A Lume cantarola baixinho a música dela, a do fundo do ônibus. E para no meio, como sempre.');
+    await say('Você nunca canta o final.', 'me');
+    await say('Eu nunca lembrei como termina. Faz anos. Desde antes do clarão.', 'lume');
+    sfx('catalog'); await say('[Capítulo 6: {y}Almas do 31{/}.]', 'cat');
+    await grantTechs(false); saveGame();
+  },
+  async itin6() {
+    const k = tunes(), f = G.flags;
+    await say('* O itinerário da Linha 31, colado no vidro do abrigo. Alguém marcou as paradas com caneta de cor.');
+    const st = [['FEIRA', 'pregao', 'oeste'], ['ESCOLA', 'recreio', 'norte'], ['CORETO', 'valsa', 'leste']].map(([n, t, d]) => `${k.includes(t) ? '{g}♪{/}' : '·'} ${n} (${d})`).join('  ');
+    await say(`* ${st}\n* PONTO FINAL (sul): só com as três canções.`);
+    await say(`* Almas do 31 que lembram quem são: {y}${soulsCount()}{/}. (${soulsNames().join(', ')})`);
+  },
+  async padeira6() {
+    const f = G.flags;
+    if (!f.padeiraTalk) {
+      f.padeiraTalk = true;
+      await say('* A moça do balcão está na porta da padaria. O rosto dela é uma mancha clara, como um dedo na lente.');
+      await say('Bom dia, menino do fone. O de sempre?', 'padeira');
+      await say('O de... sempre.', 'me');
+      await say('* Você tenta lembrar o que era "o de sempre". Pão na chapa? Média? Você não sabe.');
+      await say('Eu passei aqui todo dia por três anos. E eu nunca soube o nome dela.', 'me');
+      await say('Ela sabia que você usava fone. Já é mais do que a maioria das pessoas sabe da gente.', 'lume');
+      return;
+    }
+    if (f.ch6Gift === 'pastel') { await say('Bom dia! Hoje tem pastel de feira, quentinho. Você sempre levava um no caminho, lembra?', 'padeira'); await say('...Lembro. Agora eu lembro.', 'me'); return; }
+    await say(pickOne(['Bom dia, menino do fone.', 'Chuva hoje à tarde, viu? Leva guarda-chuva.', 'O ônibus atrasou de novo? Senta aí, toma um café.']), 'padeira');
+  },
+  // ---------- FEIRA ----------
+  async feiraFirst() {
+    await wait(20);
+    await say('* Uma feira de rua inteira, com toldo listrado, caixote de fruta e rádio de pilha. Tudo um pouco desbotado, como uma foto antiga.');
+    await say('* Feirantes gritam preços para ninguém. Um pombo anda de costas.');
+    await say('É a feira de segunda. A da rua de baixo do ponto. A Dona Cida descia aqui.', 'me');
+  },
+  async cida6() {
+    const f = G.flags;
+    if (!f.cida6Met) {
+      f.cida6Met = true;
+      await say('* Sentada num caixote, com as patas cruzadas e um guarda-chuva do lado, uma gata fantasma de óculos.');
+      if (f.cidaDone) {
+        await say('Ora, se não é o baú do pastel! E o lustre!', 'cida');
+        await say('Dona Cida! A senhora não ficou na cela?', 'me');
+        await say('Fiquei. Aí a cela começou a andar, meu bem. A linha puxa a gente pelo pé, igual ao ônibus quando arranca.', 'cida');
+        await say('Mas eu resisti. Sabe por quê? Eu sei quem eu sou. Aparecida dos Santos, alma número sete, banco preferencial, óculos dourados.', 'cida');
+        await say('Quem lembra o próprio nome, ela não consegue levar. Só leva quem esqueceu.', 'cida');
+      } else {
+        await say('...Quem é? Eu não enxergo direito. Perdi os óculos numa muralha, eu acho. Ou foi aqui?', 'cida');
+        await say('* Ela pisca devagar. O contorno dela está ficando transparente, como os feirantes.');
+        await say('Dona Cida! Sou eu, o baú! A gente se conheceu na Jaula!', 'me');
+        await say('Baú...? Eu conhecia um menino que comia pastel aqui. Será que era você? Eu não lembro, meu bem. Tá tudo tão longe.', 'cida');
+        await say('Ela está desbotando. Igual aos feirantes. Baú, ela tá sendo puxada.', 'lume');
+        await say('Se a gente achar alguma coisa com o nome dela, alguma coisa daqui da feira... talvez ela lembre.', 'lume');
+      }
+      await say('O Seu Ozório, do pastel, virou um tacho. Fica lá no fundo da feira, gritando preço. Ele não sabe mais quem é.', 'cida');
+      await say('Ele anotava tudo num caderninho de fiado. Tudo! Até o meu caldo de cana. Se acharem o caderno, quem sabe ele lembra.', 'cida');
+      await say('Achei que vi o caderno voando para aquele quartinho do meio, onde guardam as caixas. Tem uma porta de luz amarela lá.', 'cida');
+      await say('Porta de luz amarela... É da cor da minha música. Talvez ela abra com a canção do ônibus.', 'lume');
+      sfx('catalog'); await say('[PORTAS DE MEMÓRIA: fale com elas e escolha a melodia certa. A Lume toca, você repete as setas.]', 'cat');
+      await say('[LEMBRANÇAS: alguns monstros são feitos de memória. O elemento certo (veja no Avaliar) os ACALMA e eles vão embora em paz.]', 'cat');
+      return;
+    }
+    if (soulOk('cida')) await say(pickOne(['Cuidado com os pombos. Esses daqui têm opinião.', 'O caldo de cana era fiado. Eterno. O Ozório nunca cobrou.', 'Vai, meu bem. Eu vou ficar aqui olhando a feira mais um pouquinho.']), 'cida');
+    else await say('...Eu conheço vocês? Desculpa, meu bem. Tá tudo tão longe.', 'cida');
+  },
+  async caderno6() {
+    if (G.flags.cadernoGot) return;
+    G.flags.cadernoGot = true; sfx('item'); refreshEnts();
+    await say('* Um caderno de capa dura, com espiral torta e manchas de óleo. Na capa, a caneta: "FIADO — OZÓRIO — NÃO EMPRESTA".');
+    await say('* Lá dentro, página por página, uma letra redonda e cuidadosa:');
+    await say('* "Dona Cida — caldo de cana c/ limão — fiado eterno."\n* "Seu Valdir e Dna. Marlene — 2 pastel de carne — pagaram com um bolo."');
+    await say('* "Menino do fone — 2 pastel de queijo — paga segunda."');
+    await say('...Eu devo dois pastéis pro homem.', 'me');
+    await say('* Na última página, um desenho de giz de cera: um homem de avental, gigante, e uma menina do lado. "PAI, VOLTA CEDO. — BIA".');
+    await say('* (Você guardou o {y}Caderno de Fiado{/}.)');
+  },
+  async ozorio6() {
+    const f = G.flags;
+    if (f.soul_ozorio === 'lembrou') { await say(pickOne(['Freguês! Olha o pastel! Pra você é fiado, mas eu anoto.', 'A Bia ia gostar de você. Ela gostava de bicho esquisito.', 'Dois pastéis de queijo, menino. Tô anotando.']), 'ozorio'); return; }
+    if (f.soul_ozorio === 'perdido') return;
+    if (f.cadernoGot) {
+      playMusic('padaria');
+      await say('* O Tacho Fervente borbulha atrás da barraca. "Olha o pastel! Três e cinquenta! Três e cinquenta!"', 'tacho');
+      await say('* Você abre a tampa e mostra o caderno de fiado.');
+      await say('* O óleo para de ferver.');
+      await say('...Fiado. Fiado eterno. Dona Cida.', 'tacho');
+      await say('* Ele lê devagar, página por página. O metal começa a esfriar e a ficar pálido, e depois cor de pele.');
+      await say('Menino do fone. Dois de queijo. Paga segunda.', 'tacho');
+      await say('* Na última página, ele para. A menina de giz de cera.');
+      await say('...Bia.| A minha Bia. Eu ia voltar cedo naquele dia. Eu prometi.', 'ozorio');
+      await say('* Onde estava o tacho, agora está um homem grande de avental, careca, de bigode grisalho, chorando em cima de um caderno.');
+      await say('Ozório Ferreira. Pasteleiro. Banco nove. Eu lembro, rapaz. Eu lembro de tudo.', 'ozorio');
+      await say('E você me deve dois pastéis.', 'ozorio');
+      await say('Eu sou um baú.', 'me');
+      await say('Baú paga também. Tá anotado.', 'ozorio');
+      f.soul_ozorio = 'lembrou'; f.ozorioDone = true; f.ozorioLembrou = true;
+      if (!soulOk('cida')) { f.soul_cida = 'lembrou'; await say('* A Dona Cida chega devagar e lê o próprio nome no caderno: "caldo de cana, fiado eterno". Ela ri, e o contorno dela volta a ficar firme.'); await say('Aparecida. Eu sou a Aparecida. Ai, meu Deus, que susto, meu bem.', 'cida'); }
+      await say('Toma. Pregão da feira. Eu gritava isso toda segunda, cinco da manhã. Abre qualquer porta daqui.', 'ozorio');
+      learnTune('pregao'); sfx('rune'); await say('* A Lume aprendeu o {o}Pregão da Feira{/}!');
+      giveItem('pastel', 3); await say('* Você recebeu {y}Pastel de Feira{/} ×3. "Esses são por conta da casa. Os outros dois, não."');
+      refreshEnts(); playMusic(WD.map.music); saveGame();
+      return;
+    }
+    await say('* No fundo da feira, um tacho de ferro do tamanho de uma barraca, com chapéu de papel. O óleo dentro dele ferve e grita.');
+    await say('OLHA O PASTEL! TRÊS E CINQUENTA! QUEIJO, CARNE, PALMITO! TRÊS E CINQUENTA!', 'tacho');
+    await say('Seu Ozório? Sou eu, o menino do fone...', 'me');
+    await say('FREGUÊS SEM DINHEIRO NÃO COME! TRÊS E CINQUENTA!', 'tacho');
+    await say('Ele não lembra de nada, baú. A Dona Cida falou do caderno.', 'lume');
+    const c = await choose('* O que fazer com o Tacho?', ['Procurar o caderno antes', 'Lutar agora'], 'n', 0);
+    if (c === 0) { await say('Espera aqui, Seu Ozório. A gente já volta.', 'me'); await say('TRÊS E CINQUENTA!', 'tacho'); return; }
+    await say('* A Lume fica quieta. Você sabe o que ela está pensando.');
+    const r = await battle(['tacho'], { boss: true, music: 'boss6', noFlee: true, intro: '* O Tacho Fervente borbulha e cospe óleo!' });
+    if (r !== 'win') return;
+    f.soul_ozorio = 'perdido'; f.ozorioDone = true; f.ozorioPerdido = true; refreshEnts();
+    await say('* O tacho esfria e fica cinza. Por um segundo, aparece o rosto de um homem de bigode, confuso.');
+    await say('...Bia? Cadê o troco?', 'tacho');
+    await say('* Ele levanta, de avental desbotado, e começa a andar pela faixa amarela, devagar, para o sul. Sem olhar para trás.');
+    await say('...A gente devia ter procurado o caderno.', 'lume');
+    await say('* Um papagaio pousa na barraca vazia. "OLHA O PASTEL! TRÊS E CINQUENTA!", ele repete, com a voz do dono.');
+  },
+  async papagaio6() {
+    if (!tunes().includes('pregao')) {
+      await say('OLHA O PASTEL! TRÊS E CINQUENTA! QUEIJO, CARNE, PALMITO!', 'papagaio');
+      await say('Ele grita igual ao Seu Ozório. Dá pra tirar a melodia disso.', 'lume');
+      learnTune('pregao'); sfx('rune'); await say('* A Lume aprendeu o {o}Pregão da Feira{/}!');
+      return;
+    }
+    await say(pickOne(['TRÊS E CINQUENTA!', 'FIADO NÃO! FIADO NÃO!', 'BIA! BIA! VOLTA CEDO!']), 'papagaio');
+  },
+  // ---------- ESCOLA ----------
+  async escolaFirst() {
+    await wait(20);
+    await say('* Uma escola estadual de muro pichado e corredor comprido. As portas das salas estão fechadas.');
+    await say('* Lá de dentro vem um som de giz. Muito giz. Sem parar.');
+    await say('"Copiem cem vezes." Eu reconheço esse tom de voz. Toda escola tem uma.', 'lume');
+  },
+  async chamada6(e) {
+    const f = G.flags, q = e.q;
+    if (f['cham' + q]) return;
+    const Q = {
+      1: { t: '* Uma porta de sala de aula. No vidro, um bilhete de giz: "CHAMADA. Quem senta no banco 12?"', o: ['Lume', 'Dona Cida', 'Tiago', 'Seu Ozório'], a: 'Lume', ok: 'Presente! ...Ops, era pra você responder. Mas vale.' },
+      2: { t: '* Outra porta. No vidro: "CHAMADA. Quem senta no banco 7, o preferencial?"', o: ['Dona Cida', 'Seu Jorge', 'Dona Marlene', 'Lume'], a: 'Dona Cida', ok: 'A porta range: "Presente." Uma voz de velhinha, de longe.' },
+      3: { t: '* A última porta, para o pátio. No vidro, a giz, uma letra que treme:\n* "E VOCÊ? QUEM É VOCÊ?"', o: [G.name, 'A alma 31', 'Um baú', 'Ninguém'], a: G.name, ok: '' }
+    }[q];
+    await say(Q.t);
+    const opts = [...Q.o].sort(() => Math.random() - 0.5);
+    const i = await choose('* O que você responde?', [...opts, 'Ainda não'], 'n', opts.length);
+    if (i < 0 || i >= opts.length) return;
+    if (opts[i] === Q.a) {
+      f['cham' + q] = true; refreshEnts(); sfx('rune');
+      if (q === 3) {
+        await say(`${G.name}. Meu nome é ${G.name}.`, 'me');
+        await say('* A porta demora a abrir. Como se precisasse confirmar.');
+        await say('[...Presente.]', 'cat');
+        await say('Você disse o seu nome, baú. Não o número. O seu nome.', 'lume');
+      } else await say(Q.ok, q === 1 ? 'lume' : 'n');
+      return;
+    }
+    sfx('cancel'); await say('* A porta escurece. Do fim do corredor, passos de bedel: "RESPOSTA ERRADA. PARA A DIRETORIA."');
+    await battle(q === 3 ? ['bedel', 'lousa'] : ['bedel'], { noFlee: false, intro: '* O Bedel de Giz te pega no flagra!' });
+  },
+  async duda6() {
+    const f = G.flags;
+    if (!f.dudaMet) {
+      f.dudaMet = true; f.soul_duda = 'lembrou';
+      await say('* Dentro do banheiro da escola, sentada em cima de um skate quebrado, uma garota de armadura de heroína, com o cabelo cortado torto.');
+      await say('Se você for um bedel, eu juro que eu mordo.', 'duda');
+      await say('Engraçado você falar isso.', 'me');
+      await say('...Um baú falante e um lustre. Tá. Hoje tá tudo normal.', 'duda');
+      await say('Duda. Banco vinte e dois, do lado da porta. Eu tinha dezessete anos quando o 31 caiu. Ainda tenho, acho. Aqui o tempo não anda.', 'duda');
+      await say('Me invocaram como heroína lá em cima. Me deram uma espada e me mandaram descer. Eu desci, vi o que eles fazem com os bichos... e vim parar no banheiro.', 'duda');
+      await say('Os heróis do Andar 3 também estão sendo puxados. Os que já não lembram de casa. Eu vi três passarem pela faixa ontem, de olho vazio.', 'duda');
+      await say('E você? Você lembra?', 'lume');
+      await say('Lembro. Rua das Acácias, 40, portão verde. Minha mãe grita meu nome inteiro quando tá brava: Maria Eduarda.', 'duda');
+      await say('Eu repito isso toda noite. Pra não esquecer.', 'duda');
+      await say('* Ela te joga duas cordinhas de ônibus, arrancadas de algum lugar.');
+      giveItem('cordinha', 2); sfx('item'); await say('* Você recebeu {y}Cordinha de Parada{/} ×2.');
+      await say('Se precisar de mim no Ponto Final, puxa. Eu vou estar lá. Todo mundo vai estar lá, de um jeito ou de outro.', 'duda');
+      return;
+    }
+    await say(pickOne(['Maria Eduarda. Rua das Acácias, 40. Portão verde.', 'A Professora Neide me deu zero em redação uma vez. Eu daria tudo pra ela me dar zero de novo.', 'Não conta pra ninguém que eu choro no banheiro, tá?']), 'duda');
+  },
+  async diario6() {
+    if (G.flags.diarioGot) return;
+    G.flags.diarioGot = true; sfx('item'); refreshEnts();
+    await say('* Entre os livros inchados, um diário de classe de capa verde. "3º B — Língua Portuguesa — Profª Neide Aparecida Lins".');
+    await say('* Lá dentro, a lista de chamada. Trinta e dois nomes. Do lado de cada um, ela escreveu alguma coisa à mão.');
+    await say('* "Maria Eduarda — escreve bem, mas não acredita. Insistir." "Kauã — dorme na aula porque trabalha de madrugada. Não acordar."');
+    await say('* (Você guardou o {y}Diário de Classe{/}.)');
+  },
+  async neide6() {
+    const f = G.flags;
+    if (f.soul_neide === 'lembrou') { await say(pickOne(['Corrigindo: "a gente vamos" não existe. Nem no fim do mundo.', 'Quando eu chamar, vocês respondem. Combinado?', 'A Maria Eduarda está aqui? ...Está. Ótimo. Ótimo.']), 'neide'); return; }
+    if (f.soul_neide === 'perdido') return;
+    if (!f.diarioGot) {
+      await say('* No pátio, uma professora feita de pó de giz anda de um lado para o outro, com uma régua na mão. Os alunos de giz copiam, copiam, copiam.');
+      await say('Fila! Em silêncio! Quem não sabe o próprio nome copia cem vezes!', 'neide');
+      await say('A senhora sabe o seu?', 'me');
+      await say('* Ela para. A régua treme.');
+      await say('...Copie cem vezes. Copie cem vezes.', 'neide');
+      await say('Ela também esqueceu, baú. Uma professora sem a lista de chamada... Deve estar em algum lugar da escola.', 'lume');
+      return;
+    }
+    playMusic('padaria');
+    await say('* Você mostra o diário de classe. A professora de giz pega com as duas mãos, como quem segura um passarinho.');
+    await say('3º B. Língua Portuguesa.| ...Neide. Neide Aparecida Lins.', 'neide');
+    await say('* O pó de giz cai do rosto dela. Embaixo, uma senhora de óculos de armação grossa e coque grisalho.');
+    await say('Eu estava levando as provas para casa. Trinta e duas redações. Eu ia corrigir no ônibus. Eu sempre corrigia no ônibus.', 'neide');
+    await say('Eu esqueci o nome deles. Um por um. Era como apagar o quadro.', 'neide');
+    await say('* Ela abre o diário e começa a chamada, em voz alta. Cada nome que ela lê, um aluno de giz para de copiar e vai embora.');
+    if (f.dudaMet) { await say('Maria Eduarda.', 'neide'); await say('* Do banheiro, lá longe, uma voz de menina responde: "PRESENTE!"'); }
+    await say('Banco quinze. Profª Neide. Presente.', 'neide');
+    f.soul_neide = 'lembrou';
+    await say('Rapaz. Quando você precisar, faça a chamada. Quem lembra de si responde. Sempre.', 'neide');
+    G.tech = G.tech || []; if (!G.tech.includes('chamada')) G.tech.push('chamada'); sfx('rune');
+    await say(`[Técnica aprendida: {y}Chamada{/}. ${TECH.chamada.desc}]`, 'cat');
+    if (!tunes().includes('recreio')) { learnTune('recreio'); await say('E leve o sinal do recreio. Toda criança corre quando ouve.', 'neide'); await say('* A Lume aprendeu o {c}Sinal do Recreio{/}!'); }
+    playMusic(WD.map.music); saveGame();
+  },
+  async sino6() {
+    if (tunes().includes('recreio')) { await say('* O sino do pátio. Ele ainda vibra um pouquinho.'); return; }
+    await say('* Um sino de escola, de ferro, com uma cordinha. No metal está gravado: "RECREIO".');
+    sfx('bell'); shake(4);
+    await say('* BLÉN-BLÉN-BLÉN! Os alunos de giz param de copiar por um segundo e olham para a porta.');
+    learnTune('recreio'); sfx('rune'); await say('* A Lume aprendeu o {c}Sinal do Recreio{/}!');
+    if (G.flags.soul_neide !== 'lembrou') await say('A professora nem olhou. Ela continua contando cópias.', 'lume');
+  },
+  // ---------- CORETO ----------
+  async coretoFirst() {
+    await wait(20);
+    await say('* Uma praça de cidade pequena, de noite. Postes de ferro, bancos de cimento, árvores podadas em bola.');
+    await say('* No meio, um coreto branco. Uma banda inteira toca marcha, de farda encharcada, sem parar.');
+    await say('* Embaixo do coreto alguma coisa enorme respira devagar.');
+    await say('Essa praça não é do 31. Olha as placas: "Praça da Matriz — Velhágua".', 'lume');
+    await say('É a praça que afundou. A do edital. Com a banda dentro.', 'me');
+    await say('Então a masmorra não come só gente que cai de outro mundo. Ela tá comendo a cidade de cima também.', 'lume');
+  },
+  async marlene6() {
+    const f = G.flags;
+    if (f.marleneFate) { await say(f.marleneFate === 'junto' ? 'Vai, querido. A gente fica. Já dançamos o bastante pra uma vida e meia.' : 'Vamos, querido. Eu dou conta. Já dei conta de coisa pior que fim do mundo.', 'marlene'); return; }
+    if (!f.marleneMet) {
+      f.marleneMet = true;
+      await say('* Num banco de cimento, uma senhora de bobes no cabelo, armadura de heroína por cima do vestido florido e uma espada no colo.');
+      await say('Ah, finalmente alguém. Mocinho, você é da banda? Pede pra eles tocarem a valsa.', 'marlene');
+      await say('Eu sou um baú, senhora.', 'me');
+      await say('Eu tenho setenta e oito anos e me invocaram heroína. Baú falante é o de menos.', 'marlene');
+      await say('Marlene. Banco cinco. O quatro era o do meu Valdir, a gente sentava junto há cinquenta e dois anos.', 'marlene');
+      await say('A gente se conheceu num coreto igualzinho a esse. Ele me tirou pra dançar a valsa e pisou no meu pé a música inteira.', 'marlene');
+      await say('Eu desci o Andar 3 inteiro atrás dele. Tenho certeza que ele tá aqui. Ele sempre ia onde tinha valsa.', 'marlene');
+      await say('Mas essa banda só toca marcha. Faz dias. O maestro não deixa parar.', 'marlene');
+      return;
+    }
+    if (f.maestroDone && tunes().includes('valsa')) { await say('A valsa! Eu ouvi a valsa! ...Mas cadê o Valdir? Toca de novo, mocinho, toca perto do coreto.', 'marlene'); return; }
+    await say('O maestro fica lá em cima do coreto. Alguém tinha que fazer aquele homem descansar.', 'marlene');
+  },
+  async valdir6() {
+    const f = G.flags;
+    if (f.marleneFate) { await say(f.marleneFate === 'junto' ? '* O Seu Valdir dorme de novo, com a Dona Marlene sentada no casco dele, lendo em voz alta.' : '* O Seu Valdir dorme tranquilo. Ele sabe que ela foi. Ele confia.'); return; }
+    if (!tunes().includes('valsa')) {
+      await say('* Embaixo do coreto sai uma cabeça de jabuti do tamanho de um sofá, com sobrancelhas brancas e grossas. Ele ronca.');
+      await say('Zzz... Marlene... a valsa... zzz...', 'valdir');
+      await say('O coreto tá em cima dele. Ele virou o coreto, baú. O lugar onde eles se conheceram.', 'lume');
+      return;
+    }
+    await say('* O jabuti ronca. A Lume flutua até perto das sobrancelhas dele.');
+    const c = await choose('* Tocar a Valsa do Coreto para o Seu Valdir?', ['Tocar', 'Depois'], 'n', 1);
+    if (c !== 0) return;
+    const ok = await playTune('valsa'); if (!ok) return;
+    playMusic('valsa');
+    await say('* O jabuti abre um olho. Depois o outro. A praça inteira parece segurar a respiração.');
+    await say('...Marlene?', 'valdir');
+    await say('* Do banco, a Dona Marlene levanta tão rápido que um bobe voa longe.');
+    await say('VALDIR! Seu velho teimoso! Eu desci três andares atrás de você!', 'marlene');
+    await say('...Você... pisou... no meu pé. Na primeira valsa.', 'valdir');
+    await say('Quem pisou foi VOCÊ!', 'marlene');
+    await say('* Os dois riem. O riso dele é tão lento que termina depois do dela.');
+    await say('Valdir Souza. Banco quatro. Marido. Lembro.', 'valdir');
+    f.soul_valdir = 'lembrou'; f.soul_marlene = 'lembrou';
+    await say('* Mas o chão treme. A faixa amarela começa a puxar a praça inteira para o sul, devagar, como uma toalha de mesa.');
+    await say('Eu não saio daqui, Marlene. Eu sou o coreto agora. Se eu sair, a praça cai.', 'valdir');
+    await say('Vai com eles. Vai com o menino. Ele vai precisar de alguém que saiba segurar uma espada.', 'valdir');
+    await say('Cinquenta e dois anos e você ainda quer mandar em mim.', 'marlene');
+    const c2 = await choose('* O que dizer para a Dona Marlene?', ['"Fica com ele."', '"Vem com a gente."'], 'n');
+    if (c2 === 0) {
+      f.marleneFate = 'junto';
+      await say('Fica com ele, Dona Marlene. A gente cuida do resto.', 'me');
+      await say('...Obrigada, querido. Eu já ia ficar de qualquer jeito. Mas é bom quando alguém concorda.', 'marlene');
+      await say('* Ela sobe no casco dele e senta embaixo do coreto, de espada no colo. A banda, sem maestro, toca a valsa mais uma vez, só para os dois.');
+    } else {
+      f.marleneFate = 'conosco'; f.marleneGone = true;
+      await say('Vem com a gente, Dona Marlene. O Seu Valdir tem razão.', 'me');
+      await say('* Ela olha para ele por muito tempo. Ele faz que sim com a cabeça, devagar, como tudo que ele faz.');
+      await say('Se eu voltar e você estiver dormindo, Valdir Souza, eu te acordo com a espada.', 'marlene');
+      await say('...Promete.', 'valdir');
+      await say('* Ela beija a testa dele, ajeita os bobes e anda até você, com a espada no ombro.');
+      await say('Vamos, mocinho. Quem vai na frente sou eu.', 'marlene');
+    }
+    refreshEnts(); playMusic(WD.map.music); saveGame();
+  },
+  async maestro6() {
+    const f = G.flags;
+    if (f.maestroDone) return;
+    if (!f.maestroSeen) {
+      f.maestroSeen = true; playMusic(null);
+      await say('* No alto do coreto, um homem de farda de banda, encharcado, de batuta na mão. Ele não para de reger.');
+      await say('Fora do compasso! Quem está fora do compasso?!', 'maestro');
+      await say('Maestro, a banda tá cansada. O senhor tá tocando há quanto tempo?', 'me');
+      await say('Desde terça. A praça afundou numa terça, no meio da valsa. Eu levantei a batuta e não abaixei mais.', 'maestro');
+      await say('Teodoro Prates, regente da Banda Municipal de Velhágua há quarenta anos. Se a música parar, a praça acaba. Entendeu? ACABA.', 'maestro');
+      await say('Às vezes as coisas precisam acabar pra poder descansar.', 'lume');
+      await say('...Uma lustre falando de descanso. Fora do compasso! FORA!', 'maestro');
+    } else await say('Tempo! Um, dois, três!', 'maestro');
+    const r = await battle(['maestro', 'musico'], { boss: true, music: 'boss6', noFlee: true, intro: '* O Maestro Afogado ergue a batuta. A banda inteira obedece!' });
+    if (r !== 'win') return;
+    f.maestroDone = true; refreshEnts(); playMusic(null);
+    await say('* A batuta cai e quica no piso do coreto. Pela primeira vez em muitos dias, a praça fica em silêncio.');
+    await say('* E a praça não acaba.');
+    await say('...Ela continua aqui.', 'maestro');
+    await say('* O Maestro olha para a banda. Os músicos baixam os instrumentos, um por um, e se sentam no chão do coreto, exaustos.');
+    await say('Uma última, maestro. Mas a que a gente quiser.', 'lume');
+    await say('* Ele levanta a batuta devagar. A banda toca uma valsa. A Valsa do Coreto. A Lume flutua no meio deles, gravando cada nota.');
+    playMusic('valsa'); learnTune('valsa'); sfx('rune');
+    await say('* A Lume aprendeu a {p}Valsa do Coreto{/}!');
+    await say('Se você subir, menino... lá pra cima, pra Velhágua de verdade... diga que a banda tocou até o fim. Diga que ninguém saiu do compasso.', 'maestro');
+    await say('* Ele se deita no chão do coreto, de farda molhada, e fecha os olhos. A banda some com ele, devagar, como bruma no sol.');
+    G.flags.maestroBaton = true;
+    await giveRune('coro', false, 1);
+    await say('* Você guardou a {y}Batuta do Maestro{/}. Ela ainda está morna.');
+    playMusic(WD.map.music); saveGame(); await checkEvo();
+  },
+  // ---------- PORTA FINAL ----------
+  async portaFinal() {
+    const f = G.flags, k = tunes(), need = ['pregao', 'recreio', 'valsa'];
+    if (f.finalOpen) return;
+    await say('* Uma porta de luz branca no fim da rua. Ela vibra em três tons diferentes, um depois do outro.');
+    const miss = need.filter(t => !k.includes(t));
+    if (miss.length) { await say(`Ela pede três músicas, baú. Faltam: ${miss.map(t => TUNES[t].name).join(', ')}.`, 'lume'); return; }
+    const pend = [];
+    if (f.soul_ozorio !== 'lembrou' && f.soul_ozorio !== 'perdido') pend.push('o Seu Ozório');
+    if (f.soul_neide !== 'lembrou') pend.push('a Profª Neide');
+    if (!soulOk('cida')) pend.push('a Dona Cida');
+    if (pend.length) { await say(`Baú... ${pend.join(', ')} ainda não ${pend.length > 1 ? 'lembraram' : 'lembrou'} quem ${pend.length > 1 ? 'são' : 'é'}. Se a gente passar por essa porta, a linha leva ${pend.length > 1 ? 'eles' : 'a pessoa'}.`, 'lume'); }
+    const c = await choose('* Tocar as três canções e abrir o caminho para o Ponto Final?' + (pend.length ? ' (Quem não lembrou será levado.)' : ''), ['Tocar', 'Ainda não'], 'n', 1);
+    if (c !== 0) return;
+    for (const t of need) { const ok = await playTune(t); if (!ok) { await say('* A porta perde o fio da música. Precisa recomeçar do zero.'); return; } }
+    if (f.soul_ozorio !== 'lembrou') f.soul_ozorio = 'perdido';
+    if (f.soul_neide !== 'lembrou') f.soul_neide = 'perdido';
+    if (!soulOk('cida')) f.soul_cida = 'perdida';
+    f.finalOpen = true; refreshEnts(); sfx('rune'); shake(10);
+    await say('* As três melodias se juntam numa só. A porta de luz se abre como a porta de um ônibus: com um suspiro.');
+    if (pend.length) await say(`* Ao longe, ${pend.join(', ')} ${pend.length > 1 ? 'começam' : 'começa'} a andar pela faixa amarela, para o sul, de olhos vazios.`);
+    await say('* A rua continua para o sul, dentro de uma neblina branca. No fim dela, um letreiro aceso: PONTO FINAL.');
+    saveGame();
+  },
+  // ---------- PONTO FINAL ----------
+  async pontofinalFirst() {
+    await wait(20);
+    await say('* Neblina. Um ponto de ônibus no meio do nada, com uma placa: PONTO FINAL. Não tem rua depois dele.');
+    await say('* Uma fila de passageiros sem rosto entra, um por um, num ônibus feito de névoa.');
+    const lost = [];
+    if (G.flags.soul_ozorio === 'perdido') lost.push('um avental de pasteleiro');
+    if (G.flags.soul_neide === 'perdido') lost.push('um coque grisalho e uma régua');
+    if (G.flags.soul_cida === 'perdida') lost.push('um guarda-chuva com cabo de gato');
+    if (lost.length) await say(`* Na fila, você reconhece ${lost.join(', ')}.`);
+    await say('* Na frente da fila, alguém de capa de chuva confere os bilhetes. Ele usa o quepe do Seu Jorge.');
+  },
+  async fila6() {
+    await say(pickOne(['* Um passageiro sem rosto segura uma sacola de feira vazia. Ele não olha para você.', '* Uma passageira sem rosto tem um crachá: "TELEMARKETING — PRAZER, MEU NOME É". O resto está em branco.', '* Um passageiro sem rosto cantarola uma música que você quase reconhece.']));
+  },
+  async p32() {
+    const f = G.flags;
+    if (f.p32Done) return;
+    if (!f.p32Seen) {
+      f.p32Seen = true; playMusic(null);
+      await say('* A figura de capa de chuva vira para você. Embaixo do capuz não tem rosto. Só escuro e um bilhete pendurado no peito: 32.');
+      await say('Segura firme, que a próxima é longa.', 'p32');
+      await say('* É a voz do Seu Jorge. Depois, a voz muda.');
+      await say('Olha o pastel, três e cinquenta.| Copiem cem vezes.| Quem pisou foi VOCÊ.', 'p32');
+      await say('Por que você fala com a voz deles?', 'me');
+      await say('Porque é minha. Tudo que vocês largam no banco do ônibus fica comigo. O guarda-chuva. O nome dos alunos. O gosto do pastel.', 'p32');
+      await say('Eu sou feito do que vocês esqueceram. Eu sou o passageiro trinta e dois. O que faltava pra coleção.', 'p32');
+      await say('Ela me costurou com as suas sobras. E quando a fila entrar, a coleção fecha.', 'p32');
+      if (f.marleneFate === 'conosco') await say('Sobra é o seu casaco, rapaz. Sai da frente que eu tenho setenta e oito anos e uma espada.', 'marlene');
+      await say('Baú. Tem uma coisa minha naquele casaco. Eu sinto.', 'lume');
+    } else await say('Bilhete, por favor.', 'p32');
+    const r = await battle(['p32'], { boss: true, music: 'boss6', noFlee: true, intro: '* O Passageiro 32 ergue a alça do ônibus!' });
+    if (r !== 'win') return;
+    f.p32Done = true; refreshEnts();
+    await STORY.p32End();
+  },
+  async p32End() {
+    const f = G.flags; playMusic('pontofinal');
+    await say('* O casaco de chuva se rasga nas costuras. De dentro dele saem luzes pequenas, de todas as cores, como vaga-lumes.');
+    await say('* As luzes voam de volta para os donos. Um quepe sobe pela névoa, procurando alguém. Um guarda-chuva se abre sozinho.');
+    if (soulsCount() > 4) await say('* Na fila, alguns passageiros sem rosto param. Um deles toca o próprio rosto, como quem procura os óculos.');
+    await say('* Duas luzes ficam para trás, girando em volta da sua tampa. Elas estão enroscadas uma na outra.');
+    await say('* Uma é quente e amarela, e cheira a óleo de feira. Você sabe o que é antes de tocar: o gosto do pastel de queijo. Segunda de manhã. Três e cinquenta.');
+    await say('* A outra é pequena e azul, e vibra como uma corda. É o pedaço que faltava da música da Lume. O final.');
+    await say('* As duas estão enroscadas. Se você puxar uma, a outra escorrega para o fundo e some.');
+    await say('...Pega a sua, baú. É sua. Você pagou por ela.', 'lume');
+    const c = await choose('* Qual lembrança você segura?', ['O sabor do pastel (sua)', 'O final da canção (da Lume)'], 'n');
+    if (c === 0) {
+      f.ch6Gift = 'pastel'; delete f.mem_pastel; f.pastelBack = true;
+      await say('* Você abre a tampa e a luz amarela entra.');
+      await say('* Queijo derretido que queima o céu da boca. Massa que estala. O Seu Ozório gritando "cuidado que tá quente!" toda segunda, e você nunca tomando cuidado.');
+      await say('...Eu lembro. Eu lembro do gosto.', 'me');
+      await say('* A luz azul escorrega e afunda na névoa, devagar, como uma nota que acaba.');
+      await say('Que bom, baú. De verdade. Eu canto do jeito que eu sempre cantei. Ninguém nunca reclamou.', 'lume');
+    } else {
+      f.ch6Gift = 'cancao';
+      await say('* Você empurra a luz azul na direção da Lume. A amarela escorrega e afunda na névoa, cheirando a feira.');
+      await say('Baú... não. Era sua...', 'lume');
+      await say('Eu já sei que eu gostava de pastel. Você nunca soube como a sua música termina.', 'me');
+      await say('* A luz entra na Lume. O lustre inteiro acende de um jeito que você nunca viu.');
+      await say('* Ela canta. A música do fundo do ônibus. Até o fim, pela primeira vez. Termina numa nota alta e comprida, que parece uma porta se abrindo.');
+      await say('...Era assim. Era assim que terminava.', 'lume');
+      await say('Eu fiz pra minha irmã mais nova dormir. Eu tinha esquecido dela também.| Ela se chama Lívia.', 'lume');
+    }
+    await wait(30); shake(30); sfx('rumble');
+    await say('* O ônibus de névoa se desfaz. A fila de passageiros sem rosto continua andando, para baixo, por uma escada que não estava ali.');
+    await say('* No fim da escada, uma porta redonda, enorme, de pedra. Ela tem trinta e uma fechaduras.');
+    await say('* Estacionado na frente da porta, com as luzes acesas e o motor ligado, o 31.');
+    if (f.tiagoTaken) await say('* Pela janela do ônibus, você vê o Seu Jorge e o Tiago, sentados lado a lado. Eles não se mexem.');
+    else await say('* Pela janela do ônibus, você vê o Seu Jorge no banco do motorista, com as mãos no volante. Ele não se mexe.');
+    await say('* Do outro lado da porta, alguém bate. Três vezes.');
+    await say('OBRIGADA POR ORGANIZAR A FILA, TRINTA E UM.', 'fundo');
+    await say('[Coleção: ' + (31 - Math.max(0, soulsCount() - 1)) + ' de 31 almas na porta.]', 'cat');
+    await say('* Atrás de você, passos. Muitos.');
+    await say('PEQUENO BAÚ. A RESISTÊNCIA DESCEU.', 'musgo');
+    const allies = ['ratos-de-vela, cogumelos e lodos de tinta, de vela acesa'];
+    if (f.dateDone) allies.push('a Rita, de armadura sem brasão');
+    if (f.aprendizesDone || f.free_pip) allies.push('Pip, Nina e Tolo, de escudo erguido');
+    if (soulOk('cida')) allies.push('a Dona Cida, de guarda-chuva');
+    if (f.dudaMet) allies.push('a Duda, com a espada no ombro');
+    if (f.soul_ozorio === 'lembrou') allies.push('o Seu Ozório, com o caderno debaixo do braço');
+    if (f.soul_neide === 'lembrou') allies.push('a Profª Neide, de régua na mão');
+    await say(`* Atrás do Musgo: ${allies.join('; ')}.`);
+    await say('Cada um de vocês que lembrou do próprio nome tem um bilhete carimbado. Eu sinto daqui.', 'lume');
+    await say('Trinta e uma fechaduras.| Trinta e um bilhetes.| Ela quer que a gente abra essa porta.', 'me');
+    await say('Ou quer que a gente fique com medo de abrir.', 'lume');
+    await endScreen(6);
+    f.ch6done = true;
+    saveGame();
+  }
+});
+// primeiras visitas, gatilhos de chefes e portas
+{ const _f = { feira: 'feiraFirst', escola: 'escolaFirst', coreto: 'coretoFirst', pontofinal: 'pontofinalFirst' };
+  const _oe = onEnter; onEnter = async function (id) { await _oe(id); if (_f[id] && !G.flags['seen_' + id]) { G.flags['seen_' + id] = true; await STORY[_f[id]](); } }; }
+{ const _os = STORY.onStep3; STORY.onStep3 = function () {
+  if (_os && _os()) return true;
+  if (WD.id === 'coreto' && !G.flags.maestroDone && WD.y <= 5 && WD.x >= 10 && WD.x <= 16) { runScript(STORY.maestro6); return true; }
+  if (WD.id === 'pontofinal' && !G.flags.p32Done && WD.y >= 8 && WD.x >= 8 && WD.x <= 14) { runScript(STORY.p32); return true; }
+  return false; }; }
+// fim de capítulo
+{ const _es = endScreen; endScreen = function (ch) { if (ch !== 6) return _es(ch); playMusic('ending');
+    const w = { type: 'end', t: 0, update() { this.t++; if (this.t > 90 && btnp('a')) { sfx('select'); closeWin(this); } },
+      draw() { bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H); const a = Math.min(1, this.t / 60);
+        bx.globalAlpha = a; bx.drawImage(SP[spec().sp][0], 96, 22, 48, 48); bx.globalAlpha = 1;
+        txt('FIM DO CAPÍTULO 6', 120, 80, { align: 'center', sz: 1.5, col: '#ffe066', alpha: a });
+        txt('Almas do 31', 120, 100, { align: 'center', col: '#b8aecb', alpha: a });
+        const L = [`${G.name} · ${spec().name} nv ${G.lv}`, `Almas que lembraram: ${soulsCount()} · Lembranças acalmadas: ${G.flags.calmed || 0}`, `Tempo: ${fmtTime(G.time)}`, G.flags.ch6Gift === 'cancao' ? 'A Lume cantou a música até o fim' : 'Você lembrou do gosto do pastel', G.flags.marleneFate === 'junto' ? 'Marlene ficou com o Valdir' : 'Marlene veio com você'];
+        L.forEach((l, i) => txt(l, 120, 120 + i * 12, { align: 'center', col: i >= 3 ? '#8fe3ff' : '#ffffff', alpha: clamp((this.t - 40) / 40, 0, 1) }));
+        txt('Próximo: Capítulo 7 — O Selado', 120, 190, { align: 'center', col: '#8fe3ff', alpha: clamp((this.t - 70) / 40, 0, 1) });
+        if (this.t > 90 && FRAME % 50 < 34) txt('A para continuar', 120, 214, { align: 'center', col: '#8a8099' }); } };
+    return openWin(w); }; }
+// título, capítulo do save e retrato da Lume no fim
+{ const _co = chapterOf; chapterOf = function (d) { const f = (d && d.flags) || {}; return f.ch6open ? 6 : _co(d); }; }
 
 boot();
 </script>

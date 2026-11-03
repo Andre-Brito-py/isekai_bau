@@ -6,7 +6,8 @@ const BG_OF = {
   mercado: 'mercado', acampamento: 'acampamento', teatro: 'teatro', ponte: 'ponte',
   escadaria3: 'fortaleza', muralhas: 'fortaleza', patio: 'acampamento', jaula: 'jaula', scriptorium: 'scriptorium',
   devolucao: 'arquivo', achados: 'arquivo', fundo: 'arquivo', estrada: 'estrada', correio: 'correio',
-  terminal: 'terminal', manobras: 'terminal', garagem: 'garagem', trincheira: 'trincheira', oficina: 'trincheira'
+  terminal: 'terminal', manobras: 'terminal', garagem: 'garagem', trincheira: 'trincheira', oficina: 'trincheira',
+  padaria: 'padaria', feira: 'feira', escola: 'escola', coreto: 'coreto', pontofinal: 'pontofinal'
 };
 // d = sombra, m = meio, b = brilho, a = acento, f = chão
 const BG_PAL = {
@@ -25,7 +26,12 @@ const BG_PAL = {
   correio: { d: '#0e0a1a', m: '#2a1e48', b: '#6a8ae0', a: '#ff6b6b', f: '#18122c' },
   terminal: { d: '#0e0c08', m: '#3a3018', b: '#d0a030', a: '#ff8030', f: '#1c1810' },
   garagem: { d: '#0c0a0e', m: '#2e2632', b: '#a088b0', a: '#ffd040', f: '#1a161c' },
-  trincheira: { d: '#100c06', m: '#3a2a12', b: '#a88040', a: '#ff6030', f: '#1c160c' }
+  trincheira: { d: '#100c06', m: '#3a2a12', b: '#a88040', a: '#ff6030', f: '#1c160c' },
+  padaria: { d: '#140c1a', m: '#3a2448', b: '#e08a5a', a: '#ffd090', f: '#1e1426' },
+  feira: { d: '#0c1408', m: '#2a4418', b: '#e0a030', a: '#ff6a4a', f: '#16200e' },
+  escola: { d: '#08140e', m: '#1a3a2a', b: '#6ac89a', a: '#e8e4dc', f: '#0e1e16' },
+  coreto: { d: '#0a0e1e', m: '#1e2a4e', b: '#8aa0e0', a: '#ffb0d8', f: '#121830' },
+  pontofinal: { d: '#08080c', m: '#1e2230', b: '#8a9ab8', a: '#ffe066', f: '#0e1018' }
 };
 const BGC = {};
 function bgRand(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
@@ -133,6 +139,42 @@ function bgPaint(k) {
       for (let i = 0; i < 240; i += 3) { r(i, 34 + Math.round(Math.sin(i * 0.4) * 2), 1, 1, P.b); if (i % 18 === 0) { line(i, 31, i + 3, 37, P.b); line(i + 3, 31, i, 37, P.b); } }
       for (let row = 0; row < 3; row++) for (let i = -(row % 2) * 9; i < 240; i += 18) { const sy = SKY - 8 - row * 7; ell(i + 8, sy, 9, 4, P.m); r(i + 1, sy - 4, 15, 1, P.b); r(i + 7, sy - 1, 2, 1, P.d); }
       for (const gx of [60, 180]) { for (let a = 0; a < 8; a++) { const t = a / 8 * Math.PI * 2; r(gx + Math.cos(t) * 8, 20 + Math.sin(t) * 8, 3, 3, P.d); } ell(gx, 20, 6, 6, P.d); ell(gx, 20, 2, 2, P.a); }
+      break;
+    }
+  }
+  switch (k) {
+    case 'padaria': {
+      for (let i = 0; i < 14; i++) { x.globalAlpha = 0.5 - i * 0.03; r(0, i * 3, 240, 3, i < 6 ? '#2a1a3a' : '#5a2a4a'); } x.globalAlpha = 1;
+      for (let i = 0; i < 6; i++) { const bxp = i * 42 - 6, bh = 30 + (i % 3) * 10; block(bxp, SKY - bh, 38, bh, P.d, P.m); for (let wy = SKY - bh + 5; wy < SKY - 8; wy += 9) for (let wx = bxp + 4; wx < bxp + 34; wx += 9) r(wx, wy, 5, 5, R() < 0.4 ? P.a : '#1a1020'); }
+      block(84, SKY - 34, 72, 34, '#3a2030', P.b); r(90, SKY - 30, 60, 8, '#1a1020'); r(94, SKY - 28, 52, 4, P.a); r(92, SKY - 18, 26, 18, '#ffd090'); r(126, SKY - 18, 22, 12, '#1a1020'); for (let i = 0; i < 4; i++) r(130 + i * 4, SKY - 14, 2, 2, '#e8b860');
+      r(30, SKY - 22, 30, 3, '#3a70c0'); r(32, SKY - 19, 1, 19, '#9aa0aa'); r(57, SKY - 19, 1, 19, '#9aa0aa'); x.globalAlpha = 0.3; r(33, SKY - 19, 24, 12, '#bfe8f0'); x.globalAlpha = 1;
+      break;
+    }
+    case 'feira': {
+      for (let i = 0; i < 6; i++) { const sx = i * 42 - 8; const cols = [['#c83838', '#f2ecdc'], ['#3a70c0', '#f2ecdc'], ['#4a9a4a', '#f0c040'], ['#f07830', '#fff4c0']][i % 4]; r(sx, 20, 40, 14, '#07050c'); for (let j = 0; j < 40; j += 5) r(sx + j, 21, 5, 10, (j / 5) % 2 ? cols[1] : cols[0]); r(sx + 2, 34, 2, SKY - 34, P.m); r(sx + 36, 34, 2, SKY - 34, P.m); r(sx + 4, SKY - 14, 32, 10, '#5a3420'); for (let j = 0; j < 7; j++) r(sx + 6 + j * 4, SKY - 17, 3, 3, ['#f07830', '#4a9a4a', '#c83838', '#f0c040', '#e86890'][j % 5]); }
+      for (let i = 0; i < 12; i++) { const fx0 = R() * 240; line(fx0, 0, fx0 + 10, 18, '#3a3448'); r(fx0 + 10, 18, 2, 2, ['#f0c040', '#e86890', '#7ad0f0'][i % 3]); }
+      break;
+    }
+    case 'escola': {
+      block(0, 4, 240, SKY - 4, P.d, P.b); for (let i = 0; i < 4; i++) { const lx = 16 + i * 58; r(lx, 12, 44, 26, '#120e14'); r(lx + 1, 13, 42, 24, '#1f3a2a'); r(lx + 4, 17, 20, 1, '#9ab8a8'); r(lx + 4, 22, 30, 1, '#9ab8a8'); r(lx + 4, 27, 14, 1, '#9ab8a8'); r(lx, 38, 44, 2, '#7a4a2a'); }
+      for (let i = 0; i < 20; i++) r(i * 12 + 2, SKY - 16, 10, 16, ['#3a70c0', '#4a9a4a', '#c8962a', '#c83838'][i % 4]); for (let i = 0; i < 20; i++) { r(i * 12 + 4, SKY - 12, 6, 1, '#120e14'); r(i * 12 + 8, SKY - 8, 1, 2, '#e8e4dc'); }
+      r(108, 2, 24, 8, '#e8e4dc'); r(119, 3, 1, 4, '#120e14'); r(119, 6, 4, 1, '#120e14');
+      break;
+    }
+    case 'coreto': {
+      for (let i = 0; i < 40; i++) bgSpark(x, Math.round(R() * 240), Math.round(R() * 40), P.m);
+      for (const tx of [14, 52, 188, 226]) { ell(tx, 30, 16, 12, '#14301e'); ell(tx - 3, 27, 9, 6, '#24482e'); r(tx - 2, 40, 4, SKY - 40, '#2a1a10'); }
+      ell(120, SKY - 2, 52, 6, '#3a4a2a'); ell(120, SKY - 4, 46, 5, '#5a7a3a');
+      r(80, SKY - 30, 80, 24, '#07050c'); for (let i = 0; i < 9; i++) r(82 + i * 9, SKY - 28, 2, 22, '#e8e4dc'); r(78, SKY - 8, 84, 3, '#c8962a'); r(78, SKY - 30, 84, 3, '#c8962a');
+      for (let i = 0; i < 26; i++) { const hw = Math.round(i * 1.8); r(120 - hw, SKY - 56 + i, hw * 2, 1, i % 6 === 0 ? P.b : P.m); } r(118, SKY - 62, 4, 6, '#c8962a');
+      for (const lx of [62, 178]) { r(lx, 20, 2, SKY - 20, '#3a3448'); ell(lx + 1, 18, 4, 4, '#3a3448'); ell(lx + 1, 18, 2, 2, '#ffe9a0'); x.globalAlpha = 0.12; ell(lx + 1, 18, 12, 12, '#ffe9a0'); x.globalAlpha = 1; }
+      break;
+    }
+    case 'pontofinal': {
+      for (let i = 0; i < 8; i++) { x.globalAlpha = 0.18; ell(30 + i * 30, 26 + (i % 3) * 8, 28, 10, P.m); } x.globalAlpha = 1;
+      r(150, SKY - 30, 80, 26, '#07050c'); x.globalAlpha = 0.5; r(151, SKY - 29, 78, 24, '#3a4a5a'); x.globalAlpha = 1; for (let i = 0; i < 6; i++) r(156 + i * 12, SKY - 26, 8, 8, '#1a2030'); r(150, SKY - 12, 80, 3, '#3a70c0'); r(208, SKY - 36, 22, 6, '#2a1a10'); r(212, SKY - 35, 14, 4, P.a);
+      for (let i = 0; i < 8; i++) { const fx0 = 140 - i * 16, fh = 14 + (i % 3) * 2; x.globalAlpha = 0.85 - i * 0.08; r(fx0, SKY - fh, 8, fh, '#2a3240'); ell(fx0 + 4, SKY - fh - 3, 3, 3, '#2a3240'); x.globalAlpha = 1; }
+      r(20, SKY - 30, 2, 30, '#5a6070'); r(14, SKY - 34, 14, 6, '#e8e4dc'); r(16, SKY - 32, 10, 1, '#3a3448'); r(16, SKY - 30, 6, 1, '#c83838');
       break;
     }
   }

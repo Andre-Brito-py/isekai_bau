@@ -119,6 +119,69 @@
   - GANCHO CAP. 6 "Almas do 31": juntar as almas do ônibus espalhadas pela masmorra (Dona Cida nº 7, Lume
     nº 12, os heróis do Andar 3, o Musgo como aliado) para ir buscar o 31 antes que a coleção se complete.
 
+  CAPÍTULO 6 — "ALMAS DO 31" (feito; data6.js + maps6.js gerado por build/ch6/maps6.py)
+  Tema: o que você esquece não some; vira parte da masmorra. Lembrar quem se é = não poder ser colecionado.
+  REGRA NOVA DO MUNDO: a VOZ puxa pela LINHA 31 as almas do ônibus que esqueceram quem eram (DESBOTADAS) para o
+  Ponto Final. Quem LEMBRA do próprio nome resiste (prova: a Dona Cida, com os óculos, não foi puxada).
+  Início: a mancha de óleo na Garagem (cond ch5done) vira uma FAIXA AMARELA; o bilhete 31 brilha e o chão afunda.
+  A masmorra montou o TRAJETO DO 31 com a memória de cada passageiro. Mapas (itinerário):
+  1) PONTO DA PADARIA (hub; a parada do PROTAGONISTA, feita da memória dele, com pedaços borrados pelo que ele já
+     perdeu; Lanterna; quadro de itinerário: Feira, Escola, Coreto, Ponto Final). O caminho para o Ponto Final é
+     uma PORTA DE MEMÓRIA que só abre com as três canções de parada ("só passa quem sabe o caminho de cor").
+  2) FEIRA DE SEGUNDA (memória da DONA CIDA, nº 7, e do SEU OZÓRIO, nº 9, pasteleiro). Cida desce pela linha e
+     resiste; vira guia. Ozório virou TACHO FERVENTE, repete "Olha o pastel, três e cinquenta!". Memória perdida:
+     o CADERNO DE FIADO (dívida do protagonista: dois pastéis de queijo; última página: desenho da filha, BIA).
+     Com o caderno: ele LEMBRA (soul_ozorio='lembrou'), ensina o PREGÃO DA FEIRA e dá pastéis. Sem o caderno: luta
+     contra o Tacho; ele desbota e segue para o Ponto Final ('perdido'); o papagaio dele repete o pregão.
+  3) ESCOLA ESTADUAL (memória da PROFª NEIDE, nº 15). Mecânica CHAMADA: portas de sala perguntam o banco de cada
+     passageiro (Cida 7, Ozório 9, Lume 12, Neide 15, Duda 22, Tiago 30, Jorge 0); errar chama um Bedel. A última
+     porta pergunta "Quem é você?" e a resposta certa é o NOME do jogador (não "alma 31", não "um baú").
+     Neide virou a DIRETORA DE GIZ que obriga alunos desbotados a copiar para sempre. Memória: DIÁRIO DE CLASSE
+     (nomes dos alunos e o dela na capa). Lembrou = ensina SINAL DO RECREIO e a técnica CHAMADA. Senão, o sinal sai
+     do sino do pátio depois da última porta. DUDA, nº 22, 17 anos, heroína invocada que desertou, se esconde no
+     banheiro da escola: conta que os heróis do Andar 3 estão sendo puxados também (ela lembra; não corre perigo).
+  4) CORETO DA PRAÇA (o coreto que Velhágua perdeu, com a banda dentro: prova de que a masmorra agora come a
+     superfície). SEU VALDIR, nº 4, virou o JABUTI DO CORETO (o coreto está no casco dele: ele virou o lugar onde
+     dançaram). DONA MARLENE, nº 5, 78 anos, heroína invocada de bobes e espada, procura o marido. Mini-chefe
+     MAESTRO AFOGADO (morador de Velhágua; mantém a banda tocando para a praça nunca acabar). Vencido, a banda toca
+     a VALSA DO CORETO uma última vez; a Lume aprende; tocar a valsa acorda o Valdir. ESCOLHA: Valdir não sai do
+     lugar (ele É o coreto) e pede que levem a Marlene; ela quer ficar. marleneFate 'junto' (os dois ficam,
+     lembrados) ou 'conosco' (ela vem e luta ao seu lado no Ponto Final; o Valdir fica sozinho, em paz).
+  5) PONTO FINAL (chefe O PASSAGEIRO 32). Uma fila de passageiros desbotados entra num ônibus de névoa. O 32 é uma
+     figura de capa de chuva costurada com tudo o que os passageiros ESQUECERAM (o quepe do Jorge, a valsa, o
+     sabor do pastel...). Fala com frases roubadas. Fases: BILHETERIA (devolve o seu último feitiço contra você),
+     LOTAÇÃO (chama os desbotados como golpes; cada alma que você fez lembrar responde "Presente!" e bloqueia um),
+     COLEÇÃO (sequência de memória longa). Vencido, vira luzes que voltam aos donos.
+     ESCOLHA FINAL: duas luzes emaranhadas, só dá para segurar uma: O SABOR DO PASTEL (sua memória) ou O FIM DA
+     CANÇÃO DA LUME (ela canta a música do título a vida toda sem lembrar como termina). ch6Gift 'pastel'|'cancao'.
+  - GANCHO CAP. 7 "O Selado": a linha desce até uma porta redonda com 31 fechaduras. O 31 está estacionado na
+    frente, com os desbotados dentro (e o Jorge, e o Tiago se foi junto). Do outro lado, alguém bate três vezes.
+    A VOZ: "Obrigada por organizar a fila, trinta e um." O Musgo chega com a resistência; a Rita e os aprendizes
+    também, se você os ajudou. Os bilhetes carimbados (almas que lembraram) são chaves.
+  - MECÂNICAS: CANÇÕES (mapa): a Lume toca melodias (sequência de setas) em PORTAS DE MEMÓRIA; G.tunes guarda as
+    aprendidas (onibus, pregao, recreio, valsa). ACALMAR (batalha): Lembranças têm "calma" (Avaliar mostra o
+    elemento); feitiço do elemento certo enche a calma (CANTO enche em dobro); cheia = o inimigo vai embora em
+    paz (conta como vitória, G.flags.calmed). CHAMADA (história).
+  - RUNAS: CANTO (elemento incomum, rosa: acalma em dobro, 20% de encantar; Véu = Coro, cura 6%/turno por 3),
+    CORO (forma rara: todos os inimigos, mais forte para cada alma do 31 reunida), BILHETE (mod raro: o próximo
+    golpe inimigo contra você sai pela metade). Itens: Pastel de Feira, Caldo de Cana, Cordinha de Parada (fuga).
+  - Almas reunidas (contam para CORO, Chamada e o chefe): Lume, Cida, Tiago (se ficou), Ozório, Neide, Duda,
+    Marlene/Valdir. soulOk(k)/soulsCount()/lostSouls(); flags soul_ozorio/soul_neide/soul_cida ('lembrou'|'perdido').
+  - FATOS: OZÓRIO FERREIRA, pasteleiro, banco 9, filha BIA (ficou na Terra); o protagonista deve 2 pastéis de
+    queijo (anotado). NEIDE APARECIDA LINS, português, banco 15, levava 32 redações para corrigir. DUDA = MARIA
+    EDUARDA, 17, banco 22, Rua das Acácias 40, portão verde; heroína desertora. MARLENE (banco 5) e VALDIR SOUZA
+    (banco 4), casados há 52 anos; ele virou o jabuti do coreto. MAESTRO TEODORO PRATES, Banda Municipal de
+    Velhágua: "diga que a banda tocou até o fim" (G.flags.maestroBaton = gancho da T2 em Velhágua). LUME tem uma
+    irmã mais nova, LÍVIA; a música do título foi feita para ela dormir (só revelado se ch6Gift='cancao').
+  - As portas da padaria: a cena da Porta Final avisa quem ainda não lembrou e sela o destino (vira 'perdido').
+  - Balanceamento (piloto, Desafio): ver build/test17.py (argumento extra = caminho "perdido", luta contra o Tacho).
+  GANCHOS PARA O CAP. 7 "O SELADO": a Porta Redonda com 31 fechaduras no fim da escada do Ponto Final; o 31
+  estacionado (Jorge ao volante; Tiago junto se tiagoTaken); algo bate do outro lado três vezes; a Voz agradece por
+  "organizar a fila". A resistência desceu (Musgo, monstros, Rita se dateDone, aprendizes, almas que lembraram).
+  Bilhetes carimbados = chaves. Dilema: abrir (o que está selado sobe com eles) ou manter fechada (a coleção fica
+  presa para sempre). 5º grau (Arca da Origem / Mímico Vazio) entra aqui. Pagar o fiado do Ozório (piada que vira
+  cena). Se ch6Gift='cancao', a canção completa da Lume tem efeito no Cap. 8.
+
   HUMANIDADE E HUMOR (humor.js; vale para todos os capítulos)
   O baú foi uma pessoa comum e isso tem que aparecer: ele CORA (blush(): tampa rosada, vapor e coração no
   mapa) perto de mulheres que acha bonitas, fica sem jeito, lembra de besteiras da vida (suculenta Gerson,

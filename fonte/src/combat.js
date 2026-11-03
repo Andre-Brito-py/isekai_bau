@@ -122,7 +122,13 @@ const ST_TXT = {
   silence: 'Você foi {p}silenciado{/}: não pode usar magia no próximo turno.',
   blind: 'Você está {c}cego de tinta{/}: a próxima mordida fica mais difícil.'
 };
-function giveStatus(st, turns = 3) {
+// a cegueira diz de onde veio: tinta, luz, sombra ou sal
+function blindTxt(mv) {
+  const by = (mv && mv.blindBy) || (mv && mv.el === 'sombra' ? 'sombra' : mv && mv.el === 'sal' ? 'sal' : mv && /luz|clarão|farol/i.test(mv.t || '') ? 'luz' : 'tinta');
+  BT.blindBy = by;
+  return { tinta: 'Você está {c}cego de tinta{/}: a próxima mordida fica mais difícil.', luz: 'A luz te deixou {y}ofuscado{/}: a próxima mordida fica mais difícil.', sombra: 'A sombra cobriu seus olhos. Você está {p}no escuro{/}: a próxima mordida fica mais difícil.', sal: 'O sal ardeu nos seus olhos. Você está {w}cego de sal{/}: a próxima mordida fica mais difícil.' }[by];
+}
+function giveStatus(st, turns = 3, mv = null) {
   if (BT.saltCrust > 0) return 'A crosta de sal segurou o efeito. Nada pegou em você.';
   if (st === 'forget') {
     const pool = [...G.spells.map((s, i) => 'sp:' + i), ...(G.tech || []).filter(k => TECH[k]).map(k => 'tc:' + k)];
@@ -131,7 +137,7 @@ function giveStatus(st, turns = 3) {
     const nm = BT.forgot.startsWith('sp:') ? G.spells[+BT.forgot.slice(3)].name : TECH[BT.forgot.slice(3)].name;
     return `Você {c}esqueceu{/} como usar {y}${nm}{/} por 2 turnos.`;
   }
-  if (st === 'blind') { BT.inked = true; return ST_TXT.blind; }
+  if (st === 'blind') { BT.inked = true; return blindTxt(mv); }
   BT.ps = BT.ps || {}; BT.ps[st] = st === 'silence' ? 1 : turns; return ST_TXT[st];
 }
 function cureStatus() { BT.ps = {}; BT.inked = false; }
@@ -247,7 +253,7 @@ async function runMove(e, mv) {
       await bSay(`* ${mv.name ? mv.name + ': o' : 'O'} ${tgt.name} recuperou ${h} PV.`, { auto: 50 }); return;
     }
   }
-  if (mv.st && G.hp > 0 && (worst === 'fail' || (worst === 'good' && mv.st !== 'silence' && Math.random() < 0.4)) && !(mv.k === 'spell' && worst === 'perfect')) msg += '\n* ' + giveStatus(mv.st);
+  if (mv.st && G.hp > 0 && (worst === 'fail' || (worst === 'good' && mv.st !== 'silence' && Math.random() < 0.4)) && !(mv.k === 'spell' && worst === 'perfect')) msg += '\n* ' + giveStatus(mv.st, 3, mv);
   if (mv.drain && G.mp > 0 && worst !== 'perfect') { const l = Math.min(G.mp, mv.drain); G.mp -= l; msg += ` Você perdeu ${l} PM.`; }
   await bSay(msg, { auto: 50 });
 }
