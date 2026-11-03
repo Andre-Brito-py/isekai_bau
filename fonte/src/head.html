@@ -66,6 +66,35 @@
     Usar a Fita da Bibliotecária e o Cavaleiro como prova do passado dela. Os aprendizes da Brida (se
     salvos) podem reaparecer como aliados humanos. Dona Cida pode guiar até outras almas do 31.
 
+  CAPÍTULO 4 — "A PRIMEIRA VIAGEM" (feito; data4.js)
+  Início: CALHA DE DEVOLUÇÃO no Scriptorium (cond ch3done) -> cai na Biblioteca; Ofélia drena o canto sul
+  e viaja DENTRO da tampa do protagonista ("tecnicamente nunca sai de casa"; o Arquivo é o porão dela).
+  Escada da Maré -> Achados e Perdidos (hub; BENTO, caranguejo-ermitão num bule, ex-menino de recados da
+  carruagem; runa Sal) -> Estrada Afogada (3 lembranças da 1ª viagem; mini-chefe CARRUAGEM AFOGADA do cocheiro
+  ANSELMO, que chama Ofélia de "Dona Clara" ao morrer; Chave do Correio) -> Correio Submerso (Âncora, Maré,
+  cartas) -> Fundo do Arquivo (fichários das almas; gaveta da Brida; chefe CLARA, de Sal).
+  - Mecânica nova: MARÉ global (G.flags.tide, padrão alta). Sinos alternam. 'a' = piso que alaga na maré alta;
+    'b' = estante que boia (só passa na maré alta). Mapas validados por build/ch4/validate4.py (sem softlock;
+    sino nunca encosta em tile de maré).
+  - Combate: status ESQUECIMENTO (trava 1 feitiço/técnica por 2 turnos); SEQUÊNCIA DE MEMÓRIA (seq com hide:
+    setas somem); Clara PREVÊ a ação que você mais usa (BT.acts) e pune se você repetir; errar a leitura
+    faz ela perder o turno. Runas: SAL (incomum, corrói DEF; Véu = crosta contra status), ÂNCORA (forma rara,
+    fura casca/sumiço e afunda golpes preparados), MARÉ (mod raro, repete o feitiço a 60% no fim da rodada).
+    Itens: Biscoito de Água e Sal (cura status), Chá de Cidreira (PM), Sino de Bolso (desfaz preparações).
+    Técnica comum DEVOLVER AO REMETENTE (missão das 3 cartas do Bento): reflete o próximo feitiço defendido.
+  - Opcional: 5 Lembranças Perdidas (bilhete do 31 do protagonista; fone remendado da Lume = canções mais
+    fortes, G.flags.lumeFone; ferradura da égua Estrela; dente de leite do Bento; carta de "C." para Inês)
+    -> Fragmento + 2 Sinos + runa Foco. Pastel nº 31 (comer = G.flags.ateMemory / deixar = leftMemory).
+    Gaveta da Brida: levar o apito (bridaWhistle) ou deixar luz (bridaLight).
+  - FATOS: Ofélia é CLARA VENTURA, 26 anos, alma nº 1 da PRIMEIRA VIAGEM (carruagem, 12 pessoas, ~300 anos),
+    ia visitar a irmã INÊS; escolheu o nome Ofélia por causa do livro no colo (Hamlet, ato quatro).
+    Ela separou de si a parte que lembra (CLARA, de Sal), que virou a BOCA que dita o Catálogo; o Escriba é a
+    mão; a VOZ vem de mais fundo e falou pela 1ª vez: "Trinta e um. Você é o último que faltava na COLEÇÃO."
+    ESCOLHA: G.flags.ofeliaRemembers (true = Clara voltou e Ofélia lembra de tudo; false = Clara dorme).
+  - GANCHO CAP. 5: carta do Tiago: a guerra desceu do Andar 3; o recrutador é SEU JORGE, o MOTORISTA do 31
+    (quepe azul, molho de chaves no cinto). Espelho do cocheiro Anselmo ("levar todo mundo de volta pra casa").
+    Os aprendizes da Brida podem aparecer (apito). "Coleção" = a masmorra quer as 31 almas completas (Cap. 7).
+
   ESTRUTURA: TEMPORADA 1 DE UMA TRILOGIA (meta: 10-15 h de jogo no total)
   Esta temporada se passa inteira dentro da Masmorra de Velhágua. Fecha o arco do Catálogo e deixa
   um gancho forte para a Temporada 2. Duração-alvo por capítulo, sem enchimento: história principal

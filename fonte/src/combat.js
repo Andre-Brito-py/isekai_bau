@@ -1,6 +1,6 @@
 // ================= COMBATE INIMIGO v2: defesas variadas, status, habilidades e magias =================
 const DIRK = ['up', 'down', 'left', 'right'], ARROW = { up: '▲', down: '▼', left: '◄', right: '►' };
-const EL_COL = { brasa: '#f07830', geada: '#7ad0f0', seiva: '#8ac85a', faisca: '#ffe066', tinta: '#5a6ad0' };
+const EL_COL = { brasa: '#f07830', geada: '#7ad0f0', seiva: '#8ac85a', faisca: '#ffe066', tinta: '#5a6ad0', sombra: '#b48cf0', vento: '#c8f0e0', sal: '#e8e4dc' };
 const isHist = () => G.diff === 'historia';
 function drawArrow(dir, cx, cy, r, col) {
   bx.fillStyle = col;
@@ -17,6 +17,7 @@ const TUTS = {
   dodge: '[DESVIO: aperte a direção da seta quando o golpe estiver PERTO. Cedo demais também erra.]',
   seq: '[SEQUÊNCIA: repita as setas na ordem antes do tempo acabar. Cada erro é um golpe que entra.]',
   mash: '[AGARRÃO: aperte A o mais rápido que puder para se soltar.]',
+  memo: '[MEMÓRIA: as setas aparecem por um instante e depois somem. Decore a ordem e repita de cabeça.]',
   swallow: '[FEITIÇO INIMIGO: aperte A quando o anel tocar o círculo para ENGOLIR a magia. Mímicos comem palavras: perfeito devolve PM.]'
 };
 async function tut(k) { if (G.flags['tut_' + k]) return; G.flags['tut_' + k] = true; sfx('catalog'); await bSay(TUTS[k], { cat: true }); }
@@ -33,11 +34,12 @@ async function dodge(spd = 1) {
   const T = Math.round(60 / spd * (isHist() ? 1.25 : 1) / (DF().tricks ? 1.08 : 1));
   return bWait('dodge', { dg: { dir, from, T, t: 0, state: 0, res: null, hold: 0 } });
 }
-async function seq(n, spd = 1) {
-  await tut('seq');
+async function seq(n, spd = 1, hide = false) {
+  await tut(hide ? 'memo' : 'seq');
   const keys = Array.from({ length: n }, () => pickOne(DIRK));
   const per = (isHist() ? 30 : DF().tricks ? 20 : 24) / spd;
-  return bWait('seq', { sq: { keys, i: 0, ok: [], T: Math.round(per * n + 30), t: 0, state: 0 } });
+  const prev = hide ? Math.round((isHist() ? 26 : 18) * n + 20) : 0;
+  return bWait('seq', { sq: { keys, i: 0, ok: [], T: Math.round(per * n + 30 + (hide ? 20 : 0)), t: 0, state: 0, prev, hide } });
 }
 async function mash(need, T = 120) {
   await tut('mash');
@@ -75,6 +77,7 @@ const DEFMODES = {
     update() {
       const s = BT.sq;
       if (s.state === 0) {
+        if (s.prev > 0) { s.prev--; return; }
         s.t++;
         for (const k of DIRK) if (btnp(k)) { const ok = k === s.keys[s.i]; s.ok.push(ok); s.i++; sfx(ok ? 'move' : 'hurt'); if (!ok) { BT.hurt = 8; } break; }
         if (s.i >= s.keys.length || s.t >= s.T) { while (s.ok.length < s.keys.length) s.ok.push(false); s.state = 1; s.hold = 20; }
@@ -82,13 +85,14 @@ const DEFMODES = {
     },
     draw() {
       const s = BT.sq, n = s.keys.length, w = Math.min(28, Math.floor(200 / n)), x0 = 120 - (n * w) / 2;
-      txt(s.state === 1 ? (s.ok.every(x => x) ? 'SEQUÊNCIA PERFEITA!' : `${s.ok.filter(x => !x).length} golpe(s) entraram`) : 'REPITA A SEQUÊNCIA!', 120, 124, { align: 'center', col: '#ffe066' });
+      txt(s.state === 1 ? (s.ok.every(x => x) ? 'SEQUÊNCIA PERFEITA!' : `${s.ok.filter(x => !x).length} golpe(s) entraram`) : s.prev > 0 ? 'MEMORIZE!' : s.hide ? 'REPITA DE MEMÓRIA!' : 'REPITA A SEQUÊNCIA!', 120, 124, { align: 'center', col: s.prev > 0 ? '#8fe3ff' : '#ffe066' });
       s.keys.forEach((k, i) => {
         const done = i < s.ok.length, col = done ? (s.ok[i] ? '#9be58a' : '#ff6b6b') : i === s.i ? '#ffffff' : '#6a6078';
         box(x0 + i * w, 136, w - 3, 26, { bw: i === s.i && s.state === 0 ? 2 : 1, edge: col, fill: '#000' });
-        drawArrow(k, Math.round(x0 + i * w + (w - 3) / 2), 149, 7, col);
+        if (s.hide && s.prev <= 0 && !done) txt('?', Math.round(x0 + i * w + (w - 3) / 2), 143, { align: 'center', col });
+        else drawArrow(k, Math.round(x0 + i * w + (w - 3) / 2), 149, 7, col);
       });
-      bar(40, 170, 160, 3, 1 - s.t / s.T, '#f28c28');
+      bar(40, 170, 160, 3, s.prev > 0 ? 1 : 1 - s.t / s.T, s.prev > 0 ? '#8fe3ff' : '#f28c28');
     }
   },
   mash: {
@@ -111,7 +115,7 @@ const DEFMODES = {
 };
 
 // ---------- dano e status no jogador ----------
-const ST_NAME = { poison: 'VENENO', burn: 'QUEIMADO', silence: 'SILÊNCIO', blind: 'CEGO' };
+const ST_NAME = { poison: 'VENENO', burn: 'QUEIMADO', silence: 'SILÊNCIO', blind: 'CEGO', forget: 'ESQUECIDO' };
 const ST_TXT = {
   poison: 'Você está {g}envenenado{/}: perde PV a cada turno. (O frasco e a Seiva curam.)',
   burn: 'Sua tampa está {o}queimando{/}: perde PV a cada turno. (O frasco e a Seiva curam.)',
@@ -119,6 +123,14 @@ const ST_TXT = {
   blind: 'Você está {c}cego de tinta{/}: a próxima mordida fica mais difícil.'
 };
 function giveStatus(st, turns = 3) {
+  if (BT.saltCrust > 0) return 'A crosta de sal segurou o efeito. Nada pegou em você.';
+  if (st === 'forget') {
+    const pool = [...G.spells.map((s, i) => 'sp:' + i), ...(G.tech || []).filter(k => TECH[k]).map(k => 'tc:' + k)];
+    if (!pool.length) return 'Você sente que esqueceu alguma coisa, mas não tinha nada para esquecer.';
+    BT.forgot = pickOne(pool); BT.ps = BT.ps || {}; BT.ps.forget = 2;
+    const nm = BT.forgot.startsWith('sp:') ? G.spells[+BT.forgot.slice(3)].name : TECH[BT.forgot.slice(3)].name;
+    return `Você {c}esqueceu{/} como usar {y}${nm}{/} por 2 turnos.`;
+  }
   if (st === 'blind') { BT.inked = true; return ST_TXT.blind; }
   BT.ps = BT.ps || {}; BT.ps[st] = st === 'silence' ? 1 : turns; return ST_TXT[st];
 }
@@ -131,6 +143,7 @@ async function tickStatus() {
     await bSay(st === 'poison' ? `* O veneno arde. -${d} PV.` : `* A queimadura arde. -${d} PV.`, { auto: 28 });
   }
   if (BT.ps.silence > 0) BT.ps.silence--;
+  if (BT.ps.forget > 0 && --BT.ps.forget === 0) { BT.forgot = null; await bSay('* Você lembrou de novo o que tinha esquecido.', { auto: 30 }); }
 }
 function hurt(e, pow, mult, res, o = {}) {
   const am = e.atkBuff && e.atkBuff.t > 0 ? e.atkBuff.m : 1;
@@ -182,7 +195,7 @@ async function runMove(e, mv) {
       msg = (worst === 'perfect' ? `* Desvio perfeito! Só um arranhão: ${total}.` : worst === 'fail' ? `* Acertou em cheio! ${total} de dano.` : `* Raspou de leve. ${total} de dano.`) + msg; break;
     }
     case 'seq': {
-      const miss = await seq(mv.n, mv.spd || 1);
+      const miss = await seq(mv.n, mv.spd || 1, mv.hide);
       for (let h = 0; h < miss; h++) { total += hurt(e, mv.p, 1, 'fail', mv); if (G.hp <= 0) return; }
       if (mv.n - miss > 0) total += hurt(e, mv.p * (mv.n - miss), 0.15, 'good', mv);
       worst = miss ? 'fail' : 'perfect';
@@ -202,6 +215,12 @@ async function runMove(e, mv) {
       const r = await ring(e, { label: 'ENGULA!', col: EL_COL[mv.el], spd: mv.spd, fakeable: false, fast: mv.fast });
       worst = r;
       for (let i = 0; i < 18; i++) BT.parts.push({ x: e.x + rand(-6, 6), y: e.y, vx: (120 - e.x) / 18 + rand(-0.4, 0.4), vy: (150 - e.y) / 18, life: 18, col: EL_COL[mv.el] || '#fff', sz: 2, then: true });
+      if (BT.reflect > 0 && r !== 'fail') {
+        BT.reflect = 0; const d = Math.max(1, Math.round(e.atk * mv.p * (r === 'perfect' ? 1.6 : 1.1) * (mv.hits || 1)));
+        if (r === 'good') total += hurt(e, mv.p, 0.25, r, { magic: true });
+        hitEnemy(e, d, 'crit', EL_COL[mv.el] || '#ffffff'); sfx('crit');
+        msg = `* {y}DEVOLVIDO AO REMETENTE!{/} ${mv.name} volta e acerta o ${e.name}: ${d} de dano.` + (total ? ` Você levou ${total}.` : ''); break;
+      }
       if (r === 'perfect') { const g = Math.max(2, Math.round(G.st.mmp * 0.15)); G.mp = Math.min(G.st.mmp, G.mp + g); sfx('rune'); msg = `* NHAC! Você {y}ENGOLIU{/} ${mv.name}! +${g} PM.`; msg += crystallize(mv); if (BT.copy) msg += copySpell(mv); break; }
       const hits = mv.hits || 1;
       for (let h = 0; h < hits; h++) total += hurt(e, mv.p, r === 'good' ? 0.5 : 1, r, { magic: true });
@@ -382,6 +401,14 @@ const AI = {
 function techCost(T) { return T.pmFn ? T.pmFn() : (T.pm || 0); }
 async function roundEnd() {
   for (const k in BT.cd) if (BT.cd[k] > 0) BT.cd[k]--;
+  for (const e of BT.en) if (e.corrode > 0 && --e.corrode === 0) { e.def = e.def0; }
+  if (BT.saltCrust > 0) BT.saltCrust--;
+  if (BT.reflect > 0) BT.reflect--;
+  if (BT.tideQ && BT.en.some(e => e.alive && e.hp > 0)) {
+    const q = BT.tideQ; BT.tideQ = null; BT.tideRecast = true; BT.nextSpellM = 0.6;
+    await castSpell(q.sp, q.target && q.target.alive && q.target.hp > 0 ? q.target : null);
+    BT.tideRecast = false; await killDead();
+  } else BT.tideQ = null;
   if (BT.stance > 0) BT.stance--;
   if (BT.dark > 0) BT.dark--;
   if (BT.guildShield > 0) BT.guildShield--;
@@ -392,13 +419,13 @@ async function roundEnd() {
   }
 }
 function crystallize(mv) {
-  const el = ({ tinta: 'sombra', brasa: 'brasa', geada: 'geada', faisca: 'faisca', seiva: 'seiva', sombra: 'sombra', vento: 'vento' })[mv.el];
+  const el = ({ tinta: 'sombra', brasa: 'brasa', geada: 'geada', faisca: 'faisca', seiva: 'seiva', sombra: 'sombra', vento: 'vento', sal: 'sal' })[mv.el];
   if (!el || !G.runes.includes(el) || Math.random() >= 0.35) return '';
   addRune(el, 1); return ` A magia {${RUNES[el].col}}cristalizou{/}: +1 runa ${RUNES[el].name}!`;
 }
 function copySpell(mv) {
   BT.copy = false;
-  const el = ({ tinta: 'sombra', brasa: 'brasa', geada: 'geada', faisca: 'faisca', seiva: 'seiva', sombra: 'sombra', vento: 'vento' })[mv.el] || 'sombra';
+  const el = ({ tinta: 'sombra', brasa: 'brasa', geada: 'geada', faisca: 'faisca', seiva: 'seiva', sombra: 'sombra', vento: 'vento', sal: 'sal' })[mv.el] || 'sombra';
   if (G.spells.some(s => s.name === mv.name)) return ' Você já conhecia esse feitiço.';
   if (G.spells.length >= 8) return ' O grimório está cheio demais para copiar.';
   G.spells.push({ el, form: mv.hits > 1 ? 'corrente' : /Onda/.test(mv.name) ? 'onda' : 'dardo', mod: /Selad/.test(mv.name) ? 'selo' : null, name: mv.name, copied: true });
