@@ -432,6 +432,9 @@
   CURA E SAVE (v1.3): Lanternas de Âmbar SALVAM e enchem o FRASCO DE ÂMBAR, mas NÃO curam. O frasco tem
   3 goles (45% PV + 30% PM cada); Fragmentos de Âmbar em baús escondidos dão +1 gole (Poço, Acampamento,
   Teatro). Subir de nível cura só 25%. Evoluir cura tudo. Perder volta à última Lanterna com tudo cheio.
+  TETOS DE CURA (v2.1, pedido do usuário: Carniceiro curava demais): roubo de vida passivo 10% da mordida (até 4% dos PV);
+  Devorar 25% do dano (até 12%); Banquete até 12% somando as três mordidas; Boca do Vazio até 15%; Seiva que suga até 15%;
+  Véu de Seiva até 50% dos PV (65% com Foco). Toda cura nova de técnica precisa de teto proporcional aos PV máximos.
   Dano recebido = ATQ x poder x 60/(60+DEF) (defesa proporcional, não subtrai valor fixo).
 
   RUNAS CONSUMÍVEIS (v1.6): criar um feitiço GASTA 1 de cada runa usada (o feitiço fica para sempre;
@@ -2497,7 +2500,7 @@ function veuText(sp) {
   if (sp.el === 'geada') return `Casca de gelo: dano recebido ×${f ? 0.35 : 0.5} por ${e ? 5 : 3} turnos.`;
   return `Cura cerca de ${Math.round(healAmt(sp) * (e ? 1.6 : 1))} PV.`;
 }
-const healAmt = sp => (8 + G.st.mag * 2.2) * (sp.mod === 'foco' ? 1.6 : 1);
+const healAmt = sp => Math.min((8 + G.st.mag * 2.2) * (sp.mod === 'foco' ? 1.6 : 1), G.st.mhp * (sp.mod === 'foco' ? 0.65 : 0.5));
 function spellDesc(sp) {
   const el = RUNES[sp.el];
   if (sp.form === 'veu') return `${spellCost(sp)} PM · Em você. ${veuText(sp)}`;
@@ -2774,7 +2777,7 @@ async function doBite(e, o = {}) {
   hitEnemy(e, dmg, crit ? 'crit' : 'hit');
   let post = '';
   if (spec().passive2 === 'poisonBite' && e.hp > 0) { e.dot = { d: Math.max(1, Math.round(dmg * 0.2)), t: 3, icon: 'poison' }; post += '\n* O ferrão deixou veneno.'; }
-  if (spec().passive2 === 'lifesteal') { const h = Math.round(dmg * 0.2); G.hp = Math.min(G.st.mhp, G.hp + h); post += `\n* Você recuperou ${h} PV mordendo.`; }
+  if (spec().passive2 === 'lifesteal') { const h = Math.min(Math.round(dmg * 0.1), Math.round(G.st.mhp * 0.04)); G.hp = Math.min(G.st.mhp, G.hp + h); post += `\n* Você recuperou ${h} PV mordendo.`; }
   if (o.onHit) post += o.onHit(e, dmg) || '';
   let msg = crit ? `* {y}CRÍTICO!{/} Sua mordida causou ${dmg} de dano!` : `* Você mordeu o ${e.name}. ${dmg} de dano.`;
   if ((e.weak.bite ?? 1) < 1) msg += '\n* ' + (e.d.biteMsg || 'A mordida rendeu pouco. Esse inimigo aguenta dentes.');
@@ -2855,7 +2858,7 @@ async function castSpell(sp, target) {
       if (t.d.boss && sp.el === 'brasa') t.lastFire = true;
     });
     if (sp.el === 'polvora') BT.powder.push(Math.max(1, Math.round(spellPower(sp) * pm * 0.4 * markM)));
-    if (drained) { G.hp = Math.min(G.st.mhp, G.hp + drained); log.push(`* Você absorveu ${drained} PV.`); sfx('heal'); }
+    if (drained) { drained = Math.min(drained, Math.round(G.st.mhp * 0.15)); G.hp = Math.min(G.st.mhp, G.hp + drained); log.push(`* Você absorveu ${drained} PV.`); sfx('heal'); }
     await wait(16);
   }
   if (sp.mod === 'bandeira') { BT.magT = Math.max(BT.magT, 3); BT.buff.atkM = Math.max(BT.buff.atkM, 1.2); BT.buff.atkT = Math.max(BT.buff.atkT, 3); log.push('* {y}Bandeira hasteada!{/} Ataque e magia +20% por 2 turnos.'); }
@@ -4167,7 +4170,7 @@ const TECH = {
   muralha: { name: 'Muralha', cd: 4, desc: 'Dano recebido -40% por 3 turnos.', async use() { BT.buff.defM = Math.min(BT.buff.defM, 0.6); BT.buff.defT = Math.max(BT.buff.defT, 4); sfx('guard'); await bSay('* Você vira uma muralha de ferro e ouro.', { auto: 40 }); } },
   engolir: { name: 'Engolir Inteiro', cd: 3, target: true, desc: 'Engole um inimigo comum com 25% de PV ou menos e se cura. Em chefe fraco (25% ou menos), arranca um pedaço: mordida ×2.2. Fora isso, mordida ×1.3.', async use(t) { if (!t.d.boss && t.hp <= t.mhp * 0.25) { const h = Math.round(G.st.mhp * 0.2); t.hp = 0; G.hp = Math.min(G.st.mhp, G.hp + h); sfx('bite'); await bSay(`* NHAC. O ${t.name} sumiu dentro de você. +${h} PV.`, { auto: 50 }); } else if (t.d.boss && t.hp <= t.mhp * 0.25) { await bSay(`* O ${t.name} é grande demais para engolir. Então você arranca um pedaço.`, { auto: 40 }); await doBite(t, { m: 2.2 }); } else await doBite(t, { m: 1.3 }); } },
   veneno: { name: 'Veneno Concentrado', cd: 3, target: true, desc: 'Ferroada que deixa um veneno forte por 4 turnos.', async use(t) { const d = Math.max(1, Math.round((ATKB() * 0.6 - t.def) * rand(0.9, 1.1))); hitEnemy(t, d, 'hit', '#9be58a'); t.dot = { d: Math.max(1, Math.round(G.st.atk * 0.45)), t: 4, icon: 'poison' }; await bSay(`* ${t.name}: ${d} de dano. Veneno forte por 4 turnos.`, { auto: 50 }); } },
-  devorar: { name: 'Devorar', cd: 3, target: true, desc: 'Mordida 50% mais forte (100% com pouca vida) que cura metade do dano.', async use(t) { const m = G.hp < G.st.mhp * 0.5 ? 2 : 1.5; await doBite(t, { m, onHit: (e, d) => { const h = Math.round(d * 0.5); G.hp = Math.min(G.st.mhp, G.hp + h); return `\n* Você devorou ${h} PV.`; } }); } },
+  devorar: { name: 'Devorar', cd: 3, target: true, desc: 'Mordida 50% mais forte (100% com pouca vida) que cura um quarto do dano (até 12% da sua vida).', async use(t) { const m = G.hp < G.st.mhp * 0.5 ? 2 : 1.5; await doBite(t, { m, onHit: (e, d) => { const h = Math.min(Math.round(d * 0.25), Math.round(G.st.mhp * 0.12)); G.hp = Math.min(G.st.mhp, G.hp + h); return `\n* Você devorou ${h} PV.`; } }); } },
   copiar: { name: 'Copiar', pm: 5, desc: 'Se engolir o próximo feitiço inimigo com perfeição, ele vira um feitiço seu.', async use() { BT.copy = true; sfx('rune'); await bSay('* Suas páginas se abrem em branco, esperando.', { auto: 40 }); } },
   pacto: { name: 'Pacto', cd: 2, desc: 'Troca 20% dos PV por 40% dos PM.', async use() { const c = Math.max(1, Math.round(G.st.mhp * 0.2)); if (G.hp <= c) { await bSay('* Você não tem vida suficiente para o pacto.', { auto: 40 }); return; } G.hp -= c; const g = Math.round(G.st.mmp * 0.4); G.mp = Math.min(G.st.mmp, G.mp + g); sfx('rune'); await bSay(`* Sangue vira tinta. -${c} PV, +${g} PM.`, { auto: 45 }); } },
   escuridao: { name: 'Escuridão', pm: 8, desc: 'Por 3 turnos, os inimigos erram mais: dano recebido -25%.', async use() { BT.dark = 3; sfx('buff'); await bSay('* A sala escurece. Só os seus olhos brilham.', { auto: 40 }); } },
@@ -5464,15 +5467,15 @@ Object.assign(TECH, {
   pisao: { name: 'Pisão de Bastião', cd: 4, desc: 'Atinge todos os inimigos e pode atordoar (35%; chefes 10%).',
     async use() { sfx('rumble'); shake(16); const log = []; for (const e of BT.en.filter(e => e.alive)) { const d = Math.max(1, Math.round((ATKB() * 0.9 - e.def) * rand(0.9, 1.1))); hitEnemy(e, d, 'hit', '#f0c040'); let s = ''; if (e.hp > 0 && Math.random() < (e.d.boss ? 0.1 : 0.35)) { e.stunned = 1; s = ' Atordoado!'; } log.push(`* ${e.name}: ${d}.${s}`); } await bSay(log.join('\n'), { auto: 55 }); } },
   fome: { name: 'Fome do Abismo', cd: 3, target: true, desc: 'Mordida 20% mais forte; contra quem tem menos da metade da vida, 80% mais forte.', async use(t) { await doBite(t, { m: t.hp < t.mhp * 0.5 ? 1.8 : 1.2 }); } },
-  vazio: { name: 'Boca do Vazio', cd: 5, desc: 'Suga 15% da vida atual de cada inimigo (chefes 6%) e cura metade do total.',
-    async use() { let tot = 0; const log = []; for (const e of BT.en.filter(e => e.alive)) { const d = Math.max(1, Math.round(e.hp * (e.d.boss ? 0.06 : 0.15))); hitEnemy(e, d, 'hit', '#7a48b0'); tot += d; log.push(`* ${e.name}: ${d}.`); } const h = Math.round(tot * 0.5); G.hp = Math.min(G.st.mhp, G.hp + h); sfx('bite'); log.push(`* Você engoliu ${h} PV.`); await bSay(log.join('\n'), { auto: 55 }); } },
+  vazio: { name: 'Boca do Vazio', cd: 5, desc: 'Suga 15% da vida atual de cada inimigo (chefes 6%) e cura metade do total (até 15% da sua vida).',
+    async use() { let tot = 0; const log = []; for (const e of BT.en.filter(e => e.alive)) { const d = Math.max(1, Math.round(e.hp * (e.d.boss ? 0.06 : 0.15))); hitEnemy(e, d, 'hit', '#7a48b0'); tot += d; log.push(`* ${e.name}: ${d}.`); } const h = Math.min(Math.round(tot * 0.5), Math.round(G.st.mhp * 0.15)); G.hp = Math.min(G.st.mhp, G.hp + h); sfx('bite'); log.push(`* Você engoliu ${h} PV.`); await bSay(log.join('\n'), { auto: 55 }); } },
   enxame: { name: 'Enxame de Ferrões', cd: 3, desc: 'Três ferroadas em inimigos aleatórios. Cada uma renova o veneno do alvo.',
     async use() { const log = {}; for (let i = 0; i < 3; i++) { const al = BT.en.filter(e => e.alive && e.hp > 0); if (!al.length) break; const t = pickOne(al); const d = Math.max(1, Math.round((ATKB() * 0.6 - t.def * 0.5) * rand(0.9, 1.1))); hitEnemy(t, d, 'hit', '#9be58a'); if (t.hp > 0) t.dot = { d: Math.max(1, Math.round(G.st.atk * 0.35)), t: 3, icon: 'poison' }; log[t.name] = (log[t.name] || 0) + d; await wait(8); } await bSay(Object.entries(log).map(([n, d]) => `* ${n}: ${d} e envenenado.`).join('\n'), { auto: 55 }); } },
   necrose: { name: 'Necrose', cd: 4, target: true, desc: 'Todo o veneno ou sangramento do alvo age de uma vez, com 50% a mais. Sem veneno, vira uma mordida.',
     async use(t) { if (!t.dot || t.dot.t <= 0) { await doBite(t, { m: 1.1 }); return; } const d = Math.round(t.dot.d * t.dot.t * 1.5); t.dot = null; hitEnemy(t, d, 'crit', '#9be58a'); sfx('crit'); await bSay(`* O veneno estoura por dentro do ${t.name}: ${d} de dano!`, { auto: 50 }); } },
   frenesi: { name: 'Frenesi', cd: 4, desc: 'Ataque ×1.6 por 3 turnos, mas você sofre 20% a mais de dano.', async use() { BT.buff.atkM = Math.max(BT.buff.atkM, 1.6); BT.buff.atkT = Math.max(BT.buff.atkT, 4); BT.frenzy = 3; sfx('buff'); await bSay('* Você para de pensar. Só sobra a fome.', { auto: 40 }); } },
-  banquete: { name: 'Banquete', cd: 5, target: true, desc: 'Três mordidas seguidas no mesmo alvo (70% cada). Cada uma rouba 30% do dano como vida.',
-    async use(t) { for (let i = 0; i < 3 && t.alive && t.hp > 0; i++) await doBite(t, { m: 0.7, onHit: (e, d) => { const h = Math.round(d * 0.3); G.hp = Math.min(G.st.mhp, G.hp + h); return `\n* +${h} PV.`; } }); } },
+  banquete: { name: 'Banquete', cd: 5, target: true, desc: 'Três mordidas seguidas no mesmo alvo (70% cada). Juntas, roubam até 12% da sua vida.',
+    async use(t) { let pool = Math.round(G.st.mhp * 0.12); for (let i = 0; i < 3 && t.alive && t.hp > 0; i++) await doBite(t, { m: 0.7, onHit: (e, d) => { const h = Math.min(pool, Math.round(d * 0.15)); pool -= h; G.hp = Math.min(G.st.mhp, G.hp + h); return h ? `\n* +${h} PV.` : ''; } }); } },
   indice: { name: 'Índice Remissivo', pm: 4, desc: 'Os próximos 2 feitiços não gastam PM.', async use() { BT.freeSpell = 2; sfx('rune'); await bSay('* Você abre no índice. Tudo fica mais fácil de achar.', { auto: 40 }); } },
   enciclopedia: { name: 'Enciclopédia', pm: 14, desc: 'Lança, um atrás do outro e de graça, até 4 dos seus feitiços de ataque com 45% do poder.',
     async use() { const sps = G.spells.filter(s => s.form !== 'veu').slice(0, 4); if (!sps.length) { await bSay('* Você não tem feitiços de ataque para folhear.', { auto: 40 }); return; } for (const sp of sps) { if (!BT.en.some(e => e.alive && e.hp > 0)) break; BT.nextSpellM = 0.45; await castSpell(sp, null); await killDead(); } } },

@@ -896,7 +896,7 @@ function veuText(sp) {
   if (sp.el === 'geada') return `Casca de gelo: dano recebido ×${f ? 0.35 : 0.5} por ${e ? 5 : 3} turnos.`;
   return `Cura cerca de ${Math.round(healAmt(sp) * (e ? 1.6 : 1))} PV.`;
 }
-const healAmt = sp => (8 + G.st.mag * 2.2) * (sp.mod === 'foco' ? 1.6 : 1);
+const healAmt = sp => Math.min((8 + G.st.mag * 2.2) * (sp.mod === 'foco' ? 1.6 : 1), G.st.mhp * (sp.mod === 'foco' ? 0.65 : 0.5));
 function spellDesc(sp) {
   const el = RUNES[sp.el];
   if (sp.form === 'veu') return `${spellCost(sp)} PM · Em você. ${veuText(sp)}`;
@@ -1173,7 +1173,7 @@ async function doBite(e, o = {}) {
   hitEnemy(e, dmg, crit ? 'crit' : 'hit');
   let post = '';
   if (spec().passive2 === 'poisonBite' && e.hp > 0) { e.dot = { d: Math.max(1, Math.round(dmg * 0.2)), t: 3, icon: 'poison' }; post += '\n* O ferrão deixou veneno.'; }
-  if (spec().passive2 === 'lifesteal') { const h = Math.round(dmg * 0.2); G.hp = Math.min(G.st.mhp, G.hp + h); post += `\n* Você recuperou ${h} PV mordendo.`; }
+  if (spec().passive2 === 'lifesteal') { const h = Math.min(Math.round(dmg * 0.1), Math.round(G.st.mhp * 0.04)); G.hp = Math.min(G.st.mhp, G.hp + h); post += `\n* Você recuperou ${h} PV mordendo.`; }
   if (o.onHit) post += o.onHit(e, dmg) || '';
   let msg = crit ? `* {y}CRÍTICO!{/} Sua mordida causou ${dmg} de dano!` : `* Você mordeu o ${e.name}. ${dmg} de dano.`;
   if ((e.weak.bite ?? 1) < 1) msg += '\n* ' + (e.d.biteMsg || 'A mordida rendeu pouco. Esse inimigo aguenta dentes.');
@@ -1254,7 +1254,7 @@ async function castSpell(sp, target) {
       if (t.d.boss && sp.el === 'brasa') t.lastFire = true;
     });
     if (sp.el === 'polvora') BT.powder.push(Math.max(1, Math.round(spellPower(sp) * pm * 0.4 * markM)));
-    if (drained) { G.hp = Math.min(G.st.mhp, G.hp + drained); log.push(`* Você absorveu ${drained} PV.`); sfx('heal'); }
+    if (drained) { drained = Math.min(drained, Math.round(G.st.mhp * 0.15)); G.hp = Math.min(G.st.mhp, G.hp + drained); log.push(`* Você absorveu ${drained} PV.`); sfx('heal'); }
     await wait(16);
   }
   if (sp.mod === 'bandeira') { BT.magT = Math.max(BT.magT, 3); BT.buff.atkM = Math.max(BT.buff.atkM, 1.2); BT.buff.atkT = Math.max(BT.buff.atkT, 3); log.push('* {y}Bandeira hasteada!{/} Ataque e magia +20% por 2 turnos.'); }
