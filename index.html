@@ -1538,10 +1538,25 @@ function say(text, who = 'n', opt = {}) {
   const tw = new TW();
   const isVoid = who === 'void';
   tw.set(text, isVoid ? 34 : hasP ? 28 : 34, { voice: wd.voice, col: wd.col, fx: wd.fx, speed: isVoid ? 0.4 : 0.55 });
+  // paginação: a caixa comporta 5 linhas; na última página, as opções também ocupam linhas
+  const MAXL = isVoid ? 7 : 5, nOpt = opt.choices ? opt.choices.length : 0, lastCap = Math.max(1, MAXL - nOpt);
+  const pages = [];
+  for (let i = 0; i < tw.lines.length; i += MAXL) pages.push(tw.lines.slice(i, i + MAXL));
+  if (!pages.length) pages.push([]);
+  const lp = pages[pages.length - 1];
+  if (lp.length > lastCap) { pages[pages.length - 1] = lp.slice(0, lp.length - lastCap); pages.push(lp.slice(lp.length - lastCap)); }
+  const setPage = (tw, i) => { tw.lines = pages[i]; tw.flat = pages[i].flat(); tw.n = 0; tw.acc = 0; tw.wait = 0; tw.done = !tw.flat.length; };
+  if (pages.length > 1) setPage(tw, 0);
   const w = {
-    type: 'dialog', tw, who, wd, opts: opt.choices, idx: 0,
+    type: 'dialog', tw, who, wd, opts: opt.choices, idx: 0, page: 0,
+    get lastPage() { return this.page >= pages.length - 1; },
     update() {
       this.tw.update();
+      if (!this.lastPage) {
+        if (btnp('a')) { if (!this.tw.done) this.tw.skip(); else { this.page++; setPage(this.tw, this.page); } }
+        else if (btnp('b') && !this.tw.done) this.tw.skip();
+        return;
+      }
       if (this.opts && this.tw.done) {
         if (navp('up')) { this.idx = (this.idx + this.opts.length - 1) % this.opts.length; sfx('move'); }
         if (navp('down')) { this.idx = (this.idx + 1) % this.opts.length; sfx('move'); }
@@ -1565,7 +1580,7 @@ function say(text, who = 'n', opt = {}) {
       }
       if (wd.name) { const nm = wd.name(); const nw = nm.length * 6 + 10; box(12, y - 8, nw, 14, { bw: 1, edge: wd.edge || '#ffffff' }); txt(nm, 17, y - 7, { col: '#ffe066' }); }
       this.tw.draw(tx, y + 8, 12);
-      if (this.opts && this.tw.done) {
+      if (this.opts && this.tw.done && this.lastPage) {
         const oy = y + 8 + this.tw.lines.length * 12 + 2;
         this.opts.forEach((o, i) => txt((i === this.idx ? '{y}►{/} ' : '  ') + o, tx, oy + i * 12, { col: i === this.idx ? '#ffe066' : '#ffffff' }));
       } else if (this.tw.done && FRAME % 40 < 26) txt('▼', 222, y + 64, { col: '#8a8099' });
@@ -2277,7 +2292,18 @@ function bWait(mode, extra) { return new Promise(r => { BT.mode = mode; Object.a
 function bSay(text, o = {}) {
   BT.tw.set(String(text).replace(/@/g, G.name), 35, { voice: o.cat ? () => sfx('blipTri', 1500) : null, col: o.cat ? '#a8ecff' : o.col, fx: o.fx });
   BT.auto = o.auto || 0; BT.autoT = 0;
-  return bWait('text');
+  if (BT.tw.lines.length <= 5) return bWait('text');
+  // texto longo: mostra em páginas de 5 linhas
+  const all = BT.tw.lines;
+  return (async () => {
+    let r;
+    for (let i = 0; i < all.length; i += 5) {
+      const pg = all.slice(i, i + 5);
+      Object.assign(BT.tw, { lines: pg, flat: pg.flat(), n: 0, acc: 0, wait: 0, done: false });
+      BT.autoT = 0; r = await bWait('text');
+    }
+    return r;
+  })();
 }
 async function battle(group, opts = {}) {
   sfx('encounter');
@@ -2662,9 +2688,14 @@ function evolveScreen() {
   const w = {
     type: 'evolve', idx: 0, conf: false,
     update() {
-      if (navp('left') || navp('right')) { this.idx = 1 - this.idx; sfx('move'); }
       if (this.locked) return;
-      if (btnp('a')) { sfx('select'); const id = opts[this.idx]; choose(`* Evoluir para ${SPECIES[id].name}? Não dá pra voltar atrás.`, ['Evoluir', 'Pensar mais'], 'n', 1).then(c => { if (c === 0) { this.locked = true; this.hidden = true; evolveAnim(id).then(() => closeWin(this, id)); } }); }
+      if (this.conf) {
+        if (btnp('a')) { sfx('select'); const id = opts[this.idx]; this.locked = true; this.hidden = true; evolveAnim(id).then(() => closeWin(this, id)); }
+        else if (btnp('b')) { sfx('cancel'); this.conf = false; }
+        return;
+      }
+      if (navp('left') || navp('right')) { this.idx = 1 - this.idx; sfx('move'); }
+      if (btnp('a')) { sfx('select'); this.conf = true; }
     },
     draw() {
       if (this.hidden) return;
@@ -2672,19 +2703,27 @@ function evolveScreen() {
       txt('ESCOLHA SUA EVOLUÇÃO', 120, 8, { align: 'center', col: '#ffe066' });
       opts.forEach((id, i) => {
         const s = SPECIES[id], x = 8 + i * 116, sel = i === this.idx;
-        box(x, 24, 108, 150, { bw: sel ? 2 : 1, edge: sel ? '#ffe066' : '#5a5070' });
+        box(x, 22, 108, 162, { bw: sel ? 2 : 1, edge: sel ? '#ffe066' : '#5a5070' });
         const fr = SP[s.sp][Math.floor(FRAME / 30) % 2 ? 0 : 2];
         const bob = sel ? Math.round(Math.sin(FRAME * 0.15) * 2) : 0;
-        bx.drawImage(fr, x + 30, 32 + bob, 48, 48);
-        txt(s.name, x + 54, 84, { align: 'center', col: sel ? '#ffe066' : '#ffffff' });
-        txt(s.tag, x + 54, 96, { align: 'center', col: id === 'ferro' ? '#ffa94d' : '#8fe3ff' });
-        s.desc.forEach((d, k) => txt('· ' + d, x + 6, 112 + k * 20, { w: 16, lh: 10, col: '#d8d0e8' }));
+        bx.drawImage(fr, x + 34, 28 + bob, 40, 40);
+        txt(s.name, x + 54, 71, { align: 'center', col: sel ? '#ffe066' : '#ffffff' });
+        txt(s.tag, x + 54, 83, { align: 'center', col: id === 'ferro' ? '#ffa94d' : '#8fe3ff' });
+        let yy = 98;
+        s.desc.forEach(d => { yy += txt('· ' + d, x + 6, yy, { w: 16, lh: 11, col: '#d8d0e8' }) * 11 + 3; });
       });
-      const s = SPECIES[opts[this.idx]].bonus;
-      box(8, 180, 224, 52, { bw: 1, edge: '#8a8099' });
-      txt(`Bônus: PV +${s.mhp}  PM +${s.mmp}  ATQ +${s.atk}`, 16, 186);
-      txt(`       DEF +${s.def}  MAG +${s.mag}`, 16, 198);
-      txt('◄ ► escolhe · A confirma', 120, 214, { align: 'center', col: '#8a8099' });
+      const sp = SPECIES[opts[this.idx]], s = sp.bonus;
+      if (this.conf) {
+        box(8, 188, 224, 48, { bw: 2, edge: '#ffe066' });
+        txt(`Evoluir para {y}${sp.name}{/}?`, 120, 192, { align: 'center' });
+        txt('Não dá pra voltar atrás.', 120, 204, { align: 'center', col: '#d8d0e8' });
+        txt('A evoluir · B pensar mais', 120, 220, { align: 'center', col: '#8a8099' });
+        return;
+      }
+      box(8, 188, 224, 48, { bw: 1, edge: '#8a8099' });
+      txt(`Bônus: PV +${s.mhp}  PM +${s.mmp}  ATQ +${s.atk}`, 16, 192);
+      txt(`       DEF +${s.def}  MAG +${s.mag}`, 16, 204);
+      txt('◄ ► escolhe · A confirma', 120, 220, { align: 'center', col: '#8a8099' });
     }
   };
   return openWin(w);
