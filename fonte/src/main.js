@@ -1051,9 +1051,11 @@ async function battle(group, opts = {}) {
   Object.assign(BT, { cd: {}, freeSpell: 0, bloodM: 1, magT: 0, bulwark: 0, frenzy: 0, starHeal: 0, powder: [], saltCrust: 0, reflect: 0, tideQ: null, tideRecast: false, acts: {}, lastAct: null, forgot: null, foneSaid: false, stance: 0, orbit: 0, dark: 0, star: 0, guildShield: 0, nextSpellM: 1, lastSpell: null, copy: false, ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0, choir: 0, ticketShield: 0 }); FXL.length = 0; BT.flashT = 0; BT.dimT = 0;
   V.scene = 'battle'; playMusic(opts.music || 'battle');
   await fadeIn(10);
+  BT.tameTxt = typeof tameGroup === 'function' ? tameGroup(BT.en) : '';
   const names = BT.en.map(e => e.name);
   const intro = opts.intro ? opts.intro : (opts.boss && group[0] === 'boss') ? '* O Guarda-Musgo bloqueia a escada!' : names.length === 1 ? `* Um ${names[0]} bloqueia o caminho!` : `* ${names.slice(0, -1).join(', ')} e ${names[names.length - 1]} aparecem!`;
   await bSay(intro);
+  if (BT.tameTxt) await bSay(BT.tameTxt, { auto: 70 });
   if (!G.flags.tutBattle) {
     G.flags.tutBattle = true;
     await bSay('[MORDER: aperte {y}A{/} quando o cursor passar pelo centro da barra.]', { cat: true });

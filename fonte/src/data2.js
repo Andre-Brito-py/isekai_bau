@@ -285,9 +285,10 @@ Object.assign(STORY, {
     G.flags.knowTiago = true;
     await say('Eu era o cobrador. O Tiago. Lembra?', 'tiago');
     await say('O COBRADOR?! Ele virou o HERÓI e eu virei um BAÚ? Isso é uma injustiça cósmica.', 'me');
-    await say('Eu não sei se você me entende. Monstro não fala com gente aqui.', 'tiago');
-    await say('* Você abre e fecha a tampa duas vezes. É tudo o que dá pra fazer.');
-    await say('...É. Entende.', 'tiago');
+    await say('* O Tiago dá um pulo para trás.');
+    await say('Ele... FALOU. O baú falou. Com a voz de gente.', 'tiago');
+    await say('Mímicos imitam vozes, Herói. É assim que atraem os caçadores. Não caia nessa.', 'brida');
+    await say('Mímico nenhum imita o jeito de quem reclama de injustiça cósmica às sete da manhã, Brida. É ele.', 'tiago');
     await say('Herói, o senhor enlouqueceu.', 'brida');
     await say('Brida, recolhe o pessoal. Ninguém abre esse baú. Ordem do Herói.', 'tiago');
     await say('Escuta. Tem mais gente do ônibus por aí. Uns viraram monstro. Outros viraram herói.', 'tiago');

@@ -132,3 +132,26 @@ Object.assign(STORY, {
     await say('[O Catálogo não tem registro de que alguém tenha mostrado essa parte a ele.]', 'cat');
   }
 });
+
+// ---- monstros adestrados: quando lutam ao lado de humanos, eles obedecem a alguém ----
+const HUMANS = new Set(['hunter', 'archer', 'vet', 'archerVet', 'soldier', 'cleric', 'farol', 'guarda', 'clericM', 'recruta', 'escudeiro', 'arcabuz', 'alquimista', 'veterano', 'fiscalP', 'brida', 'maren', 'maren5', 'jorge', 'knight']);
+const TAME = {
+  garg: ['Gárgula Adestrada', '* A Gárgula de Giz tem uma corrente no pescoço com o brasão azul de Auren. É um monstro adestrado pela guarnição. Ela olha para o soldado antes de cada passo.'],
+  escr: ['Escriba Adestrado', '* O Escriba Sombrio tem uma argola de ferro no tornozelo, presa ao cinto do soldado. A Inquisição adestra escribas para copiar ordens.'],
+  escrM: ['Escriba Adestrado', '* O Escriba Mestre usa uma coleira com um selo da Inquisição. Ele escreve só o que mandam.'],
+  cao: ['Cão Adestrado', '* O Cão de Guerra obedece ao assobio do soldado. Foi treinado no canil de Auren, igual ao Farejador da Brida.'],
+  hound: ['Farejador', '* O Farejador é da Brida. Treinado desde filhote. Ele só ataca quando ela manda.']
+};
+function tameGroup(en) {
+  if (!en.some(e => HUMANS.has(e.id)) || !en.some(e => !HUMANS.has(e.id))) return '';
+  const lines = [];
+  for (const e of en) { const t = TAME[e.id]; if (!t || e.d.boss) continue; e.tame = true; if (e.id !== 'hound') e.name = t[0]; if (!lines.includes(t[1])) lines.push(t[1]); }
+  return lines.join('\n');
+}
+// sem quem dá as ordens, o adestrado fica perdido por um turno
+{ const _kd = killDead; killDead = async function () {
+  const before = BT.en.some(e => e.alive && HUMANS.has(e.id));
+  await _kd();
+  if (!before || !BT.on) return;
+  if (!BT.en.some(e => e.alive && e.hp > 0 && HUMANS.has(e.id))) for (const e of BT.en) if (e.alive && e.hp > 0 && e.tame) { const fem = e.id === 'garg'; e.skip = fem ? '* A % espera uma ordem que não vem. Ela perdeu o turno.' : '* O % espera uma ordem que não vem. Ele perdeu o turno.'; await bSay(`* Sem ninguém dando ordens, ${fem ? 'a' : 'o'} ${e.name} olha em volta, ${fem ? 'perdida' : 'perdido'}.`, { auto: 50 }); }
+}; }

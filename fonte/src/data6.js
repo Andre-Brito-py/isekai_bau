@@ -32,7 +32,7 @@ Object.assign(ITEMS, {
   pastel: { name: 'Pastel de Feira', hp: 160, desc: 'Cura 160 PV. Queijo, três e cinquenta. Quente demais na primeira mordida, sempre.' },
   caldo: { name: 'Caldo de Cana', mp: 50, desc: 'Recupera 50 PM. Com limão, do jeito que a Dona Cida pedia.' },
   cordinha: { name: 'Cordinha de Parada', desc: 'Em batalha: PLIM! Todos os inimigos comuns perdem o próximo turno. Chefes não descem do ônibus.',
-    async fx() { let n = 0; for (const e of BT.en) if (e.alive && !e.d.boss) { e.confused = 1; n++; } sfx('catalog'); await bSay(n ? '* PLIM! Você puxa a cordinha. Os inimigos olham em volta, achando que é o ponto deles.' : '* PLIM! O chefe nem se mexe. Ele não desce aqui.', { auto: 50 }); } }
+    async fx() { let n = 0; for (const e of BT.en) if (e.alive && !e.d.boss) { e.skip = '* O % levanta para descer no ponto, percebe que não é o dele e senta de novo. Perdeu o turno.'; n++; } sfx('catalog'); await bSay(n ? '* PLIM! Você puxa a cordinha. Os inimigos olham em volta, achando que é o ponto deles.' : '* PLIM! O chefe nem se mexe. Ele não desce aqui.', { auto: 50 }); } }
 });
 
 // ---------- técnica da Profª Neide ----------
@@ -50,7 +50,7 @@ TECH_FX.chamada = async () => { const names = soulsNames(); await fxRun(40, (k, 
 { const _cs = castSpell; castSpell = async function (sp, target) {
   await _cs(sp, target);
   if (!BT.on) return;
-  if (sp.el === 'canto' && sp.form !== 'veu') { const al = BT.en.filter(e => e.alive && e.hp > 0 && !e.d.boss && !e.confused); if (al.length && Math.random() < 0.2) { const t = pickOne(al); t.confused = 1; await bSay(`* O ${t.name} fica parado, ouvindo. Ele perdeu o turno.`, { auto: 40 }); } }
+  if (sp.el === 'canto' && sp.form !== 'veu') { const al = BT.en.filter(e => e.alive && e.hp > 0 && !e.d.boss && !e.confused); if (al.length && Math.random() < 0.2) { const t = pickOne(al); t.skip = '* O % ainda está parado, com a música na cabeça. Perdeu o turno.'; await bSay(`* O ${t.name} fica parado, ouvindo. Ele perdeu o turno.`, { auto: 40 }); } }
   if (sp.mod === 'bilhete') { BT.ticketShield = 1; await bSay('* Um bilhete carimbado gira em volta da sua tampa. O próximo golpe vai sair pela metade.', { auto: 45 }); }
 }; }
 { const _h = hurt; hurt = function (e, pow, mult, res, o) {

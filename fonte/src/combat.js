@@ -281,6 +281,7 @@ async function enemyTurn(e) {
   if (e.dot && e.dot.t > 0) { e.dot.t--; const ic = e.dot.icon || 'bleed'; hitEnemy(e, e.dot.d, 'hit', ic === 'poison' ? '#9be58a' : ic === 'selo' ? (e.dot.col || '#ff8fa8') : '#ff6b6b'); await bSay(ic === 'selo' ? `* O selo queima o ${e.name}: ${e.dot.d} de dano.` : ic === 'poison' ? `* O veneno corrói o ${e.name}: ${e.dot.d} de dano.` : `* O ${e.name} sangra: ${e.dot.d} de dano.`, { auto: 30 }); if (e.hp <= 0) return; }
   if (e.frozen > 0) { e.frozen--; await bSay(`* O ${e.name} está congelado e não consegue se mexer.`, { auto: 40 }); return; }
   if (e.stunned > 0) { e.stunned--; await bSay(`* O ${e.name} está atordoado, vendo estrelinhas.`, { auto: 40 }); return; }
+  if (e.skip) { const t = e.skip; e.skip = null; await bSay(t.replace('%', e.name), { auto: 45 }); return; }
   if (e.confused > 0) { e.confused--; await bSay(`* O ${e.name} procura você... e só encontra um baú comum. Ele perdeu o turno.`, { auto: 45 }); return; }
   if (e.d.ai) return AI[e.d.ai](e);
   if (DF().tricks) {
