@@ -181,19 +181,26 @@ const EN_TINY = new Set(['rat', 'mush', 'bat', 'slime', 'lamp', 'crab', 'polvo',
 function enemyScale(id, d) { if (d.bsc) return d.bsc; if (d.boss) return 1; return EN_TINY.has(id) ? 1 : 2; }
 // formação em diagonal à direita (pés de cada inimigo)
 function enemySlot(i, n) { return (n === 1 ? [[178, 116]] : n === 2 ? [[162, 90], [206, 122]] : [[196, 70], [150, 98], [206, 126]])[i]; }
-// faixa do grupo entre a arena e a caixa: retrato, nome, PV e PM
+// barra neon: fundo escuro da mesma cor, preenchimento vivo, brilho em cima e um leve halo
+function neonBar(x, y, w, h, f, c) {
+  f = Math.max(0, Math.min(1, f)); const fw = Math.round(w * f);
+  bx.globalAlpha = 0.25; bx.fillStyle = c.fill; bx.fillRect(x - 1, y - 1, w + 2, h + 2); bx.globalAlpha = 1;
+  bx.fillStyle = '#07050c'; bx.fillRect(x, y, w, h);
+  bx.fillStyle = c.bg; bx.fillRect(x + 1, y + 1, w - 2, h - 2);
+  if (fw > 0) { bx.fillStyle = c.fill; bx.fillRect(x + 1, y + 1, Math.max(0, fw - 2), h - 2); bx.fillStyle = c.hi; bx.fillRect(x + 1, y + 1, Math.max(0, fw - 2), 1); }
+}
+const NEON_PV = { bg: '#0c2e1a', fill: '#39ff7a', hi: '#c8ffd8' }, NEON_PM = { bg: '#0a1e3a', fill: '#2ad4ff', hi: '#c8f4ff' };
+// faixa do grupo entre a arena e a caixa: retrato, nome, PV (verde neon) e PM (azul neon)
 function drawPartyStrip() {
   const y = 134;
   bx.fillStyle = '#07050c'; bx.fillRect(0, y - 1, 240, 16); bx.fillStyle = '#3a3448'; bx.fillRect(0, y - 1, 240, 1); bx.fillRect(0, y + 14, 240, 1);
   const icon = pbSprites(G.species).idle[0];
-  bx.drawImage(icon, 2, 6, 28, 22, 6, y + 1, 14, 11);
-  txt(G.name, 24, y + 1, { col: '#ffffff' });
-  const lw = lineW(rich(G.name), 1);
-  txt('NV' + G.lv, 28 + lw, y + 1, { col: '#8a8099' });
-  const hx = 104;
-  txt('PV', hx, y + 1, { col: '#ffffff' });
-  const low = G.hp / G.st.mhp < 0.3;
-  bar(hx + 14, y + 4, 40, 6, G.hp / G.st.mhp, low ? '#ff6b6b' : '#ffe066');
-  txt(`${G.hp}/${G.st.mhp}`, hx + 58, y + 1, { col: low ? '#ff6b6b' : '#ffffff' });
-  txt(`PM ${G.mp}`, 236, y + 1, { align: 'right', col: '#8fe3ff' });
+  bx.drawImage(icon, 2, 6, 28, 22, 4, y + 1, 14, 11);
+  let nm = G.name; while (nm.length > 1 && lineW(rich(nm), 1) > 48) nm = nm.slice(0, -1);
+  txt(nm, 21, y + 1, { col: '#ffffff' });
+  const low = G.hp / G.st.mhp < 0.3, blink = low && FRAME % 40 < 20;
+  neonBar(72, y + 4, 34, 6, G.hp / G.st.mhp, blink ? { bg: '#3a0c18', fill: '#ff3a6a', hi: '#ffc8d8' } : NEON_PV);
+  txt(`${G.hp}/${G.st.mhp}`, 109, y + 1, { col: blink ? '#ff6b8a' : '#7affa8' });
+  neonBar(158, y + 4, 28, 6, G.mp / G.st.mmp, NEON_PM);
+  txt(`${G.mp}/${G.st.mmp}`, 236, y + 1, { align: 'right', col: '#7ae4ff' });
 }
