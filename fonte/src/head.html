@@ -171,6 +171,23 @@
       camadas acima), memórias guardadas/perdidas, destino da Lume, escolhas-chave (G.flags: Rita e
       dateScore/ritaPromise, Ofélia, Clara, Maren, Jorge, Catálogo), chefes secretos vencidos, tempo de jogo
       e dificuldade. NÃO leva nível nem números: a T2 começa do zero em força, mas com a mesma identidade.
+    * FEITOS (decidido com o usuário): a herança leva a lista de feitos do personagem, e a T2 os menciona em
+      diálogos, cartazes, canções de taverna e rumores. Cada feito tem id, frase curta e capítulo. Exemplos:
+      venceu o Polvo Camarote; poupou ou derrotou a Brida; libertou as jaulas; resolveu o caso do bonde do
+      Jorge; venceu cada chefe secreto; zerou no Desafio; terminou sem usar o frasco num chefe; guardou todas
+      as memórias; encontro com a Rita (e a nota dele). Feitos raros geram reações raras (um NPC que
+      desconfia, um bardo que errou a história, uma criança fantasiada de baú).
+      Implementação: no Cap. 8, montar a lista a partir das G.flags que já existem (chefes, missões,
+      escolhas); de agora em diante, todo capítulo novo deve gravar flags claras para cada feito novo.
+    * NÍVEL DE PODER NA LORE: a T2 recomeça os números, mas a história reconhece quem o baú é. A herança
+      guarda um RENOME calculado a partir do grau final, do nível, dos chefes e dos feitos, em faixas:
+      Curiosidade da masmorra < Ameaça local < Lenda de Velhágua < Coisa que não devia existir.
+      O renome muda como a superfície reage: guardas que fogem ou chamam reforço, guildas que oferecem
+      contrato, inimigos que já conhecem as técnicas dele, preços e portas.
+      Motivo para o poder voltar ao zero: o corpo de baú é feito do mana da masmorra; fora dela ele
+      enfraquece (e a Runa do Rosto consome muito). O poder não some, fica ADORMECIDO: ao longo da T2 ele
+      volta em marcos da história ("o baú lembra como era ser uma Arca Bastião"), recuperando as técnicas
+      da linha herdada mais rápido que um save novo.
     * A forma herdada dá na T2 a técnica-assinatura da linha (ex.: Baluarte para Bastião) já no começo, e
       os personagens que voltam lembram o que aconteceu.
     * Como passar: a T2 será publicada no mesmo domínio (andre-brito-py.github.io), então lê a herança
