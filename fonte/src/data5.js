@@ -624,3 +624,7 @@ TECH.aprendizes = { name: 'Apito da Brida', cd: 5, desc: 'Pip, Nina e Tolo apare
     carro: 'A lataria amassa, mas aguenta. Pouco efeito.', escudeiro: 'A mordida bate no escudo. Pouco efeito.' };
   for (const k in BM) if (ENEMIES[k]) ENEMIES[k].biteMsg = BM[k];
   for (const k in ENEMIES) if (!ENEMIES[k].biteMsg && (ENEMIES[k].weak || {}).bite < 1) console.warn('sem frase de mordida:', k); }
+// ---------- Lanternas moderadas (v1.9): uma no começo de cada capítulo e uma antes de cada chefe ----------
+// O resto foi removido. Quem salvou numa Lanterna que sumiu continua carregando do mesmo lugar.
+{ const cut = ['save_p', 'save_m', 'save_a', 'save_w', 'save_c', 'save_dv', 'save_co', 'save_tr', 'save_of'];
+  for (const k in MAPS) MAPS[k].ents = MAPS[k].ents.filter(e => !(e.kind === 'save' && cut.includes(e.id))); }

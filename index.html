@@ -239,6 +239,8 @@
   (talvez o MOTORISTA do ônibus, alma nº 1?); revelar pistas de que Ofélia veio de uma "viagem" antiga;
   novo aliado monstro do ônibus; runas Sombra/Vento; 4ª evolução por volta do nível 10 do 3º grau.
 
+  LANTERNAS (v1.9): só uma no começo de cada capítulo e uma antes de cada chefe (2-4 por capítulo).
+  Capítulos novos seguem essa regra.
   CURA E SAVE (v1.3): Lanternas de Âmbar SALVAM e enchem o FRASCO DE ÂMBAR, mas NÃO curam. O frasco tem
   3 goles (45% PV + 30% PM cada); Fragmentos de Âmbar em baús escondidos dão +1 gole (Poço, Acampamento,
   Teatro). Subir de nível cura só 25%. Evoluir cura tudo. Perder volta à última Lanterna com tudo cheio.
@@ -2904,7 +2906,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–5', 6, 226, { col: '#5a5070' }); txt('v1.8', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–5', 6, 226, { col: '#5a5070' }); txt('v1.9', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
@@ -5830,6 +5832,10 @@ TECH.aprendizes = { name: 'Apito da Brida', cd: 5, desc: 'Pip, Nina e Tolo apare
     carro: 'A lataria amassa, mas aguenta. Pouco efeito.', escudeiro: 'A mordida bate no escudo. Pouco efeito.' };
   for (const k in BM) if (ENEMIES[k]) ENEMIES[k].biteMsg = BM[k];
   for (const k in ENEMIES) if (!ENEMIES[k].biteMsg && (ENEMIES[k].weak || {}).bite < 1) console.warn('sem frase de mordida:', k); }
+// ---------- Lanternas moderadas (v1.9): uma no começo de cada capítulo e uma antes de cada chefe ----------
+// O resto foi removido. Quem salvou numa Lanterna que sumiu continua carregando do mesmo lugar.
+{ const cut = ['save_p', 'save_m', 'save_a', 'save_w', 'save_c', 'save_dv', 'save_co', 'save_tr', 'save_of'];
+  for (const k in MAPS) MAPS[k].ents = MAPS[k].ents.filter(e => !(e.kind === 'save' && cut.includes(e.id))); }
 
 // ================= HUMANIDADE E HUMOR =================
 // Momentos que lembram que o baú já foi uma pessoa comum: ele cora, pensa besteira, tem vergonha do passado.
