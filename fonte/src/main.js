@@ -372,13 +372,32 @@ function backupOverlay() {
 }
 
 // ---------- save ----------
-const SAVE_KEY = 'renasci_bau_v1';
+// três espaços de save; o 1º usa a chave antiga, para os saves de antes continuarem valendo
+const SAVE_KEYS = ['renasci_bau_v1', 'renasci_bau_v1_s2', 'renasci_bau_v1_s3'];
+let SLOT = 0; try { SLOT = Math.min(2, Math.max(0, +(localStorage.getItem('rcb_slot') || 0))); } catch (e) { }
+const SAVE_KEY = SAVE_KEYS[0];
+function setSlot(i) { SLOT = i; try { localStorage.setItem('rcb_slot', String(i)); } catch (e) { } }
+function chapterOf(d) { const f = (d && d.flags) || {}; return f.ch5open ? 5 : f.ch4open ? 4 : f.ch3open ? 3 : f.ch1done ? 2 : 1; }
+function slotItems(mode) {
+  return SAVE_KEYS.map((_, i) => { const d = readSave(i); return d ? { label: `${i + 1}. ${d.name || '???'}`, right: `Cap. ${chapterOf(d)}`, col: i === SLOT ? '#ffe066' : null } : { label: `${i + 1}. (vazio)`, right: '', disabled: mode === 'load' }; });
+}
+function slotDesc(i) { const d = readSave(i); if (!d) return 'Espaço livre.'; const sp = SPECIES[d.species]; return `${sp ? sp.name : '?'} nv ${d.lv} · ${MAPS[d.map] ? MAPS[d.map].name : ''} · Tempo ${fmtTime(d.time || 0)}`; }
+async function pickSlot(title, mode) {
+  while (true) {
+    const r = await list({ title, x: 8, y: 8, w: 224, idx: SLOT, items: slotItems(mode), desc: slotDesc, allowDisabled: false });
+    if (r < 0) return -1;
+    if (mode === 'save' && r !== SLOT && readSave(r)) { const c = await choose(`* O espaço ${r + 1} já tem um save. Substituir?`, ['Substituir', 'Voltar'], 'n', 1); if (c !== 0) continue; }
+    if (mode === 'new' && readSave(r)) { const c = await choose(`* O espaço ${r + 1} já tem um save. Ele será apagado no primeiro save do jogo novo. Usar mesmo assim?`, ['Usar este espaço', 'Voltar'], 'n', 1); if (c !== 0) continue; }
+    return r;
+  }
+}
 function snapshot() { return JSON.parse(JSON.stringify({ ...G, v: 1 })); }
 function encodeSave() { return 'RCB1.' + btoa(unescape(encodeURIComponent(JSON.stringify(snapshot())))); }
 function decodeSave(s) { try { if (!s.startsWith('RCB1.')) return null; const d = JSON.parse(decodeURIComponent(escape(atob(s.slice(5))))); return d && d.st && d.map ? d : null; } catch (e) { return null; } }
-function writeSave() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(snapshot())); return true; } catch (e) { return false; } }
+function writeSave() { try { localStorage.setItem(SAVE_KEYS[SLOT], JSON.stringify(snapshot())); localStorage.setItem('rcb_slot', String(SLOT)); return true; } catch (e) { return false; } }
 function saveGame() { return writeSave(); }
-function readSave() { try { const s = localStorage.getItem(SAVE_KEY); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+function readSave(i = SLOT) { try { const s = localStorage.getItem(SAVE_KEYS[i]); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+const anySave = () => SAVE_KEYS.some((_, i) => readSave(i));
 function applySave(d) {
   if (!d.flask) { const extra = ['c_p2', 'c_a1', 'c_t2'].filter(k => d.gone && d.gone[k]).length; d.flask = { n: 3 + extra, max: 3 + extra }; d.flags = d.flags || {}; }
   G = Object.assign(newState(), d); migrateRunes(d); loadMap(G.map, G.x, G.y, G.dir || 'down'); V.scene = 'world'; }
@@ -557,7 +576,11 @@ async function lantern() {
   while (true) {
     const c = await choose('* A Lanterna espera. O que você faz?', ['Salvar o jogo', 'Fundir runas', 'Seguir viagem'], 'n', 2);
     if (c === 1) { await fuseMenu(); continue; }
-    if (c === 0) { if (saveGame()) { sfx('save'); await say('[Registro atualizado.]', 'cat'); } else await say('* Não foi possível salvar neste navegador. Use o Backup no MENU.'); }
+    if (c === 0) {
+      const k = await pickSlot('Salvar em qual espaço?', 'save'); if (k < 0) continue;
+      setSlot(k);
+      if (saveGame()) { sfx('save'); await say(`[Registro atualizado no espaço ${k + 1}.]`, 'cat'); } else await say('* Não foi possível salvar neste navegador. Use o Backup no MENU.');
+    }
     break;
   }
   if (respawn) await say('* Ao longe, monstros da masmorra se espreguiçam e acordam.');
@@ -1515,6 +1538,8 @@ function drawTitle() {
   bx.fillStyle = 'rgba(0,0,0,0.5)'; bx.fillRect(98, 180, 44, 4);
   const fr = SP.mimic[(FRAME % 180) < 10 ? 1 : (FRAME % 300) > 280 ? 2 : 0];
   bx.drawImage(fr, 88, 116 - hop, 64, 64);
+  // com a lista de saves ou uma pergunta aberta, o título some para não passar por cima
+  if (UI.stack.some(w => (w.type === 'list' && w.o.title) || w.type === 'dialog')) return;
   txt('RENASCI', 120, 28, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
@@ -1528,16 +1553,20 @@ async function titleFlow() {
   const tok = V.titleTok = {}; await new Promise(r => { const f = () => { if (V.titleTok !== tok || V.scene !== 'title') return; if (btnp('a')) { r(); return; } requestAnimationFrame(f); }; f(); });
   if (V.titleTok !== tok || V.scene !== 'title') return;
   V.titleWait = false; unlockAudio(); sfx('select'); playMusic('title'); AU.curName === 'title' || playMusic('title');
-  const sv = readSave();
-  const items = sv ? [{ label: 'Continuar' }, { label: 'Novo jogo' }] : [{ label: 'Novo jogo' }];
-  let r;
+  if (!readSave(SLOT)) { const k = SAVE_KEYS.findIndex((_, i) => readSave(i)); if (k >= 0) setSlot(k); }
+  const has = anySave();
+  const items = has ? [{ label: 'Continuar' }, { label: 'Carregar' }, { label: 'Novo jogo' }] : [{ label: 'Novo jogo' }];
+  let r, slot = SLOT;
   while (true) {
-    r = await list({ x: 70, y: 186, w: 100, items, cancel: false });
-    if (items[r].label === 'Novo jogo' && sv) { const c = await choose('* Começar do zero? O save atual será substituído quando você salvar de novo.', ['Começar', 'Voltar'], 'n', 1); if (c !== 0) continue; }
+    r = await list({ x: 70, y: 176, w: 100, items, cancel: false });
+    const lb = items[r].label;
+    if (lb === 'Carregar') { const k = await pickSlot('Carregar qual save?', 'load'); if (k < 0) continue; slot = k; break; }
+    if (lb === 'Novo jogo' && has) { const k = await pickSlot('Novo jogo em qual espaço?', 'new'); if (k < 0) continue; slot = k; break; }
     break;
   }
   await fadeOut(30);
-  if (items[r].label === 'Continuar') { applySave(sv); await fadeIn(30); return; }
+  setSlot(slot);
+  if (items[r].label !== 'Novo jogo') { applySave(readSave(slot)); await fadeIn(30); return; }
   G = newState(); V.scene = 'black'; V.fade = 0;
   await runScript(STORY.intro);
 }
