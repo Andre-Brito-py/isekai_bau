@@ -124,6 +124,28 @@
   - GANCHO CAP. 6 "Almas do 31": juntar as almas do ônibus espalhadas pela masmorra (Dona Cida nº 7, Lume
     nº 12, os heróis do Andar 3, o Musgo como aliado) para ir buscar o 31 antes que a coleção se complete.
 
+  HUMANIDADE E HUMOR (humor.js; vale para todos os capítulos)
+  O baú foi uma pessoa comum e isso tem que aparecer: ele CORA (blush(): tampa rosada, vapor e coração no
+  mapa) perto de mulheres que acha bonitas, fica sem jeito, lembra de besteiras da vida (suculenta Gerson,
+  30 reais devendo ao primo, academia "de dedo"). Pensamentos aleatórios nas Lanternas (THOUGHTS). Cenas:
+  Madame Pavio (vela vendedora, Mercado), bilhete "Quer sair comigo?" da 8ª série (Achados), a primeira
+  Clériga em batalha ("Ela reza bonito"), e o ENCONTRO com a RITA no Terminal (estilo encontro de RPG:
+  3 perguntas com escolhas e um medidor de "Clima"; nota alta = beijinho na fechadura e G.flags.ritaPromise:
+  "Quando você arranjar um rosto, me procura. O pastel é por minha conta."). Regras: humor como alívio,
+  nunca no meio de cena grave; flerte só com personagens adultos; nunca com aprendizes ou crianças.
+  RETRATOS (portraits.js): bustos 32x32 com 3 quadros (parado, falando, piscando) para os personagens
+  importantes. Todo personagem novo com nome e várias falas ganha retrato próprio (bust() para humanos).
+
+  FORMA HUMANA E ROMANCE (plano)
+  - No fim da Temporada 1 (Cap. 8), depois da escolha final, o protagonista ganha a RUNA DO ROSTO: a lição da
+    Ofélia/Clara sobre escolher o próprio nome vira magia. Ela deixa assumir uma forma humana por um tempo.
+  - A fidelidade da forma depende das MEMÓRIAS que sobraram: cada memória paga nas evoluções deixa o rosto
+    mais borrado (sem o pastel, ele não lembra o próprio sorriso direito). Guardar memórias tem valor real.
+  - Na Temporada 2 (a superfície), a forma humana serve para andar entre humanos sem ser caçado; ela dura
+    pouco e cansa, e o corpo de baú continua sendo o verdadeiro.
+  - Romance opcional, devagar, só com adultos, a partir da T2. Sementes já plantadas: RITA (ex-escudeira,
+    flags dateDone/dateScore/ritaPromise) e o humor da Madame Pavio. Outras opções podem surgir na T2.
+
   ESTRUTURA: TEMPORADA 1 DE UMA TRILOGIA (meta: 10-15 h de jogo no total)
   Esta temporada se passa inteira dentro da Masmorra de Velhágua. Fecha o arco do Catálogo e deixa
   um gancho forte para a Temporada 2. Duração-alvo por capítulo, sem enchimento: história principal
@@ -137,7 +159,7 @@
     6. Almas do 31 ..................... Reencontrar outras almas do ônibus espalhadas pela masmorra
                                          (cada uma vira aliado ou inimigo conforme as escolhas)
     7. O Selado ........................ O que a masmorra prende; 5º grau; decisões sem volta
-    8. A Tampa se Fecha (final) ........ Chefe final: o próprio Catálogo. Escolha final.
+    8. A Tampa se Fecha (final) ........ Chefe final: o próprio Catálogo. Escolha final. RUNA DO ROSTO (forma humana).
   Total estimado: ~11 h de história + 2-3 h opcionais = 13-14 h.
   CONTEÚDO OPCIONAL RECORRENTE (a partir do Cap. 3): 2-3 missões paralelas por capítulo ligadas às
   almas do ônibus; 1 chefe secreto a cada 2 capítulos; Bestiário da Ofélia (avaliar todo monstro dá
@@ -1633,8 +1655,10 @@ function say(text, who = 'n', opt = {}) {
       box(6, y, 228, h, { edge: wd.edge || '#ffffff' });
       let tx = 16;
       if (hasP) {
-        const p = wd.portrait(); const sc = 32 / Math.max(p.width, p.height);
-        bx.drawImage(p, 12, y + 14, p.width * sc, p.height * sc); tx = 52;
+        const p = wd.portrait(!this.tw.done);
+        if (p.width >= 32) { box(10, y + 9, 36, 36, { bw: 1, edge: wd.edge || '#8a8099', fill: '#1a1424' }); bx.drawImage(p, 12, y + 11); }
+        else { const sc = 32 / Math.max(p.width, p.height); bx.drawImage(p, 12, y + 14, p.width * sc, p.height * sc); }
+        tx = 52;
       }
       if (wd.name) { const nm = wd.name(); const nw = nm.length * 6 + 10; box(12, y - 8, nw, 14, { bw: 1, edge: wd.edge || '#ffffff' }); txt(nm, 17, y - 7, { col: '#ffe066' }); }
       this.tw.draw(tx, y + 8, 12);
@@ -5806,6 +5830,330 @@ TECH.aprendizes = { name: 'Apito da Brida', cd: 5, desc: 'Pip, Nina e Tolo apare
     carro: 'A lataria amassa, mas aguenta. Pouco efeito.', escudeiro: 'A mordida bate no escudo. Pouco efeito.' };
   for (const k in BM) if (ENEMIES[k]) ENEMIES[k].biteMsg = BM[k];
   for (const k in ENEMIES) if (!ENEMIES[k].biteMsg && (ENEMIES[k].weak || {}).bite < 1) console.warn('sem frase de mordida:', k); }
+
+// ================= HUMANIDADE E HUMOR =================
+// Momentos que lembram que o baú já foi uma pessoa comum: ele cora, pensa besteira, tem vergonha do passado.
+
+// ---------- corar: a tampa fica rosada e solta vapor ----------
+function blush(t = 420) { WD.blush = t; sfx('blipTri', 1700); }
+{ const _uw = updateWorld; updateWorld = function () { _uw(); if (WD.blush > 0) WD.blush--; }; }
+{ const _dw = drawWorld; drawWorld = function () {
+  _dw();
+  if (!(WD.blush > 0) || V.scene !== 'world') return;
+  const ox = Math.floor(WD.cx), oy = Math.floor(WD.cy), sx = WD.fx - ox, sy = WD.fy - oy, f = FRAME % 24;
+  bx.globalAlpha = 0.6; bx.fillStyle = '#ff6b9a'; bx.fillRect(sx + 2, sy + 7, 4, 2); bx.fillRect(sx + 10, sy + 7, 4, 2); bx.globalAlpha = 1;
+  bx.fillStyle = '#ffffff'; bx.fillRect(sx + 3, sy - 1 - Math.floor(f / 4), 2, 2); bx.fillRect(sx + 11, sy - 3 - Math.floor(((f + 12) % 24) / 4), 2, 2);
+  txt('♥', sx + 13, sy - 12, { col: '#ff6b9a', shadow: true });
+}; }
+
+// ---------- pensamentos de gente, nas Lanternas ----------
+const THOUGHTS = [
+  [['Eu tenho saudade de coçar o nariz.| Eu não tenho nariz. Mas a saudade continua.', 'me']],
+  [['Às vezes eu ainda tento pegar o celular no bolso.| Eu SOU o bolso.', 'me']],
+  [['Será que alguém regou a minha planta? Era uma suculenta. O nome dela era Gerson.', 'me'], ['Você deu nome pra uma suculenta?', 'lume'], ['O Gerson merecia um nome.', 'me']],
+  [['Lume, você acha que eu engordo se comer muita runa?', 'me'], ['Você é um baú. Você não engorda. Você fica... espaçoso.', 'lume']],
+  [['Eu morri devendo trinta reais pro meu primo.| Espero que ele tenha esquecido.', 'me'], ['Ele não esqueceu.', 'lume'], ['Você nem conhece ele!', 'me'], ['Ninguém esquece trinta reais.', 'lume']],
+  [['Eu nunca terminei aquele mangá. Agora eu vivo dentro de um. A ironia é enorme.', 'me']],
+  [['Eu dobrava a roupa de qualquer jeito. Agora eu sou o lugar onde a roupa fica.| Me sinto julgado.', 'me']],
+  [['Às vezes eu sonho que tenho mãos. Eu acordo e abro e fecho a tampa só pra conferir.', 'me'], ['...Isso foi triste, baú.', 'lume'], ['Eu sei. Desculpa. Pensa numa coisa engraçada.', 'me'], ['Você tem medo de cupim.', 'lume'], ['TODO MUNDO TEM MEDO DE CUPIM.', 'me']],
+  [['Lume. Se eu fosse gente de novo, por um dia só, sabe o que eu ia fazer?', 'me'], ['Comer?', 'lume'], ['...Comer. É. Era isso mesmo.', 'me']],
+  [['Eu fazia uma careta pra foto da carteirinha. Agora eu queria ter uma cara pra fazer careta.', 'me']]
+];
+{ const _l = lantern; lantern = async function () {
+  await _l();
+  if (!G.flags.introDone || Math.random() > 0.35) return;
+  const seen = G.flags.thoughts || []; const left = THOUGHTS.map((t, i) => i).filter(i => !seen.includes(i) && (G.flags.lumeJoined || !THOUGHTS[i].some(([, w]) => w === 'lume')));
+  if (!left.length) return;
+  const i = pickOne(left); G.flags.thoughts = [...seen, i];
+  for (const [t, w] of THOUGHTS[i]) await say(t, w);
+}; }
+
+// ---------- sprites ----------
+function buildSpritesHumor() {
+  SP.pavio = [0, 1].map(f => cv4(16, 16, r => {
+    r(4, 5, 8, 11, 'k'); r(5, 6, 6, 9, '#f2e2c0'); r(5, 6, 6, 1, '#fff4dc'); r(4, 14, 8, 2, '#c8962a');
+    r(6, 0 + f, 4, 6, 'k'); r(7, 1 + f, 2, 4, '#ffb040'); r(7, 2 + f, 2, 2, '#fff4c0'); r(5, 3, 1, 3, '#ffb040'); r(10, 3, 1, 3, '#ffb040');
+    r(6, 8, 1, 1, 'k'); r(9, 8, 1, 1, 'k'); r(5, 7, 2, 1, 'k'); r(9, 7, 2, 1, 'k'); r(7, 11, 2, 1, '#c83838'); r(5, 10, 1, 1, '#ff9aaa'); r(10, 10, 1, 1, '#ff9aaa');
+  }));
+  SP.rita = [hum({ fem: true, S: '#c8905a', h: '#5a2a1a', m: '#5a2a1a', l: '#7a3a20', G: 'u' }), hum({ fem: true, S: '#c8905a', h: '#5a2a1a', m: '#5a2a1a', l: '#7a3a20', G: 'u' })];
+}
+{ const _bs = buildSprites; buildSprites = function () { _bs(); buildSpritesHumor(); }; }
+WHO.pavio = { name: () => 'Madame Pavio', portrait: () => SP.pavio[0], voice: () => sfx('blipTri', 1100), col: '#fff0d0' };
+WHO.rita = { name: () => 'Rita', portrait: () => SP.rita[0], voice: () => sfx('blip', 600) };
+ITEMS.sache = { name: 'Sachê de Lavanda', hp: 40, cure: true, desc: 'Cura 40 PV e tira efeitos ruins. Deixa a tampa cheirando a gaveta de avó.' };
+
+// ---------- cenas ----------
+MAPS.mercado.ents.push({ id: 'pavio', kind: 'npc2', x: 25, y: 12, sp: 'pavio', talk: 'pavio', glow: 'rgba(255,200,120,0.2)' });
+MAPS.achados.ents.push({ id: 'bilhete8', kind: 'npc2', x: 26, y: 1, sp: 'letter', talk: 'bilhete8', hide: 'bilhete8', float: true, glow: 'rgba(255,150,190,0.2)' });
+MAPS.terminal.ents.push({ id: 'rita', kind: 'npc2', x: 24, y: 4, sp: 'rita', talk: 'rita' });
+Object.assign(STORY, {
+  async pavio() {
+    const f = G.flags;
+    if (f.pavioMet) { blush(200); await say(pickOne(['Voltou, docinho? Cuidado pra não derreter perto de mim.', 'Essa dobradiça brilhando... você passou óleo, foi?', 'Se precisar de luz, é só chamar. Eu ilumino qualquer ambiente.']), 'pavio'); return; }
+    f.pavioMet = true;
+    await say('* Atrás de uma banca de velas, uma vela alta e elegante, de cera cor de mel. A chama dela parece um penteado.');
+    await say('Ora, ora. Um baú de madeira de lei. Faz tempo que não aparece um móvel tão bem acabado no meu mercado.', 'pavio');
+    blush();
+    await say('* A sua tampa esquenta. Muito. Sai um vapor fininho das dobradiças.');
+    await say('Eu... é... obrigado? Eu sou... de madeira. É. Isso aí. Madeira.', 'me');
+    await say('Você tá CORANDO?', 'lume');
+    await say('Baú não cora!', 'me');
+    await say('Você tá da cor de goiaba.', 'lume');
+    await say('Madame Pavio, encantada. Vendo velas, luz e conselhos amorosos. O último é de graça.', 'pavio');
+    await say('Conselho: quando gostar de alguém, fala. A vida é curta. A cera, mais ainda.', 'pavio');
+    await say('Eu morri antes de aprender a falar com mulher.| Agora eu sou um baú. Não melhorou.', 'me');
+    await say('Ah, docinho. Ninguém aprende. A gente só vai ficando corajoso.', 'pavio');
+    giveItem('vela', 2); sfx('item');
+    await say('* Madame Pavio te dá {y}Vela Doce{/} ×2. "Por conta da casa. Pela cor de goiaba."');
+  },
+  async bilhete8(e) {
+    if (G.flags.bilhete8) return;
+    G.flags.bilhete8 = true; sfx('item');
+    await say('* Um bilhete dobrado em forma de coração, com a etiqueta "ÔNIBUS 31 — Nº 31".');
+    await say('* Lá dentro, com letra de oitava série: "Quer sair comigo? ( ) sim ( ) não ( ) talvez".');
+    blush();
+    await say('Não.| Não, não, não. Isso NÃO é meu.', 'me');
+    await say('Tem o seu número na etiqueta.', 'lume');
+    await say('É de OUTRO número trinta e um.', 'me');
+    await say('Tem um nome riscado aqui embaixo. Começa com J...', 'lume');
+    await say('LUME.', 'me');
+    await say('Eu vou anotar isso.', 'of');
+    await say('NINGUÉM VAI ANOTAR NADA.', 'me');
+    await say('* Silêncio. A Lume dobra o bilhete com cuidado.');
+    await say('...Você nunca entregou?', 'lume');
+    await say('Eu tinha treze anos e muito medo de "não".', 'me');
+    await say('E se fosse "sim"?', 'lume');
+    await say('Aí eu ia ter que falar com ela.| Pior ainda.', 'me');
+  },
+  async rita() {
+    const f = G.flags;
+    if (!f.ritaMet) {
+      f.ritaMet = true;
+      await say('* No guarda-volumes da rodoviária, uma mulher de cabelo preso e armadura sem brasão organiza malas perdidas.');
+      await say('* Ela tira a mochila de um herói de cima de você e te olha de cima a baixo.');
+      await say('Que mala bonita. Madeira boa. Ferragem caprichada.| Quem foi o idiota que esqueceu você aqui?', 'rita');
+      blush();
+      await say('* A sua tampa faz um barulhinho involuntário. Tipo uma chaleira.');
+      await say('...Oi.', 'me');
+      await say('* Ela dá um pulo para trás e quase derruba uma pilha de malas.');
+      await say('Você FALA?', 'rita');
+      await say('Ele fala, ele morde e ele cora. É um pacote completo.', 'lume');
+      await say('Rita. Ex-escudeira de Auren. Larguei a lança quando mandaram queimar um ninho de cogumelos com os filhotes dentro.', 'rita');
+      await say('Agora eu cuido das malas e escondo quem precisa fugir. Inclusive bagagem falante, pelo jeito.', 'rita');
+      return;
+    }
+    if (!f.dateDone) {
+      if (!f.dateAsk) {
+        f.dateAsk = true;
+        await say('Psiu. Baú. Vem cá.', 'lume');
+        await say('Eu falei com a Rita. Ela topou tomar um café com você. Nos bancos da plataforma 4.', 'lume');
+        await say('VOCÊ O QUÊ?', 'me');
+        await say('Um encontro, baú. A gente tá no meio de uma guerra, todo mundo vai morrer de novo, você merece UM café.', 'lume');
+      }
+      const c = await choose('* Ir ao encontro com a Rita?', ['Ir (com o coração na tampa)', 'Ainda não estou pronto'], 'n', 1);
+      if (c !== 0) { await say('Covarde. Mas um covarde fofo.', 'lume'); return; }
+      await STORY.encontro();
+      return;
+    }
+    await say(f.ritaPromise ? pickOne(['Ainda tá de pé o pastel, hein. Quando você tiver um rosto.', 'Se cuida lá embaixo, mala falante.']) : pickOne(['Amigos de bagagem, né? Combinado.', 'Precisa guardar alguma coisa? Eu guardo. Inclusive segredo.']), 'rita');
+  },
+  async encontro() {
+    playMusic('terminal');
+    await say('* Plataforma 4. Dois copinhos de café de máquina. Você não tem como segurar o seu. A Rita segura os dois.');
+    let clima = 0;
+    const meter = () => `[Clima do encontro: ${'♥'.repeat(Math.max(0, clima))}${clima <= 0 ? '...' : ''}]`;
+    await say('E aí. O que um baú faz pra se divertir?', 'rita');
+    let c = await choose('* O que você responde?', ['"Eu guardo coisas. Sou ótimo nisso."', '"Eu como runas. É tipo sushi."', '(Ficar em silêncio)']);
+    if (c === 0) { clima += 1; await say('Ótimo currículo. Eu guardo malas. A gente tem muito em comum.', 'rita'); }
+    else if (c === 1) { clima += 2; await say('* Rita ri tanto que o café sai pelo nariz.'); await say('Sushi! Que nojo. Me conta mais.', 'rita'); }
+    else { await say('Fala ALGUMA coisa!', 'lume'); await say('* Você abre a tampa e fecha de novo. Com som.'); await say('...Isso foi um sim?', 'rita'); }
+    sfx('catalog'); await say(meter(), 'cat');
+    await say('Você era gente antes, né? Do que você gostava?', 'rita');
+    c = await choose('* O que você responde?', ['"Mangá. E pastel de feira."', '"Dormir. Eu era excelente em dormir."', '"Eu fazia academia." (mentira)']);
+    if (c === 0) {
+      clima += 2;
+      if (G.flags.mem_pastel) { await say('Pastel. Eu... não lembro o gosto. Eu sei que gostava. Me disseram.', 'me'); await say('* A Rita para de sorrir por um segundo.'); await say('Então um dia eu te pago um. E você me conta se lembrou.', 'rita'); clima += 1; }
+      else await say('Pastel de queijo ou de carne?', 'rita');
+    } else if (c === 1) { clima += 1; await say('Respeito. Eu não durmo desde que larguei a lança.', 'rita'); }
+    else { clima -= 1; await say('MENTIRA.', 'lume'); await say('Você não tem braço.', 'rita'); await say('...Eu fazia academia de dedo. No celular.', 'me'); }
+    sfx('catalog'); await say(meter(), 'cat');
+    await say('Posso fazer uma pergunta estranha? Como é aí dentro?', 'rita');
+    c = await choose('* Ela quer olhar dentro da sua tampa.', ['"Fica à vontade!"', '"É um pouco cedo pra isso."', '(Morder de leve, por reflexo)']);
+    if (c === 0) { clima += 1; await say('* Ela abre a sua tampa com cuidado. Lá dentro: três runas, uma pena do Escriba e uma meia.'); await say('Por que tem uma meia aqui?', 'rita'); await say('Eu não sei. Ela aparece. Toda manhã. Eu não tenho pé.', 'me'); }
+    else if (c === 1) { clima += 2; await say('* A Rita gargalha.'); await say('Um baú de respeito. Gostei.', 'rita'); }
+    else { clima -= 2; await say('* NHAC. Bem de leve. No dedão.'); await say('AI!', 'rita'); await say('DESCULPA! É reflexo! Eu juro que é reflexo!', 'me'); await say('...Tá. Foi meio engraçado.', 'rita'); }
+    sfx('catalog'); await say(meter(), 'cat');
+    await say('Esse foi o encontro mais esquisito da minha vida.| E eu já saí com um bardo.', 'rita');
+    G.flags.dateDone = true; G.flags.dateScore = clima;
+    if (clima >= 5) {
+      G.flags.ritaPromise = true; blush(600);
+      await say('* Ela se abaixa e dá um beijinho rápido na sua tampa. Bem na fechadura.');
+      await say('Quando você arranjar um rosto, me procura. O pastel é por minha conta.', 'rita');
+      await say('* Você não consegue falar nada. Você só solta vapor.');
+      await say('Ele travou. Acho que você quebrou ele.', 'lume');
+    } else if (clima >= 2) {
+      blush(300);
+      await say('Foi bom, mala falante. Sério. Fazia tempo que eu não ria.', 'rita');
+    } else await say('Vamos ser amigos. Amigos de bagagem. Combinado?', 'rita');
+    giveItem('sache', 2); sfx('item');
+    await say('* A Rita enfia dois sachês de lavanda na sua tampa. "Pra tirar o cheiro de pólvora." Você recebeu {y}Sachê de Lavanda{/} ×2.');
+    await say('Eu tô corado? Baú cora?', 'me');
+    await say('Cora. Você tá cor de goiaba de novo.', 'lume');
+  }
+});
+
+// ---------- na batalha: a primeira Clériga ----------
+{ const _pt = playerTurn; playerTurn = async function () {
+  if (!G.flags.blushCleric && BT.en.some(e => e.alive && (e.id === 'cleric' || e.id === 'clericM'))) {
+    G.flags.blushCleric = true;
+    await bSay('* A Clériga ajeita o cabelo antes de rezar. A sua tampa esquenta. Muito.');
+    await bSay('Baú. BAÚ. Ela tá rezando pra você MORRER.', { col: '#ffe066' });
+    await bSay('Eu sei. Ela reza bonito.', { col: '#ffffff' });
+  }
+  return _pt();
+}; }
+
+// ================= RETRATOS DE DIÁLOGO (32x32) =================
+// Personagens importantes ganham um busto próprio, mais detalhado que o sprite do mapa.
+// Cada retrato tem 3 quadros: parado, falando (boca aberta) e piscando.
+const PORT = {};
+function pcv(fn) { return [0, 1, 2].map(fr => cv4(32, 32, (r, x) => fn(r, fr, x))); }
+// busto humano parametrizado
+function bust(o) {
+  return pcv((r, fr) => {
+    const k = PAL.k, sk = o.skin, sd = o.skinD || shade(o.skin), hr = o.hair, cl = o.cloth, c2 = o.cloth2 || shade(o.cloth);
+    // cabelo de trás (comprido)
+    if (o.style === 'long' || o.style === 'pony') { r(6, 8, 20, 20, k); r(7, 9, 18, 19, hr); }
+    // ombros e roupa
+    r(3, 25, 26, 7, k); r(4, 26, 24, 6, cl); r(4, 26, 24, 1, c2); r(12, 24, 8, 3, k); r(13, 24, 6, 3, sk);
+    if (o.collar) { r(11, 26, 4, 3, o.collar); r(17, 26, 4, 3, o.collar); }
+    if (o.vest) { r(4, 27, 6, 5, o.vest); r(22, 27, 6, 5, o.vest); }
+    if (o.badge) r(21, 28, 3, 2, o.badge);
+    // rosto
+    r(9, 7, 14, 18, k); r(10, 8, 12, 16, sk); r(10, 21, 12, 3, sd); r(11, 23, 10, 1, sk);
+    r(8, 13, 2, 4, k); r(22, 13, 2, 4, k); r(9, 14, 1, 2, sd); r(22, 14, 1, 2, sd);
+    // olhos e sobrancelhas
+    const ey = 14;
+    if (fr === 2) { r(12, ey + 1, 3, 1, k); r(17, ey + 1, 3, 1, k); }
+    else { r(12, ey, 3, 3, '#ffffff'); r(17, ey, 3, 3, '#ffffff'); r(13, ey, 2, 3, o.eyes || '#3a2418'); r(18, ey, 2, 3, o.eyes || '#3a2418'); r(13, ey, 1, 1, '#ffffff'); r(18, ey, 1, 1, '#ffffff'); r(12, ey - 1, 3, 1, k); r(17, ey - 1, 3, 1, k); }
+    r(12, ey - 3, 3, 1, o.brow || shade(hr)); r(17, ey - 3, 3, 1, o.brow || shade(hr));
+    r(15, 17, 2, 2, sd);
+    if (o.blush) { r(11, 18, 2, 1, '#ff9aaa'); r(19, 18, 2, 1, '#ff9aaa'); }
+    // boca
+    if (fr === 1) { r(14, 20, 4, 2, '#5a1a1a'); r(15, 21, 2, 1, '#c85050'); } else r(14, 20, 4, 1, o.lips || '#8a3a3a');
+    if (o.stache) { r(12, 19, 8, 1, o.stache); r(12, 18, 3, 1, o.stache); r(17, 18, 3, 1, o.stache); }
+    // cabelo da frente
+    if (o.style !== 'bald') {
+      r(8, 4, 16, 6, k); r(9, 5, 14, 5, hr); r(9, 9, 3, 4, hr); r(20, 9, 3, 4, hr); r(12, 9, 5, 2, hr);
+      r(9, 5, 14, 1, shade(hr, 1.25));
+      if (o.style === 'long') { r(6, 10, 4, 16, hr); r(22, 10, 4, 16, hr); }
+      if (o.style === 'pony') { r(23, 6, 5, 3, k); r(24, 7, 6, 2, hr); r(27, 8, 3, 8, hr); }
+      if (o.style === 'bun') { r(12, 0, 8, 6, k); r(13, 1, 6, 4, hr); }
+      if (o.style === 'messy') { r(8, 3, 3, 3, hr); r(14, 2, 3, 3, hr); r(20, 3, 3, 3, hr); }
+    }
+    if (o.glasses) { r(11, ey - 1, 5, 5, o.glasses); r(16, ey - 1, 5, 5, o.glasses); r(12, ey, 3, 3, '#ffffff'); r(17, ey, 3, 3, '#ffffff'); if (fr !== 2) { r(13, ey, 2, 3, o.eyes || '#3a2418'); r(18, ey, 2, 3, o.eyes || '#3a2418'); } else { r(12, ey + 1, 3, 1, k); r(17, ey + 1, 3, 1, k); } }
+    if (o.scar) { r(19, 10, 1, 4, '#c87070'); r(20, 12, 1, 1, '#c87070'); }
+    if (o.earring) { r(9, 18, 1, 2, o.earring); r(22, 18, 1, 2, o.earring); }
+    if (o.extra) o.extra(r, fr);
+  });
+}
+function shade(hex, m = 0.7) { const n = parseInt(hex.slice(1), 16); const c = [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.max(0, Math.min(255, Math.round(v * m)))); return '#' + c.map(v => v.toString(16).padStart(2, '0')).join(''); }
+
+function buildPortraits() {
+  PORT.tiago = bust({ skin: '#d8a070', hair: '#3a2418', style: 'messy', cloth: '#3a5a8a', vest: '#7a4a2a', badge: '#f0c040', eyes: '#3a2418' });
+  PORT.brida = bust({ skin: '#d8a070', hair: '#8a2a1a', style: 'pony', cloth: '#9a93b0', collar: '#c83838', eyes: '#2a4a2a', scar: true,
+    extra: (r) => { r(18, 0, 3, 6, '#c83838'); r(20, 0, 3, 3, '#ff6b6b'); } });
+  PORT.maren = bust({ skin: '#e8c0a0', hair: '#2a1a30', style: 'long', cloth: '#7a48b0', collar: '#f0c040', eyes: '#5a2a8a', lips: '#7a2a5a',
+    extra: (r) => { r(7, 0, 18, 6, PAL.k); r(10, 0, 12, 5, '#3a2050'); r(10, 3, 12, 1, '#f0c040'); r(5, 5, 22, 3, PAL.k); r(6, 6, 20, 1, '#3a2050'); } });
+  PORT.maren5 = bust({ skin: '#e8c0a0', hair: '#2a1a30', style: 'messy', cloth: '#5a3a7a', eyes: '#5a2a8a', lips: '#7a2a5a',
+    extra: (r) => { r(12, 22, 1, 2, '#3a2050'); r(19, 12, 1, 3, '#3a2050'); } });
+  PORT.jorge = bust({ skin: '#d8a070', hair: '#9a9aa0', style: 'short', cloth: '#3a70c0', collar: '#e8e4dc', badge: '#f0c040', stache: '#7a7a80', eyes: '#3a2418',
+    extra: (r) => { r(7, 2, 18, 6, PAL.k); r(8, 3, 16, 4, '#2a4a8a'); r(13, 3, 6, 2, '#f0c040'); r(6, 7, 20, 2, PAL.k); } });
+  PORT.rita = bust({ skin: '#c8905a', hair: '#2a1410', style: 'pony', cloth: '#6a7084', collar: '#3a70c0', eyes: '#3a2418', earring: '#f0c040', lips: '#a04040' });
+  PORT.pip = bust({ skin: '#e8b890', hair: '#c86a30', style: 'messy', cloth: '#4a9a4a', eyes: '#3a5a2a', blush: true });
+  PORT.nina = bust({ skin: '#a86a40', hair: '#1a1410', style: 'bun', cloth: '#4a9a4a', eyes: '#3a2418' });
+  // Ofélia: fantasma bibliotecária, coque e óculos redondos
+  const ghost = (body, hair, rim, eyes) => pcv((r, fr) => {
+    const k = PAL.k;
+    r(4, 22, 24, 10, k); r(5, 23, 22, 9, body); r(13, 23, 6, 4, shade(body, 0.85)); r(15, 24, 2, 8, rim);
+    r(8, 6, 16, 18, k); r(9, 7, 14, 16, body); r(9, 20, 14, 3, shade(body, 0.88));
+    r(8, 3, 16, 6, k); r(9, 4, 14, 5, hair); r(12, 0, 8, 5, k); r(13, 1, 6, 3, hair); r(8, 8, 3, 7, hair); r(21, 8, 3, 7, hair);
+    r(10, 12, 6, 6, rim); r(16, 12, 6, 6, rim); r(11, 13, 4, 4, '#ffffff'); r(17, 13, 4, 4, '#ffffff');
+    if (fr === 2) { r(11, 15, 4, 1, k); r(17, 15, 4, 1, k); } else { r(12, 13, 2, 4, eyes); r(18, 13, 2, 4, eyes); r(12, 13, 1, 1, '#ffffff'); r(18, 13, 1, 1, '#ffffff'); }
+    if (fr === 1) { r(14, 19, 4, 2, '#3a2050'); } else r(14, 19, 4, 1, '#7a5aa0');
+    r(25, 12, 2, 2, '#ffffff'); r(4, 18, 1, 1, '#ffffff');
+  });
+  PORT.of = ghost('#e8e0f8', '#c0a0f0', '#f0c040', '#5a3a8a');
+  PORT.clara = ghost('#d8eef8', '#8ac0d8', '#7ad0f0', '#1c3058');
+  // Lume: lustre com rosto
+  PORT.lume = pcv((r, fr) => {
+    const k = PAL.k, au = '#f0c040', au2 = '#b88a20';
+    r(15, 0, 2, 6, k); r(6, 8, 20, 4, k); r(7, 9, 18, 2, au); r(7, 10, 18, 1, au2);
+    for (const cx of [5, 26]) { r(cx - 1, 4, 4, 6, k); r(cx, 5, 2, 4, '#f2ecdc'); r(cx, 1 + (FRAME >> 3) % 2, 2, 3, '#ffb040'); r(cx, 2 + (FRAME >> 3) % 2, 2, 1, '#fff4c0'); }
+    r(9, 11, 14, 16, k); r(10, 12, 12, 14, '#fff0b0'); r(10, 12, 12, 2, '#ffffff'); r(10, 23, 12, 3, '#f0d070');
+    if (fr === 2) { r(12, 17, 3, 1, k); r(17, 17, 3, 1, k); } else { r(12, 16, 3, 3, k); r(17, 16, 3, 3, k); r(12, 16, 1, 1, '#ffffff'); r(17, 16, 1, 1, '#ffffff'); }
+    r(11, 20, 2, 1, '#ff9aaa'); r(19, 20, 2, 1, '#ff9aaa');
+    if (fr === 1) r(14, 21, 4, 2, '#8a3a3a'); else r(14, 21, 4, 1, '#8a3a3a');
+    if (G.flags && G.flags.lumeFone) { r(8, 13, 2, 6, '#3a3a48'); r(22, 13, 2, 6, '#3a3a48'); r(9, 11, 14, 1, '#3a3a48'); r(8, 16, 2, 1, '#e8dcc0'); }
+    r(13, 27, 6, 3, k); r(14, 27, 4, 2, au); r(15, 30, 2, 2, '#ffb040');
+  });
+  // Bento: caranguejo-ermitão num bule
+  PORT.bento = pcv((r, fr) => {
+    const k = PAL.k;
+    r(4, 14, 24, 17, k); r(5, 15, 22, 15, '#f2ecdc'); r(5, 27, 22, 2, '#c8c0d8'); r(9, 19, 4, 4, '#e86890'); r(19, 21, 3, 3, '#3a70c0'); r(14, 24, 3, 2, '#8ac85a');
+    r(26, 17, 6, 4, k); r(27, 18, 4, 2, '#f2ecdc'); r(0, 17, 5, 8, k); r(1, 18, 3, 6, '#f2ecdc');
+    r(8, 10, 16, 5, k); r(9, 11, 14, 3, '#9a93b0'); r(17, 4 - (fr === 1 ? 1 : 0), 7, 4, k); r(18, 5 - (fr === 1 ? 1 : 0), 5, 2, '#b87838');
+    r(11, 2, 2, 9, k); r(19, 2, 2, 9, k); r(10, 0, 4, 4, k); r(18, 0, 4, 4, k);
+    if (fr === 2) { r(11, 2, 2, 1, '#ffffff'); r(19, 2, 2, 1, '#ffffff'); } else { r(11, 1, 2, 2, '#ffffff'); r(19, 1, 2, 2, '#ffffff'); }
+    r(10, 6, 8, 3, k); r(11, 6, 6, 2, '#d8d0c0'); r(13, 5, 2, 1, '#d8d0c0');
+  });
+  // Dona Cida: gata fantasma de óculos
+  PORT.cida = pcv((r, fr) => {
+    const k = PAL.k, f = '#c0a0f0';
+    r(6, 2, 6, 10, k); r(20, 2, 6, 10, k); r(7, 4, 4, 7, f); r(21, 4, 4, 7, f); r(8, 6, 2, 4, '#e86890'); r(22, 6, 2, 4, '#e86890');
+    r(5, 9, 22, 18, k); r(6, 10, 20, 16, f); r(6, 22, 20, 4, shade(f, 0.85)); r(4, 26, 24, 6, k); r(5, 27, 22, 5, f);
+    r(9, 14, 6, 5, '#f0c040'); r(17, 14, 6, 5, '#f0c040'); r(10, 15, 4, 3, '#ffffff'); r(18, 15, 4, 3, '#ffffff'); r(15, 16, 2, 1, '#f0c040');
+    if (fr === 2) { r(10, 16, 4, 1, k); r(18, 16, 4, 1, k); } else { r(11, 15, 2, 3, '#3a8a3a'); r(19, 15, 2, 3, '#3a8a3a'); }
+    r(15, 20, 2, 1, '#e86890'); r(14, 21 + (fr === 1 ? 1 : 0), 4, 1, k);
+    for (const y of [20, 22]) { r(3, y, 6, 1, '#ffffff'); r(23, y, 6, 1, '#ffffff'); }
+  });
+  // Musgo: golem de pedra com musgo
+  PORT.musgo = pcv((r, fr) => {
+    const k = PAL.k;
+    r(4, 4, 24, 26, k); r(5, 5, 22, 24, '#6a6078'); r(5, 5, 22, 6, '#4a9a4a'); r(8, 3, 6, 4, '#2a5a3a'); r(17, 2, 7, 4, '#4a9a4a');
+    r(9, 14, 5, 4, k); r(18, 14, 5, 4, k); if (fr !== 2) { r(10, 15, 3, 2, '#f0c040'); r(19, 15, 3, 2, '#f0c040'); }
+    r(10, 23, 12, fr === 1 ? 3 : 2, k); r(7, 20, 2, 6, '#5a5068'); r(23, 8, 3, 9, '#5a5068'); r(14, 18, 4, 2, '#5a5068');
+    r(20, 24, 4, 3, '#f2ecdc'); r(21, 23, 2, 1, '#ffb040');
+  });
+  // Escriba: figura de tinta encapuzada, com correntes
+  PORT.escriba = pcv((r, fr) => {
+    const k = PAL.k;
+    r(5, 3, 22, 29, k); r(6, 4, 20, 28, '#3a3070'); r(9, 9, 14, 13, '#1c1840'); r(6, 4, 20, 2, '#5a4a9a');
+    if (fr !== 2) { r(12, 13, 3, 2, '#d8d0f0'); r(18, 13, 3, 2, '#d8d0f0'); }
+    if (fr === 1) r(14, 18, 4, 1, '#d8d0f0');
+    for (let i = 0; i < 32; i += 3) { r(i, 26, 2, 2, '#8a8099'); }
+    r(24, 18, 2, 10, '#f2ecdc'); r(25, 16, 1, 3, '#f2ecdc');
+  });
+  // Madame Pavio: vela elegante
+  PORT.pavio = pcv((r, fr) => {
+    const k = PAL.k;
+    r(8, 9, 16, 23, k); r(9, 10, 14, 22, '#f2e2c0'); r(9, 10, 14, 2, '#fff4dc'); r(20, 12, 2, 8, '#fff4dc');
+    const fl = (FRAME >> 3) % 2; r(10, 0 + fl, 12, 11, k); r(11, 1 + fl, 10, 9, '#ffb040'); r(13, 3 + fl, 6, 5, '#fff4c0'); r(8, 5, 3, 6, '#ffb040'); r(21, 5, 3, 6, '#ffb040');
+    if (fr === 2) { r(12, 16, 3, 1, k); r(17, 16, 3, 1, k); } else { r(12, 15, 3, 3, '#3a2418'); r(17, 15, 3, 3, '#3a2418'); r(12, 15, 1, 1, '#ffffff'); r(17, 15, 1, 1, '#ffffff'); r(11, 14, 1, 1, k); r(20, 14, 1, 1, k); }
+    r(11, 19, 2, 1, '#ff9aaa'); r(19, 19, 2, 1, '#ff9aaa'); if (fr === 1) r(14, 21, 4, 2, '#c83838'); else r(14, 21, 4, 1, '#c83838');
+    r(6, 28, 20, 4, k); r(7, 29, 18, 3, '#c8962a');
+  });
+  PORT.knight = bust({ skin: '#2a2638', hair: '#4f4a66', style: 'short', cloth: '#4f4a66', eyes: '#ff5050',
+    extra: (r) => { r(8, 4, 16, 20, PAL.k); r(9, 5, 14, 18, '#5a5468'); r(10, 13, 12, 3, PAL.k); r(12, 14, 2, 1, '#ff5050'); r(18, 14, 2, 1, '#ff5050'); for (let i = 11; i < 22; i += 2) r(i, 18, 1, 4, PAL.k); } });
+}
+{ const _bs = buildSprites; buildSprites = function () { _bs(); buildPortraits(); }; }
+// o retrato recebe "falando" para animar a boca, e pisca de vez em quando
+const portFrame = (k, talking) => PORT[k][FRAME % 160 < 6 ? 2 : talking && FRAME % 12 < 6 ? 1 : 0];
+for (const k of ['tiago', 'brida', 'maren', 'maren5', 'jorge', 'rita', 'pip', 'lume', 'bento', 'cida', 'musgo', 'escriba', 'pavio', 'clara', 'knight']) if (WHO[k]) WHO[k].portrait = t => portFrame(k, t);
+WHO.of.portrait = t => portFrame(G.flags.ofeliaRemembers && G.flags.ch4done ? 'clara' : 'of', t);
+WHO.guard.portrait = t => SP.hunter[0];
+// a aprendiz Nina tem o próprio retrato quando fala
+{ const _ap = STORY.aprendiz5; if (_ap) STORY.aprendiz5 = async e => { WHO.pip.portrait = t => portFrame(e.id === 'nina5' ? 'nina' : 'pip', t); return _ap(e); }; }
 
 boot();
 </script>

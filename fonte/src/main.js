@@ -251,8 +251,10 @@ function say(text, who = 'n', opt = {}) {
       box(6, y, 228, h, { edge: wd.edge || '#ffffff' });
       let tx = 16;
       if (hasP) {
-        const p = wd.portrait(); const sc = 32 / Math.max(p.width, p.height);
-        bx.drawImage(p, 12, y + 14, p.width * sc, p.height * sc); tx = 52;
+        const p = wd.portrait(!this.tw.done);
+        if (p.width >= 32) { box(10, y + 9, 36, 36, { bw: 1, edge: wd.edge || '#8a8099', fill: '#1a1424' }); bx.drawImage(p, 12, y + 11); }
+        else { const sc = 32 / Math.max(p.width, p.height); bx.drawImage(p, 12, y + 14, p.width * sc, p.height * sc); }
+        tx = 52;
       }
       if (wd.name) { const nm = wd.name(); const nw = nm.length * 6 + 10; box(12, y - 8, nw, 14, { bw: 1, edge: wd.edge || '#ffffff' }); txt(nm, 17, y - 7, { col: '#ffe066' }); }
       this.tw.draw(tx, y + 8, 12);
