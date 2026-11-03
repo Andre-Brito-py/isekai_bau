@@ -1130,7 +1130,7 @@ async function doBite(e, o = {}) {
   if (spec().passive2 === 'lifesteal') { const h = Math.round(dmg * 0.2); G.hp = Math.min(G.st.mhp, G.hp + h); post += `\n* Você recuperou ${h} PV mordendo.`; }
   if (o.onHit) post += o.onHit(e, dmg) || '';
   let msg = crit ? `* {y}CRÍTICO!{/} Sua mordida causou ${dmg} de dano!` : `* Você mordeu o ${e.name}. ${dmg} de dano.`;
-  if ((e.weak.bite ?? 1) < 1) msg += '\n* A mordida afundou na gosma. Pouco efeito.';
+  if ((e.weak.bite ?? 1) < 1) msg += '\n* ' + (e.d.biteMsg || 'A mordida rendeu pouco. Esse inimigo aguenta dentes.');
   msg += post;
   await bSay(msg, { auto: 45 });
 }

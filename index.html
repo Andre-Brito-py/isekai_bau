@@ -2507,7 +2507,7 @@ async function doBite(e, o = {}) {
   if (spec().passive2 === 'lifesteal') { const h = Math.round(dmg * 0.2); G.hp = Math.min(G.st.mhp, G.hp + h); post += `\n* Você recuperou ${h} PV mordendo.`; }
   if (o.onHit) post += o.onHit(e, dmg) || '';
   let msg = crit ? `* {y}CRÍTICO!{/} Sua mordida causou ${dmg} de dano!` : `* Você mordeu o ${e.name}. ${dmg} de dano.`;
-  if ((e.weak.bite ?? 1) < 1) msg += '\n* A mordida afundou na gosma. Pouco efeito.';
+  if ((e.weak.bite ?? 1) < 1) msg += '\n* ' + (e.d.biteMsg || 'A mordida rendeu pouco. Esse inimigo aguenta dentes.');
   msg += post;
   await bSay(msg, { auto: 45 });
 }
@@ -5794,6 +5794,12 @@ TECH.aprendizes = { name: 'Apito da Brida', cd: 5, desc: 'Pip, Nina e Tolo apare
 // depois do fim do capítulo, o 31 some da garagem
 { const _st = solidTile; solidTile = function (c) { if (c === 'V' && WD.id === 'garagem' && G.flags.jorgeDone) return false; return _st(c); }; }
 { const _tc = tileCanvasFor; tileCanvasFor = function (c, x, y) { if (c === 'V' && WD.id === 'garagem' && G.flags.jorgeDone) return TILE['.' + (hash(x, y) % 4)]; return _tc(c, x, y); }; }
+// frase própria de cada monstro resistente a mordida
+{ const BM = { slime: 'A mordida afundou na gosma. Pouco efeito.', crab: 'Seus dentes escorregam na carapaça. Pouco efeito.', garg: 'Morder pedra dá dor de dente. Pouco efeito.',
+    jailer: 'Você mordeu grade de ferro. Pouco efeito.', ferrugem: 'A crosta de ferrugem segura a mordida. Pouco efeito.', gaveta: 'Você mordeu madeira maciça. Pouco efeito.',
+    carro: 'A lataria amassa, mas aguenta. Pouco efeito.', escudeiro: 'A mordida bate no escudo. Pouco efeito.' };
+  for (const k in BM) if (ENEMIES[k]) ENEMIES[k].biteMsg = BM[k];
+  for (const k in ENEMIES) if (!ENEMIES[k].biteMsg && (ENEMIES[k].weak || {}).bite < 1) console.warn('sem frase de mordida:', k); }
 
 boot();
 </script>
