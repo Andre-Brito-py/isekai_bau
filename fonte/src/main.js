@@ -1048,7 +1048,7 @@ async function battle(group, opts = {}) {
   const prev = AU.curName; playMusic(null);
   for (let i = 0; i < 3; i++) { V.flashW = 1; await wait(4); V.flashW = 0; await wait(4); }
   await fadeOut(8);
-  Object.assign(BT, { cd: {}, freeSpell: 0, bloodM: 1, magT: 0, bulwark: 0, frenzy: 0, starHeal: 0, powder: [], saltCrust: 0, reflect: 0, tideQ: null, tideRecast: false, acts: {}, lastAct: null, forgot: null, foneSaid: false, stance: 0, orbit: 0, dark: 0, star: 0, guildShield: 0, nextSpellM: 1, lastSpell: null, copy: false, ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 });
+  Object.assign(BT, { cd: {}, freeSpell: 0, bloodM: 1, magT: 0, bulwark: 0, frenzy: 0, starHeal: 0, powder: [], saltCrust: 0, reflect: 0, tideQ: null, tideRecast: false, acts: {}, lastAct: null, forgot: null, foneSaid: false, stance: 0, orbit: 0, dark: 0, star: 0, guildShield: 0, nextSpellM: 1, lastSpell: null, copy: false, ps: {}, on: true, opts, en: group.map((id, i) => mkEnemy(id, i, group.length)), mode: 'none', menuIdx: 0, parts: [], nums: [], buff: { atkT: 0, atkM: 1, defT: 0, defM: 1 }, hurt: 0, biteFx: null, turn: 0, tgt: 0, netted: false, marked: false, inked: false, lumeT: 0 }); FXL.length = 0; BT.flashT = 0; BT.dimT = 0;
   V.scene = 'battle'; playMusic(opts.music || 'battle');
   await fadeIn(10);
   const names = BT.en.map(e => e.name);
@@ -1108,7 +1108,7 @@ async function playerTurn() {
         const items = [{ label: 'Mordida', right: '' }, ...ids.map(k => { const T = TECH[k], cd = BT.cd[k] || 0, cost = T.pm ? techCost(T) : 0; return { label: T.name, right: forgot('tc:' + k) ? 'esquecida' : (T.need && !T.need()) ? '—' : cd ? `espera ${cd}` : T.pm ? cost + ' PM' : 'pronta', disabled: cd > 0 || (T.pm && cost > G.mp) || (T.need && !T.need()) || forgot('tc:' + k), col: T.pm ? '#8fe3ff' : '#ffa94d' }; })];
         const i = await list({ x: 8, y: 150, w: 224, h: 74, title: 'Técnicas', maxVis: 4, items, desc: k => k === 0 ? 'Mordida comum com a barra de tempo.' : TECH[ids[k - 1]].desc, descY: 40 });
         if (i < 0) continue;
-        if (i > 0) { const k = ids[i - 1], T = TECH[k]; let tgt = null; if (T.target) { const t = await pickTarget(); if (t < 0) continue; tgt = BT.en[t]; } if (T.pm) G.mp -= techCost(T); if (T.cd) BT.cd[k] = T.cd + 1; markAct('tech'); pbPose('open', 22, { glow: T.pm ? '#8fe3ff' : '#ffa94d' }); await bSay(`* Técnica: {o}${T.name}{/}!`, { auto: 18 }); await T.use(tgt); return 'acted'; }
+        if (i > 0) { const k = ids[i - 1], T = TECH[k]; let tgt = null; if (T.target) { const t = await pickTarget(); if (t < 0) continue; tgt = BT.en[t]; } if (T.pm) G.mp -= techCost(T); if (T.cd) BT.cd[k] = T.cd + 1; markAct('tech'); pbPose('open', 22, { glow: T.pm ? '#8fe3ff' : '#ffa94d' }); await bSay(`* Técnica: {o}${T.name}{/}!`, { auto: 18 }); if (TECH_FX[k]) await TECH_FX[k](tgt || BT.en.find(e => e.alive)); await T.use(tgt); return 'acted'; }
       }
       const t = await pickTarget(); if (t < 0) continue; markAct('bite'); await doBite(BT.en[t]); return 'acted';
     }
@@ -1199,7 +1199,7 @@ async function castSpell(sp, target) {
   if (sp.mod === 'mare' && !BT.tideRecast) BT.tideQ = { sp, target };
   await bSay(`* Você conjura {${elTag(sp.el)}}${sp.name}{/}!`, { auto: 22 });
   if (sp.form === 'veu') {
-    sfx(sp.el === 'seiva' ? 'heal' : 'buff'); burst(BPX, BPY - 14, el.col, 30);
+    sfx(sp.el === 'seiva' ? 'heal' : 'buff'); await fxAura(sp.el);
     const f = sp.mod === 'foco', ec = sp.mod === 'eco';
     if (sp.el === 'sombra') { BT.dark = Math.max(BT.dark, (ec ? 5 : 3)); await bSay(`* Sombras envolvem você. Os inimigos erram mais: dano recebido -25% por ${BT.dark} turnos.`, { auto: 50 }); }
     else if (sp.el === 'vento') { for (const t of BT.en) { t.shell = 0; t.hide = 0; t.atkBuff = null; } BT.buff.atkM = Math.max(BT.buff.atkM, f ? 1.4 : 1.2); BT.buff.atkT = Math.max(BT.buff.atkT, 3); await bSay('* Um redemoinho varre todas as proteções inimigas e te deixa mais leve.', { auto: 50 }); }
@@ -1229,7 +1229,7 @@ async function castSpell(sp, target) {
     else { targets = first ? [first] : []; mults = [1]; }
     if (!targets.length) break;
     if (BT.tideRecast) log.push('* {c}A maré devolveu o feitiço!{/}');
-    sfx(sp.el); spellFx(sp, targets); await wait(24);
+    sfx(sp.el); await spellAnim(sp, targets, pm);
     let drained = 0;
     targets.forEach((t, k) => {
       const wk = t.weak[sp.el] ?? 1;
@@ -1390,6 +1390,7 @@ function drawBattle() {
       bx.fillStyle = '#f2ecdc'; for (let i = -hw + 1; i < hw - 2; i += 4) for (let k = 0; k < 3; k++) { const ww = 3 - k; bx.fillRect(e.x + i + (3 - ww) / 2, s < 0 ? y0 - 3 + k : y0 + 2 - k, ww, 1); }
     }
   }
+  drawFx();
 
   for (const p of BT.parts) { bx.fillStyle = p.col; bx.fillRect(Math.round(p.x), Math.round(p.y), p.sz, p.sz); }
   // caixa (desenhada com deslocamento: a arena ficou maior)

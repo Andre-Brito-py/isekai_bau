@@ -139,6 +139,11 @@
   INIMIGO NOVO = decidir o tamanho (EN_TINY ou d.bsc). Sprite de batalha do baú para cada forma (32x34) com poses idle
   (respira e pisca), open (mordida/feitiço/técnica, com aura da cor do elemento), shut (defesa), hurt (golpe) e win.
   Inimigos avançam um pouco ao atacar (e.lunge). FORMA NOVA = adicionar cores em PB_MAP e detalhes em pbFrame.
+  ANIMAÇÕES DE SKILLS (fx.js, pedido do usuário): feitiço = ELEMENTO (aparência: projétil e impacto próprios) +
+  FORMA (trajeto: dardo voa, onda varre o chão, corrente salta entre alvos, âncora cai do alto, mina é arremessada)
+  + MODIFICADOR (foco carrega antes, selo deixa círculo, dreno puxa luzes de volta, maré, bandeira). Véu = aura
+  própria por elemento. Toda técnica tem animação em TECH_FX. O dano aparece no momento do impacto.
+  REGRA: runa, elemento ou técnica NOVA só entra com animação própria (drawProj/drawImpact/fxWave/TECH_FX).
   CENÁRIOS DE BATALHA (battlebg.js): cada mapa aponta para um cenário (BG_OF ou map.battleScene). MAPA NOVO =
   escolher ou criar um cenário. ESTILO DE ARTE DE REFERÊNCIA (imagens do Deltarune enviadas pelo usuário, só como
   estilo): fundo quase preto, cenário em 2-3 tons saturados de uma mesma cor, bordas com brilho, brilhos de 4 pontas,
