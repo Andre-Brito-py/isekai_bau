@@ -139,7 +139,7 @@ async function tickStatus() {
   if (!BT.ps) return;
   for (const st of ['poison', 'burn']) if (BT.ps[st] > 0 && G.hp > 0) {
     BT.ps[st]--; const d = Math.max(1, Math.round(G.st.mhp * (st === 'poison' ? 0.06 : 0.05)));
-    G.hp = Math.max(1, G.hp - d); BT.nums.push({ x: 120, y: 184, s: '-' + d, col: st === 'poison' ? '#9be58a' : '#ffa94d', t: 40 }); sfx('hurt');
+    G.hp = Math.max(1, G.hp - d); pbPose('hurt', 12); BT.nums.push({ x: BPX, y: BPY - 42, s: '-' + d, col: st === 'poison' ? '#9be58a' : '#ffa94d', t: 40 }); sfx('hurt');
     await bSay(st === 'poison' ? `* O veneno arde. -${d} PV.` : `* A queimadura arde. -${d} PV.`, { auto: 28 });
   }
   if (BT.ps.silence > 0) BT.ps.silence--;
@@ -149,7 +149,7 @@ function hurt(e, pow, mult, res, o = {}) {
   const am = e.atkBuff && e.atkBuff.t > 0 ? e.atkBuff.m : 1;
   let gm = mult; if (gm < 1 && gm > 0 && spec().guard) gm *= spec().guard;
   if (gm <= 0) return 0;
-  if (BT.orbit > 0) { BT.orbit--; BT.nums.push({ x: 120, y: 184, s: 'ÓRBITA', col: '#ffe066', t: 50 }); sfx('guard'); return 0; }
+  if (BT.orbit > 0) { BT.orbit--; BT.nums.push({ x: BPX, y: BPY - 42, s: 'ÓRBITA', col: '#ffe066', t: 50 }); sfx('guard'); return 0; }
   if (e.blinded) { gm *= 0.5; e.blinded = 0; }
   if (BT.stance > 0) gm *= 0.4;
   if (BT.dark > 0) gm *= 0.75;
@@ -161,8 +161,9 @@ function hurt(e, pow, mult, res, o = {}) {
   let dmg = e.atk * am * pow * rand(0.85, 1.15) * 60 / (60 + dstat);
   dmg = Math.max(1, Math.round(dmg * gm * BT.buff.defM));
   G.hp = Math.max(0, G.hp - dmg);
-  BT.nums.push({ x: 120, y: 184, s: '-' + dmg, col: res === 'fail' ? '#ff6b6b' : '#8fe3ff', t: 50 });
+  BT.nums.push({ x: BPX, y: BPY - 42, s: '-' + dmg, col: res === 'fail' ? '#ff6b6b' : '#8fe3ff', t: 50 });
   if (res === 'fail') { sfx('hurt'); BT.hurt = 14; shake(8); } else sfx('guard');
+  pbPose(res === 'fail' ? 'hurt' : 'shut', 16); e.lunge = 16;
   return dmg;
 }
 function passives(e, dmg, res) {
@@ -412,7 +413,7 @@ async function roundEnd() {
   if (BT.bulwark > 0) BT.bulwark--;
   if (BT.frenzy > 0) BT.frenzy--;
   if (BT.magT > 0) BT.magT--;
-  if (BT.starHeal > 0 && G.hp > 0) { BT.starHeal--; const h = Math.round(G.st.mhp * 0.06); G.hp = Math.min(G.st.mhp, G.hp + h); BT.nums.push({ x: 120, y: 184, s: '+' + h, col: '#ffe066', t: 40 }); }
+  if (BT.starHeal > 0 && G.hp > 0) { BT.starHeal--; const h = Math.round(G.st.mhp * 0.06); G.hp = Math.min(G.st.mhp, G.hp + h); BT.nums.push({ x: BPX, y: BPY - 42, s: '+' + h, col: '#ffe066', t: 40 }); }
   if (BT.powder && BT.powder.length && BT.en.some(e => e.alive && e.hp > 0)) {
     const p = BT.powder.reduce((a, b) => a + b, 0); BT.powder = []; sfx('crit'); shake(10); const log = [];
     for (const e of BT.en.filter(e => e.alive && e.hp > 0)) { const d = Math.max(1, Math.round(p * (e.weak.polvora ?? 1))); hitEnemy(e, d, 'hit', '#f07830'); burst(e.x, e.y, '#f07830', 14); log.push(`* ${e.name}: ${d}.`); }

@@ -65,8 +65,8 @@ function enemyIcons(e, dx, dy, w, h) {
   if (e.blinded) list.push(['blind']);
   if (e.confused > 0) list.push(['confused']);
   if (!e.d.guardian && BT.en.some(g => g !== e && g.alive && g.hp > 0 && g.d.guardian)) list.push(['guarded']);
-  const x = Math.min(228, Math.round(dx + w - 2)), y0 = Math.max(2, dy + 2);
-  list.slice(0, 7).forEach(([k, c], i) => iconAt(k, x, y0 + i * 12, c));
+  // colunas de até 3 ícones à direita do sprite
+  list.slice(0, 6).forEach(([k, c], i) => iconAt(k, Math.min(228, Math.round(dx + w + 2) + Math.floor(i / 3) * 12), Math.max(2, dy) + (i % 3) * 12, c));
 }
 function playerIcons() {
   const L = [];
@@ -88,6 +88,6 @@ function playerIcons() {
   const ps = BT.ps || {};
   if (ps.poison > 0) L.push('poison'); if (ps.burn > 0) L.push('burn'); if (ps.silence > 0) L.push('silence'); if (ps.forget > 0) L.push('forget');
   if (BT.inked) L.push('ink'); if (BT.netted) L.push('net');
-  // faixa logo acima da caixa de texto: da esquerda para a direita, sem passar da barra de vida do chefe
-  L.slice(0, 16).forEach((k, i) => { const x = i < 6 ? 6 + i * 12 : 234 - 12 * (i - 5); iconAt(k, x, 104, null); });
+    // em cima do baú, em fileiras de 7 (de baixo para cima)
+  L.slice(0, 14).forEach((k, i) => iconAt(k, 4 + (i % 7) * 12, BPY - 48 - Math.floor(i / 7) * 12, null));
 }

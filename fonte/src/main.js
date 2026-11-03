@@ -78,7 +78,7 @@ function wrapRich(arr, max) {
   flush(); lines.push(line);
   return lines;
 }
-const TQ = [];
+const TQ = []; const TXO = { x: 0, y: 0 };
 function glyph(c, col, lx_, ly, sz) {
   const g = FG[c] || FG['?']; const gs = TSD * sz; const cellW = 6 * sz * (g.w > 8 ? 2 : 1);
   const dx = Math.round(lx_ * S + (cellW * S - g.w * gs) / 2), dy = Math.round(ly * S + (12 * sz * S - 16 * gs) / 2);
@@ -90,7 +90,7 @@ function txt(s, x, y, o = {}) {
   const lines = o.w ? wrapRich(rich(s, o.col), o.w) : [rich(s, o.col)];
   lines.forEach((ln, i) => {
     let xx = x; if (o.align === 'center') xx = x - lineW(ln, sz) / 2; else if (o.align === 'right') xx = x - lineW(ln, sz);
-    TQ.push({ chars: ln, x: xx, y: y + i * (o.lh || 12 * sz), n: 1e9, sz, shadow: o.shadow, alpha: o.alpha, fx: o.fx });
+    TQ.push({ chars: ln, x: xx + TXO.x, y: y + TXO.y + i * (o.lh || 12 * sz), n: 1e9, sz, shadow: o.shadow, alpha: o.alpha, fx: o.fx });
   });
   return lines.length;
 }
@@ -139,7 +139,7 @@ class TW {
     let rem = this.n;
     for (let i = 0; i < this.lines.length; i++) {
       const ln = this.lines[i]; if (rem <= 0) break;
-      TQ.push({ chars: ln, x, y: y + i * lh, n: rem, sz: 1, fx: this.fx, shadow: o.shadow });
+      TQ.push({ chars: ln, x: x + TXO.x, y: y + TXO.y + i * lh, n: rem, sz: 1, fx: this.fx, shadow: o.shadow });
       rem -= ln.length;
     }
   }
@@ -1022,9 +1022,9 @@ const BT = { on: false, en: [], mode: 'none', tw: new TW(), parts: [], nums: [],
 const SIL = new Map();
 function silhouette(c, col) { const k = col; let m = SIL.get(c); if (!m) { m = {}; SIL.set(c, m); } if (m[k]) return m[k]; const s = mk(c.width, c.height), x = s.getContext('2d'); x.drawImage(c, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, s.width, s.height); return m[k] = s; }
 function mkEnemy(id, i, n) {
-  const d = ENEMIES[id], xs = n === 1 ? [120] : n === 2 ? [78, 162] : [48, 120, 192];
+  const d = ENEMIES[id], slot = enemySlot(i, n), sc = enemyScale(id, d), fh = ((SP[d.sp] || [])[0] || { height: 16 }).height * sc;
   const D = DF(), hm = D.hp * (d.boss ? D.boss : 1), hp = Math.round(d.hp * hm);
-  return { id, d, name: d.name, hp, mhp: hp, atk: Math.round(d.atk * D.atk), def: d.def, x: xs[i], y: d.boss ? 58 : 66, sc: d.sc || (d.boss ? 3 : n >= 3 ? 3 : 4), shake: 0, flash: 0, hpShow: 0, alive: true, alpha: 1, frozen: 0, weak: { ...d.weak }, phase: 1, charge: false, turns: 0, sp: d.sp };
+  return { id, d, name: d.name, hp, mhp: hp, atk: Math.round(d.atk * D.atk), def: d.def, x: slot[0], y: Math.round(slot[1] - fh / 2), h: fh, sc, shake: 0, flash: 0, hpShow: 0, alive: true, alpha: 1, frozen: 0, weak: { ...d.weak }, phase: 1, charge: false, turns: 0, sp: d.sp };
 }
 function bWait(mode, extra) { return new Promise(r => { BT.mode = mode; Object.assign(BT, extra || {}); BT.res = v => { BT.mode = 'none'; r(v); }; }); }
 function bSay(text, o = {}) {
@@ -1080,7 +1080,7 @@ async function battle(group, opts = {}) {
       if (BT.en.every(x => !x.alive)) { result = 'win'; break; }
     }
     if (result !== 'lose' && !result) { await tickStatus(); }
-    if (spec().passive === 'regen' && G.mp < G.st.mmp && result !== 'lose') { G.mp = Math.min(G.st.mmp, G.mp + 4); BT.nums.push({ x: 206, y: 184, s: '+4 PM', col: '#8fe3ff', t: 40 }); }
+    if (spec().passive === 'regen' && G.mp < G.st.mmp && result !== 'lose') { G.mp = Math.min(G.st.mmp, G.mp + 4); BT.nums.push({ x: BPX + 14, y: BPY - 48, s: '+4 PM', col: '#8fe3ff', t: 40 }); }
     if (!result) await roundEnd();
     if (BT.buff.atkT > 0 && --BT.buff.atkT === 0) { BT.buff.atkM = 1; await bSay('* A Fúria se apagou.', { auto: 30 }); }
     if (BT.buff.defT > 0 && --BT.buff.defT === 0) { BT.buff.defM = 1; await bSay('* A casca de gelo derreteu.', { auto: 30 }); }
@@ -1106,9 +1106,9 @@ async function playerTurn() {
       if (G.tech && G.tech.length) {
         const ids = G.tech.filter(k => TECH[k]);
         const items = [{ label: 'Mordida', right: '' }, ...ids.map(k => { const T = TECH[k], cd = BT.cd[k] || 0, cost = T.pm ? techCost(T) : 0; return { label: T.name, right: forgot('tc:' + k) ? 'esquecida' : (T.need && !T.need()) ? '—' : cd ? `espera ${cd}` : T.pm ? cost + ' PM' : 'pronta', disabled: cd > 0 || (T.pm && cost > G.mp) || (T.need && !T.need()) || forgot('tc:' + k), col: T.pm ? '#8fe3ff' : '#ffa94d' }; })];
-        const i = await list({ x: 8, y: 116, w: 224, h: 74, title: 'Técnicas', maxVis: 4, items, desc: k => k === 0 ? 'Mordida comum com a barra de tempo.' : TECH[ids[k - 1]].desc, descY: 40 });
+        const i = await list({ x: 8, y: 150, w: 224, h: 74, title: 'Técnicas', maxVis: 4, items, desc: k => k === 0 ? 'Mordida comum com a barra de tempo.' : TECH[ids[k - 1]].desc, descY: 40 });
         if (i < 0) continue;
-        if (i > 0) { const k = ids[i - 1], T = TECH[k]; let tgt = null; if (T.target) { const t = await pickTarget(); if (t < 0) continue; tgt = BT.en[t]; } if (T.pm) G.mp -= techCost(T); if (T.cd) BT.cd[k] = T.cd + 1; markAct('tech'); await bSay(`* Técnica: {o}${T.name}{/}!`, { auto: 18 }); await T.use(tgt); return 'acted'; }
+        if (i > 0) { const k = ids[i - 1], T = TECH[k]; let tgt = null; if (T.target) { const t = await pickTarget(); if (t < 0) continue; tgt = BT.en[t]; } if (T.pm) G.mp -= techCost(T); if (T.cd) BT.cd[k] = T.cd + 1; markAct('tech'); pbPose('open', 22, { glow: T.pm ? '#8fe3ff' : '#ffa94d' }); await bSay(`* Técnica: {o}${T.name}{/}!`, { auto: 18 }); await T.use(tgt); return 'acted'; }
       }
       const t = await pickTarget(); if (t < 0) continue; markAct('bite'); await doBite(BT.en[t]); return 'acted';
     }
@@ -1116,7 +1116,7 @@ async function playerTurn() {
       if (BT.ps && BT.ps.silence > 0) { await bSay('* Você está silenciado! As runas não saem da sua boca.'); continue; }
       if (!G.spells.length) { await bSay('* Você ainda não tem feitiços. Crie um no {y}Grimório{/} (MENU), fora da batalha.'); continue; }
       const items = G.spells.map((s, k) => ({ label: s.name, right: forgot('sp:' + k) ? 'esquecido' : BT.freeSpell ? 'grátis' : spellCost(s) + ' PM', disabled: (spellCost(s) > G.mp && !BT.freeSpell) || forgot('sp:' + k), col: RUNES[s.el].col }));
-      const i = await list({ x: 8, y: 116, w: 224, items, maxVis: 5, title: `Feitiços · PM ${G.mp}/${G.st.mmp}`, h: 74, desc: k => spellDesc(G.spells[k]), descY: 40 });
+      const i = await list({ x: 8, y: 150, w: 224, items, maxVis: 5, title: `Feitiços · PM ${G.mp}/${G.st.mmp}`, h: 74, desc: k => spellDesc(G.spells[k]), descY: 40 });
       if (i < 0) continue;
       const sp = G.spells[i];
       let target = null;
@@ -1125,13 +1125,13 @@ async function playerTurn() {
     }
     if (c === 2) {
       const ks = ['flask', ...Object.keys(G.items).filter(k => G.items[k] > 0)];
-      const i = await list({ x: 8, y: 116, w: 224, h: 74, title: 'Itens', maxVis: 4, items: ks.map(k => k === 'flask' ? flaskItem() : ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: k => ks[k] === 'flask' ? FLASK_DESC() : ITEMS[ks[k]].desc, descY: 40 });
+      const i = await list({ x: 8, y: 150, w: 224, h: 74, title: 'Itens', maxVis: 4, items: ks.map(k => k === 'flask' ? flaskItem() : ({ label: ITEMS[k].name, right: '×' + G.items[k] })), desc: k => ks[k] === 'flask' ? FLASK_DESC() : ITEMS[ks[k]].desc, descY: 40 });
       if (i < 0) continue;
-      if (ks[i] === 'flask') { if (!G.flask.n) { await bSay('* O frasco está vazio.'); continue; } markAct('item'); const t = drinkFlask(); sfx('heal'); burst(120, 196, '#f2b544', 22); await bSay(t, { auto: 50 }); return 'acted'; }
+      if (ks[i] === 'flask') { if (!G.flask.n) { await bSay('* O frasco está vazio.'); continue; } markAct('item'); const t = drinkFlask(); sfx('heal'); pbPose('win', 20); burst(BPX, BPY - 14, '#f2b544', 22); await bSay(t, { auto: 50 }); return 'acted'; }
       const it = ITEMS[ks[i]]; markAct('item');
       if (it.fx) { G.items[ks[i]]--; await it.fx(); return 'acted'; }
       if (it.world) { await bSay('* Isso não funciona no meio de uma batalha.'); continue; }
-      useItemOut(ks[i]); sfx('heal'); burst(120, 196, it.hp ? '#9be58a' : '#5fa8ff', 18);
+      useItemOut(ks[i]); sfx('heal'); pbPose('win', 20); burst(BPX, BPY - 14, it.hp ? '#9be58a' : '#5fa8ff', 18);
       if (it.cure) cureStatus();
       await bSay(`* Você comeu ${it.name}. ${it.hp ? `PV: ${G.hp}/${G.st.mhp}` : `PM: ${G.mp}/${G.st.mmp}`}.${it.cure ? ' Os efeitos ruins sumiram.' : ''}`, { auto: 50 });
       return 'acted';
@@ -1195,11 +1195,11 @@ async function killDead() {
   }
 }
 async function castSpell(sp, target) {
-  const el = RUNES[sp.el]; BT.lastSpell = sp; const markM = (BT.nextSpellM || 1) * (BT.bloodM || 1) * (BT.magT > 0 ? 1.2 : 1); BT.nextSpellM = 1; BT.bloodM = 1;
+  const el = RUNES[sp.el]; BT.lastSpell = sp; pbPose('open', 26, { glow: el.col }); const markM = (BT.nextSpellM || 1) * (BT.bloodM || 1) * (BT.magT > 0 ? 1.2 : 1); BT.nextSpellM = 1; BT.bloodM = 1;
   if (sp.mod === 'mare' && !BT.tideRecast) BT.tideQ = { sp, target };
   await bSay(`* Você conjura {${elTag(sp.el)}}${sp.name}{/}!`, { auto: 22 });
   if (sp.form === 'veu') {
-    sfx(sp.el === 'seiva' ? 'heal' : 'buff'); burst(120, 196, el.col, 30);
+    sfx(sp.el === 'seiva' ? 'heal' : 'buff'); burst(BPX, BPY - 14, el.col, 30);
     const f = sp.mod === 'foco', ec = sp.mod === 'eco';
     if (sp.el === 'sombra') { BT.dark = Math.max(BT.dark, (ec ? 5 : 3)); await bSay(`* Sombras envolvem você. Os inimigos erram mais: dano recebido -25% por ${BT.dark} turnos.`, { auto: 50 }); }
     else if (sp.el === 'vento') { for (const t of BT.en) { t.shell = 0; t.hide = 0; t.atkBuff = null; } BT.buff.atkM = Math.max(BT.buff.atkM, f ? 1.4 : 1.2); BT.buff.atkT = Math.max(BT.buff.atkT, 3); await bSay('* Um redemoinho varre todas as proteções inimigas e te deixa mais leve.', { auto: 50 }); }
@@ -1209,7 +1209,7 @@ async function castSpell(sp, target) {
     else if (sp.el === 'geada') { BT.buff.defM = f ? 0.35 : 0.5; BT.buff.defT = (ec ? 5 : 3) + 1; await bSay(`* Uma casca de gelo cobre você. Dano recebido reduzido por ${BT.buff.defT - 1} turnos.`, { auto: 50 }); }
     else {
       let h = Math.round(healAmt(sp) * markM * rand(0.95, 1.05)); const before = G.hp; G.hp = Math.min(G.st.mhp, G.hp + h);
-      if (ec) { await wait(14); sfx('heal'); burst(120, 196, el.col, 20); G.hp = Math.min(G.st.mhp, G.hp + Math.round(h * 0.6)); }
+      if (ec) { await wait(14); sfx('heal'); burst(BPX, BPY - 14, el.col, 20); G.hp = Math.min(G.st.mhp, G.hp + Math.round(h * 0.6)); }
       const hadSt = BT.ps && Object.values(BT.ps).some(v => v > 0); cureStatus();
       await bSay(`* A seiva fecha suas rachaduras. +${G.hp - before} PV.${hadSt ? ' Os efeitos ruins sumiram.' : ''}`, { auto: 50 });
     }
@@ -1280,7 +1280,7 @@ function spellFx(sp, targets) {
   }
 }
 function burst(x, y, col, n) { for (let i = 0; i < n; i++) { const a = rand(0, Math.PI * 2), s = rand(0.5, 2.2); BT.parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rand(18, 34), col: Math.random() < 0.3 ? '#ffffff' : col, sz: Math.random() < 0.5 ? 2 : 1 }); } }
-function popNum(e, s, col) { BT.nums.push({ x: e.x, y: e.y - 14 * e.sc / 3, s, col, t: 50 }); }
+function popNum(e, s, col) { BT.nums.push({ x: e.x, y: e.y - (e.h || 32) / 2 - 6, s, col, t: 50 }); }
 async function victory() {
   const _v = await victory0(); if (G.flags._pendingTech) { G.flags._pendingTech = false; await grantTechs(true); } return _v;
 }
@@ -1294,7 +1294,7 @@ async function victory0() {
   while (G.xp >= xpNeed(G.lv)) {
     G.xp -= xpNeed(G.lv); G.lv++;
     const g = spec().grow; for (const k in g) G.st[k] += g[k];
-    G.hp = Math.min(G.st.mhp, G.hp + Math.round(G.st.mhp * 0.25)); G.mp = Math.min(G.st.mmp, G.mp + Math.round(G.st.mmp * 0.25)); J.level(); burst(120, 196, '#ffe066', 30);
+    G.hp = Math.min(G.st.mhp, G.hp + Math.round(G.st.mhp * 0.25)); G.mp = Math.min(G.st.mmp, G.mp + Math.round(G.st.mmp * 0.25)); J.level(); burst(BPX, BPY - 14, '#ffe066', 30);
     if (typeof grantTechs === 'function') G.flags._pendingTech = true;
     await bSay(`[Nível ${G.lv} alcançado! PV +${g.mhp}, PM +${g.mmp}, ATQ +${g.atk}, DEF +${g.def}, MAG +${g.mag}. +25% de PV e PM.]`, { cat: true });
   }
@@ -1364,35 +1364,36 @@ function circlePx(cx, cy, r, col) {
 }
 function drawBattle() {
   bx.fillStyle = '#07050c'; bx.fillRect(0, 0, W, H);
-  const gcol = WD.map?.battleBg || (BT.opts?.boss ? '#16301f' : WD.id === 'poco' ? '#16233a' : '#201833');
-  bx.fillStyle = gcol; const off = Math.floor(FRAME / 4) % 24;
-  for (let y = 8; y < 108; y += 24) for (let x = -24 + off; x < 240; x += 24) { bx.fillRect(x, y, 24, 1); bx.fillRect(x, y, 1, 24); }
-  bx.fillStyle = '#07050c'; bx.fillRect(0, 104, 240, 4);
+  drawBattleBg();
+  drawParty();
   for (const e of BT.en) {
     if (!e.alive && !(e.dying > 0)) continue;
     const sp = SP[e.sp], fr = sp[Math.floor(FRAME / 20) % sp.length];
     const w = fr.width * e.sc, h = fr.height * e.sc;
     let dx = Math.round(e.x - w / 2 + (e.shake ? Math.sin(e.shake * 1.7) * 4 : 0)), dy = Math.round(e.y - h / 2 + (e.d.sp === 'bat' ? Math.sin(FRAME * 0.08) * 3 : 0));
     if (e.d.boss) dy += Math.round(Math.sin(FRAME * 0.05) * 1.5);
+    if (e.lunge > 0) { e.lunge--; dx -= Math.round(Math.sin((1 - e.lunge / 16) * Math.PI) * 16); }
     bx.globalAlpha = e.alive ? 1 : e.dying / 36;
     bx.drawImage(e.flash > 0 && e.flash % 4 < 2 ? silhouette(fr, '#ffffff') : fr, dx, dy, w, h);
     if (e.frozen > 0) { bx.globalAlpha = 0.45; bx.drawImage(silhouette(fr, '#7ad0f0'), dx, dy, w, h); }
     bx.globalAlpha = 1;
-    if (e.alive && (e.hpShow > 0 || e.d.boss)) { const bw = e.d.boss ? 90 : 40; bar(e.x - bw / 2, dy + h + 3, bw, 4, e.hp / e.mhp, '#4ad04a'); bx.fillStyle = '#000'; }
+    if (e.alive && (e.hpShow > 0 || e.d.boss)) { const bw = e.d.boss ? 64 : Math.max(22, Math.min(36, w)); bar(e.x - bw / 2, dy + h + 3, bw, 4, e.hp / e.mhp, '#4ad04a'); bx.fillStyle = '#000'; }
     if (BT.mode === 'target' && BT.tgt === BT.en.indexOf(e) && FRAME % 30 < 20) txt('▼', e.x - 3, dy - 14, { col: '#ffe066' });
     if (e.alive && typeof enemyIcons === 'function') enemyIcons(e, dx, dy, w, h);
   }
   if (BT.biteFx) {
-    const e = BT.biteFx.e, p = Math.min(1, (BT.biteFx.t = (BT.biteFx.t || 0) + 1) / 10), gap = 40 * (1 - p);
+    const e = BT.biteFx.e, p = Math.min(1, (BT.biteFx.t = (BT.biteFx.t || 0) + 1) / 10), hw = Math.max(14, Math.round((e.h || 32) * 0.6)), gap = hw * (1 - p);
     for (const s of [-1, 1]) {
-      const y0 = e.y + s * (gap + 4);
-      bx.fillStyle = '#7a4a2a'; bx.fillRect(e.x - 36, s < 0 ? y0 - 14 : y0 + 6, 72, 8);
-      bx.fillStyle = '#f2ecdc'; for (let i = -32; i < 32; i += 8) for (let k = 0; k < 6; k++) { const ww = 6 - k; bx.fillRect(e.x + i + (8 - ww) / 2 - 4 + 4, s < 0 ? y0 - 6 + k : y0 + 5 - k, ww, 1); }
+      const y0 = Math.round(e.y + s * (gap + 2));
+      bx.fillStyle = '#120e1a'; bx.fillRect(e.x - hw - 1, s < 0 ? y0 - 8 : y0 + 2, hw * 2 + 2, 6);
+      bx.fillStyle = '#7a4a2a'; bx.fillRect(e.x - hw, s < 0 ? y0 - 7 : y0 + 3, hw * 2, 4);
+      bx.fillStyle = '#f2ecdc'; for (let i = -hw + 1; i < hw - 2; i += 4) for (let k = 0; k < 3; k++) { const ww = 3 - k; bx.fillRect(e.x + i + (3 - ww) / 2, s < 0 ? y0 - 3 + k : y0 + 2 - k, ww, 1); }
     }
   }
-  if (G.flags.lumeJoined) { const ly = 92 + Math.round(Math.sin(FRAME * 0.07) * 2); bx.drawImage(SP.lume[Math.floor(FRAME / 20) % 2], 216, ly); if (BT.lumeT > 0) { BT.lumeT--; txt('♪', 206, ly - 6 - (60 - BT.lumeT) / 6, { col: '#ffe066', alpha: BT.lumeT / 60 }); } }
+
   for (const p of BT.parts) { bx.fillStyle = p.col; bx.fillRect(Math.round(p.x), Math.round(p.y), p.sz, p.sz); }
-  // caixa
+  // caixa (desenhada com deslocamento: a arena ficou maior)
+  bx.save(); bx.translate(0, BOXDY); TXO.y = BOXDY;
   box(8, 116, 224, 72, { edge: BT.hurt > 0 && BT.hurt % 4 < 2 ? '#ff6b6b' : '#ffffff' });
   const m = BT.mode;
   if (m === 'text' || m === 'main') BT.tw.draw(16, 122, 12);
@@ -1420,17 +1421,13 @@ function drawBattle() {
     txt('A quando o anel tocar o círculo', 120, 170, { align: 'center', col: '#8a8099' });
   }
   if (m === 'text' && BT.tw.done && !BT.auto && FRAME % 40 < 26) txt('▼', 220, 174, { col: '#8a8099' });
-  // status
-  const sy = 192;
-  txt(`${G.name}  NV ${G.lv}`, 10, sy, { col: '#ffffff' });
-  txt('PV', 106, sy, { col: '#ffffff' }); bar(120, sy + 3, 28, 6, G.hp / G.st.mhp, G.hp / G.st.mhp < 0.3 ? '#ff6b6b' : '#ffe066');
-  txt(`${G.hp}/${G.st.mhp}`, 152, sy, { col: '#ffffff' });
-  txt(`PM ${G.mp}`, 196, sy, { col: '#8fe3ff' });
+  bx.restore(); TXO.y = 0;
+  drawPartyStrip();
   for (let i = 0; i < 5; i++) {
-    const x = 8 + i * 45, sel = m === 'main' && BT.menuIdx === i;
+    const x = 4 + i * 47, sel = m === 'main' && BT.menuIdx === i;
     const col = sel ? '#ffe066' : '#f28c28';
-    box(x, 208, 44, 22, { bw: 1, edge: col, fill: '#000' });
-    txt(btnLabel(i), x + 22, 213, { align: 'center', col });
+    box(x, 224, 44, 15, { bw: 1, edge: col, fill: '#000' });
+    txt(btnLabel(i), x + 23, 225, { align: 'center', col });
   }
   for (const n of BT.nums) txt(n.s, n.x, n.y, { align: 'center', col: n.col, shadow: true, alpha: Math.min(1, n.t / 15) });
   if (typeof playerIcons === 'function') playerIcons();
@@ -1537,7 +1534,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–5', 6, 226, { col: '#5a5070' }); txt('v1.9', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–5', 6, 226, { col: '#5a5070' }); txt('v2.0', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;

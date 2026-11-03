@@ -131,6 +131,18 @@
   RETRATOS (portraits.js): bustos 32x32 com 3 quadros (parado, falando, piscando) para os personagens
   importantes. Todo personagem novo com nome e várias falas ganha retrato próprio (bust() para humanos).
 
+  BATALHA EM CENA (v2.0, pedido do usuário, layout no estilo da referência do Deltarune): arena preta grande (0-132)
+  com cenário no topo; o baú à esquerda, de perfil, com a Lume flutuando atrás; inimigos em diagonal à direita;
+  faixa do grupo (retrato, nome, PV, PM) em 134; caixa de texto em 150 (desenhada com BOXDY); botões em 224.
+  TAMANHOS REAIS, todos em escala 1x ou 2x (nunca fracionada): baú e chefes (48px) em 1x; gente, cães, gárgulas em 2x
+  (32px); bichinhos (EN_TINY: rato, cogumelo, morcego, lodo, lamparina, caranguejos, polvo de toldo, traça) em 1x.
+  INIMIGO NOVO = decidir o tamanho (EN_TINY ou d.bsc). Sprite de batalha do baú para cada forma (32x34) com poses idle
+  (respira e pisca), open (mordida/feitiço/técnica, com aura da cor do elemento), shut (defesa), hurt (golpe) e win.
+  Inimigos avançam um pouco ao atacar (e.lunge). FORMA NOVA = adicionar cores em PB_MAP e detalhes em pbFrame.
+  CENÁRIOS DE BATALHA (battlebg.js): cada mapa aponta para um cenário (BG_OF ou map.battleScene). MAPA NOVO =
+  escolher ou criar um cenário. ESTILO DE ARTE DE REFERÊNCIA (imagens do Deltarune enviadas pelo usuário, só como
+  estilo): fundo quase preto, cenário em 2-3 tons saturados de uma mesma cor, bordas com brilho, brilhos de 4 pontas,
+  chão iluminado; personagens com contorno escuro forte e cores vivas. Arte sempre original.
   EFEITOS EM BATALHA (v1.9): estados viram ícones de pixel (icons.js), nunca palavras soltas. Os do jogador ficam na faixa acima da
   caixa; os dos inimigos, numa coluna ao lado do sprite. Selo = círculo mágico na cor do elemento.
   REGRA TÉCNICA: o build concatena tudo num só escopo; NUNCA declarar função global com nome já usado (uma auxiliar 'ring' dos
