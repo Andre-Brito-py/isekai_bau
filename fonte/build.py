@@ -3,6 +3,9 @@ src='/home/claude/rpg/src/'
 head=open(src+'head.html').read()
 font=open('/home/claude/rpg/build/font.json').read()
 js=''.join(open(src+f).read()+'\n' for f in ['sprites.js','audio.js','data.js','main.js','data2.js','combat.js','data3.js','data4.js','data5.js','humor.js','portraits.js','bosses.js','icons.js'])
+import re as _re, collections as _c
+_dups=[k for k,v in _c.Counter(_re.findall(r'(?m)^(?:async )?function (\w+)', js)).items() if v>1]
+if _dups: raise SystemExit('ERRO: funções globais declaradas mais de uma vez: '+', '.join(_dups))
 html=head+'\n<script>\nconst FONT='+font+';\n'+js+'boot();\n</script>\n'
 open('/home/claude/rpg/renasci-como-bau.html','w').write(html)
 # standalone version with doctype for offline use

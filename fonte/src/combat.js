@@ -169,7 +169,7 @@ function passives(e, dmg, res) {
   let extra = '';
   if (spec().passive === 'counter' && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.6 * (BT.stance > 0 ? 2 : 1))); hitEnemy(e, c, 'hit'); extra = ` {c}Contra-ataque!{/} ${c} no ${e.name}.`; }
   if (BT.bulwark > 0 && res === 'perfect' && e.alive) { const c = Math.max(1, Math.round(G.st.atk * 0.8)); hitEnemy(e, c, 'hit', '#f0c040'); extra += ` {y}Baluarte!{/} ${c} no ${e.name}.`; }
-  if (spec().passive === 'thorns' && dmg > 0 && e.alive) { const c = Math.max(1, Math.round(dmg * 0.3)); hitEnemy(e, c, 'hit', '#ffa94d'); extra = ` Os espinhos devolvem ${c}.`; }
+  if (spec().passive === 'thorns' && dmg > 0 && e.alive) { const c = Math.max(1, Math.round(dmg * 0.3)); hitEnemy(e, c, 'hit', '#ffa94d'); extra += ` {o}Espinhos!{/} ${c} no ${e.name}.`; }
   return extra;
 }
 const gmult = r => r === 'perfect' ? 0.3 : r === 'good' ? 0.5 : 1;
@@ -204,12 +204,14 @@ async function runMove(e, mv) {
       worst = miss ? 'fail' : 'perfect';
       msg = miss === 0 ? `* Você bloqueou os ${mv.n} golpes! Só ${total} de dano.` : `* ${miss} de ${mv.n} golpes entraram: ${total} de dano.`;
       if (miss === 0 && spec().passive === 'counter') msg += passives(e, 0, 'perfect');
+      else if (spec().passive === 'thorns') msg += passives(e, total, miss ? 'fail' : 'perfect');
       break;
     }
     case 'mash': {
       const f = await mash(mv.need || 12, mv.T || 110);
       total = hurt(e, mv.p, f >= 1 ? 0.25 : 1 - 0.6 * f, f >= 1 ? 'good' : 'fail', mv); worst = f >= 1 ? 'good' : 'fail';
       msg = f >= 1 ? `* Você se soltou! Só ${total} de dano.` : `* Te apertou! ${total} de dano.`;
+      if (spec().passive === 'thorns') msg += passives(e, total, f >= 1 ? 'good' : 'fail');
       if (mv.bind && f < 0.6 && !(BT.guildShield > 0)) { BT.netted = true; msg += ' Você ainda está PRESO e vai perder o próximo turno.'; }
       break;
     }

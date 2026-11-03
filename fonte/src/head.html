@@ -131,6 +131,10 @@
   RETRATOS (portraits.js): bustos 32x32 com 3 quadros (parado, falando, piscando) para os personagens
   importantes. Todo personagem novo com nome e várias falas ganha retrato próprio (bust() para humanos).
 
+  EFEITOS EM BATALHA (v1.9): estados viram ícones de pixel (icons.js), nunca palavras soltas. Os do jogador ficam na faixa acima da
+  caixa; os dos inimigos, numa coluna ao lado do sprite. Selo = círculo mágico na cor do elemento.
+  REGRA TÉCNICA: o build concatena tudo num só escopo; NUNCA declarar função global com nome já usado (uma auxiliar 'ring' dos
+  ícones apagou o minijogo de defesa). Auxiliares novas levam prefixo do arquivo (icPx, icRing...). Checar duplicatas antes de publicar.
   REGRA DE ARTE DOS CHEFES (pedido do usuário, vale para sempre): TODO chefe, mini-chefe e chefe secreto
   tem que ser MUITO bem caprichado. Sprite de batalha próprio em bosses.js (48x48, escala 2, 4 quadros, com
   BIGSP + big()): contorno, luz e sombra, textura, acessórios que contem quem ele é (ex.: o Polvo tem cartola,
