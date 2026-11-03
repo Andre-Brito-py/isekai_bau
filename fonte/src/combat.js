@@ -269,7 +269,7 @@ async function enemyTurn(e) {
   if (e.atkBuff && e.atkBuff.t > 0) e.atkBuff.t--;
   if (e.shell > 0) e.shell--;
   if (e.hide > 0) e.hide--;
-  if (e.dot && e.dot.t > 0) { e.dot.t--; hitEnemy(e, e.dot.d, 'hit', '#ff8fa8'); await bSay(`* O selo queima o ${e.name}: ${e.dot.d} de dano.`, { auto: 30 }); if (e.hp <= 0) return; }
+  if (e.dot && e.dot.t > 0) { e.dot.t--; const ic = e.dot.icon || 'bleed'; hitEnemy(e, e.dot.d, 'hit', ic === 'poison' ? '#9be58a' : ic === 'selo' ? (e.dot.col || '#ff8fa8') : '#ff6b6b'); await bSay(ic === 'selo' ? `* O selo queima o ${e.name}: ${e.dot.d} de dano.` : ic === 'poison' ? `* O veneno corrói o ${e.name}: ${e.dot.d} de dano.` : `* O ${e.name} sangra: ${e.dot.d} de dano.`, { auto: 30 }); if (e.hp <= 0) return; }
   if (e.frozen > 0) { e.frozen--; await bSay(`* O ${e.name} está congelado e não consegue se mexer.`, { auto: 40 }); return; }
   if (e.stunned > 0) { e.stunned--; await bSay(`* O ${e.name} está atordoado, vendo estrelinhas.`, { auto: 40 }); return; }
   if (e.confused > 0) { e.confused--; await bSay(`* O ${e.name} procura você... e só encontra um baú comum. Ele perdeu o turno.`, { auto: 45 }); return; }

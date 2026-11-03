@@ -1170,7 +1170,7 @@ async function doBite(e, o = {}) {
   dmg *= (e.weak.bite ?? 1); dmg = Math.max(1, Math.round(dmg * rand(0.9, 1.1)));
   hitEnemy(e, dmg, crit ? 'crit' : 'hit');
   let post = '';
-  if (spec().passive2 === 'poisonBite' && e.hp > 0) { e.dot = { d: Math.max(1, Math.round(dmg * 0.2)), t: 3 }; post += '\n* O ferrão deixou veneno.'; }
+  if (spec().passive2 === 'poisonBite' && e.hp > 0) { e.dot = { d: Math.max(1, Math.round(dmg * 0.2)), t: 3, icon: 'poison' }; post += '\n* O ferrão deixou veneno.'; }
   if (spec().passive2 === 'lifesteal') { const h = Math.round(dmg * 0.2); G.hp = Math.min(G.st.mhp, G.hp + h); post += `\n* Você recuperou ${h} PV mordendo.`; }
   if (o.onHit) post += o.onHit(e, dmg) || '';
   let msg = crit ? `* {y}CRÍTICO!{/} Sua mordida causou ${dmg} de dano!` : `* Você mordeu o ${e.name}. ${dmg} de dano.`;
@@ -1245,7 +1245,7 @@ async function castSpell(sp, target) {
       if (sp.el === 'faisca' && t.hp > 0 && !t.frozen && Math.random() < (t.d.boss ? 0.12 : sp.mod === 'foco' ? 0.35 : 0.2)) { t.stunned = 1; log.push(`* O ${t.name} ficou atordoado!`); }
       if (sp.form === 'mina' && t.hp > 0) { t.mine = (t.mine || 0) + Math.round(dmg * 1.7); log.push(`* Uma mina rúnica gruda no ${t.name}. Ela explode quando ele agir.`); }
       if (sp.el === 'sal' && t.hp > 0) { if (!t.corrode) { t.def0 = t.def; t.def = Math.round(t.def * 0.65); log.push(`* O sal corrói a defesa do ${t.name}.`); } t.corrode = 3; }
-      if (sp.mod === 'selo' && t.hp > 0) { t.dot = { d: Math.max(1, Math.round(dmg * 0.35)), t: 3 }; log.push(`* Um selo rosa queima no ${t.name}.`); }
+      if (sp.mod === 'selo' && t.hp > 0) { t.dot = { d: Math.max(1, Math.round(dmg * 0.35)), t: 3, icon: 'selo', col: RUNES[sp.el].col }; log.push(`* Um selo rosa queima no ${t.name}.`); }
       log.unshift(`* ${t.name}: ${dmg} de dano${wk > 1 ? ' {y}(ponto fraco!){/}' : wk < 1 ? ' (resistiu)' : ''}.`);
       if (t.d.boss && sp.el === 'brasa') t.lastFire = true;
     });
@@ -1380,9 +1380,7 @@ function drawBattle() {
     bx.globalAlpha = 1;
     if (e.alive && (e.hpShow > 0 || e.d.boss)) { const bw = e.d.boss ? 90 : 40; bar(e.x - bw / 2, dy + h + 3, bw, 4, e.hp / e.mhp, '#4ad04a'); bx.fillStyle = '#000'; }
     if (BT.mode === 'target' && BT.tgt === BT.en.indexOf(e) && FRAME % 30 < 20) txt('▼', e.x - 3, dy - 14, { col: '#ffe066' });
-    if (e.charge && FRAME % 20 < 12) txt('!!', e.x - 6, dy - 12, { col: '#ff6b6b' });
-    if (e.alive && e.dot && e.dot.t > 0) txt('SELO', e.x, dy + h + 8, { align: 'center', col: '#ff8fa8' });
-    if (e.alive && e.stunned) txt('★', e.x - 6, dy - 12, { col: '#ffe066' });
+    if (e.alive && typeof enemyIcons === 'function') enemyIcons(e, dx, dy, w, h);
   }
   if (BT.biteFx) {
     const e = BT.biteFx.e, p = Math.min(1, (BT.biteFx.t = (BT.biteFx.t || 0) + 1) / 10), gap = 40 * (1 - p);
@@ -1435,12 +1433,7 @@ function drawBattle() {
     txt(btnLabel(i), x + 22, 213, { align: 'center', col });
   }
   for (const n of BT.nums) txt(n.s, n.x, n.y, { align: 'center', col: n.col, shadow: true, alpha: Math.min(1, n.t / 15) });
-  if (BT.buff.atkT > 0) txt('FÚRIA', 10, 178, { col: '#ffa94d' });
-  if (BT.buff.defT > 0) txt('GELO', 52, 178, { col: '#8fe3ff' });
-  if (BT.marked) txt('MARCADO', 90, 178, { col: '#ff6b6b' });
-  { let sx2 = 10; for (const st in (BT.ps || {})) if (BT.ps[st] > 0) { txt(ST_NAME[st], sx2, 104, { col: { poison: '#9be58a', burn: '#ffa94d', silence: '#d0a8ff' }[st] }); sx2 += ST_NAME[st].length * 6 + 6; } }
-  for (const e of BT.en) if (e.alive && (e.shell > 0 || e.hide > 0 || (e.atkBuff && e.atkBuff.t > 0))) { const fr = SP[e.sp][0]; const yy = e.y - fr.height * e.sc / 2 - 12; txt([e.shell > 0 ? 'CASCA' : '', e.hide > 0 ? 'SOME' : '', e.atkBuff && e.atkBuff.t > 0 ? 'ATQ↑' : ''].filter(Boolean).join(' '), e.x, yy, { col: '#ffe066', align: 'center', shadow: true }); }
-  if (BT.netted) txt('PRESO', 150, 178, { col: '#ff6b6b' });
+  if (typeof playerIcons === 'function') playerIcons();
 }
 
 // ================= EVOLUÇÃO / FIM / TÍTULO =================
