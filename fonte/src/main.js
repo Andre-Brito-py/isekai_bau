@@ -558,7 +558,7 @@ function interact() {
   const c = tileAt(x, y);
   if (c === 'G') return runScript(STORY.gate);
   if (c === 'H' && G.flags.ch2done && !G.flags.ch3open && STORY.ch3start) return runScript(STORY.ch3start);
-  const lines = LOOK[c]; if (lines) runScript(() => say(lines[(x * 7 + y * 3) % lines.length]));
+  const lines = lookLines(c); if (lines) runScript(() => say(lines[(x * 7 + y * 3) % lines.length]));
 }
 async function lantern() {
   await say('* Uma Lanterna de Âmbar. A luz é morna como cozinha em dia de chuva.');
