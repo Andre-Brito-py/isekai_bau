@@ -25,17 +25,18 @@ function makeJailer(f) {
 function buildSprites3() {
   SP.garg = [spr(GARG, { m: 'l', l: 'w' }), spr(GARG.map((r, i) => i === 2 ? "kmk..........kmk" : i === 3 ? "kmlmk.kkkk.kmlmk" : r), { m: 'l', l: 'w' })];
   SP.escr = [spr(ESCR), spr(ESCR.map((r, i) => i === 12 ? "...kk.kk.kk....." : r))];
-  const armed = (map, tool) => { const c = spr(HUMAN, map); const x = c.getContext('2d'); tool(x); return c; };
+  const armed = (map, tool) => { const c = hum(map); const x = c.getContext('2d'); tool(x); return c; };
   const spear = x => { x.fillStyle = PAL.n; x.fillRect(14, 1, 1, 13); x.fillStyle = PAL.l; x.fillRect(13, 0, 3, 2); };
   const staff = x => { x.fillStyle = PAL.y; x.fillRect(14, 2, 1, 12); x.fillStyle = PAL.w; x.fillRect(13, 0, 3, 3); };
   const lantern = x => { x.fillStyle = PAL.k; x.fillRect(12, 8, 4, 5); x.fillStyle = '#ffe9a0'; x.fillRect(13, 9, 2, 3); };
-  SP.soldier = [armed({ G: 'w', m: 'l', l: 'w' }, spear), armed({ G: 'w', m: 'l', l: 'w' }, spear)];
-  SP.cleric = [armed({ G: 'w', m: 'y', l: 'w', b: 'n' }, staff), armed({ G: 'w', m: 'y', l: 'w', b: 'n' }, staff)];
-  SP.farol = [armed({ G: 'n', m: 'd', l: 'm' }, lantern), armed({ G: 'n', m: 'd', l: 'm' }, lantern)];
-  SP.pip = [spr(HUMAN, { G: 'g', m: 'n', l: 'o' })];
-  SP.knight = [armed({ m: 'd', l: 'm', s: 'k', G: 'd', y: 'r', b: 'k', n: 'd' }, spear), armed({ m: 'd', l: 'm', s: 'k', G: 'd', y: 'r', b: 'k', n: 'd' }, spear)];
+  SP.soldier = [armed({ G: 'w', m: 'l', l: 'w', S: '#e0b080', h: '#5a3a20' }, spear), armed({ G: 'w', m: 'l', l: 'w', S: '#e0b080', h: '#5a3a20' }, spear)];
+  SP.cleric = [armed({ G: 'w', m: 'y', l: 'w', b: 'n', fem: true, S: '#c8905a', h: '#1a1410' }, staff), armed({ G: 'w', m: 'y', l: 'w', b: 'n', fem: true, S: '#c8905a', h: '#1a1410' }, staff)];
+  SP.farol = [armed({ G: 'n', m: 'd', l: 'm', S: '#f0c8a0', h: '#e0c060' }, lantern), armed({ G: 'n', m: 'd', l: 'm', S: '#f0c8a0', h: '#e0c060' }, lantern)];
+  SP.pip = [hum({ G: 'g', m: 'n', l: 'o', S: '#e8b890', h: '#c86a30' })];
+  SP.nina = [hum({ G: 'g', m: 'n', l: 'o', fem: true, S: '#a86a40', h: '#1a1410' })];
+  SP.knight = [armed({ m: 'd', l: 'm', S: 'k', h: 'k', G: 'd', y: 'r', b: 'k', n: 'd' }, spear), armed({ m: 'd', l: 'm', S: 'k', h: 'k', G: 'd', y: 'r', b: 'k', n: 'd' }, spear)];
   for (const c of SP.knight) { const x = c.getContext('2d'); x.fillStyle = '#ff5050'; x.fillRect(6, 4, 1, 1); x.fillRect(9, 4, 1, 1); }
-  SP.maren = [spr(MAREN), spr(MAREN.map((r, i) => i === 0 ? "......kk........" : i === 1 ? ".....kqqk......." : r))];
+  SP.maren = [spr(MAREN, { s: '#e8c0a0' }), spr(MAREN.map((r, i) => i === 0 ? "......kk........" : i === 1 ? ".....kqqk......." : r), { s: '#e8c0a0' })];
   SP.escriba = [spr(ESCR, { B: 'L', w: 'k' }), spr(ESCR, { B: 'L', w: 'k' })];
   for (const c of SP.escriba) { const x = c.getContext('2d'); x.fillStyle = '#8a8099'; for (let i = 0; i < 16; i += 2) { x.fillRect(i, 13, 1, 1); x.fillRect(1, i, 1, 1); } }
   SP.cida = [spr(CIDA), spr(CIDA.map((r, i) => i === 5 ? "..kLwkLLLLwkLk.." : r))];
@@ -269,7 +270,7 @@ Object.assign(MAPS, {
       { id: 'cida', kind: 'npc2', x: 8, y: 3, sp: 'cida', talk: 'cida', float: true, glow: 'rgba(200,180,255,0.15)' },
       { id: 'cage1', kind: 'npc2', x: 2, y: 3, sp: 'cage', talk: 'caged' }, { id: 'cage2', kind: 'npc2', x: 17, y: 3, sp: 'cage', talk: 'caged' },
       { id: 'pip', kind: 'npc2', x: 5, y: 16, sp: 'pip', talk: 'apprentice', hide: 'free_pip', name: 'Pip' },
-      { id: 'nina', kind: 'npc2', x: 11, y: 16, sp: 'pip', talk: 'apprentice', hide: 'free_nina', name: 'Nina' },
+      { id: 'nina', kind: 'npc2', x: 11, y: 16, sp: 'nina', talk: 'apprentice', hide: 'free_nina', name: 'Nina' },
       { id: 'tolo', kind: 'npc2', x: 17, y: 16, sp: 'pip', talk: 'apprentice', hide: 'free_tolo', name: 'Tolo' },
       { id: 'bridaJ', kind: 'npc2', x: 11, y: 8, sp: 'brida', talk: 'bridaJ', hide: 'bridaGone' },
       { id: 'r_vento', kind: 'rune', x: 21, y: 14, rune: 'vento' }, { id: 'r_sombra', kind: 'rune', x: 2, y: 14, rune: 'sombra' },

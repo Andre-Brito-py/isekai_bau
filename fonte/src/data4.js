@@ -114,9 +114,9 @@ function buildSprites4() {
   SP.drawer = [S4.drawer(0), S4.drawer(1)];
   SP.claraW = [S4.claraW(0), S4.claraW(1)];
   SP.calha = [0, 1].map(f => cv4(16, 16, r => { r(2, 2, 12, 12, 'k'); r(3, 3, 10, 10, '#c8962a'); r(5, 5, 6, 6, 'k'); r(6, 6, 4, 4, f ? '#2a1a10' : '#120a08'); r(3, 3, 10, 1, '#f0c040'); r(4, 13, 8, 2, 'k'); }));
-  SP.carteiro = [0, 1].map(f => { const c = spr(HUMAN, { G: 'B', m: 'u', l: 'c', s: 'c', y: 'y', b: 'B' }); const x = c.getContext('2d'); x.fillStyle = PAL.k; x.fillRect(4, 0, 8, 2); x.fillStyle = PAL.u; x.fillRect(5, 0, 6, 1); x.fillStyle = PAL.k; x.fillRect(10, 8 + f, 5, 5); x.fillStyle = PAL.n; x.fillRect(11, 9 + f, 3, 3); x.fillStyle = PAL.w; x.fillRect(11, 8 + f, 2, 1); return c; });
+  SP.carteiro = [0, 1].map(f => { const c = hum({ G: 'B', m: 'u', l: 'c', S: 'c', h: 'u', y: 'y', b: 'B' }); const x = c.getContext('2d'); x.fillStyle = PAL.k; x.fillRect(4, 0, 8, 2); x.fillStyle = PAL.u; x.fillRect(5, 0, 6, 1); x.fillStyle = PAL.k; x.fillRect(10, 8 + f, 5, 5); x.fillStyle = PAL.n; x.fillRect(11, 9 + f, 3, 3); x.fillStyle = PAL.w; x.fillRect(11, 8 + f, 2, 1); return c; });
   SP.clara = [spr(OFELIA, { w: '#e8e4dc', L: 'c', y: 'u', k: 'B' }), spr(OFELIA.map((r, i) => i === 6 ? "..kwykywwykywk.." : r), { w: '#d0e8f0', L: 'c', y: 'c', k: 'B' })];
-  SP.anselmo = [spr(HUMAN, { G: 'd', m: 'k', l: 'm', s: '#e8e4dc', y: 'n' })];
+  SP.anselmo = [hum({ G: 'd', m: 'k', l: 'm', S: '#e8e4dc', h: '#c0c0c8', y: 'n' })];
 }
 
 // ---------- tiles do Arquivo ----------

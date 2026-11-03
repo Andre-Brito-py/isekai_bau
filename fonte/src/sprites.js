@@ -365,7 +365,12 @@ const LAMP = ["................", ".......y........", "......yy....y...", ".....
 const LAMP2 = LAMP.map((r, i) => i === 1 ? "........y......." : i === 2 ? ".......yy..y...." : i === 3 ? "......yfy.yy...." : r);
 const POLVO = ["................", "....kkkkkkkk....", "...krwrwrwrwk...", "..krwrwrwrwrwk..", "..kkkkkkkkkkkk..", "...kqqqqqqqqk...", "..kqqwkqqwkqqk..", "..kqqkkqqkkqqk..", "..kqqqqqqqqqqk..", "...kqqqppqqqk...", "..kqkqkqqkqkqk..", ".kqk.kqkkqk.kqk.", ".kk..kk..kk..kk.", "................", "................", "................"];
 const POLVO2 = POLVO.map((r, i) => i === 11 ? "..kqk.kqqk.kqk.." : i === 12 ? "..kk..kk.kk..kk." : r);
-const HUMAN = ["......kkkk......", ".....kmmmmk.....", "....kmllllmk....", "....kmmmmmmk....", "....kskssksk....", "....kssssssk....", ".....kssssk.....", "...kkGGGGGGkk...", "..kGGGGyyGGGGk..", "..ksGGGGGGGGsk..", "..kkGGnnnnGGkk..", "...kGGGGGGGGk...", "...kbbk..kbbk...", "...kbbk..kbbk...", "...kkkk..kkkk...", "................"];
+const HUMAN = ["......kkkk......", ".....kmmmmk.....", "....kmllllmk....", "....kmmmmmmk....", "....khSSSShk....", "....kSkSSkSk....", ".....kSnnSk.....", "...kkGGGGGGkk...", "..kGGGGyyGGGGk..", "..kSGGGGGGGGSk..", "..kkGGnnnnGGkk..", "...kGGGGGGGGk...", "...kbbk..kbbk...", "...kbbk..kbbk...", "...kkkk..kkkk...", "................"];
+// versão feminina: cabelo comprido caindo dos lados do rosto e por cima dos ombros
+const HUMAN_F = HUMAN.map((r, i) => i === 4 ? "...khhSSSShhk..." : i === 5 ? "...khSkSSkShk..." : i === 6 ? "...khkSnnSkhk..." : i === 7 ? "..khkGGGGGGkhk.." : r);
+PAL.S = '#e0a878'; PAL.h = '#4a2c1c';
+// pessoa: pele (S), cabelo (h) e fem: true para usar a versão feminina
+function hum(map = {}) { return spr(map.fem ? HUMAN_F : HUMAN, map); }
 const HOUND = ["................", "................", "................", "................", "..kk............", ".kmmk...........", "kmmmmkkkkkkkk.k.", "kkmkmmmmmmmmmkk.", "kpmmmmmmmmmmmmk.", ".kkmmmmmmmmmmmk.", "..kmmrmmmmmmmk..", "..kmk...kmk.kmk.", "..kkk...kkk.kkk.", "................", "................", "................"];
 const BRIDA = ["........rr......", ".......rr.......", ".....kkkkkk.....", "....kllllllk....", "....kkkkkkkk....", "....kskssksk....", "....kssrrssk....", ".....kssssk.....", "..kkkllllllkkk..", ".kyykllyyllkmmk.", ".kyyklllllllkmk.", ".kyykllllllkssk.", "..kkkbbbbbbkkk..", "....kbbk.kbbk...", "....kkkk.kkkk...", "................"];
 const LUME = [".......kk.......", ".......yy.......", "..f....yy....f..", "..w..f.yy.f..w..", "..w..w.yy.w..w..", ".kyyyyyyyyyyyyk.", "..kyyykyykyyyk..", "...kyyyppyyyk...", "....kyyyyyyk....", "...c.kyyyyk.c...", "...c..kyyk..c...", "......c..c......", ".......cc.......", "................", "................", "................"];
@@ -376,17 +381,17 @@ function buildSprites2() {
   SP.lampBig = [spr(LAMP, { f: 'r', y: 'f' }), spr(LAMP2, { f: 'r', y: 'f' })];
   SP.polvo = [spr(POLVO), spr(POLVO2)];
   SP.octo = [spr(POLVO, { q: 'r', r: 'y', w: 'w' }), spr(POLVO2, { q: 'r', r: 'y' })];
-  const hunter = spr(HUMAN), hunter2 = spr(HUMAN);
+  const hunter = hum({ S: '#d8a070', h: '#3a2418' }), hunter2 = hum({ S: '#d8a070', h: '#3a2418' });
   for (const c of [hunter, hunter2]) { const x = c.getContext('2d'); x.fillStyle = PAL.l; x.fillRect(14, 3, 1, 7); x.fillStyle = PAL.y; x.fillRect(13, 9, 3, 1); x.fillStyle = PAL.b; x.fillRect(14, 10, 1, 2); }
   hunter2.getContext('2d').clearRect(3, 12, 10, 3); { const x = hunter2.getContext('2d'); x.fillStyle = PAL.k; x.fillRect(3, 12, 4, 2); x.fillRect(9, 12, 4, 2); x.fillStyle = PAL.b; x.fillRect(4, 12, 2, 1); x.fillRect(10, 12, 2, 1); }
   SP.hunter = [hunter, hunter2];
-  SP.vet = [spr(HUMAN, { G: 'u', m: 'd', l: 'm' }), spr(HUMAN, { G: 'u', m: 'd', l: 'm' })];
+  SP.vet = [hum({ G: 'u', m: 'd', l: 'm', S: '#a86a40', h: '#1a1410' }), hum({ G: 'u', m: 'd', l: 'm', S: '#a86a40', h: '#1a1410' })];
   for (const c of SP.vet) { const x = c.getContext('2d'); x.fillStyle = PAL.l; x.fillRect(14, 2, 1, 8); x.fillStyle = PAL.y; x.fillRect(13, 9, 3, 1); }
-  const archer = (m) => { const c = spr(HUMAN, m); const x = c.getContext('2d'); x.fillStyle = PAL.n; for (let j = 4; j < 13; j++) x.fillRect(j < 6 || j > 10 ? 2 : 1, j, 1, 1); x.fillStyle = PAL.w; x.fillRect(3, 5, 1, 7); return c; };
-  SP.archer = [archer({ m: 'G', l: 'g', G: 'n' }), archer({ m: 'G', l: 'g', G: 'n' })];
-  SP.archerVet = [archer({ m: 'P', l: 'q', G: 'B' }), archer({ m: 'P', l: 'q', G: 'B' })];
+  const archer = (m) => { const c = hum(m); const x = c.getContext('2d'); x.fillStyle = PAL.n; for (let j = 4; j < 13; j++) x.fillRect(j < 6 || j > 10 ? 2 : 1, j, 1, 1); x.fillStyle = PAL.w; x.fillRect(3, 5, 1, 7); return c; };
+  SP.archer = [archer({ m: 'G', l: 'g', G: 'n', fem: true, S: '#f0c8a0', h: '#c86a30' }), archer({ m: 'G', l: 'g', G: 'n', fem: true, S: '#f0c8a0', h: '#c86a30' })];
+  SP.archerVet = [archer({ m: 'P', l: 'q', G: 'B', fem: true, S: '#8a5a3a', h: '#1a1410' }), archer({ m: 'P', l: 'q', G: 'B', fem: true, S: '#8a5a3a', h: '#1a1410' })];
   SP.hound = [spr(HOUND), spr(HOUND.map((r, i) => i === 11 ? "..kmk..kmk..kmk." : i === 12 ? "..kkk..kkk..kkk." : r))];
-  SP.brida = [spr(BRIDA), spr(BRIDA.map((r, i) => i === 0 ? ".........rr....." : i === 1 ? "........rr......" : r))];
+  SP.brida = [spr(BRIDA, { s: '#d8a070' }), spr(BRIDA.map((r, i) => i === 0 ? ".........rr....." : i === 1 ? "........rr......" : r), { s: '#d8a070' })];
   SP.lume = [spr(LUME), spr(LUME2)];
   SP.door = [makeDoor(false), makeDoor(true)];
 }

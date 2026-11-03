@@ -689,7 +689,12 @@ const LAMP = ["................", ".......y........", "......yy....y...", ".....
 const LAMP2 = LAMP.map((r, i) => i === 1 ? "........y......." : i === 2 ? ".......yy..y...." : i === 3 ? "......yfy.yy...." : r);
 const POLVO = ["................", "....kkkkkkkk....", "...krwrwrwrwk...", "..krwrwrwrwrwk..", "..kkkkkkkkkkkk..", "...kqqqqqqqqk...", "..kqqwkqqwkqqk..", "..kqqkkqqkkqqk..", "..kqqqqqqqqqqk..", "...kqqqppqqqk...", "..kqkqkqqkqkqk..", ".kqk.kqkkqk.kqk.", ".kk..kk..kk..kk.", "................", "................", "................"];
 const POLVO2 = POLVO.map((r, i) => i === 11 ? "..kqk.kqqk.kqk.." : i === 12 ? "..kk..kk.kk..kk." : r);
-const HUMAN = ["......kkkk......", ".....kmmmmk.....", "....kmllllmk....", "....kmmmmmmk....", "....kskssksk....", "....kssssssk....", ".....kssssk.....", "...kkGGGGGGkk...", "..kGGGGyyGGGGk..", "..ksGGGGGGGGsk..", "..kkGGnnnnGGkk..", "...kGGGGGGGGk...", "...kbbk..kbbk...", "...kbbk..kbbk...", "...kkkk..kkkk...", "................"];
+const HUMAN = ["......kkkk......", ".....kmmmmk.....", "....kmllllmk....", "....kmmmmmmk....", "....khSSSShk....", "....kSkSSkSk....", ".....kSnnSk.....", "...kkGGGGGGkk...", "..kGGGGyyGGGGk..", "..kSGGGGGGGGSk..", "..kkGGnnnnGGkk..", "...kGGGGGGGGk...", "...kbbk..kbbk...", "...kbbk..kbbk...", "...kkkk..kkkk...", "................"];
+// versão feminina: cabelo comprido caindo dos lados do rosto e por cima dos ombros
+const HUMAN_F = HUMAN.map((r, i) => i === 4 ? "...khhSSSShhk..." : i === 5 ? "...khSkSSkShk..." : i === 6 ? "...khkSnnSkhk..." : i === 7 ? "..khkGGGGGGkhk.." : r);
+PAL.S = '#e0a878'; PAL.h = '#4a2c1c';
+// pessoa: pele (S), cabelo (h) e fem: true para usar a versão feminina
+function hum(map = {}) { return spr(map.fem ? HUMAN_F : HUMAN, map); }
 const HOUND = ["................", "................", "................", "................", "..kk............", ".kmmk...........", "kmmmmkkkkkkkk.k.", "kkmkmmmmmmmmmkk.", "kpmmmmmmmmmmmmk.", ".kkmmmmmmmmmmmk.", "..kmmrmmmmmmmk..", "..kmk...kmk.kmk.", "..kkk...kkk.kkk.", "................", "................", "................"];
 const BRIDA = ["........rr......", ".......rr.......", ".....kkkkkk.....", "....kllllllk....", "....kkkkkkkk....", "....kskssksk....", "....kssrrssk....", ".....kssssk.....", "..kkkllllllkkk..", ".kyykllyyllkmmk.", ".kyyklllllllkmk.", ".kyykllllllkssk.", "..kkkbbbbbbkkk..", "....kbbk.kbbk...", "....kkkk.kkkk...", "................"];
 const LUME = [".......kk.......", ".......yy.......", "..f....yy....f..", "..w..f.yy.f..w..", "..w..w.yy.w..w..", ".kyyyyyyyyyyyyk.", "..kyyykyykyyyk..", "...kyyyppyyyk...", "....kyyyyyyk....", "...c.kyyyyk.c...", "...c..kyyk..c...", "......c..c......", ".......cc.......", "................", "................", "................"];
@@ -700,17 +705,17 @@ function buildSprites2() {
   SP.lampBig = [spr(LAMP, { f: 'r', y: 'f' }), spr(LAMP2, { f: 'r', y: 'f' })];
   SP.polvo = [spr(POLVO), spr(POLVO2)];
   SP.octo = [spr(POLVO, { q: 'r', r: 'y', w: 'w' }), spr(POLVO2, { q: 'r', r: 'y' })];
-  const hunter = spr(HUMAN), hunter2 = spr(HUMAN);
+  const hunter = hum({ S: '#d8a070', h: '#3a2418' }), hunter2 = hum({ S: '#d8a070', h: '#3a2418' });
   for (const c of [hunter, hunter2]) { const x = c.getContext('2d'); x.fillStyle = PAL.l; x.fillRect(14, 3, 1, 7); x.fillStyle = PAL.y; x.fillRect(13, 9, 3, 1); x.fillStyle = PAL.b; x.fillRect(14, 10, 1, 2); }
   hunter2.getContext('2d').clearRect(3, 12, 10, 3); { const x = hunter2.getContext('2d'); x.fillStyle = PAL.k; x.fillRect(3, 12, 4, 2); x.fillRect(9, 12, 4, 2); x.fillStyle = PAL.b; x.fillRect(4, 12, 2, 1); x.fillRect(10, 12, 2, 1); }
   SP.hunter = [hunter, hunter2];
-  SP.vet = [spr(HUMAN, { G: 'u', m: 'd', l: 'm' }), spr(HUMAN, { G: 'u', m: 'd', l: 'm' })];
+  SP.vet = [hum({ G: 'u', m: 'd', l: 'm', S: '#a86a40', h: '#1a1410' }), hum({ G: 'u', m: 'd', l: 'm', S: '#a86a40', h: '#1a1410' })];
   for (const c of SP.vet) { const x = c.getContext('2d'); x.fillStyle = PAL.l; x.fillRect(14, 2, 1, 8); x.fillStyle = PAL.y; x.fillRect(13, 9, 3, 1); }
-  const archer = (m) => { const c = spr(HUMAN, m); const x = c.getContext('2d'); x.fillStyle = PAL.n; for (let j = 4; j < 13; j++) x.fillRect(j < 6 || j > 10 ? 2 : 1, j, 1, 1); x.fillStyle = PAL.w; x.fillRect(3, 5, 1, 7); return c; };
-  SP.archer = [archer({ m: 'G', l: 'g', G: 'n' }), archer({ m: 'G', l: 'g', G: 'n' })];
-  SP.archerVet = [archer({ m: 'P', l: 'q', G: 'B' }), archer({ m: 'P', l: 'q', G: 'B' })];
+  const archer = (m) => { const c = hum(m); const x = c.getContext('2d'); x.fillStyle = PAL.n; for (let j = 4; j < 13; j++) x.fillRect(j < 6 || j > 10 ? 2 : 1, j, 1, 1); x.fillStyle = PAL.w; x.fillRect(3, 5, 1, 7); return c; };
+  SP.archer = [archer({ m: 'G', l: 'g', G: 'n', fem: true, S: '#f0c8a0', h: '#c86a30' }), archer({ m: 'G', l: 'g', G: 'n', fem: true, S: '#f0c8a0', h: '#c86a30' })];
+  SP.archerVet = [archer({ m: 'P', l: 'q', G: 'B', fem: true, S: '#8a5a3a', h: '#1a1410' }), archer({ m: 'P', l: 'q', G: 'B', fem: true, S: '#8a5a3a', h: '#1a1410' })];
   SP.hound = [spr(HOUND), spr(HOUND.map((r, i) => i === 11 ? "..kmk..kmk..kmk." : i === 12 ? "..kkk..kkk..kkk." : r))];
-  SP.brida = [spr(BRIDA), spr(BRIDA.map((r, i) => i === 0 ? ".........rr....." : i === 1 ? "........rr......" : r))];
+  SP.brida = [spr(BRIDA, { s: '#d8a070' }), spr(BRIDA.map((r, i) => i === 0 ? ".........rr....." : i === 1 ? "........rr......" : r), { s: '#d8a070' })];
   SP.lume = [spr(LUME), spr(LUME2)];
   SP.door = [makeDoor(false), makeDoor(true)];
 }
@@ -3786,17 +3791,18 @@ function makeJailer(f) {
 function buildSprites3() {
   SP.garg = [spr(GARG, { m: 'l', l: 'w' }), spr(GARG.map((r, i) => i === 2 ? "kmk..........kmk" : i === 3 ? "kmlmk.kkkk.kmlmk" : r), { m: 'l', l: 'w' })];
   SP.escr = [spr(ESCR), spr(ESCR.map((r, i) => i === 12 ? "...kk.kk.kk....." : r))];
-  const armed = (map, tool) => { const c = spr(HUMAN, map); const x = c.getContext('2d'); tool(x); return c; };
+  const armed = (map, tool) => { const c = hum(map); const x = c.getContext('2d'); tool(x); return c; };
   const spear = x => { x.fillStyle = PAL.n; x.fillRect(14, 1, 1, 13); x.fillStyle = PAL.l; x.fillRect(13, 0, 3, 2); };
   const staff = x => { x.fillStyle = PAL.y; x.fillRect(14, 2, 1, 12); x.fillStyle = PAL.w; x.fillRect(13, 0, 3, 3); };
   const lantern = x => { x.fillStyle = PAL.k; x.fillRect(12, 8, 4, 5); x.fillStyle = '#ffe9a0'; x.fillRect(13, 9, 2, 3); };
-  SP.soldier = [armed({ G: 'w', m: 'l', l: 'w' }, spear), armed({ G: 'w', m: 'l', l: 'w' }, spear)];
-  SP.cleric = [armed({ G: 'w', m: 'y', l: 'w', b: 'n' }, staff), armed({ G: 'w', m: 'y', l: 'w', b: 'n' }, staff)];
-  SP.farol = [armed({ G: 'n', m: 'd', l: 'm' }, lantern), armed({ G: 'n', m: 'd', l: 'm' }, lantern)];
-  SP.pip = [spr(HUMAN, { G: 'g', m: 'n', l: 'o' })];
-  SP.knight = [armed({ m: 'd', l: 'm', s: 'k', G: 'd', y: 'r', b: 'k', n: 'd' }, spear), armed({ m: 'd', l: 'm', s: 'k', G: 'd', y: 'r', b: 'k', n: 'd' }, spear)];
+  SP.soldier = [armed({ G: 'w', m: 'l', l: 'w', S: '#e0b080', h: '#5a3a20' }, spear), armed({ G: 'w', m: 'l', l: 'w', S: '#e0b080', h: '#5a3a20' }, spear)];
+  SP.cleric = [armed({ G: 'w', m: 'y', l: 'w', b: 'n', fem: true, S: '#c8905a', h: '#1a1410' }, staff), armed({ G: 'w', m: 'y', l: 'w', b: 'n', fem: true, S: '#c8905a', h: '#1a1410' }, staff)];
+  SP.farol = [armed({ G: 'n', m: 'd', l: 'm', S: '#f0c8a0', h: '#e0c060' }, lantern), armed({ G: 'n', m: 'd', l: 'm', S: '#f0c8a0', h: '#e0c060' }, lantern)];
+  SP.pip = [hum({ G: 'g', m: 'n', l: 'o', S: '#e8b890', h: '#c86a30' })];
+  SP.nina = [hum({ G: 'g', m: 'n', l: 'o', fem: true, S: '#a86a40', h: '#1a1410' })];
+  SP.knight = [armed({ m: 'd', l: 'm', S: 'k', h: 'k', G: 'd', y: 'r', b: 'k', n: 'd' }, spear), armed({ m: 'd', l: 'm', S: 'k', h: 'k', G: 'd', y: 'r', b: 'k', n: 'd' }, spear)];
   for (const c of SP.knight) { const x = c.getContext('2d'); x.fillStyle = '#ff5050'; x.fillRect(6, 4, 1, 1); x.fillRect(9, 4, 1, 1); }
-  SP.maren = [spr(MAREN), spr(MAREN.map((r, i) => i === 0 ? "......kk........" : i === 1 ? ".....kqqk......." : r))];
+  SP.maren = [spr(MAREN, { s: '#e8c0a0' }), spr(MAREN.map((r, i) => i === 0 ? "......kk........" : i === 1 ? ".....kqqk......." : r), { s: '#e8c0a0' })];
   SP.escriba = [spr(ESCR, { B: 'L', w: 'k' }), spr(ESCR, { B: 'L', w: 'k' })];
   for (const c of SP.escriba) { const x = c.getContext('2d'); x.fillStyle = '#8a8099'; for (let i = 0; i < 16; i += 2) { x.fillRect(i, 13, 1, 1); x.fillRect(1, i, 1, 1); } }
   SP.cida = [spr(CIDA), spr(CIDA.map((r, i) => i === 5 ? "..kLwkLLLLwkLk.." : r))];
@@ -4030,7 +4036,7 @@ Object.assign(MAPS, {
       { id: 'cida', kind: 'npc2', x: 8, y: 3, sp: 'cida', talk: 'cida', float: true, glow: 'rgba(200,180,255,0.15)' },
       { id: 'cage1', kind: 'npc2', x: 2, y: 3, sp: 'cage', talk: 'caged' }, { id: 'cage2', kind: 'npc2', x: 17, y: 3, sp: 'cage', talk: 'caged' },
       { id: 'pip', kind: 'npc2', x: 5, y: 16, sp: 'pip', talk: 'apprentice', hide: 'free_pip', name: 'Pip' },
-      { id: 'nina', kind: 'npc2', x: 11, y: 16, sp: 'pip', talk: 'apprentice', hide: 'free_nina', name: 'Nina' },
+      { id: 'nina', kind: 'npc2', x: 11, y: 16, sp: 'nina', talk: 'apprentice', hide: 'free_nina', name: 'Nina' },
       { id: 'tolo', kind: 'npc2', x: 17, y: 16, sp: 'pip', talk: 'apprentice', hide: 'free_tolo', name: 'Tolo' },
       { id: 'bridaJ', kind: 'npc2', x: 11, y: 8, sp: 'brida', talk: 'bridaJ', hide: 'bridaGone' },
       { id: 'r_vento', kind: 'rune', x: 21, y: 14, rune: 'vento' }, { id: 'r_sombra', kind: 'rune', x: 2, y: 14, rune: 'sombra' },
@@ -4538,9 +4544,9 @@ function buildSprites4() {
   SP.drawer = [S4.drawer(0), S4.drawer(1)];
   SP.claraW = [S4.claraW(0), S4.claraW(1)];
   SP.calha = [0, 1].map(f => cv4(16, 16, r => { r(2, 2, 12, 12, 'k'); r(3, 3, 10, 10, '#c8962a'); r(5, 5, 6, 6, 'k'); r(6, 6, 4, 4, f ? '#2a1a10' : '#120a08'); r(3, 3, 10, 1, '#f0c040'); r(4, 13, 8, 2, 'k'); }));
-  SP.carteiro = [0, 1].map(f => { const c = spr(HUMAN, { G: 'B', m: 'u', l: 'c', s: 'c', y: 'y', b: 'B' }); const x = c.getContext('2d'); x.fillStyle = PAL.k; x.fillRect(4, 0, 8, 2); x.fillStyle = PAL.u; x.fillRect(5, 0, 6, 1); x.fillStyle = PAL.k; x.fillRect(10, 8 + f, 5, 5); x.fillStyle = PAL.n; x.fillRect(11, 9 + f, 3, 3); x.fillStyle = PAL.w; x.fillRect(11, 8 + f, 2, 1); return c; });
+  SP.carteiro = [0, 1].map(f => { const c = hum({ G: 'B', m: 'u', l: 'c', S: 'c', h: 'u', y: 'y', b: 'B' }); const x = c.getContext('2d'); x.fillStyle = PAL.k; x.fillRect(4, 0, 8, 2); x.fillStyle = PAL.u; x.fillRect(5, 0, 6, 1); x.fillStyle = PAL.k; x.fillRect(10, 8 + f, 5, 5); x.fillStyle = PAL.n; x.fillRect(11, 9 + f, 3, 3); x.fillStyle = PAL.w; x.fillRect(11, 8 + f, 2, 1); return c; });
   SP.clara = [spr(OFELIA, { w: '#e8e4dc', L: 'c', y: 'u', k: 'B' }), spr(OFELIA.map((r, i) => i === 6 ? "..kwykywwykywk.." : r), { w: '#d0e8f0', L: 'c', y: 'c', k: 'B' })];
-  SP.anselmo = [spr(HUMAN, { G: 'd', m: 'k', l: 'm', s: '#e8e4dc', y: 'n' })];
+  SP.anselmo = [hum({ G: 'd', m: 'k', l: 'm', S: '#e8e4dc', h: '#c0c0c8', y: 'n' })];
 }
 
 // ---------- tiles do Arquivo ----------
@@ -5265,20 +5271,20 @@ const S5 = {
   diario: f => cv4(16, 16, r => { r(3, 3 + f, 10, 11, 'k'); r(4, 4 + f, 8, 9, '#3a70c0'); r(4, 4 + f, 1, 9, 'B'); r(6, 6 + f, 5, 1, '#e8dcc0'); r(6, 8 + f, 4, 1, '#e8dcc0'); r(8, 12 + f, 2, 3, 'y'); })
 };
 function buildSprites5() {
-  const armed = (map, tool) => { const c = spr(HUMAN, map); const x = c.getContext('2d'); tool(x); return c; };
+  const armed = (map, tool) => { const c = hum(map); const x = c.getContext('2d'); tool(x); return c; };
   const spear = x => { x.fillStyle = PAL.n; x.fillRect(14, 1, 1, 13); x.fillStyle = PAL.l; x.fillRect(13, 0, 3, 2); };
   const shield = x => { x.fillStyle = PAL.k; x.fillRect(9, 6, 7, 9); x.fillStyle = '#6a7084'; x.fillRect(10, 7, 5, 7); x.fillStyle = PAL.y; x.fillRect(12, 8, 1, 5); x.fillRect(10, 10, 5, 1); };
   const gun = x => { x.fillStyle = PAL.k; x.fillRect(9, 8, 7, 2); x.fillStyle = PAL.n; x.fillRect(9, 9, 3, 2); x.fillStyle = '#e0a060'; x.fillRect(15, 7, 1, 1); };
   const flask = x => { x.fillStyle = PAL.k; x.fillRect(11, 7, 4, 5); x.fillStyle = PAL.v; x.fillRect(12, 8, 2, 3); x.fillStyle = PAL.w; x.fillRect(12, 6, 2, 1); };
   const lamp = x => { x.fillStyle = PAL.k; x.fillRect(12, 8, 4, 5); x.fillStyle = '#ffe9a0'; x.fillRect(13, 9, 2, 3); x.fillStyle = PAL.k; x.fillRect(4, 0, 8, 2); x.fillStyle = PAL.u; x.fillRect(5, 0, 6, 1); };
-  SP.recruta = [armed({ G: 'u', m: 'l', l: 'w' }, spear), armed({ G: 'u', m: 'l', l: 'w' }, spear)];
-  SP.escudeiro = [armed({ G: 'u', m: 'm', l: 'l' }, shield), armed({ G: 'u', m: 'm', l: 'l' }, shield)];
-  SP.arcabuz = [armed({ G: 'n', m: 'd', l: 'm' }, gun), armed({ G: 'n', m: 'd', l: 'm' }, gun)];
-  SP.alquimista = [armed({ G: 'G', m: 'g', l: 'v' }, flask), armed({ G: 'G', m: 'g', l: 'v' }, flask)];
-  SP.veterano = [armed({ G: 'r', m: 'd', l: 'm', y: 'w' }, spear), armed({ G: 'r', m: 'd', l: 'm', y: 'w' }, spear)];
-  SP.fiscalP = [armed({ G: 'B', m: 'k', l: 'm' }, lamp), armed({ G: 'B', m: 'k', l: 'm' }, lamp)];
-  SP.jorge = [0, 1].map(f => { const c = spr(HUMAN, { G: 'u', m: 'B', l: 'u', y: 'w', s: 's' }); const x = c.getContext('2d'); x.fillStyle = PAL.k; x.fillRect(3, 0, 10, 3); x.fillStyle = '#3a70c0'; x.fillRect(4, 0, 8, 2); x.fillStyle = PAL.k; x.fillRect(3, 2, 11, 1); x.fillStyle = '#5a4a3a'; x.fillRect(6, 6, 4, 1); x.fillStyle = PAL.y; x.fillRect(12, 11 + f, 2, 2); x.fillRect(11, 12 + f, 1, 1); return c; });
-  SP.maren5 = [spr(MAREN.map((r, i) => i < 4 ? '................' : r)), spr(MAREN.map((r, i) => i < 4 ? '................' : i === 4 ? '...kkkk.kkkkk...' : r))];
+  SP.recruta = [armed({ G: 'u', m: 'l', l: 'w', S: '#d09868', h: '#5a3a20' }, spear), armed({ G: 'u', m: 'l', l: 'w', S: '#d09868', h: '#5a3a20' }, spear)];
+  SP.escudeiro = [armed({ G: 'u', m: 'm', l: 'l', fem: true, S: '#8a5a3a', h: '#1a1410' }, shield), armed({ G: 'u', m: 'm', l: 'l', fem: true, S: '#8a5a3a', h: '#1a1410' }, shield)];
+  SP.arcabuz = [armed({ G: 'n', m: 'd', l: 'm', S: '#f0c8a0', h: '#3a2418' }, gun), armed({ G: 'n', m: 'd', l: 'm', S: '#f0c8a0', h: '#3a2418' }, gun)];
+  SP.alquimista = [armed({ G: 'G', m: 'g', l: 'v', fem: true, S: '#e0b080', h: '#c86a30' }, flask), armed({ G: 'G', m: 'g', l: 'v', fem: true, S: '#e0b080', h: '#c86a30' }, flask)];
+  SP.veterano = [armed({ G: 'r', m: 'd', l: 'm', y: 'w', S: '#a86a40', h: '#1a1410' }, spear), armed({ G: 'r', m: 'd', l: 'm', y: 'w', S: '#a86a40', h: '#1a1410' }, spear)];
+  SP.fiscalP = [armed({ G: 'B', m: 'k', l: 'm', S: '#c8905a', h: '#3a2418' }, lamp), armed({ G: 'B', m: 'k', l: 'm', S: '#c8905a', h: '#3a2418' }, lamp)];
+  SP.jorge = [0, 1].map(f => { const c = hum({ G: 'u', m: 'B', l: 'u', y: 'w', S: '#d8a070', h: '#9a9aa0' }); const x = c.getContext('2d'); x.fillStyle = PAL.k; x.fillRect(3, 0, 10, 3); x.fillStyle = '#3a70c0'; x.fillRect(4, 0, 8, 2); x.fillStyle = PAL.k; x.fillRect(3, 2, 11, 1); x.fillStyle = '#5a4a3a'; x.fillRect(6, 6, 4, 1); x.fillStyle = PAL.y; x.fillRect(12, 11 + f, 2, 2); x.fillRect(11, 12 + f, 1, 1); return c; });
+  SP.maren5 = [spr(MAREN.map((r, i) => i < 4 ? '................' : i === 4 ? '...khhhhhhhk....' : r), { s: '#e8c0a0', h: '#2a1a30' }), spr(MAREN.map((r, i) => i < 4 ? '................' : i === 4 ? '...khhh.hhhhk...' : r), { s: '#e8c0a0', h: '#2a1a30' })];
   SP.cao = [S5.cao(0), S5.cao(1)];
   SP.fiscal = [S5.fiscal(0), S5.fiscal(1)];
   SP.musgo = [S5.musgo(0), S5.musgo(1)];
@@ -5506,7 +5512,7 @@ const TH_ASF = { floor: '#2c2c32', speck: '#36363c', dark: '#24242a', wall: '#44
 Object.assign(MAPS, {
   terminal: { name: "Terminal Rodoviário", music: 'terminal', dark: 0.25, theme: TH_TERM, battleBg: '#1e1a1a', rows: ["############..############", "#.QQQ.QQQ...........QQQ..#", "#........................#", "#..QQQ.QQQ.......KK......#", "#...........######.......#", "#..QQQ.QQQ..#....#..QQQ..#", "#...........#....#.......#", "#...........##..##.......#", "#.........................", "#.........................", "#..K...............K.....#", "#..QQQ.QQQ......QQQ.QQQ..#", "#........................#", "#..QQQ.QQQ......QQQ.QQQ..#", "#........................#", "#.....,..............,...#", "#........................#", "##########################"],
     exits: [{"x": 25, "y": 8, "to": "trincheira", "tx": 1, "ty": 8}, {"x": 25, "y": 9, "to": "trincheira", "tx": 1, "ty": 9}, {"x": 12, "y": 0, "to": "manobras", "tx": 13, "ty": 18, "cond": "musgoDone"}, {"x": 13, "y": 0, "to": "manobras", "tx": 14, "ty": 18, "cond": "musgoDone"}],
-    ents: [{"id": "save_tm", "kind": "save", "x": 3, "y": 15}, {"id": "tubo5", "kind": "npc2", "x": 1, "y": 2, "sp": "tubo", "talk": "tubo5"}, {"id": "tiago5", "kind": "npc2", "x": 14, "y": 5, "sp": "hunter", "talk": "tiago5"}, {"id": "d_man1", "kind": "door", "x": 12, "y": 0, "cond": "musgoDone", "dark": true, "msg": "portao5"}, {"id": "d_man2", "kind": "door", "x": 13, "y": 0, "cond": "musgoDone", "dark": true, "msg": "portao5"}, {"id": "pip5", "kind": "npc2", "x": 22, "y": 15, "sp": "pip", "talk": "aprendiz5", "cond": "free_pip", "name": "Pip"}, {"id": "nina5", "kind": "npc2", "x": 23, "y": 14, "sp": "pip", "talk": "aprendiz5", "cond": "free_nina", "name": "Nina"}, {"id": "tolo5", "kind": "npc2", "x": 24, "y": 15, "sp": "pip", "talk": "aprendiz5", "cond": "free_tolo", "name": "Tolo"}, {"id": "p_t1", "kind": "patrol", "x": 3, "y": 12, "path": [[3, 12], [22, 12]], "delay": 18, "range": 4, "group": ["fiscalP"], "sp": "fiscalP", "light": true}, {"id": "p_t2", "kind": "patrol", "x": 19, "y": 2, "path": [[19, 2], [19, 9]], "delay": 18, "range": 4, "group": ["recruta"], "sp": "recruta"}, {"id": "e_t1", "kind": "enemy", "x": 8, "y": 15, "group": ["recruta", "escudeiro"]}, {"id": "e_t2", "kind": "enemy", "x": 21, "y": 16, "group": ["arcabuz"]}, {"id": "cr_tm1", "kind": "chest", "x": 24, "y": 1, "rune": "polvora", "n": 1}, {"id": "cr_tm2", "kind": "chest", "x": 1, "y": 16, "rune": "dardo", "n": 2}] },
+    ents: [{"id": "save_tm", "kind": "save", "x": 3, "y": 15}, {"id": "tubo5", "kind": "npc2", "x": 1, "y": 2, "sp": "tubo", "talk": "tubo5"}, {"id": "tiago5", "kind": "npc2", "x": 14, "y": 5, "sp": "hunter", "talk": "tiago5"}, {"id": "d_man1", "kind": "door", "x": 12, "y": 0, "cond": "musgoDone", "dark": true, "msg": "portao5"}, {"id": "d_man2", "kind": "door", "x": 13, "y": 0, "cond": "musgoDone", "dark": true, "msg": "portao5"}, {"id": "pip5", "kind": "npc2", "x": 22, "y": 15, "sp": "pip", "talk": "aprendiz5", "cond": "free_pip", "name": "Pip"}, {"id": "nina5", "kind": "npc2", "x": 23, "y": 14, "sp": "nina", "talk": "aprendiz5", "cond": "free_nina", "name": "Nina"}, {"id": "tolo5", "kind": "npc2", "x": 24, "y": 15, "sp": "pip", "talk": "aprendiz5", "cond": "free_tolo", "name": "Tolo"}, {"id": "p_t1", "kind": "patrol", "x": 3, "y": 12, "path": [[3, 12], [22, 12]], "delay": 18, "range": 4, "group": ["fiscalP"], "sp": "fiscalP", "light": true}, {"id": "p_t2", "kind": "patrol", "x": 19, "y": 2, "path": [[19, 2], [19, 9]], "delay": 18, "range": 4, "group": ["recruta"], "sp": "recruta"}, {"id": "e_t1", "kind": "enemy", "x": 8, "y": 15, "group": ["recruta", "escudeiro"]}, {"id": "e_t2", "kind": "enemy", "x": 21, "y": 16, "group": ["arcabuz"]}, {"id": "cr_tm1", "kind": "chest", "x": 24, "y": 1, "rune": "polvora", "n": 1}, {"id": "cr_tm2", "kind": "chest", "x": 1, "y": 16, "rune": "dardo", "n": 2}] },
   trincheira: { name: "Trincheira do Mercado", music: 'trincheira', dark: 0.35, theme: TH_TRIN, battleBg: '#1e1a1a', rows: ["##############################", "#..X......X.......X.......K..#", "#..X..,...X...,...X.......K..#", "#..XXXX...XXXXX...XXXX.......#", "#............................#", "#....,.........,.............#", "#..XXXX...XXXXX...XXXX.......#", "#..X..........X......X.......#", "...X..........X......X.......#", "...X...,......X..,...X.......#", "#..XXXX...XXXXX...XXXX.......#", "#............................#", "#....,.........,.............#", "#..XXXX...XXXXX...XXXX..TT...#", "#..X..........X......X..TT...#", "#..X..........X......X.......#", "#..XXXX...XXXXX...XXXX.......#", "#.........,..................#", "#............................#", "##############################"],
     exits: [{"x": 0, "y": 8, "to": "terminal", "tx": 24, "ty": 8}, {"x": 0, "y": 9, "to": "terminal", "tx": 24, "ty": 9}],
     ents: [{"id": "save_tr", "kind": "save", "x": 25, "y": 11}, {"id": "musgo", "kind": "npc2", "x": 26, "y": 8, "sp": "musgo", "talk": "musgo5", "glow": "rgba(150,220,120,0.15)"}, {"id": "refug1", "kind": "npc2", "x": 27, "y": 4, "sp": "rat", "talk": "refugiado"}, {"id": "refug2", "kind": "npc2", "x": 27, "y": 15, "sp": "mush", "talk": "refugiado"}, {"id": "e_tr1", "kind": "enemy", "x": 8, "y": 8, "group": ["recruta", "recruta"]}, {"id": "e_tr2", "kind": "enemy", "x": 18, "y": 8, "group": ["escudeiro", "arcabuz"]}, {"id": "e_tr3", "kind": "enemy", "x": 11, "y": 14, "group": ["alquimista", "recruta"]}, {"id": "e_tr4", "kind": "enemy", "x": 18, "y": 14, "group": ["cao", "cao"]}, {"id": "e_tr5", "kind": "enemy", "x": 5, "y": 1, "group": ["arcabuz"]}, {"id": "cr_tr1", "kind": "chest", "x": 1, "y": 1, "item": "frag", "n": 1}, {"id": "cr_tr2", "kind": "chest", "x": 20, "y": 1, "rune": "bandeira", "n": 1}, {"id": "carta5", "kind": "npc2", "x": 12, "y": 8, "sp": "diario", "talk": "diario5", "hide": "carta5", "float": true, "glow": "rgba(120,170,255,0.18)"}],
