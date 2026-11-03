@@ -2,7 +2,7 @@ import json
 src='/home/claude/rpg/src/'
 head=open(src+'head.html').read()
 font=open('/home/claude/rpg/build/font.json').read()
-js=''.join(open(src+f).read()+'\n' for f in ['sprites.js','audio.js','data.js','main.js','data2.js','combat.js','data3.js','data4.js','data5.js','humor.js','portraits.js'])
+js=''.join(open(src+f).read()+'\n' for f in ['sprites.js','audio.js','data.js','main.js','data2.js','combat.js','data3.js','data4.js','data5.js','humor.js','portraits.js','bosses.js'])
 html=head+'\n<script>\nconst FONT='+font+';\n'+js+'boot();\n</script>\n'
 open('/home/claude/rpg/renasci-como-bau.html','w').write(html)
 # standalone version with doctype for offline use
