@@ -747,7 +747,7 @@ function drawWorld() {
         const shw = 12 - Math.round(hop * 4);
         bx.fillStyle = 'rgba(0,0,0,0.35)'; bx.fillRect(sx + 8 - shw / 2, sy + 14, shw, 2);
         if (V.human8 && typeof HUMAN8 !== 'undefined' && HUMAN8) { const hb = HUMAN8[Math.floor(FRAME / 30) % HUMAN8.length]; drawTall(hb, sx, sy, WD.dir === 'left'); }
-        else if (WD.disg) { const cl = (typeof CHEST8 !== 'undefined' && CHEST8[G.species] && CHEST8[G.species].closed) || SP.chest[0], kw = cl.width / 16, kh = cl.height / 16; bx.drawImage(cl, sx + Math.round((16 - w * kw) / 2), sy + 16 - Math.round(h * kh), Math.round(w * kw), Math.round(h * kh)); if (FRAME % 90 < 6) { bx.fillStyle = '#f0c040'; bx.fillRect(sx + 6, sy + 9, 1, 1); bx.fillRect(sx + 9, sy + 9, 1, 1); } }
+        else if (WD.disg) { const cl = SP.chest[0], kw = cl.width / 16, kh = cl.height / 16; bx.drawImage(cl, sx + Math.round((16 - w * kw) / 2), sy + 16 - Math.round(h * kh), Math.round(w * kw), Math.round(h * kh)); if (FRAME % 90 < 6) { bx.fillStyle = '#f0c040'; bx.fillRect(sx + 6, sy + 9, 1, 1); bx.fillRect(sx + 9, sy + 9, 1, 1); } }
         else { const kw = fr.width / 16, kh = fr.height / 16; bx.drawImage(fr, sx + Math.round((16 - w * kw) / 2) + ox, sy + 16 - Math.round(h * kh) - lift, Math.round(w * kw), Math.round(h * kh)); }
         if (WD.idle > 420) { const zt = (FRAME % 120) / 120; txt('z', (sx + 13 + zt * 6), sy - 4 - zt * 12, { col: '#b8aecb', alpha: 1 - zt }); if (FRAME % 120 > 60) txt('z', sx + 10 + (zt - .5) * 6, sy - 2 - (zt - .5) * 12, { col: '#8a8099', alpha: 1.5 - zt }); }
         lights.push([sx + 8, sy + 8, 70, null]);

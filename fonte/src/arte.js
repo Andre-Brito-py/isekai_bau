@@ -267,7 +267,7 @@ function drawLume8(x, y, alpha) {
   bx.globalAlpha = 1;
 }
 // ----- parte 2 das artes do usuário (arte_ia2.js): lado/costas, baús, Lume, Pavio, Bento e forma humana -----
-const SPF = {}, CHEST8 = {}; let HUMAN8 = null;
+const SPF = {}, CHEST8 = {}, CHEST8MAP = {}; let HUMAN8 = null;
 function buildArteIA2() {
   if (typeof ARTE_IA2 === 'undefined') return;
   const D = ARTE_IA2, dec = a => a.map(iaCanvas);
@@ -282,8 +282,8 @@ function buildArteIA2() {
     const sp = SPECIES[k] && SPECIES[k].sp; if (!sp) continue;
     const [f, t, c] = dec(v.map), [bf, bt, bc] = dec(v.bat), tl = flipH(t), btl = flipH(bt);
     const hop = (cv, dy) => { const o = mk(cv.width, cv.height + 2); o.getContext('2d').drawImage(cv, 0, 2 - dy); return o; };
-    SP[sp] = [f, f, f];
-    SPD[sp] = { down: [f, f, f], up: [c, c, c], right: [tl, tl, tl, hop(tl, 1), hop(tl, 2), tl], left: [t, t, t, hop(t, 1), hop(t, 2), t] };
+    // no mapa o baú continua em pixel art desenhada à mão (sprites.js): pulinhos, poeira e as animações de parado
+    CHEST8MAP[k] = { front: f, three: t, three_l: tl, closed: c, hop };
     CHEST8[k] = { closed: c, bat: { front: bf, three: bt, three_l: btl, closed: bc } };
   }
 }
