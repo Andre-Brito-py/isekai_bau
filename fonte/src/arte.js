@@ -241,3 +241,28 @@ function dtChests() {
 }
 { const _bs = buildSprites; buildSprites = function () { _bs(); dtChests(); }; }
 { const _pb = pbSprites; pbSprites = function (form) { const S = _pb(form); if (!S._dt) { S._dt = true; for (const p of Object.keys(S)) if (Array.isArray(S[p])) S[p].forEach(c => dtShadeOnce(c, 0.6)); } return S; }; }
+// ----- artes enviadas pelo usuário (arte_ia.js): substituem os sprites e retratos dos personagens com nome -----
+function iaCanvas(e) {
+  const c = mk(e.w, e.h), x = c.getContext('2d'), id = x.createImageData(e.w, e.h), b = atob(e.d), P = [];
+  for (let i = 0; i < e.p.length; i += 6) P.push([parseInt(e.p.substr(i, 2), 16), parseInt(e.p.substr(i + 2, 2), 16), parseInt(e.p.substr(i + 4, 2), 16)]);
+  for (let i = 0; i < b.length; i++) { const k = b.charCodeAt(i); if (!k) continue; const p = P[k - 1]; id.data[i * 4] = p[0]; id.data[i * 4 + 1] = p[1]; id.data[i * 4 + 2] = p[2]; id.data[i * 4 + 3] = 255; }
+  x.putImageData(id, 0, 0); return c;
+}
+function buildArteIA() {
+  if (typeof ARTE_IA === 'undefined') return;
+  for (const [k, fr] of Object.entries(ARTE_IA.sp)) SP[k] = fr.map(iaCanvas);
+  SP.maren5 = SP.maren; SP.tiago = SP.tiago || SP.hunter;
+  for (const [k, fr] of Object.entries(ARTE_IA.port)) PORT[k] = fr.map(iaCanvas);
+  PORT.of = PORT.ofelia; PORT.maren5 = PORT.maren;
+}
+{ const _bs = buildSprites; buildSprites = function () { _bs(); buildArteIA(); }; }
+for (const k of ['jorge', 'tiago', 'marlene', 'neide', 'ozorio', 'duda', 'rita', 'brida', 'maren', 'maren5', 'clara', 'pip', 'nina', 'anselmo', 'escriba', 'lume', 'musgo', 'cida', 'bento', 'valdir'])
+  if (WHO[k]) WHO[k].portrait = t => portFrame(k, t);
+for (const m of Object.values(MAPS)) for (const e of m.ents || []) if (e.id === 'tolo' && e.sp === 'pip') e.sp = 'tolo';
+// a Lume (agora maior) desenhada flutuando, centralizada no lugar dela
+function drawLume8(x, y, alpha) {
+  const L = SP.lume, f = L[Math.floor(FRAME / 14) % L.length], bob = Math.round(Math.sin(FRAME * 0.06) * 1.5);
+  if (alpha != null) bx.globalAlpha = alpha;
+  bx.drawImage(f, Math.round(x + 8 - f.width / 2), Math.round(y + 12 - f.height + bob));
+  bx.globalAlpha = 1;
+}

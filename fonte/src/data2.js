@@ -163,7 +163,7 @@ Object.assign(LOOK, {
   D: ['* Uma cortina pesada de veludo vermelho. Cheira a mofo e a aplausos antigos.'],
   H: ['* O Sino do Andar 2. Dizem que ele toca sozinho quando alguém sobe para o Andar 3.']
 });
-WHO.lume = { name: () => 'Lume', portrait: () => SP.lume[Math.floor(FRAME / 20) % 2], voice: () => sfx('blipTri', 1250) };
+WHO.lume = { name: () => 'Lume', portrait: () => (PORT.lume ? PORT.lume[0] : SP.lume[0]), voice: () => sfx('blipTri', 1250) };
 WHO.brida = { name: () => 'Capitã Brida', portrait: () => SP.brida[0], voice: () => sfx('blip', 300) };
 WHO.tiago = { name: () => G.flags.knowTiago ? 'Tiago' : 'Herói', portrait: () => SP.hunter[0], voice: () => sfx('blip', 720) };
 WHO.octo = { name: () => 'Polvo do Camarote', portrait: () => SP.octo[0], voice: () => sfx('blipLow', 140), col: '#ffb0b0' };

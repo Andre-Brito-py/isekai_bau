@@ -184,7 +184,7 @@ function drawParty() {
   if (G.flags.lumeJoined) {
     const lx = BPX - 30, ly = BPY - 58 + Math.round(Math.sin(FRAME * 0.07) * 3);
     bx.globalAlpha = 0.18; bx.fillStyle = '#ffe066'; bx.beginPath(); bx.arc(lx + 8, ly + 8, 11 + Math.sin(FRAME * 0.1) * 1.5, 0, Math.PI * 2); bx.fill(); bx.globalAlpha = 1;
-    bx.drawImage(SP.lume[Math.floor(FRAME / 20) % 2], lx, ly);
+    { const L = SP.lume, f = L[Math.floor(FRAME / 14) % L.length]; bx.drawImage(f, Math.round(lx + 8 - f.width / 2), Math.round(ly + 16 - f.height)); }
     if (BT.lumeT > 0) { BT.lumeT--; txt('♪', lx + 2 - (60 - BT.lumeT) / 8, ly - 6 - (60 - BT.lumeT) / 6, { col: '#ffe066', alpha: BT.lumeT / 60 }); }
   }
 }

@@ -810,7 +810,7 @@ function drawWorld() {
       case 'lume': {
         const sw = Math.round(Math.sin(FRAME * 0.04) * 2);
         bx.fillStyle = '#5a5070'; bx.fillRect(sx + 7 + sw, sy - 16, 2, 16);
-        bx.drawImage(SP.lume[Math.floor(FRAME / 20) % 2], sx + sw, sy);
+        drawLume8(sx + sw, sy);
         lights.push([sx + 8, sy + 8, 46, 'rgba(255,220,140,0.2)']);
         if (!G.flags.octoDone) { const f = Math.floor(FRAME / 24) % 2; bx.drawImage(SP.octo[f], sx - 8, sy + 22 + Math.round(Math.sin(FRAME * 0.05) * 2), 32, 32); }
         break;
@@ -819,7 +819,7 @@ function drawWorld() {
       case 'page': if (!G.flags[e.id]) { const fy = Math.round(Math.sin(FRAME * 0.1 + e.x) * 1.5); bx.fillStyle = '#120e1a'; bx.fillRect(sx + 4, sy + 3 + fy, 9, 11); bx.fillStyle = '#e8dcc0'; bx.fillRect(sx + 5, sy + 4 + fy, 7, 9); bx.fillStyle = '#5a4a6a'; for (let k = 0; k < 4; k++) bx.fillRect(sx + 6, sy + 6 + k * 2 + fy, 5, 1); lights.push([sx + 8, sy + 8, 22, 'rgba(255,240,200,0.18)']); } break;
       case 'pickup': if (!G.flags[e.id]) { bx.drawImage(SP.chest[0], sx, sy); lights.push([sx + 8, sy + 8, 22, 'rgba(255,224,102,0.18)']); } break;
       case 'npc2': { if (e.cond && !G.flags[e.cond]) break; if (e.hide && G.flags[e.hide]) break; const sp = SP[e.sp]; const fl = e.float ? Math.round(Math.sin(FRAME * 0.06) * 2) : 0; const fr0 = sp[Math.floor(FRAME / 30) % sp.length]; if (fr0.height > 16 || fr0.width > 16) drawTall(fr0, sx, sy, e.flip, fl); else if (e.flip) { bx.save(); bx.translate(sx + 16, sy + fl); bx.scale(-1, 1); bx.drawImage(fr0, 0, 0); bx.restore(); } else bx.drawImage(fr0, sx, sy + fl); if (e.glow) lights.push([sx + 8, sy + 8, 36, e.glow]); break; }
-      case 'boss3': { const sp = SP[e.sp]; const f = Math.floor(FRAME / 30) % sp.length; const big = sp[0].width > 16; bx.drawImage(sp[f], big ? sx - 8 : sx, big ? sy - 16 : sy); if (e.glow) lights.push([sx + 8, sy + 4, 40, e.glow]); break; }
+      case 'boss3': { const sp = SP[e.sp]; const f = Math.floor(FRAME / 30) % sp.length; const big = sp[0].width > 16; if (sp[0].height > 32 || (big && sp[0].width !== 32)) drawTall(sp[f], sx, sy); else bx.drawImage(sp[f], big ? sx - 8 : sx, big ? sy - 16 : sy); if (e.glow) lights.push([sx + 8, sy + 4, 40, e.glow]); break; }
       case 'brida': {
         const f = Math.floor(FRAME / 30) % 2;
         drawTall(SP.brida[f], sx, sy); bx.drawImage(SP.hound[f], sx + 16, sy + 2);
@@ -837,7 +837,7 @@ function drawWorld() {
   if (G.flags.lumeJoined && WD.lume) {
     const lxp = Math.round(WD.lume[0] - ox - 6), lyp = Math.round(WD.lume[1] - oy - 12 + Math.sin(FRAME * 0.08) * 2);
     const fade = G.flags.lumeFading && (FRAME % 97 < 9 || FRAME % 211 < 5);
-    bx.globalAlpha = fade ? 0.25 : 1; bx.drawImage(SP.lume[Math.floor(FRAME / 20) % 2], lxp, lyp); bx.globalAlpha = 1;
+    drawLume8(lxp, lyp, fade ? 0.25 : 1);
     if (!fade) lights.push([lxp + 8, lyp + 8, WD.id === 'ponte' ? 92 : 56, 'rgba(255,220,140,0.16)']);
   }
   // luz
@@ -1540,7 +1540,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.1', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.2', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;

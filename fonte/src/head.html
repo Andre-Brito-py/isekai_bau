@@ -306,6 +306,12 @@
   caixa; os dos inimigos, numa coluna ao lado do sprite. Selo = círculo mágico na cor do elemento.
   REGRA TÉCNICA: o build concatena tudo num só escopo; NUNCA declarar função global com nome já usado (uma auxiliar 'ring' dos
   ícones apagou o minijogo de defesa). Auxiliares novas levam prefixo do arquivo (icPx, icRing...). Checar duplicatas antes de publicar.
+  ARTE DOS PERSONAGENS (v2.2): as artes vêm de imagens geradas pelo usuário numa IA de imagem (build/arteia/elenco.png e
+  lume.png). build/arteia/gerar.py recorta cada personagem, reduz na mesma escala (fator 6.4; humanos ~48 px de altura),
+  limpa o magenta, reduz a paleta, monta 4 quadros de animação (respirar, acenar a cabeça; fantasma ondula; Escriba flutua;
+  a Lume canta com os quadros dela) e os retratos 32x32 (cabeça ampliada 2x), e escreve src/arte_ia.js. Os prompts usados
+  estão no documento "Renasci como Baú: prompts de arte dos personagens". Personagem novo = pedir a arte com o mesmo bloco
+  de estilo, salvar em build/arteia e acrescentar a caixa em proc.py. O baú ainda usa o desenho antigo (16x16 no mapa).
   ESTILO DE PERSONAGENS (decidido com o usuário, a partir de uma folha de sprites do Deltarune; só o estilo, nunca os
   personagens): sprites de personagem maiores que os tiles (cerca de 20x30 no mapa), cabeça grande, contorno escuro grosso,
   2-3 tons chapados por cor, cores bem saturadas, rosto simples (olhos de um ou dois pixels, sem gradiente).
