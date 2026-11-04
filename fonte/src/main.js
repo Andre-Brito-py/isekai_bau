@@ -463,7 +463,7 @@ function updateWorld() {
   const blocked = worldBlocked();
   // movimento do jogador
   if (WD.moving > 0) {
-    const [dx, dy] = DIRS[WD.dir]; WD.fx += dx * 2; WD.fy += dy * 2; WD.moving -= 2;
+    const [dx, dy] = DIRS[WD.dir], st = Math.min(WD.moving, FRAME % 3 === 0 ? 1 : 2); WD.fx += dx * st; WD.fy += dy * st; WD.moving -= st;  // ~5 casas por segundo
     if (WD.moving <= 0) {
       WD.fx = WD.x * TS; WD.fy = WD.y * TS; G.x = WD.x; G.y = WD.y; G.dir = WD.dir; WD.land = 6;
       for (const s_ of [-1, 1]) WD.dust.push({ x: WD.fx + 8 + s_ * 5, y: WD.fy + 14, vx: s_ * rand(0.3, 0.6), vy: -rand(0.05, 0.2), t: 16 });
@@ -1569,7 +1569,7 @@ async function titleFlow() {
 }
 
 // ================= LOOP =================
-function frame() {
+function tick() {
   FRAME++;
   JP = { ...JPQ }; for (const k in JPQ) delete JPQ[k];
   for (let i = WAITS.length - 1; i >= 0; i--) if (--WAITS[i].n <= 0) { const w = WAITS.splice(i, 1)[0]; w.r(); }
@@ -1594,6 +1594,15 @@ function frame() {
   ctx.drawImage(buf, 0, 0, W, H, Math.round(sx * S), Math.round(sy * S), cvs.width, cvs.height);
   if (sx || sy) for (const t of TQ) { t.x += sx; t.y += sy; }
   flushText();
+}
+// passo fixo de 60 quadros por segundo: em telas de 90/120 Hz o jogo não acelera
+let FT_LAST = 0, FT_ACC = 0;
+function frame(ts) {
+  if (!FT_LAST) FT_LAST = ts;
+  FT_ACC += Math.min(100, ts - FT_LAST); FT_LAST = ts;
+  let n = 0;
+  while (FT_ACC >= 1000 / 60 - 1 && n < 4) { FT_ACC -= 1000 / 60; tick(); n++; }
+  if (FT_ACC < 0) FT_ACC = 0;
   requestAnimationFrame(frame);
 }
 function boot() {
