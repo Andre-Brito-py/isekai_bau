@@ -5,6 +5,7 @@ from ext import *
 from PIL import Image
 OUT = {'sp': {}, 'chest': {}, 'human': {}, 'port': {}}
 FRONT_H = {k: Image.open(f'sp_{k}.png').size[1] for k in ['jorge','tiago','marlene','neide','ozorio','duda','valdir','rita','brida','maren','ofelia','clara','nina','tolo','anselmo','escriba','musgo','cida','bento']}
+MAIN = {'ofelia', 'clara'}
 # ---- vistas de lado e de costas (elenco3.png) ----
 src, fg = load('elenco3.png')
 def box_split(b, n, i):
@@ -20,12 +21,24 @@ V = {  # personagem: (peça de lado, peça de costas)
 for k, (sb, bb) in V.items():
     for suf, b in (('_s', sb), ('_b', bb)):
         if not b: continue
-        a = extract(src, fg, b, 1, H=FRONT_H[k] - (6 if suf == '_s' and k in ('valdir', 'musgo') else 0), largest=True)
+        if k in MAIN: a = xp(src, fg, b, FRONT_H[k], k=16)
+        else: a = extract(src, fg, b, 1, H=FRONT_H[k] - (6 if suf == '_s' and k in ('valdir', 'musgo') else 0), largest=True)
         OUT['sp'][k + suf] = [enc(f) for f in breathe(a)]
+# ---- principais (Ofélia e Clara): frente e retrato refeitos a partir da arte em alta (elenco.png) ----
+from gerar_anim import ghost, human
+srcE, fgE = load('elenco.png')
+for k, b, top, yo in [('ofelia', (592, 340, 746, 700), 0.34, 0.10), ('clara', (746, 340, 884, 700), 0.34, 0.0)]:
+    f = xp(srcE, fgE, b, FRONT_H[k], k=16)
+    OUT['sp'][k] = [enc(x) for x in (ghost(f) if k == 'ofelia' else human(f))]
+    p = xp(srcE, fgE, b, 32, k=18, top=top, W=32, outline=False, y0=yo)
+    t = np.roll(p, 1, axis=0); t[0] = 0
+    OUT['port'][k] = [enc(x) for x in [p, t, p]]
 # ---- Lume (lume2.png) ----
 src, fg = load('lume2.png'); LB = [(50, 290), (290, 520), (530, 760), (770, 1000)]
 LP = [pieces(fg, a, b, 0, 1150) for a, b in LB]
-def lu(r, i): return extract(src, fg, LP[r][i], 1, H=32, largest=True, outline=False, colors=20)
+def lu(r, i): return xp(src, fg, LP[r][i], 32, k=14)
+LUP = lambda r, i: xp(src, fg, LP[r][i], 32, k=16, top=0.78, W=32)
+OUT['port']['lume'] = [enc(f) for f in [LUP(0, 0), LUP(0, 1), LUP(0, 0)]]
 OUT['sp']['lume'] = [enc(f) for f in same([lu(0, 0), lu(1, 1), lu(0, 1), lu(1, 1)])]
 OUT['sp']['lumeSleep'] = [enc(f) for f in same([lu(2, 5), lu(2, 6)])]
 OUT['sp']['lumeLaugh'] = [enc(f) for f in same([lu(3, 0), lu(3, 1), lu(3, 2), lu(3, 1)])]
@@ -50,7 +63,7 @@ for a, b in rows: allp += [p for p in pieces(fg, a, b, gap=6) if p[2] - p[0] > 6
 assert len(allp) == 51, len(allp)
 for i, k in enumerate(FORMS):
     f, t, c = allp[i * 3:i * 3 + 3]
-    m = lambda bx, H: extract(src, fg, bx, 1, H=H, colors=22, largest=(k != 'vazio'))
+    m = lambda bx, H: (xp(src, fg, bx, H, k=18) if H > 30 and k != 'vazio' else extract(src, fg, bx, 1, H=H, colors=22, largest=(k != 'vazio')))
     OUT['chest'][k] = {'map': [enc(x) for x in same([m(f, 26), m(t, 26), m(c, 26)])], 'bat': [enc(x) for x in same([m(f, 36), m(t, 36), m(c, 36)])]}
 # ---- formas humanas (linha de 4º grau) ----
 def human_rows(fn, bands, names):
@@ -60,9 +73,9 @@ def human_rows(fn, bands, names):
         body = ps[1] if ps[1][2] - ps[1][0] < 150 else box_split(ps[1], 2, 0)
         x0 = 655 if fn == 'humano_b.png' else ps[5][0]; x1 = 1100 if fn == 'humano_b.png' else ps[8][2]
         busts = [(int(x0 + (x1 - x0) * i / 4), a, int(x0 + (x1 - x0) * (i + 1) / 4), b) for i in range(4)]
-        bod = extract(src, fg, body, 1, H=48, largest=True)
-        b48 = [extract(src, fg, bb, 1, H=46, largest=True, colors=24) for bb in busts]
-        b32 = [extract(src, fg, bb, 1, H=31, largest=True, colors=20) for bb in busts]
+        bod = xp(src, fg, body, 48, k=20, dark=1.15, sig=0.5)
+        b48 = [xp(src, fg, bb, 46, k=24, dark=1.0, sig=0.5) for bb in busts]
+        b32 = [xp(src, fg, bb, 31, k=22, dark=1.0, sig=0.5) for bb in busts]
         sq = lambda im, S: np.array(Image.fromarray(same([im])[0]).crop((0, 0, max(S, im.shape[1]), max(S, im.shape[0]))).resize((S, S), Image.NEAREST)) if False else fit(im, S)
         OUT['human'][k] = {'body': [enc(x) for x in breathe(bod)], 'big': [enc(fit(x, 48)) for x in b48], 'port': [enc(fit(x, 32)) for x in b32]}
 def fit(im, S):

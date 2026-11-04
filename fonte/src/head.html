@@ -312,6 +312,10 @@
   caixa; os dos inimigos, numa coluna ao lado do sprite. Selo = círculo mágico na cor do elemento.
   REGRA TÉCNICA: o build concatena tudo num só escopo; NUNCA declarar função global com nome já usado (uma auxiliar 'ring' dos
   ícones apagou o minijogo de defesa). Auxiliares novas levam prefixo do arquivo (icPx, icRing...). Checar duplicatas antes de publicar.
+  PIXEL ART DOS PRINCIPAIS (v2.7): build/arteia/pixel.py (paleta limitada na fonte + voto por bloco que preserva o traço
+  escuro + limpeza de pixel solto + só a franja magenta de fora removida), usado via ext.xp(). Aplicado em: Lume (mapa e
+  retrato com expressões), Ofélia e Clara (frente, lado, costas, retratos tirados da arte em alta), baús na batalha (36px)
+  e formas humanas (corpo, busto 48 e retrato 32). Baús no mapa (26px) seguem no método antigo (dentes ficam mais legíveis).
   CHEFES (v2.5): todos olham para a ESQUERDA (o baú). A IA nem sempre obedece 'facing left': conferir cada folha nova e
   marcar flip na tabela B do gerar3.py. O letreiro '31' do Jorge é desespelhado à parte. O corpo dos chefes é desenhado por
   drawBoss8 (arte.js): respiração ancorada nos pés, sombra, entrada subindo do chão, preparo + avanço com rastro, tranco ao

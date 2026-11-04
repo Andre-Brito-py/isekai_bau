@@ -275,7 +275,8 @@ function buildArteIA2() {
     const m = k.match(/^(.*)_(s|b)$/);
     if (m) (SPF[m[1]] = SPF[m[1]] || {})[m[2]] = dec(fr); else SP[k] = dec(fr);
   }
-  if (D.port.pavio) PORT.pavio = dec(D.port.pavio);
+  for (const [k, fr] of Object.entries(D.port)) PORT[k] = dec(fr);
+  if (D.port.ofelia) PORT.of = PORT.ofelia;
   // baús: mapa e batalha
   for (const [k, v] of Object.entries(D.chest)) {
     const sp = SPECIES[k] && SPECIES[k].sp; if (!sp) continue;

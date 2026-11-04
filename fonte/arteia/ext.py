@@ -80,3 +80,15 @@ def enc_png(a):
     q = Image.fromarray(idx.astype(np.uint8), 'P'); q.putpalette(pal + [0] * (768 - len(pal)))
     buf = io.BytesIO(); q.save(buf, 'PNG', optimize=True, transparency=63)
     return {'w': int(a.shape[1]), 'h': int(a.shape[0]), 'png': base64.b64encode(buf.getvalue()).decode()}
+# pixelização nova (pixel.py): paleta limitada na fonte e voto por bloco que preserva o traço escuro
+def xp(src, fg, box, H, k=16, W=None, outline=True, largest=True, top=None, cx=None, y0=0.0, **kw):
+    from pixel import crop, pixelate
+    rgb, m = crop(src, fg, box, largest)
+    if top:  # só a parte de cima (retratos): fração da altura, recorte quadrado centrado na cabeça
+        o = int(m.shape[0] * y0); rgb, m = rgb[o:], m[o:]
+        h = int(m.shape[0] / (1 - y0) * top); ys, xs = np.where(m[:h]); c = int(xs.mean()) if cx is None else int(cx * m.shape[1])
+        x0 = max(0, min(m.shape[1] - h, c - h // 2)) if m.shape[1] > h else 0
+        rgb, m = rgb[:h, x0:x0 + h], m[:h, x0:x0 + h]
+        if m.shape[1] < h:  # figura mais estreita que o quadrado: completa dos lados
+            p = h - m.shape[1]; rgb = np.pad(rgb, ((0, 0), (p // 2, p - p // 2), (0, 0))); m = np.pad(m, ((0, 0), (p // 2, p - p // 2)))
+    return pixelate(rgb, m, H, k=k, W=W, outline=outline, **kw)
