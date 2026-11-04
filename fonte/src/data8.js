@@ -819,9 +819,11 @@ Object.assign(STORY, {
     await say(blur >= 3 ? '* Você tenta lembrar do seu rosto. Não tem quase nada lá. Um espaço branco, limpo, com o contorno de um sorriso que você nunca viu.' : blur >= 1 ? '* Você tenta lembrar do seu rosto. Algumas partes vêm fáceis. Outras estão borradas, onde ficavam as memórias que você pagou.' : '* Você lembra do seu rosto. Do jeito que ele ficava na janela do 31, refletido, às sete da manhã.', 'void');
     await humanReveal8();
     V.scene = 'world'; await fadeIn(16);
-    await say('...Isso é um braço. Eu tenho um BRAÇO.', 'me');
+    V.human8 = true;
+    await say('...Isso é um braço. Eu tenho um BRAÇO.', 'humano');
     await say('Você tem DOIS. Para de balançar eles assim.', 'lume');
     if (f.ritaPromise) await say('* Do ônibus, alguém assobia. A Rita. "Ô, mala! Não esquece do pastel."');
+    V.human8 = false; sfx('flee');
     await say('* Mas o rosto pisca e some. Você volta a ser um baú, cansado como se tivesse corrido.', 'void');
     await say('Dura pouco. Cansa. Lá fora você aprende. O corpo de verdade continua sendo esse aí.', 'of');
     await say('* Na parede do fundo, uma escada que você nunca tinha visto. No topo, uma luz que não é de vela, nem de âmbar.');

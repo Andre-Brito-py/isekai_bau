@@ -266,3 +266,64 @@ function drawLume8(x, y, alpha) {
   bx.drawImage(f, Math.round(x + 8 - f.width / 2), Math.round(y + 12 - f.height + bob));
   bx.globalAlpha = 1;
 }
+// ----- parte 2 das artes do usuário (arte_ia2.js): lado/costas, baús, Lume, Pavio, Bento e forma humana -----
+const SPF = {}, CHEST8 = {}; let HUMAN8 = null;
+function buildArteIA2() {
+  if (typeof ARTE_IA2 === 'undefined') return;
+  const D = ARTE_IA2, dec = a => a.map(iaCanvas);
+  for (const [k, fr] of Object.entries(D.sp)) {
+    const m = k.match(/^(.*)_(s|b)$/);
+    if (m) (SPF[m[1]] = SPF[m[1]] || {})[m[2]] = dec(fr); else SP[k] = dec(fr);
+  }
+  if (D.port.pavio) PORT.pavio = dec(D.port.pavio);
+  // baús: mapa e batalha
+  for (const [k, v] of Object.entries(D.chest)) {
+    const sp = SPECIES[k] && SPECIES[k].sp; if (!sp) continue;
+    const [f, t, c] = dec(v.map), [bf, bt, bc] = dec(v.bat), tl = flipH(t), btl = flipH(bt);
+    const hop = (cv, dy) => { const o = mk(cv.width, cv.height + 2); o.getContext('2d').drawImage(cv, 0, 2 - dy); return o; };
+    SP[sp] = [f, f, f];
+    SPD[sp] = { down: [f, f, f], up: [c, c, c], right: [tl, tl, tl, hop(tl, 1), hop(tl, 2), tl], left: [t, t, t, hop(t, 1), hop(t, 2), t] };
+    CHEST8[k] = { closed: c, bat: { front: bf, three: bt, three_l: btl, closed: bc } };
+  }
+}
+{ const _bs = buildSprites; buildSprites = function () { _bs(); buildArteIA2(); }; }
+// os personagens se viram para o baú quando ele chega perto
+function faceSp8(e) {
+  const F = SPF[e.sp]; if (!F || V.scene !== 'world') return null;
+  const ex = e.tx ?? e.x, ey = e.ty ?? e.y, dx = WD.x - ex, dy = WD.y - ey;
+  if (Math.abs(dx) + Math.abs(dy) > 3) return null;
+  if (dy < 0 && Math.abs(dy) >= Math.abs(dx) && F.b) return [F.b, false];
+  if (Math.abs(dx) > Math.abs(dy) && F.s) return [F.s, dx < 0];
+  return null;
+}
+// o baú na batalha: aberto de frente, fechado na defesa, de lado na vitória
+{ const _pb = pbSprites; pbSprites = function (form) {
+  const C = CHEST8[form] && CHEST8[form].bat;
+  if (!C) return _pb(form);
+  if (C._S) return C._S;
+  const sh = (cv, dx, dy, s = 1) => { const o = mk(cv.width + 4, cv.height + 4); const x = o.getContext('2d'); x.imageSmoothingEnabled = false; const w = Math.round(cv.width * s), h = Math.round(cv.height / s); x.drawImage(cv, 2 + dx + (cv.width - w) / 2, 2 + dy + cv.height - h, w, h); return o; };
+  const S = { idle: [sh(C.front, 0, 0), sh(C.front, 0, 0, 1.03), sh(C.front, 0, 0), sh(C.front, 0, 0, 0.97)],
+    open: [sh(C.front, 0, -1, 1.08), sh(C.front, 0, -2, 1.1), sh(C.front, 0, -1, 1.08), sh(C.front, 0, 0, 1.04)],
+    shut: [sh(C.closed, 0, 0), sh(C.closed, 0, 0, 1.02), sh(C.closed, 0, 0), sh(C.closed, 0, 0, 0.98)],
+    hurt: [sh(C.front, -2, 0, 0.94), sh(C.front, -1, 0, 0.96), sh(C.front, -2, 0, 0.94), sh(C.front, -1, 0, 0.96)],
+    win: [sh(C.three_l, 0, 0), sh(C.three_l, 0, -2), sh(C.front, 0, -3), sh(C.three_l, 0, -1)] };
+  S._dt = true; C._S = S; return S;
+}; }
+// a Lume: dorme quando você fica parado, ri quando canta na batalha
+drawLume8 = function (x, y, alpha) {
+  const L = WD.idle > 420 && SP.lumeSleep ? SP.lumeSleep : SP.lume, f = L[Math.floor(FRAME / (L === SP.lume ? 14 : 40)) % L.length], bob = Math.round(Math.sin(FRAME * 0.06) * 1.5);
+  if (alpha != null) bx.globalAlpha = alpha;
+  bx.drawImage(f, Math.round(x + 8 - f.width / 2), Math.round(y + 12 - f.height + bob));
+  bx.globalAlpha = 1;
+};
+for (const k of ['pavio', 'bento']) if (WHO[k]) WHO[k].portrait = t => portFrame(k, t);
+// forma humana com a arte do usuário (linha de 4º grau); Arca brilha dourado, Vazio fica translúcido
+function humanArt8() {
+  if (typeof ARTE_IA2 === 'undefined') return null;
+  const H = ARTE_IA2.human[G.flags.prev4] || ARTE_IA2.human.bastiao; if (!H) return null;
+  const dec = a => a.map(iaCanvas), aura = G.flags.grau5;
+  const fx = cv => { if (aura === 'vazio') { const x = cv.getContext('2d'), d = x.getImageData(0, 0, cv.width, cv.height); for (let i = 0; i < d.data.length; i += 4) { const p = i >> 2; if (d.data[i + 3] && ((p % cv.width) + Math.floor(p / cv.width)) % 3 === 0) d.data[i + 3] = 120; } x.putImageData(d, 0, 0); } return cv; };
+  const big = dec(H.big).map(fx), port = dec(H.port).map(fx), body = dec(H.body).map(fx);
+  return { big: [big[0], big[1], big[0], big[2], big[3]], port: [port[0], port[1], port[0]], body };
+}
+{ const _hp = humanPort8; humanPort8 = function () { const A = humanArt8(); if (!A) return _hp(); PORT.humano48 = A.big; HUMAN8 = A.body; return A.port; }; }

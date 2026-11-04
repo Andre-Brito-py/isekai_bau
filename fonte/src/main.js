@@ -746,8 +746,9 @@ function drawWorld() {
         for (const d of WD.dust) { bx.fillStyle = d.t > 8 ? '#6a6080' : '#4a4060'; const z = d.t > 8 ? 2 : 1; bx.fillRect(Math.round(d.x - ox_(WD.cx)), Math.round(d.y - oy_(WD.cy)), z, z); }
         const shw = 12 - Math.round(hop * 4);
         bx.fillStyle = 'rgba(0,0,0,0.35)'; bx.fillRect(sx + 8 - shw / 2, sy + 14, shw, 2);
-        if (WD.disg) { bx.drawImage(SP.chest[0], sx + Math.round((16 - w) / 2), sy + 16 - h, w, h); if (FRAME % 90 < 6) { bx.fillStyle = '#f0c040'; bx.fillRect(sx + 6, sy + 9, 1, 1); bx.fillRect(sx + 9, sy + 9, 1, 1); } }
-        else bx.drawImage(fr, sx + Math.round((16 - w) / 2) + ox, sy + 15 - h + 1 - lift, w, h);
+        if (V.human8 && typeof HUMAN8 !== 'undefined' && HUMAN8) { const hb = HUMAN8[Math.floor(FRAME / 30) % HUMAN8.length]; drawTall(hb, sx, sy, WD.dir === 'left'); }
+        else if (WD.disg) { const cl = (typeof CHEST8 !== 'undefined' && CHEST8[G.species] && CHEST8[G.species].closed) || SP.chest[0], kw = cl.width / 16, kh = cl.height / 16; bx.drawImage(cl, sx + Math.round((16 - w * kw) / 2), sy + 16 - Math.round(h * kh), Math.round(w * kw), Math.round(h * kh)); if (FRAME % 90 < 6) { bx.fillStyle = '#f0c040'; bx.fillRect(sx + 6, sy + 9, 1, 1); bx.fillRect(sx + 9, sy + 9, 1, 1); } }
+        else { const kw = fr.width / 16, kh = fr.height / 16; bx.drawImage(fr, sx + Math.round((16 - w * kw) / 2) + ox, sy + 16 - Math.round(h * kh) - lift, Math.round(w * kw), Math.round(h * kh)); }
         if (WD.idle > 420) { const zt = (FRAME % 120) / 120; txt('z', (sx + 13 + zt * 6), sy - 4 - zt * 12, { col: '#b8aecb', alpha: 1 - zt }); if (FRAME % 120 > 60) txt('z', sx + 10 + (zt - .5) * 6, sy - 2 - (zt - .5) * 12, { col: '#8a8099', alpha: 1.5 - zt }); }
         lights.push([sx + 8, sy + 8, 70, null]);
         if (G.species === 'arcano') lights.push([sx + 8, sy + 8, 26, 'rgba(120,220,255,0.12)']);
@@ -818,7 +819,7 @@ function drawWorld() {
       case 'seal': drawSeal(e, sx, sy, lights); break;
       case 'page': if (!G.flags[e.id]) { const fy = Math.round(Math.sin(FRAME * 0.1 + e.x) * 1.5); bx.fillStyle = '#120e1a'; bx.fillRect(sx + 4, sy + 3 + fy, 9, 11); bx.fillStyle = '#e8dcc0'; bx.fillRect(sx + 5, sy + 4 + fy, 7, 9); bx.fillStyle = '#5a4a6a'; for (let k = 0; k < 4; k++) bx.fillRect(sx + 6, sy + 6 + k * 2 + fy, 5, 1); lights.push([sx + 8, sy + 8, 22, 'rgba(255,240,200,0.18)']); } break;
       case 'pickup': if (!G.flags[e.id]) { bx.drawImage(SP.chest[0], sx, sy); lights.push([sx + 8, sy + 8, 22, 'rgba(255,224,102,0.18)']); } break;
-      case 'npc2': { if (e.cond && !G.flags[e.cond]) break; if (e.hide && G.flags[e.hide]) break; const sp = SP[e.sp]; const fl = e.float ? Math.round(Math.sin(FRAME * 0.06) * 2) : 0; const fr0 = sp[Math.floor(FRAME / 30) % sp.length]; if (fr0.height > 16 || fr0.width > 16) drawTall(fr0, sx, sy, e.flip, fl); else if (e.flip) { bx.save(); bx.translate(sx + 16, sy + fl); bx.scale(-1, 1); bx.drawImage(fr0, 0, 0); bx.restore(); } else bx.drawImage(fr0, sx, sy + fl); if (e.glow) lights.push([sx + 8, sy + 8, 36, e.glow]); break; }
+      case 'npc2': { if (e.cond && !G.flags[e.cond]) break; if (e.hide && G.flags[e.hide]) break; let sp = SP[e.sp], fl8 = e.flip; { const f8 = typeof faceSp8 === 'function' && faceSp8(e); if (f8) { sp = f8[0]; fl8 = f8[1]; } } const fl = e.float ? Math.round(Math.sin(FRAME * 0.06) * 2) : 0; const fr0 = sp[Math.floor(FRAME / 30) % sp.length]; if (fr0.height > 16 || fr0.width > 16) drawTall(fr0, sx, sy, fl8, fl); else if (fl8) { bx.save(); bx.translate(sx + 16, sy + fl); bx.scale(-1, 1); bx.drawImage(fr0, 0, 0); bx.restore(); } else bx.drawImage(fr0, sx, sy + fl); if (e.glow) lights.push([sx + 8, sy + 8, 36, e.glow]); break; }
       case 'boss3': { const sp = SP[e.sp]; const f = Math.floor(FRAME / 30) % sp.length; const big = sp[0].width > 16; if (sp[0].height > 32 || (big && sp[0].width !== 32)) drawTall(sp[f], sx, sy); else bx.drawImage(sp[f], big ? sx - 8 : sx, big ? sy - 16 : sy); if (e.glow) lights.push([sx + 8, sy + 4, 40, e.glow]); break; }
       case 'brida': {
         const f = Math.floor(FRAME / 30) % 2;
@@ -1540,7 +1541,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.2', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.3', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;

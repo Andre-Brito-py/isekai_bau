@@ -170,7 +170,7 @@ function drawParty() {
   else if (won) { pose = 'win'; oy = -Math.round(Math.abs(Math.sin(FRAME * 0.15)) * 6); fr = Math.floor(FRAME / 8) % 4; }
   else if (m === 'mash') { pose = 'hurt'; ox = FRAME % 6 < 3 ? -1 : 1; }
   else if (m === 'guard' || m === 'dodge' || m === 'seq' || BT.stance > 0) pose = 'shut';
-  const img = S[pose][fr], w = PB_W * PB_SC, h = PB_H * PB_SC;
+  const img = S[pose][fr], w = img.width * PB_SC, h = img.height * PB_SC;
   let dx = BPX - w / 2 + ox, dy = BPY - h + oy;
   if (G.hp > 0 && G.hp < G.st.mhp * 0.3 && pose === 'idle') { dy += FRAME % 40 < 20 ? 1 : 0; }
   // aura de feitiço
@@ -204,11 +204,12 @@ function neonBar(x, y, w, h, f, c) {
 }
 const NEON_PV = { bg: '#0c2e1a', fill: '#39ff7a', hi: '#c8ffd8' }, NEON_PM = { bg: '#0a1e3a', fill: '#2ad4ff', hi: '#c8f4ff' };
 // faixa do grupo entre a arena e a caixa: retrato, nome, PV (verde neon) e PM (azul neon)
+const S0_OLD = c => c.width === 32 && c.height === 34;
 function drawPartyStrip() {
   const y = 134;
   bx.fillStyle = '#07050c'; bx.fillRect(0, y - 1, 240, 16); bx.fillStyle = '#3a3448'; bx.fillRect(0, y - 1, 240, 1); bx.fillRect(0, y + 14, 240, 1);
   const icon = pbSprites(G.species).idle[0];
-  bx.drawImage(icon, 2, 6, 28, 22, 4, y + 1, 14, 11);
+  if (S0_OLD(icon)) bx.drawImage(icon, 2, 6, 28, 22, 4, y + 1, 14, 11); else bx.drawImage(icon, 4, y + 1, Math.round(12 * icon.width / icon.height), 12);
   let nm = G.name; while (nm.length > 1 && lineW(rich(nm), 1) > 48) nm = nm.slice(0, -1);
   txt(nm, 21, y + 1, { col: '#ffffff' });
   const low = G.hp / G.st.mhp < 0.3, blink = low && FRAME % 40 < 20;
