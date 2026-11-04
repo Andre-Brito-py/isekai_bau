@@ -12,7 +12,8 @@ const PB_MAP = {
   bastiao: { o: 'y', n: 'm', b: 'd', l: 'w' }, abismo: { o: 'd', n: 'k', b: 'P', l: 'q', y: 'r' },
   ferrao: { o: 'g', n: 'G', b: 'k', l: 'v' }, carniceiro: { o: 'r', n: 'b', b: 'k', l: 'w' },
   biblioteca: { o: 's', n: 'n', b: 'b', l: 'y', y: 'c' }, proibido: { o: 'P', n: 'k', b: 'r', l: 'r', y: 'r' },
-  eclipse: { o: 'k', n: 'P', b: 'k', l: 'L', y: 'w' }, constelacao: { o: 'B', n: 'u', b: 'k', l: 'w' }
+  eclipse: { o: 'k', n: 'P', b: 'k', l: 'L', y: 'w' }, constelacao: { o: 'B', n: 'u', b: 'k', l: 'w' },
+  arca: { o: 'y', n: '#e8dcc0', b: '#c8962a', l: 'w', y: 'c' }, vazio: { o: '#c0c8d8', n: '#8a90a0', b: '#5a6070', l: 'w', y: 'w' }
 };
 function pbShade(hex, f) {
   const n = parseInt(hex.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.max(0, Math.min(255, Math.round(f > 1 ? v + (255 - v) * (f - 1) : v * f))));
@@ -20,7 +21,7 @@ function pbShade(hex, f) {
 }
 // desenha um quadro. pose: idle|open|shut|hurt|win ; f: 0..3
 function pbFrame(form, pose, f) {
-  const M = PB_MAP[form] || {}, C = k => PAL[M[k] || k];
+  const M = PB_MAP[form] || {}, C = k => PAL[M[k] || k] || M[k];
   const O = C('o'), N = C('n'), B = C('b'), Lm = C('l'), Y = C('y');
   const No = pbShade(N, 1.25), Nd = pbShade(N, 0.72), Oh = pbShade(O, 1.3), Od = pbShade(O, 0.75);
   const darkBody = ['abismo', 'eclipse', 'proibido'].includes(form);
@@ -131,6 +132,18 @@ function pbFrame(form, pose, f) {
       if (form === 'constelacao') for (let i = 0; i < st.length - 1; i++) { const [a1, b1] = st[i], [a2, b2] = st[i + 1]; for (let k = 1; k < 4; k++) P(bx0 + Math.round(a1 + (a2 - a1) * k / 4), by0 + Math.round(b1 + (b2 - b1) * k / 4), pbShade(N, 1.6)); }
       st.forEach(([px, py], i) => { P(bx0 + px, by0 + py, tw(i) ? '#ffffff' : PAL.y); if (tw(i)) { P(bx0 + px + 1, by0 + py, PAL.y); P(bx0 + px - 1, by0 + py, PAL.y); P(bx0 + px, by0 + py - 1, PAL.y); } });
       for (const u of [6, 15, 21]) { const [wx, wy] = lidPt(u, 3); P(wx, wy, tw(u) ? '#ffffff' : PAL.y); }
+      break;
+    }
+    case 'arca': {
+      const [rx, ry] = lidPt(L / 2, T + 0.5); R(rx - 6, ry - 2, 13, 2, '#120e1a'); R(rx - 5, ry - 2, 11, 1, '#f0c040'); R(rx - 1, ry - 4, 3, 2, '#f0c040');
+      for (const [px, py] of [[8, 4], [12, 7], [16, 4], [20, 7]]) P(bx0 + px, by0 + py, tw(px) ? '#ffffff' : '#7ad0f0');
+      R(bx0 + 10, by0 + 2, 8, 1, '#c8962a'); R(bx0 + 10, by0 + 9, 8, 1, '#c8962a');
+      break;
+    }
+    case 'vazio': {
+      x.clearRect(bx0 + 7, by0 + 3, L - 13, by1 - by0 - 6);
+      R(bx0 + 7, by0 + 3, L - 13, 1, '#5a6070'); R(bx0 + 7, by1 - 4, L - 13, 1, '#5a6070');
+      if (f === 2) { P(bx0 + 12, by0 + 6, '#ffffff'); }
       break;
     }
     case 'eclipse': { const cx = bx0 + 13, cy = by0 + 6; for (let a = 0; a < 24; a++) { const t = a / 24 * Math.PI * 2; P(cx + Math.round(Math.cos(t) * 4), cy + Math.round(Math.sin(t) * 4), PAL.L); } R(cx - 2, cy - 3, 5, 7, darkBody ? '#120e1a' : N); R(cx - 3, cy - 2, 2, 5, '#120e1a'); P(cx + 3, cy, '#ffffff'); break; }

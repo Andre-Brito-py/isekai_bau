@@ -182,6 +182,49 @@
   presa para sempre). 5º grau (Arca da Origem / Mímico Vazio) entra aqui. Pagar o fiado do Ozório (piada que vira
   cena). Se ch6Gift='cancao', a canção completa da Lume tem efeito no Cap. 8.
 
+  CAPÍTULO 7 — "O SELADO" (FEITO; data7.js + maps7.js gerado por build/ch7/maps7.py; teste: build/test18.py)
+  Fatos para o Cap. 8: G.flags.saved7 = ids das almas trazidas (soul_X = 'resgatado' para ozorio/neide/cida);
+  grau5; fiadoPago; clueLantern (manifesto); capitaoLuneta (chefe secreto vencido: a luneta pode servir no Cap. 8);
+  moca7 (o Selado falou). Fim: Jorge e Tiago acordam, a Voz grita "VOCÊS ROUBARAM A MINHA COLEÇÃO", todos para
+  o 31. A Bala de Âmbar e a Água do Cais seguem existindo como itens.
+  Tema: o que a gente tranca dentro de si; decisões sem volta; quanto cabe dentro de um baú.
+  1) ANTESSALA DA PORTA (hub; Lanterna). A resistência acampa na frente da PORTA REDONDA (31 fechaduras). Cada
+     alma que lembrou acende a sua fechadura com o bilhete; as dos perdidos ficam escuras. No centro, entalhe de
+     LANTERNA COM UM OLHO (pista). Uma 32ª fechadura, pequena e sem número, aberta POR DENTRO (pista). O 31 está
+     estacionado e congelado: Jorge ao volante (e Tiago, se tiagoTaken), olhos abertos, motor ligado.
+     Ozório cobra o fiado (piada vira cena: o baú oferece um gole do Frasco de Âmbar, o Ozório sente "cheiro de
+     gente", recusa e rasga a página: "me paga quando tiver rosto"; G.flags.fiadoPago). Rita (se dateDone) e Marlene (se conosco) têm falas. Ideia da Lume: "Você é um baú. Baús têm
+     fechadura." O protagonista encosta a PRÓPRIA fechadura na 32ª e passa. Só ele e a Lume. Os outros seguram a
+     antessala contra a FILA (passageiros sem rosto) que a Voz manda.
+  2) CAIS DE ÂMBAR: um mar subterrâneo de âmbar líquido (almas digeridas, dito sem rodeio pela Lume). Pontes de
+     tábuas velhas. CRISTAIS DE ALMA: passageiros perdidos presos em pilares de âmbar (do 31 e da Viagem Zero).
+  3) CONVÉS DA BARCA (a VIAGEM ZERO, encalhada há ~900 anos; o Catálogo diz "Viagem 3" ao contar e se corrige,
+     pista). Mini-chefe O TIMONEIRO, que segue virando o leme para um porto que não existe.
+  4) PORÃO DA BARCA: cristais, manifesto de embarque ("Viagem Zero — 40 almas — embarque autorizado por:" e só o
+     desenho de uma lanterna com um olho; pista). Sala lacrada (runa CHAVE) com o chefe secreto O CAPITÃO.
+     Depois do Timoneiro: 5º GRAU (escolha de história, não de nível): ARCA DA ORIGEM ou MÍMICO VAZIO.
+  5) CELA DO SELO: chefe O LACRE REAL, um selo de cera vivo com o brasão da lanterna-com-olho, burocrata (CARIMBOS).
+     Vencido, o lacre racha e o SELADO fala pela primeira vez: a MOÇA DA BARCA, sem nome ("levaram o meu nome
+     junto com a outra metade de mim"; "a outra metade ainda acende lanternas lá em cima" é o MÁXIMO de pista
+     permitido). Ela não sai ainda: o lacre só rachou. Ela pede que levem as almas e "não deixem ela chamar de novo".
+  - Volta pela fechadura com os cristais carregados: na antessala eles acordam com nome e rosto. O lacre rachado
+    solta o 31: Jorge e Tiago acordam. GANCHO CAP. 8: a masmorra inteira treme; a Voz percebe o roubo da coleção;
+    "A Tampa se Fecha": subir com o 31 lotado, de dentro para fora, enquanto a masmorra desaba.
+  - MECÂNICAS: CRISTAIS DE ALMA + ESPAÇO NA TAMPA (G.flags.carry, lista de ids; capacidade 3; Arca = 6; Vazio = 10).
+    Há mais cristais (9) que espaço: quem você carrega acorda; quem fica, fica (decisão sem volta). Dá para trocar
+    num cristal enquanto não passar pela fechadura de volta. LADRÕES DE ÂMBAR roubam um cristal carregado num
+    agarrão falhado; derrotar o ladrão devolve; se a luta acabar com ele fugindo, o cristal volta ao lugar dele.
+    Batalha do chefe: CARIMBOS (o Lacre anuncia o carimbo: INDEFERIDO anula a sua próxima ação se ela for a mesma da
+    anterior; ARQUIVADO = esquecimento; DEVOLVIDO = reflete o próximo feitiço; CHAVE ou ÂMBAR quebram o carimbo).
+  - 5º GRAU: ARCA DA ORIGEM (aceitar ser o novo Catálogo: muito mais forte, carrega 6, técnica DILÚVIO cresce com
+    as almas carregadas; o Catálogo passa a falar "nós") ou MÍMICO VAZIO (abrir mão do poder e das memórias:
+    atributos menores, imune a esquecimento e silêncio, carrega 10; técnica NADA anula um golpe e devolve; apaga
+    TODAS as lembranças da Terra: mem_pastel volta a ser perdido, pastelBack some; o rosto humano do Cap. 8 fica
+    borrado). G.flags.grau5 = 'arca'|'vazio'.
+  - RUNAS: ÂMBAR (elemento raro: cristaliza, 25% de prender por 1 turno; Véu = casca que divide o dano por 2 nos
+    próximos 2 golpes), CHAVE (forma rara: um alvo, arranca casca/sumiço/força e abre fechaduras no mapa).
+    Itens: Bala de Âmbar (cura e limpa status), Água do Cais (PM).
+
   HUMANIDADE E HUMOR (humor.js; vale para todos os capítulos)
   O baú foi uma pessoa comum e isso tem que aparecer: ele CORA (blush(): tampa rosada, vapor e coração no
   mapa) perto de mulheres que acha bonitas, fica sem jeito, lembra de besteiras da vida (suculenta Gerson,

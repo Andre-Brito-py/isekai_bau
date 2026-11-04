@@ -321,7 +321,7 @@ async function useSeal(e) {
   const i = await list({ title: 'Usar qual feitiço?', x: 8, y: 8, w: 224, items: G.spells.map(s => ({ label: s.name, right: spellCost(s) + ' PM', disabled: spellCost(s) > G.mp, col: RUNES[s.el].col })), desc: k => spellDesc(G.spells[k]) });
   if (i < 0) return;
   const sp = G.spells[i]; G.mp -= spellCost(sp); sfx(sp.el in { brasa: 1, geada: 1, seiva: 1 } ? sp.el : 'rune');
-  const ok = sp.el === e.need.el && (!e.need.form || sp.form === e.need.form);
+  const ok = (!e.need.el || sp.el === e.need.el) && (!e.need.form || sp.form === e.need.form);
   if (!ok) { sfx('cancel'); await say(pickOne(['* O selo absorve a magia e... nada. Era outra palavra.', '* A runa brilha, pisca e apaga. Não era esse feitiço.'])); if (e.need.form && sp.el === e.need.el) await say('* Quase! O elemento é esse, mas a forma não.'); return; }
   G.flags[e.flag] = true; sfx('gate'); shake(12);
   await say(SEAL_OK[e.look]);

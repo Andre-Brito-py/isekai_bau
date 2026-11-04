@@ -28,9 +28,9 @@ async function ring(e, o = {}) {
   const fake = DF().tricks && o.fakeable !== false && elite && Math.random() < (e.d.boss ? 0.3 : 0.22) ? rand(18, 30) : 0;
   return bWait('guard', { ring: { r: 46, v: (o.fast ? 1.25 : rand(0.75, 1.05)) * (e.d.boss ? 1.1 : 1) * DF().ring * (o.spd || 1), state: 0, res: null, fake, hold: 0, label: o.label, col: o.col } });
 }
-async function dodge(spd = 1) {
+async function dodge(spd = 1, fixedDir) {
   await tut('dodge');
-  const dir = pickOne(DIRK), from = pickOne(['left', 'right', 'top']);
+  const dir = fixedDir || pickOne(DIRK), from = pickOne(['left', 'right', 'top']);
   const T = Math.round(60 / spd * (isHist() ? 1.25 : 1) / (DF().tricks ? 1.08 : 1));
   return bWait('dodge', { dg: { dir, from, T, t: 0, state: 0, res: null, hold: 0 } });
 }
@@ -201,7 +201,7 @@ async function runMove(e, mv) {
       msg = `${head} ${total} de dano.` + msg; break;
     }
     case 'dodge': {
-      for (let h = 0; h < (mv.hits || 1); h++) { const r = await dodge(mv.spd || 1); note(r); const d = hurt(e, mv.p, r === 'perfect' ? 0.15 : r === 'good' ? 0.45 : 1, r, mv); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
+      for (let h = 0; h < (mv.hits || 1); h++) { const r = await dodge(mv.spd || 1, mv.dir); note(r); const d = hurt(e, mv.p, r === 'perfect' ? 0.15 : r === 'good' ? 0.45 : 1, r, mv); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
       msg = (worst === 'perfect' ? `* Desvio perfeito! Só um arranhão: ${total}.` : worst === 'fail' ? `* Acertou em cheio! ${total} de dano.` : `* Raspou de leve. ${total} de dano.`) + msg; break;
     }
     case 'seq': {

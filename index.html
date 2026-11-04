@@ -187,6 +187,49 @@
   presa para sempre). 5º grau (Arca da Origem / Mímico Vazio) entra aqui. Pagar o fiado do Ozório (piada que vira
   cena). Se ch6Gift='cancao', a canção completa da Lume tem efeito no Cap. 8.
 
+  CAPÍTULO 7 — "O SELADO" (FEITO; data7.js + maps7.js gerado por build/ch7/maps7.py; teste: build/test18.py)
+  Fatos para o Cap. 8: G.flags.saved7 = ids das almas trazidas (soul_X = 'resgatado' para ozorio/neide/cida);
+  grau5; fiadoPago; clueLantern (manifesto); capitaoLuneta (chefe secreto vencido: a luneta pode servir no Cap. 8);
+  moca7 (o Selado falou). Fim: Jorge e Tiago acordam, a Voz grita "VOCÊS ROUBARAM A MINHA COLEÇÃO", todos para
+  o 31. A Bala de Âmbar e a Água do Cais seguem existindo como itens.
+  Tema: o que a gente tranca dentro de si; decisões sem volta; quanto cabe dentro de um baú.
+  1) ANTESSALA DA PORTA (hub; Lanterna). A resistência acampa na frente da PORTA REDONDA (31 fechaduras). Cada
+     alma que lembrou acende a sua fechadura com o bilhete; as dos perdidos ficam escuras. No centro, entalhe de
+     LANTERNA COM UM OLHO (pista). Uma 32ª fechadura, pequena e sem número, aberta POR DENTRO (pista). O 31 está
+     estacionado e congelado: Jorge ao volante (e Tiago, se tiagoTaken), olhos abertos, motor ligado.
+     Ozório cobra o fiado (piada vira cena: o baú oferece um gole do Frasco de Âmbar, o Ozório sente "cheiro de
+     gente", recusa e rasga a página: "me paga quando tiver rosto"; G.flags.fiadoPago). Rita (se dateDone) e Marlene (se conosco) têm falas. Ideia da Lume: "Você é um baú. Baús têm
+     fechadura." O protagonista encosta a PRÓPRIA fechadura na 32ª e passa. Só ele e a Lume. Os outros seguram a
+     antessala contra a FILA (passageiros sem rosto) que a Voz manda.
+  2) CAIS DE ÂMBAR: um mar subterrâneo de âmbar líquido (almas digeridas, dito sem rodeio pela Lume). Pontes de
+     tábuas velhas. CRISTAIS DE ALMA: passageiros perdidos presos em pilares de âmbar (do 31 e da Viagem Zero).
+  3) CONVÉS DA BARCA (a VIAGEM ZERO, encalhada há ~900 anos; o Catálogo diz "Viagem 3" ao contar e se corrige,
+     pista). Mini-chefe O TIMONEIRO, que segue virando o leme para um porto que não existe.
+  4) PORÃO DA BARCA: cristais, manifesto de embarque ("Viagem Zero — 40 almas — embarque autorizado por:" e só o
+     desenho de uma lanterna com um olho; pista). Sala lacrada (runa CHAVE) com o chefe secreto O CAPITÃO.
+     Depois do Timoneiro: 5º GRAU (escolha de história, não de nível): ARCA DA ORIGEM ou MÍMICO VAZIO.
+  5) CELA DO SELO: chefe O LACRE REAL, um selo de cera vivo com o brasão da lanterna-com-olho, burocrata (CARIMBOS).
+     Vencido, o lacre racha e o SELADO fala pela primeira vez: a MOÇA DA BARCA, sem nome ("levaram o meu nome
+     junto com a outra metade de mim"; "a outra metade ainda acende lanternas lá em cima" é o MÁXIMO de pista
+     permitido). Ela não sai ainda: o lacre só rachou. Ela pede que levem as almas e "não deixem ela chamar de novo".
+  - Volta pela fechadura com os cristais carregados: na antessala eles acordam com nome e rosto. O lacre rachado
+    solta o 31: Jorge e Tiago acordam. GANCHO CAP. 8: a masmorra inteira treme; a Voz percebe o roubo da coleção;
+    "A Tampa se Fecha": subir com o 31 lotado, de dentro para fora, enquanto a masmorra desaba.
+  - MECÂNICAS: CRISTAIS DE ALMA + ESPAÇO NA TAMPA (G.flags.carry, lista de ids; capacidade 3; Arca = 6; Vazio = 10).
+    Há mais cristais (9) que espaço: quem você carrega acorda; quem fica, fica (decisão sem volta). Dá para trocar
+    num cristal enquanto não passar pela fechadura de volta. LADRÕES DE ÂMBAR roubam um cristal carregado num
+    agarrão falhado; derrotar o ladrão devolve; se a luta acabar com ele fugindo, o cristal volta ao lugar dele.
+    Batalha do chefe: CARIMBOS (o Lacre anuncia o carimbo: INDEFERIDO anula a sua próxima ação se ela for a mesma da
+    anterior; ARQUIVADO = esquecimento; DEVOLVIDO = reflete o próximo feitiço; CHAVE ou ÂMBAR quebram o carimbo).
+  - 5º GRAU: ARCA DA ORIGEM (aceitar ser o novo Catálogo: muito mais forte, carrega 6, técnica DILÚVIO cresce com
+    as almas carregadas; o Catálogo passa a falar "nós") ou MÍMICO VAZIO (abrir mão do poder e das memórias:
+    atributos menores, imune a esquecimento e silêncio, carrega 10; técnica NADA anula um golpe e devolve; apaga
+    TODAS as lembranças da Terra: mem_pastel volta a ser perdido, pastelBack some; o rosto humano do Cap. 8 fica
+    borrado). G.flags.grau5 = 'arca'|'vazio'.
+  - RUNAS: ÂMBAR (elemento raro: cristaliza, 25% de prender por 1 turno; Véu = casca que divide o dano por 2 nos
+    próximos 2 golpes), CHAVE (forma rara: um alvo, arranca casca/sumiço/força e abre fechaduras no mapa).
+    Itens: Bala de Âmbar (cura e limpa status), Água do Cais (PM).
+
   HUMANIDADE E HUMOR (humor.js; vale para todos os capítulos)
   O baú foi uma pessoa comum e isso tem que aparecer: ele CORA (blush(): tampa rosada, vapor e coração no
   mapa) perto de mulheres que acha bonitas, fica sem jeito, lembra de besteiras da vida (suculenta Gerson,
@@ -3143,7 +3186,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–6', 6, 226, { col: '#5a5070' }); txt('v2.0', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–7', 6, 226, { col: '#5a5070' }); txt('v2.0', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
@@ -3615,9 +3658,9 @@ async function ring(e, o = {}) {
   const fake = DF().tricks && o.fakeable !== false && elite && Math.random() < (e.d.boss ? 0.3 : 0.22) ? rand(18, 30) : 0;
   return bWait('guard', { ring: { r: 46, v: (o.fast ? 1.25 : rand(0.75, 1.05)) * (e.d.boss ? 1.1 : 1) * DF().ring * (o.spd || 1), state: 0, res: null, fake, hold: 0, label: o.label, col: o.col } });
 }
-async function dodge(spd = 1) {
+async function dodge(spd = 1, fixedDir) {
   await tut('dodge');
-  const dir = pickOne(DIRK), from = pickOne(['left', 'right', 'top']);
+  const dir = fixedDir || pickOne(DIRK), from = pickOne(['left', 'right', 'top']);
   const T = Math.round(60 / spd * (isHist() ? 1.25 : 1) / (DF().tricks ? 1.08 : 1));
   return bWait('dodge', { dg: { dir, from, T, t: 0, state: 0, res: null, hold: 0 } });
 }
@@ -3788,7 +3831,7 @@ async function runMove(e, mv) {
       msg = `${head} ${total} de dano.` + msg; break;
     }
     case 'dodge': {
-      for (let h = 0; h < (mv.hits || 1); h++) { const r = await dodge(mv.spd || 1); note(r); const d = hurt(e, mv.p, r === 'perfect' ? 0.15 : r === 'good' ? 0.45 : 1, r, mv); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
+      for (let h = 0; h < (mv.hits || 1); h++) { const r = await dodge(mv.spd || 1, mv.dir); note(r); const d = hurt(e, mv.p, r === 'perfect' ? 0.15 : r === 'good' ? 0.45 : 1, r, mv); total += d; msg += passives(e, d, r); if (G.hp <= 0) return; }
       msg = (worst === 'perfect' ? `* Desvio perfeito! Só um arranhão: ${total}.` : worst === 'fail' ? `* Acertou em cheio! ${total} de dano.` : `* Raspou de leve. ${total} de dano.`) + msg; break;
     }
     case 'seq': {
@@ -4365,7 +4408,7 @@ async function useSeal(e) {
   const i = await list({ title: 'Usar qual feitiço?', x: 8, y: 8, w: 224, items: G.spells.map(s => ({ label: s.name, right: spellCost(s) + ' PM', disabled: spellCost(s) > G.mp, col: RUNES[s.el].col })), desc: k => spellDesc(G.spells[k]) });
   if (i < 0) return;
   const sp = G.spells[i]; G.mp -= spellCost(sp); sfx(sp.el in { brasa: 1, geada: 1, seiva: 1 } ? sp.el : 'rune');
-  const ok = sp.el === e.need.el && (!e.need.form || sp.form === e.need.form);
+  const ok = (!e.need.el || sp.el === e.need.el) && (!e.need.form || sp.form === e.need.form);
   if (!ok) { sfx('cancel'); await say(pickOne(['* O selo absorve a magia e... nada. Era outra palavra.', '* A runa brilha, pisca e apaga. Não era esse feitiço.'])); if (e.need.form && sp.el === e.need.el) await say('* Quase! O elemento é esse, mas a forma não.'); return; }
   G.flags[e.flag] = true; sfx('gate'); shake(12);
   await say(SEAL_OK[e.look]);
@@ -6847,7 +6890,8 @@ const PB_MAP = {
   bastiao: { o: 'y', n: 'm', b: 'd', l: 'w' }, abismo: { o: 'd', n: 'k', b: 'P', l: 'q', y: 'r' },
   ferrao: { o: 'g', n: 'G', b: 'k', l: 'v' }, carniceiro: { o: 'r', n: 'b', b: 'k', l: 'w' },
   biblioteca: { o: 's', n: 'n', b: 'b', l: 'y', y: 'c' }, proibido: { o: 'P', n: 'k', b: 'r', l: 'r', y: 'r' },
-  eclipse: { o: 'k', n: 'P', b: 'k', l: 'L', y: 'w' }, constelacao: { o: 'B', n: 'u', b: 'k', l: 'w' }
+  eclipse: { o: 'k', n: 'P', b: 'k', l: 'L', y: 'w' }, constelacao: { o: 'B', n: 'u', b: 'k', l: 'w' },
+  arca: { o: 'y', n: '#e8dcc0', b: '#c8962a', l: 'w', y: 'c' }, vazio: { o: '#c0c8d8', n: '#8a90a0', b: '#5a6070', l: 'w', y: 'w' }
 };
 function pbShade(hex, f) {
   const n = parseInt(hex.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.max(0, Math.min(255, Math.round(f > 1 ? v + (255 - v) * (f - 1) : v * f))));
@@ -6855,7 +6899,7 @@ function pbShade(hex, f) {
 }
 // desenha um quadro. pose: idle|open|shut|hurt|win ; f: 0..3
 function pbFrame(form, pose, f) {
-  const M = PB_MAP[form] || {}, C = k => PAL[M[k] || k];
+  const M = PB_MAP[form] || {}, C = k => PAL[M[k] || k] || M[k];
   const O = C('o'), N = C('n'), B = C('b'), Lm = C('l'), Y = C('y');
   const No = pbShade(N, 1.25), Nd = pbShade(N, 0.72), Oh = pbShade(O, 1.3), Od = pbShade(O, 0.75);
   const darkBody = ['abismo', 'eclipse', 'proibido'].includes(form);
@@ -6968,6 +7012,18 @@ function pbFrame(form, pose, f) {
       for (const u of [6, 15, 21]) { const [wx, wy] = lidPt(u, 3); P(wx, wy, tw(u) ? '#ffffff' : PAL.y); }
       break;
     }
+    case 'arca': {
+      const [rx, ry] = lidPt(L / 2, T + 0.5); R(rx - 6, ry - 2, 13, 2, '#120e1a'); R(rx - 5, ry - 2, 11, 1, '#f0c040'); R(rx - 1, ry - 4, 3, 2, '#f0c040');
+      for (const [px, py] of [[8, 4], [12, 7], [16, 4], [20, 7]]) P(bx0 + px, by0 + py, tw(px) ? '#ffffff' : '#7ad0f0');
+      R(bx0 + 10, by0 + 2, 8, 1, '#c8962a'); R(bx0 + 10, by0 + 9, 8, 1, '#c8962a');
+      break;
+    }
+    case 'vazio': {
+      x.clearRect(bx0 + 7, by0 + 3, L - 13, by1 - by0 - 6);
+      R(bx0 + 7, by0 + 3, L - 13, 1, '#5a6070'); R(bx0 + 7, by1 - 4, L - 13, 1, '#5a6070');
+      if (f === 2) { P(bx0 + 12, by0 + 6, '#ffffff'); }
+      break;
+    }
     case 'eclipse': { const cx = bx0 + 13, cy = by0 + 6; for (let a = 0; a < 24; a++) { const t = a / 24 * Math.PI * 2; P(cx + Math.round(Math.cos(t) * 4), cy + Math.round(Math.sin(t) * 4), PAL.L); } R(cx - 2, cy - 3, 5, 7, darkBody ? '#120e1a' : N); R(cx - 3, cy - 2, 2, 5, '#120e1a'); P(cx + 3, cy, '#ffffff'); break; }
   }
   return c;
@@ -7049,7 +7105,8 @@ const BG_OF = {
   escadaria3: 'fortaleza', muralhas: 'fortaleza', patio: 'acampamento', jaula: 'jaula', scriptorium: 'scriptorium',
   devolucao: 'arquivo', achados: 'arquivo', fundo: 'arquivo', estrada: 'estrada', correio: 'correio',
   terminal: 'terminal', manobras: 'terminal', garagem: 'garagem', trincheira: 'trincheira', oficina: 'trincheira',
-  padaria: 'padaria', feira: 'feira', escola: 'escola', coreto: 'coreto', pontofinal: 'pontofinal'
+  padaria: 'padaria', feira: 'feira', escola: 'escola', coreto: 'coreto', pontofinal: 'pontofinal',
+  antessala: 'antessala', cais: 'cais', conves: 'conves', porao: 'porao', cela: 'cela'
 };
 // d = sombra, m = meio, b = brilho, a = acento, f = chão
 const BG_PAL = {
@@ -7073,7 +7130,12 @@ const BG_PAL = {
   feira: { d: '#0c1408', m: '#2a4418', b: '#e0a030', a: '#ff6a4a', f: '#16200e' },
   escola: { d: '#08140e', m: '#1a3a2a', b: '#6ac89a', a: '#e8e4dc', f: '#0e1e16' },
   coreto: { d: '#0a0e1e', m: '#1e2a4e', b: '#8aa0e0', a: '#ffb0d8', f: '#121830' },
-  pontofinal: { d: '#08080c', m: '#1e2230', b: '#8a9ab8', a: '#ffe066', f: '#0e1018' }
+  pontofinal: { d: '#08080c', m: '#1e2230', b: '#8a9ab8', a: '#ffe066', f: '#0e1018' },
+  antessala: { d: '#0e0c0a', m: '#2e2820', b: '#a89068', a: '#f0c040', f: '#18140e' },
+  cais: { d: '#140c02', m: '#4a2e08', b: '#e0a030', a: '#fff4c0', f: '#20160a' },
+  conves: { d: '#100a06', m: '#3a2414', b: '#a87850', a: '#f0c040', f: '#1c120a' },
+  porao: { d: '#0a0806', m: '#2a2016', b: '#8a7050', a: '#e0a030', f: '#14100a' },
+  cela: { d: '#140406', m: '#4a1014', b: '#c84848', a: '#f0c040', f: '#1e080a' }
 };
 const BGC = {};
 function bgRand(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
@@ -7212,6 +7274,32 @@ function bgPaint(k) {
       for (const lx of [62, 178]) { r(lx, 20, 2, SKY - 20, '#3a3448'); ell(lx + 1, 18, 4, 4, '#3a3448'); ell(lx + 1, 18, 2, 2, '#ffe9a0'); x.globalAlpha = 0.12; ell(lx + 1, 18, 12, 12, '#ffe9a0'); x.globalAlpha = 1; }
       break;
     }
+    case 'antessala': {
+      ell(120, 30, 46, 30, '#2a241e'); ell(120, 30, 42, 27, '#3a342e'); for (let i = 0; i < 31; i++) { const a = -Math.PI / 2 + (i / 31) * Math.PI * 2, rx = 120 + Math.cos(a) * 36, ry = 30 + Math.sin(a) * 23; r(rx - 1, ry - 1, 3, 3, '#07050c'); if (i % 3 === 0) r(rx, ry, 1, 1, P.a); }
+      r(116, 22, 8, 12, '#07050c'); r(118, 18, 4, 4, P.a); r(119, 26, 2, 2, '#07050c'); r(118, 54, 4, 5, '#07050c');
+      block(4, SKY - 26, 60, 22, '#e8d8a0', '#ffffff'); r(4, SKY - 12, 60, 3, '#3a70c0'); for (let i = 0; i < 4; i++) r(8 + i * 14, SKY - 23, 10, 8, '#1c3058'); r(30, SKY - 30, 18, 5, '#2a1a10'); r(34, SKY - 29, 10, 3, '#ffb040');
+      for (const tx of [176, 206]) { for (let y = 0; y < 24; y++) { const hw = Math.round(14 * y / 24); r(tx - hw, SKY - 24 + y, hw * 2, 1, y % 6 ? '#4a3a2a' : '#6a5a3a'); } }
+      break;
+    }
+    case 'cais': case 'conves': {
+      for (let y = 0; y < SKY; y++) { x.globalAlpha = 0.25 + y / SKY * 0.4; r(0, y, 240, 1, y % 5 ? P.m : P.b); } x.globalAlpha = 1;
+      for (let i = 0; i < 14; i++) { const fx0 = R() * 240, fy = 10 + R() * (SKY - 20); ell(fx0, fy, 3, 2, P.d); r(fx0 - 1, fy - 1, 2, 1, P.a); }
+      if (k === 'cais') { for (const px of [30, 90, 150, 210]) { r(px, SKY - 30, 4, 30, '#3a2414'); r(px - 2, SKY - 32, 8, 3, '#5a3a24'); } r(0, SKY - 18, 240, 3, '#5a3a24'); }
+      else { r(20, 0, 5, SKY, '#3a2414'); r(22, 0, 1, SKY, '#5a3a24'); for (let i = 0; i < 5; i++) line(25, 4 + i * 8, 110 - i * 12, SKY - 4, '#5a4a3a'); r(170, 4, 50, 26, '#d8c8a0'); r(170, 4, 50, 2, '#ffffff'); line(170, 30, 195, 50, '#5a4a3a'); line(220, 30, 195, 50, '#5a4a3a'); ell(194, 34, 22, 22, '#5a3420'); ell(194, 34, 19, 19, '#07050c'); for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; line(194, 34, 194 + Math.cos(a) * 19, 34 + Math.sin(a) * 19, '#7a4a2a'); } }
+      break;
+    }
+    case 'porao': {
+      for (let i = 0; i < 6; i++) { block(i * 42 - 4, 10, 36, SKY - 10, P.d, P.m); for (let y = 16; y < SKY - 4; y += 10) r(i * 42, y, 28, 2, P.m); }
+      for (let i = 0; i < 8; i++) { const cx = 10 + i * 30; for (let j = 0; j < 9; j++) r(cx + (j % 2), j * 3, 2, 2, '#6a6078'); if (i % 2) { r(cx - 2, 27, 6, 6, '#07050c'); r(cx, 29, 2, 2, P.a); } }
+      for (let i = 0; i < 4; i++) { const cx = 28 + i * 60; r(cx, SKY - 30, 6, 30, '#c8962a'); r(cx + 1, SKY - 30, 2, 30, '#f0c040'); r(cx + 1, SKY - 22, 3, 6, '#7a4a08'); }
+      break;
+    }
+    case 'cela': {
+      ell(120, 32, 54, 34, '#2a0a0c'); ell(120, 32, 48, 30, '#4a1014'); r(102, 12, 36, 42, '#07050c'); ell(120, 32, 14, 16, '#c84848'); r(114, 22, 12, 20, '#07050c'); r(116, 24, 8, 16, '#fff4c0'); ell(120, 32, 3, 3, '#07050c'); r(114, 20, 12, 2, P.a);
+      for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; line(120 + Math.cos(a) * 50, 32 + Math.sin(a) * 30, 120 + Math.cos(a) * 64, 32 + Math.sin(a) * 40, '#5a1418'); }
+      for (let i = 0; i < 20; i++) r(R() * 240, SKY - 4 - R() * 6, 3, 2, '#e8dcc0');
+      break;
+    }
     case 'pontofinal': {
       for (let i = 0; i < 8; i++) { x.globalAlpha = 0.18; ell(30 + i * 30, 26 + (i % 3) * 8, 28, 10, P.m); } x.globalAlpha = 1;
       r(150, SKY - 30, 80, 26, '#07050c'); x.globalAlpha = 0.5; r(151, SKY - 29, 78, 24, '#3a4a5a'); x.globalAlpha = 1; for (let i = 0; i < 6; i++) r(156 + i * 12, SKY - 26, 8, 8, '#1a2030'); r(150, SKY - 12, 80, 3, '#3a70c0'); r(208, SKY - 36, 22, 6, '#2a1a10'); r(212, SKY - 35, 14, 4, P.a);
@@ -7301,6 +7389,7 @@ function drawProj(el, x, y, t, dir, s) {
     case 'sal': for (let i = 0; i < 5; i++) { const ox = Math.cos(t * 0.2 + i * 1.3) * 3 * s - c * i * 2, oy = Math.sin(t * 0.25 + i * 1.7) * 3 * s - sn * i * 2; fxR(x + ox - 1, y + oy - 1, 3, 3, d); fxR(x + ox - 1, y + oy - 1, 2, 2, i % 2 ? b : w); } break;
     case 'tinta': fxDisc(x, y, 3.5 * s, d); fxDisc(x - 1, y - 1, 2.5 * s, m); fxP(x - 1, y - 2, w); if (t % 3 === 0) fxPart(x, y + 2, rand(-0.2, 0.2), 0.6, 14, m, 2, 1); break;
     case 'polvora': fxDisc(x, y, 3.5 * s, '#120e1a'); fxDisc(x - 1, y - 1, 1, '#5a5070'); fxLine(x + 2, y - 3, x + 4, y - 6, '#a89068'); fxSpark(x + 4, y - 7, t % 4 < 2 ? '#ffb040' : '#ffe066'); break;
+    case 'ambar': { fxGlow(x, y, 6 * s, b, 0.25); const L = 5 * s; for (let i = -L; i <= L; i++) { const wdt = Math.max(0, (L - Math.abs(i)) / L * 3 * s); fxLine(x + c * i - sn * wdt, y + sn * i + c * wdt, x + c * i + sn * wdt, y + sn * i - c * wdt, i > 0 ? b : m); } fxP(x + c * L, y + sn * L, w); fxP(x - sn * 2, y + c * 2, w); if (t % 3 === 0) fxPart(x, y, rand(-0.3, 0.3), rand(-0.3, 0.3), 16, pickOne([b, w]), 1); break; }
     case 'canto': fxGlow(x, y, 6 * s, b, 0.22); for (let i = 0; i < 3; i++) { const ox = -c * i * 6 + Math.sin(t * 0.4 + i) * 2, oy = -sn * i * 6 + Math.cos(t * 0.4 + i * 2) * 3; fxNote(x + ox, y + oy, i === 0 ? w : i === 1 ? b : m, i === 0 && s > 1.2); } if (t % 3 === 0) fxPart(x, y, rand(-0.3, 0.3), -0.4, 18, b, 1); break;
     default: fxGlow(x, y, 5, m); fxDisc(x, y, 3 * s, m); fxP(x, y, '#ffffff');
   }
@@ -7318,6 +7407,7 @@ function drawImpact(el, x, y, p, s, fy) {
     case 'sal': { for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2 + 0.4, r = (4 + p * 8) * s, cx = x + Math.cos(a) * r, cy = y + Math.sin(a) * r * 0.8, hh = Math.min(1, p * 3) * 5 * s; fxR(cx - 1, cy - hh, 3, hh, d); fxR(cx - 1, cy - hh, 2, hh - 1, i % 2 ? b : w); } break; }
     case 'tinta': { for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2, r = (3 + p * 12) * s; fxDisc(x + Math.cos(a) * r, y + Math.sin(a) * r * 0.7 + p * 6, 2 * q + 1, i % 2 ? m : d); } fxDisc(x, y, 4 * q * s, m); break; }
     case 'polvora': { if (p < 0.2) fxDisc(x, y, 14 * s, '#ffffff'); fxDisc(x, y, q * 10 * s, b); fxRing(x, y, (5 + p * 20) * s, m); fxRing(x, y, (4 + p * 16) * s, '#ffe066'); bx.globalAlpha = q; for (let i = 0; i < 4; i++) fxDisc(x + (i - 1.5) * 8 * p, y - p * 16 - i * 2, 3 + p * 5, '#4a4450'); bx.globalAlpha = 1; break; }
+    case 'ambar': { const r = Math.min(1, p * 2.5); for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2 + 0.2, cx = x + Math.cos(a) * 9 * s * r, cy = y + Math.sin(a) * 7 * s * r, hh = (4 + (i % 3) * 2) * s * r; fxR(cx - 1, cy - hh, 3, hh, d); fxR(cx - 1, cy - hh, 2, hh - 1, i % 2 ? b : m); fxP(cx, cy - hh, w); } if (p < 0.3) fxDisc(x, y, 8 * s, w); if (p > 0.5) { bx.globalAlpha = (1 - p) * 0.6; fxDisc(x, y, 10 * s, b); bx.globalAlpha = 1; } break; }
     case 'canto': { for (let k = 0; k < 3; k++) { const r = (4 + p * 16 - k * 4) * s; if (r > 0) fxRing(x, y, r, k === 0 ? b : m, r * 0.7); } for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2 + p * 2, r = (5 + p * 12) * s; fxNote(x + Math.cos(a) * r, y + Math.sin(a) * r * 0.7 - p * 8, i % 2 ? w : b); } break; }
     case 'estrela': { for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + p, r = (3 + p * 14) * s; fxSpark(x + Math.cos(a) * r, y + Math.sin(a) * r, '#ffe066', i % 2 === 0 && p < 0.5); } if (p < 0.25) fxDisc(x, y, 6 * s, '#fff4a0'); break; }
     default: fxRing(x, y, 3 + p * 12, m); fxRing(x, y, 2 + p * 9, '#ffffff');
@@ -7361,6 +7451,7 @@ async function fxWave(el, ts, s) {
         case 'seiva': { const hh = (4 + (i % 3) * 3) * s; fxLine(xx, gy, xx + Math.sin(i) * 2, gy - hh, m); fxR(xx + Math.sin(i) * 2 - 1, gy - hh, 3, 2, b); break; }
         case 'tinta': { const hh = (6 + Math.sin(i * 0.8 + k * 0.3) * 4) * s; fxR(xx, gy - hh, 5, hh, m); fxR(xx, gy - hh, 5, 1, w); break; }
         case 'polvora': if (i % 3 === 0) { fxDisc(xx, gy - 4, 4 * a, b); fxDisc(xx, gy - 4, 2 * a, w); } break;
+        case 'ambar': { const hh = (i < 3 ? (i + 1) * 4 : 12) * s; fxR(xx, gy - hh, 3, hh, d); fxR(xx, gy - hh, 2, hh - 1, b); fxP(xx, gy - hh, w); break; }
         case 'canto': if (i % 2 === 0) fxNote(xx, gy - 6 - Math.abs(Math.sin(i + k * 0.3)) * 14, i % 4 ? b : w, i === 0); fxR(xx, gy - 1, 4, 1, m); break;
         default: fxR(xx, gy - 6, 4, 6, m);
       }
@@ -7380,6 +7471,15 @@ async function fxMine(el, t, s) {
   await fxRun(20, (k, p) => { const x = x0 + (x1 - x0) * p, y = y0 + (y1 - y0) * p - Math.sin(p * Math.PI) * 26; fxDisc(x, y, 3, '#3a3632'); fxRing(x, y, 3.5, b); fxP(x, y, k % 6 < 3 ? '#ff3030' : '#601010'); });
   impactAt(el, t, s * 0.7);
 }
+// chave: voa até o alvo, entra e gira (CLIC)
+async function fxKey(el, t, s) {
+  const [x0, y0] = MOUTH(), [, m, b, w] = epal(el);
+  const drawKey = (x, y, a) => { const c = Math.cos(a), sn = Math.sin(a); fxRing(x, y, 3, '#f0c040'); fxRing(x, y, 2, '#c8962a'); for (let i = 3; i < 10; i++) fxP(x + c * i, y + sn * i, '#f0c040'); for (const k of [7, 9]) fxP(x + c * k - sn * 2, y + sn * k + c * 2, '#f0c040'); };
+  await fxRun(16, (k, p) => { const x = x0 + (t.x - x0) * p, y = y0 + (t.y - y0) * p - Math.sin(p * Math.PI) * 6; fxGlow(x, y, 5, b, 0.2); drawKey(x, y, Math.atan2(t.y - y0, t.x - x0) + Math.PI); });
+  sfx('select');
+  await fxRun(10, (k, p) => { drawKey(t.x, t.y, Math.PI + p * Math.PI / 2); fxRing(t.x, t.y, 4 + p * 10, w); });
+  impactAt(el, t, s);
+}
 // aura do Véu ao redor do baú, uma para cada elemento
 async function fxAura(el) {
   const cx = BPX, cy = BPY - 12, [d, m, b, w] = epal(el);
@@ -7392,6 +7492,7 @@ async function fxAura(el) {
       case 'sombra': bx.globalAlpha = 0.5 * q; fxDisc(cx, cy, 20 * q, d); bx.globalAlpha = 1; for (let i = 0; i < 6; i++) { const a = -Math.PI / 2 + (i - 2.5) * 0.4, r = 14 + Math.sin(k * 0.3 + i) * 4; fxLine(cx + Math.cos(a) * 8, cy + Math.sin(a) * 6, cx + Math.cos(a) * r, cy + Math.sin(a) * r, m); fxP(cx + Math.cos(a) * r, cy + Math.sin(a) * r, b); } break;
       case 'vento': for (let j = 0; j < 30; j++) { const a = j * 0.45 + k * 0.4, r = 6 + j * 0.5; fxP(cx + Math.cos(a) * r, cy + 10 - j * 0.9, j % 3 ? b : w); } break;
       case 'sal': for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2, r = 18 - 8 * p, hh = 3 + (i % 3); fxR(cx + Math.cos(a) * r - 1, cy + Math.sin(a) * r * 0.7 - hh, 3, hh, i % 2 ? w : b); } break;
+      case 'ambar': for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2, r = 20 - 6 * Math.min(1, p * 2), hh = 6 + (i % 3) * 2; fxR(cx + Math.cos(a) * r - 1, cy + Math.sin(a) * r * 0.7 - hh, 3, hh, i % 2 ? b : m); fxP(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.7 - hh, w); } fxGlow(cx, cy, 14 * q, b, 0.2); break;
       case 'canto': for (let i = 0; i < 7; i++) { const a = k * 0.12 + i * 0.9, r = 16 + Math.sin(k * 0.2 + i) * 3; fxNote(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.6 - p * 6, i % 2 ? b : w, i === 0); } fxGlow(cx, cy, 14 * q, m, 0.2); break;
       default: for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2 + k * 0.1, yy = cy + 10 - p * 26 + i * 2; fxR(cx + Math.cos(a) * 14 - 1, yy, 3, 1, b); fxR(cx + Math.cos(a) * 14, yy - 1, 1, 3, b); } fxGlow(cx, cy, 16 * q, m, 0.25);
     }
@@ -7406,6 +7507,7 @@ async function spellAnim(sp, targets, pm = 1) {
   else if (sp.form === 'corrente') await fxChain(el, targets, s);
   else if (sp.form === 'ancora') await fxAnchor(el, targets[0], s);
   else if (sp.form === 'mina') await fxMine(el, targets[0], s);
+  else if (sp.form === 'chave') await fxKey(el, targets[0], s);
   else if (el === 'faisca') await fxLightning(targets[0], s);
   else await fxShot(el, targets[0], s);
   if (sp.mod === 'selo') for (const t of targets) { const x = t.x, fy = feet(t), c = RUNES[el].col; fxSpawn(36, (k, p) => { const r = 6 + Math.min(1, p * 3) * 8; fxRing(x, fy, r, c, r * 0.35); fxRing(x, fy, r - 3, c, (r - 3) * 0.35); for (let i = 0; i < 4; i++) { const a = k * 0.1 + i * Math.PI / 2; fxP(x + Math.cos(a) * (r - 1.5), fy + Math.sin(a) * (r - 1.5) * 0.35, '#ffffff'); } }); }
@@ -7651,8 +7753,8 @@ function soulOk(k) {
   const f = G.flags;
   if (k === 'lume') return true;
   if (k === 'tiago') return !!f.ch5done && !f.tiagoTaken;
-  if (k === 'cida') return f.soul_cida === 'lembrou' || (!!f.cidaDone && f.soul_cida !== 'perdida');
-  return f['soul_' + k] === 'lembrou';
+  if (k === 'cida') return f.soul_cida === 'lembrou' || f.soul_cida === 'resgatado' || (!!f.cidaDone && f.soul_cida !== 'perdida');
+  return f['soul_' + k] === 'lembrou' || f['soul_' + k] === 'resgatado';
 }
 function soulsCount() { return SOULS.filter(soulOk).length; }
 function soulsNames() { const N = { lume: 'Lume', cida: 'Dona Cida', tiago: 'Tiago', ozorio: 'Seu Ozório', neide: 'Profª Neide', duda: 'Duda', marlene: 'Dona Marlene', valdir: 'Seu Valdir' }; return SOULS.filter(soulOk).map(k => N[k]); }
@@ -8628,6 +8730,687 @@ Object.assign(STORY, {
     return openWin(w); }; }
 // título, capítulo do save e retrato da Lume no fim
 { const _co = chapterOf; chapterOf = function (d) { const f = (d && d.flags) || {}; return f.ch6open ? 6 : _co(d); }; }
+
+// gerado por build/ch7/maps7.py (não editar à mão)
+const TH_ANT = { floor: '#36302a', speck: '#403a32', dark: '#2a2620', wall: '#4e4640', mortar: '#2a2420', wallHi: '#6e6458' };
+const TH_CAI = { floor: '#5a3a24', speck: '#6a4a2e', dark: '#4a2e1c', wall: '#3a2414', mortar: '#2a1a0e', wallHi: '#7a5a3a' };
+const TH_CON = { floor: '#5a3a24', speck: '#6a4a2e', dark: '#4a2e1c', wall: '#3a2414', mortar: '#2a1a0e', wallHi: '#7a5a3a' };
+const TH_POR = { floor: '#3a2a1c', speck: '#463424', dark: '#2e2216', wall: '#2a1c12', mortar: '#1a120a', wallHi: '#4a3a2a' };
+const TH_CEL = { floor: '#3a1c1e', speck: '#462426', dark: '#2e1618', wall: '#4a1a1e', mortar: '#2a0e10', wallHi: '#6a2a2e' };
+Object.assign(MAPS, {
+  antessala: { name: "Antessala da Porta", music: 'antessala', dark: 0.4, theme: TH_ANT, rows: ["########################", "######ZZZZZZZZZZZZ######", "#....ZZZZZZZZZZZZZZ....#", "#....ZZZZZZZZZZZZZZ....#", "#......ZZZZZZZZZZ......#", "#......................#", "#.VVVVV..........T..T..#", "#.VVVVV.....,.........K#", "#......................#", "#..K.......,.....T..T..#", "#......................#", "#...,..........,.......#", "#..KK.............KK...#", "#......................#", "#......................#", "########################"],
+    exits: [],
+    ents: [{"id": "save_an", "kind": "save", "x": 12, "y": 12}, {"id": "fech32", "kind": "npc2", "x": 11, "y": 5, "sp": "fechadura", "talk": "fechadura7", "glow": "rgba(255,224,102,0.2)"}, {"id": "onibus7", "kind": "npc2", "x": 4, "y": 8, "sp": "mancha", "talk": "onibus7"}, {"id": "musgo7", "kind": "npc2", "x": 15, "y": 8, "sp": "musgo", "talk": "musgo7", "glow": "rgba(150,220,120,0.15)"}, {"id": "ozorio7", "kind": "npc2", "x": 9, "y": 10, "sp": "ozorio", "talk": "ozorio7", "cond": "ozorioLembrou"}, {"id": "rita7", "kind": "npc2", "x": 21, "y": 10, "sp": "rita", "talk": "rita7", "cond": "dateDone"}, {"id": "marlene7", "kind": "npc2", "x": 6, "y": 12, "sp": "marlene", "talk": "marlene7", "cond": "marleneGone"}, {"id": "duda7", "kind": "npc2", "x": 20, "y": 13, "sp": "duda", "talk": "duda7", "cond": "dudaMet"}, {"id": "neide7", "kind": "npc2", "x": 16, "y": 12, "sp": "neide", "talk": "neide7", "cond": "c7_neide", "float": true}, {"id": "cida7", "kind": "npc2", "x": 8, "y": 13, "sp": "cida", "talk": "cida7", "cond": "c7_cida", "float": true}, {"id": "pip7", "kind": "npc2", "x": 18, "y": 5, "sp": "pip", "talk": "pip7", "cond": "aprendizesDone"}] },
+  cais: { name: "Cais de Âmbar", music: 'ambar', dark: 0.3, theme: TH_CAI, rows: ["GGGGGGGGGGGGG..GGGGGGGGGGGGG", "GGGGGGGGGGGGG..GGGGGGGGGGGGG", "GGGGGGGGGGGGG..GGGGGGGGGGGGG", "GG...GGGGGGGG..GGGGGGGG...GG", "GG...,...........,........GG", "GG...GGGGGGGG..GGGGGGGG...GG", "GGGGGGGGGGGGG....GGGGGGGGGGG", "GGGGGGGGGGGGG....GGGGGGGGGGG", "GG...GGGGGGGG..GGGGGGGG...GG", "GG.......,................GG", "GG...GGGGGG....GGGGGGGG...GG", "GGGGGGGGGGG....GGGGGGGGGGGGG", "GG...GGGGGGGG..GGGGGGGG...GG", "GG..................,.....GG", "GG...GGGG.........KGGGG...GG", "GGGGGGGGG..........GGGGGGGGG", "GGGGGGGGGK.........GGGGGGGGG", "GGGGGGGGGGGGGGGGGGGGGGGGGGGG"],
+    exits: [{"x": 13, "y": 0, "to": "conves", "tx": 12, "ty": 16}, {"x": 14, "y": 0, "to": "conves", "tx": 13, "ty": 16}],
+    ents: [{"id": "volta7", "kind": "npc2", "x": 13, "y": 16, "sp": "fechadura", "talk": "volta7", "glow": "rgba(255,224,102,0.2)"}, {"id": "cr_kaua", "kind": "npc2", "x": 3, "y": 4, "sp": "cristal", "talk": "cristal7", "who": "kaua", "hide": "carry_kaua", "glow": "rgba(240,192,64,0.18)"}, {"id": "cr_ozorio", "kind": "npc2", "x": 24, "y": 4, "sp": "cristal", "talk": "cristal7", "who": "ozorio", "hide": "carry_ozorio", "cond": "c7_ozorioLost", "glow": "rgba(240,192,64,0.18)"}, {"id": "cr_cida", "kind": "npc2", "x": 3, "y": 9, "sp": "cristal", "talk": "cristal7", "who": "cida", "hide": "carry_cida", "cond": "c7_cidaLost", "glow": "rgba(240,192,64,0.18)"}, {"id": "cr_zelia", "kind": "npc2", "x": 24, "y": 9, "sp": "cristal", "talk": "cristal7", "who": "zelia", "hide": "carry_zelia", "glow": "rgba(240,192,64,0.18)"}, {"id": "cr_benedito", "kind": "npc2", "x": 3, "y": 13, "sp": "cristal", "talk": "cristal7", "who": "benedito", "hide": "carry_benedito", "glow": "rgba(240,192,64,0.18)"}, {"id": "cr_neide", "kind": "npc2", "x": 24, "y": 13, "sp": "cristal", "talk": "cristal7", "who": "neide", "hide": "carry_neide", "cond": "c7_neideLost", "glow": "rgba(240,192,64,0.18)"}, {"id": "r_ambar", "kind": "rune", "x": 16, "y": 6, "rune": "ambar"}, {"id": "ch_ca1", "kind": "chest", "x": 11, "y": 11, "item": "frag", "n": 1}, {"id": "ch_ca2", "kind": "chest", "x": 16, "y": 15, "item": "bala", "n": 2}, {"id": "e_ca1", "kind": "enemy", "x": 13, "y": 11, "group": ["peixe", "peixe"]}, {"id": "e_ca2", "kind": "enemy", "x": 8, "y": 4, "group": ["gaivota", "gaivota"]}, {"id": "e_ca3", "kind": "enemy", "x": 19, "y": 9, "group": ["ladrao"]}, {"id": "e_ca4", "kind": "enemy", "x": 8, "y": 13, "group": ["peixe", "gaivota", "ladrao"]}, {"id": "e_ca5", "kind": "enemy", "x": 19, "y": 4, "group": ["marujo"]}] },
+  conves: { name: "Convés da Barca", music: 'barca', dark: 0.35, theme: TH_CON, rows: ["##########################", "#########........#########", "#########........#########", "####.................#####", "###...................####", "##.....##.......##.....###", "#......##.......##......##", "#.......................K#", "#..K....,.........,......#", "#........................#", "#.....##.........##......#", "#.....##.........##......#", "#........................#", "#..,....................##", "##......................##", "###....................###", "####.........,.......#####", "########............######"],
+    exits: [{"x": 12, "y": 17, "to": "cais", "tx": 13, "ty": 1}, {"x": 13, "y": 17, "to": "cais", "tx": 14, "ty": 1}, {"x": 20, "y": 12, "to": "porao", "tx": 4, "ty": 2, "cond": "timoneiroDone"}],
+    ents: [{"id": "save_cv", "kind": "save", "x": 4, "y": 14}, {"id": "timoneiroE", "kind": "boss3", "x": 12, "y": 2, "sp": "timoneiroW", "done": "timoneiroDone", "script": "timoneiro7", "glow": "rgba(240,192,64,0.18)"}, {"id": "d_esc", "kind": "door", "x": 20, "y": 12, "cond": "timoneiroDone", "dark": true, "msg": "escotilha7"}, {"id": "cr_priscila", "kind": "npc2", "x": 2, "y": 7, "sp": "cristal", "talk": "cristal7", "who": "priscila", "hide": "carry_priscila", "glow": "rgba(240,192,64,0.18)"}, {"id": "cr_teo", "kind": "npc2", "x": 23, "y": 9, "sp": "cristal", "talk": "cristal7", "who": "teo", "hide": "carry_teo", "glow": "rgba(240,192,64,0.18)"}, {"id": "ch_cv1", "kind": "chest", "x": 23, "y": 13, "item": "agua", "n": 2}, {"id": "e_cv1", "kind": "enemy", "x": 6, "y": 9, "group": ["marujo", "marujo"]}, {"id": "e_cv2", "kind": "enemy", "x": 19, "y": 8, "group": ["ancoraviva"]}, {"id": "e_cv3", "kind": "enemy", "x": 12, "y": 12, "group": ["marujo", "ladrao"]}, {"id": "e_cv4", "kind": "enemy", "x": 12, "y": 5, "group": ["gaivota", "gaivota", "marujo"]}] },
+  porao: { name: "Porão da Barca", music: 'barca', dark: 0.55, theme: TH_POR, rows: ["##########################", "#........#...............#", "#........#...............#", "#..KK....#..K....KK......#", "#........................#", "#........#...............#", "#####.####...............#", "#........#..K.......K....#", "#........#...............#", "#........#######.#########", "#........................#", "#..K.....................#", "#........................#", "#######.#####.#####.######", "#.....#.#.........#......#", "#.....#.#.........#......#", "#.......#.........#......#", "##########################"],
+    exits: [{"x": 13, "y": 16, "to": "cela", "tx": 10, "ty": 12}],
+    ents: [{"id": "volta_cv", "kind": "npc2", "x": 4, "y": 1, "sp": "fechadura", "talk": "subir7"}, {"id": "manif7", "kind": "npc2", "x": 7, "y": 1, "sp": "manifesto", "talk": "manifesto7", "float": true, "glow": "rgba(240,192,64,0.15)"}, {"id": "r_chave", "kind": "rune", "x": 22, "y": 2, "rune": "chave"}, {"id": "cr_luzia", "kind": "npc2", "x": 1, "y": 8, "sp": "cristal", "talk": "cristal7", "who": "luzia", "hide": "carry_luzia", "glow": "rgba(240,192,64,0.18)"}, {"id": "cr_rafael", "kind": "npc2", "x": 24, "y": 7, "sp": "cristal", "talk": "cristal7", "who": "rafael", "hide": "carry_rafael", "glow": "rgba(240,192,64,0.18)"}, {"id": "cr_nilo", "kind": "npc2", "x": 1, "y": 12, "sp": "cristal", "talk": "cristal7", "who": "nilo", "hide": "carry_nilo", "glow": "rgba(240,192,64,0.18)"}, {"id": "s_cabine", "kind": "seal", "x": 7, "y": 13, "flag": "s_cabine", "need": {"form": "chave"}, "look": "cabin"}, {"id": "capitaoE", "kind": "boss3", "x": 3, "y": 15, "sp": "capitaoW", "done": "capitaoDone", "script": "capitao7", "glow": "rgba(255,80,80,0.15)"}, {"id": "ch_po1", "kind": "chest", "x": 5, "y": 14, "item": "frag", "n": 1}, {"id": "ch_po2", "kind": "chest", "x": 24, "y": 1, "item": "bala", "n": 2}, {"id": "e_po1", "kind": "enemy", "x": 4, "y": 4, "group": ["lacaio"]}, {"id": "e_po2", "kind": "enemy", "x": 14, "y": 4, "group": ["afogado"]}, {"id": "e_po3", "kind": "enemy", "x": 5, "y": 10, "group": ["lacaio", "ladrao"]}, {"id": "e_po4", "kind": "enemy", "x": 20, "y": 11, "group": ["ancoraviva", "marujo"]}, {"id": "e_po5", "kind": "enemy", "x": 22, "y": 15, "group": ["afogado", "lacaio"]}] },
+  cela: { name: "Cela do Selo", music: 'cela', dark: 0.5, theme: TH_CEL, rows: ["####################", "########....########", "#####..........#####", "####............####", "###..............###", "##................##", "##.......,........##", "##................##", "###..............###", "####............####", "#####..........#####", "######........######", "######........######", "#########..#########"],
+    exits: [{"x": 9, "y": 13, "to": "porao", "tx": 13, "ty": 15}, {"x": 10, "y": 13, "to": "porao", "tx": 13, "ty": 15}],
+    ents: [{"id": "save_ce", "kind": "save", "x": 7, "y": 11}, {"id": "lacreE", "kind": "boss3", "x": 9, "y": 3, "sp": "lacreW", "done": "lacreDone", "script": "lacre7", "glow": "rgba(255,80,80,0.18)"}, {"id": "moca7", "kind": "npc2", "x": 10, "y": 1, "sp": "moca", "talk": "moca7", "cond": "lacreDone", "float": true, "glow": "rgba(255,224,160,0.25)"}] },
+});
+
+// ================= CAPÍTULO 7: O SELADO =================
+// Atrás da Porta Redonda: o Mar de Âmbar, a Barca da Viagem Zero e o Lacre que prende o Selado.
+// Mecânicas: CRISTAIS DE ALMA + ESPAÇO NA TAMPA (você não consegue levar todo mundo), LADRÕES DE ÂMBAR,
+// CARIMBOS do Lacre Real, e o 5º grau (Arca da Origem ou Mímico Vazio), escolhido pela história.
+
+// ---------- 5º grau ----------
+const GROW5F = { mhp: 12, mmp: 2, atk: 4, def: 3, mag: 1 }, GROW5A = { mhp: 8, mmp: 6, atk: 1, def: 2, mag: 4 };
+const line5 = () => G.flags.line5 || (SPECIES[G.flags.prev4] && SPECIES[G.flags.prev4].grow === GROW4A ? 'a' : 'f');
+const prev4 = () => SPECIES[G.flags.prev4] || {};
+Object.assign(SPECIES, {
+  arca: { tier: 5, name: 'Arca da Origem', sp: 'mimicArca', bonus: { mhp: 60, mmp: 12, atk: 10, def: 8, mag: 10 }, tag: 'Origem',
+    get grow() { return line5() === 'a' ? GROW5A : GROW5F; }, get bite() { return line5() === 'a' ? 1 : 1.5; }, get guard() { return line5() === 'a' ? 0.85 : 0.6; },
+    get discount() { return line5() === 'a' ? 1 : 0; }, get passive() { return prev4().passive; }, get passive2() { return prev4().passive2; },
+    desc: ['Aceita ser o novo Catálogo', 'Muito mais forte', 'Carrega 6 almas', 'Técnica: Dilúvio'] },
+  vazio: { tier: 5, name: 'Mímico Vazio', sp: 'mimicVazio', bonus: { mhp: 30, mmp: 10, atk: 5, def: 4, mag: 5 }, tag: 'Vazio',
+    get grow() { return line5() === 'a' ? GROW5A : GROW5F; }, get bite() { return line5() === 'a' ? 1 : 1.4; }, get guard() { return line5() === 'a' ? 0.85 : 0.65; },
+    get discount() { return line5() === 'a' ? 1 : 0; }, get passive() { return prev4().passive; }, get passive2() { return prev4().passive2; },
+    desc: ['Abre mão das memórias', 'Imune a esquecer e silêncio', 'Carrega 10 almas', 'Técnica: Nada'] }
+});
+for (const k of ['bastiao', 'abismo', 'ferrao', 'carniceiro', 'biblioteca', 'proibido', 'eclipse', 'constelacao']) Object.assign(SPECIES[k], { evoLv: 999, evos: ['arca', 'vazio'] });
+Object.assign(LINE_TECH, { arca: ['diluvio'], vazio: ['nada'] });
+Object.assign(TECH, {
+  diluvio: { name: 'Dilúvio', cd: 4, desc: 'As almas que você carrega saem da tampa como uma onda dourada: todos os inimigos, mais forte para cada alma carregada.',
+    async use() { const n = Math.max(1, carry().length), log = []; for (const e of BT.en.filter(e => e.alive && e.hp > 0)) { const d = Math.max(1, Math.round((G.st.atk * 0.55 + G.st.mag * 0.55) * (0.8 + n * 0.15) * rand(0.9, 1.1) - e.def * 0.5)); hitEnemy(e, d, 'hit', '#f0c040'); log.push(`* ${e.name}: ${d}.`); } await bSay(`* ${n > 1 ? `${n} almas` : 'Uma alma'} saem da sua tampa como uma onda de âmbar.\n` + log.slice(0, 4).join('\n'), { auto: 60 }); } },
+  nada: { name: 'Nada', cd: 3, desc: 'Você fica tão vazio que o próximo golpe atravessa você e volta inteiro para quem bateu.',
+    async use() { BT.nothing = 1; sfx('rune'); await bSay('* Você abre a tampa. Lá dentro não tem nada. Nem você.', { auto: 45 }); } }
+});
+// o Nada anula o próximo golpe e devolve o dano
+{ const _h = hurt; hurt = function (e, pow, mult, res, o) {
+  if (BT.nothing > 0 && mult > 0 && e && e.alive) {
+    BT.nothing = 0; const am = e.atkBuff && e.atkBuff.t > 0 ? e.atkBuff.m : 1; const d = Math.max(1, Math.round(e.atk * am * pow * 60 / (60 + e.def)));
+    hitEnemy(e, d, 'crit', '#c0c8d8'); BT.nums.push({ x: BPX, y: BPY - 52, s: 'NADA', col: '#c0c8d8', t: 50 }); sfx('guard'); return 0;
+  }
+  if (BT.amberShell > 0 && mult > 0) { BT.amberShell--; mult *= 0.5; BT.nums.push({ x: BPX, y: BPY - 52, s: 'ÂMBAR', col: '#f0c040', t: 40 }); }
+  return _h(e, pow, mult, res, o);
+}; }
+// o Vazio não guarda nada: nem esquecimento, nem silêncio
+{ const _gs = giveStatus; giveStatus = function (st, turns, mv) { if (G.species === 'vazio' && (st === 'forget' || st === 'silence')) return 'Não tem nada aí dentro para esquecer ou calar.'; return _gs(st, turns, mv); }; }
+// ---------- espaço na tampa ----------
+function carry() { if (!G.flags.carry) G.flags.carry = []; return G.flags.carry; }
+function carryCap() { return G.species === 'arca' ? 6 : G.species === 'vazio' ? 10 : 3; }
+const CRYSTALS = {
+  kaua: { n: 'Kauã', seat: 26, t: 'Dezenove anos. Trabalhava de madrugada numa padaria e dormia no fundo do ônibus. No bolso, um bilhete da Profª Neide: "Não acordar. Ele trabalha."' },
+  zelia: { n: 'Dona Zélia', seat: 3, t: 'Costureira. No colo, uma caixa com um vestido de noiva que ela ia entregar no sábado. A noiva nunca soube por que o vestido não chegou.' },
+  benedito: { n: 'Seu Benedito', seat: 8, t: 'Porteiro de prédio. Um rádio de pilha que só pega jogo. Ele ainda está ouvindo o segundo tempo.' },
+  priscila: { n: 'Priscila', seat: 18, t: 'Enfermeira, saindo de um plantão de trinta e seis horas. Ainda de crachá. Dormiu sentada e acordou aqui.' },
+  teo: { n: 'Téo', seat: 24, t: 'Entregador de aplicativo. Na mochila térmica, uma pizza que ainda está quente, novecentos metros de âmbar depois.' },
+  luzia: { n: 'Irmã Luzia', seat: 11, t: 'Freira que contava piada ruim para quem estivesse triste no ponto. "Sabe por que o ônibus não tem medo? Porque ele tem passe livre."' },
+  rafael: { n: 'Rafael', seat: 27, t: 'Ia pedir a namorada em casamento naquela noite. O anel está na mão dele, fechada com força.' },
+  nilo: { n: 'Velho Nilo', seat: null, t: 'Não é do 31. É o cozinheiro da barca da Viagem Zero, novecentos anos atrás. Ele ainda segura uma concha de sopa. Ninguém veio buscar a viagem dele.' },
+  ozorio: { n: 'Seu Ozório', seat: 9, cond: () => G.flags.soul_ozorio === 'perdido', t: 'O pasteleiro. O caderno de fiado está aberto no colo dele, na página da Bia.' },
+  neide: { n: 'Profª Neide', seat: 15, cond: () => G.flags.soul_neide === 'perdido', t: 'A professora. Ela segura trinta e duas redações sem nota.' },
+  cida: { n: 'Dona Cida', seat: 7, cond: () => G.flags.soul_cida === 'perdida', t: 'A gata de óculos dourados. Os óculos estão no chão do cristal, fora do alcance da pata.' }
+};
+STORY.cristal7 = async function (e) {
+  const c = CRYSTALS[e.who], C = carry(), cap = carryCap();
+  if (G.flags.crossBack) { await say('* O cristal ficou para trás. Você não volta mais aqui.'); return; }
+  await say(`* Um pilar de âmbar. Dentro dele, alguém de olhos fechados.\n* {y}${c.n}{/}${c.seat != null ? `, banco ${c.seat}` : ''}.`);
+  await say('* ' + c.t);
+  const opts = C.length < cap ? ['Levar na tampa', 'Deixar'] : ['Trocar por alguém que você carrega', 'Deixar'];
+  const i = await choose(`* Espaço na tampa: ${C.length}/${cap}.`, opts, 'n', 1);
+  if (i !== 0) return;
+  if (C.length >= cap) {
+    const names = C.map(k => CRYSTALS[k].n);
+    const j = await choose('* Quem você deixa no lugar?', [...names, 'Ninguém'], 'n', names.length);
+    if (j < 0 || j >= names.length) return;
+    const out = C.splice(j, 1)[0]; delete G.flags['carry_' + out];
+    await say(`* Você devolve ${CRYSTALS[out].n} ao âmbar, com cuidado. O cristal volta a ficar inteiro, no mesmo lugar.`);
+  }
+  C.push(e.who); G.flags['carry_' + e.who] = true; refreshEnts(); sfx('item');
+  await say(`* Você abre a tampa e o cristal entra, devagar. Pesa como uma mala de viagem. (${C.length}/${cap})`);
+  if (C.length === 1 && !G.flags.tut_carry) { G.flags.tut_carry = true; sfx('catalog'); await say('[ESPAÇO NA TAMPA: você só consegue levar algumas almas. Quem você levar acorda do outro lado da porta. Quem ficar, fica. Dá para trocar enquanto você não voltar pela fechadura.]', 'cat'); await say('[Cuidado com os LADRÕES DE ÂMBAR: eles roubam o que você carrega.]', 'cat'); }
+};
+
+// ---------- ladrões de âmbar ----------
+AI.ladrao = async function (e) {
+  const C = carry();
+  if (!e.stolen && C.length && Math.random() < 0.55) {
+    await bSay('* O Ladrão de Âmbar enfia a mão na sua tampa!', { auto: 30 });
+    const f = await mash(16, 110);
+    hurt(e, 0.8, f >= 1 ? 0.25 : 1 - 0.6 * f, f >= 1 ? 'good' : 'fail');
+    if (f >= 1) { await bSay('* Você fecha a tampa na mão dele. Ele recua, sacudindo os dedos.', { auto: 45 }); return; }
+    const k = pickOne(C); C.splice(C.indexOf(k), 1); e.stolen = k;
+    await bSay(`* O Ladrão arrancou o cristal de {y}${CRYSTALS[k].n}{/} da sua tampa! Derrote ele para pegar de volta.`, { auto: 55 });
+    return;
+  }
+  if (e.stolen && Math.random() < 0.35 && e.turns > 2) { e.fleeing = true; e.alive = false; e.dying = 20; sfx('flee'); delete G.flags['carry_' + e.stolen]; refreshEnts(); await bSay(`* O Ladrão mergulha no âmbar com o cristal. Ele vai largar o ${CRYSTALS[e.stolen].n} no mesmo pilar de onde tirou. Dá para buscar de novo.`, { auto: 60 }); e.stolen = null; return; }
+  return runMove(e, pickMove(e, e.d.moves));
+};
+{ const _kd = killDead; killDead = async function () {
+  for (const e of BT.en) if (e.stolen && e.hp <= 0 && e.alive) { carry().push(e.stolen); await bSay(`* O cristal de {y}${CRYSTALS[e.stolen].n}{/} rola de volta para a sua tampa.`, { auto: 40 }); e.stolen = null; }
+  return _kd();
+}; }
+{ const _b = battle; battle = async function (group, opts) {
+  const r = await _b(group, opts);
+  for (const e of BT.en || []) if (e.stolen) { delete G.flags['carry_' + e.stolen]; e.stolen = null; refreshEnts(); }
+  return r;
+}; }
+
+// ---------- runas ----------
+Object.assign(RUNES, {
+  ambar: { name: 'Âmbar', type: 'el', col: '#f0c040', pow: 11, desc: 'Lembrança cristalizada. 25% de prender inimigos comuns por 1 turno. Véu: casca que divide os próximos 2 golpes.' },
+  chave: { name: 'Chave', type: 'form', col: '#f2ecdc', mult: 1, cost: 4, desc: 'Um alvo. Arranca casca, sumiço e força do inimigo, e abre fechaduras no mapa.' }
+});
+Object.assign(RUNE_RAR, { ambar: 'rara', chave: 'rara' });
+Object.assign(MAP_D, { antessala: 18, cais: 18, conves: 19, porao: 19, cela: 20 });
+EL_COL.ambar = '#f0c040';
+EP.ambar = ['#7a4a08', '#c8962a', '#f0c040', '#fff4c0'];
+{ const _cs = castSpell; castSpell = async function (sp, target) {
+  await _cs(sp, target);
+  if (!BT.on) return;
+  if (sp.el === 'ambar' && sp.form !== 'veu') { const al = BT.en.filter(e => e.alive && e.hp > 0 && !e.d.boss && !e.skip); if (al.length && Math.random() < 0.25) { const t = pickOne(al); t.skip = '* O % está preso numa casca de âmbar. Perdeu o turno.'; await bSay(`* O ${t.name} fica preso no âmbar!`, { auto: 40 }); } }
+  if (sp.form === 'chave' && target && target.alive) {
+    const had = target.shell > 0 || target.hide > 0 || (target.atkBuff && target.atkBuff.t > 0);
+    target.shell = 0; target.hide = 0; target.atkBuff = null;
+    if (target.stamp) { target.stamp = null; await bSay('* A chave gira dentro do carimbo. CLIC. Carimbo anulado.', { auto: 45 }); }
+    else if (had) await bSay(`* CLIC. A chave abre as proteções do ${target.name}.`, { auto: 40 });
+  }
+}; }
+{ const _cs = castSpell; castSpell = async function (sp, target) {
+  if (sp.form === 'veu' && sp.el === 'ambar') { BT.lastSpell = sp; pbPose('open', 26, { glow: RUNES.ambar.col }); await bSay(`* Você conjura {y}${sp.name}{/}!`, { auto: 22 }); sfx('buff'); await fxAura('ambar'); BT.amberShell = sp.mod === 'eco' ? 4 : 2; await bSay(`* Uma casca de âmbar cobre a sua tampa. Os próximos ${BT.amberShell} golpes saem pela metade.`, { auto: 50 }); return; }
+  return _cs(sp, target);
+}; }
+
+// ---------- itens ----------
+Object.assign(ITEMS, {
+  bala: { name: 'Bala de Âmbar', hp: 220, cure: true, desc: 'Cura 220 PV e os efeitos ruins. Doce, com gosto de lembrança de outra pessoa.' },
+  agua: { name: 'Água do Cais', mp: 60, desc: 'Recupera 60 PM. Fria, de um poço que ninguém lembra de ter cavado.' }
+});
+
+// ---------- sprites ----------
+const S7 = {
+  peixe: f => cv4(16, 16, r => { r(2, 5, 12, 7, 'k'); r(3, 6, 10, 5, '#e0a030'); r(3, 6, 10, 2, '#f0c040'); r(0, 4 + f, 3, 3, 'k'); r(0, 9 - f, 3, 3, 'k'); r(1, 5 + f, 2, 1, '#c8962a'); r(1, 10 - f, 2, 1, '#c8962a'); r(10, 7, 2, 2, '#ffffff'); r(11, 7, 1, 1, 'k'); r(13, 9, 2, 1, 'k'); for (const x of [5, 7, 9]) r(x, 8, 1, 2, '#c8962a'); r(6, 3, 4, 2, 'k'); r(7, 3, 2, 1, '#fff4c0'); }),
+  gaivota: f => cv4(16, 16, r => { r(5, 6, 7, 5, 'k'); r(6, 7, 5, 3, '#e8dcc0'); r(11, 5, 4, 4, 'k'); r(12, 6, 2, 2, '#f2ecdc'); r(13, 6, 1, 1, 'k'); r(15, 7, 1, 1, '#f07830'); r(0, 4 - f * 2, 6, 3, 'k'); r(1, 5 - f * 2, 5, 1, '#c8c0a8'); r(10, 2 + f * 2, 4, 3, 'k'); r(11, 3 + f * 2, 3, 1, '#c8c0a8'); r(7, 11, 1, 2, '#f07830'); r(9, 11, 1, 2, '#f07830'); r(3, 8, 3, 2, '#f0c040'); }),
+  ancoraviva: f => cv4(16, 16, r => { r(6, 0, 4, 4, 'k'); r(7, 1, 2, 2, '#07050c'); r(7, 3, 2, 10, 'k'); r(3, 4, 10, 2, 'k'); r(4, 4, 8, 1, '#8a8099'); r(7, 4, 2, 9, '#6a6078'); r(1, 10, 3, 3, 'k'); r(12, 10, 3, 3, 'k'); r(2, 12, 12, 3, 'k'); r(3, 12, 10, 2, '#6a6078'); r(1, 10, 2, 2, '#8a8099'); r(13, 10, 2, 2, '#8a8099'); r(5, 7, 1, 1, '#f0c040'); r(10, 7, 1, 1, '#f0c040'); r(6, 9 + f, 4, 1, '#120e1a'); r(4, 13, 2, 1, '#e0a030'); }),
+  cristal: f => cv4(16, 16, r => { r(3, 0, 10, 16, 'k'); r(4, 1, 8, 15, '#c8962a'); r(5, 1, 3, 15, '#f0c040'); r(5, 1, 1, 15, '#fff4c0'); r(6, 4, 4, 4, '#7a4a08'); r(7, 5, 2, 2, '#e8b890'); r(6, 8, 4, 6, '#7a4a08'); r(11, 2 + f * 6, 1, 3, '#ffffff'); }),
+  fechadura: f => cv4(16, 16, r => { r(3, 0, 10, 16, 'k'); r(4, 1, 8, 14, '#5a5048'); r(4, 1, 8, 1, '#8a7a68'); r(6, 4, 4, 4, '#07050c'); r(7, 7, 2, 5, '#07050c'); r(7 + f, 5, 1, 1, '#f0c040'); r(5, 13, 6, 1, '#f0c040'); }),
+  manifesto: f => cv4(16, 16, r => { r(2, 2, 12, 13, 'k'); r(3, 3, 10, 11, '#d8c8a0'); for (let y = 5; y < 13; y += 2) r(4, y, 6 + (y % 3), 1, '#7a6a50'); r(10, 10 + f, 3, 3, '#c8962a'); r(11, 11 + f, 1, 1, '#07050c'); }),
+  timoneiroW: f => cv4(16, 16, r => { r(3, 1, 10, 3, 'k'); r(4, 1, 8, 2, '#1c3058'); r(4, 4, 8, 6, 'k'); r(5, 5, 6, 4, '#a8c0c8'); r(6, 6, 1, 1, '#f0c040'); r(9, 6, 1, 1, '#f0c040'); r(4, 10, 8, 6, 'k'); r(5, 11, 6, 5, '#3a4a5a'); r(1, 8 + f, 4, 4, 'k'); r(2, 9 + f, 2, 2, '#7a4a2a'); }),
+  capitaoW: f => cv4(16, 16, r => { r(2, 0, 12, 4, 'k'); r(3, 1, 10, 2, '#2a1a10'); r(6, 0, 4, 1, '#f0c040'); r(4, 4, 8, 6, 'k'); r(5, 5, 6, 4, '#e8e4dc'); r(6, 6, 1, 1, '#07050c'); r(9, 6, 1, 1, '#07050c'); r(6, 8, 4, 1, '#07050c'); r(3, 10, 10, 6, 'k'); r(4, 11, 8, 5, '#5a1a1a'); r(7, 11, 2, 4, '#f0c040'); r(13, 8 - f, 2, 6, '#c0c8d0'); }),
+  lacreW: f => cv4(16, 16, r => { r(1, 2, 14, 13, 'k'); r(2, 3, 12, 11, '#a82828'); r(2, 3, 12, 2, '#c84040'); r(5, 6, 6, 5, '#7a1a1a'); r(7, 7, 2, 3, '#f0c040'); r(6 + f, 8, 1, 1, '#ffffff'); r(0, 6, 2, 3, '#a82828'); r(14, 9, 2, 3, '#a82828'); }),
+  moca: f => cv4(16, 16, r => { r(4, 1, 8, 15, 'k'); r(5, 2, 6, 14, '#c8962a'); r(5, 2, 6, 4, '#f0c040'); r(6, 4, 1, 1, '#ffffff'); r(9, 4, 1, 1, '#ffffff'); r(5, 8, 6, 8, '#e0a030'); r(3 + f, 10, 2, 5, '#c8962a'); })
+};
+function buildSprites7() {
+  for (const k of ['peixe', 'gaivota', 'ancoraviva', 'cristal', 'fechadura', 'manifesto', 'timoneiroW', 'capitaoW', 'lacreW', 'moca']) SP[k] = [S7[k](0), S7[k](1)];
+  const add = (c, fn) => { fn(c.getContext('2d')); return c; };
+  const R = (x, a, b, w, h, col) => { x.fillStyle = PAL[col] || col; x.fillRect(a, b, w, h); };
+  const two = (map, fn) => [0, 1].map(f => add(hum(map), x => fn && fn(x, f)));
+  SP.ladrao = two({ G: '#3a3448', m: '#2a2438', l: '#3a3448', S: '#c8a070', h: '#2a1a10', y: '#f0c040' }, (x, f) => { R(x, 5, 4, 6, 2, '#07050c'); R(x, 12, 9 + f, 4, 5, '#5a4a3a'); R(x, 13, 10 + f, 2, 2, '#f0c040'); });
+  SP.marujo = two({ G: '#3a5a7a', m: '#e8e4dc', l: '#ffffff', S: '#a8c0c8', h: '#3a4a5a', y: '#c8c0a8' }, (x, f) => { for (let i = 0; i < 4; i++) R(x, 5, 8 + i * 2, 6, 1, '#e8e4dc'); R(x, 13, 5 - f, 2, 8, '#a89068'); });
+  SP.lacaio = two({ G: '#a82828', m: '#7a1a1a', l: '#c84040', S: '#e0b8a0', h: '#7a1a1a', y: '#f0c040' }, (x, f) => { R(x, 12, 6 + f * 2, 4, 3, '#5a3420'); R(x, 12, 9 + f * 2, 4, 2, '#c83838'); });
+  SP.afogado = two({ G: '#c8962a', m: '#7a4a08', l: '#e0a030', S: '#f0c040', h: '#7a4a08', y: '#fff4c0' }, (x, f) => { R(x, 5, 5, 2, 1, '#7a4a08'); R(x, 9, 5, 2, 1, '#7a4a08'); R(x, 3 + f, 12, 10, 1, '#f0c040'); });
+  // as formas de 5º grau no mapa
+  makeMimicSet('mimicArca', { o: 'y', n: 's', b: 'n', l: 'w', y: 'c' });
+  makeMimicSet('mimicVazio', { o: 'l', n: 'm', b: 'd', l: 'w', y: 'w' });
+  const deco = (key, fn) => { const all = new Set([...SP[key], ...Object.values(SPD[key]).flat()]); for (const c of all) fn(c.getContext('2d')); };
+  deco('mimicArca', x => { x.fillStyle = PAL.y; x.fillRect(5, 0, 6, 1); x.fillRect(7, 0, 2, 2); x.fillStyle = PAL.c; x.fillRect(4, 12, 1, 1); x.fillRect(11, 12, 1, 1); x.fillRect(7, 13, 2, 1); });
+  deco('mimicVazio', x => { x.clearRect(5, 11, 6, 2); x.fillStyle = PAL.d; x.fillRect(4, 11, 1, 2); x.fillRect(11, 11, 1, 2); });
+}
+// tiles: G = âmbar líquido (mar), Z = pedra da Porta Redonda
+function buildTiles7(T) {
+  TILE.G = tileCanvas((x, R) => { x.fillStyle = '#7a4a08'; x.fillRect(0, 0, 16, 16); x.fillStyle = '#a86a10'; for (let i = 0; i < 5; i++) x.fillRect(Math.floor(R() * 14), Math.floor(R() * 15), 3, 1); x.fillStyle = '#f0c040'; x.fillRect(Math.floor(R() * 14), Math.floor(R() * 15), 2, 1); }, 701);
+  TILE.Z = tileCanvas((x, R) => { x.fillStyle = '#3a342e'; x.fillRect(0, 0, 16, 16); x.fillStyle = '#4e4640'; x.fillRect(1, 1, 14, 14); x.fillStyle = '#2a2420'; x.fillRect(0, 7, 16, 1); x.fillRect(7, 0, 1, 16); if (R() < 0.5) { x.fillStyle = '#c8962a'; x.fillRect(3 + Math.floor(R() * 8), 3 + Math.floor(R() * 8), 2, 2); } }, 702);
+}
+{ const _bs = buildSprites; buildSprites = function () { _bs(); buildSprites7(); buildBoss7(); buildPorts7(); }; }
+{ const _bt = buildTiles; buildTiles = function (theme) { _bt(theme); buildTiles7(theme || {}); }; }
+{ const _st = solidTile; solidTile = function (c) { if ('GZ'.includes(c)) return true; return _st(c); }; }
+{ const _tc = tileCanvasFor; tileCanvasFor = function (c, x, y) { if (c === 'G' && Math.floor(FRAME / 40 + (x * 3 + y) * 0.3) % 3 === 0) return TILE.G; return _tc(c, x, y); }; }
+Object.assign(LOOK, {
+  G: ['* Âmbar líquido, morno, até onde a vista alcança. De perto, dá para ver rostos lá dentro, bem fundo, devagar.', '* O âmbar se mexe como mel. Ele cheira a fim de tarde.', '* Você vê um guarda-chuva boiando no âmbar. Depois, um sapato. Depois, nada.'],
+  Z: ['* A pedra da Porta Redonda. Fria. Tem trinta e uma fechaduras entalhadas, cada uma com um número.', '* No centro da porta, um entalhe gasto: uma lanterna com um olho dentro.']
+});
+Object.assign(LOOK_K, { antessala: ['* Caixotes da resistência: velas de rato, cogumelos secos, potes de tinta. Tudo etiquetado pelo Musgo: "NOSSO".', '* Mantimentos que a Rita "achou". Ninguém pergunta onde.'], cais: ['* Caixotes de carga da barca, inchados de âmbar. A etiqueta é numa língua que você não conhece, mas o desenho é claro: frágil.'], conves: ['* Barris de água doce de novecentos anos. Vazios.', '* Cordas enroladas, duras como pedra.'], porao: ['* Caixotes empilhados até o teto. Um deles tem o mesmo desenho do brasão de Auren.', '* Correntes, muitas. Para quem?'] });
+Object.assign(K_REGION, { antessala: 'antessala', cais: 'cais', conves: 'conves', porao: 'porao', cela: 'porao' });
+
+// ---------- chefes grandes ----------
+const BIGSP7 = {
+  // O Timoneiro: marinheiro de âmbar, preso ao próprio leme
+  timoneiro: () => big(48, 48, g => {
+    const { r, E, EO, L, f, s } = g, coat = '#1c3058', coatH = '#3a5a8a', skin = '#a8c0c8', amb = '#f0c040', ambD = '#c8962a';
+    // leme gigante atrás (gira)
+    EO(24, 30, 18, 18, '#5a3420'); E(24, 30, 15, 15, '#07050c'); E(24, 30, 4, 4, '#7a4a2a'); E(24, 30, 2, 2, amb);
+    for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + f * Math.PI / 16; L(24 + Math.cos(a) * 4, 30 + Math.sin(a) * 4, 24 + Math.cos(a) * 21, 30 + Math.sin(a) * 21, '#7a4a2a', 2); E(24 + Math.cos(a) * 21, 30 + Math.sin(a) * 21, 2, 2, '#5a3420'); }
+    // corpo de casaco de marinheiro
+    r(15, 18, 18, 26, 'k'); r(16, 19, 16, 25, coat); r(16, 19, 3, 25, coatH); for (const y of [24, 30, 36]) { r(20, y, 2, 2, amb); r(26, y, 2, 2, amb); }
+    // cristais de âmbar crescendo no ombro e no braço
+    for (const [x, y, h] of [[14, 18, 6], [12, 22, 4], [33, 20, 5]]) { r(x, y - h, 3, h, 'k'); r(x + 1, y - h + 1, 1, h - 1, amb); }
+    // cabeça e chapéu
+    EO(24, 13, 6, 7, skin); r(20, 11, 3, 2, '#1c3058'); r(26, 11, 3, 2, '#1c3058'); r(21, 11, 1, 1, '#ffffff'); r(27, 11, 1, 1, '#ffffff');
+    r(19, 16, 10, 2, '#e8e4dc'); r(18, 15, 2, 2, '#e8e4dc'); r(28, 15, 2, 2, '#e8e4dc'); r(23, 18 + (f % 2), 2, 1, '#5a7a8a');
+    r(15, 2, 18, 6, 'k'); r(16, 3, 16, 4, '#1c3058'); r(13, 7, 22, 2, 'k'); r(22, 3, 4, 3, amb);
+    // mãos no leme
+    r(10, 26 + (f % 2), 5, 4, 'k'); r(11, 27 + (f % 2), 3, 2, skin); r(33, 26 - (f % 2), 5, 4, 'k'); r(34, 27 - (f % 2), 3, 2, skin);
+    // âmbar escorrendo
+    r(18, 44, 2, 3 + f, ambD); r(28, 44, 2, 2 + (3 - f), ambD);
+  }),
+  // O Capitão: esqueleto de casaca vermelha, chapéu de três pontas, luneta e uma corrente com cadeados
+  capitao: () => big(48, 48, g => {
+    const { r, E, EO, L, f, s } = g, red = '#8a1a1a', redH = '#c83838', bone = '#e8e4dc', boneD = '#b8b4ac', gold = '#f0c040';
+    r(14, 20, 20, 26, 'k'); r(15, 21, 18, 25, red); r(15, 21, 3, 25, redH); r(22, 21, 4, 25, '#3a1010'); for (const y of [24, 29, 34, 39]) { r(20, y, 2, 2, gold); r(26, y, 2, 2, gold); }
+    r(14, 20, 6, 3, gold); r(28, 20, 6, 3, gold); for (let i = 0; i < 6; i++) r(14 + i, 23, 1, 2 + (i % 2), gold);
+    // corrente de cadeados em diagonal
+    for (let i = 0; i < 6; i++) { const x = 15 + i * 3, y = 22 + i * 4; E(x, y, 2, 1, '#8a8099'); if (i % 2) { r(x - 1, y + 1, 3, 3, 'k'); r(x, y + 2, 1, 1, gold); } }
+    // caveira
+    EO(24, 12, 7, 8, bone); E(24, 15, 6, 4, boneD); r(19, 9, 4, 4, '#07050c'); r(26, 9, 4, 4, '#07050c'); r(20, 10, 1, 1, f % 2 ? '#ff5050' : '#a82828'); r(27, 10, 1, 1, f % 2 ? '#ff5050' : '#a82828');
+    r(23, 14, 2, 2, '#07050c'); for (let i = 0; i < 5; i++) r(20 + i * 2, 17, 1, 2, '#07050c');
+    // chapéu de três pontas
+    r(12, 0, 24, 7, 'k'); r(13, 1, 22, 5, '#2a1a10'); r(13, 5, 22, 1, gold); r(21, 1, 6, 4, gold); r(23, 2, 2, 2, '#07050c'); r(9, 4, 4, 3, 'k'); r(35, 4, 4, 3, 'k');
+    // braço com a luneta
+    L(33, 24, 42, 16 - f, 'k', 4); L(33, 24, 42, 16 - f, red, 2); r(40, 10 - f, 7, 4, 'k'); r(41, 11 - f, 5, 2, '#c8962a'); r(46, 11 - f, 1, 2, '#bfe8f0');
+    // braço com o sabre
+    L(15, 24, 6, 32 + (f % 2), 'k', 4); L(15, 24, 6, 32 + (f % 2), red, 2); L(6, 32 + (f % 2), 2, 44, '#c0c8d0', 2); r(5, 31 + (f % 2), 4, 2, gold);
+  }),
+  // O Lacre Real: um selo de cera vivo, com o brasão da lanterna com um olho, carimbos nas mãos e uma fita de papel
+  lacre: () => big(48, 48, g => {
+    const { r, E, EO, L, f, s } = g, wax = '#a82828', waxH = '#d04848', waxD = '#6a1414', gold = '#f0c040';
+    // fita de papel atrás
+    for (let i = 0; i < 10; i++) r(2 + i * 4, 38 + Math.round(Math.sin(i + f) * 2), 4, 6, i % 2 ? '#e8dcc0' : '#d8c8a0');
+    // corpo de cera, com bordas escorridas
+    EO(24, 24, 18, 17, wax); E(24, 28, 16, 12, waxD); E(24, 22, 16, 14, wax); E(19, 15, 6, 3, waxH);
+    for (const [x, h] of [[9, 6], [15, 9], [33, 7], [39, 5]]) { r(x, 36, 4, h + (f % 2), 'k'); r(x + 1, 36, 2, h + (f % 2), wax); }
+    // brasão: lanterna com um olho (o carimbo da Coroa)
+    EO(24, 24, 9, 9, waxD); r(20, 18, 8, 2, gold); r(21, 20, 6, 9, 'k'); r(22, 21, 4, 7, '#fff4c0'); E(24, 24, 2, 2, '#07050c'); r(24, 23, 1, 1, f === 3 ? '#07050c' : '#ffffff'); r(21, 29, 6, 2, gold); r(23, 16, 2, 2, gold);
+    // olhos de burocrata
+    r(14, 14, 4, 3, '#ffffff'); r(30, 14, 4, 3, '#ffffff'); r(15, 15, 2, 2, '#07050c'); r(31, 15, 2, 2, '#07050c'); r(13, 12, 6, 1, waxD); r(29, 12, 6, 1, waxD);
+    // mãos com carimbos (um sobe, o outro desce)
+    const up = [0, 3, 6, 3][f];
+    r(0, 12 + up, 9, 7, 'k'); r(1, 13 + up, 7, 3, '#5a3420'); r(1, 16 + up, 7, 2, '#c83838'); L(8, 18 + up, 10, 24, waxD, 3);
+    r(39, 18 - up, 9, 7, 'k'); r(40, 19 - up, 7, 3, '#5a3420'); r(40, 22 - up, 7, 2, '#3a70c0'); L(39, 24 - up, 38, 26, waxD, 3);
+    // "INDEFERIDO" na fita
+    r(18, 40, 12, 1, '#c83838');
+  })
+};
+function buildBoss7() { SP.timoneiroB = BIGSP7.timoneiro(); SP.capitaoB = BIGSP7.capitao(); SP.lacreB = BIGSP7.lacre(); }
+function buildPorts7() {
+  PORT.moca = pcv((r, fr) => { r(6, 4, 20, 28, 'k'); r(7, 5, 18, 27, '#c8962a'); r(7, 5, 18, 6, '#f0c040'); r(9, 12, 14, 12, '#e0a030'); if (fr === 2) { r(11, 16, 4, 1, '#7a4a08'); r(17, 16, 4, 1, '#7a4a08'); } else { r(11, 15, 4, 3, '#fff4c0'); r(17, 15, 4, 3, '#fff4c0'); r(12, 16, 2, 2, '#7a4a08'); r(18, 16, 2, 2, '#7a4a08'); } r(14, 20, 4, fr === 1 ? 2 : 1, '#7a4a08'); r(4, 26, 24, 6, '#c8962a'); for (const y of [8, 22, 28]) r(25, y, 2, 2, '#fff4c0'); });
+  PORT.timoneiro = bust({ skin: '#a8c0c8', hair: '#1c3058', style: 'short', cloth: '#1c3058', collar: '#f0c040', eyes: '#1c3058', stache: '#e8e4dc' });
+  PORT.capitao = pcv((r, fr) => { r(8, 6, 16, 18, 'k'); r(9, 7, 14, 16, '#e8e4dc'); r(11, 11, 4, 4, '#07050c'); r(17, 11, 4, 4, '#07050c'); r(12, 12, 1, 1, '#ff5050'); r(18, 12, 1, 1, '#ff5050'); r(15, 16, 2, 2, '#07050c'); for (let i = 0; i < 5; i++) r(11 + i * 2, 19, 1, fr === 1 ? 3 : 2, '#07050c'); r(4, 0, 24, 7, 'k'); r(5, 1, 22, 5, '#2a1a10'); r(13, 1, 6, 4, '#f0c040'); r(4, 25, 24, 7, 'k'); r(5, 26, 22, 6, '#8a1a1a'); r(14, 26, 4, 6, '#f0c040'); });
+  PORT.lacre = pcv((r, fr) => { r(3, 3, 26, 26, 'k'); r(4, 4, 24, 24, '#a82828'); r(4, 4, 24, 4, '#d04848'); r(11, 9, 10, 14, '#6a1414'); r(13, 11, 6, 9, '#fff4c0'); r(15, 14, 2, 2, '#07050c'); r(12, 9, 8, 2, '#f0c040'); r(7, 7, 4, 2, fr === 2 ? '#a82828' : '#ffffff'); r(21, 7, 4, 2, fr === 2 ? '#a82828' : '#ffffff'); r(12, 24, 8, fr === 1 ? 3 : 1, '#3a0a0a'); });
+}
+for (const k of ['moca', 'timoneiro', 'capitao', 'lacre']) WHO[k] = { name: () => ({ moca: 'Moça da Barca', timoneiro: 'Timoneiro', capitao: 'Capitão', lacre: 'Lacre Real' })[k], portrait: t => portFrame(k, t), voice: ({ moca: () => sfx('blipTri', 700), timoneiro: () => sfx('blipLow', 110), capitao: () => sfx('blipLow', 80), lacre: () => sfx('blip', 300) })[k], col: ({ moca: '#ffe9a0', lacre: '#ffb0b0' })[k] };
+WHO.lacre.fx = 'shake';
+
+// ---------- música ----------
+Object.assign(TRACKS, {
+  antessala: { bpm: 92, bars: 4, chords: 'Em C G D', bass: 'root5', bassVol: 0.1, lead: 'B4:4 E5:4 G5:6 F#5:2 | E5:4 C5:4 E5:8 | D5:4 G5:4 B5:6 A5:2 | F#5:8 D5:8', leadWave: 'triangle', leadVol: 0.07, arp: { rate: 2, vol: 0.015, pat: [0, 1, 2, 1] }, drums: 'k.......k...h...', hatVol: 0.015 },
+  ambar: { bpm: 72, bars: 4, chords: 'Dm7 Bbmaj7 Gm7 A7', bass: 'whole', bassVol: 0.08, lead: 'A5:6 F5:2 D5:8 | D6:6 Bb5:2 F5:8 | G5:4 Bb5:4 D6:6 C6:2 | C#6:8 E5:8', leadWave: 'triangle', leadVol: 0.06, pad: true, padVol: 0.03, arp: { rate: 2, vol: 0.012, pat: [0, 2, 1, 3] } },
+  barca: { bpm: 108, bars: 4, chords: 'Am Am Dm E', bass: 'root5', bassVol: 0.12, lead: 'E5:2 A5:2 A5:2 B5:2 C6:4 B5:4 | A5:2 E5:2 E5:2 C5:2 A4:8 | D5:2 F5:2 A5:2 F5:2 D5:4 F5:4 | E5:4 G#5:4 B5:8', leadWave: 0.25, leadVol: 0.06, drums: 'k..hk.h.k..hk.hh', hatVol: 0.02 },
+  cela: { bpm: 56, bars: 4, chords: 'Cm Ab Fm G', bass: 'whole', bassVol: 0.07, lead: 'G5:8 Eb5:8 | C5:8 Eb5:4 D5:4 | F5:8 Ab5:4 G5:4 | G5:12 .:4', leadWave: 'triangle', leadVol: 0.05, pad: true, padVol: 0.03 },
+  boss7: { bpm: 164, bars: 8, chords: 'Em C D B Em C Am B', bass: 'oct8', bassVol: 0.17,
+    lead: 'E5:2 G5:2 B5:2 E6:2 D6:4 B5:4 | C6:2 B5:2 G5:2 E5:2 G5:4 C6:4 | D6:4 A5:2 F#5:2 D5:4 F#5:4 | D#5:2 F#5:2 B5:4 A5:2 F#5:2 D#5:4 | E5:2 B5:2 E5:2 B5:2 G5:4 E5:4 | C6:4 G5:4 E5:4 C5:4 | A5:2 C6:2 E6:2 A6:2 G6:4 F#6:4 | F#6:4 D#6:4 B5:4 F#5:4',
+    leadVol: 0.07, arp: { rate: 1, vol: 0.015, pat: [0, 1, 2, 1] }, drums: 'k.hsk.hsk.hsk.ss', hatVol: 0.04 }
+});
+
+// ---------- inimigos ----------
+Object.assign(ENEMIES, {
+  peixe: { name: 'Peixe-Âmbar', sp: 'peixe', hp: 380, atk: 94, def: 20, evade: 0.2, xp: 200, weak: { brasa: 1.3, faisca: 1.3 }, drops: [['agua', .2]],
+    flavor: ['* O Peixe-Âmbar pula do mar e cai de novo, devagar, como mel.', '* Ele tem um anel preso na barbatana.'],
+    check: 'Pula e cai em cima. BRASA derrete, FAÍSCA atravessa o âmbar.',
+    moves: [{ k: 'dodge', p: 0.5, hits: 3, spd: 1.35, w: 3, t: '* Ele salta três vezes do âmbar!' }, { k: 'ring', p: 1.1, w: 2, t: '* O Peixe-Âmbar te acerta com a cauda!' }] },
+  gaivota: { name: 'Gaivota de Cera', sp: 'gaivota', hp: 340, atk: 96, def: 16, evade: 0.15, xp: 190, weak: { brasa: 1.6 }, drops: [['bala', .15]],
+    flavor: ['* A Gaivota de Cera grita igual a gaivota de verdade. Pior.', '* Uma pena de cera cai e derrete no chão.'],
+    check: 'Mergulhos rápidos. Feita de cera: BRASA derrete MUITO.',
+    moves: [{ k: 'dodge', p: 0.6, hits: 2, spd: 1.45, w: 3, t: '* Mergulho! Ela vem de cima!' }, { k: 'ring', p: 0.9, st: 'blind', blindBy: 'tinta', w: 1, t: '* Ela joga cera quente nos seus olhos!' }] },
+  ladrao: { name: 'Ladrão de Âmbar', sp: 'ladrao', hp: 440, atk: 92, def: 22, xp: 220, ai: 'ladrao', weak: { faisca: 1.3, sombra: 1.2 }, drops: [['bala', .3]],
+    flavor: ['* O Ladrão de Âmbar tem um saco cheio de coisas brilhantes. Algumas piscam.', '* Ele olha direto para a sua tampa. Ele sabe o que tem aí dentro.'],
+    check: 'ROUBA cristais que você carrega (agarrão). Derrote ele para recuperar. Se ele fugir, o cristal volta ao pilar.',
+    moves: [{ k: 'ring', p: 1, w: 2, t: '* O Ladrão te acerta com o saco cheio!' }, { k: 'dodge', p: 0.5, hits: 3, spd: 1.3, w: 2, t: '* Pedrinhas de âmbar voando!' }] },
+  marujo: { name: 'Marujo da Barca', sp: 'marujo', hp: 500, atk: 96, def: 24, xp: 230, weak: { faisca: 1.3, vento: 1.2 }, drops: [['agua', .25]],
+    calm: { els: ['canto', 'ambar'], need: 3, msg: 'lembrou do porto de onde a barca saiu', bye: 'tirou o chapéu e foi dormir no porão' },
+    flavor: ['* O Marujo da Barca fala uma língua antiga. Você entende assim mesmo: "Terra à vista?"', '* Ele está esperando terra à vista há novecentos anos.'],
+    check: 'Marinheiro da Viagem Zero. Nós de corda e golpes de remo. ACALMAR: CANTO ou ÂMBAR (3).',
+    moves: [{ k: 'seq', n: 5, p: 0.5, spd: 1.15, w: 2, t: '* Nós de marinheiro! Repita o nó!' }, { k: 'ring', p: 1.2, w: 2, t: '* Uma remada nas costas da sua tampa!' }, { k: 'mash', p: 1, need: 15, bind: true, w: 1, t: '* Ele te amarra com uma corda grossa!' }] },
+  ancoraviva: { name: 'Âncora-Viva', sp: 'ancoraviva', hp: 600, atk: 100, def: 40, xp: 240, weak: { faisca: 1.5, polvora: 1.3, bite: 0.7 }, drops: [['bala', .2]],
+    biteMsg: 'Você mordeu ferro de navio. Pouco efeito.',
+    flavor: ['* A Âncora-Viva arrasta a corrente pelo chão. O barulho é de fim de viagem.'],
+    check: 'Pesada e lenta. Prende e afunda. FAÍSCA no ferro, PÓLVORA quebra.',
+    moves: [{ k: 'mash', p: 1.1, need: 16, bind: true, w: 2, t: '* A corrente te enrola e puxa para o fundo!' }, { k: 'ring', p: 1.45, fast: false, w: 2, t: '* A âncora cai em cima de você!' }, { k: 'buff', stat: 'shell', ally: true, turns: 2, w: 1, t: '* A âncora se finca na frente do aliado.' }] },
+  lacaio: { name: 'Lacaio do Lacre', sp: 'lacaio', hp: 460, atk: 96, def: 22, xp: 230, weak: { brasa: 1.4, vento: 1.2 }, drops: [['agua', .25]],
+    flavor: ['* O Lacaio do Lacre carimba o ar. "INDEFERIDO."', '* Ele é feito de cera vermelha. E de pressa.'],
+    check: 'Carimba você: esquecimento e silêncio. BRASA derrete a cera.',
+    moves: [{ k: 'spell', p: 0.9, el: 'ambar', name: 'Carimbo: ARQUIVADO', st: 'forget', w: 2, t: '* {y}Carimbo: ARQUIVADO{/}! Uma lembrança sua vai para a gaveta.' }, { k: 'ring', p: 0.85, st: 'silence', w: 1, t: '* "SILÊNCIO, POR GENTILEZA."' }, { k: 'seq', n: 5, p: 0.5, hide: true, w: 2, t: '* Ele carimba cinco vezes e esconde os papéis. Lembre a ordem!' }] },
+  afogado: { name: 'Afogado de Âmbar', sp: 'afogado', hp: 700, atk: 104, def: 32, xp: 320, elite: true, weak: { canto: 1.3, brasa: 1.2 }, drops: [['bala', .35]],
+    calm: { els: ['canto'], need: 4, msg: 'sentiu o âmbar soltar o peito dele', bye: 'afundou devagar, em paz, sorrindo' },
+    flavor: ['* O Afogado de Âmbar já foi passageiro de alguma viagem. Agora é quase só âmbar.', '* Ele respira devagar. Cada respiração brilha.'],
+    check: 'Passageiro quase todo virado âmbar. Golpes que atravessam a defesa. ACALMAR: só CANTO (4).',
+    big: { k: 'seq', n: 7, p: 0.45, pierce: true, hide: true, spd: 1.1 },
+    moves: [{ k: 'seq', n: 6, p: 0.45, pierce: true, spd: 1.15, w: 2, t: '* Ele se debate como quem ainda está afundando!' }, { k: 'ring', p: 1.4, pierce: true, fast: true, w: 2, t: '* Um abraço de âmbar que aperta tudo!' }, { k: 'spell', p: 1, el: 'ambar', name: 'Maré Dourada', st: 'forget', w: 1, t: '* {y}Maré Dourada{/}! O âmbar sobe até a sua tampa.' }] },
+  timoneiro: { name: 'O Timoneiro', sp: 'timoneiroB', hp: 3700, atk: 97, def: 28, xp: 1900, boss: true, ai: 'timoneiro', weak: { faisca: 1.35, canto: 1.25 },
+    flavor: ['* O Timoneiro vira o leme para um porto que não existe.', '* "Mantenham o rumo! Terra à vista em três dias!"'], flavor2: ['* O âmbar já subiu até o peito dele.', '* Ele não solta o leme nem para lutar.'],
+    check: 'Ele ANUNCIA o lado: BOMBORDO = desvie para a ESQUERDA, ESTIBORDO = para a DIREITA. ÂNCORA AO MAR é golpe preparado: Âncora ou Sino cancelam.' },
+  capitao: { name: 'O Capitão', sp: 'capitaoB', hp: 4400, atk: 106, def: 30, xp: 2400, boss: true, ai: 'capitao', weak: { canto: 1.2, ambar: 1.2 },
+    flavor: ['* O Capitão bate o sabre no chão do camarote. "Quem autorizou o embarque?"', '* Ele fecha a luneta. "Ninguém sai da minha barca sem ordem."'], flavor2: ['* A casaca dele tem cadeados costurados por dentro.', '* "Eu só obedeci. Eu só obedeci."'],
+    check: 'Chefe secreto. Chama a tripulação, atira com o canhão, manda andar na prancha. CANTO e ÂMBAR.' },
+  lacre: { name: 'O Lacre Real', sp: 'lacreB', hp: 5300, atk: 104, def: 30, xp: 3200, boss: true, ai: 'lacre', weak: { brasa: 1.25 },
+    flavor: ['* O Lacre Real alisa a própria fita. "Senha, número de protocolo e motivo da visita."', '* Ele cheira a cera quente e a papel velho.'], flavor2: ['* A cera dele está rachando nas bordas.', '* "Isso é IRREGULAR. Totalmente IRREGULAR."'],
+    check: 'Anuncia um CARIMBO antes de usar: INDEFERIDO (não repita a mesma ação), ARQUIVADO (esquecimento forte), DEVOLVIDO (não use feitiço, ele volta). CHAVE ou ÂMBAR quebram o carimbo. BRASA derrete.' }
+});
+EN_TINY.add('peixe'); EN_TINY.add('gaivota');
+const STAMPS = {
+  indeferido: '* O Lacre ergue o carimbo vermelho: "INDEFERIDO." (Se você repetir a mesma ação da rodada passada, ela falha.)',
+  arquivado: '* O Lacre ergue o carimbo azul: "ARQUIVADO." (No próximo turno dele, você esquece um feitiço ou técnica por mais tempo. CHAVE ou ÂMBAR quebram.)',
+  devolvido: '* O Lacre ergue um carimbo dourado: "DEVOLVIDO." (O próximo feitiço que você lançar volta contra você.)'
+};
+Object.assign(AI, {
+  async timoneiro(e) {
+    if (!e.p2 && e.hp <= e.mhp * 0.5) { e.p2 = true; e.phase = 2; shake(20); sfx('rumble'); await bSay('Novecentos anos! Novecentos anos virando para o lado errado!', { col: '#bfe8f0' }); await bSay('* O Timoneiro gira o leme com toda a força. O convés inteiro inclina.', { auto: 50 }); e.atk += 6; return; }
+    if (e.side) { const side = e.side; e.side = null; return runMove(e, { k: 'dodge', p: 0.55, hits: e.p2 ? 4 : 3, spd: 1.35, dir: side, t: `* O convés tomba para ${side === 'left' ? 'BOMBORDO' : 'ESTIBORDO'}! Tudo desliza!` }); }
+    if (e.charge) { e.charge = false; return runMove(e, { k: 'ring', p: 2.2, pierce: true, fast: true, t: '* ÂNCORA AO MAR! A âncora inteira despenca na sua tampa!', fx: 'shake' }); }
+    if (e.turns % 4 === 0) { e.charge = true; await bSay('* O Timoneiro solta a trava da âncora. (Prepare-se. Âncora ou Sino de Bolso cancelam.)', { auto: 55 }); return; }
+    if (e.turns % 2 === 1) { e.side = Math.random() < 0.5 ? 'left' : 'right'; await bSay(`* "${e.side === 'left' ? 'BOMBORDO' : 'ESTIBORDO'}!" O Timoneiro avisa para onde vai virar. (Desvie para a ${e.side === 'left' ? 'ESQUERDA' : 'DIREITA'}.)`, { auto: 55 }); return; }
+    return runMove(e, pickMove(e, [{ k: 'seq', n: e.p2 ? 7 : 6, p: 0.45, spd: 1.15, w: 2, t: '* Ele bate as ordens no casco: seis toques!' }, { k: 'mash', p: 1.05, need: 16, bind: true, w: 1, t: '* Uma corda de âmbar te prende no mastro!' }, { k: 'spell', p: 1.05, el: 'ambar', name: 'Onda de Proa', w: 2, t: '* {y}Onda de Proa{/}! O mar de âmbar sobe pelo convés!' }]));
+  },
+  async capitao(e) {
+    if (!e.p2 && e.hp <= e.mhp * 0.5) { e.p2 = true; e.phase = 2; shake(20); sfx('rumble'); await bSay('A ordem veio de cima. Com o selo da lanterna. Eu SÓ OBEDECI.', { col: '#ffe0e0' }); e.atk += 8; return; }
+    const crew = BT.en.filter(x => x !== e && x.alive && x.hp > 0);
+    if (!crew.length && e.turns % 4 === 1) { BT.en.push(Object.assign(mkEnemy('marujo', 1, 3), { x: 206, y: 110 })); await bSay('* "TRIPULAÇÃO!" Um Marujo da Barca sobe pela escotilha.', { auto: 50 }); return; }
+    if (e.charge) { e.charge = false; return runMove(e, { k: 'mash', p: 1.6, need: 20, bind: true, t: '* PRANCHA! Ele te empurra para a beira do mar de âmbar!', fx: 'shake' }); }
+    if (e.turns % 3 === 0) { e.charge = true; await bSay('* "Ande na prancha." O Capitão aponta o sabre para a beira. (Prepare-se para se soltar!)', { auto: 55 }); return; }
+    return runMove(e, pickMove(e, [{ k: 'dodge', p: 0.55, hits: 4, spd: 1.4, w: 2, t: '* CANHÃO! Quatro balas de âmbar!' }, { k: 'ring', p: 1.35, pierce: true, w: 2, t: '* Um golpe de sabre que corta o ar!' }, { k: 'seq', n: 7, p: 0.45, hide: true, w: 1, t: '* Ele lê o diário de bordo em voz alta e fecha. Decore as datas!' }]));
+  },
+  async lacre(e) {
+    if (!e.p2 && e.hp <= e.mhp * 0.5) { e.p2 = true; e.phase = 2; shake(24); sfx('rumble'); await bSay('Este selo foi aplicado por ordem SUPERIOR. Você não tem AUTORIZAÇÃO.', { col: '#ffb0b0' }); await bSay('* A cera do Lacre ferve. Ele passa a carimbar duas vezes por turno.', { auto: 50 }); e.atk += 6; return; }
+    // aplica o carimbo anunciado
+    if (e.stamp) {
+      const st = e.stamp; e.stamp = null;
+      if (st === 'indeferido') { const same = BT.lastAct && BT.lastAct === BT.prevAct; if (same) { await bSay('* INDEFERIDO! Você repetiu a ação. O carimbo bate em cheio.', { auto: 45 }); return runMove(e, { k: 'ring', p: 1.9, pierce: true, fast: true, t: '* O carimbo vermelho desce com tudo!' }); } await bSay('* "...Deferido." Você mudou de ação. O carimbo bate na mesa vazia.', { auto: 45 }); return; }
+      if (st === 'arquivado') return runMove(e, { k: 'spell', p: 1.1, el: 'ambar', name: 'ARQUIVADO', st: 'forget', t: '* ARQUIVADO! O carimbo azul tenta guardar uma lembrança sua numa gaveta.' });
+      if (st === 'devolvido') { BT.devolvido = 0; await bSay('* O carimbo dourado volta para a gaveta.', { auto: 35 }); }
+    }
+    const pick = pickOne(e.p2 ? ['indeferido', 'arquivado', 'devolvido', 'indeferido'] : ['indeferido', 'arquivado', 'devolvido']);
+    e.stamp = pick; if (pick === 'devolvido') BT.devolvido = 1; await bSay(STAMPS[pick], { auto: 65 });
+    if (e.p2 || e.turns % 2 === 0) return runMove(e, pickMove(e, [{ k: 'dodge', p: 0.5, hits: 4, spd: 1.35, w: 2, t: '* Fitas de papel cortam o ar!' }, { k: 'mash', p: 1.05, need: 16, bind: true, w: 1, t: '* A fita te embrulha como uma encomenda!' }, { k: 'ring', p: 1.25, w: 2, t: '* Um golpe de carimbo! TUM!' }]));
+  }
+});
+// INDEFERIDO precisa saber a ação anterior; DEVOLVIDO volta o feitiço; CHAVE/ÂMBAR quebram o carimbo
+{ const _ma = markAct; markAct = function (a) { BT.prevAct = BT.lastAct; return _ma(a); }; }
+{ const _cs = castSpell; castSpell = async function (sp, target) {
+  if (BT.devolvido > 0 && sp.el !== 'ambar' && sp.form !== 'chave') { BT.devolvido = 0; const lac = BT.en.find(e => e.alive && e.id === 'lacre'); if (lac) { await bSay(`* DEVOLVIDO! O {y}${sp.name}{/} bate no carimbo dourado e volta para você!`, { auto: 50 }); const d = Math.max(1, Math.round(spellPower(sp) * 0.6 * 60 / (60 + G.st.mag * 1.1))); G.hp = Math.max(1, G.hp - d); BT.nums.push({ x: BPX, y: BPY - 42, s: '-' + d, col: '#ff6b6b', t: 50 }); pbPose('hurt', 14); sfx('hurt'); return; } }
+  await _cs(sp, target);
+  if (BT.on && (sp.el === 'ambar' || sp.form === 'chave')) for (const e of BT.en) if (e.alive && e.stamp) { e.stamp = null; BT.devolvido = 0; await bSay('* O carimbo trinca e cai no chão. Anulado.', { auto: 40 }); }
+}; }
+
+// ---------- história ----------
+MAPS.pontofinal.ents.push({ id: 'escada7', kind: 'npc2', x: 11, y: 13, sp: 'fechadura', talk: 'escada7', cond: 'ch6done', glow: 'rgba(255,224,102,0.22)' });
+Object.assign(SEAL_TXT, { cabin: '* Uma porta de camarote com uma fechadura enorme, de ferro. Nenhuma chave comum entra. Talvez uma chave feita de feitiço.' });
+Object.assign(SEAL_OK, { cabin: '* A chave mágica gira sozinha. CLIC, CLIC, CLIC. A porta do camarote do capitão se abre.' });
+STORY.doorMsg = (d => async e => e.msg === 'escotilha7' ? say('* Uma escotilha trancada por dentro, com o leme. Enquanto o Timoneiro estiver no leme, ela não abre.') : d(e))(STORY.doorMsg);
+const crystalNames = ids => ids.map(k => CRYSTALS[k].n);
+Object.assign(STORY, {
+  async escada7() {
+    if (G.flags.ch7open) { await say('* A escada desce até a Porta Redonda. A resistência está lá embaixo.'); return; }
+    await say('* A escada desce até a Porta Redonda. Lá embaixo, luzes de vela e vozes conhecidas.');
+    const c = await choose('* Descer até a porta? (Começa o Capítulo 7.)', ['Descer', 'Ainda não'], 'n', 1);
+    if (c !== 0) return;
+    await STORY.ch7start();
+  },
+  async ch7start() {
+    const f = G.flags;
+    f.ch7open = true;
+    if (f.soul_neide === 'lembrou') f.c7_neide = true; else f.c7_neideLost = true;
+    if (soulOk('cida')) f.c7_cida = true; else f.c7_cidaLost = true;
+    if (f.soul_ozorio !== 'lembrou') f.c7_ozorioLost = true;
+    playMusic(null); await fadeOut(12); loadMap('antessala', 12, 13, 'up'); V.scene = 'world'; await fadeIn(16);
+    playMusic('antessala');
+    await say('* Uma caverna redonda, do tamanho de uma praça. No fundo, uma porta de pedra também redonda, alta como três andares.');
+    await say('* Trinta e uma fechaduras desenhadas na pedra, em espiral. Cada uma com um número.');
+    const n = soulsCount();
+    await say(`* ${n} das fechaduras brilham, devagar, como brasa de vela. As outras estão escuras.`);
+    await say('Cada uma que brilha é alguém que lembrou o próprio nome. As escuras...', 'lume');
+    await say('...são as que a gente perdeu no caminho.', 'me');
+    await say('* Do lado da porta, estacionado, o 31. Motor ligado. Faróis acesos. O Seu Jorge no volante, de olhos abertos, sem piscar.');
+    await say('* Ao redor, uma barricada de caixotes, velas de rato e barracas remendadas. A resistência do Musgo acampou aqui.');
+    await say('* Um Morcego de Papel pousa na sua tampa. A letra é inclinada.');
+    await say(f.ofeliaRemembers ? '* "O Anselmo, o cocheiro, contava uma história para passar o tempo na estrada. Uma moça numa barca, muito antes de nós, que acendia uma lanterna no meio do mar. Eu achava que era só história. Tome cuidado. — Clara"' : '* "O cocheiro da minha viagem contava uma história de uma moça numa barca, muito antes de nós. Eu achava que era só história. Tome cuidado. — O."');
+    sfx('catalog'); await say('[Capítulo 7: {y}O Selado{/}.]', 'cat');
+    await grantTechs(false); saveGame();
+  },
+  async onibus7() {
+    const f = G.flags;
+    if (f.ch7done) { await say('Todo mundo sentado? Segura firme. A próxima é longa.', 'jorge'); return; }
+    await say('* O 31, parado. Pelo vidro, o Seu Jorge, com as duas mãos no volante e o olhar fixo na porta de pedra.' + (f.tiagoTaken ? ' No primeiro banco, o Tiago, do mesmo jeito.' : ''));
+    await say('* Você bate na porta do ônibus com a tampa. Nada. Nem um piscar.');
+    await say('Ela congelou eles aqui. Como um enfeite na frente da porta. Para a gente ver.', 'lume');
+  },
+  async musgo7() {
+    if (G.flags.ch7done) { await say('O ÔNIBUS VAI SUBIR. A GENTE SOBE JUNTO. EU NUNCA ANDEI DE ÔNIBUS.', 'musgo'); return; }
+    await say(pickOne(['A FILA VEM EM ONDAS. PASSAGEIROS SEM ROSTO. A GENTE SEGURA. VOCÊ ENTRA.', 'EU NÃO CABO NA FECHADURA. EU TENTEI. FICOU FEIO.', 'O QUE ESTÁ DO OUTRO LADO BATE TRÊS VEZES TODA HORA. COMO QUEM PEDE LICENÇA.']), 'musgo');
+  },
+  async ozorio7() {
+    const f = G.flags;
+    if (f.fiadoPago) { await say(pickOne(['Página rasgada, freguês. Você tá limpo comigo.', 'Quando tiver rosto, vem comer um de queijo. Esse é por conta da casa.']), 'ozorio'); return; }
+    f.fiadoPago = true;
+    await say('Ô, menino do fone. Já que a gente tá aqui, no fim do mundo...', 'ozorio');
+    await say('* Ele tira o caderno de fiado do avental e abre na página.');
+    await say('Dois pastéis de queijo. Três e cinquenta cada. Sete reais.', 'ozorio');
+    await say('Seu Ozório, eu sou um baú. O que eu tenho é um frasco e uma Lume.', 'me');
+    await say('Ei!', 'lume');
+    await say('* Você abre a tampa e oferece um gole do Frasco de Âmbar. É a única coisa de valor que você carrega.');
+    await say('* O Seu Ozório cheira o frasco e fica sério.');
+    await say('Isso aqui tem cheiro de... de gente. De alguém que eu não conheço.| Guarda isso, rapaz.', 'ozorio');
+    await say('* Ele arranca a página do caderno, dobra em quatro e enfia na sua fechadura.');
+    await say('Fiado pago. Você me paga quando tiver rosto. Com juros: você me conta como foi lá dentro.', 'ozorio');
+  },
+  async rita7() {
+    const f = G.flags;
+    await say(f.ritaPromise ? 'Mala falante. Eu ouvi dizer que você vai entrar numa fechadura. Volta inteiro, tá? O pastel ainda está de pé.' : 'Ei, mala. Eu cuido da barricada. Você cuida de voltar.', 'rita');
+    if (!f.rita7) { f.rita7 = true; giveItem('bala', 2); sfx('item'); await say('* A Rita enfia duas balas de âmbar na sua tampa. "Achei por aí. Não pergunta."'); await say('* (Você recebeu {y}Bala de Âmbar{/} ×2.)'); }
+  },
+  async marlene7() { await say(pickOne(['O Valdir está segurando a praça lá em cima. Eu seguro a porta aqui embaixo. Cada um no seu posto.', 'Setenta e oito anos, mocinho. Fila de banco é pior que isso aí.', 'Se o que bate do outro lado tiver educação, eu abro. Se não tiver, eu também abro, mas com a espada.']), 'marlene'); },
+  async duda7() { await say(pickOne(['Maria Eduarda. Rua das Acácias, 40. Portão verde. Vai, eu seguro.', 'Os heróis que viram passar pela faixa... estavam aqui na fila. Alguns pararam quando a gente gritou o nome deles.', 'Se você sumir aí dentro, eu entro atrás. Eu já desobedeci a Coroa, desobedeço uma porta.']), 'duda'); },
+  async neide7() { await say(pickOne(['Chamada antes de entrar: nome completo, por favor. ...Ótimo. Pode ir.', 'Quem você trouxer de volta, eu ensino de novo. Tudo de novo, se precisar.', 'Leve um caderno. Não, você é um baú. Você É o caderno.']), 'neide'); },
+  async cida7() { await say(pickOne(['Ai, meu bem, que porta mais feia. Parece fechadura de cofre de banco.', 'Leva um guarda-chuva. Lá dentro deve chover âmbar.', 'Quem você não conseguir trazer... não carrega isso sozinho, tá? Ninguém carrega.']), 'cida'); },
+  async pip7() { await say(pickOne(['A gente ficou com a barricada leste. A capitã ia gostar da formação.', 'O Tolo quer saber se dentro da fechadura tem banheiro.', 'Volta logo. A gente ainda não abriu nenhum baú. Por respeito.']), 'pip'); },
+  async fechadura7() {
+    const f = G.flags;
+    if (f.ch7done) { await say('* A 32ª fechadura. Agora ela está fechada. Por dentro.'); return; }
+    if (!f.fech7) {
+      f.fech7 = true;
+      await say('* Bem embaixo da porta, quase no chão, uma fechadura pequena. Não tem número.');
+      await say('* Ela é a única que já está aberta.| E as marcas de arranhão estão do lado de cá.| Ela foi aberta por dentro.');
+      await say('Alguém saiu por aqui. Ou alguém deixou aberta pra entrar depois.', 'lume');
+      await say('A gente não tem as chaves dos perdidos. Não dá pra abrir a porta grande.', 'me');
+      await say('Baú.| Você é um baú.| Baús têm fechadura.', 'lume');
+      await say('...Isso é a coisa mais estranha que você já me disse.', 'me');
+      await say('Encosta a sua fechadura na dela. Mímico sabe virar o que precisa. Vira passagem.', 'lume');
+      await say('E os outros?', 'me');
+      await say('NÃO CABEM. A GENTE SEGURA A FILA. VAI.', 'musgo');
+    }
+    const c = await choose('* Encostar a sua fechadura na 32ª e passar?', ['Passar', 'Ainda não'], 'n', 1);
+    if (c !== 0) return;
+    sfx('flee'); await fadeOut(14); V.scene = 'black'; await fadeIn(1);
+    if (!f.seen_cais) await say('* Você encosta a fechadura. CLIC. Por um segundo, você é uma porta. Depois, é só um baú caindo num lugar muito quente e muito dourado.', 'void');
+    await fadeOut(8); loadMap('cais', 13, 14, 'up'); V.scene = 'world'; await fadeIn(16);
+    if (!f.seen_cais) { f.seen_cais = true; await STORY.caisFirst(); }
+  },
+  async caisFirst() {
+    await say('* Um mar de âmbar líquido, morno, debaixo de um céu de pedra. Pontes de tábua velha saem para todos os lados.');
+    await say('* De perto, dá para ver: o âmbar não está vazio. Lá no fundo, bem devagar, passam rostos.');
+    await say('Baú. Isso tudo é... gente. Tudo o que a masmorra já leu. Um mar inteiro.', 'lume');
+    await say('* Ao longe, encalhada no âmbar, uma barca antiga, de proa alta e vela rasgada.');
+    await say('* Pelas pontes, pilares de âmbar. Dentro de cada um, alguém de olhos fechados.');
+  },
+  async volta7() {
+    const f = G.flags;
+    if (!f.lacreDone) {
+      const c = await choose('* A fechadura do lado de dentro. Voltar para a antessala? (Os cristais que você carrega continuam na tampa.)', ['Voltar', 'Ficar'], 'n', 1);
+      if (c !== 0) return;
+      await fadeOut(12); loadMap('antessala', 11, 6, 'down'); await fadeIn(12); return;
+    }
+    const C = carry();
+    await say(`* Você carrega ${C.length} alma${C.length === 1 ? '' : 's'}: ${crystalNames(C).join(', ') || 'ninguém'}.`);
+    const c = await choose('* Voltar pela fechadura para sempre? (Quem ficou no âmbar, fica. Não dá para voltar aqui.)', ['Voltar', 'Ainda não'], 'n', 1);
+    if (c !== 0) return;
+    await STORY.end7();
+  },
+  async subir7() { await fadeOut(10); loadMap('conves', 19, 12, 'up'); await fadeIn(10); },
+  async convesFirst() {
+    await wait(20);
+    await say('* O convés da barca. Tábuas cobertas de âmbar seco, cordas duras como pedra, uma vela rasgada que ainda tenta pegar vento.');
+    sfx('catalog'); await say('[Registro: Viagem 3. Embarcação: barca. Almas: 40.]', 'cat');
+    await say('[Correção: Viagem 0.]', 'cat');
+    await say('Três? A gente só conhece duas viagens. A carruagem da Ofélia e o 31.', 'lume');
+    await say('[Erro de contagem. Desconsiderar.]', 'cat');
+    await say('* Lá em cima, no leme, um marinheiro de âmbar vira a roda sem parar.');
+  },
+  async poraoFirst() {
+    await wait(20);
+    await say('* O porão da barca. Correntes, caixotes e pilares de âmbar até o teto. Cheira a madeira molhada e a promessa quebrada.');
+  },
+  async manifesto7() {
+    await say('* Um livro de bordo aberto num atril, coberto de âmbar seco. A primeira página:');
+    await say('* "VIAGEM ZERO. Barca de passageiros. Quarenta almas. Destino: a outra margem."');
+    await say('* "Embarque autorizado por:" e, em vez de uma assinatura, um desenho pequeno, cuidadoso: uma lanterna com um olho dentro.');
+    await say('...É o mesmo desenho da porta.', 'me');
+    await say('E das bandeiras dos soldados lá do Andar 3. Aqueles do farol.', 'lume');
+    G.flags.clueLantern = true;
+  },
+  async timoneiro7() {
+    const f = G.flags;
+    if (f.timoneiroDone) return;
+    if (!f.timoneiroSeen) {
+      f.timoneiroSeen = true; playMusic(null);
+      await say('* O Timoneiro não tira as mãos do leme. O âmbar já subiu até o peito dele.');
+      await say('Mantenham o rumo! Terra à vista em três dias!', 'timoneiro');
+      await say('Faz novecentos anos, senhor.', 'me');
+      await say('...Então faltam três dias há novecentos anos. MANTENHAM O RUMO!', 'timoneiro');
+    } else await say('BOMBORDO! ESTIBORDO! NINGUÉM SAI DO RUMO!', 'timoneiro');
+    const r = await battle(['timoneiro'], { boss: true, music: 'boss7', noFlee: true, intro: '* O Timoneiro gira o leme e o convés inteiro inclina!' });
+    if (r !== 'win') return;
+    f.timoneiroDone = true; refreshEnts(); playMusic(null);
+    await say('* O Timoneiro solta o leme. É a primeira vez em novecentos anos. As mãos dele ficaram com o formato da roda.');
+    await say('A gente nunca devia ter saído do porto. Era noite, o mar estava bravo.| Mas alguém acendeu uma lanterna lá longe, no meio da água. E a gente seguiu.', 'timoneiro');
+    await say('Quem acendeu?', 'lume');
+    await say('Não sei, moça. Uma luz. A gente achou que era a outra margem.', 'timoneiro');
+    await say('* Ele se senta no convés e fecha os olhos. A escotilha do porão, destravada, range.');
+    await STORY.evolve5();
+    playMusic(WD.map.music); saveGame();
+  },
+  async evolve5() {
+    const f = G.flags;
+    if (f.grau5) return;
+    sfx('catalog');
+    await say('[Condições de evolução atingidas: 5º grau.]', 'cat');
+    await say('[O 5º grau não é escolhido pela força. É escolhido pela resposta.]', 'cat');
+    await say(`[Pergunta: você tem espaço para ${carryCap()}. Lá embaixo tem mais gente do que isso. O que você faz com quem não cabe?]`, 'cat');
+    await say('* A Lume fica muito quieta, perto da sua tampa.');
+    await say('[Resposta um: ARCA DA ORIGEM. Você fica maior. Você guarda as almas, como nós guardamos. Você passa a ser um arquivo.]', 'cat');
+    await say('[Resposta dois: MÍMICO VAZIO. Você tira tudo o que é seu de dentro para caber mais gente. Tudo. Inclusive o que você lembra da Terra.]', 'cat');
+    await say('Baú... qualquer uma das duas muda você para sempre.', 'lume');
+    f.prev4 = G.species; f.line5 = SPECIES[G.species].grow === GROW4A ? 'a' : 'f';
+    const pick = await evolveScreen();
+    f.grau5 = pick;
+    await say(`[Evolução concluída: {y}${SPECIES[pick].name.toUpperCase()}{/}.]`, 'cat');
+    if (pick === 'arca') {
+      await say('[Nós damos as boas-vindas.]', 'cat');
+      await say('...Nós?', 'me');
+      await say('[Desculpe. Força do hábito. Você vai se acostumar. Nós nos acostumamos.]', 'cat');
+      await say(`* Sua tampa ficou dourada e pesada, como uma arca de igreja. Agora cabem ${carryCap()} almas.`);
+    } else {
+      f.mem_pastel = true; delete f.pastelBack; f.memVazio = true;
+      await say('[Memórias da Terra: arquivadas. Todas.]', 'cat');
+      await say('* Você tenta lembrar do ônibus.| Da padaria.| Do seu quarto.| Tem um espaço branco onde essas coisas estavam. Limpo, como uma sala depois da mudança.');
+      await say('Baú? ...Você lembra de mim?', 'lume');
+      await say('Lembro. Você é a Lume. Você canta. Você é minha amiga.| Isso eu aprendi aqui. Isso não era da Terra.', 'me');
+      await say('* A Lume ri e chora ao mesmo tempo, o que num lustre parece um curto-circuito.');
+      await say(`* Agora cabem ${carryCap()} almas dentro de você.`);
+    }
+    await grantTechs(false);
+  },
+  async capitao7() {
+    const f = G.flags;
+    if (f.capitaoDone) return;
+    await say('* No camarote, um esqueleto de casaca vermelha e chapéu de três pontas, sentado atrás de uma mesa com um mapa sem terra nenhuma.');
+    await say('Quem autorizou o embarque?', 'capitao');
+    await say('Ninguém. A gente entrou pela fechadura.', 'me');
+    await say('IRREGULAR. Ninguém sai da minha barca sem ordem. E a ordem nunca veio.', 'capitao');
+    const c = await choose('* O Capitão levanta o sabre. (Chefe secreto muito forte.)', ['Lutar', 'Voltar depois'], 'n', 1);
+    if (c !== 0) return;
+    const r = await battle(['capitao'], { boss: true, music: 'boss7', noFlee: false, intro: '* O Capitão bate o sabre na mesa: "TODOS AOS SEUS POSTOS!"' });
+    if (r !== 'win') return;
+    f.capitaoDone = true; refreshEnts();
+    await say('* O Capitão cai sentado na cadeira. O chapéu escorrega.');
+    await say('Ela disse que era só uma viagem. Que do outro lado tinha uma cidade nova esperando a gente.', 'capitao');
+    await say('Que ninguém ia sentir falta de quarenta pessoas.', 'capitao');
+    await say('* Ele não diz mais nada. A luneta rola da mão dele até os seus pés.');
+    G.flask.max++; G.flask.n++; J.level(); await say(`* {y}Fragmento de Âmbar{/}! O frasco agora tem ${G.flask.max} goles.`);
+    await giveRune('bilhete', false, 1);
+    giveItem('bala', 3); await say('* Você recebeu {y}Bala de Âmbar{/} ×3.');
+    f.capitaoLuneta = true;
+  },
+  async lacre7() {
+    const f = G.flags;
+    if (f.lacreDone) return;
+    if (!f.lacreSeen) {
+      f.lacreSeen = true; playMusic(null);
+      await say('* Uma sala redonda e vermelha. Na parede do fundo, um selo de cera do tamanho de uma porta, com fitas de papel penduradas.');
+      await say('* No meio da cera, o brasão: uma lanterna com um olho.');
+      await say('* O selo abre os olhos.');
+      await say('Senha, número de protocolo e motivo da visita.', 'lacre');
+      await say('A gente veio buscar as pessoas que vocês prenderam.', 'me');
+      await say('Pedido INDEFERIDO. Este selo foi aplicado por ordem superior e é IRREVOGÁVEL.', 'lacre');
+      await say('Ordem de quem?', 'lume');
+      await say('Informação SIGILOSA.| Próximo da fila.', 'lacre');
+    } else await say('Próximo da fila. Senha, protocolo e motivo.', 'lacre');
+    const r = await battle(['lacre'], { boss: true, music: 'boss7', noFlee: true, intro: '* O Lacre Real ergue dois carimbos!' });
+    if (r !== 'win') return;
+    f.lacreDone = true; refreshEnts(); playMusic('cela');
+    await say('* A cera racha de cima a baixo, com um barulho de gelo em copo. O brasão se parte bem no meio do olho.');
+    await say('...Isso vai constar na sua ficha.', 'lacre');
+    await say('* Pela rachadura sai uma luz quente. E uma voz de moça, baixinha, como quem acorda.');
+    await STORY.moca7();
+  },
+  async moca7() {
+    const f = G.flags;
+    if (f.moca7) { await say(pickOne(['Leva quem você conseguir. E não deixa ela chamar de novo.', 'Eu fico. A rachadura é pequena. Por enquanto é melhor assim.', 'Volta pela fechadura antes que o âmbar suba.']), 'moca'); return; }
+    f.moca7 = true;
+    await say('...Faz tanto tempo que ninguém fala comigo de perto.', 'moca');
+    await say('* Pela rachadura, dá para ver alguém feito de âmbar, sentada, abraçando os joelhos. Uma moça. Ela sorri sem saber se pode.');
+    await say('Quem é você?', 'lume');
+    await say('Eu não sei o meu nome. Levaram junto com a outra metade de mim.', 'moca');
+    await say('A outra metade?', 'me');
+    await say('A que não sente nada. Ela ainda está lá em cima, acendendo lanternas.| Eu fiquei com o resto. Com a culpa, principalmente.', 'moca');
+    await say('* O chão treme. Lá longe, uma voz enorme pergunta alguma coisa que você não entende.');
+    await say('Ela já percebeu que vocês entraram. Leva as pessoas que você conseguir carregar. E sai.', 'moca');
+    await say('E você?', 'me');
+    await say('Eu fico. A rachadura é pequena. Quando ela ficar grande, eu saio. E aí vai ser um problema para todo mundo.', 'moca');
+    await say('Só me promete uma coisa.| Não deixa ela chamar de novo.', 'moca');
+    await say('Ela quem?', 'lume');
+    await say('* A moça abre a boca para responder. Nenhum som sai. Como se o nome tivesse sido arrancado da garganta dela também.');
+    sfx('catalog'); await say('[Aviso: o Selado está acordado.]', 'cat');
+    await say('[Recomendação: voltar pela fechadura. Agora.]', 'cat');
+    saveGame();
+  },
+  async end7() {
+    const f = G.flags, C = carry().slice();
+    f.crossBack = true; f.saved7 = C;
+    for (const k of C) { if (k === 'ozorio' || k === 'neide') f['soul_' + k] = 'resgatado'; if (k === 'cida') f.soul_cida = 'resgatado'; }
+    playMusic(null); sfx('flee'); await fadeOut(14); loadMap('antessala', 11, 7, 'down'); V.scene = 'world'; await fadeIn(16);
+    playMusic('padaria');
+    await say('* CLIC. Você cai na antessala de tampa para cima, quente como um forno.');
+    if (C.length) {
+      await say('* Você abre a tampa. Os cristais saem um por um e derretem no chão como mel ao sol.');
+      for (const k of C) await say(`* {y}${CRYSTALS[k].n}{/} abre os olhos.` + (k === 'teo' ? ' "A pizza... ainda tá quente?"' : k === 'rafael' ? ' Ele abre a mão: o anel continua lá.' : k === 'luzia' ? ' "Sabe por que o baú não tem medo? ...Esqueci o resto. Que alívio, esquecer só uma piada."' : k === 'nilo' ? ' Ele olha em volta. "Que porto é este?" Ninguém sabe responder. Ele sorri assim mesmo.' : k === 'ozorio' ? ' "...Bia." E depois: "Menino do fone! Cadê meus sete reais?"' : k === 'neide' ? ' "Chamada. Quem está presente?" Todo mundo levanta a mão.' : k === 'cida' ? ' "Meus óculos. Alguém viu meus óculos?" Você viu. Estão na sua tampa.' : ''));
+    } else await say('* Você não trouxe ninguém. A sua tampa está vazia e leve demais.');
+    const left = Object.keys(CRYSTALS).filter(k => !C.includes(k) && (!CRYSTALS[k].cond || CRYSTALS[k].cond())).length;
+    if (left) await say(`* ${left} ficaram no âmbar. Você sabe exatamente quantos. Você vai saber para sempre.`);
+    await wait(30); shake(20); sfx('rumble');
+    await say('* O 31 engasga. O motor tosse. Os faróis piscam.');
+    await say('* Pelo vidro, o Seu Jorge pisca uma vez. Duas. E solta o volante para coçar os olhos.');
+    await say('...Que ponto é esse?', 'jorge');
+    if (f.tiagoTaken) await say('Seu Jorge! Acordou! A gente... a gente perdeu alguma coisa?', 'tiago');
+    await say(f.jorgeDiary ? 'Menino do último banco. Você voltou pra buscar o ônibus. Ninguém nunca voltou pra buscar o ônibus.' : 'Você voltou pra buscar o ônibus. Logo você, que sempre perdia ele.', 'jorge');
+    await wait(20); shake(50); sfx('rumble');
+    await say('* A caverna inteira treme. Pedras caem do teto. A Porta Redonda bate por dentro, três vezes, forte.');
+    await say('VOCÊS ROUBARAM A MINHA COLEÇÃO.', 'fundo');
+    sfx('catalog'); await say('[Contagem impossível. Contagem impossível. Contag—]', 'cat');
+    await say('ELA VAI DERRUBAR TUDO! O TETO, A TRINCHEIRA, OS ANDARES!', 'musgo');
+    await say('* O Seu Jorge abre a porta do ônibus com um chiado e aperta a buzina até todo mundo olhar.');
+    await say('Todo mundo pro ônibus! Monstro, gente, lustre, baú, quem for! Eu sei sair de qualquer lugar!', 'jorge');
+    await say('Até de dentro de uma masmorra desabando?', 'lume');
+    await say('Principalmente. Já viu o trânsito da Avenida às seis da tarde?', 'jorge');
+    await endScreen(7);
+    f.ch7done = true; saveGame();
+  }
+});
+{ const _f = { conves: 'convesFirst', porao: 'poraoFirst' };
+  const _oe = onEnter; onEnter = async function (id) { await _oe(id); if (_f[id] && !G.flags['seen_' + id]) { G.flags['seen_' + id] = true; await STORY[_f[id]](); } }; }
+{ const _os = STORY.onStep3; STORY.onStep3 = function () {
+  if (_os && _os()) return true;
+  if (WD.id === 'conves' && !G.flags.timoneiroDone && WD.y <= 4 && WD.x >= 9 && WD.x <= 16) { runScript(STORY.timoneiro7); return true; }
+  if (WD.id === 'cela' && !G.flags.lacreDone && WD.y <= 6) { runScript(STORY.lacre7); return true; }
+  return false; }; }
+{ const _es = endScreen; endScreen = function (ch) { if (ch !== 7) return _es(ch); playMusic('ending');
+    const w = { type: 'end', t: 0, update() { this.t++; if (this.t > 90 && btnp('a')) { sfx('select'); closeWin(this); } },
+      draw() { bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H); const a = Math.min(1, this.t / 60);
+        bx.globalAlpha = a; bx.drawImage(SP[spec().sp][0], 96, 22, 48, 48); bx.globalAlpha = 1;
+        txt('FIM DO CAPÍTULO 7', 120, 80, { align: 'center', sz: 1.5, col: '#ffe066', alpha: a });
+        txt('O Selado', 120, 100, { align: 'center', col: '#b8aecb', alpha: a });
+        const L = [`${G.name} · ${spec().name} nv ${G.lv}`, `Almas trazidas do âmbar: ${(G.flags.saved7 || []).length}`, `Tempo: ${fmtTime(G.time)}`, G.flags.grau5 === 'vazio' ? 'Você esvaziou tudo o que era seu' : 'Você virou uma arca', G.flags.capitaoDone ? 'O Capitão largou a luneta' : ''];
+        L.forEach((l, i) => txt(l, 120, 120 + i * 12, { align: 'center', col: i >= 3 ? '#8fe3ff' : '#ffffff', alpha: clamp((this.t - 40) / 40, 0, 1) }));
+        txt('Próximo: Capítulo 8 — A Tampa se Fecha', 120, 190, { align: 'center', col: '#8fe3ff', alpha: clamp((this.t - 70) / 40, 0, 1) });
+        if (this.t > 90 && FRAME % 50 < 34) txt('A para continuar', 120, 214, { align: 'center', col: '#8a8099' }); } };
+    return openWin(w); }; }
+{ const _co = chapterOf; chapterOf = function (d) { const f = (d && d.flags) || {}; return f.ch7open ? 7 : _co(d); }; }
+{ const _ds = drawSeal; drawSeal = function (e, sx, sy, lights) {
+  if (e.look !== 'cabin') return _ds(e, sx, sy, lights);
+  if (G.flags[e.flag]) { bx.fillStyle = '#1a120a'; bx.fillRect(sx + 2, sy, 12, 16); bx.fillStyle = '#5a3a24'; bx.fillRect(sx, sy, 2, 16); bx.fillRect(sx + 14, sy, 2, 16); return; }
+  bx.fillStyle = PAL.k; bx.fillRect(sx, sy, 16, 16);
+  bx.fillStyle = '#6a4228'; bx.fillRect(sx + 1, sy + 1, 14, 15);
+  bx.fillStyle = '#4a2c18'; for (let i = 4; i < 15; i += 4) bx.fillRect(sx + i, sy + 1, 1, 15);
+  bx.fillStyle = '#8a8a96'; bx.fillRect(sx + 1, sy + 3, 14, 2); bx.fillRect(sx + 1, sy + 11, 14, 2);
+  bx.fillStyle = '#c8962a'; bx.fillRect(sx + 5, sy + 6, 6, 5);
+  bx.fillStyle = PAL.k; bx.fillRect(sx + 7, sy + 7, 2, 2); bx.fillRect(sx + 7.5 | 0, sy + 9, 1, 2);
+  if (FRAME % 60 < 30) { bx.fillStyle = '#ffe066'; bx.fillRect(sx + 6, sy + 6, 1, 1); }
+}; }
 
 boot();
 </script>

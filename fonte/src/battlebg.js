@@ -7,7 +7,8 @@ const BG_OF = {
   escadaria3: 'fortaleza', muralhas: 'fortaleza', patio: 'acampamento', jaula: 'jaula', scriptorium: 'scriptorium',
   devolucao: 'arquivo', achados: 'arquivo', fundo: 'arquivo', estrada: 'estrada', correio: 'correio',
   terminal: 'terminal', manobras: 'terminal', garagem: 'garagem', trincheira: 'trincheira', oficina: 'trincheira',
-  padaria: 'padaria', feira: 'feira', escola: 'escola', coreto: 'coreto', pontofinal: 'pontofinal'
+  padaria: 'padaria', feira: 'feira', escola: 'escola', coreto: 'coreto', pontofinal: 'pontofinal',
+  antessala: 'antessala', cais: 'cais', conves: 'conves', porao: 'porao', cela: 'cela'
 };
 // d = sombra, m = meio, b = brilho, a = acento, f = chão
 const BG_PAL = {
@@ -31,7 +32,12 @@ const BG_PAL = {
   feira: { d: '#0c1408', m: '#2a4418', b: '#e0a030', a: '#ff6a4a', f: '#16200e' },
   escola: { d: '#08140e', m: '#1a3a2a', b: '#6ac89a', a: '#e8e4dc', f: '#0e1e16' },
   coreto: { d: '#0a0e1e', m: '#1e2a4e', b: '#8aa0e0', a: '#ffb0d8', f: '#121830' },
-  pontofinal: { d: '#08080c', m: '#1e2230', b: '#8a9ab8', a: '#ffe066', f: '#0e1018' }
+  pontofinal: { d: '#08080c', m: '#1e2230', b: '#8a9ab8', a: '#ffe066', f: '#0e1018' },
+  antessala: { d: '#0e0c0a', m: '#2e2820', b: '#a89068', a: '#f0c040', f: '#18140e' },
+  cais: { d: '#140c02', m: '#4a2e08', b: '#e0a030', a: '#fff4c0', f: '#20160a' },
+  conves: { d: '#100a06', m: '#3a2414', b: '#a87850', a: '#f0c040', f: '#1c120a' },
+  porao: { d: '#0a0806', m: '#2a2016', b: '#8a7050', a: '#e0a030', f: '#14100a' },
+  cela: { d: '#140406', m: '#4a1014', b: '#c84848', a: '#f0c040', f: '#1e080a' }
 };
 const BGC = {};
 function bgRand(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
@@ -168,6 +174,32 @@ function bgPaint(k) {
       r(80, SKY - 30, 80, 24, '#07050c'); for (let i = 0; i < 9; i++) r(82 + i * 9, SKY - 28, 2, 22, '#e8e4dc'); r(78, SKY - 8, 84, 3, '#c8962a'); r(78, SKY - 30, 84, 3, '#c8962a');
       for (let i = 0; i < 26; i++) { const hw = Math.round(i * 1.8); r(120 - hw, SKY - 56 + i, hw * 2, 1, i % 6 === 0 ? P.b : P.m); } r(118, SKY - 62, 4, 6, '#c8962a');
       for (const lx of [62, 178]) { r(lx, 20, 2, SKY - 20, '#3a3448'); ell(lx + 1, 18, 4, 4, '#3a3448'); ell(lx + 1, 18, 2, 2, '#ffe9a0'); x.globalAlpha = 0.12; ell(lx + 1, 18, 12, 12, '#ffe9a0'); x.globalAlpha = 1; }
+      break;
+    }
+    case 'antessala': {
+      ell(120, 30, 46, 30, '#2a241e'); ell(120, 30, 42, 27, '#3a342e'); for (let i = 0; i < 31; i++) { const a = -Math.PI / 2 + (i / 31) * Math.PI * 2, rx = 120 + Math.cos(a) * 36, ry = 30 + Math.sin(a) * 23; r(rx - 1, ry - 1, 3, 3, '#07050c'); if (i % 3 === 0) r(rx, ry, 1, 1, P.a); }
+      r(116, 22, 8, 12, '#07050c'); r(118, 18, 4, 4, P.a); r(119, 26, 2, 2, '#07050c'); r(118, 54, 4, 5, '#07050c');
+      block(4, SKY - 26, 60, 22, '#e8d8a0', '#ffffff'); r(4, SKY - 12, 60, 3, '#3a70c0'); for (let i = 0; i < 4; i++) r(8 + i * 14, SKY - 23, 10, 8, '#1c3058'); r(30, SKY - 30, 18, 5, '#2a1a10'); r(34, SKY - 29, 10, 3, '#ffb040');
+      for (const tx of [176, 206]) { for (let y = 0; y < 24; y++) { const hw = Math.round(14 * y / 24); r(tx - hw, SKY - 24 + y, hw * 2, 1, y % 6 ? '#4a3a2a' : '#6a5a3a'); } }
+      break;
+    }
+    case 'cais': case 'conves': {
+      for (let y = 0; y < SKY; y++) { x.globalAlpha = 0.25 + y / SKY * 0.4; r(0, y, 240, 1, y % 5 ? P.m : P.b); } x.globalAlpha = 1;
+      for (let i = 0; i < 14; i++) { const fx0 = R() * 240, fy = 10 + R() * (SKY - 20); ell(fx0, fy, 3, 2, P.d); r(fx0 - 1, fy - 1, 2, 1, P.a); }
+      if (k === 'cais') { for (const px of [30, 90, 150, 210]) { r(px, SKY - 30, 4, 30, '#3a2414'); r(px - 2, SKY - 32, 8, 3, '#5a3a24'); } r(0, SKY - 18, 240, 3, '#5a3a24'); }
+      else { r(20, 0, 5, SKY, '#3a2414'); r(22, 0, 1, SKY, '#5a3a24'); for (let i = 0; i < 5; i++) line(25, 4 + i * 8, 110 - i * 12, SKY - 4, '#5a4a3a'); r(170, 4, 50, 26, '#d8c8a0'); r(170, 4, 50, 2, '#ffffff'); line(170, 30, 195, 50, '#5a4a3a'); line(220, 30, 195, 50, '#5a4a3a'); ell(194, 34, 22, 22, '#5a3420'); ell(194, 34, 19, 19, '#07050c'); for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; line(194, 34, 194 + Math.cos(a) * 19, 34 + Math.sin(a) * 19, '#7a4a2a'); } }
+      break;
+    }
+    case 'porao': {
+      for (let i = 0; i < 6; i++) { block(i * 42 - 4, 10, 36, SKY - 10, P.d, P.m); for (let y = 16; y < SKY - 4; y += 10) r(i * 42, y, 28, 2, P.m); }
+      for (let i = 0; i < 8; i++) { const cx = 10 + i * 30; for (let j = 0; j < 9; j++) r(cx + (j % 2), j * 3, 2, 2, '#6a6078'); if (i % 2) { r(cx - 2, 27, 6, 6, '#07050c'); r(cx, 29, 2, 2, P.a); } }
+      for (let i = 0; i < 4; i++) { const cx = 28 + i * 60; r(cx, SKY - 30, 6, 30, '#c8962a'); r(cx + 1, SKY - 30, 2, 30, '#f0c040'); r(cx + 1, SKY - 22, 3, 6, '#7a4a08'); }
+      break;
+    }
+    case 'cela': {
+      ell(120, 32, 54, 34, '#2a0a0c'); ell(120, 32, 48, 30, '#4a1014'); r(102, 12, 36, 42, '#07050c'); ell(120, 32, 14, 16, '#c84848'); r(114, 22, 12, 20, '#07050c'); r(116, 24, 8, 16, '#fff4c0'); ell(120, 32, 3, 3, '#07050c'); r(114, 20, 12, 2, P.a);
+      for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; line(120 + Math.cos(a) * 50, 32 + Math.sin(a) * 30, 120 + Math.cos(a) * 64, 32 + Math.sin(a) * 40, '#5a1418'); }
+      for (let i = 0; i < 20; i++) r(R() * 240, SKY - 4 - R() * 6, 3, 2, '#e8dcc0');
       break;
     }
     case 'pontofinal': {

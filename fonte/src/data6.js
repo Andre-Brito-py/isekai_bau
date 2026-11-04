@@ -9,8 +9,8 @@ function soulOk(k) {
   const f = G.flags;
   if (k === 'lume') return true;
   if (k === 'tiago') return !!f.ch5done && !f.tiagoTaken;
-  if (k === 'cida') return f.soul_cida === 'lembrou' || (!!f.cidaDone && f.soul_cida !== 'perdida');
-  return f['soul_' + k] === 'lembrou';
+  if (k === 'cida') return f.soul_cida === 'lembrou' || f.soul_cida === 'resgatado' || (!!f.cidaDone && f.soul_cida !== 'perdida');
+  return f['soul_' + k] === 'lembrou' || f['soul_' + k] === 'resgatado';
 }
 function soulsCount() { return SOULS.filter(soulOk).length; }
 function soulsNames() { const N = { lume: 'Lume', cida: 'Dona Cida', tiago: 'Tiago', ozorio: 'Seu Ozório', neide: 'Profª Neide', duda: 'Duda', marlene: 'Dona Marlene', valdir: 'Seu Valdir' }; return SOULS.filter(soulOk).map(k => N[k]); }

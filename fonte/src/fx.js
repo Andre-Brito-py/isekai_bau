@@ -53,6 +53,7 @@ function drawProj(el, x, y, t, dir, s) {
     case 'sal': for (let i = 0; i < 5; i++) { const ox = Math.cos(t * 0.2 + i * 1.3) * 3 * s - c * i * 2, oy = Math.sin(t * 0.25 + i * 1.7) * 3 * s - sn * i * 2; fxR(x + ox - 1, y + oy - 1, 3, 3, d); fxR(x + ox - 1, y + oy - 1, 2, 2, i % 2 ? b : w); } break;
     case 'tinta': fxDisc(x, y, 3.5 * s, d); fxDisc(x - 1, y - 1, 2.5 * s, m); fxP(x - 1, y - 2, w); if (t % 3 === 0) fxPart(x, y + 2, rand(-0.2, 0.2), 0.6, 14, m, 2, 1); break;
     case 'polvora': fxDisc(x, y, 3.5 * s, '#120e1a'); fxDisc(x - 1, y - 1, 1, '#5a5070'); fxLine(x + 2, y - 3, x + 4, y - 6, '#a89068'); fxSpark(x + 4, y - 7, t % 4 < 2 ? '#ffb040' : '#ffe066'); break;
+    case 'ambar': { fxGlow(x, y, 6 * s, b, 0.25); const L = 5 * s; for (let i = -L; i <= L; i++) { const wdt = Math.max(0, (L - Math.abs(i)) / L * 3 * s); fxLine(x + c * i - sn * wdt, y + sn * i + c * wdt, x + c * i + sn * wdt, y + sn * i - c * wdt, i > 0 ? b : m); } fxP(x + c * L, y + sn * L, w); fxP(x - sn * 2, y + c * 2, w); if (t % 3 === 0) fxPart(x, y, rand(-0.3, 0.3), rand(-0.3, 0.3), 16, pickOne([b, w]), 1); break; }
     case 'canto': fxGlow(x, y, 6 * s, b, 0.22); for (let i = 0; i < 3; i++) { const ox = -c * i * 6 + Math.sin(t * 0.4 + i) * 2, oy = -sn * i * 6 + Math.cos(t * 0.4 + i * 2) * 3; fxNote(x + ox, y + oy, i === 0 ? w : i === 1 ? b : m, i === 0 && s > 1.2); } if (t % 3 === 0) fxPart(x, y, rand(-0.3, 0.3), -0.4, 18, b, 1); break;
     default: fxGlow(x, y, 5, m); fxDisc(x, y, 3 * s, m); fxP(x, y, '#ffffff');
   }
@@ -70,6 +71,7 @@ function drawImpact(el, x, y, p, s, fy) {
     case 'sal': { for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2 + 0.4, r = (4 + p * 8) * s, cx = x + Math.cos(a) * r, cy = y + Math.sin(a) * r * 0.8, hh = Math.min(1, p * 3) * 5 * s; fxR(cx - 1, cy - hh, 3, hh, d); fxR(cx - 1, cy - hh, 2, hh - 1, i % 2 ? b : w); } break; }
     case 'tinta': { for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2, r = (3 + p * 12) * s; fxDisc(x + Math.cos(a) * r, y + Math.sin(a) * r * 0.7 + p * 6, 2 * q + 1, i % 2 ? m : d); } fxDisc(x, y, 4 * q * s, m); break; }
     case 'polvora': { if (p < 0.2) fxDisc(x, y, 14 * s, '#ffffff'); fxDisc(x, y, q * 10 * s, b); fxRing(x, y, (5 + p * 20) * s, m); fxRing(x, y, (4 + p * 16) * s, '#ffe066'); bx.globalAlpha = q; for (let i = 0; i < 4; i++) fxDisc(x + (i - 1.5) * 8 * p, y - p * 16 - i * 2, 3 + p * 5, '#4a4450'); bx.globalAlpha = 1; break; }
+    case 'ambar': { const r = Math.min(1, p * 2.5); for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2 + 0.2, cx = x + Math.cos(a) * 9 * s * r, cy = y + Math.sin(a) * 7 * s * r, hh = (4 + (i % 3) * 2) * s * r; fxR(cx - 1, cy - hh, 3, hh, d); fxR(cx - 1, cy - hh, 2, hh - 1, i % 2 ? b : m); fxP(cx, cy - hh, w); } if (p < 0.3) fxDisc(x, y, 8 * s, w); if (p > 0.5) { bx.globalAlpha = (1 - p) * 0.6; fxDisc(x, y, 10 * s, b); bx.globalAlpha = 1; } break; }
     case 'canto': { for (let k = 0; k < 3; k++) { const r = (4 + p * 16 - k * 4) * s; if (r > 0) fxRing(x, y, r, k === 0 ? b : m, r * 0.7); } for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2 + p * 2, r = (5 + p * 12) * s; fxNote(x + Math.cos(a) * r, y + Math.sin(a) * r * 0.7 - p * 8, i % 2 ? w : b); } break; }
     case 'estrela': { for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + p, r = (3 + p * 14) * s; fxSpark(x + Math.cos(a) * r, y + Math.sin(a) * r, '#ffe066', i % 2 === 0 && p < 0.5); } if (p < 0.25) fxDisc(x, y, 6 * s, '#fff4a0'); break; }
     default: fxRing(x, y, 3 + p * 12, m); fxRing(x, y, 2 + p * 9, '#ffffff');
@@ -113,6 +115,7 @@ async function fxWave(el, ts, s) {
         case 'seiva': { const hh = (4 + (i % 3) * 3) * s; fxLine(xx, gy, xx + Math.sin(i) * 2, gy - hh, m); fxR(xx + Math.sin(i) * 2 - 1, gy - hh, 3, 2, b); break; }
         case 'tinta': { const hh = (6 + Math.sin(i * 0.8 + k * 0.3) * 4) * s; fxR(xx, gy - hh, 5, hh, m); fxR(xx, gy - hh, 5, 1, w); break; }
         case 'polvora': if (i % 3 === 0) { fxDisc(xx, gy - 4, 4 * a, b); fxDisc(xx, gy - 4, 2 * a, w); } break;
+        case 'ambar': { const hh = (i < 3 ? (i + 1) * 4 : 12) * s; fxR(xx, gy - hh, 3, hh, d); fxR(xx, gy - hh, 2, hh - 1, b); fxP(xx, gy - hh, w); break; }
         case 'canto': if (i % 2 === 0) fxNote(xx, gy - 6 - Math.abs(Math.sin(i + k * 0.3)) * 14, i % 4 ? b : w, i === 0); fxR(xx, gy - 1, 4, 1, m); break;
         default: fxR(xx, gy - 6, 4, 6, m);
       }
@@ -132,6 +135,15 @@ async function fxMine(el, t, s) {
   await fxRun(20, (k, p) => { const x = x0 + (x1 - x0) * p, y = y0 + (y1 - y0) * p - Math.sin(p * Math.PI) * 26; fxDisc(x, y, 3, '#3a3632'); fxRing(x, y, 3.5, b); fxP(x, y, k % 6 < 3 ? '#ff3030' : '#601010'); });
   impactAt(el, t, s * 0.7);
 }
+// chave: voa até o alvo, entra e gira (CLIC)
+async function fxKey(el, t, s) {
+  const [x0, y0] = MOUTH(), [, m, b, w] = epal(el);
+  const drawKey = (x, y, a) => { const c = Math.cos(a), sn = Math.sin(a); fxRing(x, y, 3, '#f0c040'); fxRing(x, y, 2, '#c8962a'); for (let i = 3; i < 10; i++) fxP(x + c * i, y + sn * i, '#f0c040'); for (const k of [7, 9]) fxP(x + c * k - sn * 2, y + sn * k + c * 2, '#f0c040'); };
+  await fxRun(16, (k, p) => { const x = x0 + (t.x - x0) * p, y = y0 + (t.y - y0) * p - Math.sin(p * Math.PI) * 6; fxGlow(x, y, 5, b, 0.2); drawKey(x, y, Math.atan2(t.y - y0, t.x - x0) + Math.PI); });
+  sfx('select');
+  await fxRun(10, (k, p) => { drawKey(t.x, t.y, Math.PI + p * Math.PI / 2); fxRing(t.x, t.y, 4 + p * 10, w); });
+  impactAt(el, t, s);
+}
 // aura do Véu ao redor do baú, uma para cada elemento
 async function fxAura(el) {
   const cx = BPX, cy = BPY - 12, [d, m, b, w] = epal(el);
@@ -144,6 +156,7 @@ async function fxAura(el) {
       case 'sombra': bx.globalAlpha = 0.5 * q; fxDisc(cx, cy, 20 * q, d); bx.globalAlpha = 1; for (let i = 0; i < 6; i++) { const a = -Math.PI / 2 + (i - 2.5) * 0.4, r = 14 + Math.sin(k * 0.3 + i) * 4; fxLine(cx + Math.cos(a) * 8, cy + Math.sin(a) * 6, cx + Math.cos(a) * r, cy + Math.sin(a) * r, m); fxP(cx + Math.cos(a) * r, cy + Math.sin(a) * r, b); } break;
       case 'vento': for (let j = 0; j < 30; j++) { const a = j * 0.45 + k * 0.4, r = 6 + j * 0.5; fxP(cx + Math.cos(a) * r, cy + 10 - j * 0.9, j % 3 ? b : w); } break;
       case 'sal': for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2, r = 18 - 8 * p, hh = 3 + (i % 3); fxR(cx + Math.cos(a) * r - 1, cy + Math.sin(a) * r * 0.7 - hh, 3, hh, i % 2 ? w : b); } break;
+      case 'ambar': for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2, r = 20 - 6 * Math.min(1, p * 2), hh = 6 + (i % 3) * 2; fxR(cx + Math.cos(a) * r - 1, cy + Math.sin(a) * r * 0.7 - hh, 3, hh, i % 2 ? b : m); fxP(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.7 - hh, w); } fxGlow(cx, cy, 14 * q, b, 0.2); break;
       case 'canto': for (let i = 0; i < 7; i++) { const a = k * 0.12 + i * 0.9, r = 16 + Math.sin(k * 0.2 + i) * 3; fxNote(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.6 - p * 6, i % 2 ? b : w, i === 0); } fxGlow(cx, cy, 14 * q, m, 0.2); break;
       default: for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2 + k * 0.1, yy = cy + 10 - p * 26 + i * 2; fxR(cx + Math.cos(a) * 14 - 1, yy, 3, 1, b); fxR(cx + Math.cos(a) * 14, yy - 1, 1, 3, b); } fxGlow(cx, cy, 16 * q, m, 0.25);
     }
@@ -158,6 +171,7 @@ async function spellAnim(sp, targets, pm = 1) {
   else if (sp.form === 'corrente') await fxChain(el, targets, s);
   else if (sp.form === 'ancora') await fxAnchor(el, targets[0], s);
   else if (sp.form === 'mina') await fxMine(el, targets[0], s);
+  else if (sp.form === 'chave') await fxKey(el, targets[0], s);
   else if (el === 'faisca') await fxLightning(targets[0], s);
   else await fxShot(el, targets[0], s);
   if (sp.mod === 'selo') for (const t of targets) { const x = t.x, fy = feet(t), c = RUNES[el].col; fxSpawn(36, (k, p) => { const r = 6 + Math.min(1, p * 3) * 8; fxRing(x, fy, r, c, r * 0.35); fxRing(x, fy, r - 3, c, (r - 3) * 0.35); for (let i = 0; i < 4; i++) { const a = k * 0.1 + i * Math.PI / 2; fxP(x + Math.cos(a) * (r - 1.5), fy + Math.sin(a) * (r - 1.5) * 0.35, '#ffffff'); } }); }
