@@ -822,6 +822,7 @@ Object.assign(STORY, {
     V.human8 = true;
     await say('...Isso é um braço. Eu tenho um BRAÇO.', 'humano');
     await say('Você tem DOIS. Para de balançar eles assim.', 'lume');
+    await STORY.lumeHumano8();
     if (f.ritaPromise) await say('* Do ônibus, alguém assobia. A Rita. "Ô, mala! Não esquece do pastel."');
     V.human8 = false; sfx('flee');
     await say('* Mas o rosto pisca e some. Você volta a ser um baú, cansado como se tivesse corrido.', 'void');
@@ -987,7 +988,7 @@ function heritage8() {
   const H = { v: 1, name: G.name, line: evoLine8(), grau5: f.grau5 || null,
     face: { body: f.prev4 || null, aura: f.grau5 || null, blur: faceBlur8() },
     mem: { pastel: !(f.mem_pastel && !f.pastelBack), vazio: !!f.memVazio },
-    lume: { cancao: f.ch6Gift === 'cancao', fone: !!f.lumeFone },
+    lume: { cancao: f.ch6Gift === 'cancao', fone: !!f.lumeFone, coracao: f.lumeHeart || 0 },
     esc: { ofelia: !!f.ofeliaRemembers, maren: !!f.marenSpared, jorge: f.jorgeFate || null, tiago: !!f.tiagoTaken, rita: !!f.ritaPromise, ritaNota: f.dateScore || 0, marlene: f.marleneFate || null, ch6: f.ch6Gift || null, coracao: f.finalChoice || null, almas: f.saved7 || [] },
     feats: F.map(x => x.id), renome: renown8(F), tempo: G.time, dif: G.diff || 'desafio' };
   try { localStorage.setItem('renasci_heranca', JSON.stringify(H)); } catch (e) {}

@@ -400,7 +400,7 @@ function readSave(i = SLOT) { try { const s = localStorage.getItem(SAVE_KEYS[i])
 const anySave = () => SAVE_KEYS.some((_, i) => readSave(i));
 function applySave(d) {
   if (!d.flask) { const extra = ['c_p2', 'c_a1', 'c_t2'].filter(k => d.gone && d.gone[k]).length; d.flask = { n: 3 + extra, max: 3 + extra }; d.flags = d.flags || {}; }
-  G = Object.assign(newState(), d); migrateRunes(d); loadMap(G.map, G.x, G.y, G.dir || 'down'); V.scene = 'world'; }
+  G = Object.assign(newState(), d); migrateRunes(d); if (G.map === 'antessala' && G.flags.ch6done) G.map = 'antessala7'; loadMap(G.map, G.x, G.y, G.dir || 'down'); V.scene = 'world'; }
 
 // ---------- mundo ----------
 const WD = { trail: [], disg: false, land: 0, bump: 0, idle: 0, dust: [], map: null, id: null, w: 0, h: 0, x: 0, y: 0, fx: 0, fy: 0, dir: 'down', moving: 0, ents: [], cx: 0, cy: 0, step: 0, bumpCd: 0 };

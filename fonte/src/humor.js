@@ -28,7 +28,7 @@ const THOUGHTS = [
 ];
 { const _l = lantern; lantern = async function () {
   await _l();
-  if (!G.flags.introDone || Math.random() > 0.35) return;
+  if (!G.flags.introDone || WD.skipThought || Math.random() > 0.35) return;
   const seen = G.flags.thoughts || []; const left = THOUGHTS.map((t, i) => i).filter(i => !seen.includes(i) && (G.flags.lumeJoined || !THOUGHTS[i].some(([, w]) => w === 'lume')));
   if (!left.length) return;
   const i = pickOne(left); G.flags.thoughts = [...seen, i];

@@ -8,7 +8,7 @@ const BG_OF = {
   devolucao: 'arquivo', achados: 'arquivo', fundo: 'arquivo', estrada: 'estrada', correio: 'correio',
   terminal: 'terminal', manobras: 'terminal', garagem: 'garagem', trincheira: 'trincheira', oficina: 'trincheira',
   padaria: 'padaria', feira: 'feira', escola: 'escola', coreto: 'coreto', pontofinal: 'pontofinal',
-  antessala: 'antessala', cais: 'cais', conves: 'conves', porao: 'porao', cela: 'cela',
+  antessala7: 'antessala', cais: 'cais', conves: 'conves', porao: 'porao', cela: 'cela',
   garganta: 'garganta', terminal8: 'ruinas', scriptorium8: 'scriptorium', biblioteca8: 'biblioteca', indice: 'indice', tampa: 'catacumba'
 };
 // d = sombra, m = meio, b = brilho, a = acento, f = chão

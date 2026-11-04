@@ -103,7 +103,7 @@ Object.assign(RUNES, {
   chave: { name: 'Chave', type: 'form', col: '#f2ecdc', mult: 1, cost: 4, desc: 'Um alvo. Arranca casca, sumiço e força do inimigo, e abre fechaduras no mapa.' }
 });
 Object.assign(RUNE_RAR, { ambar: 'rara', chave: 'rara' });
-Object.assign(MAP_D, { antessala: 18, cais: 18, conves: 19, porao: 19, cela: 20 });
+Object.assign(MAP_D, { antessala7: 18, cais: 18, conves: 19, porao: 19, cela: 20 });
 EL_COL.ambar = '#f0c040';
 EP.ambar = ['#7a4a08', '#c8962a', '#f0c040', '#fff4c0'];
 { const _cs = castSpell; castSpell = async function (sp, target) {
@@ -171,7 +171,7 @@ Object.assign(LOOK, {
   Z: ['* A pedra da Porta Redonda. Fria. Tem trinta e uma fechaduras entalhadas, cada uma com um número.', '* No centro da porta, um entalhe gasto: uma lanterna com um olho dentro.']
 });
 Object.assign(LOOK_K, { antessala: ['* Caixotes da resistência: velas de rato, cogumelos secos, potes de tinta. Tudo etiquetado pelo Musgo: "NOSSO".', '* Mantimentos que a Rita "achou". Ninguém pergunta onde.'], cais: ['* Caixotes de carga da barca, inchados de âmbar. A etiqueta é numa língua que você não conhece, mas o desenho é claro: frágil.'], conves: ['* Barris de água doce de novecentos anos. Vazios.', '* Cordas enroladas, duras como pedra.'], porao: ['* Caixotes empilhados até o teto. Um deles tem o mesmo desenho do brasão de Auren.', '* Correntes, muitas. Para quem?'] });
-Object.assign(K_REGION, { antessala: 'antessala', cais: 'cais', conves: 'conves', porao: 'porao', cela: 'porao' });
+Object.assign(K_REGION, { antessala7: 'antessala', cais: 'cais', conves: 'conves', porao: 'porao', cela: 'porao' });
 
 // ---------- chefes grandes ----------
 const BIGSP7 = {
@@ -361,7 +361,7 @@ Object.assign(STORY, {
     if (f.soul_neide === 'lembrou') f.c7_neide = true; else f.c7_neideLost = true;
     if (soulOk('cida')) f.c7_cida = true; else f.c7_cidaLost = true;
     if (f.soul_ozorio !== 'lembrou') f.c7_ozorioLost = true;
-    playMusic(null); await fadeOut(12); loadMap('antessala', 12, 13, 'up'); V.scene = 'world'; await fadeIn(16);
+    playMusic(null); await fadeOut(12); loadMap('antessala7', 12, 13, 'up'); V.scene = 'world'; await fadeIn(16);
     playMusic('antessala');
     await say('* Uma caverna redonda, do tamanho de uma praça. No fundo, uma porta de pedra também redonda, alta como três andares.');
     await say('* Trinta e uma fechaduras desenhadas na pedra, em espiral. Cada uma com um número.');
@@ -446,7 +446,7 @@ Object.assign(STORY, {
     if (!f.lacreDone) {
       const c = await choose('* A fechadura do lado de dentro. Voltar para a antessala? (Os cristais que você carrega continuam na tampa.)', ['Voltar', 'Ficar'], 'n', 1);
       if (c !== 0) return;
-      await fadeOut(12); loadMap('antessala', 11, 6, 'down'); await fadeIn(12); return;
+      await fadeOut(12); loadMap('antessala7', 11, 6, 'down'); await fadeIn(12); return;
     }
     const C = carry();
     await say(`* Você carrega ${C.length} alma${C.length === 1 ? '' : 's'}: ${crystalNames(C).join(', ') || 'ninguém'}.`);
@@ -596,7 +596,7 @@ Object.assign(STORY, {
     const f = G.flags, C = carry().slice();
     f.crossBack = true; f.saved7 = C;
     for (const k of C) { if (k === 'ozorio' || k === 'neide') f['soul_' + k] = 'resgatado'; if (k === 'cida') f.soul_cida = 'resgatado'; }
-    playMusic(null); sfx('flee'); await fadeOut(14); loadMap('antessala', 11, 7, 'down'); V.scene = 'world'; await fadeIn(16);
+    playMusic(null); sfx('flee'); await fadeOut(14); loadMap('antessala7', 11, 7, 'down'); V.scene = 'world'; await fadeIn(16);
     playMusic('padaria');
     await say('* CLIC. Você cai na antessala de tampa para cima, quente como um forno.');
     if (C.length) {
