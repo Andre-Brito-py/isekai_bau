@@ -454,12 +454,7 @@ Object.assign(STORY, {
       await say('* Ofélia se vira devagar. Pela primeira vez desde que vocês se conheceram, ela não tem uma resposta pronta.');
       await say('Eu sei. Eu senti quando a ficha dela caiu lá embaixo.| Faz um barulho. Parece uma gaveta fechando.', 'of');
     }
-    if (G.flags.knightRibbon) {
-      await say('* Você mostra a {y}Fita da Bibliotecária{/}. Ofélia olha para ela como quem olha uma foto antiga.');
-      await say('A gente achou isso com um cavaleiro. Ele chamava o seu nome.', 'me');
-      await say('Ele ainda estava lá. Na porta.|.|.| Eu mandei ele esperar, e ele esperou.', 'of');
-      await say('Fiel até a ferrugem. Era o jeito dele.', 'of');
-    }
+    if (G.flags.knightRibbon && !G.flags.ribbonTold) await STORY.knightOfelia();
     await say('Tudo bem. Chega de bibliotecária misteriosa. Isso cansa até fantasma.', 'of');
     await say('Embaixo desta sala existe o Arquivo Profundo. É lá que a masmorra guarda o que sobra das almas que ela come.| As coisas que elas perdem.', 'of');
     await say('Eu tranquei a entrada há muito tempo. Afoguei a sala inteira por cima para ninguém achar.', 'of');
