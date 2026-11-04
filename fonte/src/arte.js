@@ -351,8 +351,91 @@ function bossState8(e) {
   if ((e.phase8 || e.phase || 1) >= 2) return 'p2';
   return 'idle';
 }
+// ----- animação dos chefes (desenho próprio: respiração, sombra, preparo do golpe, rastro, recuo, aura de fase e dissolução) -----
+const AURA8 = { boss: '#9ad070', octo: '#e070d0', brida: '#ff5a5a', jailer: '#c0a0ff', knight: '#b070ff', maren: '#c890ff', clara: '#a8c0ff', maren5: '#e0a0ff', fiscal: '#ffd070', jorge: '#ffd040', tacho: '#ff9a30', maestro: '#8fb0ff', p32: '#ffb0d0', carro: '#c090ff', timoneiro: '#ffc040', capitao: '#ff4a4a', lacre: '#ff3a4a', escriba8: '#9a80ff' };
+// partículas de ambiente de cada um: [cores, modo]  sobe | cai | flutua
+const AMB8 = { boss: [['#9ad070', '#6a8a4a'], 'cai'], octo: [['#e070d0', '#ffffff'], 'sobe'], brida: [['#ff8a5a', '#ffd040'], 'sobe'], jailer: [['#8a8099', '#c0a0ff'], 'cai'], knight: [['#b070ff', '#5a3a8a'], 'flutua'], maren: [['#c890ff', '#ffe066'], 'flutua'], clara: [['#a8c0ff', '#ffffff'], 'flutua'], maren5: [['#e0a0ff', '#ffffff'], 'flutua'], fiscal: [['#ffd070', '#f2ecdc'], 'cai'], jorge: [['#8a8099', '#b8aecb'], 'sobe'], tacho: [['#f2ecdc', '#ffb070'], 'sobe'], maestro: [['#8fb0ff', '#ffffff'], 'flutua'], p32: [['#ffb0d0', '#f2ecdc'], 'flutua'], carro: [['#c090ff', '#8a8099'], 'cai'], timoneiro: [['#ffc040', '#ffe066'], 'flutua'], capitao: [['#ff4a4a', '#ffb070'], 'sobe'], lacre: [['#ff3a4a', '#a01a2a'], 'cai'], escriba8: [['#9a80ff', '#f2ecdc'], 'flutua'] };
+const FLOAT8 = { clara: 3, escriba8: 3, maren5: 1.5, maestro: 1 };
+function shadow8(cx, y, w, a) { bx.save(); bx.globalAlpha = a; bx.fillStyle = '#05030a'; for (let r = -2; r <= 2; r++) { const ww = Math.round(w * Math.sqrt(1 - (r / 3) * (r / 3))); bx.fillRect(Math.round(cx - ww / 2), Math.round(y + r), ww, 1); } bx.restore(); }
+function drawBoss8(e) {
+  const S = BOSS8[e.id], col = AURA8[e.id] || '#ffffff';
+  if (e.seed8 === undefined) e.seed8 = Math.floor(Math.random() * 90);
+  e.t8 = (e.t8 || 0) + 1;
+  const t = FRAME + e.seed8, st = bossState8(e), ph = e.phase8 || e.phase || 1;
+  if (!e.alive && !e.d8) { e.d8 = 1; e.dying = 84; }
+  const base = S.idle[0], H0 = base.height, by = Math.round(e.y + H0 / 2);   // linha dos pés
+  // quadro
+  let fr;
+  if (st === 'dead') fr = S.dead[0];
+  else if (st === 'hurt') fr = S.hurt[0];
+  else if (st === 'atk') fr = S.atk[0];
+  else if (st === 'p3') fr = S.p3[0];
+  else if (st === 'p2') fr = (t % 96) < 64 ? S.p2[0] : S.idle[Math.floor(t / 30) % S.idle.length];
+  else fr = S.idle[Math.floor(t / 30) % S.idle.length];
+  // corpo: respiração ancorada nos pés
+  const br = Math.sin(t * 0.065);
+  let sx = 1 - br * 0.012, sy = 1 + br * 0.02, dx = 0, dy = 0, alpha = 1, ghosts = 0;
+  const fl = FLOAT8[e.id] || 0; if (fl) dy -= 4 + Math.sin(t * 0.05) * fl;
+  // entrada: sobe do chão
+  const ent = Math.min(1, e.t8 / 32), entE = 1 - Math.pow(1 - ent, 3); dy += (1 - entE) * 14; alpha *= entE;
+  // golpe: prepara (recua e encolhe) e avança esticado, deixando rastro
+  if (e.lunge > 0) {
+    const u = 1 - e.lunge / 16;
+    if (u < 0.35) { const k = u / 0.35; dx += k * 6; sx *= 1 + k * 0.06; sy *= 1 - k * 0.06; }
+    else { const k = (u - 0.35) / 0.65; dx += 6 - Math.sin(k * Math.PI) * 30; sx *= 1.07 - k * 0.07; sy *= 0.95 + k * 0.05; ghosts = 3; }
+  }
+  // dano: tranco para trás e tremida
+  if (e.shake > 0) { dx += Math.sin(e.shake * 1.7) * 3 + Math.min(e.shake, 12) * 0.5; sx *= 1 + Math.min(e.shake, 10) * 0.004; sy *= 1 - Math.min(e.shake, 10) * 0.006; }
+  const w = Math.round(fr.width * sx), h = Math.round(fr.height * sy), X = Math.round(e.x + dx - w / 2), Y = Math.round(by + dy - h);
+  // sombra
+  const sw = Math.round(base.width * 0.62 * entE * (fl ? 0.8 - Math.sin(t * 0.05) * 0.06 : 1));
+  if (e.alive || e.dying > 40) shadow8(e.x + dx * 0.5, by - 1, sw, 0.42 * alpha);
+  bx.save();
+  if (!e.alive) {
+    // derrota: pisca, treme e se desfaz de cima para baixo em cinzas da cor do chefe
+    const k = e.dying / 84, X2 = X + (k > 0.7 ? Math.round(Math.sin(e.dying * 2.1) * 2) : 0);
+    if (k > 0.7) { bx.drawImage(e.dying % 6 < 3 ? silhouette(fr, '#ffffff') : fr, X2, Y, w, h); }
+    else {
+      const cut = Math.round(h * (1 - k / 0.7));
+      bx.globalAlpha = Math.min(1, k / 0.15);
+      bx.drawImage(fr, 0, Math.round(cut / sy), fr.width, fr.height - Math.round(cut / sy), X2, Y + cut, w, h - cut);
+      if (e.dying % 2 === 0) for (let i = 0; i < 3; i++) fxPart(X2 + Math.random() * w, Y + cut + Math.random() * 3, rand(-0.4, 0.4), rand(-1.2, -0.3), rand(24, 44), pickOne([col, '#ffffff', '#3a2a4a']), Math.random() < 0.4 ? 2 : 1);
+    }
+    bx.restore(); return;
+  }
+  bx.globalAlpha = alpha;
+  // aura de fase: contorno brilhante pulsando
+  if (st === 'p2' || st === 'p3' || ph >= 2) {
+    const pu = 0.35 + Math.sin(t * 0.12) * 0.2, sil = silhouette(fr, st === 'p3' ? '#ffd040' : col);
+    bx.globalAlpha = alpha * pu;
+    for (const [ox, oy] of [[-2, 0], [2, 0], [0, -2], [0, 2], [-1, -1], [1, -1]]) bx.drawImage(sil, X + ox, Y + oy, w, h);
+    if (t % 5 === 0) fxPart(X + Math.random() * w, Y + h * (0.3 + Math.random() * 0.6), rand(-0.2, 0.2), rand(-1.1, -0.4), rand(30, 50), Math.random() < 0.3 ? '#ffffff' : col, Math.random() < 0.3 ? 2 : 1);
+    bx.globalAlpha = alpha;
+  }
+  // rastro do avanço
+  if (ghosts) { const sil = silhouette(fr, col); for (let g = ghosts; g >= 1; g--) { bx.globalAlpha = alpha * 0.12 * (4 - g); bx.drawImage(sil, X + g * 7, Y, w, h); } bx.globalAlpha = alpha; }
+  bx.drawImage(fr, X, Y, w, h);
+  if (e.flash > 0 && e.flash % 4 < 2) { bx.globalAlpha = 0.85; bx.drawImage(silhouette(fr, '#ffffff'), X, Y, w, h); }
+  if (e.frozen > 0) { bx.globalAlpha = 0.45; bx.drawImage(silhouette(fr, '#7ad0f0'), X, Y, w, h); }
+  bx.restore();
+  // ambiente
+  const A = AMB8[e.id];
+  if (A && t % 11 === 0 && ent >= 1) {
+    const c = pickOne(A[0]);
+    if (A[1] === 'sobe') fxPart(X + w * (0.2 + Math.random() * 0.6), Y + h * 0.3 * Math.random(), rand(-0.15, 0.15), rand(-0.6, -0.25), rand(40, 60), c, 1);
+    else if (A[1] === 'cai') fxPart(X + w * Math.random(), Y + h * (0.3 + Math.random() * 0.5), rand(-0.1, 0.1), 0.2, rand(25, 40), c, 1, 1);
+    else fxPart(X + w * Math.random(), Y + h * Math.random(), rand(-0.2, 0.2), rand(-0.3, 0.1), rand(40, 70), c, 1);
+  }
+  if (e.flash === 1 || (e.shake > 0 && !e.hit8)) { e.hit8 = 1; for (let i = 0; i < 6; i++) fxPart(e.x + rand(-w / 3, w / 3), Y + h * 0.4 + rand(-10, 10), rand(0.4, 1.6), rand(-1.2, 0.2), rand(14, 24), pickOne([col, '#ffffff']), 1, 1); }
+  if (!e.shake) e.hit8 = 0;
+}
+{ const _dp = drawParty; drawParty = function () {
+  _dp();
+  if (BT.on && BT.en) for (const e of BT.en) if (BOSS8[e.id] && e.id !== 'catalogo' && (e.alive || e.dying > 0)) drawBoss8(e);
+}; }
+// o laço padrão só desenha a barra de vida e os ícones (o corpo é desenhado acima)
 { const _db = drawBattle; drawBattle = function () {
-  if (BT.on && BT.en) for (const e of BT.en) { if (e.id === 'catalogo') continue; const st = bossState8(e); if (st) e.sp = e.id + 'IA_' + (st === 'p2' && FRAME % 60 < 30 && BOSS8[e.id].idle ? 'p2' : st); }
+  if (BT.on && BT.en) for (const e of BT.en) { if (e.id === 'catalogo' || !BOSS8[e.id]) continue; const st = bossState8(e); if (!st) continue; const k = e.id + 'IA_blank'; if (!SP[k]) SP[k] = [mk(BOSS8[e.id].idle[0].width, BOSS8[e.id].idle[0].height)]; e.sp = k; }
   return _db();
 }; }
 // o Catálogo: corpo com a arte do usuário, mantendo o halo e as letras orbitando
