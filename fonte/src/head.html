@@ -225,6 +225,54 @@
     próximos 2 golpes), CHAVE (forma rara: um alvo, arranca casca/sumiço/força e abre fechaduras no mapa).
     Itens: Bala de Âmbar (cura e limpa status), Água do Cais (PM).
 
+  CAPÍTULO 8 — "A TAMPA SE FECHA" (FEITO; data8.js + maps8.js gerado por build/ch8/maps8.py; teste: build/test19.py)
+  Fatos gravados: finalChoice ('devolver'|'guardar'), helped8 (quem ajudou nos obstáculos), pages8Done, brida8, maren8,
+  escribaDone, catalogoDone, runaRosto, seasonDone; herança em localStorage 'renasci_heranca' (+ código RCB-H1).
+  Balanceamento (piloto 0.6, Desafio): Escriba deixa 35% (Ferro/Arca) e 50% (mago/Vazio); Catálogo deixa 37% e ~10%.
+  O Catálogo usa muitos golpes de MAGIA (defendidos com MAG): é isso que aperta o caminho do Ferro sem esmagar o mago.
+  Resposta certa na FICHA: desfaz a correção e causa 2% da vida do chefe (não pode virar o ataque principal).
+  Tema: identidade. O Catálogo tenta reescrever quem você é; você responde com a própria história.
+  Início: na antessala (ch7done), todo mundo entra no 31. A masmorra desaba; o Jorge dirige subindo a LINHA 31 ao
+  contrário, de dentro para fora. Mapas (subida): 1) GARGANTA DA LINHA (túnel desabando; pedras com alvo vermelho;
+  Lanterna) -> 2) TERMINAL EM RUÍNAS (o QG dos heróis, abandonado; Maren, se poupada, avisa que a Inquisição
+  "responde a alguém que nunca envelhece") -> 3) SCRIPTORIUM DESABADO (mini-chefe O ESCRIBA, a mão do Catálogo,
+  agora sem corrente) -> 4) BIBLIOTECA AFOGADA (Ofélia; a lição do nome; Lanterna antes do chefe) -> 5) O ÍNDICE
+  (o coração do Catálogo, embaixo da biblioteca; CHEFE FINAL O CATÁLOGO) -> 6) A TAMPA (a sala onde o baú acordou
+  no Cap. 1; a saída para o céu).
+  - MECÂNICA DE MAPA: PASSAGEIROS DO 31. Obstáculos (entulho, escuro, vão, porta emperrada, fila de desbotados)
+    se resolvem chamando alguém que está no ônibus. Quem pode ajudar depende das escolhas da temporada inteira
+    (Musgo e Lume sempre; Jorge; Tiago se tiagoTaken; Marlene se conosco; Rita se dateDone; Neide/Ozório/Cida se
+    lembraram ou foram resgatados; aprendizes; almas trazidas do âmbar). Nunca trava: sempre há alguém.
+  - INIMIGOS: Passageiro sem Rosto (acalmável com Canto), Fichário Vivo, Tinteiro Errante, Marca-Página,
+    Leitor de Cinzas, Boca da Fome (elite).
+  - RUNAS: CÉU (elemento raro, a palavra que ninguém lá embaixo conhecia: limpa os seus estados; Véu = Céu Aberto,
+    imune a cegueira e esquecimento por 3 turnos) e NOME (modificador raro: o feitiço vai assinado com o seu nome;
+    não pode ser copiado, refletido nem catalogado; +30% contra quem lê: Escriba, Leitor, Catálogo).
+  - O ESCRIBA (mini-chefe): RISCA um comando no ar antes de agir (MORDER, MAGIA ou ITEM). Usar o comando riscado
+    falha e dói. Copia o seu último feitiço. Fase 2: escreve com as duas mãos.
+  - O CATÁLOGO (chefe final; a luta MAIS DIFÍCIL do jogo, pedido do usuário; visual especial e mecânica única):
+    VISUAL: a arena vira um livro aberto gigante; o Catálogo é desenhado ao vivo (não é sprite fixo): um livro
+    enorme flutuando, páginas que viram sozinhas, texto se escrevendo, fitas de marcador como tentáculos e um rosto
+    de colchetes "[ • ]" (é a voz entre colchetes do jogo inteiro). Fase 3: as páginas pegam fogo cor de âmbar e a
+    lombada abre como uma boca (a Voz empurrando por trás).
+    MECÂNICA ÚNICA: A FICHA. O Catálogo aplica CORREÇÕES na sua ficha, que mudam a própria interface:
+    NOME (você vira "ALMA 31" na faixa do grupo; ninguém consegue te chamar: sem ajudas, dano -20%), ESPÉCIE (o
+    sprite volta a ser o Mímico-Caixote e ATQ/DEF/MAG caem para 65%) e REGISTRO (sem ITEM e um feitiço apagado).
+    O botão FUGIR vira RESPONDER: o Catálogo faz uma pergunta da SUA ficha, montada do save (sua 2ª evolução, a
+    quem você deve dois pastéis, quem cantava no fundo do ônibus, o seu nome, a escolha do Cap. 6...). Acertar
+    apaga uma correção e causa dano de VERDADE; errar dói e a correção fica. O Mímico Vazio não tem memórias da
+    Terra: as perguntas da Terra aparecem como [arquivado] e viram perguntas da masmorra.
+    Fases: ÍNDICE (cataloga o que você mais usa: ações repetidas rendem menos), REVISÃO (correções em dobro),
+    ÚLTIMA PÁGINA (a Voz empurra; golpes enormes; cada alma salva grita "Presente!" e bloqueia um golpe; se
+    ch6Gift='cancao', a Lume canta a canção inteira uma vez). Ao morrer: "ela vai chamar de novo"; a última página é
+    assinada só com uma lanterna.
+  - ESCOLHA FINAL (G.flags.finalChoice): DEVOLVER (abrir o coração de âmbar; as almas sobem como luz; a masmorra
+    para de comer Velhágua; as Lanternas apagam; Auren fica sem âmbar no inverno) ou GUARDAR (o baú fecha o coração
+    dentro de si: as almas dormem a salvo, ninguém colhe o âmbar; todo mundo na superfície vai querer o baú).
+  - RUNA DO ROSTO: a Ofélia ensina; forma humana (8 corpos pela linha de 4º grau, aura pelo 5º grau, nitidez pelas
+    memórias). HERANÇA (renasci_heranca + código), FEITOS e RENOME gravados no fim. Última cena: o céu.
+  - OPCIONAL: as Três Últimas Páginas do Catálogo (Fragmento + pista); a Ficha da Brida no Índice (se arquivada).
+
   HUMANIDADE E HUMOR (humor.js; vale para todos os capítulos)
   O baú foi uma pessoa comum e isso tem que aparecer: ele CORA (blush(): tampa rosada, vapor e coração no
   mapa) perto de mulheres que acha bonitas, fica sem jeito, lembra de besteiras da vida (suculenta Gerson,
@@ -258,6 +306,11 @@
   caixa; os dos inimigos, numa coluna ao lado do sprite. Selo = círculo mágico na cor do elemento.
   REGRA TÉCNICA: o build concatena tudo num só escopo; NUNCA declarar função global com nome já usado (uma auxiliar 'ring' dos
   ícones apagou o minijogo de defesa). Auxiliares novas levam prefixo do arquivo (icPx, icRing...). Checar duplicatas antes de publicar.
+  ESTILO DE PERSONAGENS (decidido com o usuário, a partir de uma folha de sprites do Deltarune; só o estilo, nunca os
+  personagens): sprites de personagem maiores que os tiles (cerca de 20x30 no mapa), cabeça grande, contorno escuro grosso,
+  2-3 tons chapados por cor, cores bem saturadas, rosto simples (olhos de um ou dois pixels, sem gradiente).
+  ESCOPO: o baú (todas as formas), a Lume e os personagens com nome, no mapa e na batalha. Inimigos comuns ficam como estão.
+  A forma humana (Runa do Rosto) também segue esse estilo, inclusive no retrato.
   REGRA DE ARTE DOS CHEFES (pedido do usuário, vale para sempre): TODO chefe, mini-chefe e chefe secreto
   tem que ser MUITO bem caprichado. Sprite de batalha próprio em bosses.js (48x48, escala 2, 4 quadros, com
   BIGSP + big()): contorno, luz e sombra, textura, acessórios que contem quem ele é (ex.: o Polvo tem cartola,

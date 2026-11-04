@@ -773,7 +773,7 @@ function drawWorld() {
       }
       case 'npc': {
         const fl = Math.round(Math.sin(FRAME * 0.05) * 2);
-        bx.globalAlpha = 0.88; bx.drawImage(SP.ofelia[0], sx, sy - 4 + fl); bx.globalAlpha = 1;
+        bx.globalAlpha = 0.88; drawTall(SP.ofelia[Math.floor(FRAME / 30) % 2], sx, sy, false, fl - 2); bx.globalAlpha = 1;
         lights.push([sx + 8, sy + 6, 44, 'rgba(190,160,255,0.16)']);
         break;
       }
@@ -818,11 +818,11 @@ function drawWorld() {
       case 'seal': drawSeal(e, sx, sy, lights); break;
       case 'page': if (!G.flags[e.id]) { const fy = Math.round(Math.sin(FRAME * 0.1 + e.x) * 1.5); bx.fillStyle = '#120e1a'; bx.fillRect(sx + 4, sy + 3 + fy, 9, 11); bx.fillStyle = '#e8dcc0'; bx.fillRect(sx + 5, sy + 4 + fy, 7, 9); bx.fillStyle = '#5a4a6a'; for (let k = 0; k < 4; k++) bx.fillRect(sx + 6, sy + 6 + k * 2 + fy, 5, 1); lights.push([sx + 8, sy + 8, 22, 'rgba(255,240,200,0.18)']); } break;
       case 'pickup': if (!G.flags[e.id]) { bx.drawImage(SP.chest[0], sx, sy); lights.push([sx + 8, sy + 8, 22, 'rgba(255,224,102,0.18)']); } break;
-      case 'npc2': { if (e.cond && !G.flags[e.cond]) break; if (e.hide && G.flags[e.hide]) break; const sp = SP[e.sp]; const fl = e.float ? Math.round(Math.sin(FRAME * 0.06) * 2) : 0; if (e.flip) { bx.save(); bx.translate(sx + 16, sy + fl); bx.scale(-1, 1); bx.drawImage(sp[Math.floor(FRAME / 30) % sp.length], 0, 0); bx.restore(); } else bx.drawImage(sp[Math.floor(FRAME / 30) % sp.length], sx, sy + fl); if (e.glow) lights.push([sx + 8, sy + 8, 36, e.glow]); break; }
+      case 'npc2': { if (e.cond && !G.flags[e.cond]) break; if (e.hide && G.flags[e.hide]) break; const sp = SP[e.sp]; const fl = e.float ? Math.round(Math.sin(FRAME * 0.06) * 2) : 0; const fr0 = sp[Math.floor(FRAME / 30) % sp.length]; if (fr0.height > 16 || fr0.width > 16) drawTall(fr0, sx, sy, e.flip, fl); else if (e.flip) { bx.save(); bx.translate(sx + 16, sy + fl); bx.scale(-1, 1); bx.drawImage(fr0, 0, 0); bx.restore(); } else bx.drawImage(fr0, sx, sy + fl); if (e.glow) lights.push([sx + 8, sy + 8, 36, e.glow]); break; }
       case 'boss3': { const sp = SP[e.sp]; const f = Math.floor(FRAME / 30) % sp.length; const big = sp[0].width > 16; bx.drawImage(sp[f], big ? sx - 8 : sx, big ? sy - 16 : sy); if (e.glow) lights.push([sx + 8, sy + 4, 40, e.glow]); break; }
       case 'brida': {
         const f = Math.floor(FRAME / 30) % 2;
-        bx.drawImage(SP.brida[f], sx, sy); bx.drawImage(SP.hound[f], sx + 16, sy + 2);
+        drawTall(SP.brida[f], sx, sy); bx.drawImage(SP.hound[f], sx + 16, sy + 2);
         lights.push([sx + 16, sy + 8, 40, 'rgba(255,120,120,0.12)']);
         break;
       }
@@ -1104,6 +1104,7 @@ async function playerTurn() {
     BT.flavor = pickOne(BT.en.find(e => e.alive && e.phase === 2)?.d.flavor2 || pickOne(BT.en.filter(e => e.alive)).d.flavor);
     BT.tw.set(BT.flavor, 35, { instant: false });
     const c = await bWait('main');
+    if (typeof cmdGate === 'function') { const g = await cmdGate(c); if (g === 'acted') return 'acted'; if (g === 'block') continue; }
     if (c === 0) {
       if (G.tech && G.tech.length) {
         const ids = G.tech.filter(k => TECH[k]);
@@ -1122,7 +1123,7 @@ async function playerTurn() {
       if (i < 0) continue;
       const sp = G.spells[i];
       let target = null;
-      if (sp.form === 'dardo' || sp.form === 'corrente' || sp.form === 'ancora' || sp.form === 'mina') { const t = await pickTarget(); if (t < 0) continue; target = BT.en[t]; }
+      if (sp.form === 'dardo' || sp.form === 'corrente' || sp.form === 'ancora' || sp.form === 'mina' || sp.form === 'chave') { const t = await pickTarget(); if (t < 0) continue; target = BT.en[t]; }
       if (BT.freeSpell > 0) BT.freeSpell--; else G.mp -= spellCost(sp); markAct('spell'); await castSpell(sp, target); return 'acted';
     }
     if (c === 2) {
@@ -1318,7 +1319,7 @@ async function gameOver() {
 // ---------- update / render da batalha ----------
 const BTN = ['MORDER', 'MAGIA', 'ITEM', 'AVALIAR', 'FUGIR'];
 // depois da primeira técnica, MORDER vira TÉCNICA (a Mordida comum fica no topo da lista)
-const btnLabel = i => i === 0 && G.tech && G.tech.length ? 'TÉCNICA' : BTN[i];
+const btnLabel = i => (typeof btnOverride === 'function' && btnOverride(i)) || (i === 0 && G.tech && G.tech.length ? 'TÉCNICA' : BTN[i]);
 function updateBattle() {
   for (const p of BT.parts) { p.x += p.vx; p.y += p.vy; p.life--; if (!p.then) p.vy += 0.03; }
   BT.parts = BT.parts.filter(p => p.life > 0);
@@ -1539,7 +1540,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–7', 6, 226, { col: '#5a5070' }); txt('v2.0', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.1', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
