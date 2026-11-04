@@ -62,3 +62,21 @@ def same(fs):
     for f in fs:
         c = np.zeros((H, W, 4), np.uint8); c[H - f.shape[0]:, (W - f.shape[1]) // 2:(W - f.shape[1]) // 2 + f.shape[1]] = f; out.append(c)
     return out
+def enc_rle(a):
+    """como enc, mas com os índices comprimidos em pares (repetições, índice)"""
+    e = enc(a); raw = base64.b64decode(e['d']); out = bytearray(); i = 0
+    while i < len(raw):
+        j = i
+        while j < len(raw) and raw[j] == raw[i] and j - i < 255: j += 1
+        out += bytes([j - i, raw[i]]); i = j
+    e['d'] = base64.b64encode(bytes(out)).decode(); e['r'] = 1; return e
+def same_h(fs):
+    H = max(f.shape[0] for f in fs); return [np.concatenate([np.zeros((H - f.shape[0], f.shape[1], 4), np.uint8), f], 0) for f in fs]
+import io
+def enc_png(a):
+    im = Image.fromarray(a, 'RGBA'); al = a[..., 3] > 127
+    p = Image.fromarray(a[..., :3]).quantize(colors=63, method=Image.Quantize.MEDIANCUT)
+    idx = np.array(p); idx[~al] = 63; pal = p.getpalette()[:63 * 3] + [255, 0, 255]
+    q = Image.fromarray(idx.astype(np.uint8), 'P'); q.putpalette(pal + [0] * (768 - len(pal)))
+    buf = io.BytesIO(); q.save(buf, 'PNG', optimize=True, transparency=63)
+    return {'w': int(a.shape[1]), 'h': int(a.shape[0]), 'png': base64.b64encode(buf.getvalue()).decode()}

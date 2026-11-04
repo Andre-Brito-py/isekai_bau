@@ -327,3 +327,44 @@ function humanArt8() {
   return { big: [big[0], big[1], big[0], big[2], big[3]], port: [port[0], port[1], port[0]], body };
 }
 { const _hp = humanPort8; humanPort8 = function () { const A = humanArt8(); if (!A) return _hp(); PORT.humano48 = A.big; HUMAN8 = A.body; return A.port; }; }
+// ----- chefes com a arte do usuário (arte_ia3.js) -----
+const BOSS8 = {};
+function pngCanvas(e) { const c = mk(e.w, e.h), im = new Image(); im.onload = () => c.getContext('2d').drawImage(im, 0, 0); im.src = 'data:image/png;base64,' + e.png; return c; }
+function buildArteIA3() {
+  if (typeof ARTE_IA3 === 'undefined') return;
+  for (const [k, v] of Object.entries(ARTE_IA3)) {
+    const S = {}; for (const [st, fr] of Object.entries(v)) { S[st] = fr.map(pngCanvas); SP[k + 'IA_' + st] = S[st]; }
+    BOSS8[k] = S;
+    if (ENEMIES[k] && k !== 'catalogo') { ENEMIES[k].sp = k + 'IA_idle'; ENEMIES[k].bsc = 1; }
+  }
+}
+{ const _bs = buildSprites; buildSprites = function () { _bs(); buildArteIA3(); }; }
+// chefes largos não saem da tela
+{ const _mk = mkEnemy; mkEnemy = function (id, i, n) { const e = _mk(id, i, n); const S = BOSS8[id]; if (S && id !== 'catalogo') { const w = S.idle[0].width; e.x = Math.max(40 + w / 2, Math.min(e.x, 238 - w / 2)); } return e; }; }
+// cada chefe troca de quadro conforme o que está acontecendo
+function bossState8(e) {
+  const S = BOSS8[e.id]; if (!S) return null;
+  if (!e.alive) return 'dead';
+  if (e.flash > 0 || e.shake > 10) return 'hurt';
+  if (e.lunge > 0) return 'atk';
+  if ((e.phase8 || e.phase || 1) >= 3 && S.p3) return 'p3';
+  if ((e.phase8 || e.phase || 1) >= 2) return 'p2';
+  return 'idle';
+}
+{ const _db = drawBattle; drawBattle = function () {
+  if (BT.on && BT.en) for (const e of BT.en) { if (e.id === 'catalogo') continue; const st = bossState8(e); if (st) e.sp = e.id + 'IA_' + (st === 'p2' && FRAME % 60 < 30 && BOSS8[e.id].idle ? 'p2' : st); }
+  return _db();
+}; }
+// o Catálogo: corpo com a arte do usuário, mantendo o halo e as letras orbitando
+{ const _dc = drawCatalogo8; drawCatalogo8 = function (e) {
+  const S = BOSS8.catalogo; if (!S) return _dc(e);
+  const ph = e.phase8 || 1, t = FRAME, burn = ph === 3, fade = e.alive ? 1 : Math.max(0, e.dying / 36), sh = e.shake ? Math.sin(e.shake * 1.7) * 4 : 0;
+  const st = !e.alive ? 'dead' : (e.flash > 0 ? 'hurt' : ph === 3 ? 'p3' : ph === 2 ? 'p2' : e.lunge > 0 ? 'atk' : 'idle');
+  const fr = S[st][Math.floor(t / 24) % S[st].length], cx = e.x + sh, cy = e.y + Math.sin(t * 0.05) * 2;
+  bx.save(); bx.globalAlpha = 0.18 * fade; fxDisc(cx, cy, 58 + Math.sin(t * 0.04) * 3, burn ? '#ff8030' : ph === 2 ? '#ff5a6a' : '#5a9ae0'); bx.globalAlpha = 0.1 * fade; fxDisc(cx, cy, 70, burn ? '#ffd040' : '#a8ecff'); bx.globalAlpha = fade;
+  bx.drawImage(fr, Math.round(cx - fr.width / 2), Math.round(cy - fr.height / 2));
+  const L = '[ÍNDICE]';
+  for (let i = 0; i < L.length; i++) { const a = t * 0.025 + i / L.length * Math.PI * 2; txt(L[i], cx + Math.cos(a) * 70 - 3, cy + Math.sin(a) * 44 - 6, { col: burn ? '#ffb040' : '#8fe3ff', alpha: 0.75 * fade }); }
+  if (e.flash > 0 && e.flash % 4 < 2) { bx.globalAlpha = 0.5; bx.drawImage(silhouette(fr, '#ffffff'), Math.round(cx - fr.width / 2), Math.round(cy - fr.height / 2)); }
+  bx.restore();
+}; }
