@@ -39,7 +39,7 @@ M['antessala7'] = dict(rows=A, start=(12, 13), exits=[],
        dict(id='pip7',kind='npc2',x=18,y=5,sp='pip',talk='pip7',cond='aprendizesDone')])
 
 # ---- 2) CAIS DE ÂMBAR 28x18 (gerado) ----
-g = grid(28, 18, 'G')
+g = grid(28, 18, 'u')  # 'u' = mar de âmbar (o 'G' é o Portão de Musgo do Cap. 1)
 rect(g, 13, 0, 14, 16, '.')
 for y in (4, 9, 13):
     rect(g, 5, y, 22, y, '.')
@@ -48,7 +48,7 @@ rect(g, 9, 14, 18, 16, '.')
 rect(g, 15, 6, 16, 7, '.'); rect(g, 11, 10, 12, 11, '.')
 for (x, y) in [(5,4),(9,9),(20,13),(17,4)]: g[y][x] = ','
 put(g, [(9,16),(18,14)], 'K')
-g[0][0] = 'G'
+g[0][0] = 'u'
 M['cais'] = dict(rows=rows(g),
  exits=[(13,0,'conves',12,16),(14,0,'conves',13,16)],
  ents=[dict(id='volta7',kind='npc2',x=13,y=16,sp='fechadura',talk='volta7',glow='rgba(255,224,102,0.2)'),

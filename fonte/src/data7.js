@@ -157,17 +157,18 @@ function buildSprites7() {
   deco('mimicArca', x => { x.fillStyle = PAL.y; x.fillRect(5, 0, 6, 1); x.fillRect(7, 0, 2, 2); x.fillStyle = PAL.c; x.fillRect(4, 12, 1, 1); x.fillRect(11, 12, 1, 1); x.fillRect(7, 13, 2, 1); });
   deco('mimicVazio', x => { x.clearRect(5, 11, 6, 2); x.fillStyle = PAL.d; x.fillRect(4, 11, 1, 2); x.fillRect(11, 11, 1, 2); });
 }
-// tiles: G = âmbar líquido (mar), Z = pedra da Porta Redonda
+// tiles: u = âmbar líquido (mar), Z = pedra da Porta Redonda (antes era 'G', que colidia com o Portão de Musgo do Cap. 1)
 function buildTiles7(T) {
-  TILE.G = tileCanvas((x, R) => { x.fillStyle = '#7a4a08'; x.fillRect(0, 0, 16, 16); x.fillStyle = '#a86a10'; for (let i = 0; i < 5; i++) x.fillRect(Math.floor(R() * 14), Math.floor(R() * 15), 3, 1); x.fillStyle = '#f0c040'; x.fillRect(Math.floor(R() * 14), Math.floor(R() * 15), 2, 1); }, 701);
+  TILE.u = tileCanvas((x, R) => { x.fillStyle = '#7a4a08'; x.fillRect(0, 0, 16, 16); x.fillStyle = '#a86a10'; for (let i = 0; i < 5; i++) x.fillRect(Math.floor(R() * 14), Math.floor(R() * 15), 3, 1); x.fillStyle = '#f0c040'; x.fillRect(Math.floor(R() * 14), Math.floor(R() * 15), 2, 1); }, 701);
+  TILE.u2 = tileCanvas((x, R) => { x.fillStyle = '#7a4a08'; x.fillRect(0, 0, 16, 16); x.fillStyle = '#a86a10'; for (let i = 0; i < 5; i++) x.fillRect(Math.floor(R() * 14), Math.floor(R() * 15), 3, 1); x.fillStyle = '#f0c040'; x.fillRect(Math.floor(R() * 14), Math.floor(R() * 15), 2, 1); }, 701);
   TILE.Z = tileCanvas((x, R) => { x.fillStyle = '#3a342e'; x.fillRect(0, 0, 16, 16); x.fillStyle = '#4e4640'; x.fillRect(1, 1, 14, 14); x.fillStyle = '#2a2420'; x.fillRect(0, 7, 16, 1); x.fillRect(7, 0, 1, 16); if (R() < 0.5) { x.fillStyle = '#c8962a'; x.fillRect(3 + Math.floor(R() * 8), 3 + Math.floor(R() * 8), 2, 2); } }, 702);
 }
 { const _bs = buildSprites; buildSprites = function () { _bs(); buildSprites7(); buildBoss7(); buildPorts7(); }; }
 { const _bt = buildTiles; buildTiles = function (theme) { _bt(theme); buildTiles7(theme || {}); }; }
-{ const _st = solidTile; solidTile = function (c) { if ('GZ'.includes(c)) return true; return _st(c); }; }
-{ const _tc = tileCanvasFor; tileCanvasFor = function (c, x, y) { if (c === 'G' && Math.floor(FRAME / 40 + (x * 3 + y) * 0.3) % 3 === 0) return TILE.G; return _tc(c, x, y); }; }
+{ const _st = solidTile; solidTile = function (c) { if ('uZ'.includes(c)) return true; return _st(c); }; }
+{ const _tc = tileCanvasFor; tileCanvasFor = function (c, x, y) { if (c === 'u') return Math.floor(FRAME / 40 + (x * 3 + y) * 0.3) % 3 === 0 ? TILE.u2 : TILE.u; return _tc(c, x, y); }; }
 Object.assign(LOOK, {
-  G: ['* Âmbar líquido, morno, até onde a vista alcança. De perto, dá para ver rostos lá dentro, bem fundo, devagar.', '* O âmbar se mexe como mel. Ele cheira a fim de tarde.', '* Você vê um guarda-chuva boiando no âmbar. Depois, um sapato. Depois, nada.'],
+  u: ['* Âmbar líquido, morno, até onde a vista alcança. De perto, dá para ver rostos lá dentro, bem fundo, devagar.', '* O âmbar se mexe como mel. Ele cheira a fim de tarde.', '* Você vê um guarda-chuva boiando no âmbar. Depois, um sapato. Depois, nada.'],
   Z: ['* A pedra da Porta Redonda. Fria. Tem trinta e uma fechaduras entalhadas, cada uma com um número.', '* No centro da porta, um entalhe gasto: uma lanterna com um olho dentro.']
 });
 Object.assign(LOOK_K, { antessala: ['* Caixotes da resistência: velas de rato, cogumelos secos, potes de tinta. Tudo etiquetado pelo Musgo: "NOSSO".', '* Mantimentos que a Rita "achou". Ninguém pergunta onde.'], cais: ['* Caixotes de carga da barca, inchados de âmbar. A etiqueta é numa língua que você não conhece, mas o desenho é claro: frágil.'], conves: ['* Barris de água doce de novecentos anos. Vazios.', '* Cordas enroladas, duras como pedra.'], porao: ['* Caixotes empilhados até o teto. Um deles tem o mesmo desenho do brasão de Auren.', '* Correntes, muitas. Para quem?'] });

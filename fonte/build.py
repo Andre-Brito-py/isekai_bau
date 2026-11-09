@@ -6,6 +6,12 @@ js=''.join(open(src+f).read()+'\n' for f in ['sprites.js','audio.js','data.js','
 import re as _re, collections as _c
 _dups=[k for k,v in _c.Counter(_re.findall(r'(?m)^(?:async )?function (\w+)', js)).items() if v>1]
 if _dups: raise SystemExit('ERRO: funções globais declaradas mais de uma vez: '+', '.join(_dups))
+# letras de tile: a mesma letra definida em dois arquivos faz um capítulo apagar o mapa do outro (bug do Portão de Musgo e da Estrada Afogada)
+_tf=_c.defaultdict(set)
+for _f in ['sprites.js','data4.js','data5.js','data6.js','data7.js','data8.js']:
+    for _k in _re.findall(r"TILE(?:\.([A-Za-z0-9])|\['([^']+)'\])\s*=(?!=)", open(src+_f).read()): _tf[_k[0] or _k[1]].add(_f)
+_tdup={k:v for k,v in _tf.items() if len(v)>1}
+if _tdup: raise SystemExit('ERRO: letra de tile definida em mais de um arquivo: '+str(_tdup))
 html=head+'\n<script>\nconst FONT='+font+';\n'+js+'boot();\n</script>\n'
 open('/home/claude/rpg/renasci-como-bau.html','w').write(html)
 # standalone version with doctype for offline use
