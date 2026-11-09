@@ -1034,9 +1034,9 @@ async function endSeason8() {
       if (this.t > 90 && FRAME % 50 < 34) txt('A para continuar', 120, 226, { align: 'center', col: '#8a8099' });
     } });
   await heritageOverlay8(code);
+  await creditsRoll8();
   V.scene = sc0;
   sfx('catalog');
-  await say('[Fim da Temporada 1. Obrigado por jogar.]', 'cat');
   await say('[...]', 'cat');
   await say('[Entrada nova no registro: um baú subiu para a superfície. Classificação: indefinida.]', 'cat');
   await say('* Quem escreveu isso, se o Catálogo fechou?', 'void');
