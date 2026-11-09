@@ -19,7 +19,6 @@ const CREDITS8 = [
   ['h', 'Recursos Humanos'], ['n', AUTOR8], [],
   ['h', 'Café da equipe'], ['n', AUTOR8], [],
   ['h', 'A equipe'], ['n', AUTOR8], [],
-  ['h', 'Estagiário que digitava o código'], ['n', 'Claude'], ['s', '(pago em tokens)'], [],
   [], ['T', 'ELENCO'], [],
   ['h', 'O Baú'], ['n', 'ele mesmo'], [],
   ['h', 'Lume'], ['n', 'Lume'], ['s', '(ela exigiu o nome em letras maiores)'], [],
