@@ -22,7 +22,7 @@ setInterval(()=>{ if(!AUTOP.on) return; release('a'); release('b'); ['up','down'
       const pr=BT.en.find(e=>e.alive&&e.proph); if(pr && Math.random()<AUTOP.skill+0.2){ const avoid={bite:0,spell:1,item:2}[pr.proph]; const opts=[0,1].filter(i=>i!==avoid && (i!==1 || (G.spells.length && G.mp>=8))); BT.menuIdx = opts.length ? pickOne(opts) : 0; if(pr.proph==='tech') AUTOP.notech=true; AUTOP.act++; press('a'); return; }
       if(G.hp < G.st.mhp*0.35 && (G.flask.n>0 || Object.values(G.items).some(v=>v>0))) BT.menuIdx=2;
       else BT.menuIdx = (G.spells.length && G.mp>=6 && AUTOP.act%%3!==2)?1:0; AUTOP.act++; press('a'); }
-    else if(m==='target'){ const hi=BT.en.findIndex(e=>e.alive&&e.id==='hound'); if(hi>=0) BT.tgt=hi; press('a'); }
+    else if(m==='target'){ const hi=BT.en.findIndex(e=>e.alive&&(e.id==='hound'||e.id==='cavaloF')); if(hi>=0) BT.tgt=hi; press('a'); }
     else if(m==='timing' && Math.abs(BT.tm.x-120)<14) press('a');
     else if(m==='dodge' && BT.dg.state===0){ const g=BT.dg, p=g.t/g.T; if(g.dec===undefined) g.dec=Math.random()<AUTOP.skill+0.1; if(g.dec && p>0.8) press(g.dir); else if(!g.dec && p>0.58 && Math.random()<0.5) press(g.dir==='up'?'down':'up'); }
     else if(m==='seq' && BT.sq.state===0){ const q=BT.sq; q.cd=(q.cd||0)+1; if(q.cd>=12){ q.cd=0; const k=q.keys[q.i]; press(Math.random()<AUTOP.skill+(q.hide?0.15:0.25) ? k : (k==='up'?'down':'up')); } }

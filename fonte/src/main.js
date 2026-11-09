@@ -1030,7 +1030,7 @@ function mkEnemy(id, i, n) {
 function bWait(mode, extra) { return new Promise(r => { BT.mode = mode; Object.assign(BT, extra || {}); BT.res = v => { BT.mode = 'none'; r(v); }; }); }
 function bSay(text, o = {}) {
   BT.tw.set(String(text).replace(/@/g, G.name), 35, { voice: o.cat ? () => sfx('blipTri', 1500) : null, col: o.cat ? '#a8ecff' : o.col, fx: o.fx });
-  BT.auto = o.auto || 0; BT.autoT = 0;
+  BT.auto = 0; BT.autoT = 0;  // o texto da batalha só passa quando o jogador aperta (antes: o.auto avançava sozinho)
   if (BT.tw.lines.length <= 5) return bWait('text');
   // texto longo: mostra em páginas de 5 linhas
   const all = BT.tw.lines;
@@ -1541,7 +1541,7 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.10', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.11', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
