@@ -594,7 +594,7 @@ Object.assign(STORY, {
     saveGame();
   }
 });
-TECH.aprendizes = { name: 'Apito da Brida', cd: 5, desc: 'Pip, Nina e Tolo aparecem: três golpes em inimigos aleatórios e um deles pode ficar atordoado.',
+TECH.aprendizes = { name: 'Apito da Brida', cd: 5, desc: 'Pip, Nina e Tolo entram correndo: três golpes em inimigos aleatórios, um pode ficar tonto, e eles se despedem.',
   async use() { sfx('catalog'); const log = ['* PRIIIIII! Três aprendizes entram correndo, de escudo erguido!']; for (const nm of ['Pip', 'Nina', 'Tolo']) { const al = BT.en.filter(e => e.alive && e.hp > 0); if (!al.length) break; const t = pickOne(al); const d = Math.max(1, Math.round((G.st.atk * 0.7 + G.st.mag * 0.5) * rand(0.9, 1.1))); hitEnemy(t, d, 'hit', '#ff6b6b'); log.push(`* ${nm} acerta o ${t.name}: ${d}.`); await wait(8); } const s = pickOne(BT.en.filter(e => e.alive && e.hp > 0 && !e.d.boss)); if (s) { s.stunned = 1; log.push(`* O ${s.name} ficou tonto!`); } await bSay(log.slice(0, 5).join('\n'), { auto: 60 }); } };
 { const _f = { terminal: 'terminalFirst', trincheira: 'trincheiraFirst', manobras: 'manobrasFirst', oficina: 'oficinaFirst', garagem: 'garagemFirst' };
   const _oe = onEnter; onEnter = async function (id) { await _oe(id); if (_f[id] && !G.flags['seen_' + id]) { G.flags['seen_' + id] = true; await STORY[_f[id]](); } }; }
