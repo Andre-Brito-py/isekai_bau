@@ -493,7 +493,7 @@ async function askFicha8() {
     pbPose('win', 20); E.right = (E.right || 0) + 1;
     await bSay(`* "${q.ok}." Você diz alto, com a tampa aberta. A correção de ${ERR8[k][0]} rasga no meio. {y}VERDADE: ${d} de dano.{/}`, { auto: 60 });
   } else {
-    const d = Math.round(G.st.mhp * 0.16); G.hp = Math.max(1, G.hp - d); sfx('hurt'); pbPose('hurt', 20); BT.nums.push({ x: BPX, y: BPY - 40, s: '-' + d, col: '#ff6b6b', t: 50 });
+    const d = Math.round(G.st.mhp * 0.12); G.hp = Math.max(1, G.hp - d); sfx('hurt'); pbPose('hurt', 20); BT.nums.push({ x: BPX, y: BPY - 40, s: '-' + d, col: '#ff6b6b', t: 50 });
     await bSay(`* [Resposta incorreta. A correção permanece.] A página corta a sua tampa. (-${d} PV)`, { auto: 55 });
   }
   return 'acted';
@@ -550,7 +550,7 @@ AI.catalogo = async function (e) {
     e.phase8 = 2; e.phase = 2; e.index8.clear(); e.use8 = {}; shake(24); sfx('rumble');
     await bSay('[Revisão geral. Esta ficha tem erros demais. Vou reescrever do começo.]', { cat: true });
     await bSay('* As páginas do Catálogo se enchem de correções em vermelho. O índice zera.', { auto: 45 });
-    await applyErr8('nome'); await applyErr8('especie'); return;
+    await applyErr8('nome'); return;
   }
   if (e.phase8 === 2 && e.hp <= e.mhp * 0.33) {
     e.phase8 = 3; e.index8.clear(); e.use8 = {}; shake(50); sfx('rumble'); playMusic('final8b');
@@ -569,9 +569,9 @@ AI.catalogo = async function (e) {
   }
   // 3) golpes por fase
   const P = e.phase8;
-  if (e.charge) { e.charge = false; return runMove(e, { k: 'ring', p: 2.4, pierce: true, fast: true, t: '* {r}COLEÇÃO COMPLETA.{/} A boca da lombada fecha em cima de você!', fx: 'shake' }); }
+  if (e.charge) { e.charge = false; return runMove(e, { k: 'ring', p: 2.1, pierce: true, fast: true, t: '* {r}COLEÇÃO COMPLETA.{/} A boca da lombada fecha em cima de você!', fx: 'shake' }); }
   if (P === 3) {
-    if (e.turns % 2 === 0) e.atk += 5;
+    if (e.turns % 2 === 0) e.atk += 3;
     if (e.turns % 4 === 1) { e.charge = true; await bSay('* A lombada se abre até o fim. Ela vai fechar com tudo no próximo turno. (Âncora ou Sino de Bolso cancelam.)', { auto: 60 }); return; }
     if (e.turns % 3 === 0) { const k = pickOne(['nome', 'especie', 'registro'].filter(x => !E8()[x])); if (k) await applyErr8(k); }
     await runMove(e, pickMove(e, [
@@ -584,7 +584,7 @@ AI.catalogo = async function (e) {
     return;
   }
   if (P === 2) {
-    if (e.turns % 2 === 0) { const k = pickOne(['nome', 'especie', 'registro'].filter(x => !E8()[x])); if (k) { await applyErr8(k); return runMove(e, { k: 'dodge', p: 0.4, hits: 3, spd: 1.5, t: '* As letras da correção voam em você!' }); } }
+    if (e.turns % 3 === 0) { const k = pickOne(['nome', 'especie', 'registro'].filter(x => !E8()[x])); if (k) { await applyErr8(k); return runMove(e, { k: 'dodge', p: 0.4, hits: 3, spd: 1.5, t: '* As letras da correção voam em você!' }); } }
     return runMove(e, pickMove(e, [
       { k: 'seq', n: 8, p: 0.4, hide: true, spd: 1.1, w: 2, t: '* "[Errata.]" Oito correções, ditadas uma vez só. Repita!' },
       { k: 'dodge', p: 0.45, hits: 5, spd: 1.55, w: 2, t: '* Notas de rodapé caem de todos os lados!' },

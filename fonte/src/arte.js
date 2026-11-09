@@ -442,8 +442,9 @@ function drawBoss8(e) {
 // o Catálogo: corpo com a arte do usuário, mantendo o halo e as letras orbitando
 { const _dc = drawCatalogo8; drawCatalogo8 = function (e) {
   const S = BOSS8.catalogo; if (!S) return _dc(e);
-  const ph = e.phase8 || 1, t = FRAME, burn = ph === 3, fade = e.alive ? 1 : Math.max(0, e.dying / 36), sh = e.shake ? Math.sin(e.shake * 1.7) * 4 : 0;
-  const st = !e.alive ? 'dead' : (e.flash > 0 ? 'hurt' : ph === 3 ? 'p3' : ph === 2 ? 'p2' : e.lunge > 0 ? 'atk' : 'idle');
+  const ph = e.phase8 || 1, t = FRAME, burn = ph === 3, fade = ph === 4 && e.dying > 1000 ? 0.7 : e.alive ? 1 : Math.max(0, Math.min(1, e.dying / 36)), sh = e.shake ? Math.sin(e.shake * 1.7) * 4 : 0;
+  // 4ª fase: o Catálogo cai aberto, quieto, do seu lado (a Voz saiu de dentro dele)
+  const st = ph === 4 && e.dying > 1000 ? 'dead' : !e.alive ? 'dead' : (e.flash > 0 ? 'hurt' : ph === 3 ? 'p3' : ph === 2 ? 'p2' : e.lunge > 0 ? 'atk' : 'idle');
   const fr = S[st][Math.floor(t / 24) % S[st].length], cx = e.x + sh, cy = e.y + Math.sin(t * 0.05) * 2;
   bx.save(); bx.globalAlpha = 0.18 * fade; fxDisc(cx, cy, 58 + Math.sin(t * 0.04) * 3, burn ? '#ff8030' : ph === 2 ? '#ff5a6a' : '#5a9ae0'); bx.globalAlpha = 0.1 * fade; fxDisc(cx, cy, 70, burn ? '#ffd040' : '#a8ecff'); bx.globalAlpha = fade;
   bx.drawImage(fr, Math.round(cx - fr.width / 2), Math.round(cy - fr.height / 2));
