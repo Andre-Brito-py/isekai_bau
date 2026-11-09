@@ -214,7 +214,8 @@ STORY.encontro = async function () {
 { const _bs = buildSprites; buildSprites = function () {
   _bs();
   if (typeof ARTE_LUMEH === 'undefined') return;
-  const B = ARTE_LUMEH.body.map(iaCanvas); SP.lumeHuman = [B[0], B[1], B[0], B[0], B[3], B[0]];
+  const B = ARTE_LUMEH.body.map(iaCanvas); SP.lumeHuman = [B[0], B[0], B[1], B[1]];
+  SPF.lumeh = { s: ARTE_LUMEH.side.map(iaCanvas), b: ARTE_LUMEH.back.map(iaCanvas), walk: ARTE_LUMEH.walk.map(iaCanvas) };
   PORT.lumeh = ARTE_LUMEH.port.map(iaCanvas);
   wrapLumeH8();
 }; }
@@ -225,7 +226,7 @@ function wrapLumeH8() {
   if (LUMEH_WRAPPED) return; LUMEH_WRAPPED = true;
   const _dl = drawLume8; drawLume8 = function (x, y, alpha) {
     if (!V.lumeH8 || !SP.lumeHuman) return _dl(x, y, alpha);
-    const f = SP.lumeHuman[Math.floor(FRAME / 22) % SP.lumeHuman.length];
+    const f = SP.lumeHuman[Math.floor(FRAME / 24) % SP.lumeHuman.length];
     if (alpha != null) bx.globalAlpha = alpha;
     bx.drawImage(f, Math.round(x - 12 - f.width / 2), Math.round(y + 31 - f.height));
     bx.globalAlpha = 1;
@@ -242,8 +243,8 @@ STORY.lumeHumano8 = async function () {
   await say('Eu lembro. Eu ensaiei a minha cara no espelho do banheiro da lanchonete por seis anos. Eu lembro de TUDO.', 'lume');
   sfx('catalog'); await fadeOut(8);
   V.lumeH8 = true; await fadeIn(10); sfx('rune');
-  await say('* As três velas se apagam juntas. No lugar do lustre, uma moça baixinha, de casaco creme e cabelo dourado até a cintura.');
-  await say('* As pontas do cabelo dela ainda queimam, como pavio. Na cabeça, uma presilha: um lustre pequenininho, de três velas.');
+  await say('* As três velas se apagam juntas. No lugar do lustre, uma moça baixinha, de manto branco e vermelho, cabelo dourado até a cintura e um violão nas costas.');
+  await say('* Em cima da cabeça, um fio de cabelo rebelde segura uma chaminha acesa, como pavio. No cabelo, uma presilha: um lustre pequenininho, com um cristal lilás.');
   await say('...Oi.', 'lumeh');
   if (h >= 8) {
     await say('* Você esquece como se fala. Faz tempo que você não tem boca, e agora que tem, ela não serve pra nada.');

@@ -5,7 +5,9 @@ from scipy import ndimage
 def crop(src, fg, box, largest=True):
     x0, y0, x1, y1 = box; m = fg[y0:y1, x0:x1].copy()
     if largest:
-        lab, n = ndimage.label(ndimage.binary_dilation(m, iterations=2)); s = ndimage.sum(m, lab, range(1, n + 1)); m &= lab == (np.argmax(s) + 1)
+        lab, n = ndimage.label(ndimage.binary_dilation(m, iterations=2)); s = ndimage.sum(m, lab, range(1, n + 1))
+        if largest == 'big': m &= np.isin(lab, [i + 1 for i in range(n) if s[i] >= 0.012 * s.max()])  # o corpo e pedaços grandes (chama), sem brilhinhos
+        else: m &= lab == (np.argmax(s) + 1)
     m = m & ~ndimage.binary_dilation(~ndimage.binary_fill_holes(m), iterations=2)  # tira só a franja magenta de fora
     ys, xs = np.where(m)
     return src[y0 + ys.min():y0 + ys.max() + 1, x0 + xs.min():x0 + xs.max() + 1].astype(float), m[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
