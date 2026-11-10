@@ -22,9 +22,18 @@ function unlockAudio() {
       AU.noise = buf;
       if (AU.pending) { const p = AU.pending; AU.pending = null; AU.curName = null; playMusic(p); }
     }
-    if (AU.ctx.state === 'suspended') AU.ctx.resume();
+    if (AU.ctx.state !== 'running') { const r = AU.ctx.resume(); if (r && r.catch) r.catch(() => { }); }
+    // iOS: um som mudo de 1 amostra dentro do gesto "acorda" o alto-falante de verdade
+    if (!AU.kicked) { AU.kicked = true; const s = AU.ctx.createBufferSource(); s.buffer = AU.ctx.createBuffer(1, 1, 22050); s.connect(AU.ctx.destination); s.start(0); }
   } catch (e) { }
 }
+// v2.16: no celular, o "pointerdown" de um toque NÃO conta como gesto para o navegador liberar o áudio;
+// só touchend/pointerup/click contam. Por isso o jogo ficava mudo no toque. Agora todos destravam.
+try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }   // iPhone: toca mesmo com a chave de silencioso
+for (const ev of ['touchend', 'pointerup', 'click', 'keydown', 'mousedown'])
+  window.addEventListener(ev, () => { if (!AU.ctx || AU.ctx.state !== 'running') unlockAudio(); }, { capture: true, passive: true });
+// ao voltar do segundo plano (iOS deixa 'interrupted'), retoma
+document.addEventListener('visibilitychange', () => { if (!document.hidden && AU.ctx && AU.ctx.state !== 'running') { const r = AU.ctx.resume(); if (r && r.catch) r.catch(() => { }); } });
 function setMuted(m) {
   AU.muted = m; try { localStorage.setItem('rcb_mute', m ? '1' : '0'); } catch (e) { }
   if (AU.master) AU.master.gain.setTargetAtTime(m ? 0 : 0.8, AU.ctx.currentTime, 0.05);

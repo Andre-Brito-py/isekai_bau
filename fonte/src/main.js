@@ -162,7 +162,8 @@ function navp(k) {
   if (KEYS[k]) { HELD[k] = (HELD[k] || 0) + 1; if (HELD[k] > 18 && HELD[k] % 5 === 0) return true; } else HELD[k] = 0;
   return false;
 }
-function toggleMute() { unlockAudio(); setMuted(!AU.muted); document.getElementById('bs').textContent = AU.muted ? 'Mudo' : 'Som'; }
+function muteLabel() { const el = document.getElementById('bs'); if (!el) return; el.textContent = AU.muted ? 'Mudo' : 'Som'; el.style.color = AU.muted ? '#ff6b6b' : ''; el.style.borderColor = AU.muted ? '#ff6b6b' : ''; }
+function toggleMute() { unlockAudio(); setMuted(!AU.muted); muteLabel(); }
 function setupTouch() {
   // direcional redondo: área de toque maior que o desenho, setores de 90° com margem (o dedo pode escorregar
   // para a diagonal sem trocar de direção) e vibração curta a cada troca
@@ -194,7 +195,7 @@ function setupTouch() {
   });
   cvs.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); if (V.scene === 'title' || UI.top()?.type === 'dialog' || BT.mode === 'text') { press('a'); setTimeout(() => release('a'), 60); } });
   addEventListener('contextmenu', e => e.preventDefault());
-  document.getElementById('bs').textContent = AU.muted ? 'Mudo' : 'Som';
+  muteLabel();
 }
 
 // ---------- tempo / fade ----------
@@ -1541,7 +1542,8 @@ function drawTitle() {
   txt('COMO BAÚ', 120, 54, { align: 'center', sz: 2, col: '#ffe066', shadow: true });
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
-  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.15', 234, 226, { align: 'right', col: '#5a5070' });
+  if (AU.muted) txt('Som desligado (botão Mudo)', 120, 214, { align: 'center', col: '#ff6b6b' });
+  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.16', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
