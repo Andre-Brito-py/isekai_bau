@@ -22,7 +22,7 @@ print(len(html))
 # PWA
 pw='/home/claude/rpg/pwa/'
 h=full.replace('</head>','<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">\n</head>',1)
-h=h.replace('</body>',"<script>if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js');</script>\n</body>",1)
+h=h.replace('</body>',"<script>if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});</script>\n</body>",1)
 open(pw+'index.html','w').write(h)
 import re
 sw=open(pw+'sw.js').read(); m=re.search(r"bau-v(\d+)",sw); sw=sw.replace(m.group(0),'bau-v'+str(int(m.group(1))+1)); open(pw+'sw.js','w').write(sw)
