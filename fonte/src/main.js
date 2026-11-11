@@ -1543,7 +1543,7 @@ function drawTitle() {
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
   if (AU.muted) txt('Som desligado (botão Mudo)', 120, 214, { align: 'center', col: '#ff6b6b' });
-  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.17', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.18', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;

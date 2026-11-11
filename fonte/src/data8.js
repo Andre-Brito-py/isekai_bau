@@ -1142,3 +1142,16 @@ function animeBust8(fr) {
 }
 function crop32(c) { const o = mk(32, 32); o.getContext('2d').drawImage(c, 8, 4, 32, 32, 0, 0, 32, 32); return o; }
 humanPort8 = function () { const B = [0, 1, 2].map(animeBust8); PORT.humano48 = B; return B.map(crop32); };
+// v2.18: quem salvou depois de vencer o Catálogo e fechou o jogo no meio do final (a tela preta da v2.16)
+// voltava para o Índice vazio, sem nada para fazer. Agora o primeiro passo na arena retoma o final de onde parou.
+{ const _os = STORY.onStep3; STORY.onStep3 = function () {
+  if (_os && _os()) return true;
+  const f = G.flags;
+  if (WD.id === 'indice' && f.catalogoDone && !f.runaRosto && !f.seasonDone) {
+    runScript(async () => {
+      await say('* As páginas soltas do Catálogo ainda flutuam pelo Índice. O 31 buzina lá embaixo, esperando você.');
+      if (!f.finalChoice) await STORY.catalogoEnd8(); else await STORY.rosto8();
+    });
+    return true;
+  }
+  return false; }; }
