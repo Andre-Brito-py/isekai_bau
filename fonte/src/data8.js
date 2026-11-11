@@ -626,11 +626,11 @@ Object.assign(STORY, {
     for (const w of who) await say(w);
     await say('* Você sobe por último e se encaixa no corredor, entre os bancos. A Lume se pendura no corrimão.');
     await say('Próxima parada: superfície. Segura firme.', 'jorge');
-    await fadeOut(14); V.scene = 'black'; sfx('rumble'); shake(30);
+    await fadeOut(14); V.scene = 'black'; await fadeIn(1); sfx('rumble'); shake(30);
     await say('* O 31 arranca. Pela janela, a antessala some atrás de uma cortina de poeira. A Porta Redonda bate por dentro, três vezes, cada vez mais longe.', 'void');
     await say('* O ônibus sobe pela faixa amarela, de ré na própria memória: Ponto Final, Coreto, Escola, Feira, Padaria. Cada parada desaba logo depois que vocês passam.', 'void');
     await say('* Até que a faixa acaba numa garganta de pedra. O motor tosse. O caminho está fechado.', 'void');
-    loadMap('garganta', 13, 17, 'up'); V.scene = 'world'; await fadeIn(16); playMusic('garganta8');
+    await fadeOut(8); loadMap('garganta', 13, 17, 'up'); V.scene = 'world'; await fadeIn(16); playMusic('garganta8');
     sfx('catalog'); await say('[Capítulo 8: {y}A Tampa se Fecha{/}.]', 'cat');
     await say('Daqui o ônibus não passa sozinho. A gente desce, abre caminho, e eu vou atrás.', 'jorge');
     await say('[PEDRAS: o teto está caindo. Um alvo vermelho marca onde a próxima pedra cai. Saia de cima.]', 'cat');
@@ -814,11 +814,11 @@ Object.assign(STORY, {
     await say('Eu escolhi o meu nome quando cheguei. Agora você escolhe o seu rosto. Feche os olhos. Lembre de você.', 'of');
     sfx('catalog'); await say('* A palavra entra na sua tampa como um gole de água fria: {y}ROSTO{/}.');
     f.runaRosto = true;
-    await fadeOut(10); V.scene = 'black';
+    await fadeOut(10); V.scene = 'black'; await fadeIn(1);
     const blur = faceBlur8();
     await say(blur >= 3 ? '* Você tenta lembrar do seu rosto. Não tem quase nada lá. Um espaço branco, limpo, com o contorno de um sorriso que você nunca viu.' : blur >= 1 ? '* Você tenta lembrar do seu rosto. Algumas partes vêm fáceis. Outras estão borradas, onde ficavam as memórias que você pagou.' : '* Você lembra do seu rosto. Do jeito que ele ficava na janela do 31, refletido, às sete da manhã.', 'void');
     await humanReveal8();
-    V.scene = 'world'; await fadeIn(16);
+    await fadeOut(8); V.scene = 'world'; await fadeIn(16);
     V.human8 = true;
     await say('...Isso é um braço. Eu tenho um BRAÇO.', 'humano');
     await say('Você tem DOIS. Para de balançar eles assim.', 'lume');
@@ -837,7 +837,7 @@ Object.assign(STORY, {
   },
   async end8() {
     const f = G.flags;
-    playMusic(null); await fadeOut(16); V.scene = 'black';
+    playMusic(null); await fadeOut(16); V.scene = 'black'; await fadeIn(1);
     await say('* O 31 sobe a escada. Não deveria caber. Cabe.', 'void');
     await say('* Pela janela da frente, a luz fica maior, mais branca, mais azul.', 'void');
     await wait(20); playMusic('ceu8');
@@ -1013,12 +1013,12 @@ async function endSeason8() {
   await openWin({ type: 'end8', t: 0, page: 0,
     update() { this.t++; if (this.t > 90 && btnp('a')) { sfx('select'); if (this.page === 0) { this.page = 1; this.t = 60; } else closeWin(this); } },
     draw() {
-      bx.globalAlpha = 1; bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
-      for (let i = 0; i < 30; i++) { const x = (i * 71 + 13) % 240, y = (i * 37 + 5) % 230; if ((FRAME + i * 13) % 90 < 60) { bx.fillStyle = i % 4 ? '#5a5070' : '#ffe066'; bx.fillRect(x, y, 1, 1); } }
+      bx.globalAlpha = 1; if (V.sky8 && this.page === 0) { drawSky8(); bx.fillStyle = 'rgba(8,5,16,0.62)'; bx.fillRect(0, 0, W, H); bx.fillStyle = 'rgba(8,5,16,0.25)'; bx.fillRect(0, 0, W, 60); } else { bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H); }
+      if (!V.sky8 || this.page) for (let i = 0; i < 30; i++) { const x = (i * 71 + 13) % 240, y = (i * 37 + 5) % 230; if ((FRAME + i * 13) % 90 < 60) { bx.fillStyle = i % 4 ? '#5a5070' : '#ffe066'; bx.fillRect(x, y, 1, 1); } }
       const a = Math.min(1, this.t / 60);
       if (this.page === 0) {
-        if (PORT.humano48) { bx.globalAlpha = a; bx.drawImage(PORT.humano48[0], 4, 178, 48, 48); bx.globalAlpha = 1; }
-        bx.globalAlpha = a; bx.drawImage(SP[spec().sp][0], 192, 186, 36, 36); bx.globalAlpha = 1;
+        if (PORT.humano48 && !V.sky8) { bx.globalAlpha = a; bx.drawImage(PORT.humano48[0], 4, 178, 48, 48); bx.globalAlpha = 1; }
+        if (!V.sky8) { bx.globalAlpha = a; bx.drawImage(SP[spec().sp][0], 192, 186, 36, 36); bx.globalAlpha = 1; }
         txt('FIM DA TEMPORADA 1', 120, 20, { align: 'center', sz: 1.25, col: '#ffe066', alpha: a });
         txt('Renasci como Baú', 120, 44, { align: 'center', col: '#b8aecb', alpha: a });
         const L = [`${G.name} · ${spec().name} nv ${G.lv}`, H.line.map(k => (SPECIES[k] || { name: k }).name).slice(-2).join(' > '), `Coração: ${f.finalChoice === 'devolver' ? 'devolvido' : 'guardado na tampa'}`, `Almas trazidas: ${(f.saved7 || []).length} · Passageiros: ${(f.helped8 || []).length}`, `Feitos: ${F.length} · Tempo: ${fmtTime(G.time)}`];
@@ -1035,11 +1035,13 @@ async function endSeason8() {
     } });
   await heritageOverlay8(code);
   await creditsRoll8();
-  V.scene = sc0;
+  V.fade = 0; V.scene = 'black';
   sfx('catalog');
   await say('[...]', 'cat');
   await say('[Entrada nova no registro: um baú subiu para a superfície. Classificação: indefinida.]', 'cat');
   await say('* Quem escreveu isso, se o Catálogo fechou?', 'void');
+  // volta para o mapa (antes ficava tudo preto depois dos créditos)
+  await fadeOut(10); V.sky8 = null; V.scene = sc0 === 'black' ? 'world' : sc0; await fadeIn(24);
 }
 { const _s8 = STORY.saida8; STORY.saida8 = async function () { if (G.flags.seasonDone) { await say('* O 31 espera lá em cima, com o motor ligado e o céu em cima. (A Temporada 2 começa daqui.)'); return; } return _s8(); }; }
 

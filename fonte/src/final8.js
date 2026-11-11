@@ -75,7 +75,7 @@ async function callAlly8() {
   const heart = G.flags.lumeHeart || 0;
   if (a.k === 'lume') {
     cureStatus(); for (const k of ['nome', 'especie', 'registro']) clearErr8(k);
-    const h = Math.round(G.st.mhp * (heart >= 8 ? 0.4 : 0.3)); G.hp = Math.min(G.st.mhp, G.hp + h); sfx('heal');
+    const h = Math.round(G.st.mhp * (heart >= 8 ? 0.3 : 0.22)); G.hp = Math.min(G.st.mhp, G.hp + h); sfx('heal');
     await bSay(heart >= 8 ? '* A Lume voa até a frente e fica entre você e a Voz. "Ninguém lê ele. Ele é MEU baú." E canta, alto, desafinando de propósito na última nota só pra você rir.' : '* A Lume canta o refrão, alto, por cima da leitura da Voz. A tinta recua um palmo.', { auto: 70 });
     await bSay(`* (+${h} PV, estados e correções limpos)`, { auto: 40 });
   } else if (a.k === 'of') {
@@ -88,7 +88,7 @@ async function callAlly8() {
     BT.buff.defM = 0.5; BT.buff.defT = 3; sfx('guard');
     await bSay('* O Musgo atravessa o índice de lado, abaixado, e finca as patas na sua frente. "Trincheira." (Dano recebido pela metade por 2 turnos)', { auto: 65 });
   } else if (a.k === 'rita') {
-    const d = Math.round(v.mhp * 0.08); BT.trueHit8 = true; hitEnemy(v, d, 'crit', '#ffe066'); BT.trueHit8 = false;
+    const d = Math.round(v.mhp * 0.06); BT.trueHit8 = true; hitEnemy(v, d, 'crit', '#ffe066'); BT.trueHit8 = false;
     await bSay(`* Um assobio. A Rita arremessa a lança de escudeira por cima da sua tampa, direto no vidro da lanterna. "Eu falei que o pastel era por minha conta." {y}${d} de dano.{/}`, { auto: 70 });
   } else if (a.k === 'povo') {
     BT.presNames8 = [...(typeof soulsNames === 'function' ? soulsNames() : []), ...((G.flags.saved7 || []).map(k => CRYSTALS[k] && CRYSTALS[k].n).filter(Boolean))];
