@@ -468,7 +468,8 @@ function chestF() { return t => { const C = IMG.chest[G.species]; return C ? ((t
 // ---------- a história do capítulo ----------
 async function abertura() {
   CENA.bg = ponteBG; CENA.actors = [];
-  const bus = { x: 30, y: 152, fr: () => busArt() };   // 200 px de largura: a traseira fica fora da tela CENA.actors.push(bus);
+  // o ônibus tem 200 px de largura: a traseira fica fora da tela
+  const bus = { x: 30, y: 152, fr: () => busArt() }; CENA.actors.push(bus);
   V.scene = 'cena'; playMusic('estrada2');
   // o ônibus entra devagar
   await fadeIn(30);
@@ -593,9 +594,18 @@ const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
 const SITE_T2 = 'andre-brito-py.github.io/isekai_bau/t2/';
 const noSite = () => location.hostname === 'andre-brito-py.github.io';
 function podeInstalar() { return !ehApp(); }
+// janela com um botão que abre o jogo no site de verdade (onde dá para instalar)
+function linkSite() {
+  return new Promise(res => {
+    OVB.innerHTML = `<h2>Instalar o Baú 2</h2><p>O jogo instalável fica no site. Toque no botão: ele abre no navegador. Lá, aperte A no título e escolha "Instalar no celular".</p><div class="row"><a class="ob pri" id="lk" href="https://${SITE_T2}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">Abrir o jogo no site</a></div><p>Endereço: ${SITE_T2}</p><div class="row"><button class="ob" id="lx">Fechar</button></div>`;
+    OV.hidden = false;
+    const done = () => { OV.hidden = true; for (const k in KEYS) KEYS[k] = false; res(); };
+    OVB.querySelector('#lx').onclick = done; OVB.querySelector('#lk').addEventListener('click', () => setTimeout(done, 300));
+  });
+}
 async function instalarApp() {
   // dentro do Claude (artifact) não dá para instalar: o atalho apontaria para a página do Claude, não para o jogo
-  if (!noSite()) { await say('* Aqui o jogo está aberto dentro do Claude, e daqui não dá para instalar: o atalho abriria a página do Claude, não o jogo.'); await say('* Abra no Chrome o endereço ' + SITE_T2 + ' e use "Instalar no celular" de lá. A herança e o resto vêm junto.'); return; }
+  if (!noSite()) { await say('* Aqui o jogo está aberto dentro do Claude, e daqui não dá para instalar: o atalho abriria a página do Claude, não o jogo.'); await linkSite(); return; }
   if (INSTALL_EV) { const ev = INSTALL_EV; INSTALL_EV = null; ev.prompt(); try { const r = await ev.userChoice; if (r.outcome === 'accepted') await say('* Pronto! O Baú 2 vai aparecer na tela do celular, ao lado do primeiro.'); } catch (e) { } return; }
   if (ehIOS()) { await say('* No iPhone: abra pelo Safari, toque no botão Compartilhar (o quadrado com a seta) e depois em "Adicionar à Tela de Início".'); return; }
   await say('* No Chrome: toque nos três pontinhos no canto de cima e escolha "Instalar app" ou "Adicionar à tela inicial". Se não aparecer, recarregue a página uma vez e tente de novo.');
@@ -615,7 +625,7 @@ function drawTitle2() {
   if (H) txt(`Herança: ${H.name} · ${HARTE.species[G.species] ? HARTE.species[G.species].name : ''}`, 120, 200, { align: 'center', col: '#9be58a' });
   else txt('Nenhuma herança da Temporada 1 neste aparelho', 120, 200, { align: 'center', col: '#8a8099' });
   if (t % 60 < 40) txt('Aperte A', 120, 216, { align: 'center', col: '#ffffff' });
-  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.5', 236, 228, { align: 'right', col: '#5a5070' });
+  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.6', 236, 228, { align: 'right', col: '#5a5070' });
 }
 function drawFim1() {
   bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
