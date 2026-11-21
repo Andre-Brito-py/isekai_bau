@@ -145,7 +145,7 @@ class TW {
 }
 
 // ---------- input ----------
-const KEYS = {}, JPQ = {}; let JP = {}; const HELD = {};
+const KEYS = {}, JPQ = {}; let JP = {}; const HELD = {}; let JOYMAG = 1;
 const KEYMAP = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', KeyW: 'up', KeyS: 'down', KeyA: 'left', KeyD: 'right', KeyZ: 'a', Enter: 'a', Space: 'a', KeyJ: 'a', KeyX: 'b', Escape: 'b', Backspace: 'b', KeyK: 'b', KeyC: 'menu', KeyQ: 'menu' };
 function press(k) { if (!KEYS[k]) JPQ[k] = true; KEYS[k] = true; }
 function release(k) { KEYS[k] = false; }
@@ -164,31 +164,35 @@ function navp(k) {
 function muteLabel() { const el = document.getElementById('bs'); if (!el) return; el.textContent = AU.muted ? 'Mudo' : 'Som'; el.style.color = AU.muted ? '#ff6b6b' : ''; el.style.borderColor = AU.muted ? '#ff6b6b' : ''; }
 function toggleMute() { unlockAudio(); setMuted(!AU.muted); muteLabel(); }
 function setupTouch() {
-  // direcional redondo: área de toque maior que o desenho, setores de 90° com margem (o dedo pode escorregar
-  // para a diagonal sem trocar de direção) e vibração curta a cada troca
-  const dp = document.getElementById('dpad'), dz = document.getElementById('dzone') || dp; let pid = null, cur = null;
+  // ANALÓGICO: o pino segue o dedo (preso ao círculo). Direção pelo ângulo: 8 setores no mapa, 4 em menus e batalha,
+  // com zona morta no centro e uma margem para o dedo não ficar trocando de direção na fronteira. A força (quanto o
+  // pino está empurrado) vai em JOYMAG: empurrar só um pouco faz o baú andar devagar.
+  const dp = document.getElementById('joy'), dz = document.getElementById('dzone') || dp, kn = document.getElementById('knob'); let pid = null, cur = null;
   const ANG = { right: 0, down: 90, left: 180, up: -90 };
-  // no mapa (andar livre) o direcional também tem as 4 diagonais; em menus e batalha, só as 4 direções
   const ANG8 = { right: 0, 'down-right': 45, down: 90, 'down-left': 135, left: 180, 'up-left': -135, up: -90, 'up-right': -45 };
   const angDiff = (a, b) => { let d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
+  const R = 52, DEAD = 14;
+  const moveKnob = (x, y) => { kn.style.transform = `translate(${x}px,${y}px)`; };
   const dirOf = e => {
-    const r = dp.getBoundingClientRect(); const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), dist = Math.hypot(dx, dy);
-    if (dist < (cur ? 8 : 14)) return cur && dist >= 8 ? cur : null;
+    const r = dp.getBoundingClientRect(); let dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2); const dist = Math.hypot(dx, dy);
+    const k = dist > R ? R / dist : 1; moveKnob(dx * k, dy * k);
+    JOYMAG = Math.min(1, dist / R);
+    if (dist < (cur ? DEAD - 4 : DEAD)) return null;
     const a = Math.atan2(dy, dx) * 180 / Math.PI;
     const T = V.scene === 'world' ? ANG8 : ANG, half = V.scene === 'world' ? 22.5 : 45;
     if (cur && T[cur] != null && angDiff(a, T[cur]) < half + 8) return cur;
-    let best = 'right', bd = 999; for (const k in T) { const d = angDiff(a, T[k]); if (d < bd) { bd = d; best = k; } } return best;
+    let best = 'right', bd = 999; for (const q in T) { const d = angDiff(a, T[q]); if (d < bd) { bd = d; best = q; } } return best;
   };
   const setDir = d => {
     if (d === cur) return;
     const on = d ? d.split('-') : [];
-    for (const k of ['up', 'down', 'left', 'right']) { if (on.includes(k)) press(k); else release(k); }
-    cur = d; dp.className = on.map(k => 'on-' + k).join(' ');
-    if (d && navigator.vibrate) { try { navigator.vibrate(8); } catch (_) { } }
+    for (const q of ['up', 'down', 'left', 'right']) { if (on.includes(q)) press(q); else release(q); }
+    cur = d; dp.className = on.map(q => 'on-' + q).join(' ') + (pid != null ? ' ativo' : '');
+    if (d && navigator.vibrate) { try { navigator.vibrate(6); } catch (_) { } }
   };
-  dz.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); pid = e.pointerId; try { dz.setPointerCapture(pid); } catch (_) { } cur = null; setDir(dirOf(e)); });
+  dz.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); pid = e.pointerId; try { dz.setPointerCapture(pid); } catch (_) { } cur = null; dp.classList.add('ativo'); setDir(dirOf(e)); });
   dz.addEventListener('pointermove', e => { if (e.pointerId === pid) setDir(dirOf(e)); });
-  const end = e => { if (e.pointerId === pid) { pid = null; setDir(null); } };
+  const end = e => { if (e.pointerId === pid) { pid = null; JOYMAG = 1; moveKnob(0, 0); setDir(null); dp.classList.remove('ativo'); } };
   dz.addEventListener('pointerup', end); dz.addEventListener('pointercancel', end); dz.addEventListener('lostpointercapture', end);
   document.querySelectorAll('[data-k]').forEach(el => {
     const k = el.dataset.k;

@@ -122,6 +122,7 @@
    e.rotina = [{at, act, t, dir, leva}]): vai até um ponto e FAZ alguma coisa lá, com animação própria (ACT2:
    varrer, pescar, carregar/empilhar caixa, acender poste, tocar sino, varal, regar, limpar balcão, remendar rede,
    beber, cochilar, conversar com balão, brincar, rezar...). Cidade nova = rotinas novas que contem a história dela.
+ - CONTROLE DE TOQUE: ANALÓGICO (pino que segue o dedo, zona morta no centro; empurrar pouco = andar devagar).
  - ANDAR NO MAPA: 8 direções (diagonais com duas teclas ou no direcional de toque; não corta quina de parede, desliza
    pelo eixo livre). Menus e batalha continuam em 4 direções.
 =====================================================================
@@ -142,22 +143,23 @@ body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));
 #screen{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;
   box-shadow:0 0 0 2px #000,0 0 0 4px #2a2236,0 12px 40px rgba(0,0,0,.6);border-radius:2px}
 #pad{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 4px 10px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box}
-#dzone{padding:14px;margin:-14px;touch-action:none;flex:none}
-#dpad{position:relative;width:172px;height:172px;border-radius:50%;touch-action:none;
+#dzone{padding:28px;margin:-28px;touch-action:none;flex:none}
+#joy{position:relative;width:172px;height:172px;border-radius:50%;touch-action:none;
+  background:radial-gradient(circle at 50% 45%,var(--btn-hi) 0,var(--btn) 58%,#1c1726 100%);
+  border:2px solid var(--btn-edge);box-shadow:inset 0 -6px 0 rgba(0,0,0,.35),inset 0 0 0 10px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.35)}
+#joy .ring{position:absolute;inset:34px;border-radius:50%;border:2px dashed rgba(138,128,153,.35)}
+#joy .tri{position:absolute;width:0;height:0;border:7px solid transparent;opacity:.55}
+#joy .tu{left:79px;top:8px;border-bottom:9px solid var(--dim)} #joy .td{left:79px;bottom:8px;border-top:9px solid var(--dim)}
+#joy .tl{top:79px;left:8px;border-right:9px solid var(--dim)} #joy .tr{top:79px;right:8px;border-left:9px solid var(--dim)}
+#joy.on-up .tu{border-bottom-color:var(--amber);opacity:1} #joy.on-down .td{border-top-color:var(--amber);opacity:1}
+#joy.on-left .tl{border-right-color:var(--amber);opacity:1} #joy.on-right .tr{border-left-color:var(--amber);opacity:1}
+#knob{position:absolute;left:51px;top:51px;width:70px;height:70px;border-radius:50%;pointer-events:none;will-change:transform;
+  background:radial-gradient(circle at 40% 35%,#5a4e72 0,#3a3150 55%,#241d33 100%);border:2px solid var(--btn-edge);
+  box-shadow:0 6px 10px rgba(0,0,0,.45),inset 0 3px 0 rgba(255,255,255,.12),inset 0 -4px 0 rgba(0,0,0,.3);transition:transform .12s ease-out}
+#knob::after{content:"";position:absolute;inset:22px;border-radius:50%;background:rgba(0,0,0,.18);box-shadow:inset 0 2px 2px rgba(0,0,0,.3)}
+#joy.ativo #knob{transition:none;background:radial-gradient(circle at 40% 35%,#7a6a5a 0,#5a4a3a 55%,#3a2e24 100%);border-color:var(--amber)}
   background:radial-gradient(circle at 50% 45%,var(--btn-hi) 0,var(--btn) 62%,var(--btn) 100%);
   border:2px solid var(--btn-edge);box-shadow:inset 0 -6px 0 rgba(0,0,0,.35),0 4px 12px rgba(0,0,0,.35)}
-#dpad .seg{position:absolute;inset:0;border-radius:50%;transition:background .05s}
-#dpad .su{clip-path:polygon(50% 50%,8% 0,92% 0)} #dpad .sd{clip-path:polygon(50% 50%,8% 100%,92% 100%)}
-#dpad .sl{clip-path:polygon(50% 50%,0 8%,0 92%)} #dpad .sr{clip-path:polygon(50% 50%,100% 8%,100% 92%)}
-#dpad .gap{position:absolute;left:50%;top:50%;width:96%;height:2px;background:var(--btn-edge);opacity:.55;transform-origin:0 0}
-#dpad .g1{transform:translate(-50%,-50%) rotate(45deg);left:50%;top:50%;transform-origin:center} #dpad .g2{transform:translate(-50%,-50%) rotate(-45deg);left:50%;top:50%;transform-origin:center}
-#dpad .hub{position:absolute;left:62px;top:62px;width:44px;height:44px;border-radius:50%;background:var(--bg);border:2px solid var(--btn-edge);opacity:.9}
-#dpad .tri{position:absolute;width:0;height:0;border:11px solid transparent}
-#dpad .tu{left:73px;top:14px;border-bottom:14px solid var(--dim)} #dpad .td{left:73px;bottom:14px;border-top:14px solid var(--dim)}
-#dpad .tl{top:73px;left:14px;border-right:14px solid var(--dim)} #dpad .tr{top:73px;right:14px;border-left:14px solid var(--dim)}
-#dpad.on-up .su,#dpad.on-down .sd,#dpad.on-left .sl,#dpad.on-right .sr{background:rgba(242,181,68,.28)}
-#dpad.on-up .tu{border-bottom-color:var(--amber)} #dpad.on-down .td{border-top-color:var(--amber)}
-#dpad.on-left .tl{border-right-color:var(--amber)} #dpad.on-right .tr{border-left-color:var(--amber)}
 #mid{display:flex;flex-direction:column;align-items:center;gap:8px}
 .pill{font:600 11px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);background:var(--btn);border:2px solid var(--btn-edge);
   border-radius:999px;padding:8px 12px;touch-action:none}
@@ -194,9 +196,7 @@ body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));
 <div id="app">
   <div id="stage"><canvas id="screen" width="240" height="240" aria-label="Tela do jogo"></canvas></div>
   <div id="pad">
-    <div id="dzone"><div id="dpad" aria-label="Direcional"><div class="seg su"></div><div class="seg sd"></div><div class="seg sl"></div><div class="seg sr"></div>
-      <div class="gap g1"></div><div class="gap g2"></div><div class="hub"></div>
-      <div class="tri tu"></div><div class="tri td"></div><div class="tri tl"></div><div class="tri tr"></div></div></div>
+    <div id="dzone"><div id="joy" aria-label="Analógico"><div class="ring"></div><div class="tri tu"></div><div class="tri td"></div><div class="tri tl"></div><div class="tri tr"></div><div id="knob"></div></div></div>
     <div id="right"><div id="mid"><div class="pill" data-k="menu" id="bm">Menu</div><div class="pill" data-k="mute" id="bs">Som</div></div><div id="ab"><div class="rb" id="ba" data-k="a">A</div><div class="rb" id="bb" data-k="b">B</div></div></div>
   </div>
 </div>
@@ -352,7 +352,7 @@ class TW {
 }
 
 // ---------- input ----------
-const KEYS = {}, JPQ = {}; let JP = {}; const HELD = {};
+const KEYS = {}, JPQ = {}; let JP = {}; const HELD = {}; let JOYMAG = 1;
 const KEYMAP = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', KeyW: 'up', KeyS: 'down', KeyA: 'left', KeyD: 'right', KeyZ: 'a', Enter: 'a', Space: 'a', KeyJ: 'a', KeyX: 'b', Escape: 'b', Backspace: 'b', KeyK: 'b', KeyC: 'menu', KeyQ: 'menu' };
 function press(k) { if (!KEYS[k]) JPQ[k] = true; KEYS[k] = true; }
 function release(k) { KEYS[k] = false; }
@@ -371,31 +371,35 @@ function navp(k) {
 function muteLabel() { const el = document.getElementById('bs'); if (!el) return; el.textContent = AU.muted ? 'Mudo' : 'Som'; el.style.color = AU.muted ? '#ff6b6b' : ''; el.style.borderColor = AU.muted ? '#ff6b6b' : ''; }
 function toggleMute() { unlockAudio(); setMuted(!AU.muted); muteLabel(); }
 function setupTouch() {
-  // direcional redondo: área de toque maior que o desenho, setores de 90° com margem (o dedo pode escorregar
-  // para a diagonal sem trocar de direção) e vibração curta a cada troca
-  const dp = document.getElementById('dpad'), dz = document.getElementById('dzone') || dp; let pid = null, cur = null;
+  // ANALÓGICO: o pino segue o dedo (preso ao círculo). Direção pelo ângulo: 8 setores no mapa, 4 em menus e batalha,
+  // com zona morta no centro e uma margem para o dedo não ficar trocando de direção na fronteira. A força (quanto o
+  // pino está empurrado) vai em JOYMAG: empurrar só um pouco faz o baú andar devagar.
+  const dp = document.getElementById('joy'), dz = document.getElementById('dzone') || dp, kn = document.getElementById('knob'); let pid = null, cur = null;
   const ANG = { right: 0, down: 90, left: 180, up: -90 };
-  // no mapa (andar livre) o direcional também tem as 4 diagonais; em menus e batalha, só as 4 direções
   const ANG8 = { right: 0, 'down-right': 45, down: 90, 'down-left': 135, left: 180, 'up-left': -135, up: -90, 'up-right': -45 };
   const angDiff = (a, b) => { let d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
+  const R = 52, DEAD = 14;
+  const moveKnob = (x, y) => { kn.style.transform = `translate(${x}px,${y}px)`; };
   const dirOf = e => {
-    const r = dp.getBoundingClientRect(); const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), dist = Math.hypot(dx, dy);
-    if (dist < (cur ? 8 : 14)) return cur && dist >= 8 ? cur : null;
+    const r = dp.getBoundingClientRect(); let dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2); const dist = Math.hypot(dx, dy);
+    const k = dist > R ? R / dist : 1; moveKnob(dx * k, dy * k);
+    JOYMAG = Math.min(1, dist / R);
+    if (dist < (cur ? DEAD - 4 : DEAD)) return null;
     const a = Math.atan2(dy, dx) * 180 / Math.PI;
     const T = V.scene === 'world' ? ANG8 : ANG, half = V.scene === 'world' ? 22.5 : 45;
     if (cur && T[cur] != null && angDiff(a, T[cur]) < half + 8) return cur;
-    let best = 'right', bd = 999; for (const k in T) { const d = angDiff(a, T[k]); if (d < bd) { bd = d; best = k; } } return best;
+    let best = 'right', bd = 999; for (const q in T) { const d = angDiff(a, T[q]); if (d < bd) { bd = d; best = q; } } return best;
   };
   const setDir = d => {
     if (d === cur) return;
     const on = d ? d.split('-') : [];
-    for (const k of ['up', 'down', 'left', 'right']) { if (on.includes(k)) press(k); else release(k); }
-    cur = d; dp.className = on.map(k => 'on-' + k).join(' ');
-    if (d && navigator.vibrate) { try { navigator.vibrate(8); } catch (_) { } }
+    for (const q of ['up', 'down', 'left', 'right']) { if (on.includes(q)) press(q); else release(q); }
+    cur = d; dp.className = on.map(q => 'on-' + q).join(' ') + (pid != null ? ' ativo' : '');
+    if (d && navigator.vibrate) { try { navigator.vibrate(6); } catch (_) { } }
   };
-  dz.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); pid = e.pointerId; try { dz.setPointerCapture(pid); } catch (_) { } cur = null; setDir(dirOf(e)); });
+  dz.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); pid = e.pointerId; try { dz.setPointerCapture(pid); } catch (_) { } cur = null; dp.classList.add('ativo'); setDir(dirOf(e)); });
   dz.addEventListener('pointermove', e => { if (e.pointerId === pid) setDir(dirOf(e)); });
-  const end = e => { if (e.pointerId === pid) { pid = null; setDir(null); } };
+  const end = e => { if (e.pointerId === pid) { pid = null; JOYMAG = 1; moveKnob(0, 0); setDir(null); dp.classList.remove('ativo'); } };
   dz.addEventListener('pointerup', end); dz.addEventListener('pointercancel', end); dz.addEventListener('lostpointercapture', end);
   document.querySelectorAll('[data-k]').forEach(el => {
     const k = el.dataset.k;
@@ -2887,7 +2891,7 @@ function updateWorld2() {
   for (const f of W2.fol) if (f.mv) stepTween(f);
   for (const e of W2.ents) updateEnt(e);
   if (W2.mv) {
-    if (stepTween(W2, W2.float ? 10 : 8)) arrived();
+    if (stepTween(W2, (W2.float ? 10 : 8) * (JOYMAG < 0.55 ? 1.6 : 1))) arrived();
     return;
   }
   if (worldBusy2()) { W2.idle = 0; return; }
@@ -3046,7 +3050,7 @@ function drawWorld2() {
   const [dx, dy] = DIR2[W2.dir], near = entAt2(W2.x + dx, W2.y + dy);
   if (near && near.talk && !worldBusy2() && near.t !== 'door') { const yy = near.py - oy - (near.h || 40) - 6 + Math.round(Math.sin(W2.t / 8)); txt('A', near.px - ox + 6, yy, { col: '#ffe066', shadow: true }); }
   // HUD
-  if (W2.toast) { const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(120 - w / 2, 8, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, 120, 10, { align: 'center', col: '#ffe8b0', alpha: a }); }
+  if (W2.toast) { const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(120 - w / 2, 26, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, 120, 28, { align: 'center', col: '#ffe8b0', alpha: a }); }
   if (m.hunters) { txt('SUSPEITA', 236, 4, { align: 'right', col: '#ff8a70' }); for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : '#3a2a3a'; bx.fillRect(196 + i * 12, 16, 9, 4); } }
   if (G.cobres != null && m.showMoney) txt(G.cobres + ' cobres', 4, 4, { col: '#f0c040' });
 }
