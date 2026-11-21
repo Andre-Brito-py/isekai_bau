@@ -84,6 +84,7 @@ function grupoCap1() {
     id: 'lume', name: 'Lume', port: 'lumeh', col: '#ffd060', el: 'luz', ranged: true, lane: 0, row: 'back', h: 46,
     mhp: 100, mmp: 50, atk: 8, def: 9, mag: 17, mdef: 14, spd: 12, coracao: cor,
     atkNm: 'Faísca', atkIcon: 'luz', atkDesc: 'Uma faísca de luz, de longe. A no tempo certo = faísca dupla.',
+    runas: ['acalanto', 'velaprot', 'ofuscar'], magNm: 'Cantigas', magIcon: 'luz', magDesc: 'Canções de apoio: curam e protegem um aliado. PM.',
     techs: ['cancao', 'velaguia'], superNm: 'Lustre de Mil Velas', superDesc: 'Luz em todos os inimigos e cura o grupo.', superTgt: 'all',
     frame: sideFrame('lumeh'), attack: lumeAtk, super: superLume
   };
@@ -144,6 +145,22 @@ async function lumeAtk(m, t) {
 
 // ---------- runas ----------
 const RUNA2 = {
+  // cantigas da Lume (apoio de um aliado só, com PM)
+  acalanto: { nm: 'Acalanto', mp: 8, w: 'leve', tgt: 'ally', d: 'Cura 35% da vida de um aliado e tira queimadura e frio. Leve.', run: async (m, t) => {
+    sfx('heal'); jingle('G5:2 E5:2 C6:4', 200); const [x, y] = unitCenter(t);
+    await tw(26, (p, k) => { for (let i = 0; i < 3; i++) txt('♪', x - 8 + i * 8 + Math.sin(k / 5 + i) * 2, y - 6 - p * 24 - i * 4, { col: i % 2 ? '#ffd060' : '#fff0a0', alpha: 1 - p }); fxRing(x, y, 6 + p * 10, '#ffd060', 1 - p); });
+    healUnit(t, Math.round(t.mhp * 0.35)); t.st.queimado = 0; t.st.frio = 0;
+  } },
+  velaprot: { nm: 'Vela Protetora', mp: 6, w: 'leve', tgt: 'ally', d: 'Uma velinha acesa ao lado do aliado: metade do dano até a vez dele e cura um pouco por 3 vezes. Leve.', run: async (m, t) => {
+    sfx('buff'); const [x, y] = unitCenter(t);
+    await tw(22, p => { bx.fillStyle = '#f2ecdc'; bx.fillRect(Math.round(x + 14), Math.round(y + 4 - p * 4), 2, 6); bx.fillStyle = p > 0.5 ? '#ffd060' : '#ff9a30'; bx.fillRect(Math.round(x + 14), Math.round(y + 1 - p * 4), 2, 3); fxRing(x, y, 18 - p * 6, '#ffd060', p); });
+    t.def0 = true; t.st.vela = 3; callout('Vela acesa para ' + t.name, '#ffd060', 50);
+  } },
+  ofuscar: { nm: 'Ofuscar', mp: 10, tgt: 'enemy', d: 'Um clarão nos olhos de um inimigo: luz e ele perde parte da vez (empurrado na linha do tempo).', run: async (m, t) => {
+    sfx('rune'); await projectile(m, t, '#ffffff', 12, { r: 3 }); flashW(3);
+    const [x, y] = unitCenter(t); burst(x, y, 18, ['#ffffff', '#fff0a0']);
+    hitFoe(m, t, 0.6, { el: 'luz', mag: true }); t.ct = Math.max(0, t.ct - 35); popNum(x, y - 22, 'OFUSCADO', '#fff0a0');
+  } },
   brasa: { nm: 'Brasa · Dardo', mp: 5, d: 'Fogo num inimigo. Pode queimar.', run: async (m, t) => {
     sfx('brasa'); await projectile(m, t, '#f07830', 16, { r: 4, trail: ['#f07830', '#ffd040', '#c83a18'] });
     const [x, y] = unitCenter(t); burst(x, y, 22, ['#f07830', '#ffd040', '#c83a18'], { up: 1 }); flashW(1);
@@ -401,20 +418,49 @@ function drawCena() {
     bx.globalAlpha = 1;
   }
 }
-// o 31 visto de lado, parado na estrada
+// o 31 em escala real (3,2 m de altura = ~92 px; 12 m de comprimento, aparece só a frente, saindo da borda)
 let BUS_C = null;
 function busArt() {
   if (BUS_C) return BUS_C;
-  const P = new Pix(96, 46), cream = ramp('#d8c890'), blue = ramp('#3a70c0');
-  P.cyl(2, 4, 92, 34, cream, true);
-  P.rect(2, 26, 92, 5, blue[2]); P.rect(2, 26, 92, 1, blue[3]);
-  for (let i = 0; i < 6; i++) { P.rect(8 + i * 13, 8, 10, 11, '#1c3058'); P.rect(9 + i * 13, 9, 4, 3, '#4a70a0'); }
-  P.rect(84, 8, 8, 16, '#1c3058'); P.rect(85, 9, 2, 5, '#5a80b0');                         // para-brisa
-  P.rect(70, 14, 12, 18, '#2a2a3a'); P.rect(71, 15, 4, 16, '#3a3a4a');                     // porta
-  P.rect(40, 0, 18, 5, '#2a1a10'); P.rect(42, 1, 14, 3, '#ffb040');                        // letreiro
-  P.rect(88, 30, 4, 3, '#ffe0a0'); P.rect(2, 30, 3, 3, '#c83030');                         // faróis
-  for (const wx of [18, 74]) { P.ball(wx, 39, 6, 6, ramp('#2a2a34')); P.ball(wx, 39, 2, 2, ramp('#8a8a9a')); }
-  P.outline(); return BUS_C = P.canvas();
+  const Wd = 200, Hd = 100, P = new Pix(Wd, Hd);
+  const cream = ramp('#d8cc98'), blue = ramp('#3a6ab8'), glass = ['#101c34', '#1c3058', '#2a4a7a', '#4a70a0', '#8ab0d0'], rub = ramp('#2a2a34'), steel = ramp('#8a8a9a');
+  const top = 8, bot = 86, front = Wd - 6;
+  // carroceria: frente arredondada à direita, luz vindo de cima
+  P.poly([[0, top + 4], [front - 10, top], [front - 2, top + 6], [front, top + 18], [front, bot], [0, bot]], (x, y) => P.tone(cream, 0.78 - (y - top) / 160 + (x > front - 12 ? -0.12 : 0), x, y));
+  // teto com respiros e uma camada de musgo da masmorra
+  P.rect(0, top, front - 10, 3, cream[3]);
+  for (const vx of [24, 70, 116]) { P.rect(vx, top - 4, 18, 4, cream[1]); P.rect(vx + 1, top - 4, 16, 1, cream[3]); }
+  for (let i = 0; i < 40; i++) { const x = (i * 37) % (front - 20), w = 2 + (i % 4); P.rect(x, top - 1 + (i % 2), w, 2, i % 3 ? '#4a7a3a' : '#2e5a2a'); }
+  // faixa azul da empresa
+  P.rect(0, 58, front, 6, blue[2]); P.rect(0, 58, front, 1, blue[3]); P.rect(0, 63, front, 1, blue[0]);
+  // janelas laterais com reflexo em diagonal
+  for (let i = 0; i < 6; i++) {
+    const wx = 4 + i * 24, wy = 20;
+    P.rect(wx - 1, wy - 1, 21, 26, cream[0]);
+    P.poly([[wx, wy], [wx + 19, wy], [wx + 19, wy + 24], [wx, wy + 24]], (x, y) => P.tone(glass, 0.3 + (y - wy) / 60, x, y));
+    for (let d = 0; d < 4; d++) P.line(wx + 4 + d + i * 2, wy + 23, wx + 14 + d + i * 2, wy + 1, glass[4 - (d > 1 ? 1 : 0)]);
+    P.rect(wx + 9, wy, 1, 24, cream[1]);
+  }
+  // porta dianteira dobrável
+  const dx = 152; P.rect(dx - 1, 16, 22, 70, cream[0]);
+  for (const k of [0, 10]) { P.poly([[dx + k, 17], [dx + k + 9, 17], [dx + k + 9, 84], [dx + k, 84]], (x, y) => P.tone(glass, 0.35 + (y - 17) / 140, x, y)); P.rect(dx + k + 1, 50, 7, 1, cream[2]); }
+  P.rect(dx, 84, 20, 2, rub[1]);                                                                                     // degrau
+  // para-brisa (frente) e letreiro aceso
+  P.poly([[front - 13, 18], [front - 1, 22], [front - 1, 54], [front - 13, 54]], (x, y) => P.tone(glass, 0.5 + (x - front + 13) / 30, x, y));
+  P.rect(front - 14, 9, 14, 8, '#1a1008'); P.rect(front - 13, 10, 12, 6, '#ffb040'); P.rect(front - 12, 11, 4, 4, '#ffe0a0'); P.rect(front - 6, 11, 4, 4, '#ffe0a0');
+  P.rect(130, 9, 20, 8, '#1a1008'); P.rect(131, 10, 18, 6, '#ff9a30');                                              // letreiro lateral
+  // farol, pisca e para-choque
+  P.ball(front - 4, 70, 3, 3, ['#c8a040', '#f0d070', '#fff0c0', '#ffffff', '#ffffff']); P.rect(front - 3, 76, 3, 2, '#ff9a30');
+  P.rect(0, 86, front, 3, rub[1]); P.rect(front - 18, 84, 18, 5, rub[2]); P.rect(front - 18, 84, 18, 1, rub[3]);
+  // retrovisor
+  P.line(front, 22, front + 4, 18, rub[1]); P.rect(front + 3, 18, 3, 8, rub[2]);
+  // ferrugem e um amassado (lembrança da curva)
+  for (const [x, y] of [[40, 80], [44, 82], [96, 77], [100, 79], [128, 84]]) P.rect(x, y, 3, 2, '#9a4a2a');
+  P.line(60, 66, 74, 72, cream[0]); P.line(60, 67, 74, 73, cream[3]);
+  // rodas (~0,9 m = 26 px), escondidas pela metade na caixa de roda
+  for (const wx of [34, 166]) { P.ball(wx, 87, 13, 13, rub, { clip: (x, y) => y < 99 }); P.ball(wx, 87, 6, 6, steel); P.ball(wx, 87, 2, 2, rub); P.rect(wx - 15, 72, 30, 2, cream[0]); }
+  P.outline();
+  return BUS_C = P.canvas();
 }
 function standF(k) { return t => { const S = IMG.spf[k] && IMG.spf[k].s; return S ? flipC(S[Math.floor(t / 30) % S.length]) : null; }; }
 function chestF() { return t => { const C = IMG.chest[G.species]; return C ? ((t % 160) < 6 ? C.closed : C.three) : null; }; }
@@ -422,7 +468,7 @@ function chestF() { return t => { const C = IMG.chest[G.species]; return C ? ((t
 // ---------- a história do capítulo ----------
 async function abertura() {
   CENA.bg = ponteBG; CENA.actors = [];
-  const bus = { x: 60, y: 150, fr: () => busArt() }; CENA.actors.push(bus);
+  const bus = { x: 30, y: 152, fr: () => busArt() };   // 200 px de largura: a traseira fica fora da tela CENA.actors.push(bus);
   V.scene = 'cena'; playMusic('estrada2');
   // o ônibus entra devagar
   await fadeIn(30);
@@ -439,7 +485,7 @@ async function abertura() {
   await say('* O ônibus freia de repente. Na cabeceira da ponte, uma cancela listrada está abaixada no meio da estrada.');
   await say('Pedágio? Isso aqui nunca teve pedágio. Nem ponte tinha, quando eu passei com o 31.', 'jorge');
   // o grupo desce
-  CENA.actors.push({ x: 156, y: 148, fr: standF('rita') }, { x: 132, y: 142, fr: chestF() }, { x: 116, y: 136, fr: standF('lumeh') });
+  CENA.actors.push({ x: 196, y: 156, fr: standF('rita') }, { x: 168, y: 150, fr: chestF() }, { x: 150, y: 146, fr: standF('lumeh') });
   sfx('step');
   await say('* Em cada poste da beira da estrada, dezenas de cartazes. PROCURADO. Um desenho torto de um baú com dentes. Recompensa: 300 frascos de âmbar.');
   const ren = H && H.renome;
@@ -552,7 +598,7 @@ function drawTitle2() {
   if (H) txt(`Herança: ${H.name} · ${HARTE.species[G.species] ? HARTE.species[G.species].name : ''}`, 120, 200, { align: 'center', col: '#9be58a' });
   else txt('Nenhuma herança da Temporada 1 neste aparelho', 120, 200, { align: 'center', col: '#8a8099' });
   if (t % 60 < 40) txt('Aperte A', 120, 216, { align: 'center', col: '#ffffff' });
-  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.2', 236, 228, { align: 'right', col: '#5a5070' });
+  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.3', 236, 228, { align: 'right', col: '#5a5070' });
 }
 function drawFim1() {
   bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);

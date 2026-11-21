@@ -99,6 +99,7 @@ function endTurn(u, weight) {
   // peso da ação: leve devolve a vez cedo, pesada atrasa
   u.ct = weight === 'leve' ? 38 : weight === 'pesada' ? -30 : 0;
   for (const k of Object.keys(u.st)) if (u.st[k] > 0 && k !== 'guarda') u.st[k]--;
+  if (u.st.vela > 0 && u.hp > 0) { const h = Math.round(u.mhp * 0.07); u.hp = Math.min(u.mhp, u.hp + h); popNum(...unitCenter(u), '+' + h, '#9be58a'); }
   if (u.st.queimado > 0) { const d = Math.max(1, Math.round(u.mhp * 0.05)); u.hp = Math.max(1, u.hp - d); popNum(...unitCenter(u), d, '#ffa94d'); }
 }
 
@@ -161,7 +162,7 @@ function hurtMember(m, d0, o = {}) {
   else sfx('hurt');
   return d;
 }
-const ST_NAME = { queimado: 'QUEIMADO', frio: 'GELADO', tonto: 'TONTO' };
+const ST_NAME = { queimado: 'QUEIMADO', frio: 'GELADO', tonto: 'TONTO', vela: 'VELA' };
 
 // ---------- defesa em anel ----------
 // o anel fecha sobre o alvo; A no instante certo. Devolve 'perfeito' | 'bom' | 'falhou'
@@ -190,7 +191,7 @@ function updatePrompt() {
 const CMD = [
   { k: 'atacar', nm: 'Atacar', ic: m => m.atkIcon || 'atacar', desc: m => m.atkDesc },
   { k: 'tecnica', nm: 'Técnicas', ic: () => 'tecnica', desc: () => 'Golpes que gastam Tensão.' },
-  { k: 'runas', nm: 'Runas', ic: () => 'runas', desc: () => 'Feitiços de runa. Gastam PM.', only: m => m.runas },
+  { k: 'runas', nm: 'Runas', nmF: m => m.magNm || 'Runas', ic: m => m.magIcon || 'runas', desc: m => m.magDesc || 'Feitiços de runa. Gastam PM.', only: m => m.runas },
   { k: 'dupla', nm: 'Dupla', ic: () => 'dupla', desc: () => 'Golpe com um aliado que está quase na vez. 50 de Tensão.' },
   { k: 'item', nm: 'Itens', ic: () => 'item', desc: () => 'Frasco de Âmbar e Tinta Azul.' },
   { k: 'defender', nm: 'Defender', ic: () => 'defender', desc: () => 'Metade do dano até a próxima vez. Ação leve.' },
@@ -272,7 +273,7 @@ async function doCommand(m, k) {
   }
   if (k === 'runas') {
     const rs = m.runas.map(rk => { const S = RUNA2[rk]; return { k: rk, label: S.nm, right: S.mp + 'PM', disabled: m.mp < S.mp, d: S.d }; });
-    const i = await subList('Runas', rs); if (i < 0) return false;
+    const i = await subList(m.magNm || 'Runas', rs); if (i < 0) return false;
     const S = RUNA2[rs[i].k];
     const t = S.tgt === 'all' ? 'all' : S.tgt === 'ally' ? await pickTarget('p', { pref: m }) : await pickTarget('e', { pref: BT.lastTarget });
     if (!t) return false;
@@ -445,7 +446,7 @@ function drawBattle2() {
     txt(n.s, n.x, Math.round(y), { align: 'center', col: n.col, sz: n.big ? 1.5 : 1, shadow: true, alpha: k > 45 ? (60 - k) / 15 : 1 });
   }
   drawTimeline(); drawTension(); drawHUD();
-  if (BT.menu && !BT.menu.hidden && !BT.busy) drawWheel();
+  if (BT.menu && !BT.menu.hidden && !BT.busy && !BT.cursor && !UI.top()) drawWheel();
   if (BT.cursor) drawCursor();
   if (BT.call) { const c = BT.call, a = Math.min(1, c.t / 6, (c.n - c.t) / 10); const w = lineW(rich(c.s)) + 16; bx.globalAlpha = a * 0.85; bx.fillStyle = '#0a0612'; bx.fillRect(120 - w / 2, 24, w, 13); bx.globalAlpha = 1; txt(c.s, 120, 25, { align: 'center', col: c.col, alpha: a }); }
   if (BT.hint && !BT.call) { const h = BT.hint, a = Math.min(1, h.t / 10, (h.n - h.t) / 10), nl = wrapRich(rich(h.s), 36).length; bx.globalAlpha = 0.88 * a; bx.fillStyle = '#0a0612'; bx.fillRect(12, 23, 226, nl * 11 + 4); bx.fillStyle = '#5fd0ff'; bx.fillRect(12, 23 + nl * 11 + 4, 226, 1); bx.globalAlpha = 1; txt(h.s, 16, 25, { w: 36, col: '#b8f0ff', alpha: a, lh: 11 }); }
@@ -543,7 +544,8 @@ function drawHUD() {
   BT.party.forEach((m, i) => {
     const x = 2 + i * 79, y = y0 + 1, wd = 77, hgt = 75;
     const active = BT.menu && BT.menu.m === m && !BT.menu.hidden;
-    bx.fillStyle = active ? '#ffe066' : m.hp <= 0 ? '#4a2030' : '#3a2e4e'; bx.fillRect(x, y, wd, hgt);
+    const mirado = BT.cursor && BT.cursor.list[BT.cursor.idx] === m;
+    bx.fillStyle = mirado ? (BT.t % 16 < 8 ? '#9be58a' : '#4a8a4a') : active ? '#ffe066' : m.hp <= 0 ? '#4a2030' : '#3a2e4e'; bx.fillRect(x, y, wd, hgt);
     bx.fillStyle = '#140e1e'; bx.fillRect(x + 1, y + 1, wd - 2, hgt - 2);
     // retrato com expressão: ferido = treme, caído = cinza
     const P = PT(m.port), shake = m.flash > 0 ? Math.round(rand(-1, 1)) : 0;
@@ -565,7 +567,7 @@ function drawHUD() {
     bx.fillStyle = ct >= 1 ? (BT.t % 8 < 4 ? '#ffffff' : '#ffe066') : m.col; bx.fillRect(x + 3, y + 51, Math.round(71 * ct), 5);
     txt(m.row === 'back' ? 'trás' : 'frente', x + 3, y + 58, { col: '#6a6078' });
     // status
-    let sx = x + 74; for (const k of ['queimado', 'frio', 'tonto']) if (m.st[k] > 0) { sx -= 13; bx.drawImage(ICON[k === 'frio' ? 'congelado' : k], sx, y + 60); }
+    let sx = x + 74; for (const k of ['queimado', 'frio', 'tonto', 'vela']) if (m.st[k] > 0) { sx -= 13; bx.drawImage(ICON[k === 'frio' ? 'congelado' : k === 'vela' ? 'luz' : k], sx, y + 60); }
     if (m.def0) { sx -= 13; bx.drawImage(ICON.defender, sx, y + 60); }
   });
 }
@@ -582,12 +584,12 @@ function drawWheel() {
     if (c.k === 'super' && !dis && BT.t % 20 < 10) fxRing(x, y, 11, '#ffe066', 0.8);
   });
   const c = cs[M.idx];
-  const label = c.k === 'atacar' ? (m.atkNm || 'Atacar') : c.nm;
+  const label = c.k === 'atacar' ? (m.atkNm || 'Atacar') : c.nmF ? c.nmF(m) : c.nm;
   const w = lineW(rich(label)) + 14;
   bx.fillStyle = '#ffe066'; bx.fillRect(cx - w / 2, cy - 52, w, 14); bx.fillStyle = '#140e1e'; bx.fillRect(cx - w / 2 + 1, cy - 51, w - 2, 12);
   txt(label, cx, cy - 51, { align: 'center', col: '#ffe066' });
   const d = typeof c.desc === 'function' ? c.desc(m) : c.desc;
-  if (d) { const nl = Math.min(3, wrapRich(rich(d), 21).length); bx.globalAlpha = 0.9; bx.fillStyle = '#0a0612'; bx.fillRect(104, 158 - nl * 11 - 4, 134, nl * 11 + 3); bx.globalAlpha = 1; txt(d, 107, 158 - nl * 11 - 2, { w: 21, col: '#b8aecb', lh: 11 }); }
+  if (d) { const nl = Math.min(4, wrapRich(rich(d), 21).length); bx.globalAlpha = 0.9; bx.fillStyle = '#0a0612'; bx.fillRect(104, 158 - nl * 11 - 4, 134, nl * 11 + 3); bx.globalAlpha = 1; txt(d, 107, 158 - nl * 11 - 2, { w: 21, col: '#b8aecb', lh: 11 }); }
 }
 // --- cursor de alvo + ficha do inimigo ---
 function drawCursor() {
