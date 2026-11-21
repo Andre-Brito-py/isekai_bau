@@ -589,10 +589,12 @@ let INSTALL_EV = null;
 addEventListener('beforeinstallprompt', e => { e.preventDefault(); INSTALL_EV = e; });
 const ehApp = () => matchMedia('(display-mode: fullscreen)').matches || matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
-function podeInstalar() { return location.protocol === 'https:' && !ehApp() && (INSTALL_EV || ehIOS()); }
+// a opção aparece sempre no site (fora do app instalado); se o Chrome não oferecer a instalação direta, explica o caminho pelo menu
+function podeInstalar() { return location.protocol === 'https:' && !ehApp(); }
 async function instalarApp() {
   if (INSTALL_EV) { const ev = INSTALL_EV; INSTALL_EV = null; ev.prompt(); try { const r = await ev.userChoice; if (r.outcome === 'accepted') await say('* Pronto! O Baú 2 vai aparecer na tela do celular, ao lado do primeiro.'); } catch (e) { } return; }
-  await say('* No iPhone: toque no botão Compartilhar do Safari (o quadrado com a seta) e depois em "Adicionar à Tela de Início".');
+  if (ehIOS()) { await say('* No iPhone: abra pelo Safari, toque no botão Compartilhar (o quadrado com a seta) e depois em "Adicionar à Tela de Início".'); return; }
+  await say('* No Chrome: toque nos três pontinhos no canto de cima e escolha "Instalar app" ou "Adicionar à tela inicial". Se não aparecer, recarregue a página uma vez e tente de novo.');
 }
 
 // ---------- título ----------
@@ -609,7 +611,7 @@ function drawTitle2() {
   if (H) txt(`Herança: ${H.name} · ${HARTE.species[G.species] ? HARTE.species[G.species].name : ''}`, 120, 200, { align: 'center', col: '#9be58a' });
   else txt('Nenhuma herança da Temporada 1 neste aparelho', 120, 200, { align: 'center', col: '#8a8099' });
   if (t % 60 < 40) txt('Aperte A', 120, 216, { align: 'center', col: '#ffffff' });
-  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.3', 236, 228, { align: 'right', col: '#5a5070' });
+  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.4', 236, 228, { align: 'right', col: '#5a5070' });
 }
 function drawFim1() {
   bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
