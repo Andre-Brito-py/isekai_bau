@@ -7,7 +7,56 @@ function lerHeranca() {
   return null;
 }
 function formaFinal(H) { if (!H) return null; if (H.grau5) return H.grau5; const L = H.line || []; return L[L.length - 1] || null; }
-const linhaDe = sp => LINHA_FERRO.includes(sp) ? 'ferro' : 'arcano';
+// a linha vem do caminho inteiro herdado (a Arca e o Vazio podem vir de qualquer uma das duas)
+const linhaDe = sp => { const L = G.her && G.her.line; if (L && L.length) return L.includes('ferro') ? 'ferro' : 'arcano'; return LINHA_FERRO.includes(sp) ? 'ferro' : 'arcano'; };
+// herança do André (convertida do backup do save da T1 que ele enviou): vale quando o aparelho não tem herança gravada
+const HER_ANDRE = {"v": 1, "name": "André", "line": ["caixote", "ferro", "espinho", "carniceiro", "arca"], "grau5": "arca", "face": {"body": "carniceiro", "aura": "arca", "blur": 2}, "mem": {"pastel": false, "vazio": false}, "lume": {"cancao": true, "fone": true, "coracao": 14}, "esc": {"ofelia": true, "maren": false, "jorge": "livre", "tiago": true, "rita": true, "ritaNota": 5, "marlene": "conosco", "ch6": "cancao", "coracao": "guardar", "almas": ["zelia", "priscila", "teo", "rafael", "luzia", "benedito"]}, "feats": ["musgo", "polvo", "brida", "jaulas", "cavaleiro", "maren3", "carruagem", "clara", "cartas", "fiscal", "jorge", "diario", "ambar", "caderno", "maestro", "p32", "rita", "cancao", "timoneiro", "capitao", "lacre", "almas", "fiado", "escriba", "catalogo", "diario8", "fita", "passageiros", "coracao", "desafio"], "renome": "Coisa que não devia existir", "tempo": 31403.7833329605, "dif": "desafio"};
+// ---------- colar um código: herança (RCB-H1.) ou backup de save da T1 (RCB1.) ----------
+const T1_PAI = { ferro: 'caixote', arcano: 'caixote', fortaleza: 'ferro', espinho: 'ferro', grimorio: 'arcano', estelar: 'arcano', bastiao: 'fortaleza', abismo: 'fortaleza', ferrao: 'espinho', carniceiro: 'espinho', biblioteca: 'grimorio', proibido: 'grimorio', eclipse: 'estelar', constelacao: 'estelar' };
+function b64json(b) { return JSON.parse(decodeURIComponent(escape(atob(b)))); }
+function herancaDeCodigo(code) {
+  code = (code || '').trim().replace(/\s+/g, '');
+  try {
+    if (code.startsWith('RCB-H1.')) { const [, body] = code.split('.'); const H = b64json(body); return H && H.name ? H : null; }
+    if (code.startsWith('RCB1.')) {
+      const d = b64json(code.slice(5)), f = d.flags || {};
+      // a linha: do 4º grau (ou da forma atual) para trás, e o 5º grau no fim
+      const tip = f.prev4 || d.species, line = [tip]; while (T1_PAI[line[0]]) line.unshift(T1_PAI[line[0]]);
+      if (f.grau5 && !line.includes(f.grau5)) line.push(f.grau5);
+      const feitos = Object.keys(f).filter(k => /Done$/.test(k) && f[k] === true);
+      const sc = feitos.length + ['knightDone', 'fiscalDone', 'capitaoDone'].filter(k => f[k]).length * 3 + Math.floor((d.lv || 1) / 4) + (d.diff !== 'historia' ? 4 : 0);
+      return { v: 1, name: d.name, line, grau5: f.grau5 || null, face: { body: f.prev4 || null, aura: f.grau5 || null },
+        lume: { cancao: f.ch6Gift === 'cancao', fone: !!f.lumeFone, coracao: f.lumeHeart || 0 },
+        esc: { ofelia: !!f.ofeliaRemembers, maren: !!f.marenSpared, jorge: f.jorgeFate || null, tiago: !!f.tiagoTaken, rita: !!f.ritaPromise, ritaNota: f.dateScore || 0, marlene: f.marleneFate || null, ch6: f.ch6Gift || null, coracao: f.finalChoice || null, almas: f.saved7 || [] },
+        feats: feitos, renome: sc >= 38 ? 'Coisa que não devia existir' : sc >= 28 ? 'Lenda de Velhágua' : sc >= 18 ? 'Ameaça local' : 'Curiosidade da masmorra',
+        tempo: d.time || 0, dif: d.diff || 'desafio', deSave: true };
+    }
+  } catch (e) { }
+  return null;
+}
+function aplicarHeranca(H) {
+  G.her = H; G.name = H.name || G.name;
+  const f = formaFinal(H); G.species = f && IMG.chest[f] ? f : 'arca';
+  PTC.me = null;
+  try { localStorage.setItem('renasci_heranca', JSON.stringify(H)); } catch (e) { }
+}
+// caixa de texto grande para colar o código (sem filtrar letras, ao contrário do campo de nome)
+function codeInput() {
+  return new Promise(res => {
+    OVB.innerHTML = `<h2>Código da Temporada 1</h2><p>Serve o código de herança da tela final (RCB-H1...) ou o código de backup do save (RCB1...).</p><textarea id="ci" placeholder="Cole o código aqui"></textarea><div class="row"><button class="ob" id="cx">Cancelar</button><button class="ob pri" id="cok">Carregar</button></div>`;
+    OV.hidden = false; const ta = OVB.querySelector('#ci'); setTimeout(() => ta.focus(), 50);
+    const done = v => { OV.hidden = true; for (const k in KEYS) KEYS[k] = false; res(v); };
+    OVB.querySelector('#cok').onclick = () => done(ta.value); OVB.querySelector('#cx').onclick = () => done('');
+  });
+}
+async function colarHeranca() {
+  const c = await codeInput();
+  const H = herancaDeCodigo(c);
+  if (!H) { await say('* Esse código não parece ser da Temporada 1. Confira se copiou tudo, do começo ao fim.'); return false; }
+  aplicarHeranca(H);
+  await say(`* Herança carregada: ${H.name}, ${HARTE.species[G.species] ? HARTE.species[G.species].name : G.species}. Renome: ${H.renome}.`);
+  return true;
+}
 
 // ---------- o grupo ----------
 function bauFrame(u) {
@@ -499,10 +548,11 @@ function drawTitle2() {
   txt('TEMPORADA 2 · A SUPERFÍCIE', 120, 30, { align: 'center', col: '#ff8fa8' });
   const C = IMG.chest[G.species]; if (C) { const fr = (t % 120) < 6 ? C.closed : C.three, hop = Math.abs(Math.sin(t / 20)) * 3; bx.drawImage(fr, 100, 150 - hop); }
   const H = G.her;
+  if (UI.top()) return;
   if (H) txt(`Herança: ${H.name} · ${HARTE.species[G.species] ? HARTE.species[G.species].name : ''}`, 120, 200, { align: 'center', col: '#9be58a' });
   else txt('Nenhuma herança da Temporada 1 neste aparelho', 120, 200, { align: 'center', col: '#8a8099' });
   if (t % 60 < 40) txt('Aperte A', 120, 216, { align: 'center', col: '#ffffff' });
-  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.1', 236, 228, { align: 'right', col: '#5a5070' });
+  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.2', 236, 228, { align: 'right', col: '#5a5070' });
 }
 function drawFim1() {
   bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
@@ -516,6 +566,11 @@ async function titleFlow2() {
   V.scene = 'title'; UI.stack.length = 0; playMusic('title'); await fadeIn(20);
   await new Promise(r => { const f = () => { if (V.scene !== 'title') return; if (btnp('a')) { r(); return; } requestAnimationFrame(f); }; f(); });
   sfx('select');
+  while (true) {
+    const c = await choose(`* Herança: ${G.her ? G.her.name + ', ' + (HARTE.species[G.species] ? HARTE.species[G.species].name : '') : 'nenhuma'}.`, ['Jogar', 'Colar código da Temporada 1']);
+    if (c === 0) break;
+    await colarHeranca();
+  }
   const sv = load2();
   let novo = true;
   if (sv && (sv.flags.cap1Corvos || sv.flags.cap1Boss)) {
@@ -571,10 +626,8 @@ function frame(ts) {
 async function boot2() {
   buildFont(); buildIcons(); resize(); setupTouch();
   await loadHeranca();
-  const H = lerHeranca();
-  G.her = H;
-  if (H) { G.name = H.name || G.name; const f = formaFinal(H); if (f && IMG.chest[f]) G.species = f; }
-  else G.species = 'arca';
+  const H = lerHeranca() || HER_ANDRE;
+  aplicarHeranca(H);
   requestAnimationFrame(frame);
   titleFlow2();
 }
