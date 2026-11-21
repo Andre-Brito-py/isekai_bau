@@ -40,7 +40,9 @@ async function battle2(cfg) {
     on: true, cfg, party: cfg.party.map(mkMember), foes: cfg.foes.map(f => mkFoe(ENEMY2[f.id], f.x, f.y)),
     anims: [], parts: [], nums: [], call: null, hint: null, stop: 0, shake: 0, flash: 0, t: 0,
     tension: cfg.tension || 0, tensionShow: 0, menu: null, busy: false, queue: [], over: null, mode: G.flags.modoEspera ? 'espera' : 'ativo',
-    stats: { perf: 0, crit: 0, quebra: 0, t0: G.time }, dim: 0, cut: null, bgfn: cfg.bg || ponteBG, ring: null, prompt: null, cursor: null
+    stats: { perf: 0, crit: 0, quebra: 0, t0: G.time }, dim: 0, cut: null, bgfn: cfg.bg || ponteBG, ring: null, prompt: null, cursor: null,
+    // restos da luta anterior (sem isso o VITÓRIA! da luta dos corvos ficava por cima da luta do chefe)
+    win: null, lose: null, waitA: null, phaseQ: [], phaseBusy: false, taunt: null, eco: false, lastTarget: null, lastCmd: {}, call: null, hint: null
   });
   layoutParty();
   V.scene = 'battle2';
