@@ -73,7 +73,7 @@ const FLIPS = new Map(); function flipC(c) { if (!FLIPS.has(c)) FLIPS.set(c, fli
 function grupoCap1() {
   const H = G.her, sp = G.species, ln = linhaDe(sp), cor = (H && H.lume && H.lume.coracao) || 0;
   const bau = {
-    id: 'bau', name: G.name, short: G.name.slice(0, 8), port: 'me', col: '#f0c040', el: 'mordida', lane: 1, row: 'front', h: 34,
+    id: 'bau', name: G.name, short: G.name.slice(0, 8), port: 'me', col: '#f0c040', el: 'mordida', lane: 2, row: 'front', h: 26,
     mhp: ln === 'ferro' ? 150 : 128, mmp: ln === 'ferro' ? 26 : 40, atk: ln === 'ferro' ? 16 : 13, def: ln === 'ferro' ? 13 : 9, mag: ln === 'ferro' ? 10 : 15, spd: 9,
     atkNm: 'Morder', atkIcon: 'mordida', atkDesc: 'Morde um inimigo. A quando o anel fechar = mordida certeira.',
     runas: ['brasa', 'geada', 'seiva'], techs: ['guardar', ln === 'ferro' ? 'baluarte' : 'eco'],
@@ -89,7 +89,7 @@ function grupoCap1() {
     frame: sideFrame('lumeh'), attack: lumeAtk, super: superLume
   };
   const rita = {
-    id: 'rita', name: 'Rita', port: 'rita', col: '#e86050', el: 'corte', lane: 2, row: 'front', h: 50,
+    id: 'rita', name: 'Rita', port: 'rita', col: '#e86050', el: 'corte', lane: 1, row: 'front', h: 50,
     mhp: 132, mmp: 0, atk: 17, def: 12, mag: 6, spd: 10,
     atkNm: 'Lança', atkIcon: 'corte', atkDesc: 'Dois golpes de lança. Um anel para cada golpe.',
     techs: ['estocada', 'provocar'], superNm: 'Carga da Escudeira', superDesc: 'Atravessa todos os inimigos, quatro vezes.', superTgt: 'all',
@@ -625,7 +625,7 @@ function drawTitle2() {
   if (H) txt(`Herança: ${H.name} · ${HARTE.species[G.species] ? HARTE.species[G.species].name : ''}`, 120, 200, { align: 'center', col: '#9be58a' });
   else txt('Nenhuma herança da Temporada 1 neste aparelho', 120, 200, { align: 'center', col: '#8a8099' });
   if (t % 60 < 40) txt('Aperte A', 120, 216, { align: 'center', col: '#ffffff' });
-  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.9', 236, 228, { align: 'right', col: '#5a5070' });
+  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.10', 236, 228, { align: 'right', col: '#5a5070' });
 }
 function drawFim1() {
   bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
