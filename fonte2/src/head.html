@@ -120,6 +120,10 @@
  - JOGO DEITADO (pedido do usuário): celular de lado; a tela ocupa tudo e os controles ficam por cima, nos cantos.
    O MAPA usa a largura toda (W cresce até 520); batalha, cenas e título são quadros 240x240 no centro com o próprio
    quadro desfocado nas laterais. Em pé aparece "Gire o celular". HUD do mapa: canto de cima à direita é dos botões.
+ - ESTILO DA INTERFACE (pedido do usuário, referência: Hyper Light Drifter): painéis de vidro escuro translúcido,
+   cantos chanfrados, borda fina turquesa (#8fe3d8) com cantoneiras, nomes em etiqueta rosa (#ff7aa8), setas em pixel;
+   controles de toque "fantasma" (círculos translúcidos, ícones em pixel); laterais com ladrilho de runas escuro;
+   HUD do mapa com vida em segmentos. Nada de caixas pretas com borda branca grossa.
  - CONTROLE DE TOQUE: ANALÓGICO (pino que segue o dedo, zona morta no centro; empurrar pouco = andar devagar).
  - ANDAR NO MAPA: 8 direções (diagonais com duas teclas ou no direcional de toque; não corta quina de parede, desliza
    pelo eixo livre). Menus e batalha continuam em 4 direções.
@@ -182,6 +186,22 @@ body{font-family:var(--ui);margin:0;padding:0;box-sizing:border-box}
 .rb.down,.pill.down{transform:translateY(2px);box-shadow:inset 0 -2px 0 rgba(0,0,0,.35);background:var(--btn-hi)}
 .lbl{position:absolute;font:600 10px/1 var(--ui);letter-spacing:.1em;color:var(--dim)}
 
+/* controles "fantasma" por cima do jogo: círculos translúcidos de contorno claro e ícones em pixel */
+#joy{background:rgba(255,255,255,.05)!important;border:2px solid rgba(255,255,255,.22)!important;box-shadow:none!important;opacity:1!important}
+#joy .ring{border:1px solid rgba(255,255,255,.10)!important}
+#joy .tri{opacity:.0!important}
+#joy.on-up .tu,#joy.on-down .td,#joy.on-left .tl,#joy.on-right .tr{opacity:.9!important}
+#joy .tu{border-bottom-color:#8fe3d8!important}#joy .td{border-top-color:#8fe3d8!important}#joy .tl{border-right-color:#8fe3d8!important}#joy .tr{border-left-color:#8fe3d8!important}
+#knob{background:rgba(255,255,255,.20)!important;border:2px solid rgba(255,255,255,.38)!important;box-shadow:0 0 0 4px rgba(255,255,255,.04)!important}
+#knob::after{display:none}
+#joy.ativo #knob{background:rgba(143,227,216,.42)!important;border-color:rgba(190,255,248,.8)!important}
+.rb{background:rgba(255,255,255,.07)!important;border:2px solid rgba(255,255,255,.26)!important;box-shadow:none!important;color:transparent!important;opacity:1!important}
+.rb svg,.pill svg{display:block;image-rendering:pixelated;shape-rendering:crispEdges}
+.rb.down{background:rgba(143,227,216,.35)!important;border-color:rgba(190,255,248,.8)!important;transform:none!important}
+#ab{opacity:1!important}
+.pill{width:44px;height:40px;padding:0!important;display:flex!important;align-items:center;justify-content:center;border-radius:6px!important;
+  background:rgba(9,12,22,.45)!important;border:1px solid rgba(255,255,255,.18)!important;color:transparent!important;opacity:1!important;font-size:0!important}
+.pill.down{background:rgba(143,227,216,.35)!important}
 #ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,3,10,.72);z-index:20;padding:16px;box-sizing:border-box}
 #ovbox{width:min(360px,100%);background:#0d0a14;border:3px solid var(--ink);padding:18px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;
   font-family:ui-monospace,"Courier New",monospace}

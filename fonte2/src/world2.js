@@ -193,7 +193,8 @@ function drawWorld2() {
   const cx = m.w * TS <= W ? (m.w * TS - W) / 2 : Math.max(0, Math.min(m.w * TS - W, W2.px + 8 - W / 2)), cy = m.h * TS <= H ? (m.h * TS - H) / 2 : Math.max(0, Math.min(m.h * TS - H, W2.py + 8 - H / 2 - 8));
   W2.cam = [Math.round(cx), Math.round(cy)];
   const [ox, oy] = W2.cam;
-  bx.fillStyle = m.bg || '#0a0812'; bx.fillRect(0, 0, W, H);
+  if (m.w * TS < W || m.h * TS < H) { fundoRunas(0, W); bx.fillStyle = 'rgba(0,0,0,0.35)'; bx.fillRect(0, 0, W, H); bx.fillStyle = m.bg || '#0a0812'; bx.fillRect(Math.round(-cx), Math.round(-cy), m.w * TS, m.h * TS); }
+  else { bx.fillStyle = m.bg || '#0a0812'; bx.fillRect(0, 0, W, H); }
   // água animada
   const wf = Math.floor(W2.t / 14) % 4;
   for (const [tx, ty, T, shade] of m.water) {
@@ -220,8 +221,7 @@ function drawWorld2() {
   if (near && near.talk && !worldBusy2() && near.t !== 'door') { const yy = near.py - oy - (near.h || 40) - 6 + Math.round(Math.sin(W2.t / 8)); txt('A', near.px - ox + 6, yy, { col: '#ffe066', shadow: true }); }
   // HUD
   if (W2.toast) { const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(W / 2 - w / 2, 26, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, W / 2, 28, { align: 'center', col: '#ffe8b0', alpha: a }); }
-  if (m.hunters) { txt('SUSPEITA', 4, 16, { col: '#ff8a70' }); for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : '#3a2a3a'; bx.fillRect(56 + i * 12, 20, 9, 4); } }
-  if (G.cobres != null && m.showMoney) txt(G.cobres + ' cobres', 4, 4, { col: '#f0c040' });
+  hudMundo(m);
 }
 function drawFeet(fr, x, y, o) {
   const X = Math.round(x + 8 - fr.width / 2), Y = Math.round(y + 15 - fr.height + (o.bob || 0));
@@ -340,3 +340,24 @@ const ACT2 = {
 };
 let CAIXA_MINI = null;
 function caixaMini() { if (CAIXA_MINI) return CAIXA_MINI; const P = new Pix(14, 11), B = ramp('#9a7a4a'); for (let y = 0; y < 10; y++) for (let x = 0; x < 13; x++) P.p(x, y + 1, P.tone(B, 0.62 - y / 22 - x / 40 + (x === 0 || y === 0 ? 0.15 : 0), x, y)); P.line(1, 2, 12, 10, B[1]); return CAIXA_MINI = P.outline().canvas(); }
+
+// ---------- HUD do mapa: painel translúcido no canto (vida do grupo em segmentos, cobres, suspeita) ----------
+let HUD_G = null, HUD_T = -99;
+const COBRE_IC = (() => { const c = mk(7, 7), x = c.getContext('2d'); x.fillStyle = '#5a3a10'; x.fillRect(1, 0, 5, 7); x.fillRect(0, 1, 7, 5); x.fillStyle = '#e8a030'; x.fillRect(1, 1, 5, 5); x.fillStyle = '#ffd870'; x.fillRect(2, 1, 2, 1); x.fillRect(1, 2, 1, 2); x.fillStyle = '#5a3a10'; x.fillRect(3, 2, 1, 3); return c; })();
+function hudMundo(m) {
+  if (FRAME - HUD_T > 30 || !HUD_G) { try { HUD_G = grupoAtual(); } catch (_) { HUD_G = null; } HUD_T = FRAME; }
+  const gs = HUD_G || [], h = 8 + gs.length * 11 + 12 + (m.hunters ? 11 : 0);
+  box(4, 4, 92, h, { bw: 1 });
+  gs.forEach((u, i) => {
+    const y = 9 + i * 11, p = PT(u.id === 'lume' ? 'lumeh' : u.id === 'bau' ? 'me' : u.id);
+    if (p) { bx.save(); bx.beginPath(); bx.rect(8, y - 1, 10, 10); bx.clip(); bx.drawImage(p, 8, y - 1, 10, 10); bx.restore(); }
+    const pt = (G.pt || {})[u.id], hp = pt ? pt.hp : u.mhp, n = Math.ceil(Math.max(0, hp) / u.mhp * 10), cor = hp / u.mhp > 0.5 ? '#5fffb0' : hp / u.mhp > 0.25 ? '#ffd060' : '#ff6b6b';
+    for (let k = 0; k < 10; k++) { bx.fillStyle = k < n ? cor : 'rgba(95,255,176,0.14)'; bx.fillRect(22 + k * 7, y + 1, 6, 6); if (k < n) { bx.fillStyle = 'rgba(255,255,255,0.35)'; bx.fillRect(22 + k * 7, y + 1, 6, 1); } }
+  });
+  const yc = 9 + gs.length * 11;
+  bx.drawImage(COBRE_IC, 9, yc + 2); txt(String(G.cobres || 0), 20, yc, { col: '#ffd870' });
+  if (m.hunters) {
+    const ys = yc + 11; bx.fillStyle = '#ff8a70'; bx.fillRect(9, ys + 4, 7, 1); bx.fillRect(10, ys + 3, 5, 3); bx.fillStyle = '#120c1c'; bx.fillRect(12, ys + 3, 1, 3);
+    for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : 'rgba(255,107,107,0.18)'; bx.fillRect(22 + i * 10, ys + 2, 8, 5); }
+  }
+}

@@ -695,11 +695,10 @@ function tick() {
     for (const w of UI.stack) w.draw();
     if (OX > 0) {
       bx = MAIN_BX; W = WF; TXO.x = 0;
-      bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
-      if (FILTRO) { bx.filter = 'blur(5px) brightness(0.45) saturate(0.8)'; bx.drawImage(INNER, -20, -30, W + 40, H + 60); bx.filter = 'none'; }
-      else { bx.drawImage(INNER, -20, -30, W + 40, H + 60); bx.fillStyle = 'rgba(5,3,10,0.68)'; bx.fillRect(0, 0, W, H); }
+      fundoRunas(0, W);
+      bx.fillStyle = 'rgba(0,0,0,0.45)'; bx.fillRect(OX - 4, 0, 4, H); bx.fillRect(OX + 240, 0, 4, H);
       bx.drawImage(INNER, OX, 0);
-      bx.fillStyle = 'rgba(0,0,0,0.5)'; bx.fillRect(OX - 1, 0, 1, H); bx.fillRect(OX + 240, 0, 1, H);
+      bx.fillStyle = UIC.line; bx.globalAlpha = 0.3; bx.fillRect(OX - 1, 0, 1, H); bx.fillRect(OX + 240, 0, 1, H); bx.globalAlpha = 1;
     }
   }
   if (V.fade > 0) { bx.fillStyle = `rgba(0,0,0,${V.fade})`; bx.fillRect(0, 0, W, H); }
