@@ -3,9 +3,9 @@
 function mk(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
 function hash(x, y, s = 0) { let h = (x * 374761393 + y * 668265263 + s * 2147483647) >>> 0; h = (h ^ (h >> 13)) * 1274126177 >>> 0; return (h ^ (h >> 16)) >>> 0; }
-const W = 240, H = 240, TS = 16;
+let W = 240; const H = 240, TS = 16;   // W cresce com o celular deitado (tela larga); H é sempre 240
 const cvs = document.getElementById('screen'), ctx = cvs.getContext('2d');
-const buf = mk(W, H), bx = buf.getContext('2d'); bx.imageSmoothingEnabled = false;
+const buf = mk(W, H); let bx = buf.getContext('2d'); bx.imageSmoothingEnabled = false;
 const lightC = mk(W, H), lx = lightC.getContext('2d');
 let S = 3, DPR = 1, TSD = 2, FRAME = 0;
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -28,9 +28,12 @@ const DF = () => DIFF[G.diff] || DIFF.desafio;
 function resize() {
   DPR = window.devicePixelRatio || 1;
   const st = document.getElementById('stage').getBoundingClientRect();
-  const avail = Math.max(120, Math.min(st.width, st.height)) * DPR;
-  S = DPR >= 2 ? avail / W : Math.max(1, Math.floor(avail / W));
+  const sw = Math.max(120, st.width) * DPR, sh = Math.max(120, st.height) * DPR;
+  // celular DEITADO: a altura manda (240 px de jogo) e a largura do jogo cresce até preencher a tela (mapa mais largo)
+  if (st.width > st.height * 1.05) { S = DPR >= 2 ? sh / H : Math.max(1, Math.floor(sh / H)); S = Math.max(1, S); W = Math.max(240, Math.min(520, Math.floor(sw / S))); }
+  else { W = 240; const avail = Math.min(sw, sh); S = DPR >= 2 ? avail / W : Math.max(1, Math.floor(avail / W)); }
   S = Math.max(1, S);
+  if (buf.width !== W) { buf.width = W; lightC.width = W; buf.getContext('2d').imageSmoothingEnabled = false; }
   cvs.width = Math.round(W * S); cvs.height = Math.round(H * S);
   S = cvs.width / W;
   cvs.style.width = (cvs.width / DPR) + 'px'; cvs.style.height = (cvs.height / DPR) + 'px';
@@ -171,7 +174,7 @@ function setupTouch() {
   const ANG = { right: 0, down: 90, left: 180, up: -90 };
   const ANG8 = { right: 0, 'down-right': 45, down: 90, 'down-left': 135, left: 180, 'up-left': -135, up: -90, 'up-right': -45 };
   const angDiff = (a, b) => { let d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
-  const R = 52, DEAD = 14;
+  const R = 46, DEAD = 12;
   const moveKnob = (x, y) => { kn.style.transform = `translate(${x}px,${y}px)`; };
   const dirOf = e => {
     const r = dp.getBoundingClientRect(); let dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2); const dist = Math.hypot(dx, dy);
@@ -202,6 +205,13 @@ function setupTouch() {
   });
   cvs.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); if (V.scene === 'title' || (UI.top() && UI.top().type === 'dialog')) { press('a'); setTimeout(() => release('a'), 60); } });
   addEventListener('contextmenu', e => e.preventDefault());
+  // no celular: no primeiro toque, tela cheia e trava DEITADO (no app instalado e no navegador que deixar)
+  let deitou = false;
+  addEventListener('pointerdown', () => {
+    if (deitou || !matchMedia('(pointer:coarse)').matches) return; deitou = true;
+    const trava = () => { try { const p = screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape'); if (p && p.catch) p.catch(() => { }); } catch (_) { } };
+    try { const el = document.documentElement; if (!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen({ navigationUI: 'hide' }).then(trava, trava); else trava(); } catch (_) { trava(); }
+  }, { capture: true });
   muteLabel();
 }
 

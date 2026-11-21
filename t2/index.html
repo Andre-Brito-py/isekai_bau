@@ -122,6 +122,9 @@
    e.rotina = [{at, act, t, dir, leva}]): vai até um ponto e FAZ alguma coisa lá, com animação própria (ACT2:
    varrer, pescar, carregar/empilhar caixa, acender poste, tocar sino, varal, regar, limpar balcão, remendar rede,
    beber, cochilar, conversar com balão, brincar, rezar...). Cidade nova = rotinas novas que contem a história dela.
+ - JOGO DEITADO (pedido do usuário): celular de lado; a tela ocupa tudo e os controles ficam por cima, nos cantos.
+   O MAPA usa a largura toda (W cresce até 520); batalha, cenas e título são quadros 240x240 no centro com o próprio
+   quadro desfocado nas laterais. Em pé aparece "Gire o celular". HUD do mapa: canto de cima à direita é dos botões.
  - CONTROLE DE TOQUE: ANALÓGICO (pino que segue o dedo, zona morta no centro; empurrar pouco = andar devagar).
  - ANDAR NO MAPA: 8 direções (diagonais com duas teclas ou no direcional de toque; não corta quina de parede, desliza
    pelo eixo livre). Menus e batalha continuam em 4 direções.
@@ -137,13 +140,30 @@
 }
 html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none}
-body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box}
-#app{height:100%;display:grid;grid-template-rows:1fr auto;grid-template-columns:1fr;gap:8px;padding-block:8px;box-sizing:border-box}
-#stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:0;min-width:0}
-#screen{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;
-  box-shadow:0 0 0 2px #000,0 0 0 4px #2a2236,0 12px 40px rgba(0,0,0,.6);border-radius:2px}
-#pad{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 4px 10px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box}
-#dzone{padding:28px;margin:-28px;touch-action:none;flex:none}
+body{font-family:var(--ui);margin:0;padding:0;box-sizing:border-box}
+/* JOGO DEITADO: a tela ocupa o celular inteiro e os controles ficam POR CIMA, nos cantos, meio transparentes */
+#app{position:fixed;inset:0}
+#stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#screen{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000}
+#pad{position:absolute;inset:0;pointer-events:none}
+#pad>*{pointer-events:auto}
+#dzone{position:absolute;left:calc(env(safe-area-inset-left,0px) - 6px);bottom:-6px;padding:28px;touch-action:none}
+#joy{width:150px!important;height:150px!important;opacity:.62}
+#joy.ativo{opacity:.85}
+#joy .ring{inset:30px!important}
+#joy .tu,#joy .td{left:68px!important} #joy .tl,#joy .tr{top:68px!important}
+#knob{left:42px!important;top:42px!important;width:62px!important;height:62px!important}
+#knob::after{inset:19px!important}
+#right{position:absolute;right:calc(env(safe-area-inset-right,0px) + 6px);bottom:6px;top:6px;width:150px;pointer-events:none}
+#right>*{pointer-events:auto}
+#mid{position:absolute;top:0;right:0;display:flex;gap:6px}
+#ab{position:absolute;right:0;bottom:0;width:150px;height:130px;opacity:.7}
+.pill{opacity:.7}
+#gire{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#0b0912;color:var(--ink);font:600 16px/1.4 var(--ui);text-align:center;padding:24px}
+#gire .cel{width:56px;height:96px;border:4px solid var(--amber);border-radius:10px;animation:gira 2.2s ease-in-out infinite}
+@keyframes gira{0%,25%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+@media (orientation:portrait) and (pointer:coarse){#gire{display:flex}}
+@media (hover:hover) and (pointer:fine){#pad{display:none}}
 #joy{position:relative;width:172px;height:172px;border-radius:50%;touch-action:none;
   background:radial-gradient(circle at 50% 45%,var(--btn-hi) 0,var(--btn) 58%,#1c1726 100%);
   border:2px solid var(--btn-edge);box-shadow:inset 0 -6px 0 rgba(0,0,0,.35),inset 0 0 0 10px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.35)}
@@ -158,27 +178,15 @@ body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));
   box-shadow:0 6px 10px rgba(0,0,0,.45),inset 0 3px 0 rgba(255,255,255,.12),inset 0 -4px 0 rgba(0,0,0,.3);transition:transform .12s ease-out}
 #knob::after{content:"";position:absolute;inset:22px;border-radius:50%;background:rgba(0,0,0,.18);box-shadow:inset 0 2px 2px rgba(0,0,0,.3)}
 #joy.ativo #knob{transition:none;background:radial-gradient(circle at 40% 35%,#7a6a5a 0,#5a4a3a 55%,#3a2e24 100%);border-color:var(--amber)}
-  background:radial-gradient(circle at 50% 45%,var(--btn-hi) 0,var(--btn) 62%,var(--btn) 100%);
-  border:2px solid var(--btn-edge);box-shadow:inset 0 -6px 0 rgba(0,0,0,.35),0 4px 12px rgba(0,0,0,.35)}
-#mid{display:flex;flex-direction:column;align-items:center;gap:8px}
 .pill{font:600 11px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);background:var(--btn);border:2px solid var(--btn-edge);
   border-radius:999px;padding:8px 12px;touch-action:none}
 .pill.down{background:var(--btn-hi);color:var(--ink)}
-#ab{position:relative;width:150px;height:130px}
 .rb{position:absolute;border-radius:50%;background:var(--btn);border:2px solid var(--btn-edge);box-shadow:inset 0 -5px 0 rgba(0,0,0,.35);
   display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--ui);color:var(--dim);touch-action:none}
 #ba{width:70px;height:70px;right:4px;top:6px;color:var(--amber)} #bb{width:58px;height:58px;left:8px;top:58px;color:var(--rose)}
 .rb.down,.pill.down{transform:translateY(2px);box-shadow:inset 0 -2px 0 rgba(0,0,0,.35);background:var(--btn-hi)}
 .lbl{position:absolute;font:600 10px/1 var(--ui);letter-spacing:.1em;color:var(--dim)}
-@media (orientation:landscape) and (min-aspect-ratio:4/3){
-  #app{grid-template-columns:auto 1fr auto;grid-template-rows:1fr}
-  #pad{display:contents}
-  #dzone{grid-column:1;grid-row:1;align-self:center}
-  #stage{grid-column:2;grid-row:1}
-  #right{grid-column:3;grid-row:1;align-self:center}
-}
-#right{display:flex;flex-direction:column;align-items:center;gap:10px}
-#mid{flex-direction:row}
+
 #ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,3,10,.72);z-index:20;padding:16px;box-sizing:border-box}
 #ovbox{width:min(360px,100%);background:#0d0a14;border:3px solid var(--ink);padding:18px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;
   font-family:ui-monospace,"Courier New",monospace}
@@ -200,6 +208,7 @@ body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));
     <div id="right"><div id="mid"><div class="pill" data-k="menu" id="bm">Menu</div><div class="pill" data-k="mute" id="bs">Som</div></div><div id="ab"><div class="rb" id="ba" data-k="a">A</div><div class="rb" id="bb" data-k="b">B</div></div></div>
   </div>
 </div>
+<div id="gire"><div class="cel"></div><div>Gire o celular<br><span style="color:var(--dim);font-size:13px">O Baú 2 se joga com o celular deitado.</span></div></div>
 <div id="ov" hidden><div id="ovbox"></div></div>
 
 <script>
@@ -210,9 +219,9 @@ const HARTE={"sp": {"mimic": ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABA
 function mk(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
 function hash(x, y, s = 0) { let h = (x * 374761393 + y * 668265263 + s * 2147483647) >>> 0; h = (h ^ (h >> 13)) * 1274126177 >>> 0; return (h ^ (h >> 16)) >>> 0; }
-const W = 240, H = 240, TS = 16;
+let W = 240; const H = 240, TS = 16;   // W cresce com o celular deitado (tela larga); H é sempre 240
 const cvs = document.getElementById('screen'), ctx = cvs.getContext('2d');
-const buf = mk(W, H), bx = buf.getContext('2d'); bx.imageSmoothingEnabled = false;
+const buf = mk(W, H); let bx = buf.getContext('2d'); bx.imageSmoothingEnabled = false;
 const lightC = mk(W, H), lx = lightC.getContext('2d');
 let S = 3, DPR = 1, TSD = 2, FRAME = 0;
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -235,9 +244,12 @@ const DF = () => DIFF[G.diff] || DIFF.desafio;
 function resize() {
   DPR = window.devicePixelRatio || 1;
   const st = document.getElementById('stage').getBoundingClientRect();
-  const avail = Math.max(120, Math.min(st.width, st.height)) * DPR;
-  S = DPR >= 2 ? avail / W : Math.max(1, Math.floor(avail / W));
+  const sw = Math.max(120, st.width) * DPR, sh = Math.max(120, st.height) * DPR;
+  // celular DEITADO: a altura manda (240 px de jogo) e a largura do jogo cresce até preencher a tela (mapa mais largo)
+  if (st.width > st.height * 1.05) { S = DPR >= 2 ? sh / H : Math.max(1, Math.floor(sh / H)); S = Math.max(1, S); W = Math.max(240, Math.min(520, Math.floor(sw / S))); }
+  else { W = 240; const avail = Math.min(sw, sh); S = DPR >= 2 ? avail / W : Math.max(1, Math.floor(avail / W)); }
   S = Math.max(1, S);
+  if (buf.width !== W) { buf.width = W; lightC.width = W; buf.getContext('2d').imageSmoothingEnabled = false; }
   cvs.width = Math.round(W * S); cvs.height = Math.round(H * S);
   S = cvs.width / W;
   cvs.style.width = (cvs.width / DPR) + 'px'; cvs.style.height = (cvs.height / DPR) + 'px';
@@ -378,7 +390,7 @@ function setupTouch() {
   const ANG = { right: 0, down: 90, left: 180, up: -90 };
   const ANG8 = { right: 0, 'down-right': 45, down: 90, 'down-left': 135, left: 180, 'up-left': -135, up: -90, 'up-right': -45 };
   const angDiff = (a, b) => { let d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
-  const R = 52, DEAD = 14;
+  const R = 46, DEAD = 12;
   const moveKnob = (x, y) => { kn.style.transform = `translate(${x}px,${y}px)`; };
   const dirOf = e => {
     const r = dp.getBoundingClientRect(); let dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2); const dist = Math.hypot(dx, dy);
@@ -409,6 +421,13 @@ function setupTouch() {
   });
   cvs.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); if (V.scene === 'title' || (UI.top() && UI.top().type === 'dialog')) { press('a'); setTimeout(() => release('a'), 60); } });
   addEventListener('contextmenu', e => e.preventDefault());
+  // no celular: no primeiro toque, tela cheia e trava DEITADO (no app instalado e no navegador que deixar)
+  let deitou = false;
+  addEventListener('pointerdown', () => {
+    if (deitou || !matchMedia('(pointer:coarse)').matches) return; deitou = true;
+    const trava = () => { try { const p = screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape'); if (p && p.catch) p.catch(() => { }); } catch (_) { } };
+    try { const el = document.documentElement; if (!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen({ navigationUI: 'hide' }).then(trava, trava); else trava(); } catch (_) { trava(); }
+  }, { capture: true });
   muteLabel();
 }
 
@@ -2536,6 +2555,8 @@ async function titleFlow2() {
 }
 
 // ---------- laço principal ----------
+const INNER = mk(240, 240), INNER_X = INNER.getContext('2d'), MAIN_BX = bx, FILTRO = typeof MAIN_BX.filter === 'string';
+INNER_X.imageSmoothingEnabled = false;
 function tick() {
   FRAME++;
   JP = { ...JPQ }; for (const k in JPQ) delete JPQ[k];
@@ -2544,14 +2565,30 @@ function tick() {
   if (V.scene === 'battle2' || V.scene === 'cena' || V.scene === 'world') G.time += 1 / 60;
   const top = UI.top();
   if (top) top.update();
-  if (V.scene === 'battle2') { updateBattle2(); drawBattle2(); }
-  else if (V.scene === 'cena') drawCena();
-  else if (V.scene === 'title') drawTitle2();
-  else if (V.scene === 'fim1') drawFim1();
-  else if (V.scene === 'world') { updateWorld2(); drawWorld2(); }
-  else if (V.scene === 'card') drawCard();
-  else { bx.fillStyle = '#000'; bx.fillRect(0, 0, W, H); }
-  for (const w of UI.stack) w.draw();
+  const WF = W, OX = Math.floor((WF - 240) / 2);
+  if (V.scene === 'world') {
+    // o mapa usa a tela larga inteira; janelas e diálogos ficam no meio
+    updateWorld2(); drawWorld2();
+    bx.save(); bx.translate(OX, 0); TXO.x = OX; for (const w of UI.stack) w.draw(); bx.restore(); TXO.x = 0;
+  } else {
+    // batalha, cenas e título são quadros de 240x240: desenhados no centro; nas laterais, o próprio quadro desfocado
+    if (OX > 0) { bx = INNER_X; W = 240; TXO.x = OX; }
+    if (V.scene === 'battle2') { updateBattle2(); drawBattle2(); }
+    else if (V.scene === 'cena') drawCena();
+    else if (V.scene === 'title') drawTitle2();
+    else if (V.scene === 'fim1') drawFim1();
+    else if (V.scene === 'card') drawCard();
+    else { bx.fillStyle = '#000'; bx.fillRect(0, 0, W, H); }
+    for (const w of UI.stack) w.draw();
+    if (OX > 0) {
+      bx = MAIN_BX; W = WF; TXO.x = 0;
+      bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
+      if (FILTRO) { bx.filter = 'blur(5px) brightness(0.45) saturate(0.8)'; bx.drawImage(INNER, -20, -30, W + 40, H + 60); bx.filter = 'none'; }
+      else { bx.drawImage(INNER, -20, -30, W + 40, H + 60); bx.fillStyle = 'rgba(5,3,10,0.68)'; bx.fillRect(0, 0, W, H); }
+      bx.drawImage(INNER, OX, 0);
+      bx.fillStyle = 'rgba(0,0,0,0.5)'; bx.fillRect(OX - 1, 0, 1, H); bx.fillRect(OX + 240, 0, 1, H);
+    }
+  }
   if (V.fade > 0) { bx.fillStyle = `rgba(0,0,0,${V.fade})`; bx.fillRect(0, 0, W, H); }
   let sx = 0, sy = 0; if (V.shake > 0) { V.shake--; sx = Math.round(rand(-2, 2)); sy = Math.round(rand(-2, 2)); }
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cvs.width, cvs.height);
@@ -3050,8 +3087,8 @@ function drawWorld2() {
   const [dx, dy] = DIR2[W2.dir], near = entAt2(W2.x + dx, W2.y + dy);
   if (near && near.talk && !worldBusy2() && near.t !== 'door') { const yy = near.py - oy - (near.h || 40) - 6 + Math.round(Math.sin(W2.t / 8)); txt('A', near.px - ox + 6, yy, { col: '#ffe066', shadow: true }); }
   // HUD
-  if (W2.toast) { const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(120 - w / 2, 26, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, 120, 28, { align: 'center', col: '#ffe8b0', alpha: a }); }
-  if (m.hunters) { txt('SUSPEITA', 236, 4, { align: 'right', col: '#ff8a70' }); for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : '#3a2a3a'; bx.fillRect(196 + i * 12, 16, 9, 4); } }
+  if (W2.toast) { const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(W / 2 - w / 2, 26, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, W / 2, 28, { align: 'center', col: '#ffe8b0', alpha: a }); }
+  if (m.hunters) { txt('SUSPEITA', 4, 16, { col: '#ff8a70' }); for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : '#3a2a3a'; bx.fillRect(56 + i * 12, 20, 9, 4); } }
   if (G.cobres != null && m.showMoney) txt(G.cobres + ' cobres', 4, 4, { col: '#f0c040' });
 }
 function drawFeet(fr, x, y, o) {
@@ -3093,7 +3130,7 @@ function drawHunterUI(e, ox, oy) {
 // escuridão com a luz da Vela da Lume em volta do grupo
 let DARKC = null;
 function drawDark(ox, oy) {
-  if (!DARKC) DARKC = mk(W, H);
+  if (!DARKC || DARKC.width !== W) DARKC = mk(W, H);
   const x = DARKC.getContext('2d');
   x.globalCompositeOperation = 'source-over'; x.fillStyle = W2.map.dark; x.fillRect(0, 0, W, H);
   x.globalCompositeOperation = 'destination-out';

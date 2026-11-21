@@ -668,6 +668,8 @@ async function titleFlow2() {
 }
 
 // ---------- laço principal ----------
+const INNER = mk(240, 240), INNER_X = INNER.getContext('2d'), MAIN_BX = bx, FILTRO = typeof MAIN_BX.filter === 'string';
+INNER_X.imageSmoothingEnabled = false;
 function tick() {
   FRAME++;
   JP = { ...JPQ }; for (const k in JPQ) delete JPQ[k];
@@ -676,14 +678,30 @@ function tick() {
   if (V.scene === 'battle2' || V.scene === 'cena' || V.scene === 'world') G.time += 1 / 60;
   const top = UI.top();
   if (top) top.update();
-  if (V.scene === 'battle2') { updateBattle2(); drawBattle2(); }
-  else if (V.scene === 'cena') drawCena();
-  else if (V.scene === 'title') drawTitle2();
-  else if (V.scene === 'fim1') drawFim1();
-  else if (V.scene === 'world') { updateWorld2(); drawWorld2(); }
-  else if (V.scene === 'card') drawCard();
-  else { bx.fillStyle = '#000'; bx.fillRect(0, 0, W, H); }
-  for (const w of UI.stack) w.draw();
+  const WF = W, OX = Math.floor((WF - 240) / 2);
+  if (V.scene === 'world') {
+    // o mapa usa a tela larga inteira; janelas e diálogos ficam no meio
+    updateWorld2(); drawWorld2();
+    bx.save(); bx.translate(OX, 0); TXO.x = OX; for (const w of UI.stack) w.draw(); bx.restore(); TXO.x = 0;
+  } else {
+    // batalha, cenas e título são quadros de 240x240: desenhados no centro; nas laterais, o próprio quadro desfocado
+    if (OX > 0) { bx = INNER_X; W = 240; TXO.x = OX; }
+    if (V.scene === 'battle2') { updateBattle2(); drawBattle2(); }
+    else if (V.scene === 'cena') drawCena();
+    else if (V.scene === 'title') drawTitle2();
+    else if (V.scene === 'fim1') drawFim1();
+    else if (V.scene === 'card') drawCard();
+    else { bx.fillStyle = '#000'; bx.fillRect(0, 0, W, H); }
+    for (const w of UI.stack) w.draw();
+    if (OX > 0) {
+      bx = MAIN_BX; W = WF; TXO.x = 0;
+      bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
+      if (FILTRO) { bx.filter = 'blur(5px) brightness(0.45) saturate(0.8)'; bx.drawImage(INNER, -20, -30, W + 40, H + 60); bx.filter = 'none'; }
+      else { bx.drawImage(INNER, -20, -30, W + 40, H + 60); bx.fillStyle = 'rgba(5,3,10,0.68)'; bx.fillRect(0, 0, W, H); }
+      bx.drawImage(INNER, OX, 0);
+      bx.fillStyle = 'rgba(0,0,0,0.5)'; bx.fillRect(OX - 1, 0, 1, H); bx.fillRect(OX + 240, 0, 1, H);
+    }
+  }
   if (V.fade > 0) { bx.fillStyle = `rgba(0,0,0,${V.fade})`; bx.fillRect(0, 0, W, H); }
   let sx = 0, sy = 0; if (V.shake > 0) { V.shake--; sx = Math.round(rand(-2, 2)); sy = Math.round(rand(-2, 2)); }
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cvs.width, cvs.height);

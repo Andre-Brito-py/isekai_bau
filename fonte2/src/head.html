@@ -117,6 +117,9 @@
    e.rotina = [{at, act, t, dir, leva}]): vai até um ponto e FAZ alguma coisa lá, com animação própria (ACT2:
    varrer, pescar, carregar/empilhar caixa, acender poste, tocar sino, varal, regar, limpar balcão, remendar rede,
    beber, cochilar, conversar com balão, brincar, rezar...). Cidade nova = rotinas novas que contem a história dela.
+ - JOGO DEITADO (pedido do usuário): celular de lado; a tela ocupa tudo e os controles ficam por cima, nos cantos.
+   O MAPA usa a largura toda (W cresce até 520); batalha, cenas e título são quadros 240x240 no centro com o próprio
+   quadro desfocado nas laterais. Em pé aparece "Gire o celular". HUD do mapa: canto de cima à direita é dos botões.
  - CONTROLE DE TOQUE: ANALÓGICO (pino que segue o dedo, zona morta no centro; empurrar pouco = andar devagar).
  - ANDAR NO MAPA: 8 direções (diagonais com duas teclas ou no direcional de toque; não corta quina de parede, desliza
    pelo eixo livre). Menus e batalha continuam em 4 direções.
@@ -132,13 +135,30 @@
 }
 html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none}
-body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box}
-#app{height:100%;display:grid;grid-template-rows:1fr auto;grid-template-columns:1fr;gap:8px;padding-block:8px;box-sizing:border-box}
-#stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:0;min-width:0}
-#screen{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;
-  box-shadow:0 0 0 2px #000,0 0 0 4px #2a2236,0 12px 40px rgba(0,0,0,.6);border-radius:2px}
-#pad{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 4px 10px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box}
-#dzone{padding:28px;margin:-28px;touch-action:none;flex:none}
+body{font-family:var(--ui);margin:0;padding:0;box-sizing:border-box}
+/* JOGO DEITADO: a tela ocupa o celular inteiro e os controles ficam POR CIMA, nos cantos, meio transparentes */
+#app{position:fixed;inset:0}
+#stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#screen{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000}
+#pad{position:absolute;inset:0;pointer-events:none}
+#pad>*{pointer-events:auto}
+#dzone{position:absolute;left:calc(env(safe-area-inset-left,0px) - 6px);bottom:-6px;padding:28px;touch-action:none}
+#joy{width:150px!important;height:150px!important;opacity:.62}
+#joy.ativo{opacity:.85}
+#joy .ring{inset:30px!important}
+#joy .tu,#joy .td{left:68px!important} #joy .tl,#joy .tr{top:68px!important}
+#knob{left:42px!important;top:42px!important;width:62px!important;height:62px!important}
+#knob::after{inset:19px!important}
+#right{position:absolute;right:calc(env(safe-area-inset-right,0px) + 6px);bottom:6px;top:6px;width:150px;pointer-events:none}
+#right>*{pointer-events:auto}
+#mid{position:absolute;top:0;right:0;display:flex;gap:6px}
+#ab{position:absolute;right:0;bottom:0;width:150px;height:130px;opacity:.7}
+.pill{opacity:.7}
+#gire{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#0b0912;color:var(--ink);font:600 16px/1.4 var(--ui);text-align:center;padding:24px}
+#gire .cel{width:56px;height:96px;border:4px solid var(--amber);border-radius:10px;animation:gira 2.2s ease-in-out infinite}
+@keyframes gira{0%,25%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+@media (orientation:portrait) and (pointer:coarse){#gire{display:flex}}
+@media (hover:hover) and (pointer:fine){#pad{display:none}}
 #joy{position:relative;width:172px;height:172px;border-radius:50%;touch-action:none;
   background:radial-gradient(circle at 50% 45%,var(--btn-hi) 0,var(--btn) 58%,#1c1726 100%);
   border:2px solid var(--btn-edge);box-shadow:inset 0 -6px 0 rgba(0,0,0,.35),inset 0 0 0 10px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.35)}
@@ -153,27 +173,15 @@ body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));
   box-shadow:0 6px 10px rgba(0,0,0,.45),inset 0 3px 0 rgba(255,255,255,.12),inset 0 -4px 0 rgba(0,0,0,.3);transition:transform .12s ease-out}
 #knob::after{content:"";position:absolute;inset:22px;border-radius:50%;background:rgba(0,0,0,.18);box-shadow:inset 0 2px 2px rgba(0,0,0,.3)}
 #joy.ativo #knob{transition:none;background:radial-gradient(circle at 40% 35%,#7a6a5a 0,#5a4a3a 55%,#3a2e24 100%);border-color:var(--amber)}
-  background:radial-gradient(circle at 50% 45%,var(--btn-hi) 0,var(--btn) 62%,var(--btn) 100%);
-  border:2px solid var(--btn-edge);box-shadow:inset 0 -6px 0 rgba(0,0,0,.35),0 4px 12px rgba(0,0,0,.35)}
-#mid{display:flex;flex-direction:column;align-items:center;gap:8px}
 .pill{font:600 11px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);background:var(--btn);border:2px solid var(--btn-edge);
   border-radius:999px;padding:8px 12px;touch-action:none}
 .pill.down{background:var(--btn-hi);color:var(--ink)}
-#ab{position:relative;width:150px;height:130px}
 .rb{position:absolute;border-radius:50%;background:var(--btn);border:2px solid var(--btn-edge);box-shadow:inset 0 -5px 0 rgba(0,0,0,.35);
   display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--ui);color:var(--dim);touch-action:none}
 #ba{width:70px;height:70px;right:4px;top:6px;color:var(--amber)} #bb{width:58px;height:58px;left:8px;top:58px;color:var(--rose)}
 .rb.down,.pill.down{transform:translateY(2px);box-shadow:inset 0 -2px 0 rgba(0,0,0,.35);background:var(--btn-hi)}
 .lbl{position:absolute;font:600 10px/1 var(--ui);letter-spacing:.1em;color:var(--dim)}
-@media (orientation:landscape) and (min-aspect-ratio:4/3){
-  #app{grid-template-columns:auto 1fr auto;grid-template-rows:1fr}
-  #pad{display:contents}
-  #dzone{grid-column:1;grid-row:1;align-self:center}
-  #stage{grid-column:2;grid-row:1}
-  #right{grid-column:3;grid-row:1;align-self:center}
-}
-#right{display:flex;flex-direction:column;align-items:center;gap:10px}
-#mid{flex-direction:row}
+
 #ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,3,10,.72);z-index:20;padding:16px;box-sizing:border-box}
 #ovbox{width:min(360px,100%);background:#0d0a14;border:3px solid var(--ink);padding:18px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;
   font-family:ui-monospace,"Courier New",monospace}
@@ -195,4 +203,5 @@ body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));
     <div id="right"><div id="mid"><div class="pill" data-k="menu" id="bm">Menu</div><div class="pill" data-k="mute" id="bs">Som</div></div><div id="ab"><div class="rb" id="ba" data-k="a">A</div><div class="rb" id="bb" data-k="b">B</div></div></div>
   </div>
 </div>
+<div id="gire"><div class="cel"></div><div>Gire o celular<br><span style="color:var(--dim);font-size:13px">O Baú 2 se joga com o celular deitado.</span></div></div>
 <div id="ov" hidden><div id="ovbox"></div></div>

@@ -219,8 +219,8 @@ function drawWorld2() {
   const [dx, dy] = DIR2[W2.dir], near = entAt2(W2.x + dx, W2.y + dy);
   if (near && near.talk && !worldBusy2() && near.t !== 'door') { const yy = near.py - oy - (near.h || 40) - 6 + Math.round(Math.sin(W2.t / 8)); txt('A', near.px - ox + 6, yy, { col: '#ffe066', shadow: true }); }
   // HUD
-  if (W2.toast) { const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(120 - w / 2, 26, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, 120, 28, { align: 'center', col: '#ffe8b0', alpha: a }); }
-  if (m.hunters) { txt('SUSPEITA', 236, 4, { align: 'right', col: '#ff8a70' }); for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : '#3a2a3a'; bx.fillRect(196 + i * 12, 16, 9, 4); } }
+  if (W2.toast) { const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(W / 2 - w / 2, 26, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, W / 2, 28, { align: 'center', col: '#ffe8b0', alpha: a }); }
+  if (m.hunters) { txt('SUSPEITA', 4, 16, { col: '#ff8a70' }); for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : '#3a2a3a'; bx.fillRect(56 + i * 12, 20, 9, 4); } }
   if (G.cobres != null && m.showMoney) txt(G.cobres + ' cobres', 4, 4, { col: '#f0c040' });
 }
 function drawFeet(fr, x, y, o) {
@@ -262,7 +262,7 @@ function drawHunterUI(e, ox, oy) {
 // escuridão com a luz da Vela da Lume em volta do grupo
 let DARKC = null;
 function drawDark(ox, oy) {
-  if (!DARKC) DARKC = mk(W, H);
+  if (!DARKC || DARKC.width !== W) DARKC = mk(W, H);
   const x = DARKC.getContext('2d');
   x.globalCompositeOperation = 'source-over'; x.fillStyle = W2.map.dark; x.fillRect(0, 0, W, H);
   x.globalCompositeOperation = 'destination-out';
