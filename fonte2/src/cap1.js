@@ -584,6 +584,17 @@ const SAVE2 = 'renasci_t2_v1';
 function save2() { try { localStorage.setItem(SAVE2, JSON.stringify(G)); } catch (e) { } }
 function load2() { try { const s = localStorage.getItem(SAVE2); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
 
+// ---------- instalar como app (atalho na tela do celular) ----------
+let INSTALL_EV = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); INSTALL_EV = e; });
+const ehApp = () => matchMedia('(display-mode: fullscreen)').matches || matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+function podeInstalar() { return location.protocol === 'https:' && !ehApp() && (INSTALL_EV || ehIOS()); }
+async function instalarApp() {
+  if (INSTALL_EV) { const ev = INSTALL_EV; INSTALL_EV = null; ev.prompt(); try { const r = await ev.userChoice; if (r.outcome === 'accepted') await say('* Pronto! O Baú 2 vai aparecer na tela do celular, ao lado do primeiro.'); } catch (e) { } return; }
+  await say('* No iPhone: toque no botão Compartilhar do Safari (o quadrado com a seta) e depois em "Adicionar à Tela de Início".');
+}
+
 // ---------- título ----------
 function drawTitle2() {
   const t = FRAME;
@@ -613,9 +624,12 @@ async function titleFlow2() {
   await new Promise(r => { const f = () => { if (V.scene !== 'title') return; if (btnp('a')) { r(); return; } requestAnimationFrame(f); }; f(); });
   sfx('select');
   while (true) {
-    const c = await choose(`* Herança: ${G.her ? G.her.name + ', ' + (HARTE.species[G.species] ? HARTE.species[G.species].name : '') : 'nenhuma'}.`, ['Jogar', 'Colar código da Temporada 1']);
+    const ops = ['Jogar', 'Colar código da Temporada 1'], inst = podeInstalar();
+    if (inst) ops.push('Instalar no celular');
+    const c = await choose(`* Herança: ${G.her ? G.her.name + ', ' + (HARTE.species[G.species] ? HARTE.species[G.species].name : '') : 'nenhuma'}.`, ops);
     if (c === 0) break;
-    await colarHeranca();
+    if (c === 1) await colarHeranca();
+    if (c === 2) await instalarApp();
   }
   const sv = load2();
   let novo = true;
