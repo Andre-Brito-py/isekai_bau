@@ -592,7 +592,7 @@ const ehApp = () => matchMedia('(display-mode: fullscreen)').matches || matchMed
 const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
 // a opção aparece sempre no site (fora do app instalado); se o Chrome não oferecer a instalação direta, explica o caminho pelo menu
 const SITE_T2 = 'andre-brito-py.github.io/isekai_bau/t2/';
-const noSite = () => location.hostname === 'andre-brito-py.github.io';
+const noSite = () => location.hostname === 'andre-brito-py.github.io' || location.hostname === 'localhost';
 function podeInstalar() { return !ehApp(); }
 // janela com um botão que abre o jogo no site de verdade (onde dá para instalar)
 function linkSite() {
@@ -625,7 +625,7 @@ function drawTitle2() {
   if (H) txt(`Herança: ${H.name} · ${HARTE.species[G.species] ? HARTE.species[G.species].name : ''}`, 120, 200, { align: 'center', col: '#9be58a' });
   else txt('Nenhuma herança da Temporada 1 neste aparelho', 120, 200, { align: 'center', col: '#8a8099' });
   if (t % 60 < 40) txt('Aperte A', 120, 216, { align: 'center', col: '#ffffff' });
-  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.6', 236, 228, { align: 'right', col: '#5a5070' });
+  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.7', 236, 228, { align: 'right', col: '#5a5070' });
 }
 function drawFim1() {
   bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
@@ -640,12 +640,13 @@ async function titleFlow2() {
   await new Promise(r => { const f = () => { if (V.scene !== 'title') return; if (btnp('a')) { r(); return; } requestAnimationFrame(f); }; f(); });
   sfx('select');
   while (true) {
-    const ops = ['Jogar', 'Colar código da Temporada 1'], inst = podeInstalar();
-    if (inst) ops.push('Instalar no celular');
+    // no site (e no app da T1 instalado) dá para voltar à Temporada 1; a T2 abre pelo menu da T1, sem app separado
+    const ops = ['Jogar', 'Colar código da Temporada 1'], inst = noSite();
+    if (inst) ops.push('Voltar à Temporada 1');
     const c = await choose(`* Herança: ${G.her ? G.her.name + ', ' + (HARTE.species[G.species] ? HARTE.species[G.species].name : '') : 'nenhuma'}.`, ops);
     if (c === 0) break;
     if (c === 1) await colarHeranca();
-    if (c === 2) await instalarApp();
+    if (c === 2) { await fadeOut(24); playMusic(null); location.href = '../'; return; }
   }
   const sv = load2();
   let novo = true;

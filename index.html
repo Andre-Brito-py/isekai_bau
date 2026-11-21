@@ -3436,7 +3436,7 @@ function drawTitle() {
   txt('e a masmorra quer me abrir', 120, 84, { align: 'center', col: '#b8aecb' });
   if (V.titleWait && FRAME % 60 < 40) txt('Toque na tela ou aperte A', 120, 200, { align: 'center', col: '#ffffff' });
   if (AU.muted) txt('Som desligado (botão Mudo)', 120, 214, { align: 'center', col: '#ff6b6b' });
-  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.18', 234, 226, { align: 'right', col: '#5a5070' });
+  txt('Capítulos 1–8', 6, 226, { col: '#5a5070' }); txt('v2.19', 234, 226, { align: 'right', col: '#5a5070' });
 }
 async function titleFlow() {
   UI.stack.length = 0; V.busy = 0; BT.on = false; V.evo = null;
@@ -3448,10 +3448,14 @@ async function titleFlow() {
   if (!readSave(SLOT)) { const k = SAVE_KEYS.findIndex((_, i) => readSave(i)); if (k >= 0) setSlot(k); }
   const has = anySave();
   const items = has ? [{ label: 'Continuar' }, { label: 'Carregar' }, { label: 'Novo jogo' }] : [{ label: 'Novo jogo' }];
+  // v2.19: escolher a temporada (pedido do usuário). A T2 mora em /t2/, dentro do mesmo app instalado.
+  const T2OK = location.hostname === 'andre-brito-py.github.io' || location.hostname === 'localhost';
+  if (T2OK) items.push({ label: 'Temporada 2', col: '#ff8fa8' });
   let r, slot = SLOT;
   while (true) {
-    r = await list({ x: 70, y: 176, w: 100, items, cancel: false });
+    r = await list({ x: 70, y: items.length > 3 ? 166 : 176, w: 100, items, cancel: false });
     const lb = items[r].label;
+    if (lb === 'Temporada 2') { await fadeOut(24); playMusic(null); location.href = 't2/'; return; }
     if (lb === 'Carregar') { const k = await pickSlot('Carregar qual save?', 'load'); if (k < 0) continue; slot = k; break; }
     if (lb === 'Novo jogo' && has) { const k = await pickSlot('Novo jogo em qual espaço?', 'new'); if (k < 0) continue; slot = k; break; }
     break;

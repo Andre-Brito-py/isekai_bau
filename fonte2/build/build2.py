@@ -16,7 +16,8 @@ print(len(html))
 # PWA da Temporada 2 (pasta /t2/ do site, com manifesto, ícones e service worker próprios)
 import re as _re, shutil
 pw='/home/claude/rpg2/pwa/'
-h=full.replace('</head>','<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Baú 2"><meta name="theme-color" content="#0b0912">\n</head>',1)
+# sem manifesto próprio: a T2 abre de dentro do app da T1 (menu "Temporada 2"); um manifesto aqui fazia o Chrome confundir os dois
+h=full.replace('</head>','<link rel="icon" href="icon-192.png"><meta name="theme-color" content="#0b0912">\n</head>',1)
 h=h.replace('</body>',"<script>if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});</script>\n</body>",1)
 open(pw+'index.html','w').write(h)
 sw=open(pw+'sw.js').read(); m=_re.search(r"bau2-v(\d+)",sw); sw=sw.replace(m.group(0),'bau2-v'+str(int(m.group(1))+1)); open(pw+'sw.js','w').write(sw)
