@@ -266,13 +266,15 @@ function ponteBG() {
   const P = new Pix(240, 150);
   // céu em faixas com pontilhado
   const sky = ['#2a1e48', '#3e2656', '#5c3062', '#82406a', '#a8526a', '#c86a62', '#e08a5a', '#f0aa60', '#f8c878'];
-  for (let y = 0; y < 76; y++) for (let x = 0; x < 240; x++) { const f = y / 76 * (sky.length - 1), i = Math.floor(f); P.p(x, y, sky[Math.min(sky.length - 1, (f - i) > (BAYER4[y & 3][x & 3] + 0.5) / 16 ? i + 1 : i)]); }
+  for (let y = 0; y < 80; y++) for (let x = 0; x < 240; x++) { const f = Math.min(1, y / 76) * (sky.length - 1), i = Math.floor(f); P.p(x, y, sky[Math.min(sky.length - 1, (f - i) > (BAYER4[y & 3][x & 3] + 0.5) / 16 ? i + 1 : i)]); }
   // sol baixo atrás da cidade
   P.ball(188, 70, 13, 13, ['#f8d080', '#fce0a0', '#fff0c0', '#fff8e0', '#ffffff'], { amb: 0.7, k: 0.3 });
   // nuvens longas iluminadas por baixo
   for (const [x, y, w] of [[10, 18, 60], [96, 30, 80], [170, 14, 54], [40, 46, 40], [150, 50, 70]]) {
     P.rect(x + 4, y - 2, w - 10, 2, '#6a3a6a'); P.rect(x, y, w, 3, '#9a4a6a'); P.rect(x + 3, y + 3, w - 6, 1, '#e88a6a'); P.rect(x + 8, y + 4, w - 18, 1, '#f8c08a');
   }
+  // a margem de lá: morrinhos baixos ao longe (antes havia um buraco transparente aqui)
+  for (let x = 0; x < 120; x++) { const h = 2 + Math.round(2 * Math.sin(x * 0.06) + Math.sin(x * 0.17)); P.rect(x, 80 - h, 1, h, '#4a2e50'); P.p(x, 80 - h, '#6a3e5e'); }
   // Velhágua ao longe: casas tortas afundando, torres e o sino
   const hz = 78;
   for (let x = 120; x < 240; x++) { const h = 6 + Math.round(4 * Math.sin(x * 0.07)); P.rect(x, hz - h, 1, h + 2, '#3a2a4a'); }
