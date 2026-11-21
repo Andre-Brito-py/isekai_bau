@@ -1,0 +1,122 @@
+<title>Renasci como Baú 2</title>
+<meta name="description" content="Renasci como Baú, Temporada 2: a superfície.">
+<!--
+=====================================================================
+ BÍBLIA DA TEMPORADA 2 — RENASCI COMO BAÚ: A SUPERFÍCIE
+ (as decisões gerais da T2 — herança, combate, interface, mundo, base, runas, vilão — estão na bíblia da T1,
+  seções "SAVE HERDADO", "INTERFACE DA TEMPORADA 2", "SISTEMA DE BATALHA DA TEMPORADA 2", "MUNDO DA TEMPORADA 2",
+  "O VILÃO DA TEMPORADA 2", "RUNAS NA T2". Aqui fica o que já foi implementado e o roteiro por capítulo.)
+=====================================================================
+ ARTE: TUDO EM PIXEL ART (pedido do usuário). Chefes com nível de detalhe bem maior que na T1: pintor próprio
+ (art2.js, classe Pix) com sombreamento por volume, pontilhado ordenado entre tons, rampas de 5 tons com sombra
+ puxada para o roxo e luz para o amarelo, contorno seletivo. Personagens da T1 vêm da arte herdada
+ (build/heranca_arte.json, exportada da T1 rodando).
+
+ COMBATE (battle2.js) — TEMPO ATIVO (decidido com o usuário em 21/11/2026: nem turnos puros nem tempo real; híbrido)
+ - Linha do tempo no topo com a ordem prevista; barras de vez enchem em tempo real pela velocidade.
+ - Roda de comandos em ícones em volta de quem age. Modo ATIVO (padrão): com a roda aberta os inimigos seguem a 25%
+   e podem interromper; modo ESPERA: tudo para (botão MENU alterna). Listas e mira sempre param o tempo.
+ - Acerto no tempo nos ataques (anel amarelo): certeiro = x1.5. Defesa em anel: perfeito = x0.12 de dano,
+   contra-ataque e +9 Tensão; bom = x0.5.
+ - Escudo + fraquezas (fogo, gelo, luz, corte, mordida), descobertas ao acertar ou com a Vela-guia da Lume.
+   Escudo zerado = QUEBRA: perde a vez, dano x2, e CANCELA o golpe preparado ("!" vermelho na linha do tempo).
+ - Tensão (barra vertical à esquerda): técnicas, duplas (50) e SUPER (100) com cena de corte.
+ - Peso das ações: leve devolve a vez cedo, pesada atrasa. Fileiras frente/trás.
+ - Grupo do Cap. 1: Baú (Morder; runas Brasa/Geada/Seiva; Guardar + assinatura da linha: Baluarte no Ferro, Eco de
+   Runa no Arcano; Super Engolir o Mundo), Lume humana (Faísca de longe; Canção, Vela-guia; Super Lustre de Mil
+   Velas), Rita (Lança em dois golpes; Estocada, Provocar; Super Carga da Escudeira).
+   Duplas: Canção-Escudo (Baú+Lume; mais forte com lume.coracao >= 8), Lança de Tampa (Baú+Rita), Lança Acesa
+   (Lume+Rita).
+
+ A LUME HUMANA NA T2: de dia o sol acende o âmbar do lustre e ela "lembra que era gente" (fica humana); à noite
+ volta a ser lustre. (Regra para cenas noturnas e para a base.)
+
+ CAPÍTULO 1 — A PONTE DO PEDÁGIO (roteiro)
+ - Três dias depois da tampa. O 31 desce a serra rumo a Velhágua (que afunda devagar no rio).
+ - Pedágio que nunca existiu, cartazes de PROCURADO com o desenho do baú (recompensa: 300 frascos de âmbar; reação
+   da Lume muda com o Renome herdado). Corvos-Cartaz (tutorial do combate novo).
+ - O papel sobe pelo poste e vira o ESPANTALHO DO PEDÁGIO (chefe, 3 fases): 1) casaco de cartazes, fraco a fogo e
+   corte, levanta a cancela (golpe preparado, cancelável pela quebra), chuva de moedas, chama corvos; 2) a lanterna
+   acende: fraco a gelo e mordida, Bafo de Lanterna (queima); 3) cartazes queimados, coração de âmbar exposto: fraco
+   só a luz, Taxa do Pedágio (rouba Tensão e se cura), mais rápido.
+ - Depois: o coração é ÂMBAR com a lembrança do velho que cobrava pedágio ali há 40 anos. "A masmorra tá subindo.
+   Ou alguém tá trazendo ela pra cima." Cartaz de BEM-VINDOS com o "BEM" riscado.
+ - A seguir (por fazer): Velhágua (zona segura), o mapa da cidade, o primeiro adulto que ajuda (ver bíblia da T1),
+   a Runa do Vão e o primeiro marco, a base dentro do baú.
+=====================================================================
+-->
+<style>
+:root{
+  /* Layout: tela de jogo centralizada + controle de portátil embaixo (retrato) ou nas laterais (paisagem) */
+  --bg:#0b0912; --shell:#15111d; --btn:#262033; --btn-edge:#0a0810; --btn-hi:#3a3150;
+  --amber:#f2b544; --rose:#e0566f; --ink:#efe6d3; --dim:#8a8099;
+  --ui:"Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none}
+body{font-family:var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box}
+#app{height:100%;display:grid;grid-template-rows:1fr auto;grid-template-columns:1fr;gap:8px;padding-block:8px;box-sizing:border-box}
+#stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:0;min-width:0}
+#screen{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;
+  box-shadow:0 0 0 2px #000,0 0 0 4px #2a2236,0 12px 40px rgba(0,0,0,.6);border-radius:2px}
+#pad{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 4px 10px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box}
+#dzone{padding:14px;margin:-14px;touch-action:none;flex:none}
+#dpad{position:relative;width:172px;height:172px;border-radius:50%;touch-action:none;
+  background:radial-gradient(circle at 50% 45%,var(--btn-hi) 0,var(--btn) 62%,var(--btn) 100%);
+  border:2px solid var(--btn-edge);box-shadow:inset 0 -6px 0 rgba(0,0,0,.35),0 4px 12px rgba(0,0,0,.35)}
+#dpad .seg{position:absolute;inset:0;border-radius:50%;transition:background .05s}
+#dpad .su{clip-path:polygon(50% 50%,8% 0,92% 0)} #dpad .sd{clip-path:polygon(50% 50%,8% 100%,92% 100%)}
+#dpad .sl{clip-path:polygon(50% 50%,0 8%,0 92%)} #dpad .sr{clip-path:polygon(50% 50%,100% 8%,100% 92%)}
+#dpad .gap{position:absolute;left:50%;top:50%;width:96%;height:2px;background:var(--btn-edge);opacity:.55;transform-origin:0 0}
+#dpad .g1{transform:translate(-50%,-50%) rotate(45deg);left:50%;top:50%;transform-origin:center} #dpad .g2{transform:translate(-50%,-50%) rotate(-45deg);left:50%;top:50%;transform-origin:center}
+#dpad .hub{position:absolute;left:62px;top:62px;width:44px;height:44px;border-radius:50%;background:var(--bg);border:2px solid var(--btn-edge);opacity:.9}
+#dpad .tri{position:absolute;width:0;height:0;border:11px solid transparent}
+#dpad .tu{left:73px;top:14px;border-bottom:14px solid var(--dim)} #dpad .td{left:73px;bottom:14px;border-top:14px solid var(--dim)}
+#dpad .tl{top:73px;left:14px;border-right:14px solid var(--dim)} #dpad .tr{top:73px;right:14px;border-left:14px solid var(--dim)}
+#dpad.on-up .su,#dpad.on-down .sd,#dpad.on-left .sl,#dpad.on-right .sr{background:rgba(242,181,68,.28)}
+#dpad.on-up .tu{border-bottom-color:var(--amber)} #dpad.on-down .td{border-top-color:var(--amber)}
+#dpad.on-left .tl{border-right-color:var(--amber)} #dpad.on-right .tr{border-left-color:var(--amber)}
+#mid{display:flex;flex-direction:column;align-items:center;gap:8px}
+.pill{font:600 11px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);background:var(--btn);border:2px solid var(--btn-edge);
+  border-radius:999px;padding:8px 12px;touch-action:none}
+.pill.down{background:var(--btn-hi);color:var(--ink)}
+#ab{position:relative;width:150px;height:130px}
+.rb{position:absolute;border-radius:50%;background:var(--btn);border:2px solid var(--btn-edge);box-shadow:inset 0 -5px 0 rgba(0,0,0,.35);
+  display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--ui);color:var(--dim);touch-action:none}
+#ba{width:70px;height:70px;right:4px;top:6px;color:var(--amber)} #bb{width:58px;height:58px;left:8px;top:58px;color:var(--rose)}
+.rb.down,.pill.down{transform:translateY(2px);box-shadow:inset 0 -2px 0 rgba(0,0,0,.35);background:var(--btn-hi)}
+.lbl{position:absolute;font:600 10px/1 var(--ui);letter-spacing:.1em;color:var(--dim)}
+@media (orientation:landscape) and (min-aspect-ratio:4/3){
+  #app{grid-template-columns:auto 1fr auto;grid-template-rows:1fr}
+  #pad{display:contents}
+  #dzone{grid-column:1;grid-row:1;align-self:center}
+  #stage{grid-column:2;grid-row:1}
+  #right{grid-column:3;grid-row:1;align-self:center}
+}
+#right{display:flex;flex-direction:column;align-items:center;gap:10px}
+#mid{flex-direction:row}
+#ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,3,10,.72);z-index:20;padding:16px;box-sizing:border-box}
+#ovbox{width:min(360px,100%);background:#0d0a14;border:3px solid var(--ink);padding:18px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;
+  font-family:ui-monospace,"Courier New",monospace}
+#ovbox h2{margin:0;font:700 15px/1.3 ui-monospace,"Courier New",monospace;color:var(--amber);letter-spacing:.04em}
+#ovbox p{margin:0;font:13px/1.45 ui-monospace,"Courier New",monospace;color:var(--dim)}
+#ovbox input,#ovbox textarea{font:16px ui-monospace,"Courier New",monospace;background:#000;color:var(--ink);border:2px solid #4a405c;padding:10px;outline:none;width:100%;box-sizing:border-box;-webkit-user-select:text;user-select:text}
+#ovbox textarea{height:96px;resize:none;font-size:12px;word-break:break-all}
+#ovbox input:focus,#ovbox textarea:focus{border-color:var(--amber)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.ob{flex:1;font:700 14px/1 ui-monospace,"Courier New",monospace;padding:12px;background:#000;color:var(--ink);border:2px solid var(--ink);cursor:pointer;min-width:90px}
+.ob.pri{color:#000;background:var(--amber);border-color:var(--amber)}
+.ob:focus-visible,.pill:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+#msg{min-height:1em;color:var(--amber)!important}
+</style>
+<div id="app">
+  <div id="stage"><canvas id="screen" width="240" height="240" aria-label="Tela do jogo"></canvas></div>
+  <div id="pad">
+    <div id="dzone"><div id="dpad" aria-label="Direcional"><div class="seg su"></div><div class="seg sd"></div><div class="seg sl"></div><div class="seg sr"></div>
+      <div class="gap g1"></div><div class="gap g2"></div><div class="hub"></div>
+      <div class="tri tu"></div><div class="tri td"></div><div class="tri tl"></div><div class="tri tr"></div></div></div>
+    <div id="right"><div id="mid"><div class="pill" data-k="menu" id="bm">Menu</div><div class="pill" data-k="mute" id="bs">Som</div></div><div id="ab"><div class="rb" id="ba" data-k="a">A</div><div class="rb" id="bb" data-k="b">B</div></div></div>
+  </div>
+</div>
+<div id="ov" hidden><div id="ovbox"></div></div>
