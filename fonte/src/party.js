@@ -13,7 +13,7 @@ const PB_MAP = {
   ferrao: { o: 'g', n: 'G', b: 'k', l: 'v' }, carniceiro: { o: 'r', n: 'b', b: 'k', l: 'w' },
   biblioteca: { o: 's', n: 'n', b: 'b', l: 'y', y: 'c' }, proibido: { o: 'P', n: 'k', b: 'r', l: 'r', y: 'r' },
   eclipse: { o: 'k', n: 'P', b: 'k', l: 'L', y: 'w' }, constelacao: { o: 'B', n: 'u', b: 'k', l: 'w' },
-  arca: { o: 'y', n: '#e8dcc0', b: '#c8962a', l: 'w', y: 'c' }, vazio: { o: '#c0c8d8', n: '#8a90a0', b: '#5a6070', l: 'w', y: 'w' }
+  arca: { o: '#c8783a', n: '#2c3a8a', b: '#8a4a24', l: '#f0a868', y: '#7ad0f0' }, vazio: { o: '#c0c8d8', n: '#8a90a0', b: '#5a6070', l: 'w', y: 'w' }
 };
 function pbShade(hex, f) {
   const n = parseInt(hex.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.max(0, Math.min(255, Math.round(f > 1 ? v + (255 - v) * (f - 1) : v * f))));

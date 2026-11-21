@@ -151,10 +151,16 @@ function buildSprites7() {
   SP.lacaio = two({ G: '#a82828', m: '#7a1a1a', l: '#c84040', S: '#e0b8a0', h: '#7a1a1a', y: '#f0c040' }, (x, f) => { R(x, 12, 6 + f * 2, 4, 3, '#5a3420'); R(x, 12, 9 + f * 2, 4, 2, '#c83838'); });
   SP.afogado = two({ G: '#c8962a', m: '#7a4a08', l: '#e0a030', S: '#f0c040', h: '#7a4a08', y: '#fff4c0' }, (x, f) => { R(x, 5, 5, 2, 1, '#7a4a08'); R(x, 9, 5, 2, 1, '#7a4a08'); R(x, 3 + f, 12, 10, 1, '#f0c040'); });
   // as formas de 5º grau no mapa
-  makeMimicSet('mimicArca', { o: 'y', n: 's', b: 'n', l: 'w', y: 'c' });
+  // v2.20: a Arca no mapa com as cores da arte de batalha (azul-marinho, cobre e cristais azuis), pedido do usuário
+  makeMimicSet('mimicArca', { o: '#c8783a', n: '#2c3a8a', b: '#8a4a24', l: '#f0a868', y: '#7ad0f0' });
   makeMimicSet('mimicVazio', { o: 'l', n: 'm', b: 'd', l: 'w', y: 'w' });
   const deco = (key, fn) => { const all = new Set([...SP[key], ...Object.values(SPD[key]).flat()]); for (const c of all) fn(c.getContext('2d')); };
-  deco('mimicArca', x => { x.fillStyle = PAL.y; x.fillRect(5, 0, 6, 1); x.fillRect(7, 0, 2, 2); x.fillStyle = PAL.c; x.fillRect(4, 12, 1, 1); x.fillRect(11, 12, 1, 1); x.fillRect(7, 13, 2, 1); });
+  // cristais azuis só onde o corpo azul aparece (vale para frente, lados e costas) + um brilho de cobre no topo
+  deco('mimicArca', x => {
+    const id = x.getImageData(0, 0, 16, 16).data, navy = (i, j) => { const k = (j * 16 + i) * 4; return id[k + 3] && id[k] === 0x2c && id[k + 1] === 0x3a && id[k + 2] === 0x8a; };
+    for (const [i, j, c] of [[4, 3, '#7ad0f0'], [5, 3, '#4a6ad0'], [9, 4, '#7ad0f0'], [10, 3, '#bfeaff'], [3, 11, '#4a6ad0'], [5, 12, '#7ad0f0'], [10, 11, '#7ad0f0'], [11, 12, '#4a6ad0'], [6, 13, '#4a6ad0'], [12, 13, '#7ad0f0']]) if (navy(i, j)) { x.fillStyle = c; x.fillRect(i, j, 1, 1); }
+    for (let j = 9; j < 14; j++) for (const i of [3, 12]) if (navy(i, j)) { x.fillStyle = '#a8602e'; x.fillRect(i, j, 1, 1); }   // cintas verticais de cobre
+  });
   deco('mimicVazio', x => { x.clearRect(5, 11, 6, 2); x.fillStyle = PAL.d; x.fillRect(4, 11, 1, 2); x.fillRect(11, 11, 1, 2); });
 }
 // tiles: u = âmbar líquido (mar), Z = pedra da Porta Redonda (antes era 'G', que colidia com o Portão de Musgo do Cap. 1)
