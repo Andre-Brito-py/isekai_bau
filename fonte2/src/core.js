@@ -168,18 +168,22 @@ function setupTouch() {
   // para a diagonal sem trocar de direção) e vibração curta a cada troca
   const dp = document.getElementById('dpad'), dz = document.getElementById('dzone') || dp; let pid = null, cur = null;
   const ANG = { right: 0, down: 90, left: 180, up: -90 };
+  // no mapa (andar livre) o direcional também tem as 4 diagonais; em menus e batalha, só as 4 direções
+  const ANG8 = { right: 0, 'down-right': 45, down: 90, 'down-left': 135, left: 180, 'up-left': -135, up: -90, 'up-right': -45 };
   const angDiff = (a, b) => { let d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
   const dirOf = e => {
     const r = dp.getBoundingClientRect(); const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), dist = Math.hypot(dx, dy);
     if (dist < (cur ? 8 : 14)) return cur && dist >= 8 ? cur : null;
     const a = Math.atan2(dy, dx) * 180 / Math.PI;
-    if (cur && angDiff(a, ANG[cur]) < 45 + 14) return cur;
-    let best = 'right', bd = 999; for (const k in ANG) { const d = angDiff(a, ANG[k]); if (d < bd) { bd = d; best = k; } } return best;
+    const T = V.scene === 'world' ? ANG8 : ANG, half = V.scene === 'world' ? 22.5 : 45;
+    if (cur && T[cur] != null && angDiff(a, T[cur]) < half + 8) return cur;
+    let best = 'right', bd = 999; for (const k in T) { const d = angDiff(a, T[k]); if (d < bd) { bd = d; best = k; } } return best;
   };
   const setDir = d => {
     if (d === cur) return;
-    for (const k of ['up', 'down', 'left', 'right']) { if (k === d) press(k); else release(k); }
-    cur = d; dp.className = d ? 'on-' + d : '';
+    const on = d ? d.split('-') : [];
+    for (const k of ['up', 'down', 'left', 'right']) { if (on.includes(k)) press(k); else release(k); }
+    cur = d; dp.className = on.map(k => 'on-' + k).join(' ');
     if (d && navigator.vibrate) { try { navigator.vibrate(8); } catch (_) { } }
   };
   dz.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); pid = e.pointerId; try { dz.setPointerCapture(pid); } catch (_) { } cur = null; setDir(dirOf(e)); });

@@ -76,8 +76,49 @@
    só a luz, Taxa do Pedágio (rouba Tensão e se cura), mais rápido.
  - Depois: o coração é ÂMBAR com a lembrança do velho que cobrava pedágio ali há 40 anos. "A masmorra tá subindo.
    Ou alguém tá trazendo ela pra cima." Cartaz de BEM-VINDOS com o "BEM" riscado.
- - A seguir (por fazer): Velhágua (zona segura), o mapa da cidade, o primeiro adulto que ajuda (ver bíblia da T1),
-   a Runa do Vão e o primeiro marco, a base dentro do baú.
+ - O Cap. 1 termina na cabeceira da ponte. Velhágua virou o Cap. 2.
+
+ CAPÍTULO 2 — VELHÁGUA, A CIDADE QUE AFUNDA (roteiro)
+ - TOM: cidade simpática e cansada. Todo mundo carrega móveis escada acima: "Velhágua desce um degrau por ano".
+   Só que nesta semana desceu TRÊS. E à noite o sino da torre toca sozinho, debaixo d'água.
+ - POR QUE AFUNDA (a verdade, revelada aos poucos): há cem anos o PRIMEIRO SINO da cidade, a Dona Badalada, caiu no rio
+   numa cheia. Ela tocou todos os casamentos, batizados e enterros: é feita de lembrança. Quando a Coroa abriu MINAS
+   DE ÂMBAR debaixo da cidade (âmbar = lembrança lida), as minas sugaram as memórias do fundo do rio, e o sino,
+   faminto, virou a ÂNCORA-MÃE: agarra as estacas das casas e puxa a cidade para baixo "para não esquecer ninguém".
+   (Liga com o tema da temporada: a política do âmbar; e com o Acendedor-Mor, que compra âmbar dessas minas.)
+ - MAPAS: Cais da Ponte (chegada; o 31 estaciona; Bazar da Dona Graça) -> Praça do Sino (torre torta, Taverna do
+   Remo Torto, Posto da Guilda, casa do Seu Tobias, escadaria da Igreja Afundada) -> interiores -> BAIRRO AFOGADO
+   (Rua Submersa, Mercado Afundado, Poço do Sino) -> chefe.
+ - MECÂNICA NOVA 1, DISFARCE DE BAGAGEM: a Guilda tem cartazes do baú. Na cidade, Caçadores patrulham; quando um
+   deles OLHA (aviso "!" e cone de visão), o baú precisa ficar PARADO (é só bagagem). Se for pego andando, sobe a
+   SUSPEITA; cheia = os Caçadores atacam (luta) e ela zera. Humor: "É bagagem." "Bagagem não pisca." "...Pisca sim."
+ - MECÂNICA NOVA 2, BOIAR: no Bairro Afogado o baú BOIA na água. A Lume e a Rita ENTRAM no baú ("é maior por
+   dentro", primeira pista da Runa do Vão e da base) e saem em terra firme. CORRENTEZAS empurram o baú: as rotas são
+   o quebra-cabeça da masmorra. Caixotes que boiam e tábuas soltas abrem atalhos.
+ - INIMIGOS: Lambe-Lodo (sanguessuga, rouba PM), Caranguejo-Telha (casco de telha, escudo alto, fraco a mordida e
+   gelo), Sapo-Sino (coaxa e badala: deixa TONTO, atrasando a vez), Caçador da Guilda (humano, na cidade).
+ - CHEFE: A ÂNCORA-MÃE (sino de igreja como casco de ermitão, pernas de corrente, coração de âmbar escuro).
+   Fase 1 Casco: o sino fechado; Badalada (todos TONTOS); MARÉ: a cada 3 vezes dela a água sobe e quem está na
+   FRENTE fica lento (trocar de FILEIRA é uma ação leve). Fase 2 Correntes: prende um aliado (ele não age) até
+   alguém quebrar a CORRENTE (alvo próprio). Fase 3 Lembrança: o sino abre e chora as lembranças da cidade; se a
+   Lume CANTAR nessa fase, os golpes dela enfraquecem (e o final muda uma fala).
+ - MISSÕES: Carta para o andar de cima (Seu Tobias -> a filha Marina, no telhado; recompensa: Xale de Velas);
+   O barquinho do Pedrinho (achar no Mercado Afundado; Pena de Fênix? e cobres); O nome do Pavio (um acendedor
+   gentil que não lembra o próprio nome; a plaquinha dele está no fundo: devolve uma lembrança. PISTA do Acendedor).
+ - EQUIPAMENTOS ESTREIAM: Bazar da Dona Graça (cobres). Lança do Pedágio (troféu do Cap. 1, já começa na mochila).
+ - FINAL: o sino volta para a torre; a cidade para de afundar. Ao entardecer chega o ACENDEDOR-MOR com os Pavios
+   para acender os postes novos da Coroa. Ele elogia a canção da Lume, dá o primeiro MARCO de viagem e convida
+   para o FESTIVAL DA LUZ na capital (gancho do Cap. 3). Cai a noite: a Lume volta a ser lustre pela primeira vez
+   na superfície ("de noite eu volto a ser isso") e ele diz, gentil: "Ninguém devia ter medo do escuro, moça."
+   (Pista: ele anota o nome do Pavio da missão no caderno preto.)
+ - IMPLEMENTADO (t2-0.20): mapas cais/praca/bazar/taverna/tobias/rua1/rua2/poco (maps/cap2maps.py valida tudo);
+   Sargento Brás é o mini-chefe (emboscada na escadaria); Marco de Viagem no MENU (viajar entre Marcos visitados).
+ - REGRA DOS MORADORES (pedido do usuário): NPC não fica só andando à toa. Cada morador tem uma ROTINA (world2.js,
+   e.rotina = [{at, act, t, dir, leva}]): vai até um ponto e FAZ alguma coisa lá, com animação própria (ACT2:
+   varrer, pescar, carregar/empilhar caixa, acender poste, tocar sino, varal, regar, limpar balcão, remendar rede,
+   beber, cochilar, conversar com balão, brincar, rezar...). Cidade nova = rotinas novas que contem a história dela.
+ - ANDAR NO MAPA: 8 direções (diagonais com duas teclas ou no direcional de toque; não corta quina de parede, desliza
+   pelo eixo livre). Menus e batalha continuam em 4 direções.
 =====================================================================
 -->
 <style>

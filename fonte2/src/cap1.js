@@ -149,12 +149,12 @@ const RUNA2 = {
   acalanto: { nm: 'Acalanto', mp: 8, w: 'leve', tgt: 'ally', d: 'Cura 35% da vida de um aliado e tira queimadura e frio. Leve.', run: async (m, t) => {
     sfx('heal'); jingle('G5:2 E5:2 C6:4', 200); const [x, y] = unitCenter(t);
     await tw(26, (p, k) => { for (let i = 0; i < 3; i++) txt('♪', x - 8 + i * 8 + Math.sin(k / 5 + i) * 2, y - 6 - p * 24 - i * 4, { col: i % 2 ? '#ffd060' : '#fff0a0', alpha: 1 - p }); fxRing(x, y, 6 + p * 10, '#ffd060', 1 - p); });
-    healUnit(t, Math.round(t.mhp * 0.35)); t.st.queimado = 0; t.st.frio = 0;
+    healUnit(t, Math.round(t.mhp * 0.35 * (m.eqFx && m.eqFx.has('fone') ? 1.15 : 1))); t.st.queimado = 0; t.st.frio = 0;
   } },
   velaprot: { nm: 'Vela Protetora', mp: 6, w: 'leve', tgt: 'ally', d: 'Uma velinha acesa ao lado do aliado: metade do dano até a vez dele e cura um pouco por 3 vezes. Leve.', run: async (m, t) => {
     sfx('buff'); const [x, y] = unitCenter(t);
     await tw(22, p => { bx.fillStyle = '#f2ecdc'; bx.fillRect(Math.round(x + 14), Math.round(y + 4 - p * 4), 2, 6); bx.fillStyle = p > 0.5 ? '#ffd060' : '#ff9a30'; bx.fillRect(Math.round(x + 14), Math.round(y + 1 - p * 4), 2, 3); fxRing(x, y, 18 - p * 6, '#ffd060', p); });
-    t.def0 = true; t.st.vela = 3; callout('Vela acesa para ' + t.name, '#ffd060', 50);
+    t.def0 = true; t.st.vela = m.eqFx && m.eqFx.has('vela5') ? 5 : 3; callout('Vela acesa para ' + t.name, '#ffd060', 50);
   } },
   ofuscar: { nm: 'Ofuscar', mp: 10, tgt: 'enemy', d: 'Um clarão nos olhos de um inimigo: luz e ele perde parte da vez (empurrado na linha do tempo).', run: async (m, t) => {
     sfx('rune'); await projectile(m, t, '#ffffff', 12, { r: 3 }); flashW(3);
@@ -212,11 +212,11 @@ const TECH2 = {
     const ok = await timedPrompt(t, 18); const [x, y] = unitCenter(t);
     await tw(6, p => { m.ox += 4; bx.fillStyle = '#ffffff'; bx.fillRect(x - 30 + p * 20, y - 1, 30, 2); });
     sfx('crit'); hitstop(8); bshake(8, 3); burst(x, y, 16, ['#ffffff', '#e86050', '#ffe066']);
-    hitFoe(m, t, 1.4, { el: 'corte', crit: ok, brk: 2 }); if (ok) BT.stats.crit++;
+    hitFoe(m, t, 1.4, { el: 'corte', crit: ok, brk: m.eqFx && m.eqFx.has('estocada3') ? 3 : 2 }); if (ok) BT.stats.crit++;
     await dashBack(m, 12);
   } },
   provocar: { nm: 'Provocar', cost: 10, tgt: 'self', w: 'leve', d: 'Os inimigos miram a Rita nas próximas duas vezes, e ela se defende. Leve.', run: async (m) => {
-    sfx('select'); BT.taunt = { m, n: 2 }; m.def0 = true;
+    sfx('select'); BT.taunt = { m, n: m.eqFx && m.eqFx.has('provoca3') ? 3 : 2 }; m.def0 = true;
     const [x, y] = unitCenter(m); await tw(24, p => txt('Vem!', x, y - 34 - p * 6, { align: 'center', col: '#ff8a70', alpha: 1 - p * 0.5, shadow: true })); callout('Rita chama a atenção', '#ff8a70', 40);
   } }
 };
@@ -516,8 +516,6 @@ async function fimDemo() {
   await say('* E na guarita do pedágio, num prego, um último cartaz. Não é de PROCURADO. É de BEM-VINDOS. Alguém riscou o "BEM".');
   G.flags.cap1Ponte = true; save2();
   await fadeOut(40);
-  V.scene = 'fim1'; await fadeIn(30);
-  await new Promise(r => { V.fimR = r; });
 }
 
 // ---------- fluxo ----------
@@ -566,7 +564,7 @@ async function capitulo1() {
   G.flags.cap1Boss = true; save2();
   await fadeOut(16);
   await fimDemo();
-  titleFlow2();
+  capitulo2();
 }
 // dicas que aparecem uma vez, na primeira vez que a situação acontece
 function hintOnce() { }
@@ -625,7 +623,7 @@ function drawTitle2() {
   if (H) txt(`Herança: ${H.name} · ${HARTE.species[G.species] ? HARTE.species[G.species].name : ''}`, 120, 200, { align: 'center', col: '#9be58a' });
   else txt('Nenhuma herança da Temporada 1 neste aparelho', 120, 200, { align: 'center', col: '#8a8099' });
   if (t % 60 < 40) txt('Aperte A', 120, 216, { align: 'center', col: '#ffffff' });
-  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.10', 236, 228, { align: 'right', col: '#5a5070' });
+  txt(G.flags && G.flags.cap2Fim ? 'Cap. 2 completo' : 'Cap. 1 e 2', 4, 228, { col: '#5a5070' }); txt('t2-0.20', 236, 228, { align: 'right', col: '#5a5070' });
 }
 function drawFim1() {
   bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
@@ -650,7 +648,7 @@ async function titleFlow2() {
   }
   const sv = load2();
   let novo = true;
-  if (sv && (sv.flags.cap1Corvos || sv.flags.cap1Boss)) {
+  if (sv && sv.flags && (sv.flags.cap1Corvos || sv.flags.cap1Boss)) {
     const c = await choose('* Há um jogo da Temporada 2 salvo.', ['Continuar', 'Começar de novo']);
     if (c === 0) { Object.assign(G, sv); novo = false; }
   }
@@ -666,7 +664,7 @@ async function titleFlow2() {
   }
   PTC.me = null;
   await fadeOut(20);
-  capitulo1();
+  if (G.flags.cap1Boss) capitulo2(); else capitulo1();
 }
 
 // ---------- laço principal ----------
@@ -675,13 +673,15 @@ function tick() {
   JP = { ...JPQ }; for (const k in JPQ) delete JPQ[k];
   for (let i = WAITS.length - 1; i >= 0; i--) if (--WAITS[i].n <= 0) { const w = WAITS.splice(i, 1)[0]; w.r(); }
   if (V.tw) { const t = V.tw; t.t++; V.fade = t.from + (t.to - t.from) * Math.min(1, t.t / t.n); if (t.t >= t.n) { V.tw = null; t.r(); } }
-  if (V.scene === 'battle2' || V.scene === 'cena') G.time += 1 / 60;
+  if (V.scene === 'battle2' || V.scene === 'cena' || V.scene === 'world') G.time += 1 / 60;
   const top = UI.top();
   if (top) top.update();
   if (V.scene === 'battle2') { updateBattle2(); drawBattle2(); }
   else if (V.scene === 'cena') drawCena();
   else if (V.scene === 'title') drawTitle2();
   else if (V.scene === 'fim1') drawFim1();
+  else if (V.scene === 'world') { updateWorld2(); drawWorld2(); }
+  else if (V.scene === 'card') drawCard();
   else { bx.fillStyle = '#000'; bx.fillRect(0, 0, W, H); }
   for (const w of UI.stack) w.draw();
   if (V.fade > 0) { bx.fillStyle = `rgba(0,0,0,${V.fade})`; bx.fillRect(0, 0, W, H); }

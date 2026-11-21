@@ -85,7 +85,7 @@ function updateBattle2() {
   const slow = BT.menu ? (BT.mode === 'ativo' && !UI.top() && !BT.cursor ? ATIVO_SLOW : 0) : 1;
   if (slow > 0) {
     for (const u of alive(BT.foes)) if (!u.broken && !(u.st.frio > 0 && BT.t % 2)) u.ct += u.spd * TIME_K * slow;
-    if (!BT.menu) for (const u of alive(BT.party)) if (!(u.st.frio > 0 && BT.t % 2)) u.ct += u.spd * TIME_K;
+    if (!BT.menu) for (const u of alive(BT.party)) if (!u.preso && !((u.st.frio > 0 || u.st.molhado > 0) && BT.t % 2)) u.ct += u.spd * TIME_K;
   }
   const r = readyUnit();
   if (!r) return;
@@ -100,6 +100,7 @@ function checkEnd() {
 function endTurn(u, weight) {
   // peso da ação: leve devolve a vez cedo, pesada atrasa
   u.ct = weight === 'leve' ? 38 : weight === 'pesada' ? -30 : 0;
+  if (u.eqFx && u.eqFx.has('anel') && u.hp > 0) { BT.tension = Math.max(0, BT.tension - 5); }
   for (const k of Object.keys(u.st)) if (u.st[k] > 0 && k !== 'guarda') u.st[k]--;
   if (u.st.vela > 0 && u.hp > 0) { const h = Math.round(u.mhp * 0.07); u.hp = Math.min(u.mhp, u.hp + h); popNum(...unitCenter(u), '+' + h, '#9be58a'); }
   if (u.st.queimado > 0) { const d = Math.max(1, Math.round(u.mhp * 0.05)); u.hp = Math.max(1, u.hp - d); popNum(...unitCenter(u), d, '#ffa94d'); }
@@ -120,6 +121,7 @@ function hitFoe(a, t, pow, o = {}) {
   const el = o.el, weak = el && t.weak.includes(el);
   if (el) { if (!t.known[el]) { t.known[el] = weak ? 'weak' : 'ok'; } }
   if (o.crit) d *= 1.5;
+  if (a.eqFx && a.eqFx.has('anel')) d *= 1.3;
   if (t.broken > 0) d *= 2;
   if (weak) d *= 1.3;
   d = Math.max(1, Math.round(d));
@@ -159,12 +161,12 @@ function hurtMember(m, d0, o = {}) {
   m.hp = Math.max(0, m.hp - d); m.flash = 10;
   const [x, y] = unitCenter(m);
   popNum(x, y - 8, d, o.res === 'perfeito' ? '#9be58a' : '#ff6b6b', d > m.mhp * 0.25);
-  if (o.st && o.res !== 'perfeito') { m.st[o.st] = o.stT || 3; popNum(x, y - 20, ST_NAME[o.st], '#ffa94d'); }
+  if (o.st && o.res !== 'perfeito') { m.st[o.st] = o.stT || 3; popNum(x, y - 20, ST_NAME[o.st], '#ffa94d'); if (o.st === 'tonto') m.ct = Math.max(0, m.ct - 35); }
   if (m.hp <= 0) { m.ct = 0; sfx('die'); burst(x, y, 16, ['#ff6b6b', '#ffffff']); callout(m.name + ' caiu!', '#ff6b6b', 70); }
   else sfx('hurt');
   return d;
 }
-const ST_NAME = { queimado: 'QUEIMADO', frio: 'GELADO', tonto: 'TONTO', vela: 'VELA' };
+const ST_NAME = { queimado: 'QUEIMADO', frio: 'GELADO', tonto: 'TONTO', vela: 'VELA', molhado: 'MOLHADO', preso: 'PRESO' };
 
 // ---------- defesa em anel ----------
 // o anel fecha sobre o alvo; A no instante certo. Devolve 'perfeito' | 'bom' | 'falhou'
@@ -362,8 +364,12 @@ async function foeStrike(e, t, pow, o = {}) {
   // Guardar: o baú entra na frente
   const g = t.st.guardado > 0 && t.guardBy && t.guardBy.hp > 0 ? t.guardBy : null;
   if (g) { callout(g.name + ' entra na frente!', '#ffa94d', 50); t = g; }
-  const res = await defenseRing(t, o.n || 34, o);
+  // Sapatilha de Palco: às vezes desvia sozinha de golpes rápidos
+  const auto = o.fast && t.eqFx && t.eqFx.has('esquiva') && Math.random() < 0.3;
+  const res = auto ? 'perfeito' : await defenseRing(t, o.n || 34, o);
+  if (auto) callout(t.name + ' desvia!', '#8fe3ff', 40);
   let mult = res === 'perfeito' ? 0.12 : res === 'bom' ? 0.5 : 1;
+  if (o.el === 'agua' && t.eqFx && t.eqFx.has('agua')) mult *= 0.5;
   if (g) mult *= 0.6;
   const d = calcDmg(e, t, pow) * mult;
   if (o.fx) o.fx(t, res);
@@ -413,7 +419,7 @@ async function defeat() {
   BT.menu = null; BT.cursor = null; playMusic(null); sfx('die');
   BT.lose = { t: 0 };
   await wait(80);
-  const c = await choose('* O grupo caiu na beira da estrada. Tentar de novo?', ['Tentar de novo', 'Desistir (volta ao título)']);
+  const c = await choose(BT.cfg.loseTxt || '* O grupo caiu. Tentar de novo?', ['Tentar de novo', BT.cfg.quitLabel || 'Desistir (volta ao título)']);
   BT.on = false; BT.done(c === 0 ? 'retry' : 'quit');
 }
 
@@ -497,7 +503,7 @@ function drawPrompt() {
 
 // --- linha do tempo (topo) ---
 function predictOrder(n = 8) {
-  const sim = [...alive(BT.party), ...alive(BT.foes)].map(u => ({ u, ct: u.ct, spd: u.spd * (u.st.frio > 0 ? 0.5 : 1), br: u.broken || 0 }));
+  const sim = [...alive(BT.party), ...alive(BT.foes)].map(u => ({ u, ct: u.ct, spd: u.preso ? 0 : u.spd * (u.st.frio > 0 || u.st.molhado > 0 ? 0.5 : 1), br: u.broken || 0 }));
   const out = []; let guard = 0;
   while (out.length < n && guard++ < 4000) {
     for (const s of sim) { if (s.br > 0) { s.br--; continue; } s.ct += s.spd * TIME_K; }
@@ -569,7 +575,7 @@ function drawHUD() {
     bx.fillStyle = ct >= 1 ? (BT.t % 8 < 4 ? '#ffffff' : '#ffe066') : m.col; bx.fillRect(x + 3, y + 51, Math.round(71 * ct), 5);
     txt(m.row === 'back' ? 'trás' : 'frente', x + 3, y + 58, { col: '#6a6078' });
     // status
-    let sx = x + 74; for (const k of ['queimado', 'frio', 'tonto', 'vela']) if (m.st[k] > 0) { sx -= 13; bx.drawImage(ICON[k === 'frio' ? 'congelado' : k === 'vela' ? 'luz' : k], sx, y + 60); }
+    let sx = x + 74; for (const k of ['queimado', 'frio', 'tonto', 'vela', 'molhado', 'preso']) if (m.st[k] > 0 || (k === 'preso' && m.preso)) { sx -= 13; bx.drawImage(ICON[k === 'frio' ? 'congelado' : k === 'vela' ? 'luz' : k], sx, y + 60); }
     if (m.def0) { sx -= 13; bx.drawImage(ICON.defender, sx, y + 60); }
   });
 }

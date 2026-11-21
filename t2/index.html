@@ -81,8 +81,49 @@
    só a luz, Taxa do Pedágio (rouba Tensão e se cura), mais rápido.
  - Depois: o coração é ÂMBAR com a lembrança do velho que cobrava pedágio ali há 40 anos. "A masmorra tá subindo.
    Ou alguém tá trazendo ela pra cima." Cartaz de BEM-VINDOS com o "BEM" riscado.
- - A seguir (por fazer): Velhágua (zona segura), o mapa da cidade, o primeiro adulto que ajuda (ver bíblia da T1),
-   a Runa do Vão e o primeiro marco, a base dentro do baú.
+ - O Cap. 1 termina na cabeceira da ponte. Velhágua virou o Cap. 2.
+
+ CAPÍTULO 2 — VELHÁGUA, A CIDADE QUE AFUNDA (roteiro)
+ - TOM: cidade simpática e cansada. Todo mundo carrega móveis escada acima: "Velhágua desce um degrau por ano".
+   Só que nesta semana desceu TRÊS. E à noite o sino da torre toca sozinho, debaixo d'água.
+ - POR QUE AFUNDA (a verdade, revelada aos poucos): há cem anos o PRIMEIRO SINO da cidade, a Dona Badalada, caiu no rio
+   numa cheia. Ela tocou todos os casamentos, batizados e enterros: é feita de lembrança. Quando a Coroa abriu MINAS
+   DE ÂMBAR debaixo da cidade (âmbar = lembrança lida), as minas sugaram as memórias do fundo do rio, e o sino,
+   faminto, virou a ÂNCORA-MÃE: agarra as estacas das casas e puxa a cidade para baixo "para não esquecer ninguém".
+   (Liga com o tema da temporada: a política do âmbar; e com o Acendedor-Mor, que compra âmbar dessas minas.)
+ - MAPAS: Cais da Ponte (chegada; o 31 estaciona; Bazar da Dona Graça) -> Praça do Sino (torre torta, Taverna do
+   Remo Torto, Posto da Guilda, casa do Seu Tobias, escadaria da Igreja Afundada) -> interiores -> BAIRRO AFOGADO
+   (Rua Submersa, Mercado Afundado, Poço do Sino) -> chefe.
+ - MECÂNICA NOVA 1, DISFARCE DE BAGAGEM: a Guilda tem cartazes do baú. Na cidade, Caçadores patrulham; quando um
+   deles OLHA (aviso "!" e cone de visão), o baú precisa ficar PARADO (é só bagagem). Se for pego andando, sobe a
+   SUSPEITA; cheia = os Caçadores atacam (luta) e ela zera. Humor: "É bagagem." "Bagagem não pisca." "...Pisca sim."
+ - MECÂNICA NOVA 2, BOIAR: no Bairro Afogado o baú BOIA na água. A Lume e a Rita ENTRAM no baú ("é maior por
+   dentro", primeira pista da Runa do Vão e da base) e saem em terra firme. CORRENTEZAS empurram o baú: as rotas são
+   o quebra-cabeça da masmorra. Caixotes que boiam e tábuas soltas abrem atalhos.
+ - INIMIGOS: Lambe-Lodo (sanguessuga, rouba PM), Caranguejo-Telha (casco de telha, escudo alto, fraco a mordida e
+   gelo), Sapo-Sino (coaxa e badala: deixa TONTO, atrasando a vez), Caçador da Guilda (humano, na cidade).
+ - CHEFE: A ÂNCORA-MÃE (sino de igreja como casco de ermitão, pernas de corrente, coração de âmbar escuro).
+   Fase 1 Casco: o sino fechado; Badalada (todos TONTOS); MARÉ: a cada 3 vezes dela a água sobe e quem está na
+   FRENTE fica lento (trocar de FILEIRA é uma ação leve). Fase 2 Correntes: prende um aliado (ele não age) até
+   alguém quebrar a CORRENTE (alvo próprio). Fase 3 Lembrança: o sino abre e chora as lembranças da cidade; se a
+   Lume CANTAR nessa fase, os golpes dela enfraquecem (e o final muda uma fala).
+ - MISSÕES: Carta para o andar de cima (Seu Tobias -> a filha Marina, no telhado; recompensa: Xale de Velas);
+   O barquinho do Pedrinho (achar no Mercado Afundado; Pena de Fênix? e cobres); O nome do Pavio (um acendedor
+   gentil que não lembra o próprio nome; a plaquinha dele está no fundo: devolve uma lembrança. PISTA do Acendedor).
+ - EQUIPAMENTOS ESTREIAM: Bazar da Dona Graça (cobres). Lança do Pedágio (troféu do Cap. 1, já começa na mochila).
+ - FINAL: o sino volta para a torre; a cidade para de afundar. Ao entardecer chega o ACENDEDOR-MOR com os Pavios
+   para acender os postes novos da Coroa. Ele elogia a canção da Lume, dá o primeiro MARCO de viagem e convida
+   para o FESTIVAL DA LUZ na capital (gancho do Cap. 3). Cai a noite: a Lume volta a ser lustre pela primeira vez
+   na superfície ("de noite eu volto a ser isso") e ele diz, gentil: "Ninguém devia ter medo do escuro, moça."
+   (Pista: ele anota o nome do Pavio da missão no caderno preto.)
+ - IMPLEMENTADO (t2-0.20): mapas cais/praca/bazar/taverna/tobias/rua1/rua2/poco (maps/cap2maps.py valida tudo);
+   Sargento Brás é o mini-chefe (emboscada na escadaria); Marco de Viagem no MENU (viajar entre Marcos visitados).
+ - REGRA DOS MORADORES (pedido do usuário): NPC não fica só andando à toa. Cada morador tem uma ROTINA (world2.js,
+   e.rotina = [{at, act, t, dir, leva}]): vai até um ponto e FAZ alguma coisa lá, com animação própria (ACT2:
+   varrer, pescar, carregar/empilhar caixa, acender poste, tocar sino, varal, regar, limpar balcão, remendar rede,
+   beber, cochilar, conversar com balão, brincar, rezar...). Cidade nova = rotinas novas que contem a história dela.
+ - ANDAR NO MAPA: 8 direções (diagonais com duas teclas ou no direcional de toque; não corta quina de parede, desliza
+   pelo eixo livre). Menus e batalha continuam em 4 direções.
 =====================================================================
 -->
 <style>
@@ -334,18 +375,22 @@ function setupTouch() {
   // para a diagonal sem trocar de direção) e vibração curta a cada troca
   const dp = document.getElementById('dpad'), dz = document.getElementById('dzone') || dp; let pid = null, cur = null;
   const ANG = { right: 0, down: 90, left: 180, up: -90 };
+  // no mapa (andar livre) o direcional também tem as 4 diagonais; em menus e batalha, só as 4 direções
+  const ANG8 = { right: 0, 'down-right': 45, down: 90, 'down-left': 135, left: 180, 'up-left': -135, up: -90, 'up-right': -45 };
   const angDiff = (a, b) => { let d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
   const dirOf = e => {
     const r = dp.getBoundingClientRect(); const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), dist = Math.hypot(dx, dy);
     if (dist < (cur ? 8 : 14)) return cur && dist >= 8 ? cur : null;
     const a = Math.atan2(dy, dx) * 180 / Math.PI;
-    if (cur && angDiff(a, ANG[cur]) < 45 + 14) return cur;
-    let best = 'right', bd = 999; for (const k in ANG) { const d = angDiff(a, ANG[k]); if (d < bd) { bd = d; best = k; } } return best;
+    const T = V.scene === 'world' ? ANG8 : ANG, half = V.scene === 'world' ? 22.5 : 45;
+    if (cur && T[cur] != null && angDiff(a, T[cur]) < half + 8) return cur;
+    let best = 'right', bd = 999; for (const k in T) { const d = angDiff(a, T[k]); if (d < bd) { bd = d; best = k; } } return best;
   };
   const setDir = d => {
     if (d === cur) return;
-    for (const k of ['up', 'down', 'left', 'right']) { if (k === d) press(k); else release(k); }
-    cur = d; dp.className = d ? 'on-' + d : '';
+    const on = d ? d.split('-') : [];
+    for (const k of ['up', 'down', 'left', 'right']) { if (on.includes(k)) press(k); else release(k); }
+    cur = d; dp.className = on.map(k => 'on-' + k).join(' ');
     if (d && navigator.vibrate) { try { navigator.vibrate(8); } catch (_) { } }
   };
   dz.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); pid = e.pointerId; try { dz.setPointerCapture(pid); } catch (_) { } cur = null; setDir(dirOf(e)); });
@@ -805,6 +850,42 @@ Object.assign(TRACKS, {
   }
 });
 
+// efeitos sonoros novos da T2 (respingo, porta, equipar)
+{ const _sfx = sfx; sfx = function (name, p) {
+  if (!AU.ctx || AU.muted) return;
+  const t = AU.ctx.currentTime + 0.005, o = AU.sfx;
+  if (name === 'splash') { noiseHit(t, 0.18, { vol: 0.12, out: o }); tone(t, 320, 0.08, { wave: 'sine', vol: 0.05, out: o, slide: 120 }); return; }
+  if (name === 'door') { tone(t, 180, 0.06, { wave: 0.25, vol: 0.05, out: o }); tone(t + 0.07, 140, 0.08, { wave: 0.25, vol: 0.05, out: o }); return; }
+  if (name === 'equip') { tone(t, 660, 0.05, { wave: 0.125, vol: 0.05, out: o }); tone(t + 0.06, 990, 0.08, { wave: 0.125, vol: 0.05, out: o }); return; }
+  return _sfx(name, p);
+}; }
+
+// ---- Cap. 2: Velhágua (barcarola), Bairro Afogado (eco debaixo d'água) e a Âncora-Mãe (sino e corrente) ----
+Object.assign(TRACKS, {
+  velhagua: {
+    bpm: 104, bars: 8, chords: 'F C Dm Bb F C Bb C', bass: 'root5', bassVol: 0.12,
+    lead: 'A4:3 C5:1 F5:4 E5:2 D5:2 C5:4 | G4:3 C5:1 E5:4 D5:2 C5:2 G4:4 | A4:3 D5:1 F5:4 A5:2 G5:2 F5:4 | D5:4 F5:2 D5:2 Bb4:8 | C5:3 F5:1 A5:4 G5:2 F5:2 C5:4 | E5:3 G5:1 C6:4 Bb5:2 A5:2 G5:4 | F5:4 D5:2 F5:2 Bb5:4 A5:4 | G5:8 E5:4 C5:4',
+    leadWave: 'triangle', leadVol: 0.09, arp: { rate: 2, vol: 0.016, oct: 0 }, drums: 'k...h.s.k.h.h.s.', hatVol: 0.022
+  },
+  afogado: {
+    bpm: 72, bars: 8, chords: 'Am Am F F Dm Dm E E', bass: 'root5', bassVol: 0.1,
+    lead: 'E5:8 .:4 C5:4 | B4:8 A4:8 | C5:6 D5:2 E5:8 | .:16 | D5:6 E5:2 F5:4 A5:4 | G5:8 F5:4 E5:4 | E5:4 D5:4 C5:4 B4:4 | G#4:16',
+    leadWave: 'triangle', leadVol: 0.07, lead2: 'A3:8 E4:8 | A3:8 C4:8 | F3:8 C4:8 | F3:8 A3:8 | D3:8 A3:8 | D3:8 F3:8 | E3:8 B3:8 | E3:8 G#3:8',
+    lead2Wave: 'sine', lead2Vol: 0.035, arp: { rate: 4, vol: 0.012, oct: 1 }, drums: '................', hatVol: 0
+  },
+  ancora: {
+    bpm: 140, bars: 8, chords: 'Em Em C D Em Em Am B', bass: 'oct8', bassVol: 0.17,
+    lead: 'E5:4 B5:4 G5:2 F#5:2 E5:4 | E5:2 F#5:2 G5:2 A5:2 B5:4 E6:4 | C6:4 B5:2 A5:2 G5:4 E5:4 | D5:2 F#5:2 A5:2 D6:2 C6:4 A5:4 | E5:4 B5:4 G5:2 A5:2 B5:4 | G5:2 A5:2 B5:2 E6:2 D6:4 B5:4 | A5:2 C6:2 E6:4 D6:2 C6:2 A5:4 | B5:4 D#6:4 F#6:8',
+    leadVol: 0.075, lead2: 'E4:4 B4:4 E5:4 B4:4 | E4:4 B4:4 E5:4 G5:4 | C4:4 G4:4 C5:4 G4:4 | D4:4 A4:4 D5:4 F#5:4 | E4:4 B4:4 E5:4 B4:4 | E4:4 G4:4 B4:4 E5:4 | A3:4 E4:4 A4:4 C5:4 | B3:4 D#4:4 F#4:4 B4:4',
+    lead2Wave: 0.125, lead2Vol: 0.03, drums: 'k..sk.s.k.ks..s.', hatVol: 0.04
+  }
+});
+{ const _sfx2 = sfx; sfx = function (name, p) {
+  if (name !== 'sino' || !AU.ctx || AU.muted) return _sfx2(name, p);
+  const t = AU.ctx.currentTime + 0.005, o = AU.sfx, b = p || 196;
+  for (const [k, v, d] of [[1, 0.1, 2.2], [2.4, 0.05, 1.6], [3, 0.04, 1.2], [4.2, 0.025, 0.9]]) tone(t, b * k, d, { wave: 'sine', vol: v, out: o, sus: 0.2, dec: d * 0.8 });
+}; }
+
 // ================= ARTE DA TEMPORADA 2 =================
 // Tudo em pixel art. Os personagens da T1 vêm da arte herdada (heranca_arte.json, convertida no boot).
 // Inimigos e chefes novos são pintados aqui, pixel a pixel, com um "pintor" que sombreia por volume
@@ -819,6 +900,7 @@ function loadHeranca() {
   for (const [k, a] of Object.entries(HARTE.sp)) arr(a, v => IMG.sp[k] = v);
   for (const [k, a] of Object.entries(HARTE.port)) arr(a, v => IMG.port[k] = v);
   for (const [k, o] of Object.entries(HARTE.spf)) { IMG.spf[k] = {}; for (const [d, a] of Object.entries(o)) arr(a, v => IMG.spf[k][d] = v); }
+  for (const [k, o] of Object.entries(HARTE.chestMap || {})) { IMG.chestMap[k] = {}; for (const [d, a] of Object.entries(o)) arr(a, v => IMG.chestMap[k][d] = v); }
   for (const [k, o] of Object.entries(HARTE.chest)) { IMG.chest[k] = {}; for (const [d, u] of Object.entries(o)) jobs.push(load(u).then(v => IMG.chest[k][d] = v)); }
   return Promise.all(jobs).then(() => { IMG.ready = true; });
 }
@@ -1236,7 +1318,7 @@ function updateBattle2() {
   const slow = BT.menu ? (BT.mode === 'ativo' && !UI.top() && !BT.cursor ? ATIVO_SLOW : 0) : 1;
   if (slow > 0) {
     for (const u of alive(BT.foes)) if (!u.broken && !(u.st.frio > 0 && BT.t % 2)) u.ct += u.spd * TIME_K * slow;
-    if (!BT.menu) for (const u of alive(BT.party)) if (!(u.st.frio > 0 && BT.t % 2)) u.ct += u.spd * TIME_K;
+    if (!BT.menu) for (const u of alive(BT.party)) if (!u.preso && !((u.st.frio > 0 || u.st.molhado > 0) && BT.t % 2)) u.ct += u.spd * TIME_K;
   }
   const r = readyUnit();
   if (!r) return;
@@ -1251,6 +1333,7 @@ function checkEnd() {
 function endTurn(u, weight) {
   // peso da ação: leve devolve a vez cedo, pesada atrasa
   u.ct = weight === 'leve' ? 38 : weight === 'pesada' ? -30 : 0;
+  if (u.eqFx && u.eqFx.has('anel') && u.hp > 0) { BT.tension = Math.max(0, BT.tension - 5); }
   for (const k of Object.keys(u.st)) if (u.st[k] > 0 && k !== 'guarda') u.st[k]--;
   if (u.st.vela > 0 && u.hp > 0) { const h = Math.round(u.mhp * 0.07); u.hp = Math.min(u.mhp, u.hp + h); popNum(...unitCenter(u), '+' + h, '#9be58a'); }
   if (u.st.queimado > 0) { const d = Math.max(1, Math.round(u.mhp * 0.05)); u.hp = Math.max(1, u.hp - d); popNum(...unitCenter(u), d, '#ffa94d'); }
@@ -1271,6 +1354,7 @@ function hitFoe(a, t, pow, o = {}) {
   const el = o.el, weak = el && t.weak.includes(el);
   if (el) { if (!t.known[el]) { t.known[el] = weak ? 'weak' : 'ok'; } }
   if (o.crit) d *= 1.5;
+  if (a.eqFx && a.eqFx.has('anel')) d *= 1.3;
   if (t.broken > 0) d *= 2;
   if (weak) d *= 1.3;
   d = Math.max(1, Math.round(d));
@@ -1310,12 +1394,12 @@ function hurtMember(m, d0, o = {}) {
   m.hp = Math.max(0, m.hp - d); m.flash = 10;
   const [x, y] = unitCenter(m);
   popNum(x, y - 8, d, o.res === 'perfeito' ? '#9be58a' : '#ff6b6b', d > m.mhp * 0.25);
-  if (o.st && o.res !== 'perfeito') { m.st[o.st] = o.stT || 3; popNum(x, y - 20, ST_NAME[o.st], '#ffa94d'); }
+  if (o.st && o.res !== 'perfeito') { m.st[o.st] = o.stT || 3; popNum(x, y - 20, ST_NAME[o.st], '#ffa94d'); if (o.st === 'tonto') m.ct = Math.max(0, m.ct - 35); }
   if (m.hp <= 0) { m.ct = 0; sfx('die'); burst(x, y, 16, ['#ff6b6b', '#ffffff']); callout(m.name + ' caiu!', '#ff6b6b', 70); }
   else sfx('hurt');
   return d;
 }
-const ST_NAME = { queimado: 'QUEIMADO', frio: 'GELADO', tonto: 'TONTO', vela: 'VELA' };
+const ST_NAME = { queimado: 'QUEIMADO', frio: 'GELADO', tonto: 'TONTO', vela: 'VELA', molhado: 'MOLHADO', preso: 'PRESO' };
 
 // ---------- defesa em anel ----------
 // o anel fecha sobre o alvo; A no instante certo. Devolve 'perfeito' | 'bom' | 'falhou'
@@ -1513,8 +1597,12 @@ async function foeStrike(e, t, pow, o = {}) {
   // Guardar: o baú entra na frente
   const g = t.st.guardado > 0 && t.guardBy && t.guardBy.hp > 0 ? t.guardBy : null;
   if (g) { callout(g.name + ' entra na frente!', '#ffa94d', 50); t = g; }
-  const res = await defenseRing(t, o.n || 34, o);
+  // Sapatilha de Palco: às vezes desvia sozinha de golpes rápidos
+  const auto = o.fast && t.eqFx && t.eqFx.has('esquiva') && Math.random() < 0.3;
+  const res = auto ? 'perfeito' : await defenseRing(t, o.n || 34, o);
+  if (auto) callout(t.name + ' desvia!', '#8fe3ff', 40);
   let mult = res === 'perfeito' ? 0.12 : res === 'bom' ? 0.5 : 1;
+  if (o.el === 'agua' && t.eqFx && t.eqFx.has('agua')) mult *= 0.5;
   if (g) mult *= 0.6;
   const d = calcDmg(e, t, pow) * mult;
   if (o.fx) o.fx(t, res);
@@ -1564,7 +1652,7 @@ async function defeat() {
   BT.menu = null; BT.cursor = null; playMusic(null); sfx('die');
   BT.lose = { t: 0 };
   await wait(80);
-  const c = await choose('* O grupo caiu na beira da estrada. Tentar de novo?', ['Tentar de novo', 'Desistir (volta ao título)']);
+  const c = await choose(BT.cfg.loseTxt || '* O grupo caiu. Tentar de novo?', ['Tentar de novo', BT.cfg.quitLabel || 'Desistir (volta ao título)']);
   BT.on = false; BT.done(c === 0 ? 'retry' : 'quit');
 }
 
@@ -1648,7 +1736,7 @@ function drawPrompt() {
 
 // --- linha do tempo (topo) ---
 function predictOrder(n = 8) {
-  const sim = [...alive(BT.party), ...alive(BT.foes)].map(u => ({ u, ct: u.ct, spd: u.spd * (u.st.frio > 0 ? 0.5 : 1), br: u.broken || 0 }));
+  const sim = [...alive(BT.party), ...alive(BT.foes)].map(u => ({ u, ct: u.ct, spd: u.preso ? 0 : u.spd * (u.st.frio > 0 || u.st.molhado > 0 ? 0.5 : 1), br: u.broken || 0 }));
   const out = []; let guard = 0;
   while (out.length < n && guard++ < 4000) {
     for (const s of sim) { if (s.br > 0) { s.br--; continue; } s.ct += s.spd * TIME_K; }
@@ -1720,7 +1808,7 @@ function drawHUD() {
     bx.fillStyle = ct >= 1 ? (BT.t % 8 < 4 ? '#ffffff' : '#ffe066') : m.col; bx.fillRect(x + 3, y + 51, Math.round(71 * ct), 5);
     txt(m.row === 'back' ? 'trás' : 'frente', x + 3, y + 58, { col: '#6a6078' });
     // status
-    let sx = x + 74; for (const k of ['queimado', 'frio', 'tonto', 'vela']) if (m.st[k] > 0) { sx -= 13; bx.drawImage(ICON[k === 'frio' ? 'congelado' : k === 'vela' ? 'luz' : k], sx, y + 60); }
+    let sx = x + 74; for (const k of ['queimado', 'frio', 'tonto', 'vela', 'molhado', 'preso']) if (m.st[k] > 0 || (k === 'preso' && m.preso)) { sx -= 13; bx.drawImage(ICON[k === 'frio' ? 'congelado' : k === 'vela' ? 'luz' : k], sx, y + 60); }
     if (m.def0) { sx -= 13; bx.drawImage(ICON.defender, sx, y + 60); }
   });
 }
@@ -1925,12 +2013,12 @@ const RUNA2 = {
   acalanto: { nm: 'Acalanto', mp: 8, w: 'leve', tgt: 'ally', d: 'Cura 35% da vida de um aliado e tira queimadura e frio. Leve.', run: async (m, t) => {
     sfx('heal'); jingle('G5:2 E5:2 C6:4', 200); const [x, y] = unitCenter(t);
     await tw(26, (p, k) => { for (let i = 0; i < 3; i++) txt('♪', x - 8 + i * 8 + Math.sin(k / 5 + i) * 2, y - 6 - p * 24 - i * 4, { col: i % 2 ? '#ffd060' : '#fff0a0', alpha: 1 - p }); fxRing(x, y, 6 + p * 10, '#ffd060', 1 - p); });
-    healUnit(t, Math.round(t.mhp * 0.35)); t.st.queimado = 0; t.st.frio = 0;
+    healUnit(t, Math.round(t.mhp * 0.35 * (m.eqFx && m.eqFx.has('fone') ? 1.15 : 1))); t.st.queimado = 0; t.st.frio = 0;
   } },
   velaprot: { nm: 'Vela Protetora', mp: 6, w: 'leve', tgt: 'ally', d: 'Uma velinha acesa ao lado do aliado: metade do dano até a vez dele e cura um pouco por 3 vezes. Leve.', run: async (m, t) => {
     sfx('buff'); const [x, y] = unitCenter(t);
     await tw(22, p => { bx.fillStyle = '#f2ecdc'; bx.fillRect(Math.round(x + 14), Math.round(y + 4 - p * 4), 2, 6); bx.fillStyle = p > 0.5 ? '#ffd060' : '#ff9a30'; bx.fillRect(Math.round(x + 14), Math.round(y + 1 - p * 4), 2, 3); fxRing(x, y, 18 - p * 6, '#ffd060', p); });
-    t.def0 = true; t.st.vela = 3; callout('Vela acesa para ' + t.name, '#ffd060', 50);
+    t.def0 = true; t.st.vela = m.eqFx && m.eqFx.has('vela5') ? 5 : 3; callout('Vela acesa para ' + t.name, '#ffd060', 50);
   } },
   ofuscar: { nm: 'Ofuscar', mp: 10, tgt: 'enemy', d: 'Um clarão nos olhos de um inimigo: luz e ele perde parte da vez (empurrado na linha do tempo).', run: async (m, t) => {
     sfx('rune'); await projectile(m, t, '#ffffff', 12, { r: 3 }); flashW(3);
@@ -1988,11 +2076,11 @@ const TECH2 = {
     const ok = await timedPrompt(t, 18); const [x, y] = unitCenter(t);
     await tw(6, p => { m.ox += 4; bx.fillStyle = '#ffffff'; bx.fillRect(x - 30 + p * 20, y - 1, 30, 2); });
     sfx('crit'); hitstop(8); bshake(8, 3); burst(x, y, 16, ['#ffffff', '#e86050', '#ffe066']);
-    hitFoe(m, t, 1.4, { el: 'corte', crit: ok, brk: 2 }); if (ok) BT.stats.crit++;
+    hitFoe(m, t, 1.4, { el: 'corte', crit: ok, brk: m.eqFx && m.eqFx.has('estocada3') ? 3 : 2 }); if (ok) BT.stats.crit++;
     await dashBack(m, 12);
   } },
   provocar: { nm: 'Provocar', cost: 10, tgt: 'self', w: 'leve', d: 'Os inimigos miram a Rita nas próximas duas vezes, e ela se defende. Leve.', run: async (m) => {
-    sfx('select'); BT.taunt = { m, n: 2 }; m.def0 = true;
+    sfx('select'); BT.taunt = { m, n: m.eqFx && m.eqFx.has('provoca3') ? 3 : 2 }; m.def0 = true;
     const [x, y] = unitCenter(m); await tw(24, p => txt('Vem!', x, y - 34 - p * 6, { align: 'center', col: '#ff8a70', alpha: 1 - p * 0.5, shadow: true })); callout('Rita chama a atenção', '#ff8a70', 40);
   } }
 };
@@ -2292,8 +2380,6 @@ async function fimDemo() {
   await say('* E na guarita do pedágio, num prego, um último cartaz. Não é de PROCURADO. É de BEM-VINDOS. Alguém riscou o "BEM".');
   G.flags.cap1Ponte = true; save2();
   await fadeOut(40);
-  V.scene = 'fim1'; await fadeIn(30);
-  await new Promise(r => { V.fimR = r; });
 }
 
 // ---------- fluxo ----------
@@ -2342,7 +2428,7 @@ async function capitulo1() {
   G.flags.cap1Boss = true; save2();
   await fadeOut(16);
   await fimDemo();
-  titleFlow2();
+  capitulo2();
 }
 // dicas que aparecem uma vez, na primeira vez que a situação acontece
 function hintOnce() { }
@@ -2401,7 +2487,7 @@ function drawTitle2() {
   if (H) txt(`Herança: ${H.name} · ${HARTE.species[G.species] ? HARTE.species[G.species].name : ''}`, 120, 200, { align: 'center', col: '#9be58a' });
   else txt('Nenhuma herança da Temporada 1 neste aparelho', 120, 200, { align: 'center', col: '#8a8099' });
   if (t % 60 < 40) txt('Aperte A', 120, 216, { align: 'center', col: '#ffffff' });
-  txt('Cap. 1 (prévia)', 4, 228, { col: '#5a5070' }); txt('t2-0.10', 236, 228, { align: 'right', col: '#5a5070' });
+  txt(G.flags && G.flags.cap2Fim ? 'Cap. 2 completo' : 'Cap. 1 e 2', 4, 228, { col: '#5a5070' }); txt('t2-0.20', 236, 228, { align: 'right', col: '#5a5070' });
 }
 function drawFim1() {
   bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
@@ -2426,7 +2512,7 @@ async function titleFlow2() {
   }
   const sv = load2();
   let novo = true;
-  if (sv && (sv.flags.cap1Corvos || sv.flags.cap1Boss)) {
+  if (sv && sv.flags && (sv.flags.cap1Corvos || sv.flags.cap1Boss)) {
     const c = await choose('* Há um jogo da Temporada 2 salvo.', ['Continuar', 'Começar de novo']);
     if (c === 0) { Object.assign(G, sv); novo = false; }
   }
@@ -2442,7 +2528,7 @@ async function titleFlow2() {
   }
   PTC.me = null;
   await fadeOut(20);
-  capitulo1();
+  if (G.flags.cap1Boss) capitulo2(); else capitulo1();
 }
 
 // ---------- laço principal ----------
@@ -2451,13 +2537,15 @@ function tick() {
   JP = { ...JPQ }; for (const k in JPQ) delete JPQ[k];
   for (let i = WAITS.length - 1; i >= 0; i--) if (--WAITS[i].n <= 0) { const w = WAITS.splice(i, 1)[0]; w.r(); }
   if (V.tw) { const t = V.tw; t.t++; V.fade = t.from + (t.to - t.from) * Math.min(1, t.t / t.n); if (t.t >= t.n) { V.tw = null; t.r(); } }
-  if (V.scene === 'battle2' || V.scene === 'cena') G.time += 1 / 60;
+  if (V.scene === 'battle2' || V.scene === 'cena' || V.scene === 'world') G.time += 1 / 60;
   const top = UI.top();
   if (top) top.update();
   if (V.scene === 'battle2') { updateBattle2(); drawBattle2(); }
   else if (V.scene === 'cena') drawCena();
   else if (V.scene === 'title') drawTitle2();
   else if (V.scene === 'fim1') drawFim1();
+  else if (V.scene === 'world') { updateWorld2(); drawWorld2(); }
+  else if (V.scene === 'card') drawCard();
   else { bx.fillStyle = '#000'; bx.fillRect(0, 0, W, H); }
   for (const w of UI.stack) w.draw();
   if (V.fade > 0) { bx.fillStyle = `rgba(0,0,0,${V.fade})`; bx.fillRect(0, 0, W, H); }
@@ -2483,6 +2571,1829 @@ async function boot2() {
   aplicarHeranca(H);
   requestAnimationFrame(frame);
   titleFlow2();
+}
+
+// ================= ARTE DO MUNDO DA T2 (mapas) =================
+// Tiles de 16 px. Escala (regra fixa): adulto ~48 px (3 tiles), baú 16 px no mapa, porta ~2 tiles de altura e pouco
+// mais de 1 de largura, casa térrea ~90 px de parede. Tudo pintado pixel a pixel com o pintor Pix (art2.js).
+// TS = 16 (definido em core.js)
+const TILE2 = {};          // cache: chave -> canvas
+function tileArt(k, v = 0, f = 0) {
+  const key = k + '_' + v + '_' + f; if (TILE2[key]) return TILE2[key];
+  const P = new Pix(16, 16), h = (x, y) => hash(x + v * 17, y + v * 31, 7) % 100;
+  if (k === 'tab' || k === 'tabV') {                 // tábuas do cais (horizontais) ou do píer (verticais)
+    const W = ramp('#8a5a34'), vert = k === 'tabV';
+    for (let b = 0; b < 4; b++) {
+      const tone0 = 0.42 + ((hash(b, v, 3) % 5) - 2) * 0.05;
+      for (let i = 0; i < 16; i++) for (let j = 0; j < 4; j++) {
+        const x = vert ? b * 4 + j : i, y = vert ? i : b * 4 + j;
+        let I = tone0 + (j === 0 ? 0.18 : j === 3 ? -0.2 : 0) + (((i * 7 + b * 13 + v) % 11) === 0 ? -0.12 : 0);
+        P.p(x, y, P.tone(W, I, x, y));
+      }
+      // pregos nas pontas e um nó na madeira de vez em quando
+      const nx = (b * 5 + v * 3) % 12 + 2;
+      if (vert) { P.p(b * 4 + 1, 1, '#5a5a6a'); P.p(b * 4 + 1, 14, '#5a5a6a'); if (h(b, 1) < 30) P.p(b * 4 + 2, nx, W[0]); }
+      else { P.p(1, b * 4 + 1, '#5a5a6a'); P.p(14, b * 4 + 1, '#5a5a6a'); if (h(b, 2) < 30) { P.p(nx, b * 4 + 1, W[0]); P.p(nx + 1, b * 4 + 2, W[1]); } }
+    }
+  } else if (k === 'agua' || k === 'corr') {         // água funda (4 quadros de onda) e correnteza (riscos que andam)
+    const deep = ['#1c3a54', '#244a66', '#2e5a78', '#3a6e8e', '#5a90a8'];
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const w = Math.sin((x + f * 2 + v * 5) * 0.55 + y * 0.9) + Math.sin((y - f) * 0.7 + x * 0.3);
+      P.p(x, y, P.tone(deep, 0.42 + w * 0.08, x, y));
+    }
+    for (let i = 0; i < 3; i++) { const x = (h(i, 0) % 12) + 1, y = (h(i, 1) % 14) + 1; if ((f + i) % 4 < 2) { P.p(x, y, deep[4]); P.p(x + 1, y, deep[3]); } }
+    if (k === 'corr') {                              // v = direção: 0 direita, 1 baixo, 2 esquerda, 3 cima
+      for (let i = 0; i < 4; i++) {
+        const t = (f * 4 + i * 4) % 16, o = (i * 5 + 3) % 14 + 1;
+        const pts = [[t, o], [(t + 1) % 16, o], [(t + 2) % 16, o], [(t + 3) % 16, o]];
+        for (const [a, b] of pts) { const [x, y] = v === 0 ? [a, b] : v === 2 ? [15 - a, b] : v === 1 ? [b, a] : [b, 15 - a]; P.p(x, y, '#b8e0f0'); }
+      }
+    }
+  } else if (k === 'pedra') {                         // calçamento de pedra
+    const S = ramp('#7a7480');
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, '#3a3440');
+    const stones = [[1, 1, 6, 5], [8, 1, 7, 4], [1, 7, 4, 4], [6, 6, 5, 5], [12, 6, 3, 5], [1, 12, 7, 3], [9, 12, 6, 3]];
+    for (const [sx, sy, w, hh] of stones) for (let j = 0; j < hh; j++) for (let i = 0; i < w; i++) {
+      const I = 0.55 - j / hh * 0.25 - i / w * 0.1 + ((h(sx + i, sy + j) % 9) === 0 ? -0.1 : 0) + (j === 0 ? 0.15 : 0);
+      P.p(sx + i, sy + j, P.tone(S, I, sx + i, sy + j));
+    }
+    if (v % 3 === 1) { P.p(4, 10, '#4a7a3a'); P.p(11, 11, '#4a7a3a'); }   // mato entre as pedras
+  } else if (k === 'lodo') {
+    const M = ramp('#5a4a38');
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, P.tone(M, 0.45 + ((h(x, y) % 7) - 3) * 0.03, x, y));
+    for (let i = 0; i < 2; i++) { const cx = h(i, 5) % 10 + 3, cy = h(i, 6) % 10 + 3; P.ball(cx, cy, 2.5, 1.6, ['#2a3a48', '#3a4a58', '#4a6070', '#6a8090', '#8aa0b0']); }
+  } else if (k === 'grama') {
+    const Gr = ramp('#4a6a34');
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, P.tone(Gr, 0.45 + ((h(x, y) % 9) - 4) * 0.025, x, y));
+    for (let i = 0; i < 6; i++) { const x = h(i, 7) % 15, y = h(i, 8) % 13 + 2; P.p(x, y, Gr[3]); P.p(x, y - 1, Gr[4]); }
+  } else if (k === 'muro') {                          // muro de pedra (sólido): face com tijolos
+    const S = ramp('#6a5e6a');
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const row = y >> 2, off = (row % 2) * 4, edge = (y % 4 === 3) || ((x + off) % 8 === 7);
+      P.p(x, y, edge ? '#2e2834' : P.tone(S, 0.5 - (y % 4) * 0.06 + ((h(x >> 3, row) % 5) - 2) * 0.04, x, y));
+    }
+  } else if (k === 'escada') {                        // degraus de pedra descendo para a água
+    const S = ramp('#7a7480');
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const st = y >> 2; P.p(x, y, P.tone(S, 0.7 - st * 0.12 - (y % 4 === 3 ? 0.2 : 0), x, y)); }
+  } else if (k === 'escuro') { P.rect(0, 0, 16, 16, '#0a0812'); }
+  return TILE2[key] = P.canvas();
+}
+
+// ---------- gerador de moradores (front/back/side, 2 quadros cada) ----------
+// o: { skin, hair, hairStyle: 'curto'|'longo'|'coque'|'careca'|'chapeu', top, bottom, apron, hat, h (altura 40..50), extra: fn }
+const HUM_CACHE = {};
+function humano(key, o) {
+  if (HUM_CACHE[key]) return HUM_CACHE[key];
+  const out = { f: [], b: [], s: [] };
+  for (const view of ['f', 'b', 's']) for (let fr = 0; fr < 2; fr++) out[view].push(humanoFrame(o, view, fr));
+  return HUM_CACHE[key] = out;
+}
+function humanoFrame(o, view, fr) {
+  const H = o.h || 48, W = 24, P = new Pix(W, H + 2);
+  const skin = ramp(o.skin || '#e0a878'), hair = ramp(o.hair || '#4a2a1a'), top = ramp(o.top || '#5a7a9a'), bot = ramp(o.bottom || '#3a3a4a');
+  const cx = 12, s = H / 48, side = view === 's', back = view === 'b';
+  const Y = v => Math.round(v * s);
+  const bob = fr ? 1 : 0;
+  // pernas e sapatos
+  const legT = Y(33), legB = H - 1;
+  const lx = side ? [cx - 1, cx + 1] : [cx - 3, cx + 1];
+  for (const [i, x0] of lx.entries()) for (let y = legT; y <= legB - 2; y++) for (let x = x0; x < x0 + 3; x++) P.p(x + (side && fr && i ? 1 : 0), y, P.tone(bot, 0.5 - (x - x0) * 0.1, x, y));
+  for (const x0 of lx) P.rect(x0 - (side ? 0 : 0), legB - 1, side ? 4 : 3, 2, '#2a1e1a');
+  // tronco
+  const tT = Y(17) + bob, tB = Y(34);
+  for (let y = tT; y <= tB; y++) { const half = side ? 3 : 5 + (y > tT + 3 ? 1 : 0) - (y > tB - 2 ? 1 : 0); for (let x = cx - half; x <= cx + half - (side ? 0 : 1); x++) P.p(x, y, P.tone(top, 0.62 - (x - cx + half) / (half * 2) * 0.35 - (y - tT) / 60, x, y)); }
+  if (o.apron && !back) for (let y = tT + 6; y <= tB + 2; y++) for (let x = cx - 3; x <= cx + 2 - (side ? 2 : 0); x++) P.p(x, y, P.tone(ramp(o.apron), 0.7 - (y - tT) / 40, x, y));
+  if (o.coat) for (let y = tT; y <= tB + Y(8); y++) { const half = side ? 4 : 6; for (let x = cx - half; x <= cx + half - (side ? 0 : 1); x++) if (!(view === 'f' && Math.abs(x - cx + 0.5) < 1.5 && y > tT + 4)) P.p(x, y, P.tone(ramp(o.coat), 0.55 - (x - cx + half) / (half * 2) * 0.35, x, y)); }
+  // braços
+  const armC = o.coat ? ramp(o.coat) : top;
+  if (side) { for (let y = tT + 1; y <= tT + Y(12); y++) P.p(cx + (fr ? 1 : 0), y, P.tone(armC, 0.4, cx, y)); P.p(cx + (fr ? 1 : 0), tT + Y(13), skin[2]); }
+  else for (const ax of [cx - 7, cx + 6]) { for (let y = tT + 1; y <= tT + Y(12); y++) { P.p(ax, y, P.tone(armC, 0.5, ax, y)); P.p(ax + (ax < cx ? 1 : -1), y, P.tone(armC, 0.35, ax, y)); } P.p(ax, tT + Y(13), skin[2]); P.p(ax + (ax < cx ? 1 : -1), tT + Y(13), skin[1]); }
+  // cabeça
+  const hcY = Y(10) + bob, hr = Math.max(5, Math.round(6 * s));
+  P.ball(cx + (side ? -1 : 0), hcY, hr, hr + 1, skin);
+  P.rect(cx - 1, hcY + hr, 3, 2, skin[1]);                                                   // pescoço
+  // cabelo
+  const hs = o.hairStyle || 'curto';
+  if (hs !== 'careca') {
+    P.ball(cx + (side ? 0 : 0), hcY - 2, hr + 1, hr, hair, { clip: (x, y) => back || y < hcY - 1 || (side ? x > cx + 1 : Math.abs(x - cx + 0.5) > hr - 1) });
+    if (hs === 'longo') for (let y = hcY; y < hcY + Y(12); y++) for (let x = cx - hr - 1; x <= cx + hr; x++) if (back || (side ? x > cx + 1 : Math.abs(x - cx + 0.5) > hr - 2)) P.p(x, y, P.tone(hair, 0.4 - (y - hcY) / 40, x, y));
+    if (hs === 'coque') P.ball(cx + (side ? 3 : 0), hcY - hr - 1, 3, 3, hair);
+  }
+  if (o.hat) { const hc = ramp(o.hat); P.poly([[cx - hr - 3, hcY - 3], [cx + hr + 3, hcY - 3], [cx + hr + 1, hcY - 1], [cx - hr - 1, hcY - 1]], (x, y) => P.tone(hc, 0.55, x, y)); P.ball(cx, hcY - 5, hr - 1, 3, hc, { clip: (x, y) => y < hcY - 3 }); }
+  // rosto
+  if (view === 'f') { P.p(cx - 3, hcY + 1, '#2a1a1a'); P.p(cx + 2, hcY + 1, '#2a1a1a'); P.p(cx - 3, hcY, '#ffffff'); P.p(cx - 1, hcY + 4, skin[0]); P.p(cx, hcY + 4, skin[0]); if (o.beard) for (let x = cx - 3; x <= cx + 2; x++) { P.p(x, hcY + 4, hair[2]); P.p(x, hcY + 5, hair[1]); } }
+  if (side) { P.p(cx - 4, hcY, '#2a1a1a'); P.p(cx - 4, hcY + 1, '#2a1a1a'); P.p(cx - 5, hcY - 2, hair[1]); P.p(cx - 4, hcY - 2, hair[1]); P.p(cx - 7, hcY + 1, skin[2]); P.p(cx - 7, hcY + 2, skin[1]); P.p(cx - 5, hcY + 4, skin[0]); P.p(cx, hcY + 1, skin[1]); if (o.beard) for (let y = hcY + 3; y <= hcY + 5; y++) for (let x = cx - 6; x <= cx - 1; x++) P.p(x, y, hair[1]); }
+  if (o.extra) o.extra(P, { view, fr, cx, hcY, tT, tB, s, H });
+  return P.outline().canvas();
+}
+function humanoSprite(h, dir, t) {
+  // direção do mapa -> vista; os sprites de lado olham para a ESQUERDA
+  const v = dir === 'up' ? h.b : dir === 'down' ? h.f : h.s, fr = v[Math.floor(t / 24) % v.length];
+  return dir === 'right' ? flipC(fr) : fr;
+}
+
+// ---------- construções (props grandes) ----------
+// casa de madeira sobre palafitas. o: { w (tiles), wallH (px), wall, roof, trim, door: dx (tile), win: [dx..], sign, awning, stone }
+function casaArt(o) {
+  const W = o.w * TS, roofH = o.roofH || 34, wallH = o.wallH || 88, stH = o.stilts ? 12 : 0, H = roofH + wallH + stH + 4;
+  const P = new Pix(W, H), WL = ramp(o.wall || '#a8704a'), RF = ramp(o.roof || '#8a3a2a'), TR = ramp(o.trim || '#5a3a24');
+  const wy0 = roofH, wy1 = roofH + wallH;
+  // parede: tábuas horizontais (ou pedra)
+  for (let y = wy0; y < wy1; y++) for (let x = 2; x < W - 2; x++) {
+    if (o.stone) { const row = (y - wy0) >> 3, off = (row % 2) * 6, edge = ((y - wy0) % 8 === 7) || ((x + off) % 12 === 11); P.p(x, y, edge ? WL[0] : P.tone(WL, 0.55 - ((x + off) % 12) / 40 + ((hash(x >> 3, row, 9) % 5) - 2) * 0.04, x, y)); }
+    else { const b = (y - wy0) % 6; P.p(x, y, P.tone(WL, (b === 0 ? 0.7 : b === 5 ? 0.25 : 0.5) - x / W * 0.15 + (((x * 13 + (y - wy0 >> 3) * 7) % 23) === 0 ? -0.1 : 0), x, y)); }
+  }
+  // marca d'água e limo na base (a cidade afunda)
+  for (let y = wy1 - 14; y < wy1; y++) for (let x = 2; x < W - 2; x++) if ((y - (wy1 - 14)) > 4 + Math.sin(x * 0.3) * 2) P.p(x, y, P.tone(ramp('#4a6a4a'), 0.35 + (y - wy1) / 40, x, y));
+  // colunas de canto
+  P.cyl(0, wy0 - 2, 4, wallH + 2, TR); P.cyl(W - 4, wy0 - 2, 4, wallH + 2, TR);
+  // telhado de telhas, em fileiras desencontradas
+  for (let y = 0; y < roofH; y++) {
+    const inset = Math.max(0, Math.round((roofH - y) * 0.5) - 8);
+    for (let x = inset - 2; x < W - inset + 2; x++) {
+      const row = y >> 2, off = (row % 2) * 4, edge = (y % 4 === 3) || ((x + off) % 8 === 0);
+      P.p(x, y, P.tone(RF, (edge ? 0.25 : 0.62) - y / roofH * 0.2 + (x < W / 2 ? 0.06 : -0.04), x, y));
+    }
+  }
+  P.cyl(-2, roofH - 4, W + 4, 4, RF, true);                                                    // beiral
+  if (o.chimney) { P.cyl(W - 22, -2, 8, 16, ramp('#7a6a6a')); P.rect(W - 23, -3, 10, 2, '#4a3a3a'); }
+  // janelas com luz quente e floreira
+  for (const dx of (o.win || [])) {
+    const x = dx * TS + 2, y = wy0 + 18;
+    P.rect(x - 1, y - 1, 16, 20, TR[0]); P.rect(x, y, 14, 18, TR[2]);
+    for (let j = 0; j < 16; j++) for (let i = 0; i < 12; i++) P.p(x + 1 + i, y + 1 + j, P.tone(['#5a3a2a', '#c87a3a', '#f0b050', '#ffd880', '#fff0c0'], 0.85 - j / 26 - (i === 5 || i === 6 ? 0.25 : 0), x + 1 + i, y + 1 + j));
+    P.rect(x + 1, y + 8, 12, 1, TR[1]); P.rect(x + 6, y + 1, 1, 16, TR[1]);
+    P.rect(x - 2, y + 19, 18, 3, TR[1]); for (let i = 0; i < 5; i++) P.p(x + 1 + i * 3, y + 18, ['#e86890', '#f0c040', '#ffffff'][i % 3]);
+  }
+  // porta (2,1 m = ~60 px; aqui 2 tiles de largura útil e 3,5 de altura)
+  if (o.door != null) {
+    const dx = o.door * TS + 2, dw = 24, dh = 58, dy = wy1 - dh;
+    P.rect(dx - 2, dy - 3, dw + 4, dh + 3, TR[0]);
+    for (let j = 0; j < dh; j++) for (let i = 0; i < dw; i++) P.p(dx + i, dy + j, P.tone(ramp(o.doorC || '#6a4028'), 0.55 - i / dw * 0.25 + (i % 8 === 0 ? -0.15 : 0), dx + i, dy + j));
+    P.ball(dx + dw - 5, dy + 30, 1.6, 1.6, ramp('#d0a030'));
+    if (o.doorWin) { P.rect(dx + 6, dy + 6, 12, 10, '#f0b050'); P.rect(dx + 11, dy + 6, 1, 10, TR[0]); }
+  }
+  // toldo listrado
+  if (o.awning) {
+    const ay = wy0 + 6, AW = ramp(o.awning);
+    for (let y = 0; y < 12; y++) for (let x = 4; x < W - 4; x++) P.p(x, ay + y, ((x >> 3) % 2) ? P.tone(AW, 0.6 - y * 0.03, x, ay + y) : P.tone(ramp('#e8dcc0'), 0.7 - y * 0.03, x, ay + y));
+    for (let x = 4; x < W - 4; x += 4) P.ball(x + 2, ay + 12, 2, 2, (x >> 3) % 2 ? AW : ramp('#e8dcc0'));
+  }
+  // placa
+  if (o.signC) { const sx = (W >> 1) - 24, sy = wy0 - 2; P.rect(sx, sy, 48, 14, TR[0]); P.rect(sx + 1, sy + 1, 46, 12, ramp(o.signC)[2]); P.rect(sx + 1, sy + 1, 46, 2, ramp(o.signC)[3]); }
+  // palafitas
+  if (o.stilts) for (let x = 6; x < W - 6; x += 22) { P.cyl(x, wy1, 5, stH + 4, ramp('#5a3a24')); P.rect(x, wy1 + stH, 5, 4, ramp('#3a5a4a')[1]); }
+  P.outline();
+  return { img: P.canvas(), w: W, h: H, foot: stH + 4 };
+}
+// a torre do sino, torta e sem sino (o sino caiu há cem anos; agora tem um de lata)
+function torreArt(comSino) {
+  const W = 64, H = 200, P = new Pix(W, H), S = ramp('#8a7a7a'), RF = ramp('#4a5a7a');
+  for (let y = 40; y < H - 4; y++) {
+    const lean = Math.round((H - y) * 0.05);
+    for (let x = 10; x < 54; x++) { const row = (y >> 3), off = (row % 2) * 5, edge = (y % 8 === 7) || ((x + off) % 10 === 9); P.p(x + lean, y, edge ? S[0] : P.tone(S, 0.6 - (x - 10) / 60 + ((hash(x >> 3, row, 5) % 5) - 2) * 0.04, x, y)); }
+  }
+  // arco do campanário
+  for (let y = 52; y < 92; y++) for (let x = 20; x < 44; x++) { const r = Math.hypot(x - 32 + 0.5, Math.max(0, 64 - y)); if (r < 12 || y > 64) P.p(x + Math.round((H - y) * 0.05), y, '#1a1424'); }
+  if (comSino) P.ball(32 + 7, 74, 9, 10, ramp('#c89a40'));
+  else { P.rect(36, 66, 1, 10, '#5a5a6a'); P.ball(37, 80, 4, 4, ramp('#8a8a9a')); }                 // o sininho de lata provisório
+  // telhado pontudo
+  P.poly([[6 + 8, 42], [58 + 8, 42], [32 + 10, 4]], (x, y) => P.tone(RF, 0.7 - (y - 4) / 50 + (x < 40 ? 0.1 : -0.1), x, y));
+  P.rect(40, 0, 2, 6, '#c89a40');
+  // relógio parado
+  P.ball(32 + 5, 120, 8, 8, ramp('#e8dcc0')); P.line(37, 120, 37, 114, '#2a1e1a'); P.line(37, 120, 41, 122, '#2a1e1a');
+  // limo e marca d'água
+  for (let y = H - 30; y < H - 4; y++) for (let x = 10; x < 54; x++) if (hash(x, y, 2) % 3 === 0) P.p(x, y, P.tone(ramp('#4a6a4a'), 0.4, x, y));
+  P.outline();
+  return { img: P.canvas(), w: W, h: H };
+}
+// poste de luz (~120 px; 4 m), apagado ou aceso
+function posteArt(aceso) {
+  const P = new Pix(18, 124), F = ramp('#3a3a4a');
+  P.cyl(7, 20, 4, 102, F); P.rect(5, 118, 8, 6, F[1]);
+  P.poly([[3, 6], [15, 6], [13, 20], [5, 20]], (x, y) => aceso ? P.tone(RP.fogo, 0.85 - (y - 6) * 0.02, x, y) : P.tone(['#2a2430', '#3a3440', '#4a4450', '#6a6070', '#8a8090'], 0.5, x, y));
+  P.rect(2, 4, 14, 3, F[2]); P.rect(6, 0, 6, 4, F[1]); P.rect(4, 20, 10, 2, F[2]);
+  P.outline(); return P.canvas();
+}
+// barquinho a remo, caixotes, barril, varal
+function barcoArt() { const P = new Pix(52, 20), B = ramp('#7a5a3a'); P.poly([[0, 6], [52, 6], [44, 18], [8, 18]], (x, y) => P.tone(B, 0.65 - (y - 6) / 18 - x / 120, x, y)); P.rect(2, 6, 48, 2, B[3]); P.rect(16, 6, 3, 10, B[1]); P.rect(32, 6, 3, 10, B[1]); P.line(20, 4, 46, 0, ramp('#8a6a4a')[2], 2); P.outline(); return P.canvas(); }
+function caixoteArt(v = 0) { const P = new Pix(18, 18), B = ramp(v ? '#9a7a4a' : '#8a6a3a'); for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x + 1, y + 2, P.tone(B, 0.6 - y / 30 - x / 50 + ((x === 0 || x === 15 || y === 0 || y === 15) ? 0.15 : 0), x, y)); P.line(2, 3, 15, 16, B[1]); P.line(15, 3, 2, 16, B[1]); P.outline(); return P.canvas(); }
+function barrilArt() { const P = new Pix(16, 20), B = ramp('#7a4a2a'); P.cyl(1, 1, 14, 18, B); for (const y of [3, 9, 15]) P.rect(1, y, 14, 1, '#4a4a5a'); P.outline(); return P.canvas(); }
+
+// ---------- inimigos novos do Cap. 2 (pixel art detalhada) ----------
+// Lambe-Lodo: sanguessuga gorda de lodo, com boca de ventosa e brilho de âmbar na barriga
+function lambeArt(f) {
+  const P = new Pix(34, 22), M = ramp('#4a5a3a'), B = ramp('#8a7a4a');
+  const ond = f === 1 ? 2 : 0;
+  for (let i = 0; i < 5; i++) P.ball(8 + i * 5, 14 - Math.sin(i * 0.9 + ond) * 2, 6 - Math.abs(i - 2) * 0.6, 5, M);
+  for (let i = 0; i < 5; i++) P.p(8 + i * 5, 17 - Math.sin(i * 0.9 + ond) * 2, B[3]);                      // barriguinha listrada
+  P.ball(5, 12, 5, 5, M); P.ball(3, 12, 3, 3, ramp('#8a3a4a')); P.ball(3, 12, 1.5, 1.5, ['#1a0a10', '#1a0a10', '#3a1020', '#3a1020', '#5a2030']);   // ventosa
+  for (const [x, y] of [[2, 9], [5, 8], [2, 15], [5, 16]]) P.p(x, y, '#f2ecdc');                             // dentinhos
+  P.p(9, 9, '#ffb040'); P.p(10, 9, '#fff0a0');                                                               // olho
+  if (f === 2) for (let i = 0; i < 4; i++) P.p(1 + i * 2, 20, '#5fa0d0');
+  return P.outline().canvas();
+}
+// Caranguejo-Telha: casco feito de telhas de um telhado que afundou
+function caranguejoArt(f) {
+  const P = new Pix(40, 30), C = ramp('#c85a3a'), T = ramp('#a8503a');
+  // pernas
+  for (let i = 0; i < 3; i++) { const lx = 10 + i * 5, up = (f + i) % 2; P.line(lx, 20, lx - 6, 27 - up, C[1], 2); P.line(40 - lx, 20, 46 - lx, 27 - up, C[1], 2); }
+  P.ball(20, 19, 12, 7, C);
+  // casco de telhas sobrepostas
+  for (let r = 0; r < 3; r++) for (let i = 0; i < 4 - r; i++) { const x = 8 + r * 3 + i * 7, y = 6 + r * 4; for (let j = 0; j < 6; j++) for (let k = 0; k < 8; k++) if (Math.hypot(k - 3.5, j * 1.2) < 5) P.p(x + k, y + j, P.tone(T, 0.75 - j * 0.07 - r * 0.08, x + k, y + j)); }
+  P.p(14, 8, ramp('#4a7a3a')[3]); P.p(25, 11, ramp('#4a7a3a')[2]);                                           // limo
+  // olhos em hastes e pinças
+  for (const ex of [15, 25]) { P.line(ex, 17, ex, 12 + (f === 2 ? -1 : 0), C[1]); P.ball(ex, 11 + (f === 2 ? -1 : 0), 1.6, 1.6, ['#1a1010', '#1a1010', '#2a1a1a', '#ffffff', '#ffffff']); }
+  const pz = f === 2 ? -4 : 0;
+  P.ball(4, 18 + pz, 5, 4, C); P.poly([[0, 16 + pz], [6, 15 + pz], [2, 20 + pz]], '#1a1010');
+  P.ball(36, 18 + pz, 5, 4, C); P.poly([[40, 16 + pz], [34, 15 + pz], [38, 20 + pz]], '#1a1010');
+  return P.outline().canvas();
+}
+// Sapo-Sino: sapo gordo com um sininho de bronze na papada (a badalada deixa tonto)
+function sapoArt(f) {
+  const P = new Pix(32, 28), S = ramp('#4a8a5a'), B = ramp('#e8d8a0');
+  const inf = f === 2 ? 2 : 0;
+  P.ball(16, 18, 12 + inf, 9 + inf * 0.5, S); P.ball(16, 22, 8 + inf, 5, B);
+  P.ball(9, 9, 4, 4, S); P.ball(23, 9, 4, 4, S);
+  for (const ex of [9, 23]) { P.ball(ex, 8, 2.5, 2.5, ['#1a1010', '#2a2010', '#f0c040', '#fff0a0', '#ffffff']); P.p(ex, 8, '#1a1010'); }
+  P.line(9, 15, 23, 15, S[0]); P.ball(16, 26, 4, 3.5, ramp('#c89a40')); P.p(16, 29, '#5a4a2a');                // boca e sino
+  for (const [x, y] of [[8, 20], [24, 21], [12, 13], [21, 14]]) P.p(x, y, S[0]);
+  P.ball(5, 25, 3, 2, S); P.ball(27, 25, 3, 2, S);
+  if (f === 2) for (let i = 0; i < 3; i++) P.p(28 + i, 20 - i * 3, '#ffe066');
+  return P.outline().canvas();
+}
+const FR2 = {};
+function fr2(k, f) { const key = k + f; if (FR2[key]) return FR2[key]; return FR2[key] = ({ lambe: lambeArt, caranguejo: caranguejoArt, sapo: sapoArt })[k](f); }
+
+// ================= MUNDO DA T2: andar, seguidores, pessoas, baús, portas, inimigos no mapa =================
+const MAPS2 = {};
+const KEY2 = {           // legenda padrão dos tiles
+  '.': { t: 'tab' }, 'p': { t: 'tabV' }, ',': { t: 'pedra' }, ';': { t: 'grama' }, '_': { t: 'lodo' }, '=': { t: 'escada' },
+  '~': { t: 'agua', water: true }, '>': { t: 'corr', v: 0, water: true, push: 'right' }, 'v': { t: 'corr', v: 1, water: true, push: 'down' },
+  '<': { t: 'corr', v: 2, water: true, push: 'left' }, '^': { t: 'corr', v: 3, water: true, push: 'up' },
+  '#': { t: 'muro', solid: true }, ' ': { t: 'escuro', solid: true }, 'x': { t: 'tab', solid: true }, 'X': { t: 'pedra', solid: true }
+};
+const W2 = { map: null, id: null, x: 0, y: 0, px: 0, py: 0, dir: 'down', mv: null, t: 0, fol: [], float: false, idle: 0, ents: [], toast: null, sus: 0, cam: [0, 0] };
+const DIR2 = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+
+// ---------- carregar mapa ----------
+function tileOf(m, x, y) { if (x < 0 || y < 0 || x >= m.w || y >= m.h) return KEY2[' ']; const ch = m.rows[y][x]; return (m.key && m.key[ch]) || KEY2[ch] || KEY2['.']; }
+function bakeMap(m) {
+  if (m.baked) return;
+  m.h = m.rows.length; m.w = m.rows[0].length;
+  const c = mk(m.w * TS, m.h * TS), x = c.getContext('2d');
+  for (let ty = 0; ty < m.h; ty++) for (let tx = 0; tx < m.w; tx++) {
+    const T = tileOf(m, tx, ty);
+    if (T.water) continue;   // água é desenhada a cada quadro (anima)
+    x.drawImage(tileArt(T.t, T.v ?? (hash(tx, ty, 3) % 3), 0), tx * TS, ty * TS);
+  }
+  m.baked = c;
+  // água: lista de tiles + sombra das tábuas por cima e as estacas do cais
+  m.water = []; for (let ty = 0; ty < m.h; ty++) for (let tx = 0; tx < m.w; tx++) { const T = tileOf(m, tx, ty); if (T.water) m.water.push([tx, ty, T, !tileOf(m, tx, ty - 1).water && ty > 0]); }
+}
+function loadMap2(id, x, y, dir) {
+  const m = MAPS2[id]; bakeMap(m);
+  Object.assign(W2, { map: m, id, x, y, px: x * TS, py: y * TS, dir: dir || W2.dir, mv: null, float: !!tileOf(m, x, y).water });
+  W2.ents = (m.ents || []).filter(e => !(e.gone && e.gone()) && !(e.t === 'foe' && G.gone2[id + ':' + e.id])).map(e => Object.assign({ px: e.x * TS, py: e.y * TS, dir: e.dir || 'down', mv: null, t0: Math.random() * 100, wait: 60 + Math.random() * 120, home: [e.x, e.y] }, e));
+  W2.fol = [];
+  if (!W2.float) for (const k of partyKeys().slice(1)) W2.fol.push({ k, x, y, px: x * TS, py: y * TS, dir: W2.dir, mv: null });
+  G.pos = { map: id, x, y, dir: W2.dir };
+  W2.toast = { s: m.name, t: 0 };
+  if (m.music) playMusic(m.music);
+}
+function partyKeys() { return ['bau', 'lume', 'rita'].filter(k => k === 'bau' || G.flags['tem_' + k] !== false); }
+
+// ---------- colisão ----------
+function propSolid(m, x, y) { for (const pr of m.props || []) for (const [sx, sy, w, h] of pr.solid || []) if (x >= sx && x < sx + w && y >= sy && y < sy + h) return true; return false; }
+function entAt2(x, y) { return W2.ents.find(e => !e.passa && ((e.mv ? e.mv.tx : e.x) === x && (e.mv ? e.mv.ty : e.y) === y || (e.x === x && e.y === y))); }
+function canStand(x, y, who) {
+  const m = W2.map, T = tileOf(m, x, y);
+  if (T.solid || propSolid(m, x, y)) return false;
+  if (T.water && !(who === 'player' && G.flags.boiar)) return false;
+  if (who === 'player') { const e = entAt2(x, y); if (e && e.t !== 'foe' && e.t !== 'door' && e.t !== 'trig') return false; }
+  else { if (W2.x === x && W2.y === y) return false; const e = entAt2(x, y); if (e && e !== who) return false; }
+  return true;
+}
+
+// ---------- atualizar ----------
+function worldBusy2() { return V.busy2 > 0 || UI.stack.length > 0 || V.tw; }
+function run2(fn) { V.busy2 = (V.busy2 || 0) + 1; return Promise.resolve().then(fn).catch(e => console.error(e)).finally(() => { V.busy2--; }); }
+function stepTween(o, n = 8) { const m = o.mv; m.k++; const p = Math.min(1, m.k / (n * (m.fx !== m.tx && m.fy !== m.ty ? 1.41 : 1))); o.px = (m.fx + (m.tx - m.fx) * p) * TS; o.py = (m.fy + (m.ty - m.fy) * p) * TS; if (p >= 1) { o.x = m.tx; o.y = m.ty; o.mv = null; return true; } return false; }
+function startMove(o, tx, ty) { o.mv = { fx: o.x, fy: o.y, tx, ty, k: 0 }; }
+function updateWorld2() {
+  W2.t++;
+  if (W2.toast && ++W2.toast.t > 150) W2.toast = null;
+  // seguidores andam sempre (mesmo com diálogo aberto, terminam o passo)
+  for (const f of W2.fol) if (f.mv) stepTween(f);
+  for (const e of W2.ents) updateEnt(e);
+  if (W2.mv) {
+    if (stepTween(W2, W2.float ? 10 : 8)) arrived();
+    return;
+  }
+  if (worldBusy2()) { W2.idle = 0; return; }
+  if (btnp('menu')) { run2(menuGrupo); return; }
+  if (btnp('a')) { const [dx, dy] = DIR2[W2.dir], e = entAt2(W2.x + dx, W2.y + dy) || W2.ents.find(q => q.big && q.x <= W2.x + dx && W2.x + dx < q.x + q.big[0] && q.y - q.big[1] < W2.y + dy && W2.y + dy <= q.y); if (e && e.talk) { if (e.t === 'npc') e.dir = ({ up: 'down', down: 'up', left: 'right', right: 'left' })[W2.dir]; run2(() => e.talk(e)); return; } }
+  const d = ['up', 'down', 'left', 'right'].find(k => KEYS[k]);
+  if (!d) { W2.idle++; return; }
+  W2.idle = 0;
+  // diagonais: duas direções ao mesmo tempo. Sem cortar quina de parede; se a diagonal estiver fechada, desliza pelo eixo livre
+  const h = KEYS.left && !KEYS.right ? -1 : KEYS.right && !KEYS.left ? 1 : 0, v = KEYS.up && !KEYS.down ? -1 : KEYS.down && !KEYS.up ? 1 : 0;
+  if (h && v) {
+    const okH = canStand(W2.x + h, W2.y, 'player'), okV = canStand(W2.x, W2.y + v, 'player');
+    W2.dir = h > 0 ? 'right' : 'left';
+    if (okH && okV && canStand(W2.x + h, W2.y + v, 'player')) { tryStep(W2.x + h, W2.y + v); return; }
+    if (okH) { tryStep(W2.x + h, W2.y); return; }
+    if (okV) { W2.dir = v > 0 ? 'down' : 'up'; tryStep(W2.x, W2.y + v); return; }
+    if (W2.t % 16 === 0) sfx('bump'); return;
+  }
+  W2.dir = d;
+  const [dx, dy] = DIR2[d], nx = W2.x + dx, ny = W2.y + dy;
+  if (!canStand(nx, ny, 'player')) { if (W2.t % 16 === 0) sfx('bump'); return; }
+  tryStep(nx, ny);
+}
+function tryStep(nx, ny) {
+  const wasFloat = W2.float, toWater = !!tileOf(W2.map, nx, ny).water;
+  // seguidores: cada um vai para onde estava o da frente
+  if (!wasFloat && !toWater) { let px = W2.x, py = W2.y; for (const f of W2.fol) { const ox = f.x, oy = f.y; if (ox !== px || oy !== py) { f.dir = px > ox ? 'right' : px < ox ? 'left' : py > oy ? 'down' : 'up'; startMove(f, px, py); } px = ox; py = oy; } }
+  if (!wasFloat && toWater) { sfx('splash'); for (const f of W2.fol) startMove(f, W2.x, W2.y); W2.entering = 8; }
+  startMove(W2, nx, ny);
+  onMoveStart();
+}
+function arrived() {
+  const m = W2.map, T = tileOf(m, W2.x, W2.y);
+  // entrar / sair da água
+  if (T.water && !W2.float) { W2.float = true; W2.fol = []; if (!G.flags.tutBoiar) { G.flags.tutBoiar = true; run2(async () => { await say('* A Lume e a Rita pulam para dentro do baú. Lá dentro é maior do que parece. Ninguém comenta. Por enquanto.'); }); } }
+  else if (!T.water && W2.float) { W2.float = false; sfx('step'); W2.fol = partyKeys().slice(1).map(k => ({ k, x: W2.x, y: W2.y, px: W2.px, py: W2.py, dir: W2.dir, mv: null })); }
+  G.pos = { map: W2.id, x: W2.x, y: W2.y, dir: W2.dir };
+  // entidade no tile: porta, gatilho, inimigo
+  for (const e of W2.ents.slice()) {
+    if (e.x === W2.x && e.y === W2.y && e.t === 'door') { run2(() => goDoor(e)); return; }
+    if (e.t === 'trig' && W2.x >= e.x && W2.x < e.x + (e.w || 1) && W2.y >= e.y && W2.y < e.y + (e.h || 1) && !(e.once && G.flags[e.once])) { if (e.once) G.flags[e.once] = true; run2(() => e.run(e)); return; }
+  }
+  if (checkFoeTouch()) return;
+  // correnteza empurra o baú
+  if (T.push && W2.float && !worldBusy2()) {
+    const [dx, dy] = DIR2[T.push];
+    if (canStand(W2.x + dx, W2.y + dy, 'player')) { W2.dir = T.push; startMove(W2, W2.x + dx, W2.y + dy); return; }
+  }
+  // segurar a direção: continua andando sem parar
+  if (m.onStep) m.onStep(W2.x, W2.y);
+}
+function onMoveStart() { if (W2.map.hunters) hunterSeesMove(); }
+async function goDoor(e) {
+  sfx('door'); await fadeOut(10);
+  loadMap2(e.to, e.tx, e.ty, e.tdir || W2.dir);
+  if (MAPS2[e.to].onEnter) await MAPS2[e.to].onEnter();
+  await fadeIn(10);
+}
+
+// ---------- entidades ----------
+function updateEnt(e) {
+  if (e.mv) { stepTween(e, e.t === 'foe' ? (e.chasing ? 9 : 14) : (e.passo || 16)); return; }
+  if (e.rotina) { updateRotina(e); return; }
+  if (e.t === 'npc' && e.wander && !worldBusy2()) {
+    if (--e.wait > 0) return;
+    e.wait = 90 + Math.random() * 160;
+    const d = pickOne(['up', 'down', 'left', 'right']), [dx, dy] = DIR2[d], nx = e.x + dx, ny = e.y + dy;
+    e.dir = d;
+    if (Math.abs(nx - e.home[0]) + Math.abs(ny - e.home[1]) <= e.wander && canStand(nx, ny, e) && !tileOf(W2.map, nx, ny).water) startMove(e, nx, ny);
+  }
+  if (e.t === 'foe' && !worldBusy2()) {
+    const dist = Math.abs(e.x - W2.x) + Math.abs(e.y - W2.y);
+    e.chasing = dist <= (e.vision || 4) && !W2.float === !e.swim;
+    if (--e.wait > 0) return;
+    e.wait = e.chasing ? 2 : 30 + Math.random() * 50;
+    let d;
+    if (e.chasing) { const dx = W2.x - e.x, dy = W2.y - e.y; d = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); }
+    else d = pickOne(['up', 'down', 'left', 'right']);
+    const [dx, dy] = DIR2[d], nx = e.x + dx, ny = e.y + dy; e.dir = d;
+    const T = tileOf(W2.map, nx, ny);
+    if (nx === W2.x && ny === W2.y) { checkFoeTouch(e); return; }
+    if (Math.abs(nx - e.home[0]) + Math.abs(ny - e.home[1]) <= (e.range || 4) + (e.chasing ? 3 : 0) && !T.solid && !propSolid(W2.map, nx, ny) && (!!T.water === !!e.swim) && !entAt2(nx, ny)) startMove(e, nx, ny);
+  }
+  if (e.t === 'hunter') updateHunter(e);
+}
+function checkFoeTouch(only) {
+  if (worldBusy2()) return false;
+  for (const e of W2.ents) {
+    if (e.t !== 'foe' || (only && e !== only)) continue;
+    const ex = e.mv ? e.mv.tx : e.x, ey = e.mv ? e.mv.ty : e.y;
+    if (Math.abs(ex - W2.x) + Math.abs(ey - W2.y) <= (e === only ? 1 : 0) || (ex === W2.x && ey === W2.y)) { run2(() => mapFight(e)); return true; }
+  }
+  return false;
+}
+async function mapFight(e) {
+  sfx('encounter'); V.shake = 10;
+  await tw2flash();
+  const res = await lutaMapa(e.group, { music: e.music, bg: e.bg, boss: e.boss });
+  if (res === 'win') { G.gone2[W2.id + ':' + e.id] = true; W2.ents = W2.ents.filter(q => q !== e); if (e.after) await e.after(); }
+}
+function tw2flash() { return new Promise(r => { let k = 0; const f = () => { k++; V.fade = k % 6 < 3 ? 0.6 : 0; if (k < 18) requestAnimationFrame(f); else { V.fade = 0; r(); } }; f(); }); }
+
+// ---------- Caçadores da Guilda (disfarce de bagagem) ----------
+// O caçador anda e, de tempos em tempos, PARA E OLHA (aviso "!"). Se o baú se mexer dentro do cone dele, sobe a suspeita.
+function updateHunter(e) {
+  if (worldBusy2()) return;
+  e.cyc = (e.cyc || 0) + 1;
+  const per = e.per || 260, ph = e.cyc % per;
+  e.alerta = ph > per - 90 && ph < per - 70;                 // aviso: vai olhar
+  e.olhando = ph >= per - 70;                                // olhando (ninguém se mexe!)
+  if (ph === per - 70) { e.dir = e.lookDir || pickOne(['up', 'down', 'left', 'right']); sfx('select'); }
+  if (!e.olhando && !e.mv && ph % 30 === 0 && e.path) { let [tx, ty] = e.path[e.pi || 0]; if (e.x === tx && e.y === ty) { e.pi = ((e.pi || 0) + 1) % e.path.length; [tx, ty] = e.path[e.pi]; } const dx = Math.sign(tx - e.x), dy = dx ? 0 : Math.sign(ty - e.y); if ((dx || dy) && canStand(e.x + dx, e.y + dy, e)) { e.dir = dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up'; startMove(e, e.x + dx, e.y + dy); } }
+}
+function inCone(e, x, y) {
+  const [dx, dy] = DIR2[e.dir], rx = x - e.x, ry = y - e.y, fwd = rx * dx + ry * dy, side = Math.abs(rx * dy - ry * dx);
+  return fwd > 0 && fwd <= (e.vis || 5) && side <= Math.ceil(fwd / 2);
+}
+function hunterSeesMove() {
+  for (const e of W2.ents) if (e.t === 'hunter' && e.olhando && inCone(e, W2.x, W2.y)) {
+    W2.sus = Math.min(3, W2.sus + 1); e.viu = 40; sfx('cancel');
+    if (!G.flags.tutBagagem) { G.flags.tutBagagem = true; run2(() => say('* "Hm? Essa mala se mexeu?" Quando um caçador estiver OLHANDO (o "!" em cima dele), fique parado. Você é bagagem. Bagagem não anda.')); }
+    if (W2.sus >= 3) { W2.sus = 0; run2(() => cacadoresAtacam(e)); }
+    return;
+  }
+}
+
+// ---------- desenhar ----------
+function drawWorld2() {
+  const m = W2.map; if (!m) return;
+  const cx = m.w * TS <= W ? (m.w * TS - W) / 2 : Math.max(0, Math.min(m.w * TS - W, W2.px + 8 - W / 2)), cy = m.h * TS <= H ? (m.h * TS - H) / 2 : Math.max(0, Math.min(m.h * TS - H, W2.py + 8 - H / 2 - 8));
+  W2.cam = [Math.round(cx), Math.round(cy)];
+  const [ox, oy] = W2.cam;
+  bx.fillStyle = m.bg || '#0a0812'; bx.fillRect(0, 0, W, H);
+  // água animada
+  const wf = Math.floor(W2.t / 14) % 4;
+  for (const [tx, ty, T, shade] of m.water) {
+    const sx = tx * TS - ox, sy = ty * TS - oy; if (sx < -16 || sy < -16 || sx > W || sy > H) continue;
+    bx.drawImage(tileArt(T.t, T.v ?? (hash(tx, ty, 3) % 3), wf), sx, sy);
+    if (shade) { bx.fillStyle = 'rgba(10,20,30,0.45)'; bx.fillRect(sx, sy, 16, 4); bx.fillStyle = '#4a3020'; bx.fillRect(sx + 3, sy, 3, 6); bx.fillRect(sx + 11, sy, 3, 5); }
+  }
+  bx.drawImage(m.baked, -ox, -oy);
+  // tudo que tem pé, em ordem de profundidade
+  const list = [];
+  for (const pr of m.props || []) list.push({ y: pr.by ?? (pr.y * TS), draw: () => bx.drawImage(pr.img(), Math.round(pr.x * TS - ox + (pr.dx || 0)), Math.round(pr.y * TS - oy - pr.img().height + (pr.dy || 0))) });
+  for (const e of W2.ents) { const fr = e.spr ? e.spr(W2.t + e.t0, e.dir, e) : null; if (fr) list.push({ y: e.py + 15, draw: () => { drawFeet(fr, e.px - ox, e.py - oy, e); const k = e.acting || (e.mv && e.leva ? 'carregar' : null); if (k && ACT2[k]) ACT2[k](e, Math.round(e.px - ox), Math.round(e.py - oy), Math.floor(W2.t + e.t0), fr); } }); }
+  for (const f of W2.fol) { const fr = folSprite(f); if (fr) list.push({ y: f.py + 15, draw: () => drawFeet(fr, f.px - ox, f.py - oy, f) }); }
+  list.push({ y: W2.py + 15.5, draw: () => drawPlayer(ox, oy) });
+  list.sort((a, b) => a.y - b.y).forEach(d => d.draw());
+  // balões de aviso dos caçadores e cone
+  for (const e of W2.ents) if (e.t === 'hunter') drawHunterUI(e, ox, oy);
+  for (const e of W2.ents) if (e.emote && e.emote.t-- > 0) balao(Math.round(e.px - ox + 8), Math.round(e.py - oy - (e.h || 48) - 6), e.emote.s);
+  if (m.overlay) m.overlay(ox, oy);
+  if (m.dark) drawDark(ox, oy);
+  if (m.tint) { bx.fillStyle = m.tint; bx.fillRect(0, 0, W, H); }
+  // indicador de A sobre quem dá para conversar
+  const [dx, dy] = DIR2[W2.dir], near = entAt2(W2.x + dx, W2.y + dy);
+  if (near && near.talk && !worldBusy2() && near.t !== 'door') { const yy = near.py - oy - (near.h || 40) - 6 + Math.round(Math.sin(W2.t / 8)); txt('A', near.px - ox + 6, yy, { col: '#ffe066', shadow: true }); }
+  // HUD
+  if (W2.toast) { const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(120 - w / 2, 8, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, 120, 10, { align: 'center', col: '#ffe8b0', alpha: a }); }
+  if (m.hunters) { txt('SUSPEITA', 236, 4, { align: 'right', col: '#ff8a70' }); for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : '#3a2a3a'; bx.fillRect(196 + i * 12, 16, 9, 4); } }
+  if (G.cobres != null && m.showMoney) txt(G.cobres + ' cobres', 4, 4, { col: '#f0c040' });
+}
+function drawFeet(fr, x, y, o) {
+  const X = Math.round(x + 8 - fr.width / 2), Y = Math.round(y + 15 - fr.height + (o.bob || 0));
+  bx.globalAlpha = 0.3; bx.fillStyle = '#000'; bx.fillRect(Math.round(x + 8 - fr.width * 0.3), Math.round(y + 14), Math.round(fr.width * 0.6), 2); bx.globalAlpha = o.alpha ?? 1;
+  bx.drawImage(fr, X, Y); bx.globalAlpha = 1;
+}
+function drawPlayer(ox, oy) {
+  const D = IMG.chestMap[G.species] || IMG.chestMap.caixote; if (!D) return;
+  const moving = !!W2.mv, fr = D[W2.dir][moving ? (Math.floor(W2.t / 5) % D[W2.dir].length) : ((W2.t % 140) < 6 ? 1 : 0)];
+  let x = W2.px - ox, y = W2.py - oy, hop = moving && !W2.float ? -Math.abs(Math.sin(W2.mv.k / 8 * Math.PI)) * 3 : 0;
+  if (W2.float) {
+    const b = Math.sin(W2.t / 12) * 1.5;
+    bx.drawImage(fr, 0, 0, 16, 11, Math.round(x), Math.round(y + 2 + b), 16, 11);            // só a parte de cima aparece: o resto está na água
+    bx.fillStyle = 'rgba(190,230,245,0.7)'; const r = (W2.t / 3) % 10; bx.fillRect(Math.round(x - 1 - r / 3), Math.round(y + 12 + b), Math.round(18 + r / 1.5), 1);
+    return;
+  }
+  bx.globalAlpha = 0.3; bx.fillStyle = '#000'; bx.fillRect(Math.round(x + 2), Math.round(y + 14), 12, 2); bx.globalAlpha = 1;
+  bx.drawImage(fr, Math.round(x), Math.round(y + hop));
+}
+const FOLSPR = {};
+function folSprite(f) {
+  const t = W2.t + (f.k === 'rita' ? 13 : 0);
+  if (f.k === 'lume') { const S = IMG.spf.lumeh, F = IMG.sp.lumeHuman; const v = f.dir === 'up' ? S.b : f.dir === 'down' ? F : S.s; const fr = v[Math.floor(t / (f.mv ? 8 : 26)) % v.length]; return f.dir === 'right' ? flipC(fr) : fr; }
+  if (f.k === 'rita') { const S = IMG.spf.rita, F = IMG.sp.rita; const v = f.dir === 'up' ? S.b : f.dir === 'down' ? F : S.s; const fr = v[Math.floor(t / (f.mv ? 8 : 26)) % v.length]; return f.dir === 'right' ? flipC(fr) : fr; }
+  return null;
+}
+function drawHunterUI(e, ox, oy) {
+  const x = e.px - ox + 8, top = e.py - oy - 44;
+  if (e.alerta && W2.t % 10 < 6) txt('!', x, top - 10, { align: 'center', col: '#ffe066', shadow: true });
+  if (e.olhando) {
+    txt('!', x, top - 10, { align: 'center', col: '#ff6b6b', shadow: true });
+    // cone de visão em tiles
+    bx.fillStyle = 'rgba(255,90,90,0.16)';
+    for (let f = 1; f <= (e.vis || 5); f++) for (let s = -Math.ceil(f / 2); s <= Math.ceil(f / 2); s++) { const [dx, dy] = DIR2[e.dir], tx = e.x + dx * f + (dy ? s : 0), ty = e.y + dy * f + (dx ? s : 0); if (!tileOf(W2.map, tx, ty).solid) bx.fillRect(tx * TS - ox, ty * TS - oy, 16, 16); }
+  }
+  if (e.viu > 0) { e.viu--; txt('?', x + 8, top - 6, { col: '#ff8a70', shadow: true }); }
+}
+// escuridão com a luz da Vela da Lume em volta do grupo
+let DARKC = null;
+function drawDark(ox, oy) {
+  if (!DARKC) DARKC = mk(W, H);
+  const x = DARKC.getContext('2d');
+  x.globalCompositeOperation = 'source-over'; x.fillStyle = W2.map.dark; x.fillRect(0, 0, W, H);
+  x.globalCompositeOperation = 'destination-out';
+  const lights = [[W2.px - ox + 8, W2.py - oy + 4, 58 + Math.sin(W2.t / 9) * 2]];
+  for (const e of W2.ents) if (e.luz) lights.push([e.px - ox + 8, e.py - oy - 8, e.luz]);
+  for (const L of W2.map.lights || []) lights.push([L[0] * TS - ox + 8, L[1] * TS - oy + 8, L[2]]);
+  for (const [lx, ly, r] of lights) { const g = x.createRadialGradient(lx, ly, r * 0.2, lx, ly, r); g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(0.7, 'rgba(0,0,0,0.6)'); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.beginPath(); x.arc(lx, ly, r, 0, Math.PI * 2); x.fill(); }
+  bx.drawImage(DARKC, 0, 0);
+}
+
+// ---------- ROTINAS DOS MORADORES: andam até um ponto e FAZEM alguma coisa lá ----------
+// e.rotina = [{ at: [x, y], act: 'varrer', t: quadros, dir, leva: true (carrega caixa no caminho até aqui) }, ...]
+function updateRotina(e) {
+  if (worldBusy2()) return;
+  const R = e.rotina, r = R[e.ri || 0];
+  if (e.acting) {
+    e.bob = ACT_BOB[e.acting] ? ACT_BOB[e.acting](W2.t + e.t0) : 0;
+    if (--e.actT <= 0) { e.acting = null; e.bob = 0; e.ri = ((e.ri || 0) + 1) % R.length; e.leva = !!R[e.ri].leva; }
+    return;
+  }
+  const [tx, ty] = r.at;
+  if (e.x === tx && e.y === ty) { e.acting = r.act; e.actT = r.t || 240; if (r.dir) e.dir = r.dir; e.leva = false; return; }
+  if (--e.wait > 0) return;
+  e.wait = 6; e.leva = !!r.leva;
+  const dx = Math.sign(tx - e.x), dy = Math.sign(ty - e.y);
+  const tries = Math.abs(tx - e.x) >= Math.abs(ty - e.y) ? [[dx, 0], [0, dy], [0, 1], [0, -1]] : [[0, dy], [dx, 0], [1, 0], [-1, 0]];
+  if (dx && dy && canStand(e.x + dx, e.y, e) && canStand(e.x, e.y + dy, e)) tries.unshift([dx, dy]);
+  for (const [ax, ay] of tries) {
+    if (!ax && !ay) continue; const nx = e.x + ax, ny = e.y + ay;
+    if (canStand(nx, ny, e) && !tileOf(W2.map, nx, ny).water) { e.dir = ax > 0 ? 'right' : ax < 0 ? 'left' : ay > 0 ? 'down' : 'up'; startMove(e, nx, ny); e.stuck = 0; return; }
+  }
+  // alguém (o baú!) está no caminho: espera um pouco, olha feio e, se demorar, pula para a próxima tarefa
+  e.stuck = (e.stuck || 0) + 1; if (e.stuck === 8) e.emote = { s: '...', t: 60 };
+  if (e.stuck > 30) { e.stuck = 0; e.ri = ((e.ri || 0) + 1) % R.length; }
+}
+const ACT_BOB = {
+  brincar: t => -Math.abs(Math.sin(t / 7)) * 4,
+  varrer: t => (Math.floor(t / 10) % 2),
+  dancar: t => -Math.abs(Math.sin(t / 9)) * 2
+};
+// pontos do corpo no sprite do morador (~48 px): mão e cabeça
+function maoDe(e, x, y, fr) { const top = y + 15 - fr.height; return { mx: x + 8 + (e.dir === 'left' ? -6 : e.dir === 'right' ? 6 : 5), my: top + 30, top, cx: x + 8, f: e.dir === 'left' ? -1 : e.dir === 'right' ? 1 : (e.dir === 'up' ? 0 : 1) }; }
+function px2(x, y, c, w = 1, h = 1) { bx.fillStyle = c; bx.fillRect(Math.round(x), Math.round(y), w, h); }
+function balao(x, y, s, col = '#ffffff') { const w = Math.max(10, lineW(rich(s)) + 6); bx.fillStyle = '#0a0612'; bx.fillRect(x - w / 2 - 1, y - 1, w + 2, 13); bx.fillStyle = '#f2ecdc'; bx.fillRect(x - w / 2, y, w, 11); bx.fillRect(x - 1, y + 11, 3, 2); txt(s, x, y + 1, { align: 'center', col: '#2a1e1a' }); }
+const ACT2 = {
+  // varrer o cais: vassoura indo e vindo, poeirinha
+  varrer(e, x, y, t, fr) { const { mx, my, f } = maoDe(e, x, y, fr), s = Math.sin(t / 5) * 4; bx.strokeStyle = '#8a6a3a'; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(mx + 0.5, my - 6); bx.lineTo(mx + f * 6 + s + 0.5, y + 14); bx.stroke(); px2(mx + f * 6 + s - 3, y + 13, '#c8a050', 7, 2); if (t % 12 < 4) px2(mx + f * 9 + s, y + 12 - (t % 12), '#b8a890'); },
+  // pescar: vara, linha até a água e a boia subindo e descendo; às vezes fisga
+  pescar(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), dd = DIR2[e.dir], tx = x + 8 + dd[0] * 26, ty = y + 6 + dd[1] * 26, fis = t % 420 > 380; bx.strokeStyle = '#6a4a2a'; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(mx, my); bx.lineTo(mx + dd[0] * 16, my - 14 + dd[1] * 8); bx.stroke(); bx.strokeStyle = 'rgba(240,240,240,0.7)'; bx.beginPath(); bx.moveTo(mx + dd[0] * 16, my - 14 + dd[1] * 8); bx.lineTo(tx, ty + (fis ? 3 : 0)); bx.stroke(); px2(tx - 1, ty - 1 + (fis ? 3 : Math.round(Math.sin(t / 15))), '#e85a4a', 3, 2); px2(tx - 1, ty - 2 + (fis ? 3 : Math.round(Math.sin(t / 15))), '#ffffff', 3, 1); if (fis) balao(x + 8, y - 44, '!'); },
+  // carregar caixa na cabeça (andando com e.leva) e empilhar no destino
+  carregar(e, x, y, t, fr) { const top = y + 15 - fr.height + (e.bob || 0); bx.drawImage(caixaMini(), Math.round(x + 1), Math.round(top - 9)); },
+  empilhar(e, x, y, t, fr) { const top = y + 15 - fr.height, p = Math.min(1, (t % 120) / 40); if (p < 1) bx.drawImage(caixaMini(), Math.round(x + 1 + DIR2[e.dir][0] * 10 * p), Math.round(top - 9 + 30 * p)); },
+  // acender poste: vara comprida com a chama na ponta, até a lanterna do poste
+  acender(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), dd = DIR2[e.dir], ex = x + 8 + dd[0] * 14, ey = y - 92; bx.strokeStyle = '#5a4a3a'; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(mx, my); bx.lineTo(ex, ey); bx.stroke(); px2(ex - 1, ey - 3, t % 8 < 4 ? '#ffd060' : '#ff9a30', 3, 3); px2(ex, ey - 4, '#fff0c0'); },
+  // tocar o sininho de lata: puxa a corda (e soa baixinho, se o baú estiver perto)
+  sino(e, x, y, t, fr) { const { top } = maoDe(e, x, y, fr), pull = (t % 90) < 20 ? 4 : 0; bx.strokeStyle = '#c8b890'; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(x + 13, top - 40); bx.lineTo(x + 13, top + 30 + pull); bx.stroke(); if (t % 90 === 0 && Math.abs(e.x - W2.x) + Math.abs(e.y - W2.y) < 9) sfx('sino', 880); if ((t % 90) < 30) txt('♪', x + 18, top - 8 - (t % 90) / 3, { col: '#ffe066' }); },
+  // estender roupa no varal
+  varal(e, x, y, t, fr) { const { top } = maoDe(e, x, y, fr); bx.strokeStyle = '#d8d0c0'; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(x - 14, top + 6); bx.lineTo(x + 30, top + 6); bx.stroke(); const n = Math.min(4, 1 + Math.floor((t % 600) / 120)); for (let i = 0; i < n; i++) px2(x - 12 + i * 11, top + 7, ['#e86890', '#5a9ad0', '#f0c040', '#ffffff'][i], 8, 9 + (i % 2) * 3); },
+  // regar as plantas da horta do telhado
+  regar(e, x, y, t, fr) { const { mx, my, f } = maoDe(e, x, y, fr); px2(mx + f * 2 - 3, my - 2, '#7a8a9a', 6, 5); px2(mx + f * 6, my - 1, '#7a8a9a', 3, 1); for (let i = 0; i < 3; i++) if ((t + i * 5) % 15 < 8) px2(mx + f * (8 + i), my + 2 + ((t + i * 5) % 15), '#8fd0f0'); },
+  // limpar o balcão com um pano
+  limpar(e, x, y, t, fr) { const { my } = maoDe(e, x, y, fr), s = Math.sin(t / 8) * 6; px2(x + 4 + s, my + 2, '#e8dcc0', 7, 3); },
+  // remendar rede de pesca no colo
+  remendar(e, x, y, t, fr) { const { my } = maoDe(e, x, y, fr); bx.strokeStyle = '#c8b890'; bx.lineWidth = 1; for (let i = 0; i < 4; i++) { bx.beginPath(); bx.moveTo(x - 2 + i * 6, my); bx.lineTo(x + 2 + i * 6, my + 10); bx.stroke(); } bx.beginPath(); bx.moveTo(x - 2, my + 4); bx.lineTo(x + 20, my + 4); bx.stroke(); if (t % 40 < 20) px2(x + 8 + (t % 40) / 4, my + 3, '#c8c8d8'); },
+  // beber (caneca sobe e desce) e cochilar (zzz)
+  beber(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), up = (t % 160) < 40 ? 10 : 0; px2(mx - 2, my - up - 2, '#c8a060', 5, 6); px2(mx - 2, my - up - 2, '#f2ecdc', 5, 1); },
+  cochilar(e, x, y, t, fr) { const { top } = maoDe(e, x, y, fr); const k = t % 120; txt(k < 40 ? 'z' : k < 80 ? 'zZ' : 'zZz', x + 16, top - 4 - (k % 40) / 8, { col: '#b8aecb' }); },
+  // conversar: balãozinho de reticências que vai e volta
+  conversar(e, x, y, t, fr) { if (t % 200 < 120) balao(x + 8, y + 15 - fr.height - 14, ['...', '!', '?', 'hã!', 'pois é'][Math.floor(t / 200) % 5]); },
+  // brincar (pula) e olhar o rio (parado, de vez em quando suspira)
+  brincar(e, x, y, t, fr) { if (t % 180 < 40) balao(x + 8, y + 15 - fr.height - 14 + (e.bob || 0), '♪'); },
+  olhar(e, x, y, t, fr) { if (t % 300 < 50) balao(x + 8, y + 15 - fr.height - 14, '...'); },
+  dancar(e, x, y, t, fr) { if (t % 60 < 30) txt('♪', x + 18, y + 15 - fr.height - 4, { col: '#ffe066' }); },
+  rezar(e, x, y, t, fr) { const { top } = maoDe(e, x, y, fr); if (t % 160 < 60) txt('+', x + 18, top - 2 - (t % 160) / 12, { col: '#ffe8b0' }); }
+};
+let CAIXA_MINI = null;
+function caixaMini() { if (CAIXA_MINI) return CAIXA_MINI; const P = new Pix(14, 11), B = ramp('#9a7a4a'); for (let y = 0; y < 10; y++) for (let x = 0; x < 13; x++) P.p(x, y + 1, P.tone(B, 0.62 - y / 22 - x / 40 + (x === 0 || y === 0 ? 0.15 : 0), x, y)); P.line(1, 2, 12, 10, B[1]); return CAIXA_MINI = P.outline().canvas(); }
+
+// ================= ARTE DO CAP. 2: interiores, igreja afundada, cenários de batalha e a ÂNCORA-MÃE =================
+// tiles extras: parede de madeira (interior) e tapete
+{ const _ta = tileArt; tileArt = function (k, v = 0, f = 0) {
+  if (k !== 'parm' && k !== 'tapete' && k !== 'piso') return _ta(k, v, f);
+  const key = k + '_' + v + '_' + f; if (TILE2[key]) return TILE2[key];
+  const P = new Pix(16, 16);
+  if (k === 'parm') { const Wd = ramp('#5a3a2a'); for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, P.tone(Wd, (x % 4 === 0 ? 0.25 : 0.5) - y / 60 + ((hash(x >> 2, v, 4) % 5) - 2) * 0.04, x, y)); P.rect(0, 13, 16, 3, Wd[0]); }
+  if (k === 'tapete') { const R = ramp('#8a3a4a'); for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, P.tone(R, 0.5 + (((x + y) % 4 === 0) ? 0.15 : 0) - (((x - y + 16) % 8 === 0) ? 0.15 : 0), x, y)); }
+  if (k === 'piso') { const Wd = ramp('#9a6a42'); for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const b = y >> 2; P.p(x, y, P.tone(Wd, 0.5 + (y % 4 === 0 ? 0.12 : 0) + ((hash(b, (x + b * 5) >> 3, v) % 5) - 2) * 0.05 - ((x + b * 5) % 8 === 0 ? 0.2 : 0), x, y)); } }
+  return TILE2[key] = P.canvas();
+}; }
+Object.assign(KEY2, { 'w': { t: 'parm', solid: true }, 'r': { t: 'tapete' }, 'o': { t: 'piso' } });
+
+// ---------- móveis e objetos (escala: balcão ~1 m = 30 px, prateleira ~2 m) ----------
+function balcaoArt(w) { const P = new Pix(w * TS, 34), Wd = ramp('#7a4a2a'); P.cyl(0, 4, w * TS, 6, Wd, true); for (let y = 10; y < 34; y++) for (let x = 2; x < w * TS - 2; x++) P.p(x, y, P.tone(Wd, 0.45 - (x % 12 === 0 ? 0.2 : 0) - y / 90, x, y)); for (let i = 0; i < w * 2; i++) { const x = 4 + i * 7; P.ball(x + 2, 2, 2.5, 2.5, ramp(['#e8a030', '#5a9a4a', '#c83a3a', '#7ad0f0'][i % 4])); } return P.outline().canvas(); }
+function estanteArt(w) { const P = new Pix(w * TS, 60), Wd = ramp('#5a3a24'); for (let y = 0; y < 60; y++) for (let x = 0; x < w * TS; x++) P.p(x, y, P.tone(Wd, 0.3 + (x < 3 || x > w * TS - 4 ? 0.2 : 0), x, y)); for (const sy of [14, 30, 46]) { P.rect(2, sy, w * TS - 4, 3, Wd[3]); for (let x = 4; x < w * TS - 6; x += 5) { const h = 6 + (hash(x, sy, 1) % 6); P.rect(x, sy - h, 4, h, ramp(['#c83a3a', '#3a6ab8', '#e8a030', '#5a9a4a', '#d8c8a0'][hash(x, sy, 2) % 5])[2]); } } return P.outline().canvas(); }
+function mesaArt() { const P = new Pix(40, 26), Wd = ramp('#8a5a34'); P.cyl(0, 4, 40, 6, Wd, true); P.rect(3, 10, 4, 16, Wd[1]); P.rect(33, 10, 4, 16, Wd[1]); P.ball(12, 2, 3, 3, ramp('#e8dcc0')); P.rect(24, 0, 5, 5, ramp('#c8a060')[2]); return P.outline().canvas(); }
+function camaArt() { const P = new Pix(36, 30), Wd = ramp('#6a4028'); P.rect(0, 4, 36, 26, Wd[1]); P.rect(2, 8, 32, 18, ramp('#d8c8e8')[2]); P.rect(2, 8, 10, 8, ramp('#f2ecdc')[3]); P.rect(14, 12, 20, 14, ramp('#5a7aa8')[2]); P.rect(0, 0, 36, 6, Wd[2]); return P.outline().canvas(); }
+function fonteArt() {
+  const P = new Pix(56, 40), S = ramp('#8a8290');
+  P.ball(28, 26, 27, 12, S); P.ball(28, 25, 22, 9, ['#1c3a54', '#244a66', '#2e5a78', '#3a6e8e', '#5a90a8']);
+  P.cyl(24, 4, 8, 22, S); P.ball(28, 4, 6, 3, S);
+  P.ball(28, 0, 3, 3, ramp('#c89a40'));                                                         // um peixinho de bronze, com limo
+  for (let i = 0; i < 8; i++) P.p(8 + i * 5, 31 + (i % 2), ramp('#4a7a4a')[3]);
+  return P.outline().canvas();
+}
+// a igreja afundada: só o frontão e a escadaria que desce para dentro d'água
+function igrejaArt() {
+  const W = 112, H = 150, P = new Pix(W, H), S = ramp('#9a8a8a'), RF = ramp('#5a4a5a');
+  for (let y = 46; y < H - 6; y++) for (let x = 6; x < W - 6; x++) { const row = y >> 3, off = (row % 2) * 6, edge = (y % 8 === 7) || ((x + off) % 12 === 11); P.p(x, y, edge ? S[0] : P.tone(S, 0.62 - x / W * 0.25 + ((hash(x >> 3, row, 3) % 5) - 2) * 0.04 - (y > H - 46 ? 0.15 : 0), x, y)); }
+  P.poly([[0, 48], [W, 48], [W / 2, 4]], (x, y) => P.tone(RF, 0.7 - (y - 4) / 60 + (x < W / 2 ? 0.08 : -0.08), x, y));
+  P.ball(W / 2, 30, 8, 8, ['#2a3a5a', '#3a5a8a', '#7ab0e0', '#c8e8ff', '#ffffff'], { amb: 0.4 });  // rosácea
+  for (let i = 0; i < 6; i++) P.line(W / 2, 30, W / 2 + Math.cos(i) * 8, 30 + Math.sin(i) * 8, '#2a2030');
+  // portal em arco, metade debaixo d'água
+  for (let y = 70; y < H - 4; y++) for (let x = 36; x < 76; x++) { const r = Math.hypot(x - 56 + 0.5, Math.max(0, 90 - y)); if (r < 20) P.p(x, y, y > H - 40 ? P.tone(['#0a1a2a', '#14304a', '#1c3a54', '#2e5a78', '#3a6e8e'], 0.4 + Math.sin(x * 0.5) * 0.05, x, y) : '#140e1a'); }
+  for (let y = H - 40; y < H - 4; y++) for (let x = 6; x < W - 6; x++) if ((y - (H - 40)) % 5 === 0 && hash(x, y, 9) % 4 === 0) P.p(x, y, ramp('#4a6a4a')[2]);    // marca d'água
+  P.rect(52, 50, 8, 3, ramp('#c89a40')[2]); P.rect(55, 46, 2, 10, ramp('#c89a40')[2]);
+  P.outline(); return P.canvas();
+}
+
+// ---------- cenários de batalha ----------
+let BG_CIDADE = null, BG_AFOGADO = null, BG_POCO = null;
+function bgCidade() {
+  if (BG_CIDADE) return BG_CIDADE;
+  const P = new Pix(240, 150), sky = ['#3e2656', '#5c3062', '#82406a', '#a8526a', '#c86a62', '#e08a5a', '#f0aa60'];
+  for (let y = 0; y < 70; y++) for (let x = 0; x < 240; x++) { const f = y / 70 * (sky.length - 1), i = Math.floor(f); P.p(x, y, sky[Math.min(sky.length - 1, (f - i) > (BAYER4[y & 3][x & 3] + 0.5) / 16 ? i + 1 : i)]); }
+  // casas da praça, com janelas acesas
+  const cs = [[0, 40, '#8a5a3a', '#7a2a2a'], [44, 30, '#9a7a5a', '#4a4a6a'], [150, 36, '#7a5a4a', '#6a3a2a'], [196, 44, '#a8704a', '#8a3a2a']];
+  for (const [x, w, wc, rc] of cs) { for (let y = 38; y < 112; y++) for (let i = 0; i < w; i++) P.p(x + i, y, P.tone(ramp(wc), 0.4 - i / w * 0.15 - ((y - 38) % 6 === 0 ? 0.1 : 0), x + i, y)); P.poly([[x - 2, 40], [x + w + 2, 40], [x + w / 2, 22]], (xx, yy) => P.tone(ramp(rc), 0.45, xx, yy)); for (let k = 0; k < 2; k++) P.rect(x + 6 + k * 14, 56, 8, 10, '#f0b050'); }
+  // a torre torta no meio
+  for (let y = 4; y < 112; y++) { const lean = Math.round((112 - y) * 0.06); for (let x = 102; x < 134; x++) P.p(x + lean, y, P.tone(ramp('#8a7a7a'), 0.5 - (x - 102) / 50, x, y)); }
+  P.poly([[98 + 6, 6], [138 + 6, 6], [120 + 7, -20]], ramp('#4a5a7a')[1]);
+  for (let y = 16; y < 40; y++) for (let x = 112; x < 126; x++) if (Math.hypot(x - 119, Math.max(0, 24 - y)) < 7 || y > 24) P.p(x + 6, y, '#1a1424');
+  // calçamento e poças refletindo o céu
+  for (let y = 112; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, P.tone(ramp('#6a6470'), 0.5 - (y - 112) / 80 + (((x >> 3) + (y >> 2)) % 2 ? 0.06 : 0), x, y));
+  for (const [x, y, w] of [[30, 128, 40], [150, 138, 50], [96, 122, 22]]) for (let i = 0; i < w; i++) for (let j = 0; j < 7; j++) if (Math.hypot((i - w / 2) / (w / 2), (j - 3) / 3.2) < 1) P.p(x + i, y + j, P.tone(['#5c3062', '#82406a', '#c86a62', '#e08a5a', '#f0aa60'], 0.75 - j * 0.08, x + i, y + j));
+  return BG_CIDADE = P.canvas();
+}
+function bgAfogado() {
+  if (BG_AFOGADO) return BG_AFOGADO;
+  const P = new Pix(240, 150), deep = ['#08141e', '#0c1e2c', '#12293a', '#1a3a4e', '#24506a'];
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, P.tone(deep, 0.85 - y / 160 + Math.sin(x * 0.04 + y * 0.02) * 0.04, x, y));
+  // raios de luz entrando pela água
+  for (const [x0, w] of [[30, 18], [110, 26], [190, 14]]) for (let y = 0; y < 120; y++) for (let i = 0; i < w; i++) if ((x0 + i + y * 0.3) % 1 < 1 && hash(i, y, x0) % 3) P.p(Math.round(x0 + i + y * 0.3), y, P.tone(deep, 0.95 + (1 - y / 120) * 0.1, x0 + i, y));
+  // casas afogadas (silhuetas com janelas escuras)
+  for (const [x, w, h] of [[0, 46, 70], [60, 36, 54], [150, 40, 64], [200, 40, 80]]) { for (let y = 112 - h; y < 112; y++) for (let i = 0; i < w; i++) P.p(x + i, y, P.tone(['#0a1a24', '#10242e', '#163040', '#1e3c4e', '#28506a'], 0.45 - i / w * 0.15, x + i, y)); P.poly([[x - 2, 112 - h], [x + w + 2, 112 - h], [x + w / 2, 112 - h - 14]], '#0e2230'); for (let k = 0; k < 2; k++) P.rect(x + 6 + k * 16, 112 - h + 14, 8, 10, '#06101a'); }
+  // algas balançando (desenhadas fixas) e chão de lodo com tralha
+  for (let i = 0; i < 18; i++) { const x = (i * 53) % 240, h = 12 + (i * 7) % 20; for (let j = 0; j < h; j++) P.p(x + Math.round(Math.sin(j * 0.4 + i) * 2), 150 - 40 - j + 30, ramp('#2a5a3a')[1 + (j % 3)]); }
+  for (let y = 112; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, P.tone(ramp('#3a3a2e'), 0.45 - (y - 112) / 90 + ((hash(x, y, 4) % 7) - 3) * 0.02, x, y));
+  for (const [x, y] of [[40, 118], [130, 122], [200, 116]]) { P.ball(x, y, 6, 3, ramp('#5a4a3a')); }
+  P.rect(170, 114, 22, 3, ramp('#6a4a2a')[1]); P.rect(176, 111, 3, 6, ramp('#6a4a2a')[1]);   // um remo
+  return BG_AFOGADO = P.canvas();
+}
+function bgPoco() {
+  if (BG_POCO) return BG_POCO;
+  const P = new Pix(240, 150), deep = ['#06100a', '#0a1a14', '#10261e', '#183428', '#224838'];
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, P.tone(deep, 0.6 - Math.hypot(x - 120, y - 40) / 300, x, y));
+  // paredes do poço, curvas, em pedra
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) { const d = Math.abs(x - 120) / 120; if (d > 0.78 - y / 900) { const row = y >> 3, edge = (y % 8 === 7) || (((x + row * 5) % 14) === 0); P.p(x, y, edge ? '#0a1210' : P.tone(ramp('#4a5a52'), 0.4 - (d - 0.7) + ((hash(x >> 3, row, 6) % 5) - 2) * 0.04, x, y)); } }
+  // correntes descendo do alto
+  for (const cx of [60, 96, 150, 184]) for (let y = 0; y < 100 + (cx % 3) * 10; y += 5) { P.ball(cx + Math.round(Math.sin(y * 0.05) * 2), y, 2, 3, ramp('#5a5a6a')); }
+  // água parada no fundo, com o reflexo das lembranças (pontinhos âmbar)
+  for (let y = 112; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, P.tone(['#0a1a24', '#10283a', '#163a50', '#1e4a64', '#2a6080'], 0.4 + Math.sin(x * 0.2 + y) * 0.05, x, y));
+  for (let i = 0; i < 30; i++) P.p((i * 71) % 240, 114 + (i * 13) % 34, i % 3 ? '#e8a030' : '#fff0a0');
+  return BG_POCO = P.canvas();
+}
+
+// ---------- A ÂNCORA-MÃE (chefe do Cap. 2) ----------
+// O primeiro sino de Velhágua, a Dona Badalada, que caiu no rio numa cheia há cem anos. Virou um bicho-ermitão:
+// o SINO é o casco (bronze com azinhavre, cracas, rachado), as PERNAS são correntes de navio, uma delas termina numa
+// ÂNCORA de verdade. Lá dentro, dois olhos de âmbar escuro. Fase 2: o sino sobe e mostra o corpo de correntes.
+// Fase 3: o sino racha, e pela rachadura vaza luz âmbar com silhuetas de gente (as lembranças que ela guardou).
+const ANC_CACHE = {};
+function ancoraFrame(ph, f, hurt) { const k = ph + '_' + f + '_' + (hurt ? 1 : 0); return ANC_CACHE[k] || (ANC_CACHE[k] = ancoraArt(ph, f, hurt)); }
+function ancoraArt(ph, f, hurt) {
+  const W = 112, H = 116, P = new Pix(W, H), BZ = ramp('#a87a3a'), AZ = ramp('#4a8a7a'), CH = ramp('#5a5a6a');
+  const cx = 58, lift = ph >= 2 ? 14 : 0, sw = f === 1 ? 1 : 0, atk = f >= 2;
+  // --- pernas de corrente (atrás do sino) ---
+  const legs = [[-34, 1], [-20, 0], [20, 0], [34, 1]];
+  for (const [dx, k] of legs) {
+    const x0 = cx + dx * 0.5, y0 = 70 - lift, x1 = cx + dx + (k ? sw : -sw) * 2, y1 = 112;
+    const mx = (x0 + x1) / 2 + (dx < 0 ? -10 : 10), my = (y0 + y1) / 2 - 10;
+    for (let t = 0; t <= 1; t += 1 / 12) { const x = (1 - t) * (1 - t) * x0 + 2 * (1 - t) * t * mx + t * t * x1, y = (1 - t) * (1 - t) * y0 + 2 * (1 - t) * t * my + t * t * y1; P.ball(x, y, 2.6, 3.2, CH, { clip: (a, b) => Math.hypot(a + 0.5 - x, b + 0.5 - y) > 1.1 }); }
+  }
+  // a ÂNCORA: o braço direito (da tela, esquerda do bicho) termina numa âncora de navio
+  const ax = atk ? 6 : 14, ay = atk ? (f === 3 ? 98 : 40) : 62 - lift;
+  for (let t = 0; t <= 1; t += 1 / 10) { const x = cx - 18 + (ax - cx + 18) * t, y = 62 - lift + (ay - 62 + lift) * t - Math.sin(t * Math.PI) * 14; P.ball(x, y, 2.4, 3, CH, { clip: (a, b) => Math.hypot(a + 0.5 - x, b + 0.5 - y) > 1 }); }
+  P.cyl(ax - 2, ay, 5, 18, ramp('#4a4a58'));
+  P.poly([[ax - 12, ay + 12], [ax + 13, ay + 12], [ax + 9, ay + 22], [ax + 1, ay + 16], [ax - 8, ay + 22]], (x, y) => P.tone(ramp('#4a4a58'), 0.7 - (y - ay - 12) * 0.05, x, y));
+  P.cyl(ax - 7, ay + 2, 15, 3, ramp('#4a4a58'), true); P.ball(ax, ay - 2, 3, 3, ramp('#4a4a58'), { clip: (a, b) => Math.hypot(a + 0.5 - ax, b + 0.5 - ay + 2) > 1.4 });
+  // fase 2+: corpo de correntes enroladas aparece debaixo do sino
+  if (ph >= 2) { for (let i = 0; i < 18; i++) { const a = i * 0.7, r = 6 + (i % 6) * 2; P.ball(cx + Math.cos(a) * r, 80 + Math.sin(a) * r * 0.5, 2.5, 3, CH); } P.ball(cx, 82, 7, 6, ramp('#5a2a14'), { amb: 0.5 }); P.ball(cx, 82, 3, 3, ramp('#e8a030'), { amb: 0.6 }); }
+  // --- o SINO (casco) ---
+  const by = 18 - lift + (sw ? 1 : 0), bh = 58, top = by, bot = by + bh;
+  const half = y => { const k = (y - top) / bh; return 12 + k * 24 + (k > 0.85 ? (k - 0.85) * 40 : 0); };
+  for (let y = top; y <= bot; y++) { const hw = half(y); for (let x = Math.round(cx - hw); x <= Math.round(cx + hw); x++) {
+    const u = (x - cx) / hw, nz = Math.sqrt(Math.max(0, 1 - u * u)), I = 0.2 + 0.8 * Math.max(0, -u * 0.55 + nz * 0.65 - (y - top) / bh * 0.15);
+    // azinhavre (verde) escorrendo de cima, em manchas
+    const pat = hash(x >> 2, (y + (x >> 3)) >> 2, 11) % 10 < (y < top + 16 ? 6 : 3);
+    P.p(x, y, P.tone(pat ? AZ : BZ, I, x, y));
+  } }
+  P.ball(cx, top + 1, 12, 5, BZ, { clip: (x, y) => y < top + 2 }); P.cyl(cx - 4, top - 8, 8, 9, BZ);   // cabeça e asa do sino
+  P.ball(cx, top - 9, 5, 4, BZ, { clip: (x, y) => Math.hypot(x + 0.5 - cx, y + 0.5 - top + 9) > 2.4 });
+  // frisos e a inscrição meio apagada
+  for (const yy of [top + 14, top + 40, bot - 3]) { const hw = half(yy); for (let x = Math.round(cx - hw); x <= Math.round(cx + hw); x++) { P.p(x, yy, BZ[4 - (x > cx ? 2 : 0)]); P.p(x, yy + 1, BZ[1]); } }
+  for (let i = 0; i < 9; i++) if (i !== 4) { const x = cx - 18 + i * 4; P.rect(x, top + 27, 2, 4, BZ[1]); }
+  // cracas e algas penduradas
+  for (const [x, y] of [[cx - 20, top + 46], [cx + 16, top + 50], [cx - 6, top + 52], [cx + 24, top + 34], [cx - 26, top + 36]]) { P.ball(x, y, 2.2, 2, ramp('#d8d0c0')); P.p(x, y, '#5a5040'); }
+  for (let i = 0; i < 7; i++) { const x = Math.round(cx - 30 + i * 10), L = 6 + (i * 5) % 10; for (let j = 0; j < L; j++) P.p(x + Math.round(Math.sin(j * 0.6 + i + sw) * 1.5), bot + j - 2, ramp('#2a5a3a')[1 + (j % 3)]); }
+  // boca do sino: escuro e os dois olhos de âmbar
+  const my = bot - 2;
+  for (let x = Math.round(cx - half(bot)) + 2; x <= Math.round(cx + half(bot)) - 2; x++) P.p(x, my, '#0a0608');
+  const eyeY = my - (ph >= 2 ? 0 : 5), eh = hurt ? 0 : atk ? 2 : 1;
+  for (const ex of [cx - 9, cx + 9]) { P.ball(ex, eyeY, 3.2, 1.5 + eh * 0.4, ['#5a2a08', '#a85a10', '#f0a030', '#ffd870', '#fff8d0'], { amb: 0.5 }); P.p(ex, eyeY, '#fff8d0'); }
+  // fase 3: rachadura vazando luz e silhuetas (lembranças da cidade)
+  if (ph >= 3) {
+    let x = cx + 6, y = top + 4; const glow = ['#7a3a08', '#c87a1a', '#f0b040', '#ffe08a', '#fff8e0'];
+    for (let i = 0; i < 26; i++) { P.p(x, y, glow[3]); P.p(x + 1, y, glow[2]); x += (i % 3) - 1; y += 2; }
+    for (const [sx, sy] of [[cx - 14, top + 22], [cx + 2, top + 30], [cx + 16, top + 20]]) { P.ball(sx, sy, 2.2, 2.2, glow, { amb: 0.6 }); P.rect(sx - 2, sy + 2, 5, 6, glow[2]); }
+  }
+  if (hurt) for (let i = 0; i < 6; i++) P.p(cx - 20 + i * 8, top + 10 + (i % 2) * 6, '#ffffff');
+  P.outline();
+  return P.canvas();
+}
+// a corrente que prende um aliado (alvo separado na fase 2)
+let CORR_C = null;
+function correnteArt() {
+  if (CORR_C) return CORR_C;
+  const P = new Pix(22, 60), CH = ramp('#6a6a7a');
+  for (let y = 0; y < 60; y += 5) P.ball(11 + Math.round(Math.sin(y * 0.15) * 3), y + 2, 3, 3.5, CH, { clip: (a, b) => Math.hypot(a + 0.5 - 11 - Math.sin(y * 0.15) * 3, b + 0.5 - y - 2) > 1.3 });
+  for (let i = 0; i < 5; i++) P.p(8 + i, 20 + i * 8, ramp('#9a4a2a')[2]);                          // ferrugem
+  return CORR_C = P.outline().canvas();
+}
+// o Caçador da Guilda e o Pavio, para batalha (humanos do gerador, olhando para a esquerda)
+const CAC_HUM = { hat: '#2a2a3a', coat: '#3a3a4a', hair: '#2a1a1a', top: '#5a4a3a', bottom: '#2a2a30', skin: '#d8a070', extra: (P, o) => { if (o.view === 's') { P.line(o.cx - 8, o.tT + 8, o.cx + 4, o.tT + 8, '#6a4a2a'); P.rect(o.cx - 9, o.tT + 6, 2, 5, '#8a8a9a'); } } };
+
+// ================= GRUPO DA T2: vida que continua, equipamentos, itens, loja, Marcos, menu =================
+// ---------- equipamentos (só formas humanas: Lume e Rita por enquanto) ----------
+// mod: atributos; fx: efeitos especiais que as técnicas conferem. Todo item tem vantagem e desvantagem.
+const EQ2 = {
+  lancaPedagio: { nm: 'Lança do Pedágio', slot: 'arma', who: ['rita'], mod: { atk: 4 }, fx: ['estocada3'], preco: 0, d: 'Troféu do Espantalho. +4 ATQ; a Estocada quebra 3 de escudo. Pesada: -1 VEL.', mod2: { spd: -1 } },
+  escudoTampa: { nm: 'Escudo de Tampa', slot: 'roupa', who: ['rita'], mod: { def: 4, spd: -1 }, fx: ['provoca3'], preco: 120, d: 'Uma tampa de bueiro com alça. +4 DEF; Provocar dura 3 vezes. -1 VEL.' },
+  sapatilha: { nm: 'Sapatilha de Palco', slot: 'amuleto', who: ['lume'], mod: { spd: 2, def: -2 }, fx: ['esquiva'], preco: 90, d: 'Às vezes desvia sozinha de golpes rápidos. +2 VEL, -2 DEF.' },
+  microfone: { nm: 'Microfone de Lata', slot: 'arma', who: ['lume'], mod: { mag: 2 }, fx: ['microfone'], preco: 150, d: 'O Acalanto vira Acalanto em Coro: cura o grupo todo, mas custa o dobro de PM.' },
+  xaleVelas: { nm: 'Xale de Velas', slot: 'roupa', who: ['lume'], mod: { mdef: 3, spd: -1 }, fx: ['vela5'], preco: 0, d: 'Bordado com velinhas. A Vela Protetora dura 5 vezes. +3 DEF mágica, -1 VEL.' },
+  foneRemendado: { nm: 'Fone Remendado', slot: 'amuleto', who: ['lume'], mod: {}, fx: ['fone'], preco: 0, d: 'Com fita isolante. A Lume canta uma música que só os dois conhecem: curas +15%.' },
+  anelPedagio: { nm: 'Anel do Pedágio', slot: 'amuleto', who: ['lume', 'rita'], mod: {}, fx: ['anel'], preco: 0, maldito: true, d: 'AMALDIÇOADO. +30% de dano. Cada ação cobra 5 de Tensão do grupo.' },
+  luvaPescador: { nm: 'Luva de Pescador', slot: 'roupa', who: ['rita'], mod: { atk: 2, def: 2 }, fx: ['agua'], preco: 0, d: 'Do Seu Tobias. +2 ATQ e DEF; leva metade do dano de golpes de água.' }
+};
+const SLOTS2 = { arma: 'Arma', roupa: 'Roupa', amuleto: 'Amuleto' };
+function eqOf(id) { return (G.eq && G.eq[id]) || {}; }
+function eqFx(id) { const s = new Set(); for (const k of Object.values(eqOf(id))) if (k && EQ2[k]) for (const f of EQ2[k].fx || []) s.add(f); return s; }
+function eqMods(id) { const m = {}; for (const k of Object.values(eqOf(id))) if (k && EQ2[k]) for (const o of [EQ2[k].mod, EQ2[k].mod2]) for (const [a, v] of Object.entries(o || {})) m[a] = (m[a] || 0) + v; return m; }
+// o grupo de agora: base + poder que voltou + equipamento + vida e PM guardados
+function grupoAtual() {
+  const g = grupoCap1();
+  for (const m of g) {
+    const b = (G.poder || 0);
+    m.mhp += b * (m.id === 'bau' ? 14 : 10); m.atk += b * 2; m.mag += b * 2; m.def += b;
+    const md = eqMods(m.id); for (const [a, v] of Object.entries(md)) m[a] = Math.max(1, (m[a] || 0) + v);
+    m.eqFx = eqFx(m.id);
+    if (m.eqFx.has('microfone') && m.runas) m.runas = m.runas.map(r => r === 'acalanto' ? 'acalantoCoro' : r);
+    const s = G.pt && G.pt[m.id];
+    m.hp = s ? Math.min(m.mhp, Math.max(s.hp > 0 ? 1 : 0, s.hp)) : m.mhp; m.mp = s ? Math.min(m.mmp, s.mp) : m.mmp;
+    if (m.hp <= 0) m.hp = 1;
+  }
+  return g.filter(m => partyKeys().includes(m.id));
+}
+function guardarGrupo(party) { G.pt = G.pt || {}; for (const m of party) G.pt[m.id] = { hp: Math.max(1, m.hp), mp: m.mp }; }
+function curarTudo() { G.pt = {}; }
+// cantiga extra para o Microfone de Lata
+RUNA2.acalantoCoro = { nm: 'Acalanto em Coro', mp: 16, w: 'normal', tgt: 'all', d: 'Cura 25% da vida do grupo todo e tira queimadura e frio.', run: async (m) => {
+  sfx('heal'); jingle('G5:2 E5:2 C6:2 G5:2 E6:4', 220);
+  await tw(30, (p, k) => { for (const u of alive(BT.party)) { const [x, y] = unitCenter(u); txt('♪', x + Math.sin(k / 5) * 3, y - 10 - p * 22, { col: '#ffd060', alpha: 1 - p }); } });
+  for (const u of alive(BT.party)) { healUnit(u, Math.round(u.mhp * 0.25 * (m.eqFx && m.eqFx.has('fone') ? 1.15 : 1))); u.st.queimado = 0; u.st.frio = 0; }
+} };
+
+// ---------- luta no mapa ----------
+const FOE_POS = [[176, 132], [208, 150], [196, 108]];
+async function lutaMapa(group, o = {}) {
+  const itens0 = { ...G.items }, pt0 = JSON.parse(JSON.stringify(G.pt || {}));
+  while (true) {
+    G.items = { ...itens0 }; G.pt = JSON.parse(JSON.stringify(pt0));
+    const foes = group.map((id, i) => { const [x, y] = o.pos ? o.pos[i] : FOE_POS[i]; const d = ENEMY2[id]; return { id, x, y: d.fly ? y - 46 : y }; });
+    const res = await battle2({ party: grupoAtual(), foes, music: o.music || 'luta2', bg: o.bg || (W2.map && W2.map.batBg), tension: o.tension || 0, quitLabel: 'Voltar ao último Marco', intro: o.intro, ...(o.extra || {}) });
+    if (res === 'win') {
+      guardarGrupo(BT.party);
+      const c = group.reduce((a, id) => a + (ENEMY2[id].cobres || 8), 0); G.cobres = (G.cobres || 0) + c;
+      V.scene = 'world'; await fadeIn(12);
+      await say(`* +${c} cobres.`);
+      return 'win';
+    }
+    if (res === 'quit') { await voltarMarco(); return 'lose'; }
+    await fadeOut(10);
+  }
+}
+async function voltarMarco() {
+  const M = G.marco || { map: G.pos.map, x: G.pos.x, y: G.pos.y };
+  curarTudo(); V.scene = 'world'; loadMap2(M.map, M.x, M.y, 'down'); await fadeIn(20);
+  await say('* Você acorda encostado no Marco, com a Lume abanando a sua tampa com um chapéu.');
+}
+
+// ---------- Marco: salva, cura, e os bichos voltam ----------
+function marcoSpr() { return MARCO_C || (MARCO_C = marcoArt()); }
+let MARCO_C = null;
+function marcoArt() {
+  const P = new Pix(20, 40), S = ramp('#7a7480');
+  P.cyl(4, 8, 12, 30, S); P.rect(2, 36, 16, 4, S[1]);
+  P.poly([[4, 8], [16, 8], [10, 0]], (x, y) => P.tone(S, 0.8 - y * 0.04, x, y));
+  // runa do baú brilhando
+  for (const [x, y] of [[8, 16], [9, 16], [10, 16], [11, 16], [8, 17], [11, 17], [8, 18], [9, 18], [10, 18], [11, 18], [9, 20], [10, 20], [9, 21], [10, 22]]) P.p(x, y, '#ffd060');
+  return P.outline().canvas();
+}
+async function usarMarco(e) {
+  sfx('save'); curarTudo(); G.gone2 = {}; G.marco = { map: W2.id, x: W2.x, y: W2.y }; G.marcos = G.marcos || {}; G.marcos[W2.id] = { x: W2.x, y: W2.y, nm: W2.map.name };
+  save2();
+  await tw2glow();
+  await say('* A runa do Marco brilha. O grupo descansa, a vida e os PM voltam, e o jogo foi salvo. (Os bichos da região também descansaram.)');
+  loadMap2(W2.id, W2.x, W2.y, W2.dir);
+}
+function tw2glow() { return new Promise(r => { let k = 0; const f = () => { k++; V.fade = -0; if (k < 20) requestAnimationFrame(f); else r(); }; f(); }); }
+
+// ---------- itens ----------
+const ITEM2 = {
+  frasco: { nm: 'Frasco de Âmbar', preco: 25, d: 'Cura 45% da vida de um aliado.' },
+  tinta: { nm: 'Tinta Azul', preco: 20, d: 'Devolve 15 PM.' },
+  pluma: { nm: 'Pena de Fênix?', preco: 60, d: 'Levanta um aliado caído. É uma pena de galinha dourada.' }
+};
+async function usarItemFora() {
+  const ks = Object.keys(ITEM2).filter(k => (G.items[k] || 0) > 0);
+  if (!ks.length) { await say('* A mochila só tem migalha de pastel.'); return; }
+  const i = await list({ x: 60, y: 40, w: 150, title: 'Itens', items: ks.map(k => ({ label: ITEM2[k].nm, right: 'x' + G.items[k] })), desc: j => ITEM2[ks[j]] && ITEM2[ks[j]].d, descY: 150 });
+  if (i < 0) return;
+  const k = ks[i], g = grupoAtual();
+  const j = await list({ x: 60, y: 60, w: 150, title: 'Em quem?', items: g.map(m => ({ label: m.name, right: m.hp + '/' + m.mhp })) });
+  if (j < 0) return;
+  const m = g[j]; G.pt = G.pt || {}; const s = G.pt[m.id] || { hp: m.hp, mp: m.mp };
+  if (k === 'frasco') s.hp = Math.min(m.mhp, s.hp + Math.round(m.mhp * 0.45));
+  if (k === 'tinta') s.mp = Math.min(m.mmp, s.mp + 15);
+  if (k === 'pluma') s.hp = Math.max(s.hp, Math.round(m.mhp * 0.3));
+  G.pt[m.id] = s; G.items[k]--; sfx('heal');
+  await say(`* ${m.name}: ${s.hp}/${m.mhp} de vida, ${s.mp} PM.`);
+}
+
+// ---------- equipar ----------
+async function menuEquipar() {
+  const quem = ['lume', 'rita'].filter(k => partyKeys().includes(k));
+  while (true) {
+    const i = await list({ x: 40, y: 30, w: 170, title: 'Equipar (só formas humanas)', items: quem.map(k => ({ label: k === 'lume' ? 'Lume' : 'Rita', right: Object.values(eqOf(k)).filter(Boolean).length + '/3' })), desc: () => 'O baú (forma de baú) não usa equipamento: na forma de monstro, a força dele é outra.', descY: 150 });
+    if (i < 0) return;
+    const id = quem[i];
+    while (true) {
+      const sl = Object.keys(SLOTS2), cur = eqOf(id);
+      const j = await list({ x: 40, y: 30, w: 170, title: (id === 'lume' ? 'Lume' : 'Rita') + ': equipamento', items: sl.map(s => ({ label: SLOTS2[s], right: cur[s] ? EQ2[cur[s]].nm : '-' })), desc: q => cur[sl[q]] ? EQ2[cur[sl[q]]].d : 'Vazio.', descY: 150 });
+      if (j < 0) break;
+      const slot = sl[j];
+      const opts = Object.keys(G.equipInv || {}).filter(k => G.equipInv[k] > 0 && EQ2[k].slot === slot && EQ2[k].who.includes(id) && !emUsoPorOutro(k, id));
+      const items = [{ label: '(tirar)', k: null }, ...opts.map(k => ({ label: EQ2[k].nm + (EQ2[k].maldito ? ' ☠' : ''), k }))];
+      const q = await list({ x: 30, y: 30, w: 190, title: SLOTS2[slot], items, desc: n => items[n] && items[n].k ? EQ2[items[n].k].d : 'Deixar o espaço vazio.', descY: 140 });
+      if (q < 0) continue;
+      G.eq = G.eq || {}; G.eq[id] = G.eq[id] || {}; G.eq[id][slot] = items[q].k; sfx('equip');
+      if (items[q].k && EQ2[items[q].k].maldito) await say('* O anel aperta o dedo. Não sai. Quer dizer, sai, mas reclama.');
+    }
+  }
+}
+function emUsoPorOutro(k, id) { const tot = (G.equipInv || {})[k] || 0; let usado = 0; for (const [w, e] of Object.entries(G.eq || {})) if (w !== id) for (const v of Object.values(e)) if (v === k) usado++; return usado >= tot; }
+function ganharEquip(k) { G.equipInv = G.equipInv || {}; G.equipInv[k] = (G.equipInv[k] || 0) + 1; }
+
+// ---------- loja ----------
+async function loja(estoque, dono = 'n') {
+  while (true) {
+    const items = estoque.map(k => { const isEq = !!EQ2[k], d = isEq ? EQ2[k] : ITEM2[k], tem = isEq ? (G.equipInv || {})[k] || 0 : G.items[k] || 0; return { k, label: d.nm, right: d.preco + 'c', disabled: (G.cobres || 0) < d.preco, d: d.d + (isEq ? ` (${EQ2[k].who.map(w => w === 'lume' ? 'Lume' : 'Rita').join('/')}; você tem ${tem})` : ` (você tem ${tem})`) }; });
+    const i = await list({ x: 20, y: 24, w: 200, title: `Comprar   ${G.cobres || 0} cobres`, items, desc: n => items[n] && items[n].d, descY: 150 });
+    if (i < 0) return;
+    const it = items[i], d = EQ2[it.k] || ITEM2[it.k];
+    if ((G.cobres || 0) < d.preco) { sfx('cancel'); continue; }
+    G.cobres -= d.preco; sfx('item');
+    if (EQ2[it.k]) ganharEquip(it.k); else G.items[it.k] = (G.items[it.k] || 0) + 1;
+    await say(`* Comprou ${d.nm}.${EQ2[it.k] ? ' (Equipe pelo MENU.)' : ''}`);
+  }
+}
+
+// ---------- menu do grupo (botão MENU no mapa) ----------
+async function menuGrupo() {
+  sfx('select');
+  while (true) {
+    const g = grupoAtual();
+    const viaja = G.flags.marcoViagem && Object.keys(G.marcos || {}).length > 1;
+    const i = await list({ x: 70, y: 40, w: 100, title: `${G.cobres || 0} cobres`, items: [{ label: 'Grupo' }, { label: 'Equipar' }, { label: 'Itens' }, { label: 'Tempo: ' + (G.flags.modoEspera ? 'Espera' : 'Ativo') }, { label: 'Fechar' }, ...(viaja ? [{ label: 'Viajar (Marco)' }] : [])] });
+    if (i < 0 || i === 4) return;
+    if (i === 5) { const ks = Object.keys(G.marcos), j = await list({ x: 30, y: 40, w: 180, title: 'Marco de Viagem', items: ks.map(k => ({ label: G.marcos[k].nm })) }); if (j >= 0) { const M = G.marcos[ks[j]]; sfx('rune'); await fadeOut(12); loadMap2(ks[j], M.x, M.y, 'down'); await fadeIn(12); return; } continue; }
+    if (i === 0) await panel(g.flatMap(m => [`{y}${m.name}{/}  ${m.hp}/${m.mhp} PV  ${m.mmp ? m.mp + '/' + m.mmp + ' PM' : ''}`, `  ATQ ${m.atk} DEF ${m.def} MAG ${m.mag} VEL ${m.spd}`, ...(Object.values(eqOf(m.id)).filter(Boolean).length ? ['  ' + Object.values(eqOf(m.id)).filter(Boolean).map(k => EQ2[k].nm).join(', ')] : []), '']), { title: 'Grupo' });
+    if (i === 1) await menuEquipar();
+    if (i === 2) await usarItemFora();
+    if (i === 3) { G.flags.modoEspera = !G.flags.modoEspera; }
+  }
+}
+
+// gerado por maps/cap2maps.py (validado: larguras, alcance, correntezas sem prender, entidades em chão válido)
+const ROWS2 = {"cais": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "....................................", "....................................", "....................................", "....................................", "....................................", "....................................", "....................................", "....................................", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"], "praca": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,,,==,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,==,,,,", ",,,,######################==####", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~"], "bazar": ["wwwwwwwwwwww", "wwwwwwwwwwww", "wwwwwwwwwwww", "woooooooooow", "woooooooooow", "woooooooooow", "wooorrrrooow", "wooorrrrooow", "woooooooooow", "wwwwwoowwwww"], "taverna": ["wwwwwwwwwwwwww", "wwwwwwwwwwwwww", "wwwwwwwwwwwwww", "woooooooooooow", "woooooooooooow", "woooorrrroooow", "woooorrrroooow", "woooorrrroooow", "woooooooooooow", "wwwwwwoowwwwww"], "tobias": ["wwwwwwwwwwww", "wwwwwwwwwwww", "wwwwwwwwwwww", "woooooooooow", "woooooooooow", "woooooooooow", "w~~~~oo~~~~w", "w~~~~oo~~~~w", "w~~~~oo~~~~w", "wwwwwoowwwww"], "rua1": ["############################", "#......~~~~~~~~~~~~~......~#", "#......~~~.....~~~~~......~#", "#......~~~.....~~~~~......~#", "#......~~~.....~~#~~......~#", "#~~~~~~~#~~~~~~~~#~~~~~~~~~#", "#~~~~~~~#>>>>>>>>>>>>>>>>vv#", "#~~~~~~~#>>>>>>>>>>>>>>>>vv#", "#~~~~~~~#~~~~~~~~#~~~~~~~vv#", "#~~~~~~~#~~~~....#~~~~~~~vv#", "#~~~~~~~#~~~~....~~~~~~~~vv#", "#~~~~~~~#~~~~....~#~~~~~~vv#", "#~~~~~~~#~~~~....~#<<<<<<<<#", "#~......~~~~~~~~~~#<<<<<<<<#", "#~......~~~~~~~~~~#~~~~~~~~#", "#~......~~~~~~~~~~#.......~#", "#~......~~~~~~~~~~#.......~#", "#~......~#########~.......~#", "#~~~~~~~~~~~~~~~~~~.......~#", "#~~~~~~~~~~~~~~~~~~.......~#", "#~~~~~~~~~~~~~~~~~~~~~~~~~~#", "############################"], "rua2": ["########################", "#~~~~~~~~~~~~~~~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~~~~~~~~~v.....~#", "#.....~~~~~~~~~~v.....~#", "#.......~~~~~~~~~.....~#", "#.......~~~~~~~~~.....~#", "#.....~~~~~~~~~~~.....~#", "#~~~~~~~~~~~~~~~~.....~#", "#~~~~~~~.......~~.....~#", "#~~~~~~~.......~~~~~~~~#", "#~~~~~~~.......~~~~~~~~#", "#~~~~~~~.......~~~~~~~~#", "#~~~~~~~~~~~~~~<<<<<<<^#", "########################"], "poco": ["################", "################", "#___~~~~~~~~___#", "#___~~~~~~~~___#", "#___~~~~~~~~___#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#######__#######"]};
+const POS2 = {"cais": {"chegada": [14, 11], "bazarDoor": [[5, 8], [6, 8]], "ruaPraca": [[29, 0], [30, 0], [31, 0]], "jorge": [21, 14], "ze": [19, 21], "cacador": [26, 10], "cacPath": [[23, 10], [28, 10], [28, 12], [23, 12]], "placa": [24, 8], "bazarOut": [5, 9], "pracaIn": [30, 1], "caixas": [[2, 13], [3, 13], [33, 9]], "marco": [11, 9]}, "praca": {"caisIn": [2, 26], "caisDoor": [[1, 27], [2, 27], [3, 27]], "tavDoor": [[4, 8], [5, 8]], "tobDoor": [[21, 8], [22, 8]], "guildaDoor": [13, 8], "tavOut": [4, 9], "tobOut": [21, 9], "celeste": [15, 14], "bras": [12, 9], "pedrinho": [8, 18], "pavioPoste": [11, 11], "marco": [2, 11], "cac1": [6, 12], "cac1Path": [[4, 12], [11, 12]], "cac2": [14, 19], "cac2Path": [[10, 19], [21, 19]], "escada": [[26, 20], [27, 20]], "ruaDoor": [31, 27], "ruaOut": [30, 26], "fonte": [5, 17], "postes": [[10, 9], [19, 9], [9, 20], [20, 20]]}, "bazar": {"door": [[5, 9], [6, 9]], "entra": [5, 8], "graca": [6, 3], "balcao": [6, 4]}, "taverna": {"door": [[6, 9], [7, 9]], "entra": [6, 8], "neusa": [3, 3], "balcao": [3, 4], "pavio": [10, 5], "bebum": [2, 7], "mesa": [[9, 6], [10, 6]]}, "tobias": {"door": [[5, 9], [6, 9]], "entra": [5, 8], "tobias": [8, 4], "cama": [2, 3]}, "rua1": {"chegada": [3, 2], "pracaDoor": [1, 1], "merDoor": [25, 19], "merOut": [24, 18], "bau1": [13, 2], "bau2": [25, 1], "guarda": [22, 2], "marco": [4, 14], "marina": [15, 10], "tenda": [13, 10], "lambe1": [4, 9], "lambe2": [12, 15], "cara1": [11, 4], "sapo1": [21, 17], "bau3": [2, 17]}, "rua2": {"chegada": [2, 8], "ruaDoor": [1, 8], "pocoDoor": [20, 12], "marco": [18, 7], "barco": [13, 2], "placa": [9, 14], "anel": [14, 15], "cara": [11, 4], "lambe1": [4, 13], "lambe2": [19, 3], "sapo": [11, 13], "bau": [21, 6], "barracas": [[9, 2], [12, 12]]}, "poco": {"chegada": [7, 11], "door": [[7, 13], [8, 13]], "gatilho": [[5, 7], [6, 7], [7, 7], [8, 7], [9, 7], [10, 7]], "ancora": [7, 4]}};
+
+// ================= INIMIGOS DO CAP. 2: Bairro Afogado, Guilda dos Caçadores e a ÂNCORA-MÃE =================
+// Lambe-Lodo (rouba PM), Caranguejo-Telha (casco: escudo alto), Sapo-Sino (deixa TONTO, coaxo preparado),
+// Caçador da Guilda (rede no baú), Sargento Brás (mini-chefe) e a Âncora-Mãe (maré, correntes, lembrança).
+
+// ---------- ícones novos: fileira (trocar de linha), molhado e preso ----------
+Object.assign(ICON_G, {
+  fileira: ["............", "...k........", "..kyk.......", ".kyyyyyyyk..", "..kyk...k...", "...k........", "........k...", "...k...kyk..", "..kyyyyyyyk.", ".......kyk..", "........k...", "............"],
+  molhado: [".....k......", "....kck.....", "...kccck....", "..kccwcck...", "..kcwccck...", "..kccccck...", "...kccck....", "....kkk.....", "............", "............", "............", "............"],
+  preso: [".kkk........", "kwwwk.......", "kw.kkkk.....", "kwwkwwwk....", ".kkkw.kw....", "...kwwwk....", "....kkk.....", "............", "............", "............", "............", "............"]
+});
+
+// ---------- humanos em batalha (gerador de moradores, vista de lado olhando para a esquerda) ----------
+function humBat(k) { return u => { const h = humano(k, HUMS[k]); return u.pose === 'atk' ? h.s[1] : h.s[Math.floor(BT.t / 24 + u.x) % 2]; }; }
+const fr2u = k => u => fr2(k, u.pose ?? (Math.floor(BT.t / 16 + u.x) % 2));
+
+Object.assign(ENEMY2, {
+  lambe: { name: 'Lambe-Lodo', kind: 'lambe', mhp: 160, atk: 15, def: 7, mdef: 6, spd: 11, shield: 2, maxShield: 2, weak: ['fogo', 'luz'], ai: 'lambe', h: 22, cobres: 9,
+    frame: fr2u('lambe'), dieCols: ['#4a5a3a', '#8a7a4a', '#5fa0d0'] },
+  caranguejo: { name: 'Caranguejo-Telha', kind: 'caranguejo', mhp: 200, atk: 16, def: 18, mdef: 8, spd: 8, shield: 4, maxShield: 4, weak: ['mordida', 'gelo'], ai: 'caranguejo', h: 30, cobres: 12,
+    frame: fr2u('caranguejo'), dieCols: ['#c85a3a', '#a8503a', '#4a7a3a'] },
+  sapo: { name: 'Sapo-Sino', kind: 'sapo', mhp: 180, atk: 15, def: 9, mdef: 9, spd: 9, shield: 3, maxShield: 3, weak: ['corte', 'fogo'], ai: 'sapo', h: 28, cobres: 11,
+    frame: fr2u('sapo'), dieCols: ['#4a8a5a', '#e8d8a0', '#c89a40'], cancelTxt: 'A papada murchou! Coaxo cancelado!' },
+  cacador: { name: 'Caçador da Guilda', kind: 'cacador', mhp: 170, atk: 16, def: 10, mdef: 7, spd: 11, shield: 3, maxShield: 3, weak: ['luz', 'mordida'], ai: 'cacador', h: 50, cobres: 10,
+    frame: humBat('cacador'), dieCols: ['#3a3a4a', '#5a4a3a', '#d8a070'] },
+  bras: { name: 'Sargento Brás', kind: 'bras', boss: true, mhp: 1400, atk: 22, def: 12, mdef: 9, spd: 10, shield: 4, maxShield: 4, weak: ['luz', 'mordida'], ai: 'bras', h: 54, cobres: 60, ph: 1,
+    frame: humBat('bras'), dieCols: ['#4a3a2a', '#c8a040', '#d8a070'], cancelTxt: 'O carimbo caiu da mão dele! Golpe cancelado!' },
+  ancora: { name: 'Âncora-Mãe', kind: 'ancora', boss: true, leva: true, mhp: 3900, atk: 27, def: 13, mdef: 11, spd: 10, shield: 6, maxShield: 6, weak: ['gelo', 'mordida'], ai: 'ancora', h: 110, ph: 1, cobres: 150,
+    frame: u => ancoraFrame(u.ph || 1, u.pose ?? (Math.floor(BT.t / 30) % 2), u.flash > 0), dieCols: ['#a87a3a', '#4a8a7a', '#ffd870', '#ffffff'],
+    cancelTxt: 'A âncora escorregou da corrente! Golpe cancelado!' },
+  corrente: { name: 'Corrente', kind: 'corrente', mhp: 170, atk: 10, def: 9, mdef: 12, spd: 7, shield: 2, maxShield: 2, weak: ['corte', 'fogo'], ai: 'corrente', h: 60, cobres: 0,
+    frame: () => correnteArt(), dieCols: ['#6a6a7a', '#9a4a2a', '#ffffff'] }
+});
+
+// cai a corrente: o aliado fica livre. Cai a Âncora-Mãe: as correntes dela caem junto.
+{ const _kf = killFoe; killFoe = function (t) {
+  _kf(t);
+  const solta = c => { if (c.held) { c.held.preso = null; c.held.ct = Math.max(c.held.ct, 40); callout(c.held.name + ' está livre!', '#9be58a', 60); c.held = null; } };
+  if (t.kind === 'corrente') solta(t);
+  if (t.leva) for (const o of alive(BT.foes)) if (o !== t) { o.hp = 0; solta(o); _kf(o); }
+}; }
+
+// dá uma volta pelo ar e volta (inimigo vai até o alvo)
+async function foeLunge(e, t, n = 14, dx = 16) {
+  const [tx, ty] = unitCenter(t), [ex, ey] = unitCenter(e);
+  await tw(n, p => { e.ox = (tx + dx - ex) * ease.io(p); e.oy = (ty - ey) * ease.io(p) - Math.sin(p * Math.PI) * 8; });
+}
+async function foeBack(e, n = 12) { const ox = e.ox, oy = e.oy; await tw(n, p => { e.ox = ox * (1 - p); e.oy = oy * (1 - p); }); e.ox = 0; e.oy = 0; }
+
+Object.assign(AI2, {
+  // ---- Lambe-Lodo: gruda e chupa PM (e se cura um pouco); ou cospe lodo de longe ----
+  async lambe(e) {
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.55) {
+      callout('Sugada de Lodo!', '#d0a8ff', 40); e.pose = 2;
+      await foeLunge(e, t, 16);
+      const r = await foeStrike(e, t, 0.8, { n: 26, el: 'agua' });
+      if (r !== 'perfeito' && t.hp > 0) {
+        const [tx, ty] = unitCenter(t), [ex, ey] = unitCenter(e);
+        const mp = Math.min(t.mp || 0, r === 'bom' ? 4 : 8);
+        await tw(16, p => { for (let i = 0; i < 4; i++) { const q = (p + i * 0.22) % 1; fxDisc(tx + (ex - tx) * q, ty - 4 + Math.sin(q * 6) * 3, 1.6, mp ? '#8fb8ff' : '#e85a4a'); } });
+        if (mp > 0) { t.mp -= mp; popNum(tx, ty - 30, '-' + mp + ' PM', '#8fb8ff'); }
+        const h = Math.round(e.mhp * 0.06); e.hp = Math.min(e.mhp, e.hp + h); popNum(ex, ey - 18, '+' + h, '#9be58a');
+      }
+      e.pose = null; await foeBack(e);
+    } else {
+      callout('Cuspe de Lodo', '#d0a8ff', 36); e.pose = 2; sfx('splash');
+      await projectile(e, t, '#6a5a3a', 14, { r: 3, trail: ['#5a4a38', '#3a3a2e', '#8a7a4a'] });
+      const [x, y] = unitCenter(t); burst(x, y, 12, ['#5a4a38', '#8a7a4a', '#3a3a2e']);
+      await foeStrike(e, t, 0.9, { n: 22, fast: true, el: 'agua' });
+      e.pose = null;
+    }
+  },
+  // ---- Caranguejo-Telha: pinça dupla, telhada na fileira de trás e casco de telha (DEF alta até a próxima vez) ----
+  async caranguejo(e) {
+    if (e.casco) { e.def -= 10; e.casco = false; }
+    if (e.turns % 3 === 0 && e.hp < e.mhp * 0.75) {
+      callout('Casco de Telha!', '#d0a8ff', 50); sfx('guard'); e.pose = 2; e.casco = true; e.def += 10; e.shield = e.maxShield;
+      const [x, y] = unitCenter(e);
+      await tw(22, p => { for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2 + p * 2; bx.fillStyle = i % 2 ? '#c85a3a' : '#a8503a'; bx.fillRect(Math.round(x + Math.cos(a) * (22 - p * 10)), Math.round(y + Math.sin(a) * (14 - p * 6)), 4, 3); } });
+      popNum(x, y - 22, 'DEF+', '#8fe3ff'); e.pose = null; return;
+    }
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.6) {
+      callout('Pinça Dupla!', '#d0a8ff', 40); e.pose = 2;
+      await foeLunge(e, t, 14, 18);
+      for (let i = 0; i < 2 && t.hp > 0; i++) {
+        const [x, y] = unitCenter(t);
+        tw(8, p => { bx.strokeStyle = '#ffffff'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(x + 10, y - 8 + i * 10); bx.lineTo(x + 10 - p * 16, y - 2 + i * 4); bx.stroke(); });
+        await foeStrike(e, t, 0.62, { n: i ? 16 : 26, noCounter: i === 0 });
+      }
+      e.pose = null; await foeBack(e);
+    } else {
+      const back = alive(BT.party).filter(m => m.row === 'back'), tt = back.length && !(BT.taunt && BT.taunt.n > 0) ? pickOne(back) : t;
+      callout('Telhada!', '#d0a8ff', 40); e.pose = 2;
+      const [x0, y0] = unitCenter(e), [x1, y1] = unitCenter(tt);
+      await tw(18, p => { const x = x0 + (x1 - x0) * p, y = y0 + (y1 - y0) * p - Math.sin(p * Math.PI) * 30; bx.save(); bx.translate(Math.round(x), Math.round(y)); bx.rotate(p * 9); bx.fillStyle = '#a8503a'; bx.fillRect(-4, -2, 8, 4); bx.fillStyle = '#e8805a'; bx.fillRect(-4, -2, 8, 1); bx.restore(); });
+      burst(x1, y1, 10, ['#a8503a', '#e8805a', '#5a2a1a']);
+      await foeStrike(e, tt, 1.1, { n: 24 }); e.pose = null;
+    }
+  },
+  // ---- Sapo-Sino: badalada (TONTO), língua rápida e o Coaxo-Sino preparado (todos, TONTO) ----
+  async sapo(e) {
+    if (e.charge) {
+      e.charge = null; callout('COAXO-SINO!', '#ff6b6b', 50); e.pose = 2; sfx('sino', 330); bshake(10, 2); flashW(2);
+      for (const m of alive(BT.party)) {
+        const [x, y] = unitCenter(m);
+        await tw(8, p => { fxRing(x, y, 4 + p * 16, '#ffe066', 1 - p); fxRing(x, y, 2 + p * 10, '#ffffff', 1 - p); });
+        await foeStrike(e, m, 0.8, { n: 22, st: 'tonto', stT: 2, noCounter: true });
+      }
+      e.pose = null; return;
+    }
+    if (e.turns % 3 === 2) {
+      e.charge = { t: null }; e.pose = 2; sfx('select'); callout('O sapo infla a papada...', '#ff6b6b', 70);
+      const [x, y] = unitCenter(e); await tw(24, p => fxRing(x, y + 6, 6 + p * 8, '#ffe066', 0.5 + p * 0.5));
+      if (!G.flags.tutSapo) { G.flags.tutSapo = true; hint('O "!" vermelho: golpe preparado. Zere o escudo do sapo (corte ou fogo) antes do Coaxo-Sino.', 300); }
+      return;
+    }
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.5) {
+      callout('Língua!', '#d0a8ff', 30); e.pose = 2;
+      const [x0, y0] = unitCenter(e), [x1, y1] = unitCenter(t);
+      await tw(10, p => { const q = p < 0.5 ? p * 2 : 2 - p * 2; bx.strokeStyle = '#e86890'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(x0 - 8, y0 + 4); bx.lineTo(x0 - 8 + (x1 - x0 + 8) * q, y0 + 4 + (y1 - y0 - 4) * q); bx.stroke(); });
+      await foeStrike(e, t, 0.95, { n: 18, fast: true }); e.pose = null;
+    } else {
+      callout('Badalada!', '#d0a8ff', 36); e.pose = 2; sfx('sino', 523);
+      const [x, y] = unitCenter(t); await tw(12, p => { fxRing(x, y, 20 - p * 14, '#ffe066', p); });
+      await foeStrike(e, t, 0.7, { n: 24, st: 'tonto', stT: 2 }); e.pose = null;
+    }
+  },
+  // ---- Caçador da Guilda: cassetete, rede (prefere o baú) e lanterna nos olhos (perde parte da vez) ----
+  async cacador(e) {
+    const t = foeTarget(); if (!t) return;
+    const k = pickOne(['cassetete', 'cassetete', 'rede', 'lanterna']);
+    if (k === 'cassetete') {
+      callout('Cassetete!', '#d0a8ff', 30); e.pose = 'atk'; await foeLunge(e, t, 14, 14);
+      const [x, y] = unitCenter(t); tw(8, p => { bx.strokeStyle = '#6a4a2a'; bx.lineWidth = 3; bx.beginPath(); bx.moveTo(x + 12, y - 16); bx.lineTo(x + 12 - p * 12, y - 16 + p * 16); bx.stroke(); });
+      await foeStrike(e, t, 1.05, { n: 26 }); e.pose = null; await foeBack(e);
+    } else if (k === 'rede') await foeRede(e, t);
+    else {
+      callout('Lanterna nos olhos!', '#d0a8ff', 36); e.pose = 'atk';
+      const [x, y] = unitCenter(t); await tw(10, p => { bx.globalAlpha = 0.5 * (1 - p); bx.fillStyle = '#fff0a0'; bx.beginPath(); bx.moveTo(e.x - 10, e.y - 36); bx.lineTo(x + 6, y - 14); bx.lineTo(x + 6, y + 14); bx.fill(); bx.globalAlpha = 1; });
+      await foeStrike(e, t, 0.5, { n: 18, fast: true, noCounter: true, fx: (u, r) => { if (r !== 'perfeito') { u.ct = Math.max(0, u.ct - 25); popNum(...unitCenter(u), 'OFUSCADO', '#fff0a0'); } } });
+      e.pose = null;
+    }
+  },
+  // ---- Sargento Brás (mini-chefe): carimbo preparado, apito (chama um caçador), rede, sermão ----
+  async bras(e) {
+    if (e.charge) {
+      const t = e.charge.t && e.charge.t.hp > 0 ? e.charge.t : foeTarget(); e.charge = null; if (!t) return;
+      callout('CARIMBO: PROCURADO!', '#ff6b6b', 60); e.pose = 'atk'; await foeLunge(e, t, 12, 14);
+      const [x, y] = unitCenter(t);
+      await tw(12, p => { const yy = y - 40 + ease.in(p) * 34; bx.fillStyle = '#5a3a24'; bx.fillRect(x - 3, yy - 14, 6, 12); bx.fillStyle = '#c83a3a'; bx.fillRect(x - 9, yy, 18, 6); });
+      sfx('crit'); hitstop(8); bshake(14, 3);
+      await foeStrike(e, t, e.ph >= 2 ? 2.4 : 2.1, { n: 30, label: 'GOLPE FORTE' });
+      if (t.hp > 0) { const [a, b] = unitCenter(t); popNum(a, b - 30, 'PROCURADO', '#e85a4a'); }
+      e.pose = null; await foeBack(e); return;
+    }
+    if (e.turns % 4 === 3) {
+      const t = foeTarget(); if (!t) return; e.charge = { t };
+      callout('Brás molha o carimbo na tinta...', '#ff6b6b', 80); sfx('select');
+      const [x, y] = unitCenter(t); await tw(20, p => fxRing(x, y, 20 - p * 10, '#ff6b6b', p)); return;
+    }
+    const opts = ['cassetete', 'cassetete', 'rede'];
+    if (alive(BT.foes).length < 2) opts.push('apito', 'apito');
+    if (e.ph >= 2) opts.push('sermao');
+    const k = pickOne(opts), t = foeTarget(); if (!t) return;
+    if (k === 'cassetete') {
+      callout('Cassetete de Sargento!', '#d0a8ff', 36); e.pose = 'atk'; await foeLunge(e, t, 14, 14);
+      for (let i = 0; i < 2 && t.hp > 0; i++) { const [x, y] = unitCenter(t); tw(8, p => { bx.strokeStyle = '#6a4a2a'; bx.lineWidth = 3; bx.beginPath(); bx.moveTo(x + 12, y - 18 + i * 8); bx.lineTo(x + 12 - p * 14, y - 18 + i * 8 + p * 16); bx.stroke(); }); await foeStrike(e, t, 0.7, { n: i ? 16 : 26, noCounter: i === 0 }); }
+      e.pose = null; await foeBack(e);
+    } else if (k === 'rede') {
+      await foeRede(e, t);
+    } else if (k === 'apito') {
+      callout('PRIIIIIII! (apito)', '#d0a8ff', 50); sfx('encounter');
+      const pos = [[208, 150], [196, 108], [142, 96]].find(([x]) => !alive(BT.foes).some(f => Math.abs(f.x - x) < 8)) || [142, 96];
+      const c = mkFoe(ENEMY2.cacador, pos[0], pos[1]); c.ct = 0; c.alpha = 0; BT.foes.push(c);
+      await tw(20, p => { c.alpha = p; c.ox = 30 * (1 - p); }); c.ox = 0;
+    } else {
+      callout('Regulamento da Guilda, artigo 12!', '#d0a8ff', 60); e.pose = 'atk';
+      for (const m of alive(BT.party)) { const [x, y] = unitCenter(m); await tw(8, p => { for (let i = 0; i < 3; i++) txt('!', x - 6 + i * 6, y - 20 - p * 10, { col: '#ff8a70', alpha: 1 - p }); }); await foeStrike(e, m, 0.45, { n: 20, fast: true, noCounter: true }); }
+      BT.tension = Math.max(0, BT.tension - 10); callout('-10 de Tensão (burocracia)', '#ffa94d', 50); e.pose = null;
+    }
+  },
+  // ---- a Corrente: aperta quem ela segura ----
+  async corrente(e) {
+    const h = e.held;
+    if (!h || h.hp <= 0) { e.hp = 0; killFoe(e); return; }
+    if (alive(BT.party).every(m => m.preso)) { callout('A corrente afrouxa...', '#9be58a', 50); e.hp = 0; killFoe(e); return; }
+    callout('A corrente aperta!', '#d0a8ff', 36); sfx('hurt'); bshake(4);
+    const d = Math.max(1, Math.round(h.mhp * 0.05)); hurtMember(h, d);
+  },
+  // ---- A ÂNCORA-MÃE ----
+  async ancora(e) {
+    e.mareN = (e.mareN || 0) + 1;
+    if (e.charge) {
+      const t = e.charge.t && e.charge.t.hp > 0 ? e.charge.t : foeTarget(); e.charge = null; if (!t) return;
+      callout('A ÂNCORA DESCE!', '#ff6b6b', 60); e.pose = 2; await wait(10); e.pose = 3;
+      const [x, y] = unitCenter(t);
+      await tw(10, p => { const yy = 20 + (y - 20) * ease.in(p); bx.fillStyle = '#4a4a58'; bx.fillRect(x - 2, yy - 20, 4, 20); bx.fillRect(x - 10, yy, 20, 4); bx.fillStyle = '#6a6a7a'; bx.fillRect(x - 10, yy, 20, 1); });
+      sfx('rumble'); bshake(18, 4); flashW(2); burst(x, y + 10, 26, ['#5a5a6a', '#1c3a54', '#ffffff'], { up: 2 });
+      await foeStrike(e, t, e.ph >= 3 ? 2.5 : 2.3, { n: 30, label: 'GOLPE FORTE' });
+      e.pose = null; return;
+    }
+    // a maré sobe a cada 3 vezes dela (fases 1 e 2): quem está na FRENTE fica molhado (lento)
+    if (e.ph <= 2 && e.mareN % 3 === 0) { await mareSobe(e); return; }
+    // fase 2: prende um aliado com uma corrente
+    if (e.ph === 2 && !alive(BT.foes).some(f => f.kind === 'corrente') && e.turns - (e.lastGrab ?? -9) >= 4) { await agarrar(e); return; }
+    if (e.turns % 4 === 1) {
+      const t = foeTarget(); if (!t) return; e.charge = { t }; e.pose = 2;
+      callout('A âncora sobe...', '#ff6b6b', 80); sfx('gate');
+      const [x, y] = unitCenter(t); await tw(20, p => fxRing(x, y, 20 - p * 10, '#ff6b6b', p)); return;
+    }
+    const opts = e.ph === 1 ? ['badalada', 'puxao', 'puxao'] : e.ph === 2 ? ['badalada', 'puxao', 'chicote'] : ['choro', 'choro', 'badalada', 'puxao'];
+    const k = pickOne(opts);
+    if (k === 'badalada') {
+      callout('BADALADA!', '#d0a8ff', 50); sfx('sino', 147); bshake(12, 2); flashW(2);
+      await tw(24, p => { const [x, y] = unitCenter(e); for (let i = 0; i < 3; i++) fxRing(x, y + 20, (p * 140 + i * 30) % 160, '#ffe066', 1 - p); });
+      for (const m of alive(BT.party)) await foeStrike(e, m, 0.5, { n: 20, fast: true, st: 'tonto', stT: 2, noCounter: true });
+    } else if (k === 'puxao') {
+      const t = foeTarget(); if (!t) return;
+      callout('Puxão de Corrente', '#d0a8ff', 40); e.pose = 2;
+      const [x0, y0] = [e.x - 30, e.y - 50], [x1, y1] = unitCenter(t);
+      await tw(12, p => { for (let i = 0; i <= 10; i++) { const q = i / 10 * p; fxDisc(x0 + (x1 - x0) * q, y0 + (y1 - y0) * q - Math.sin(q * Math.PI) * 14, 2, i % 2 ? '#5a5a6a' : '#8a8a9a'); } });
+      await foeStrike(e, t, 1.2, { n: 26, el: 'agua' }); e.pose = null;
+    } else if (k === 'chicote') {
+      callout('Chicote de Correntes!', '#d0a8ff', 50); e.pose = 2;
+      for (const m of alive(BT.party)) { const [x, y] = unitCenter(m); await tw(8, p => { bx.strokeStyle = '#8a8a9a'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(x + 30 - p * 40, y - 20); bx.quadraticCurveTo(x, y + 10, x - 30 + p * 10, y - 4); bx.stroke(); }); await foeStrike(e, m, 0.7, { n: 20, fast: true, noCounter: true }); }
+      e.pose = null;
+    } else {
+      // choro do sino: as lembranças da cidade saem pela rachadura e batem em todos
+      callout(e.acalmou ? 'Choro do Sino (mais baixo)' : 'CHORO DO SINO', '#ffd870', 50); sfx('sino', 110);
+      const [x, y] = unitCenter(e);
+      await tw(30, p => { for (let i = 0; i < 7; i++) { const a = i * 0.9 + p * 2, r = p * 120; bx.globalAlpha = 1 - p; bx.fillStyle = '#ffd870'; bx.fillRect(Math.round(x - r * Math.abs(Math.cos(a))), Math.round(y - 10 + Math.sin(a) * 30), 3, 6); bx.fillRect(Math.round(x - r * Math.abs(Math.cos(a))) - 1, Math.round(y - 13 + Math.sin(a) * 30), 5, 3); bx.globalAlpha = 1; } });
+      for (const m of alive(BT.party)) await foeStrike(e, m, 0.85, { n: 22, noCounter: true });
+    }
+  }
+});
+// rede do caçador (prefere o baú: "bagagem" se pega com rede)
+async function foeRede(e, t) {
+  const bau = BT.party.find(m => m.id === 'bau' && m.hp > 0), tt = BT.taunt && BT.taunt.n > 0 ? t : (bau && Math.random() < 0.6 ? bau : t);
+  callout(tt.id === 'bau' ? 'Rede de bagagem!' : 'Rede!', '#d0a8ff', 40); e.pose = 'atk';
+  const [x0, y0] = unitCenter(e), [x1, y1] = unitCenter(tt);
+  await tw(16, p => { const x = x0 + (x1 - x0) * p, y = y0 + (y1 - y0) * p - Math.sin(p * Math.PI) * 18, r = 4 + p * 10; bx.strokeStyle = '#d8c8a0'; bx.lineWidth = 1; for (let i = -2; i <= 2; i++) { bx.beginPath(); bx.moveTo(x - r, y + i * r / 2.5); bx.lineTo(x + r, y + i * r / 2.5); bx.stroke(); bx.beginPath(); bx.moveTo(x + i * r / 2.5, y - r); bx.lineTo(x + i * r / 2.5, y + r); bx.stroke(); } });
+  await foeStrike(e, tt, 0.6, { n: 22, fast: true, st: 'tonto', stT: 2 }); e.pose = null;
+}
+// a maré: a água do poço sobe e molha quem está na FRENTE (fica lento por 3 vezes)
+async function mareSobe(e) {
+  callout('A MARÉ SOBE!', '#5fd0ff', 60); sfx('splash'); sfx('rumble');
+  BT.mare = BT.mare || { lvl: 0 };
+  await tw(30, p => { BT.mare.lvl = Math.sin(p * Math.PI) * 18 + 4; });
+  BT.mare.lvl = 4;
+  for (const m of alive(BT.party)) {
+    if (m.row === 'back') { const [x, y] = unitCenter(m); popNum(x, y - 20, 'SECO', '#9be58a'); continue; }
+    const d = calcDmg(e, m, 0.35) * (m.eqFx && m.eqFx.has('agua') ? 0.5 : 1);
+    hurtMember(m, d); m.st.molhado = 3; const [x, y] = unitCenter(m); popNum(x, y - 20, 'MOLHADO', '#5fd0ff'); burst(x, y + 10, 10, ['#5fd0ff', '#ffffff']);
+  }
+  if (!G.flags.tutMare) { G.flags.tutMare = true; hint('MARÉ: quem está na FRENTE fica MOLHADO (lento). FILEIRA (na roda) troca de linha. É uma ação leve. Atrás: leva menos dano físico, mas o corpo a corpo enfraquece.', 520); }
+}
+async function agarrar(e) {
+  const ops = alive(BT.party).filter(m => !m.preso); if (ops.length < 2) { e.lastGrab = e.turns; return AI2.ancora(e); }
+  const t = BT.taunt && BT.taunt.n > 0 && BT.taunt.m.hp > 0 ? BT.taunt.m : pickOne(ops);
+  e.lastGrab = e.turns; callout('Correntes!', '#ff6b6b', 50); e.pose = 2; sfx('gate');
+  const [x0, y0] = [e.x - 30, e.y - 40], [x1, y1] = unitCenter(t);
+  await tw(18, p => { for (let i = 0; i <= 14; i++) { const q = i / 14 * ease.out(p); fxDisc(x0 + (x1 - x0) * q, y0 + (y1 - y0) * q + Math.sin(q * 9) * 3, 2.2, i % 2 ? '#5a5a6a' : '#9a9aaa'); } });
+  const res = await foeStrike(e, t, 0.6, { n: 24, noCounter: true });
+  e.pose = null;
+  if (res === 'perfeito') { callout(t.name + ' escapou da corrente!', '#9be58a', 60); return; }
+  const c = mkFoe(ENEMY2.corrente, 134, 152); c.ct = 0; c.alpha = 0; c.held = t; BT.foes.push(c);
+  t.preso = c; t.ct = 0;
+  await tw(16, p => { c.alpha = p; });
+  callout(t.name + ' está PRESO!', '#ff6b6b', 70);
+  if (!G.flags.tutPreso) { G.flags.tutPreso = true; hint('PRESO: o aliado não age até alguém quebrar a CORRENTE (alvo próprio, fraca a corte e fogo).', 400); }
+}
+// a água subindo e a corrente até quem está preso (desenhado atrás dos lutadores)
+function bgAnimPoco() {
+  if (BT.mare && BT.mare.lvl > 0) { const y = 158 - BT.mare.lvl; bx.globalAlpha = 0.45; bx.fillStyle = '#2a6080'; bx.fillRect(0, y, W, 162 - y); bx.globalAlpha = 0.8; bx.fillStyle = '#8fd0f0'; for (let x = 0; x < W; x += 6) bx.fillRect(x + (BT.t >> 2) % 6, y + (x % 12 ? 0 : 1), 3, 1); bx.globalAlpha = 1; }
+  for (const c of BT.foes) if (c.kind === 'corrente' && c.held && c.hp > 0 && !c.gone) {
+    const [x0, y0] = [c.x, c.y - 40], [x1, y1] = unitCenter(c.held);
+    for (let i = 0; i <= 8; i++) { const q = i / 8; fxDisc(x0 + (x1 - x0) * q, y0 + (y1 - y0) * q + Math.sin(q * Math.PI) * 6, 1.8, i % 2 ? '#5a5a6a' : '#9a9aaa'); }
+  }
+}
+// fases da Âncora-Mãe
+function fasesAncora() {
+  return [
+    { at: 0.66, run: async (e) => {
+      sfx('rumble'); bshake(30, 3); flashW(4);
+      await say('EU SEGURO. EU SEGURO TODO MUNDO. NINGUÉM SOBE. NINGUÉM ESQUECE.', 'ancora');
+      e.ph = 2; e.weak = ['corte', 'fogo']; e.maxShield = 6; e.shield = 6; e.mini = null;
+      callout('O sino sobe: as correntes estão à mostra!', '#8fe3ff', 90);
+    } },
+    { at: 0.33, run: async (e) => {
+      sfx('sino', 98); bshake(40, 4); flashW(6);
+      for (const c of alive(BT.foes)) if (c.kind === 'corrente') { c.hp = 0; killFoe(c); }
+      await say('* O bronze racha de cima a baixo. Pela rachadura escorre luz âmbar e, dentro da luz, gente: noivas, um menino de batizado, um velho de chapéu. As lembranças que ela guardou.');
+      await say('TODO MUNDO QUE EU TOQUEI... ESTÃO SAINDO... NÃO... NÃO VÃO EMBORA...', 'ancora');
+      await say('@... ela não quer machucar ninguém. Ela só não quer ficar sozinha no escuro. Acho que alguém precisa cantar pra ela. Não pra dormir. Pra ela lembrar que alguém ainda canta.', 'lume');
+      e.ph = 3; e.weak = ['luz']; e.maxShield = 4; e.shield = 4; e.spd = 11; e.mini = null;
+      if (BT.mare) BT.mare.lvl = 0;
+      callout('Fase da Lembrança: a fraqueza agora é LUZ', '#ffd870', 90);
+    } }
+  ];
+}
+// a Lume canta para o sino na fase 3: os golpes dela enfraquecem (e o final muda uma fala)
+function cantouSino(m) {
+  if (!m || m.id !== 'lume' || !BT.on) return;
+  const b = BT.foes.find(f => f.kind === 'ancora' && f.hp > 0 && f.ph === 3);
+  if (!b || b.acalmou) return;
+  b.acalmou = true; b.atk = Math.round(b.atk * 0.75); G.flags.cantouSino = true;
+  callout('A Dona Badalada para para escutar...', '#ffd870', 100);
+  hint('A Lume cantou para o sino. Os golpes da Âncora-Mãe ficaram mais fracos.', 300);
+}
+for (const [o, k] of [[RUNA2, 'acalanto'], [RUNA2, 'acalantoCoro'], [RUNA2, 'velaprot'], [TECH2, 'cancao']]) { const f = o[k].run; o[k].run = async (m, t) => { await f(m, t); cantouSino(m); }; }
+
+// ---------- trocar de FILEIRA (só onde a luta permite; estreia na Âncora-Mãe) ----------
+CMD.splice(CMD.findIndex(c => c.k === 'defender'), 0, { k: 'fileira', nm: 'Fileira', ic: () => 'fileira', desc: m => m.row === 'back' ? 'Ir para a FRENTE: corpo a corpo com força total. Ação leve.' : 'Ir para TRÁS: escapa da maré e leva menos dano físico, mas o corpo a corpo enfraquece. Ação leve.', only: () => !!(BT.cfg && BT.cfg.fileira) });
+{ const _dc = doCommand; doCommand = async function (m, k) {
+  if (k !== 'fileira') return _dc(m, k);
+  await act(m, async () => {
+    const x0 = m.x; m.row = m.row === 'back' ? 'front' : 'back';
+    const keep = BT.party.map(u => [u, u.x, u.y]); layoutParty(); const x1 = m.x; for (const [u, x, y] of keep) if (u !== m) { u.x = x; u.y = y; }
+    m.x = x0; sfx('step'); m.anim = 'run';
+    await tw(16, p => { m.x = x0 + (x1 - x0) * ease.io(p); m.oy = -Math.sin(p * Math.PI) * 6; if (BT.t % 3 === 0) part({ x: m.x, y: m.y, vy: -0.3, life: 12, col: '#8a7a6a' }); });
+    m.x = x1; m.oy = 0; m.anim = 'idle';
+    callout(m.name + (m.row === 'back' ? ' vai para trás' : ' vai para a frente'), '#8fe3ff', 40);
+  });
+  endTurn(m, 'leve'); return true;
+}; }
+
+// ================= CAPÍTULO 2: VELHÁGUA, A CIDADE QUE AFUNDA =================
+// Mapas em mapas2.js (validados em maps/cap2maps.py). Aqui: moradores (com ROTINAS: cada um faz alguma coisa),
+// cenários, missões, a Guilda (disfarce de bagagem), o Bairro Afogado (boiar e correntezas) e o final.
+
+// ---------- moradores ----------
+const HUMS = {
+  graca: { h: 44, skin: '#d8a078', hair: '#b8b0a8', hairStyle: 'coque', top: '#7a4a6a', bottom: '#4a3a4a', apron: '#e8dcc0' },
+  neusa: { h: 47, skin: '#c88a5a', hair: '#5a2a1a', hairStyle: 'longo', top: '#a8503a', bottom: '#3a3040', apron: '#e8dcc0' },
+  tobias: { h: 44, skin: '#c8906a', hair: '#e8e8e0', hairStyle: 'careca', beard: true, top: '#4a6a8a', bottom: '#3a3a4a', hat: '#3a4a6a' },
+  marina: { h: 47, skin: '#c8906a', hair: '#3a2014', hairStyle: 'longo', top: '#5a9a7a', bottom: '#4a4a6a' },
+  pedrinho: { h: 34, skin: '#d8a078', hair: '#2a1a10', top: '#e8a030', bottom: '#3a5a8a' },
+  celeste: { h: 46, skin: '#e0b090', hair: '#2a2a3a', hairStyle: 'longo', top: '#2a2a3a', bottom: '#2a2a3a', extra: (P, o) => { if (o.view !== 'b') P.rect(o.cx - 6, o.hcY - 6, 12, 2, '#f2ecdc'); P.rect(o.cx - 1, o.tT + 3, 2, 5, '#c8a040'); P.rect(o.cx - 2, o.tT + 4, 4, 1, '#c8a040'); } },
+  bras: { h: 52, skin: '#c08060', hair: '#3a2a1a', beard: true, top: '#5a4a3a', coat: '#4a3a2a', bottom: '#2a2a30', hat: '#3a3a4a', extra: (P, o) => { if (o.view === 'f') P.rect(o.cx - 4, o.tT + 4, 3, 3, '#e8c040'); if (o.view === 's') { P.line(o.cx - 9, o.tT + 10, o.cx + 2, o.tT + 10, '#6a4a2a'); } } },
+  pavio: { h: 50, skin: '#c8b0a0', hair: '#5a5a60', top: '#6a6a7a', coat: '#5a5a6a', bottom: '#3a3a44', hat: '#2a2a30', extra: (P, o) => { P.rect(o.cx - 1, o.hcY - 12, 2, 5, '#f2ecdc'); P.p(o.cx, o.hcY - 13, o.fr ? '#ffd060' : '#ff9a30'); P.p(o.cx - 1, o.hcY - 14, '#fff0c0'); } },
+  ze: { h: 46, skin: '#a87050', hair: '#2a1a10', top: '#5a7a4a', bottom: '#4a4a3a', hat: '#c8a060' },
+  dita: { h: 45, skin: '#8a5a3a', hair: '#1a1010', hairStyle: 'coque', top: '#c86a8a', bottom: '#5a3a5a', apron: '#f0e8d0' },
+  joao: { h: 50, skin: '#b87850', hair: '#1a1010', top: '#d8c8a0', bottom: '#4a4a5a' },
+  zefa: { h: 44, skin: '#d8a078', hair: '#8a8a90', hairStyle: 'coque', top: '#5a8ac8', bottom: '#3a3a5a' },
+  lurdes: { h: 46, skin: '#a86a4a', hair: '#2a1a1a', hairStyle: 'longo', top: '#e8c040', bottom: '#6a3a3a' },
+  nico: { h: 49, skin: '#e0b090', hair: '#7a4a2a', top: '#8a3a3a', bottom: '#3a3a4a', beard: true },
+  bebum: { h: 47, skin: '#d89078', hair: '#4a3a2a', hairStyle: 'careca', top: '#6a7a5a', bottom: '#3a3a3a' },
+  lia: { h: 46, skin: '#c08060', hair: '#5a3a2a', hairStyle: 'coque', top: '#3a6a8a', bottom: '#3a3a4a', hat: '#c8a060' },
+  // o Acendedor-Mor: casaca preta, cabelo prateado, cartola, corrente dourada e as mãos sempre sujas de fuligem
+  vesper: { h: 53, skin: '#d8b090', hair: '#9a9aaa', top: '#e8dcc0', coat: '#1a1a2a', bottom: '#1a1a24', extra: (P, o) => {
+    P.rect(o.cx - 5, o.hcY - 17, 10, 11, '#1a1a24'); P.rect(o.cx - 5, o.hcY - 9, 10, 2, '#8a2a3a'); P.rect(o.cx - 8, o.hcY - 7, 16, 2, '#1a1a24'); P.rect(o.cx - 4, o.hcY - 17, 2, 8, '#3a3a4a');
+    if (o.view === 'f') { for (let i = 0; i < 5; i++) P.p(o.cx - 4 + i * 2, o.tT + 9 + (i % 2), '#e8c040'); P.p(o.cx - 7, o.tT + Math.round(13 * o.s), '#3a3434'); P.p(o.cx + 6, o.tT + Math.round(13 * o.s), '#3a3434'); }
+    if (o.view === 's') { P.p(o.cx + (o.fr ? 1 : 0), o.tT + Math.round(13 * o.s), '#3a3434'); P.line(o.cx - 3, o.tT + 14, o.cx - 3, o.H - 2, '#5a4a3a'); P.rect(o.cx - 5, o.tT + 10, 4, 5, '#e8a030'); }
+  } },
+  cacador: CAC_HUM
+};
+function humSpr(k) { return (t, dir) => humanoSprite(humano(k, HUMS[k]), dir, t); }
+const PORT_H = {};
+function portHum(k) { if (PORT_H[k]) return PORT_H[k]; const f = humano(k, HUMS[k]).f[0], c = mk(32, 32), x = c.getContext('2d'); x.fillStyle = '#1a1424'; x.fillRect(0, 0, 32, 32); x.drawImage(f, 0, 0, 24, 30, 4, 4 + (HUMS[k].h < 40 ? 4 : 0), 24, 30); return PORT_H[k] = c; }
+const voz = (f, w) => () => sfx(w || 'blip', f);
+Object.assign(WHO, {
+  graca: { name: () => 'Dona Graça', portrait: () => portHum('graca'), voice: voz(470), col: '#ffe8d0' },
+  neusa: { name: () => 'Dona Neusa', portrait: () => portHum('neusa'), voice: voz(520), col: '#ffd8c0' },
+  tobias: { name: () => 'Seu Tobias', portrait: () => portHum('tobias'), voice: voz(200, 'blipLow') },
+  marina: { name: () => 'Marina', portrait: () => portHum('marina'), voice: voz(640), col: '#d8ffe8' },
+  pedrinho: { name: () => 'Pedrinho', portrait: () => portHum('pedrinho'), voice: voz(900, 'blipTri') },
+  celeste: { name: () => 'Irmã Celeste', portrait: () => portHum('celeste'), voice: voz(760, 'blipTri'), col: '#f0f0ff' },
+  bras: { name: () => 'Sargento Brás', portrait: () => portHum('bras'), voice: voz(150, 'blipLow'), col: '#ffd8a0', edge: '#c88040' },
+  pavio: { name: () => G.flags.pavio >= 3 ? 'Osvaldo' : 'Pavio', portrait: () => portHum('pavio'), voice: voz(380), col: '#e8e0d8' },
+  ze: { name: () => 'Zé do Píer', portrait: () => portHum('ze'), voice: voz(250, 'blipLow') },
+  dita: { name: () => 'Dona Dita', portrait: () => portHum('dita'), voice: voz(560) },
+  joao: { name: () => 'João Estiva', portrait: () => portHum('joao'), voice: voz(220, 'blipLow') },
+  zefa: { name: () => 'Dona Zefa', portrait: () => portHum('zefa'), voice: voz(600) },
+  lurdes: { name: () => 'Dona Lurdes', portrait: () => portHum('lurdes'), voice: voz(660) },
+  nico: { name: () => 'Seu Nico', portrait: () => portHum('nico'), voice: voz(260, 'blipLow') },
+  bebum: { name: () => 'Freguês', portrait: () => portHum('bebum'), voice: voz(300) },
+  lia: { name: () => 'Lia Pescadora', portrait: () => portHum('lia'), voice: voz(580) },
+  cacador: { name: () => 'Caçador', portrait: () => portHum('cacador'), voice: voz(190, 'blipLow'), col: '#ffd0c0' },
+  vesper: { name: () => 'Acendedor-Mor', portrait: () => portHum('vesper'), voice: voz(240, 'blipTri'), col: '#fff0d8', edge: '#c8a040' },
+  ancora: { name: () => G.flags.c2Boss ? 'Dona Badalada' : 'Âncora-Mãe', voice: () => sfx('blipLow', 70), fx: 'shake', col: '#e8d8a0', edge: '#4a8a7a' }
+});
+
+// ---------- arte extra: telhado (ilhas da Rua Submersa), baú de tesouro, toldo, tenda, cartaz ----------
+{ const _ta2 = tileArt; tileArt = function (k, v = 0, f = 0) {
+  if (k !== 'telha') return _ta2(k, v, f);
+  const key = k + '_' + v + '_' + f; if (TILE2[key]) return TILE2[key];
+  const P = new Pix(16, 16), T = ramp('#a8503a');
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const row = y >> 2, off = (row % 2) * 4, edge = (y % 4 === 3) || ((x + off) % 8 === 0); P.p(x, y, P.tone(T, (edge ? 0.25 : 0.6) - (y % 4) * 0.06 + ((hash(x >> 3, row, v) % 5) - 2) * 0.04, x, y)); }
+  if (v === 1) { P.p(5, 6, ramp('#4a7a3a')[3]); P.p(6, 6, ramp('#4a7a3a')[2]); }
+  return TILE2[key] = P.canvas();
+}; }
+const memo = f => { let c = null; return () => c || (c = f()); };
+const BAU_C = {};
+function chestSpr(aberto) { const k = aberto ? 1 : 0; if (BAU_C[k]) return BAU_C[k]; const P = new Pix(16, 14), Wd = ramp('#8a5a2a'), Au = ramp('#d8a030');
+  if (aberto) { P.rect(1, 0, 14, 4, Wd[1]); P.rect(1, 3, 14, 1, Au[2]); }
+  for (let y = aberto ? 5 : 2; y < 14; y++) for (let x = 1; x < 15; x++) P.p(x, y, P.tone(Wd, 0.6 - y / 30 - x / 60, x, y));
+  if (!aberto) { P.rect(1, 2, 14, 1, Wd[3]); P.rect(1, 6, 14, 1, Au[2]); P.rect(7, 6, 2, 3, Au[3]); } else { P.rect(2, 5, 12, 2, '#1a0e08'); }
+  return BAU_C[k] = P.outline().canvas(); }
+function toldoArt(col) { const P = new Pix(34, 44), A = ramp(col), Cr = ramp('#e8dcc0'), Wd = ramp('#6a4a2a');
+  P.cyl(2, 10, 3, 34, Wd); P.cyl(29, 10, 3, 34, Wd);
+  for (let y = 4; y < 14; y++) for (let x = 0; x < 34; x++) P.p(x, y, P.tone((x >> 2) % 2 ? A : Cr, 0.7 - (y - 4) * 0.04, x, y));
+  for (let x = 0; x < 34; x += 4) P.ball(x + 2, 14, 2, 2, (x >> 2) % 2 ? A : Cr);
+  P.rect(5, 30, 24, 4, Wd[2]); for (let i = 0; i < 5; i++) P.ball(8 + i * 4, 28, 2, 2, ramp(['#e8a030', '#5a9a4a', '#c83a3a', '#7ad0f0', '#f0d070'][i]));
+  return P.outline().canvas(); }
+function tendaArt() { const P = new Pix(36, 36), L = ramp('#c8b890'), Wd = ramp('#6a4a2a');
+  P.poly([[2, 34], [34, 34], [18, 4]], (x, y) => P.tone(L, 0.75 - (y - 4) / 50 + (x < 18 ? 0.1 : -0.1), x, y)); P.poly([[14, 34], [22, 34], [18, 18]], '#3a2a20');
+  P.cyl(17, 0, 2, 6, Wd);
+  for (const [x, c] of [[0, '#5a9a4a'], [30, '#4a8a3a']]) { P.rect(x, 28, 6, 6, ramp('#a8503a')[2]); P.ball(x + 3, 25, 4, 4, ramp(c)); P.p(x + 2, 23, '#e86890'); }
+  return P.outline().canvas(); }
+function cartazArt() { const P = new Pix(12, 15), Pp = ramp('#e8dcc0'); for (let y = 0; y < 15; y++) for (let x = 0; x < 12; x++) P.p(x, y, P.tone(Pp, 0.7 - y / 40, x, y)); P.rect(1, 1, 10, 2, '#c83a3a'); P.rect(3, 6, 6, 4, '#8a5a2a'); P.rect(3, 6, 6, 1, '#3a2a1a'); for (let i = 0; i < 3; i++) P.p(4 + i * 2, 8, '#ffffff'); P.rect(2, 12, 8, 1, '#5a4a3a'); return P.outline().canvas(); }
+function plantaArt() { const P = new Pix(14, 18); P.rect(2, 10, 10, 8, ramp('#a8503a')[2]); P.rect(2, 10, 10, 1, ramp('#a8503a')[3]); P.ball(7, 7, 6, 6, ramp('#4a8a3a')); P.p(5, 4, '#f0c040'); P.p(9, 6, '#e86890'); return P.outline().canvas(); }
+// o sino no fundo do poço (só a cúpula aparece acima da água)
+function sinoPocoArt() { const src = ancoraFrame(1, 0, false), c = mk(112, 74); c.getContext('2d').drawImage(src, 0, 0, 112, 74, 0, 0, 112, 74); return c; }
+
+// ---------- montagem dos mapas ----------
+const casa = o => memo(() => casaArt(o).img);
+const cartazC = memo(cartazArt), toldoV = memo(() => toldoArt('#c83a3a')), toldoA = memo(() => toldoArt('#3a6ab8')), tendaC = memo(tendaArt), plantaC = memo(plantaArt);
+const postes = { on: memo(() => posteArt(true)), off: memo(() => posteArt(false)) };
+const porta = (x, y, to, tx, ty, tdir) => ({ t: 'door', x, y, to, tx, ty, tdir, passa: true });
+const portas = (list, to, tx, ty, tdir) => list.map(([x, y]) => porta(x, y, to, tx, ty, tdir));
+function morador(k, x, y, o = {}) { return Object.defineProperties({ t: 'npc', id: k, x, y, h: (HUMS[k] && HUMS[k].h) || 48, spr: HUMS[k] ? humSpr(k) : null }, Object.getOwnPropertyDescriptors(o)); }
+function marcoEnt(x, y) { return { t: 'marco', id: 'marco', x, y, h: 40, spr: () => marcoSpr(), talk: async (e) => { await primeiroMarco(); await usarMarco(e); } }; }
+function bauEnt(map, id, x, y, give) { const k = 'b_' + map + '_' + id; return { t: 'chest', id, x, y, h: 16, spr: () => chestSpr(G.flags[k]), talk: async () => { if (G.flags[k]) { await say('* Vazio. Você sente uma pontinha de empatia por ele.'); return; } G.flags[k] = true; sfx('item'); await give(); save2(); } }; }
+function inimigo(id, kind, x, y, group, o = {}) { return Object.assign({ t: 'foe', id, x, y, group, h: kind === 'caranguejo' ? 30 : 24, swim: kind === 'lambe', vision: 4, range: 4,
+  spr: (t, dir) => { const f = fr2(kind, Math.floor(t / 18) % 2); return dir === 'right' ? flipC(f) : f; } }, o); }
+function cacadorEnt(map, id, x, y, path, o = {}) { return Object.assign({ t: 'hunter', id, x, y, path, h: 48, per: 300, vis: 5, spr: humSpr('cacador'), gone: () => G.gone2 && G.gone2[map + ':' + id],
+  talk: async () => { await say(pickOne(['Circulando. A Guilda está de olho em monstros. Já viram um baú com dentes por aí?', 'Trezentos frascos de recompensa. Com isso eu compro um barco. Ou um andar a mais pra casa.', 'Bela mala. Pesada? Parece pesada.']), 'cacador'); await say(pickOne(['É bagagem.', 'Herança de família.', 'Ele é... decorativo.']), pickOne(['lume', 'rita'])); } }, o); }
+async function dar(k, n = 1, nm) { if (k === 'cobres') { G.cobres = (G.cobres || 0) + n; await say(`* Dentro, ${n} cobres.`); return; }
+  if (EQ2[k]) { ganharEquip(k); sfx('equip'); await say(`* Dentro: {y}${EQ2[k].nm}{/}! ${EQ2[k].d} (Equipe pelo MENU.)`); return; }
+  G.items[k] = (G.items[k] || 0) + n; await say(`* Dentro: {y}${ITEM2[k].nm}${n > 1 ? ' x' + n : ''}{/}.`); }
+const PC = POS2.cais, PP = POS2.praca, R1 = POS2.rua1, R2 = POS2.rua2, PZ = POS2.poco;
+const rot = (...a) => a.map(([x, y, act, t, dir, leva]) => ({ at: [x, y], act, t, dir, leva }));
+
+function montarMapas2() {
+  // ===== CAIS DA PONTE =====
+  MAPS2.cais = { rows: ROWS2.cais, name: 'Velhágua · Cais da Ponte', music: 'velhagua', batBg: bgCidade, showMoney: true, bg: '#1c3a54',
+    props: [
+      { img: casa({ w: 3, wall: '#8a6a4a', roof: '#6a3a2a', win: [0.6] }), x: 0, y: 8 },
+      { img: casa({ w: 7, wall: '#a8704a', roof: '#8a3a2a', door: 5 - 3 - 0.125, win: [0.5, 5], awning: '#c83a3a', signC: '#e8c040', doorWin: true }), x: 3, y: 8 },
+      { img: casa({ w: 6, wall: '#9a7a5a', roof: '#4a4a6a', win: [1, 3.6], chimney: true }), x: 10.5, y: 8 },
+      { img: casa({ w: 11, stone: true, wall: '#7a7480', roof: '#5a3a2a', win: [1, 4, 7.6], signC: '#c8a048' }), x: 17, y: 8 },
+      { img: casa({ w: 4, wall: '#a88060', roof: '#3a5a4a', win: [1] }), x: 32, y: 8 },
+      ...[[19, 3], [21.5, 2], [24, 4], [26.5, 2]].map(([x, dy]) => ({ img: cartazC, x, y: 5.6, dy, by: 129 })),
+      { img: busArt, x: 8, y: 15, solid: [[8, 13, 12, 2]] },
+      { img: memo(() => caixoteArt(0)), x: 2, y: 14, solid: [[2, 13, 1, 1]] }, { img: memo(() => caixoteArt(1)), x: 3, y: 14, solid: [[3, 13, 1, 1]] }, { img: memo(() => caixoteArt(1)), x: 2.5, y: 13.1, by: 225 },
+      { img: memo(barrilArt), x: 33, y: 10, solid: [[33, 9, 1, 1]] },
+      { img: memo(barcoArt), x: 20.3, y: 20.4, by: 300 }
+    ],
+    ents: [
+      ...portas(PC.bazarDoor, 'bazar', ...POS2.bazar.entra, 'up'), ...portas(PC.ruaPraca, 'praca', ...PP.caisIn, 'up'),
+      marcoEnt(...PC.marco),
+      morador('jorge0', ...PC.jorge, { h: 48, spr: (t, dir) => { const S = IMG.spf.jorge, F = IMG.sp.jorge; const v = dir === 'up' ? S.b : dir === 'down' ? F : S.s, fr = v[Math.floor(t / 26) % v.length]; return dir === 'right' ? flipC(fr) : fr; },
+        rotina: rot([21, 14, 'limpar', 520, 'left'], [22, 15, 'olhar', 300, 'down']), talk: falaJorge }),
+      morador('ze', ...PC.ze, { rotina: rot([19, 21, 'pescar', 900, 'down'], [17, 15, 'remendar', 420, 'down']), talk: falaZe }),
+      morador('joao', 32, 10, { rotina: rot([32, 10, 'empilhar', 110, 'right'], [4, 12, 'empilhar', 110, 'down', true]), passo: 18, talk: falaJoao }),
+      morador('dita', 14, 9, { rotina: rot([14, 9, 'varrer', 320, 'down'], [24, 11, 'varrer', 320, 'right'], [26, 13, 'olhar', 200, 'down']), talk: falaDita }),
+      { t: 'sign', x: PC.placa[0], y: PC.placa[1], h: 20, talk: async () => { await say('* PROCURADO: BAÚ COM DENTES. Responde pelo nome de "@". Recompensa: 300 frascos de âmbar. Entregar no Posto da Guilda, Praça do Sino.'); await say('Eles escreveram o seu nome certo. Isso é quase carinhoso.', 'lume'); } },
+      cacadorEnt('cais', 'c0', ...PC.cacador, PC.cacPath, { per: 280 }),
+      bauEnt('cais', 'a', 34, 14, () => dar('cobres', 30))
+    ],
+    hunters: true
+  };
+  // ===== BAZAR DA DONA GRAÇA =====
+  MAPS2.bazar = { rows: ROWS2.bazar, name: 'Bazar da Dona Graça', music: 'velhagua', showMoney: true,
+    props: [{ img: memo(() => estanteArt(2)), x: 1, y: 4, solid: [[1, 3, 2, 1]] }, { img: memo(() => estanteArt(2)), x: 9, y: 4, solid: [[9, 3, 2, 1]] }, { img: memo(() => balcaoArt(6)), x: 3, y: 5, solid: [[3, 4, 6, 1]] }, { img: plantaC, x: 10, y: 8 }],
+    ents: [...portas(POS2.bazar.door, 'cais', ...PC.bazarOut, 'down'),
+      morador('graca', ...POS2.bazar.graca, { rotina: rot([6, 3, 'limpar', 400, 'down'], [3, 3, 'limpar', 300, 'up'], [8, 3, 'olhar', 200, 'down']), talk: falaGraca }),
+      { t: 'sign', x: POS2.bazar.balcao[0], y: POS2.bazar.balcao[1], h: 30, talk: falaGraca }]
+  };
+  // ===== PRAÇA DO SINO =====
+  MAPS2.praca = { rows: ROWS2.praca, name: 'Velhágua · Praça do Sino', music: 'velhagua', batBg: bgCidade, showMoney: true, bg: '#1c3a54',
+    props: [
+      { img: casa({ w: 7, wall: '#7a4a2a', roof: '#5a2a2a', door: 4 - 1 - 0.125, win: [0.5, 5], signC: '#c89a40', chimney: true, doorWin: true }), x: 1, y: 8 },
+      { img: casa({ w: 7, stone: true, wall: '#8a8290', roof: '#2a3a5a', door: 13 - 9 - 0.125, doorC: '#3a3a4a', win: [0.5, 5.4], signC: '#8a2a2a' }), x: 9, y: 8 },
+      { img: casa({ w: 6, wall: '#a8805a', roof: '#3a5a7a', door: 21 - 18.5 - 0.125, win: [0.4, 4.3] }), x: 18.5, y: 8 },
+      { img: casa({ w: 7, wall: '#9a6a4a', roof: '#6a3a3a', win: [1, 4] }), x: 25, y: 8 },
+      { img: () => (G.flags.c2Boss ? torreSim : torreNao)(), x: 14, y: 14, solid: [[14, 12, 4, 2]] },
+      { img: memo(fonteArt), x: 5, y: 17, solid: [[5, 15, 4, 2]] },
+      { img: memo(igrejaArt), x: 24.5, y: 20, by: 300 },
+      ...PP.postes.map(([x, y]) => ({ img: () => (G.flags.c2Fim ? postes.on : postes.off)(), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
+      { img: cartazC, x: 9.6, y: 5.8, by: 129 }, { img: cartazC, x: 15.2, y: 5.6, by: 129 }
+    ],
+    ents: [
+      ...portas(PP.caisDoor, 'cais', ...PC.pracaIn, 'down'), ...portas(PP.tavDoor, 'taverna', ...POS2.taverna.entra, 'up'), ...portas(PP.tobDoor, 'tobias', ...POS2.tobias.entra, 'up'),
+      porta(...PP.ruaDoor, 'rua1', ...R1.chegada, 'down'),
+      { t: 'sign', x: PP.guildaDoor[0], y: PP.guildaDoor[1], h: 58, talk: async () => { await say('* POSTO DA GUILDA DOS CAÇADORES. Um bilhete na porta: "Fechado para almoço." A data do bilhete é de ontem.'); } },
+      marcoEnt(...PP.marco),
+      morador('celeste', ...PP.celeste, { rotina: rot([15, 14, 'sino', 500, 'up'], [13, 15, 'rezar', 300, 'up'], [16, 15, 'olhar', 200, 'down']), talk: falaCeleste }),
+      morador('bras', ...PP.bras, { rotina: rot([12, 9, 'olhar', 420, 'down'], [17, 10, 'conversar', 300, 'left']), gone: () => !!G.flags.brasSumiu, talk: falaBras }),
+      morador('pavio', 11, 9, { rotina: rot([11, 9, 'acender', 260, 'left'], [20, 9, 'acender', 260, 'left'], [10, 20, 'acender', 260, 'left'], [21, 20, 'acender', 260, 'left']), passo: 20, talk: falaPavio }),
+      morador('pedrinho', ...PP.pedrinho, { get rotina() { return G.flags.ped >= 3 ? rot([8, 18, 'brincar', 400, 'down'], [3, 19, 'brincar', 300, 'down'], [9, 21, 'olhar', 200, 'down']) : rot([8, 18, 'olhar', 500, 'down'], [10, 21, 'olhar', 400, 'down']); }, talk: falaPedrinho }),
+      morador('zefa', 19, 15, { rotina: rot([19, 15, 'conversar', 9000, 'right']), talk: falaFofoca }),
+      morador('lurdes', 20, 15, { rotina: rot([20, 15, 'conversar', 600, 'left'], [22, 10, 'varal', 500, 'up']), talk: falaFofoca }),
+      morador('nico', 3, 25, { rotina: rot([3, 25, 'empilhar', 100, 'down'], [7, 10, 'empilhar', 100, 'up', true]), passo: 20, talk: falaNico }),
+      cacadorEnt('praca', 'c1', ...PP.cac1, PP.cac1Path, { per: 300 }), cacadorEnt('praca', 'c2', ...PP.cac2, PP.cac2Path, { per: 250, vis: 6 }),
+      { t: 'trig', x: PP.escada[0][0], y: PP.escada[0][1], w: 2, h: 1, passa: true, run: escadaIgreja },
+      bauEnt('praca', 'a', 30, 9, () => dar('frasco', 1))
+    ],
+    hunters: true
+  };
+  // ===== TAVERNA DO REMO TORTO =====
+  MAPS2.taverna = { rows: ROWS2.taverna, name: 'Taverna do Remo Torto', music: 'velhagua', showMoney: true,
+    props: [{ img: memo(() => balcaoArt(5)), x: 1, y: 5, solid: [[1, 4, 5, 1]] }, { img: memo(mesaArt), x: 9, y: 7, solid: [[9, 6, 3, 1]] }, { img: memo(barrilArt), x: 12, y: 4 }, { img: memo(barrilArt), x: 12, y: 5 }, { img: memo(() => estanteArt(3)), x: 7, y: 3 }],
+    ents: [...portas(POS2.taverna.door, 'praca', ...PP.tavOut, 'down'),
+      morador('neusa', ...POS2.taverna.neusa, { rotina: rot([3, 3, 'limpar', 400, 'down'], [1, 3, 'olhar', 200, 'up'], [5, 3, 'limpar', 300, 'down']), talk: falaNeusa }),
+      { t: 'sign', x: POS2.taverna.balcao[0], y: POS2.taverna.balcao[1], h: 30, talk: falaNeusa },
+      morador('bebum', ...POS2.taverna.bebum, { rotina: rot([2, 7, 'beber', 500, 'right'], [2, 7, 'cochilar', 600, 'down']), talk: falaBebum }),
+      morador('lia', ...POS2.taverna.pavio, { rotina: rot([10, 5, 'remendar', 600, 'down'], [11, 5, 'beber', 300, 'down']), talk: falaLia })]
+  };
+  // ===== CASA DO SEU TOBIAS (o térreo já está debaixo d'água) =====
+  MAPS2.tobias = { rows: ROWS2.tobias, name: 'Casa do Seu Tobias', music: 'velhagua',
+    props: [{ img: memo(camaArt), x: 1, y: 5, solid: [[1, 3, 2, 2]] }, { img: memo(mesaArt), x: 8, y: 3.4, by: 20 }, { img: plantaC, x: 10, y: 4 }],
+    ents: [...portas(POS2.tobias.door, 'praca', ...PP.tobOut, 'down'),
+      morador('tobias', ...POS2.tobias.tobias, { rotina: rot([8, 4, 'remendar', 500, 'down'], [9, 3, 'olhar', 300, 'up']), talk: falaTobias })]
+  };
+  // ===== RUA SUBMERSA (telhados) =====
+  const afog = { music: 'afogado', batBg: bgAfogado, bg: '#0c1e2c', tint: 'rgba(30,50,110,0.12)', key: { '.': { t: 'telha' } },
+    overlay: (ox, oy) => { if (W2.t % 900 === 450) sfx('sino', 98); for (let i = 0; i < 6; i++) { const x = (i * 97 + (W2.t >> 2)) % 260 - 10, y = 240 - ((W2.t * 0.4 + i * 53) % 260); bx.globalAlpha = 0.35; bx.fillStyle = '#bfe8ff'; bx.fillRect(Math.round(x), Math.round(y), 1, 1); bx.globalAlpha = 1; } } };
+  MAPS2.rua1 = Object.assign({ rows: ROWS2.rua1, name: 'Bairro Afogado · Rua Submersa', onEnter: async () => { if (!G.flags.c2Rua) { G.flags.c2Rua = true; await say('* Debaixo de você, a rua inteira: postes, uma bicicleta, janelas com cortina. Tudo olhando para cima.'); await say('* Os telhados que ainda aparecem viraram ilhas. Riscos brancos na água: CORRENTEZAS. Elas empurram o baú.'); } },
+    props: [{ img: tendaC, x: 13, y: 11, solid: [[13, 10, 2, 1]] }, { img: plantaC, x: 16, y: 12.2, by: 190 }],
+    ents: [
+      porta(...R1.pracaDoor, 'praca', ...PP.ruaOut, 'up'), porta(...R1.merDoor, 'rua2', ...R2.chegada, 'right'),
+      marcoEnt(...R1.marco),
+      morador('marina', ...R1.marina, { rotina: rot([15, 10, 'regar', 400, 'left'], [16, 11, 'varal', 400, 'down'], [15, 12, 'olhar', 200, 'down']), talk: falaMarina }),
+      bauEnt('rua1', 'a', ...R1.bau1, () => dar('frasco', 2)), bauEnt('rua1', 'b', ...R1.bau2, async () => { await dar('escudoTampa'); await dar('cobres', 40); }), bauEnt('rua1', 'c', ...R1.bau3, () => dar('sapatilha')),
+      inimigo('l1', 'lambe', ...R1.lambe1, ['lambe', 'lambe']), inimigo('l2', 'lambe', ...R1.lambe2, ['lambe']),
+      inimigo('k1', 'caranguejo', ...R1.cara1, ['caranguejo']), inimigo('s1', 'sapo', ...R1.sapo1, ['sapo', 'lambe']),
+      inimigo('g1', 'caranguejo', ...R1.guarda, ['caranguejo', 'sapo', 'caranguejo'], { vision: 2, range: 0, after: async () => { await say('* O telhado fica quieto. No canto, um baú de verdade. Um baú de baú. Você não sabe bem como se sentir.'); } })
+    ] }, afog);
+  // ===== MERCADO AFUNDADO =====
+  MAPS2.rua2 = Object.assign({ rows: ROWS2.rua2, name: 'Bairro Afogado · Mercado Afundado', key: {},
+    props: [{ img: toldoV, x: 9, y: 3, solid: [[9, 2, 2, 1]] }, { img: toldoA, x: 12, y: 13, solid: [[12, 12, 2, 1]] }, { img: memo(() => caixoteArt(1)), x: 19.5, y: 13.2, by: 212 }],
+    ents: [
+      porta(...R2.ruaDoor, 'rua1', ...R1.merOut, 'left'), porta(...R2.pocoDoor, 'poco', ...PZ.chegada, 'up'),
+      marcoEnt(...R2.marco),
+      { t: 'chest', id: 'barco', x: R2.barco[0], y: R2.barco[1], h: 16, spr: () => G.flags.ped >= 2 ? null : barquinhoSpr(), talk: async () => { if (G.flags.ped >= 2) return; G.flags.ped = 2; sfx('item'); await say('* Um barquinho de madeira, encalhado num toldo. Do lado, escrito torto: PEDRINHO.'); await say('Pronto. Agora a gente é oficialmente um serviço de achados e perdidos.', 'rita'); save2(); } },
+      { t: 'chest', id: 'placa', x: R2.placa[0], y: R2.placa[1], h: 16, spr: () => G.flags.pavio >= 2 ? null : placaSpr(), talk: async () => { if (G.flags.pavio >= 2) return; G.flags.pavio = Math.max(2, G.flags.pavio || 0); sfx('item'); await say('* Uma plaquinha de latão, verde de limo, pregada numa banca afundada: "CONSERTO DE RELÓGIOS · OSVALDO CANDEIA".'); if ((G.flags.pavio || 0) >= 2) await say('Osvaldo. Um nome inteiro, jogado no fundo do rio. Quem é que joga um nome fora?', 'lume'); save2(); } },
+      bauEnt('rua2', 'a', ...R2.anel, async () => { await dar('anelPedagio'); await say('Esse anel tá... cobrando alguma coisa. Dá pra sentir. Igual o Espantalho.', 'lume'); }),
+      bauEnt('rua2', 'b', ...R2.bau, async () => { await dar('cobres', 60); await dar('pluma', 1); }),
+      inimigo('k1', 'caranguejo', ...R2.cara, ['caranguejo', 'caranguejo']), inimigo('l1', 'lambe', ...R2.lambe1, ['lambe', 'lambe']),
+      inimigo('l2', 'lambe', ...R2.lambe2, ['lambe', 'sapo']), inimigo('s1', 'sapo', ...R2.sapo, ['sapo', 'caranguejo'])
+    ] }, afog);
+  // ===== POÇO DO SINO =====
+  MAPS2.poco = { rows: ROWS2.poco, key: { '~': { t: 'agua', water: true, solid: true } }, name: 'Poço do Sino', music: 'afogado', batBg: bgPoco, bg: '#06100a', dark: 'rgba(4,10,8,0.78)', lights: [[7.5, 3, 70]],
+    props: [{ img: () => G.flags.c2Boss ? null : sinoPocoC(), x: 4.5, y: 4.6, by: 60 }],
+    ents: [...portas(PZ.door, 'rua2', 20, 11, 'up'), { t: 'trig', x: PZ.gatilho[0][0], y: PZ.gatilho[0][1], w: 6, h: 1, passa: true, run: pocoChefe }]
+  };
+  for (const m of Object.values(MAPS2)) { m.baked = null; for (const p of m.props || []) { const f = p.img; p.img = () => f() || EMPTY_C; } }
+}
+const SINO_MINI = memo(() => { const P = new Pix(14, 14), B = ramp('#a87a3a'); P.ball(7, 9, 6.5, 5, B); P.ball(7, 5, 4, 4, B); P.rect(1, 12, 13, 1, B[1]); P.p(5, 8, '#4a8a7a'); P.p(9, 6, '#4a8a7a'); return P.outline().canvas(); });
+const EMPTY_C = mk(1, 1), torreSim = memo(() => torreArt(true).img), torreNao = memo(() => torreArt(false).img), sinoPocoC = memo(sinoPocoArt);
+const barquinhoSpr = memo(() => { const P = new Pix(16, 12), B = ramp('#c8703a'); P.poly([[0, 6], [16, 6], [13, 11], [3, 11]], (x, y) => P.tone(B, 0.7 - (y - 6) * 0.08, x, y)); P.rect(7, 0, 1, 6, '#5a3a24'); P.poly([[8, 0], [13, 5], [8, 5]], '#f2ecdc'); return P.outline().canvas(); });
+const placaSpr = memo(() => { const P = new Pix(14, 10), B = ramp('#c8a040'); for (let y = 0; y < 8; y++) for (let x = 0; x < 13; x++) P.p(x, y + 1, P.tone(B, 0.6 - y / 20, x, y)); P.p(3, 4, '#4a8a5a'); P.p(9, 6, '#4a8a5a'); P.rect(2, 3, 9, 1, '#5a4a2a'); P.rect(2, 6, 6, 1, '#5a4a2a'); return P.outline().canvas(); });
+
+// ---------- falas dos moradores (mudam conforme a história) ----------
+async function falaJorge() {
+  const f = G.flags;
+  if (!f.celeste) await say('Dizem que a freira da torre sabe por que a cidade afunda. Vai na Praça do Sino, subindo a rua. E anda parado. Quer dizer... para quando olharem.', 'jorge');
+  else if (!f.boiar) await say('A escadaria da igreja desce pro bairro velho. O sargento da Guilda vive rondando ali. Grandão, de bigode, cara de quem nunca perdeu uma discussão.', 'jorge');
+  else if (!f.c2Boss) await say('Lá embaixo, segue a água. Se a correnteza te levar pro lugar errado, é porque o lugar certo é do outro lado. Isso vale pra estrada também.', 'jorge');
+  else await say('Que barulho bonito esse sino fez voltando. Parecia o 31 subindo a serra: reclamando, mas subindo.', 'jorge');
+  if (!f.jorgeCafe) { f.jorgeCafe = true; await say('Ah, e se precisar descansar: as pedras com a runa do baú, os Marcos. Elas fazem o mesmo que aquelas lanternas lá de baixo. Achei uma ali do lado do 31.', 'jorge'); }
+}
+async function falaZe() {
+  if (G.flags.c2Boss) { await say('A água baixou um palmo. Um palmo! Achei minha bota de 1990 no píer.', 'ze'); return; }
+  await say('Velhágua desce um degrau por ano. A gente se acostuma: sobe a cama, sobe o fogão, sobe a avó.', 'ze');
+  await say('Só que essa semana desceu TRÊS degraus. E de noite tem um sino tocando. Lá embaixo. Debaixo d\'água.', 'ze');
+  await say('O sino da torre é de lata, moço. Tem cem anos que é de lata. O que toca lá embaixo é outro.', 'ze');
+}
+async function falaJoao() { await say(pickOne(['Caixa pra cima, caixa pra cima. Desde que abriram a mina da Coroa debaixo do bairro velho, eu só carrego caixa pra cima.', 'Ô, licença! Essa é a geladeira da Dona Zefa. Não, a geladeira tá dentro da caixa. Não pergunta.', 'Tem três dias que a água sobe mais rápido. A mina bebe, dizem. Bebe o quê, eu não sei.']), 'joao'); }
+async function falaDita() { await say(pickOne(['Varrer o cais todo dia é teimosia, eu sei. Mas se eu parar de varrer, aí é que afunda de vez.', 'Moço, essa mala de vocês tá me olhando.', 'Os postes novos da Coroa chegaram semana passada. Dizem que o Acendedor-Mor vem acender pessoalmente. Um conde! Aqui! Vou varrer duas vezes.']), 'dita'); }
+async function falaGraca() {
+  if (!G.flags.graca) { G.flags.graca = true;
+    await say('Bem-vindos ao Bazar! Tem frasco, tem tinta, tem pena de galinha dourada que levanta defunto. Funciona. Não pergunte como.', 'graca');
+    await say('E eu vendo pra qualquer um que paga em cobre. Até pra mala. Principalmente pra mala com dente, que mala com dente paga adiantado.', 'graca');
+    await say('Ela sabe.', 'rita'); await say('Todo mundo sabe, filha. A Guilda é que finge que não. Ou finge que sabe. Depende do dia.', 'graca');
+  }
+  await loja(['frasco', 'tinta', 'pluma', 'escudoTampa', 'sapatilha', 'microfone']);
+  if (!G.flags.gracaMina) { G.flags.gracaMina = true; await say('Ah: desde que a Coroa abriu a mina de âmbar debaixo do bairro velho, a gente afunda mais rápido. Mas isso eu não falei, tá?', 'graca'); }
+}
+async function falaNeusa() {
+  const c = await choose('Remo Torto, o pior caldo de peixe da cidade e o melhor de Velhágua. Vai querer?', ['Caldo para o grupo (15 cobres)', 'Notícias', 'Nada'], 'neusa', 2);
+  if (c === 0) { if ((G.cobres || 0) < 15) { await say('Fiado, só pra quem tem endereço. E mala não tem CEP.', 'neusa'); return; } G.cobres -= 15; curarTudo(); sfx('heal'); await say('* O caldo é salgado, quente e tem um olho de peixe olhando para você. A vida e os PM do grupo voltam ao máximo.'); return; }
+  if (c === 1) {
+    if (!G.flags.celeste) await say('A Irmã Celeste toca o sininho de lata da torre, toda hora certa. Ela diz que é pra cidade não esquecer que tem sino. Se alguém sabe do sino de baixo, é ela.', 'neusa');
+    else if (!G.flags.c2Boss) await say('O Seu Tobias, aqui do lado, não sai mais de casa. A filha dele mora "no andar de cima", nos telhados do bairro afogado. Teimosa igual o pai.', 'neusa');
+    else await say('A cidade parou de afundar e o povo resolveu comemorar comendo o meu caldo. Eu devia ter afundado antes.', 'neusa');
+  }
+}
+async function falaBebum() { await say(pickOne(['Eu vi um baú andando. Parei de beber. Vi de novo. Voltei a beber.', 'Psiu. Sabe por que o sino toca lá embaixo? Porque ninguém mais toca ele aqui em cima. Ninguém visita velho, meu filho.', 'Zzz... três degraus... zzz... e o conde de cartola... zzz.']), 'bebum'); }
+async function falaLia() { await say(pickOne(['Os postes novos da Coroa? Bonitos. O Acendedor-Mor paga bem os acendedores dele, os Pavios. Paga até pensão pra família. Gente fina.', 'Os Pavios? Educados, quietinhos, trabalham até de madrugada. Só são meio... esquecidos. Perguntei o nome de um, ele ficou olhando pro poste.', 'Remendar rede é igual remendar cidade: você puxa um fio aqui e o buraco aparece ali.']), 'lia'); }
+async function falaFofoca() {
+  const f = G.flags;
+  await say(f.c2Boss ? 'Você viu? O sino voltou! Sozinho, não. Puxado pelo ônibus! Que época.' : pickOne(['...e aí a filha do Tobias disse que não desce do telhado nem amarrada. Pois é.', '...e o sargento Brás jura que viu uma mala piscar pra ele. Pois é.', '...e o menino do Pedrinho perdeu o barquinho na correnteza. Chorou a tarde inteira. Pois é.']), pickOne(['zefa', 'lurdes']));
+  await say('Pois é.', pickOne(['zefa', 'lurdes']));
+}
+async function falaNico() { await say(pickOne(['Mudança. Toda semana é mudança. Eu já subi essa cômoda pro segundo andar, pro sótão e agora pro telhado do vizinho.', 'Se a cidade parar de afundar eu desço tudo de novo. Ou não. Acostumei com a vista.']), 'nico'); }
+async function falaCeleste() {
+  const f = G.flags;
+  if (f.c2Boss) { await say('Ela voltou. A Dona Badalada voltou. Tocou o meu batizado, sabia? E hoje tocou de novo, só pra mim. Obrigada.', 'celeste'); return; }
+  if (f.celeste) { await say('A escadaria da igreja desce para o bairro velho. Vá com Deus. E com cuidado. Deus anda meio ocupado com a enchente.', 'celeste'); return; }
+  await say('Ah! Visitas. Desculpem, eu estava tocando o sininho. Tem que tocar na hora certa, senão a cidade esquece que tem sino.', 'celeste');
+  await say('Esse aqui é de lata. O de verdade, a Dona Badalada, caiu no rio numa cheia, há cem anos. Ela tocou todos os casamentos, batizados e enterros de Velhágua.', 'celeste');
+  await say('E esta semana... ela voltou a tocar. Lá embaixo. Toda noite. E a cidade desceu três degraus. Eu acho que ela está chamando. Ou puxando.', 'celeste');
+  await say('A Guilda fechou a escadaria da igreja. O Sargento Brás diz que é perigoso. A Coroa diz que é a mina. Ninguém diz nada para o sino.', 'celeste');
+  const c = await choose('Vocês... vão descer, não vão? Eu vejo pela mala. Ela tem cara de quem vai descer.', ['A gente desce.', 'Que mala?'], 'celeste');
+  if (c === 1) await say('Essa que está piscando para mim. Tudo bem. Eu também finjo muita coisa.', 'celeste');
+  await say('Tome. A chave do cadeado da escadaria. Eu não vi nada. Eu rezo de olhos fechados, sabe.', 'celeste');
+  await say('Só peço uma coisa: se encontrarem a Dona Badalada, não machuquem ela mais que o necessário. Ela só está com medo de ser esquecida. Como todo mundo.', 'celeste');
+  sfx('item'); await say('* Você recebeu a {y}Chave da Escadaria{/}. A escadaria fica do lado da igreja, descendo para o rio.');
+  f.celeste = true; save2();
+}
+async function falaBras() {
+  const f = G.flags;
+  if (f.brasLuta) { await say(f.c2Boss ? 'Uma mala derrubou o sino que derrubava a cidade. Eu vou escrever isso no relatório e vão me internar.' : 'Eu não vi baú nenhum. Eu vi uma mala muito determinada. Circulando.', 'bras'); return; }
+  await say('Bela mala. É de quem?', 'bras');
+  await say('Minha. É... herança.', 'lume');
+  await say('Herança com dente.', 'bras');
+  await say('Herança antiga. Os dentes vieram junto. Coisa de família.', 'rita');
+  await say('Hm. Sargento Brás, da Guilda dos Caçadores. Se essa herança piscar, eu levo pra perícia. Tenham um bom dia.', 'bras');
+}
+async function falaPavio() {
+  const f = G.flags, p = f.pavio || 0;
+  if (p >= 3) { await say('Osvaldo Candeia, consertador de relógios. Eu repito toda hora, pra não perder de novo. Osvaldo. Candeia.', 'pavio'); return; }
+  if (p === 2) {
+    await say('* Você mostra a plaquinha de latão. O Pavio lê devagar, como quem lê uma palavra de outra língua.');
+    await say('O... Osvaldo. Osvaldo Candeia. Conserto de relógios. Eu... eu consertava relógios. A banca era no Mercado. O relógio da torre parou e eu nunca consegui consertar. Eu lembro disso!', 'pavio');
+    await say('Eu lembro de tudo! Quer dizer, de quase tudo. Eu entrei pros Pavios por um salário. Pra ser Pavio a gente entrega uma coisinha pequena. Um nome, ele disse. "Ninguém sente falta de um nome."', 'pavio');
+    await say('Quem disse?', 'rita');
+    await say('...Não lembro do rosto. Lembro da luz. Era uma luz muito bonita.', 'pavio');
+    await say('Obrigado. De verdade. Tomem, é o que eu tenho: o salário da semana. Pavio não gasta com nada mesmo.', 'pavio');
+    f.pavio = 3; G.cobres = (G.cobres || 0) + 50; G.items.tinta = (G.items.tinta || 0) + 2; sfx('item');
+    await say('* +50 cobres e {y}Tinta Azul x2{/}.'); save2(); return;
+  }
+  await say('Boa tarde. Eu acendo os postes novos da Coroa. Os Pavios do Acendedor-Mor acendem. Eu sou Pavio. É assim que me chamam.', 'pavio');
+  await say('Parente da Madame Pavio, lá de baixo? Ela também era meio vela.', 'lume');
+  await say('Não sei. Eu não lembro de parentes. Eu não lembro... do meu nome, na verdade. Tinha numa plaquinha. Na minha banca, no Mercado. Antes de afundar.', 'pavio');
+  await say('Se vocês descerem lá... e se acharem... não, que bobagem. Ninguém sente falta de um nome.', 'pavio');
+  if (!p) { f.pavio = 1; await say('* Nova missão: {y}O nome do Pavio{/}. A plaquinha dele está em alguma banca do Mercado Afundado.'); }
+}
+async function falaPedrinho() {
+  const f = G.flags, p = f.ped || 0;
+  if (p >= 3) { await say('Olha, ele boia! Igual o seu baú! ...O seu baú boia, né? Eu vi ele boiando. Eu não conto pra ninguém. Só pra minha mãe. E pra minha vó.', 'pedrinho'); return; }
+  if (p === 2) {
+    await say('MEU BARQUINHO! Vocês acharam! Lá embaixo? Com a correnteza e tudo?', 'pedrinho');
+    await say('Toma, é do meu cofrinho. E essa pena dourada, minha vó disse que levanta até defunto. Eu nunca testei.', 'pedrinho');
+    f.ped = 3; G.cobres = (G.cobres || 0) + 40; G.items.pluma = (G.items.pluma || 0) + 1; sfx('item');
+    await say('* +40 cobres e {y}Pena de Fênix?{/}.'); save2(); return;
+  }
+  await say('Meu barquinho fugiu. Eu soltei ele na escadaria da igreja e a correnteza levou. Foi pro Mercado Afundado, eu vi ele ir.', 'pedrinho');
+  await say('O meu pai fez ele. Antes de ir trabalhar na mina.', 'pedrinho');
+  if (!p) { f.ped = 1; await say('* Nova missão: {y}O barquinho do Pedrinho{/}.'); }
+}
+async function falaTobias() {
+  const f = G.flags, c = f.tob || 0;
+  if (c >= 3) { await say('A luva era pra pescar. Agora é pra vocês. A Marina mandou um bilhete de volta, sabia? Diz que vai descer do telhado. Num domingo. De um ano qualquer.', 'tobias'); return; }
+  if (c === 2) {
+    await say('Ela leu? Ela... riu? Quando ela era pequena, ela ria igual a mãe. De nariz.', 'tobias');
+    await say('* Você conta que ela riu de nariz. O Seu Tobias tira a luva grossa de pescador e põe no balcão, devagar.', 'n');
+    await say('Toma. Pra moça da lança. Eu não pesco mais. A água veio até mim, não preciso ir até ela.', 'tobias');
+    f.tob = 3; ganharEquip('luvaPescador'); sfx('equip'); await say(`* Você recebeu a {y}${EQ2.luvaPescador.nm}{/}. ${EQ2.luvaPescador.d}`); save2(); return;
+  }
+  if (c === 1) { await say('A carta é pra Marina, minha filha. Ela mora no andar de cima. Nos telhados do bairro afogado. Tem uma tenda e uma horta de vaso.', 'tobias'); return; }
+  await say('Desculpem a bagunça. O térreo virou aquário. Eu moro no que sobrou: a cama, a mesa e a teimosia.', 'tobias');
+  await say('Minha filha, a Marina, mudou pros telhados do bairro velho quando a água subiu. Diz que de lá a vista é melhor. A gente brigou. Faz dois anos que a gente não se fala.', 'tobias');
+  await say('Eu escrevi uma carta. Escrevo toda semana, na verdade. Nunca mando. Eu não nado, e o orgulho afunda mais rápido que a cidade.', 'tobias');
+  const r = await choose('Vocês... levariam?', ['Levamos.', 'Por que não fala com ela?'], 'tobias');
+  if (r === 1) await say('Porque falar é difícil e carta a gente pode reescrever até ficar menos burra.', 'tobias');
+  f.tob = 1; sfx('item'); await say('* Você recebeu a {y}Carta do Seu Tobias{/}. Nova missão: {y}Carta para o andar de cima{/}.'); save2();
+}
+async function falaMarina() {
+  const f = G.flags, c = f.tob || 0;
+  if (c === 1) {
+    await say('Visita no telhado? Ninguém sobe aqui. Quer dizer, ninguém desce aqui. É complicado.', 'marina');
+    await say('* Você entrega a carta. A Marina reconhece a letra antes de abrir. Fica um tempo parada, com o regador pingando no pé.', 'n');
+    await say('"Marina. A água chegou na cozinha. Eu fritei um peixe dentro da cozinha e o peixe ainda estava vivo. Era uma piada. Volta. Ou não volta. Mas responde. Teu pai, Tobias." ...Ele é ridículo.', 'marina');
+    await say('* Ela ri. De nariz.', 'n');
+    await say('Leva isso pra moça de luz. Eu bordei pras velas do meu pai, mas ele não acende vela desde que a mãe se foi. Ela precisa mais.', 'marina');
+    ganharEquip('xaleVelas'); sfx('equip'); f.tob = 2;
+    await say(`* Você recebeu o {y}${EQ2.xaleVelas.nm}{/}. ${EQ2.xaleVelas.d}`);
+    await say('E fala pra ele que... não. Fala que eu ri. Só isso.', 'marina'); save2(); return;
+  }
+  if (c >= 2) { await say('Eu tô regando a horta. Se a cidade parar de afundar, eu levo um vaso pra ele. Um vaso por semana. Feito carta.', 'marina'); return; }
+  await say('Ninguém desce aqui. O meu pai ia dizer que é perigoso. O meu pai diz que tudo é perigoso, menos ficar sozinho.', 'marina');
+}
+
+// ---------- o primeiro Marco ----------
+async function primeiroMarco() {
+  if (G.flags.tutMarco) return; G.flags.tutMarco = true;
+  await say('Essa runa... @, é igual à da sua tampa. Igualzinha. Quem é que espalhou pedra com o seu desenho pela superfície?', 'lume');
+  await say('Os antigos chamavam de Marcos. Meu avô dizia que eram de "quando os baús andavam". Eu achava que era jeito de falar.', 'rita');
+  await say('* (MARCO: salva o jogo, cura o grupo e os bichos da região voltam. Se o grupo cair, ele acorda no último Marco.)');
+}
+
+// ---------- disfarce de bagagem: os Caçadores pegaram o baú andando ----------
+async function cacadoresAtacam(e) {
+  await say(pickOne(['EI! Essa mala... ANDOU!', 'Bagagem não pisca! Bagagem não ANDA!', 'Mala de rodinha eu conheço. Mala de PERNA, não!']), 'cacador');
+  await say(pickOne(['Ele é tímido!', 'É o vento!', 'Bagagem moderna. Vem com perna.']), pickOne(['lume', 'rita']));
+  const r = await lutaMapa(['cacador', 'cacador'], { bg: bgCidade, music: 'luta2' });
+  if (r === 'win') { G.gone2[W2.id + ':' + e.id] = true; W2.ents = W2.ents.filter(q => q !== e); W2.sus = 0; await say('* O Caçador sai mancando para chamar reforço. Vai demorar: ele tropeçou no próprio apito.'); }
+  else W2.sus = 0;
+}
+
+// ---------- a escadaria da igreja: chave, o Sargento Brás e o baú que boia ----------
+function recua() { if (canStand(W2.x, W2.y - 1, 'player')) { W2.dir = 'up'; startMove(W2, W2.x, W2.y - 1); } }
+async function escadaIgreja() {
+  const f = G.flags;
+  if (f.boiar) return;
+  if (!f.celeste) {
+    await say('* Uma corrente com cadeado atravessa a escadaria. Uma placa: INTERDITADO PELA GUILDA. PERIGO: SINO.');
+    await say('Perigo: sino. Que tipo de perigo um sino oferece?', 'rita'); await say('Barulho?', 'lume');
+    await say('A gente devia falar com alguém da igreja. Aquela moça tocando o sininho, ali na torre.', 'rita'); recua(); return;
+  }
+  if (!f.brasLuta) { await emboscadaBras(); if (!f.brasLuta) return; }
+  await descobreBoiar();
+}
+async function emboscadaBras() {
+  await say('* Você destranca o cadeado. A corrente cai na escada com um barulho enorme. Barulho de sino, quase.');
+  await say('Ah. A irmã abriu o cadeado pra vocês? A Irmã Celeste abre cadeado até pra gato.', 'bras');
+  await say('* O Sargento Brás está atrás de vocês, com dois Caçadores e um carimbo enorme na mão.');
+  await say('Eu fiz uma perícia. A herança de vocês pisca. Respira. E ontem, na frente do bazar, ela BOCEJOU.', 'bras');
+  await say('Trezentos frascos. Sabe o que é isso? É o telhado de todo mundo da praça. ...Nada pessoal, mala.', 'bras');
+  await say('Ele vai cobrar. Igual o espantalho.', 'lume');
+  await say('Ninguém mais vai cobrar ninguém nessa viagem. Escudeira Rita, em guarda!', 'rita');
+  const r = await lutaMapa(['bras', 'cacador'], { bg: bgCidade, music: 'boss', intro: async () => { const e = BT.foes[0]; e.phases = fasesBras(); e.ct = 20; callout('SARGENTO BRÁS', '#ffd8a0', 100); } });
+  if (r !== 'win') return;
+  G.flags.brasLuta = true;
+  await say('Tá. Tá bom. Ninguém derruba o Brás duas vezes na mesma semana. Uma já tá bom.', 'bras');
+  await say('Olha: lá embaixo tem coisa pior que mala. Tem três dias que o sino toca e a água sobe. A Guilda não desce porque a Coroa não paga hora extra pra morrer afogado.', 'bras');
+  await say('Se essa mala fizer o sino parar... a Guilda nunca viu baú nenhum. Combinado?', 'bras');
+  await say('Combinado.', 'rita');
+  await say('* O sargento vai embora massageando o orgulho. Os Caçadores dele continuam de ronda: ordem é ordem.');
+  save2();
+}
+function fasesBras() {
+  return [{ at: 0.5, run: async (e) => {
+    sfx('rumble'); bshake(20, 3);
+    await say('Tá bom. Agora é pessoal. ...É sempre pessoal, na verdade. Eu só falo que não é.', 'bras');
+    e.ph = 2; e.weak = ['corte', 'fogo']; e.maxShield = 5; e.shield = 5; e.spd = 12;
+    callout('Ele tirou o casaco: as fraquezas mudaram!', '#8fe3ff', 90);
+  } }];
+}
+async function descobreBoiar() {
+  await say('A escada termina na água. O bairro velho tá lá embaixo, e o caminho... é por cima dele.', 'rita');
+  await say('Eu nado. A Lume...', 'rita');
+  await say('Lustre afunda, Rita. Lustre é feito de ferro e de vergonha.', 'lume');
+  await say('* Você olha para a água. A água olha para você. Você é um baú. Baú é madeira. Madeira...');
+  sfx('splash'); V.shake = 8;
+  await say('* Você pula. E BOIA.');
+  await say('ELE BOIA! @, você é um BARCO!', 'lume');
+  await say('Um barco com dentes. Abre a tampa aí, a gente entra.', 'rita');
+  G.flags.boiar = true; save2();
+  await say('* (Agora o baú anda na água. Entre na água pela escadaria. As CORRENTEZAS, os riscos brancos, empurram o baú: elas são o caminho.)');
+}
+
+// ---------- o chefe ----------
+async function pocoChefe() {
+  if (G.flags.c2Boss) return;
+  const f = G.flags;
+  if (!f.c2BossVisto) {
+    f.c2BossVisto = true; playMusic(null); sfx('sino', 98); V.shake = 20;
+    await say('* No fundo do poço, um sino do tamanho de uma casa. Verde de azinhavre, coberto de cracas. Dele saem correntes de navio como raízes, e cada corrente sobe até uma estaca de casa lá em cima.');
+    await say('* Dentro da boca do sino, dois olhos de âmbar escuro se abrem.');
+    await say('DING... QUEM... QUEM VOCÊS SÃO? EU LEMBRO DE TODO MUNDO. TODO MUNDO QUE CASOU. TODO MUNDO QUE NASCEU. TODO MUNDO QUE FOI EMBORA.', 'ancora');
+    await say('MAS ELES ESTÃO ESQUECENDO. A MINA BEBE. BEBE AS LEMBRANÇAS DO FUNDO DO RIO. ENTÃO EU PUXO. EU PUXO A CIDADE PARA BAIXO. PARA PERTO. PARA NINGUÉM SE PERDER.', 'ancora');
+    await say('Ela não quer afundar ninguém. Ela tá com medo de esquecer. Eu conheço esse medo, @.', 'lume');
+    await say('Medo com correntes de navio. Cuidado com a água: o poço sobe quando ela respira.', 'rita');
+  } else await say('VOCÊS VOLTARAM. EU LEMBRO DE VOCÊS. EU NÃO ESQUEÇO NINGUÉM.', 'ancora');
+  const r = await lutaMapa(['ancora'], { bg: bgPoco, music: 'ancora', pos: [[182, 150]], tension: 20, extra: { fileira: true, bgAnim: bgAnimPoco },
+    intro: async () => { const e = BT.foes[0]; e.phases = fasesAncora(); e.ct = 10; BT.mare = { lvl: 4 }; callout('A ÂNCORA-MÃE', '#e8d8a0', 100); hint('Nesta luta dá para trocar de FILEIRA (ícone de setas na roda): frente ou trás.', 320); } });
+  if (r !== 'win') return;
+  G.flags.c2Boss = true; save2();
+  await fimCap2();
+}
+
+// ---------- o final do capítulo ----------
+function humF(k, view = 'f', flip) { return t => { const h = humano(k, HUMS[k]), v = h[view], fr = v[Math.floor(t / 26) % v.length]; return flip ? flipC(fr) : fr; }; }
+async function fimCap2() {
+  await fadeOut(20);
+  // 1) o sino sobe: o 31 puxa a corda
+  CENA.bg = bgPoco; CENA.actors = [{ x: 120, y: 150, fr: () => ancoraFrame(3, 0, false) }]; CENA.extra = null; V.scene = 'cena'; playMusic('ending'); await fadeIn(20);
+  if (G.flags.cantouSino) {
+    await say('* A Âncora-Mãe para. As correntes afrouxam. A Lume ainda está cantando, baixinho, e o sino cantarola junto, um zumbido de bronze.');
+    await say('...FAZIA CEM ANOS QUE NINGUÉM CANTAVA PARA MIM. EU SÓ CANTAVA PARA OS OUTROS.', 'ancora');
+  } else {
+    await say('* A Âncora-Mãe para. As correntes afrouxam, uma por uma, e lá em cima as estacas das casas estalam de alívio.');
+    await say('...VOCÊS NÃO ME DEIXARAM PUXAR. MAS TAMBÉM NÃO FORAM EMBORA.', 'ancora');
+  }
+  await say('Ninguém vai esquecer a senhora. A senhora só precisa voltar pra onde todo mundo te vê. Lá em cima. Na torre.', 'lume');
+  await say('A TORRE... EU SOU PESADA, MENINA. SOU PESADA DE TANTA GENTE.', 'ancora');
+  await say('Eu conheço alguém que puxa coisa pesada serra acima.', 'rita');
+  await fadeOut(20);
+  // 2) a praça: o 31 puxando o sino, a cidade inteira na corda
+  CENA.bg = bgCidade; CENA.extra = null;
+  CENA.actors = [{ x: 40, y: 156, fr: () => busArt() }, { x: 156, y: 150, fr: humF('celeste') }, { x: 176, y: 154, fr: humF('tobias') }, { x: 190, y: 150, fr: humF('marina') }, { x: 208, y: 156, fr: humF('pedrinho') }, { x: 226, y: 150, fr: humF('bras') }];
+  if ((G.flags.tob || 0) < 2) CENA.actors.splice(2, 2);
+  const sinoT = { y: 160, on: false }; const sinoNaTorre = () => { if (!sinoT.on) return; const P = SINO_MINI(); bx.drawImage(P, 125 - 7, Math.round(sinoT.y)); };
+  CENA.extra = sinoNaTorre;
+  await fadeIn(20);
+  await say('ACELERA, 31!', 'jorge'); sfx('rumble'); V.shake = 20;
+  await say('* O 31 tosse, ronca e sobe a ladeira de ré, com uma corda amarrada no para-choque. A cidade inteira segura a corda. Até o Sargento Brás. Principalmente o Sargento Brás.');
+  sinoT.on = true; await tw2cena(70, p => { sinoT.y = 160 - ease.out(p) * 124; }); sfx('sino', 196); await wait(40);
+  await say('* E a Dona Badalada sobe. Pinga rio, pinga craca, pinga cem anos. Encaixa no campanário com um DONG que faz todo mundo chorar e fingir que é a poeira.');
+  await say('* Naquela noite, Velhágua sobe um degrau. O primeiro em cem anos.');
+  if ((G.flags.tob || 0) >= 2) await say('* No meio da praça, um velho de luva e uma moça de regador fingem que estão ali por acaso. Ninguém acredita. Os dois riem de nariz.');
+  if ((G.flags.ped || 0) >= 3) await say('* O Pedrinho põe o barquinho para boiar na fonte. Ele boia igualzinho a você.');
+  await fadeOut(24);
+  // 3) entardecer: chega o Acendedor-Mor
+  const tint = { a: 0 };
+  CENA.extra = () => { sinoNaTorre(); bx.globalAlpha = tint.a; bx.fillStyle = '#100a24'; bx.fillRect(0, 12, W, 150); bx.globalAlpha = 1; if (tint.lit) for (const [x, y] of [[20, 70], [80, 64], [168, 64], [226, 70]]) { const g = bx.createRadialGradient(x, y, 1, x, y, 22); g.addColorStop(0, 'rgba(255,210,120,0.55)'); g.addColorStop(1, 'rgba(255,210,120,0)'); bx.fillStyle = g; bx.fillRect(x - 22, y - 22, 44, 44); bx.fillStyle = '#fff0c0'; bx.fillRect(x - 1, y - 2, 3, 4); } };
+  const lume = { x: 70, y: 152, fr: standF('lumeh') }, rita = { x: 98, y: 156, fr: standF('rita') }, bau = { x: 84, y: 160, fr: chestF() };
+  const vesper = { x: 260, y: 150, fr: humF('vesper', 's') }, p1 = { x: 290, y: 152, fr: humF('pavio', 's') }, p2 = { x: 310, y: 148, fr: humF('pavio', 's') };
+  CENA.actors = [lume, rita, bau, vesper, p1, p2];
+  await fadeIn(20); playMusic('velhagua');
+  await tw2cena(60, p => { tint.a = p * 0.35; vesper.x = 260 - p * 100; p1.x = 290 - p * 70; p2.x = 310 - p * 60; });
+  await say('* Ao entardecer, uma carruagem preta para na praça. Dela desce um homem alto, de cartola e cabelo prateado, seguido por acendedores de casaco cinza. Os Pavios.');
+  await say('Boa tarde, Velhágua. Perdoem a demora: a estrada da serra estava cheia de cartazes.', 'vesper');
+  await say('Conde Ulrico Vesper, Acendedor-Mor da Coroa. Eu vim acender os postes novos. E vim ver quem fez a cidade parar de afundar.', 'vesper');
+  await say('* Ele aperta a mão de todo mundo. As mãos dele são finas, educadas, e sujas de fuligem até os pulsos.');
+  await say(G.flags.cantouSino ? 'Que canção bonita eu ouvi subir do rio hoje. Era a senhorita? Fazia tempo que eu não ouvia alguém cantar para uma coisa velha.' : 'Disseram-me que a senhorita canta. Eu adoraria ouvir, algum dia. A gente esquece quanto uma música aquece.', 'vesper');
+  await say('...Obrigada. Era só uma música. Pra ela não ficar sozinha.', 'lume');
+  await say('Nunca é só uma música.', 'vesper');
+  await say('* Ele olha para você. Um olhar longo, calmo, de quem confere uma conta.');
+  await say('E o seu baú... Bela peça. Antiga. Não se preocupe, escudeira: eu não trabalho para a Guilda. Eu trabalho para o escuro acabar.', 'vesper');
+  await say('Um presente. Os antigos chamavam de Marco de Viagem: uma pedrinha com a runa dos baús. Com ela, vocês voltam a qualquer Marco por onde passaram. Ninguém devia se perder no caminho.', 'vesper');
+  sfx('item'); G.flags.marcoViagem = true; await say('* Você recebeu o {y}Marco de Viagem{/}. A runa nele é a da sua tampa.');
+  await say('E um convite. Em sete dias começa o Festival da Luz, na capital, Auren. A cidade inteira acesa a noite toda. Eu faço questão da presença de vocês. Da senhorita, principalmente.', 'vesper');
+  // a noite cai: os postes acendem, a Lume volta a ser lustre
+  await tw2cena(50, p => { tint.a = 0.35 + p * 0.4; });
+  tint.lit = true; sfx('rune');
+  await say('* Os Pavios erguem as varas. Um por um, os postes novos da Coroa acendem. A praça fica dourada.');
+  await tw2cena(30, p => { lume.alpha = 1 - p; });
+  lume.fr = t => IMG.sp.lume ? IMG.sp.lume[Math.floor(t / 20) % IMG.sp.lume.length] : null; lume.oy = -14;
+  await tw2cena(30, p => { lume.alpha = p; });
+  await say('* E quando o último pedaço de sol some atrás da serra, a Lume treme, encolhe e volta a ser o que era lá embaixo: um lustre pequeno, de velas tortas, flutuando do seu lado.');
+  await say('...De noite eu volto a ser isso. Esqueci de avisar. Desculpa, @. Eu não queria que você visse.', 'lume');
+  await say('Ninguém devia ter medo do escuro, moça.', 'vesper');
+  await say('* Ele diz isso com uma gentileza enorme. Depois toca a aba da cartola e vai embora com os Pavios.');
+  if ((G.flags.pavio || 0) >= 3) {
+    await say('* Ao passar pelo Pavio que lembrou o próprio nome, o Acendedor-Mor para. Tira do bolso um caderno de capa preta. Escreve alguma coisa.');
+    await say('* Do seu ângulo, de cabeça para baixo, você consegue ler: "Osvaldo Candeia". E depois, com cuidado, ele risca.');
+  } else await say('* Ao passar pelos Pavios, ele cumprimenta cada um: "Boa noite, Pavio." Eles sorriem do jeito de quem não tem outro nome para responder.');
+  await say('Ele parece gente boa.', 'rita');
+  await say('Parece.', 'lume');
+  await say('* Lá em cima, na torre, a Dona Badalada toca as nove horas. Certinho. Pela primeira vez em cem anos, ninguém precisa lembrar a cidade de que ela tem um sino.');
+  G.flags.c2Fim = true; G.pos = { map: 'praca', x: 15, y: 16, dir: 'down' }; G.marco = { map: 'praca', x: 2, y: 12 }; save2();
+  await fadeOut(40);
+  await cartao(['FIM DO CAPÍTULO 2', 'Velhágua, a cidade que afunda', '', 'Próximo: Capítulo 3', 'O Festival da Luz']);
+  titleFlow2();
+}
+function tw2cena(n, fn) { return new Promise(r => { let k = 0; const f = () => { k++; fn(Math.min(1, k / n)); if (k < n) requestAnimationFrame(f); else r(); }; f(); }); }
+
+// ---------- cartão de capítulo ----------
+function drawCard() {
+  bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H);
+  const C = V.card; if (!C) return; C.t = (C.t || 0) + 1;
+  C.l.forEach((s, i) => txt(s, 120, 70 + i * 16, { align: 'center', col: i === 0 ? '#ffe066' : i >= 3 ? '#8fe3ff' : '#b8aecb', sz: i === 0 ? 1.5 : 1, alpha: Math.min(1, (C.t - i * 12) / 20) }));
+  if (C.t > 90 && FRAME % 60 < 40) txt('A', 120, 200, { align: 'center' });
+  if (C.t > 90 && btnp('a') && C.r) { const r = C.r; C.r = null; sfx('select'); r(); }
+}
+function cartao(l) { return new Promise(async r => { V.card = { l, r }; V.scene = 'card'; await fadeIn(20); }).then(() => fadeOut(20)); }
+
+// ---------- entrada no capítulo ----------
+function iniciarCap2() {
+  if (G.flags.c2Init) return false;
+  G.flags.c2Init = true; G.cobres = 30; G.gone2 = {}; G.pt = {}; G.poder = 1;
+  G.equipInv = {}; G.eq = {};
+  if (!G.equipInv.lancaPedagio) ganharEquip('lancaPedagio'); G.eq.rita = Object.assign({ arma: 'lancaPedagio' }, G.eq.rita);
+  if (G.her && G.her.lume && G.her.lume.fone && !G.equipInv.foneRemendado) { ganharEquip('foneRemendado'); G.eq.lume = Object.assign({ amuleto: 'foneRemendado' }, G.eq.lume); }
+  G.items = Object.assign({}, G.items, { frasco: Math.max(3, G.items.frasco || 0), tinta: Math.max(2, G.items.tinta || 0), pluma: Math.max(1, G.items.pluma || 0) });
+  G.marco = { map: 'cais', x: PC.chegada[0], y: PC.chegada[1] };
+  return true;
+}
+async function chegadaVelhagua() {
+  await cartao(['CAPÍTULO 2', 'Velhágua, a cidade que afunda']);
+  CENA.bg = bgCidade; CENA.extra = null;
+  const bus = { x: -80, y: 156, fr: () => busArt() }, mud = { x: 250, y: 150, fr: humF('nico', 's') }, mud2 = { x: 270, y: 152, fr: humF('joao', 's') };
+  CENA.actors = [bus, mud, mud2]; V.scene = 'cena'; playMusic('velhagua'); await fadeIn(30);
+  await tw2cena(80, p => { bus.x = -80 + ease.out(p) * 110; mud.x = 250 - p * 90; mud2.x = 270 - p * 80; });
+  await say('* Velhágua tem cheiro de pão molhado e de rio. As casas ficam em pé sobre estacas, como garças cansadas, e a torre da praça é torta para o lado da água.');
+  await say('* Na beira do cais, gente sobe a ladeira carregando cadeiras, gaiolas, uma cômoda, um piano inteiro. Ninguém parece surpreso.');
+  await say('Ponto final: Cais da Ponte. Eu fico com o 31. Se a cidade afundar, pelo menos o ônibus boia. ...Eu acho.', 'jorge');
+  CENA.actors.push({ x: 150, y: 152, fr: standF('lumeh') }, { x: 166, y: 160, fr: chestF() }, { x: 182, y: 156, fr: standF('rita') });
+  await say('* O âmbar do Espantalho, guardado na sua tampa, ainda está quente. Você sente uma coisa voltando, devagar: força antiga. (+ vida, ataque e magia.)');
+  await say('Toma, Rita. A lança do pedágio. O Espantalho não vai precisar.', 'lume');
+  await say('* A Rita equipou a {y}Lança do Pedágio{/}. (Equipamentos: MENU > Equipar. Só as formas humanas usam.)');
+  await say('@, os cartazes. Tão em todo poste. Você é famoso aqui também.', 'lume');
+  await say('A Guilda dos Caçadores. Eles ganham por monstro entregue. Se te virem andando, acabou a viagem.', 'rita');
+  await say('Então ele não anda. Ele é bagagem. A gente carrega. Quer dizer... ele vai do lado. Bem paradinho quando olharem.', 'lume');
+  await say('Bagagem não pisca.', 'rita');
+  await say('...Pisca sim. A minha piscava.', 'lume');
+  await say('* (DISFARCE DE BAGAGEM: quando um Caçador parar e OLHAR, com o "!" em cima da cabeça, não se mexa. Pego andando três vezes, eles atacam.)');
+  await fadeOut(20);
+}
+async function capitulo2() {
+  if (!MAPS2.cais) montarMapas2();
+  if (G.flags.c2Fim) { V.scene = 'card'; await cartao(['CAPÍTULO 2 COMPLETO', 'Velhágua parou de afundar.', '', 'O Capítulo 3, O Festival da Luz,', 'está a caminho.']); return titleFlow2(); }
+  const novo = iniciarCap2();
+  G.gone2 = G.gone2 || {};
+  if (novo || !G.flags.c2Chegada) { await chegadaVelhagua(); G.flags.c2Chegada = true; loadMap2('cais', ...PC.chegada, 'down'); save2(); }
+  else { const p = G.pos && MAPS2[G.pos.map] ? G.pos : { map: 'cais', x: PC.chegada[0], y: PC.chegada[1], dir: 'down' }; loadMap2(p.map, p.x, p.y, p.dir); }
+  V.scene = 'world'; await fadeIn(20);
 }
 
 boot2();

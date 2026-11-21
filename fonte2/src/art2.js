@@ -12,6 +12,7 @@ function loadHeranca() {
   for (const [k, a] of Object.entries(HARTE.sp)) arr(a, v => IMG.sp[k] = v);
   for (const [k, a] of Object.entries(HARTE.port)) arr(a, v => IMG.port[k] = v);
   for (const [k, o] of Object.entries(HARTE.spf)) { IMG.spf[k] = {}; for (const [d, a] of Object.entries(o)) arr(a, v => IMG.spf[k][d] = v); }
+  for (const [k, o] of Object.entries(HARTE.chestMap || {})) { IMG.chestMap[k] = {}; for (const [d, a] of Object.entries(o)) arr(a, v => IMG.chestMap[k][d] = v); }
   for (const [k, o] of Object.entries(HARTE.chest)) { IMG.chest[k] = {}; for (const [d, u] of Object.entries(o)) jobs.push(load(u).then(v => IMG.chest[k][d] = v)); }
   return Promise.all(jobs).then(() => { IMG.ready = true; });
 }
