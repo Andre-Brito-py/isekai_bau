@@ -434,8 +434,13 @@ async function defeat() {
   BT.menu = null; BT.cursor = null; playMusic(null); sfx('die');
   BT.lose = { t: 0 };
   await wait(80);
-  const c = await choose(BT.cfg.loseTxt || '* O grupo caiu. Tentar de novo?', ['Tentar de novo', BT.cfg.quitLabel || 'Desistir (volta ao título)']);
-  BT.on = false; BT.done(c === 0 ? 'retry' : 'quit');
+  // game over tem PUNIÇÃO: volta ao último save (perde o que fez depois dele). Contra CHEFE dá para tentar de novo
+  // na hora, pagando 20% dos cobres.
+  const chefe = BT.foes.some(f => f.boss), custo = Math.ceil((G.cobres || 0) * 0.2);
+  const ops = chefe ? ['Tentar de novo (-' + custo + ' cobres)', BT.cfg.quitLabel || 'Voltar ao último save'] : [BT.cfg.quitLabel || 'Voltar ao último save'];
+  const c = await choose(BT.cfg.loseTxt || (chefe ? '* O grupo caiu.' : '* O grupo caiu. Tudo desde o último save se perde.'), ops);
+  if (chefe && c === 0) G.cobres = Math.max(0, (G.cobres || 0) - custo);
+  BT.on = false; BT.done(chefe && c === 0 ? 'retry' : 'quit');
 }
 
 // ---------- desenho (v3: campo limpo no meio; grupo, comandos e informação em painéis fixos) ----------

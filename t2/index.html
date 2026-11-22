@@ -41,6 +41,11 @@
  10. O FAROL DE CEM INVERNOS (2 partes) — ESCALADA 5: o Farol acende por uma noite; a IRONIA FINAL (Lívia); escolha
      na luta final; epílogo (o caderno preto vai para a parede da base; o Jorge lembra do 31 um pouquinho) e o GANCHO
      da trilogia (a carta original assinada com a lanterna de um olho).
+ SAVE AUTOMÁTICO E GAME OVER (autosave.js, pedido do usuário): salva nos Marcos, nos marcos da história (save2 nas
+ cenas) e ao ENTRAR NUM MAPA se já passaram 4 min de jogo desde o último save (nunca em luta). Cada save mostra um
+ bauzinho discreto com três pontinhos no canto inferior esquerdo (~2,5 s). GAME OVER TEM PUNIÇÃO: volta ao último
+ save (perde XP, cobres, itens e progresso feitos depois). Contra CHEFE: "Tentar de novo" na hora, pagando 20% dos
+ cobres. Regra: não espalhar save2 demais nas cenas novas (só fim de cena importante, chefe vencido, capítulo).
  O QUE SE APRENDE POR NÍVEL (tecnicas_nv.js, pedido do usuário: "subir de nível deve ser bem importante"):
  técnicas nos níveis 5/9/13/17/22/27 e passivas em 10/20/30, cada técnica com animação própria.
    BAÚ: Mordida Gulosa (20T, cura 1/3 do dano), Cuspe de Tralha (25T, todos, tontura), Tampa Refletora (25T leve,
@@ -2030,8 +2035,13 @@ async function defeat() {
   BT.menu = null; BT.cursor = null; playMusic(null); sfx('die');
   BT.lose = { t: 0 };
   await wait(80);
-  const c = await choose(BT.cfg.loseTxt || '* O grupo caiu. Tentar de novo?', ['Tentar de novo', BT.cfg.quitLabel || 'Desistir (volta ao título)']);
-  BT.on = false; BT.done(c === 0 ? 'retry' : 'quit');
+  // game over tem PUNIÇÃO: volta ao último save (perde o que fez depois dele). Contra CHEFE dá para tentar de novo
+  // na hora, pagando 20% dos cobres.
+  const chefe = BT.foes.some(f => f.boss), custo = Math.ceil((G.cobres || 0) * 0.2);
+  const ops = chefe ? ['Tentar de novo (-' + custo + ' cobres)', BT.cfg.quitLabel || 'Voltar ao último save'] : [BT.cfg.quitLabel || 'Voltar ao último save'];
+  const c = await choose(BT.cfg.loseTxt || (chefe ? '* O grupo caiu.' : '* O grupo caiu. Tudo desde o último save se perde.'), ops);
+  if (chefe && c === 0) G.cobres = Math.max(0, (G.cobres || 0) - custo);
+  BT.on = false; BT.done(chefe && c === 0 ? 'retry' : 'quit');
 }
 
 // ---------- desenho (v3: campo limpo no meio; grupo, comandos e informação em painéis fixos) ----------
@@ -3180,6 +3190,7 @@ function tick() {
     }
   }
   if (V.fade > 0) { bx.fillStyle = `rgba(0,0,0,${V.fade})`; bx.fillRect(0, 0, W, H); }
+  if (typeof desenhaSalvando === 'function') desenhaSalvando();
   let sx = 0, sy = 0; if (V.shake > 0) { V.shake--; sx = Math.round(rand(-2, 2)); sy = Math.round(rand(-2, 2)); }
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cvs.width, cvs.height);
   if (MUNDO_BIG && V.scene === 'world') ctx.drawImage(WBIG, 0, 0, WBIG.width, WBIG.height, Math.round(sx * S), Math.round(sy * S), cvs.width, cvs.height);
@@ -4110,7 +4121,7 @@ async function lutaMapa(group, o = {}) {
   while (true) {
     G.items = { ...itens0 }; G.pt = JSON.parse(JSON.stringify(pt0));
     const foes = group.map((id, i) => { const [x, y] = o.pos ? o.pos[i] : FOE_POS[i]; const d = ENEMY2[id]; return { id, x, y: d.fly ? y - 46 : y }; });
-    const res = await battle2({ party: grupoAtual(), foes, music: o.music || 'luta2', bg: o.bg || (W2.map && W2.map.batBg), tension: o.tension || 0, quitLabel: 'Voltar ao último Marco', intro: o.intro, ...(o.extra || {}) });
+    const res = await battle2({ party: grupoAtual(), foes, music: o.music || 'luta2', bg: o.bg || (W2.map && W2.map.batBg), tension: o.tension || 0, quitLabel: 'Voltar ao último save', intro: o.intro, ...(o.extra || {}) });
     if (res === 'win') {
       guardarGrupo(BT.party);
       const c = group.reduce((a, id) => a + (ENEMY2[id].cobres || 8), 0); G.cobres = (G.cobres || 0) + c;
@@ -4123,9 +4134,12 @@ async function lutaMapa(group, o = {}) {
   }
 }
 async function voltarMarco() {
-  const M = G.marco || { map: G.pos.map, x: G.pos.x, y: G.pos.y };
-  curarTudo(); V.scene = 'world'; loadMap2(M.map, M.x, M.y, 'down'); await fadeIn(20);
-  await say('* Você acorda encostado no Marco, com a Lume abanando a sua tampa com um chapéu.');
+  // GAME OVER: carrega o último save (o que aconteceu depois dele se perde: XP, cobres, itens, baús, conversas)
+  const salvo = load2();
+  if (salvo) { for (const k of Object.keys(G)) delete G[k]; Object.assign(G, salvo); montarMapas2(); }
+  const P = G.pos && MAPS2[G.pos.map] ? G.pos : (G.marco ? { ...G.marco, dir: 'down' } : null);
+  curarTudo(); V.scene = 'world'; if (P) loadMap2(P.map, P.x, P.y, P.dir || 'down'); await fadeIn(20);
+  await say('* Tudo escurece... e você acorda no último lugar onde o jogo foi salvo, com a Lume abanando a sua tampa com um chapéu.');
 }
 
 // ---------- Marco: salva, cura, e os bichos voltam ----------
@@ -10201,6 +10215,33 @@ Object.assign(TECH2, {
     await dashBack(m, 14);
   } }
 });
+
+// ================= SAVE AUTOMÁTICO (e o ícone discreto) =================
+// (pedido do usuário: save automático com um ícone discreto no canto inferior esquerdo; "o salvamento não deve
+// acontecer o tempo todo, para que haja alguma punição quando o jogador der game over".)
+// QUANDO SALVA: nos Marcos (como antes), nos marcos da história (fim de cena, chefe vencido, capítulo novo) e,
+// automaticamente, ao ENTRAR NUM MAPA se já se passaram 4 minutos de jogo desde o último save. Nunca no meio da luta.
+// GAME OVER: volta ao último save (grupo2.js voltarMarco). Contra chefe dá para tentar de novo pagando 20% dos cobres.
+const SALVO = { t: 0 };
+const AUTOSAVE_SEG = 240;
+{ const _sv = save2; save2 = function () { G.ultSave = G.time || 0; _sv(); SALVO.t = 150; }; }
+{ const _lmA = loadMap2; loadMap2 = function (id) {
+  const r = _lmA.apply(this, arguments);
+  if (!(BT && BT.on) && (G.time || 0) - (G.ultSave || 0) >= AUTOSAVE_SEG) setTimeout(() => { if (V.scene === 'world' && !(BT && BT.on)) save2(); }, 600);
+  return r;
+}; }
+// ícone: um baú pequenininho com a tampa abrindo e fechando e três pontinhos, no canto de baixo à esquerda
+function desenhaSalvando() {
+  if (SALVO.t <= 0) return; SALVO.t--;
+  const a = Math.min(1, SALVO.t / 25, (150 - SALVO.t) / 10) * 0.8, x = 6, y = H - 15, k = Math.floor((150 - SALVO.t) / 8);
+  bx.save(); bx.globalAlpha = a;
+  bx.fillStyle = 'rgba(5,3,10,0.55)'; bx.fillRect(x - 3, y - 4, 30, 14);
+  const ab = k % 4 === 1 || k % 4 === 2 ? 2 : 0;
+  bx.fillStyle = '#8a5a2a'; bx.fillRect(x, y + 2, 10, 6); bx.fillStyle = '#c88a3a'; bx.fillRect(x, y + 2, 10, 1);
+  bx.fillStyle = '#a86a32'; bx.fillRect(x - 1, y - ab, 12, 3); bx.fillStyle = '#f0c040'; bx.fillRect(x + 4, y + 2, 2, 2);
+  for (let i = 0; i < 3; i++) { bx.fillStyle = i === k % 3 ? '#ffe066' : '#6a6080'; bx.fillRect(x + 14 + i * 4, y + 5, 2, 2); }
+  bx.restore();
+}
 
 boot2();
 </script>

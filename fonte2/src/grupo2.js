@@ -46,7 +46,7 @@ async function lutaMapa(group, o = {}) {
   while (true) {
     G.items = { ...itens0 }; G.pt = JSON.parse(JSON.stringify(pt0));
     const foes = group.map((id, i) => { const [x, y] = o.pos ? o.pos[i] : FOE_POS[i]; const d = ENEMY2[id]; return { id, x, y: d.fly ? y - 46 : y }; });
-    const res = await battle2({ party: grupoAtual(), foes, music: o.music || 'luta2', bg: o.bg || (W2.map && W2.map.batBg), tension: o.tension || 0, quitLabel: 'Voltar ao último Marco', intro: o.intro, ...(o.extra || {}) });
+    const res = await battle2({ party: grupoAtual(), foes, music: o.music || 'luta2', bg: o.bg || (W2.map && W2.map.batBg), tension: o.tension || 0, quitLabel: 'Voltar ao último save', intro: o.intro, ...(o.extra || {}) });
     if (res === 'win') {
       guardarGrupo(BT.party);
       const c = group.reduce((a, id) => a + (ENEMY2[id].cobres || 8), 0); G.cobres = (G.cobres || 0) + c;
@@ -59,9 +59,12 @@ async function lutaMapa(group, o = {}) {
   }
 }
 async function voltarMarco() {
-  const M = G.marco || { map: G.pos.map, x: G.pos.x, y: G.pos.y };
-  curarTudo(); V.scene = 'world'; loadMap2(M.map, M.x, M.y, 'down'); await fadeIn(20);
-  await say('* Você acorda encostado no Marco, com a Lume abanando a sua tampa com um chapéu.');
+  // GAME OVER: carrega o último save (o que aconteceu depois dele se perde: XP, cobres, itens, baús, conversas)
+  const salvo = load2();
+  if (salvo) { for (const k of Object.keys(G)) delete G[k]; Object.assign(G, salvo); montarMapas2(); }
+  const P = G.pos && MAPS2[G.pos.map] ? G.pos : (G.marco ? { ...G.marco, dir: 'down' } : null);
+  curarTudo(); V.scene = 'world'; if (P) loadMap2(P.map, P.x, P.y, P.dir || 'down'); await fadeIn(20);
+  await say('* Tudo escurece... e você acorda no último lugar onde o jogo foi salvo, com a Lume abanando a sua tampa com um chapéu.');
 }
 
 // ---------- Marco: salva, cura, e os bichos voltam ----------

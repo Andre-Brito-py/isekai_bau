@@ -721,6 +721,7 @@ function tick() {
     }
   }
   if (V.fade > 0) { bx.fillStyle = `rgba(0,0,0,${V.fade})`; bx.fillRect(0, 0, W, H); }
+  if (typeof desenhaSalvando === 'function') desenhaSalvando();
   let sx = 0, sy = 0; if (V.shake > 0) { V.shake--; sx = Math.round(rand(-2, 2)); sy = Math.round(rand(-2, 2)); }
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cvs.width, cvs.height);
   if (MUNDO_BIG && V.scene === 'world') ctx.drawImage(WBIG, 0, 0, WBIG.width, WBIG.height, Math.round(sx * S), Math.round(sy * S), cvs.width, cvs.height);
