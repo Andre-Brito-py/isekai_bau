@@ -19,8 +19,8 @@ function eqMods(id) { const m = {}; for (const k of Object.values(eqOf(id))) if 
 function grupoAtual() {
   const g = grupoCap1();
   for (const m of g) {
-    const b = (G.poder || 0);
-    m.mhp += b * (m.id === 'bau' ? 14 : 10); m.atk += b * 2; m.mag += b * 2; m.def += b;
+    const b = typeof poderNivel === 'function' ? poderNivel(m.id) : (G.poder || 0);   // nível (nivel.js) ou o poder antigo
+    m.mhp += Math.round(b * (m.id === 'bau' ? 14 : 10)); m.atk += Math.round(b * 2); m.mag += Math.round(b * 2); m.def += Math.round(b);
     const md = eqMods(m.id); for (const [a, v] of Object.entries(md)) m[a] = Math.max(1, (m[a] || 0) + v);
     m.eqFx = eqFx(m.id);
     if (m.eqFx.has('microfone') && m.runas) m.runas = m.runas.map(r => r === 'acalanto' ? 'acalantoCoro' : r);

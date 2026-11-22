@@ -12,6 +12,38 @@
   seções "SAVE HERDADO", "INTERFACE DA TEMPORADA 2", "SISTEMA DE BATALHA DA TEMPORADA 2", "MUNDO DA TEMPORADA 2",
   "O VILÃO DA TEMPORADA 2", "RUNAS NA T2". Aqui fica o que já foi implementado e o roteiro por capítulo.)
 =====================================================================
+ MAPA DA TEMPORADA: 10 CAPÍTULOS (pedido do usuário: "pelo menos nove a dez capítulos, já que o primeiro é bem
+ curto"). Meta: 1h-1h30 de história por capítulo (o Cap. 1 é o prólogo curto), 12-15 h no total com o opcional.
+ Os capítulos grandes têm 2 partes. A escalada do Vesper (bíblia da T1) foi esticada para caber em 10:
+  1. A SUPERFÍCIE (feito) — prólogo: estrada, Espantalho do pedágio. Vesper ainda não aparece.
+  2. VELHÁGUA (feito) — a cidade que afunda, Dona Badalada. ESCALADA 1: Vesper benfeitor (Marco, convite).
+  3. A CAPITAL ACESA (feito, 2 partes) — Auren, festival, discurso, Galerias, Mãe-Fuligem, 1ª EVOLUÇÃO (3 caminhos).
+  4. A CASA DOS QUE ESQUECEM (P1 feita; P2 = CANDEIA, a vila que apagou) — ESCALADA 2: suspeita (a letra da lista).
+     P2: Candeia na serra, moradores parados nas portas, minas vazias, RUNA DE GATILHO, o Dito encontrado; Dalva
+     abre a ENFERMARIA na base; Jorge a GARAGEM. Gancho: um Pavio de Candeia tem o caderno preto... de outra pessoa?
+     (não: tem uma PÁGINA arrancada do caderno, com o nome da filha riscado mil vezes: LÍVIA.)
+  5. O CADERNO PRETO (2 partes) — ESCALADA 3, a REVELAÇÃO no meio da temporada: invadir a Acendedoria (escritório
+     do Acendedor-Mor, torre de vidro) atrás do caderno; Vesper os recebe para um chá, não nega nada e explica com
+     calma (o Inverno Escuro, Lívia sem nome dita ainda: ele só diz "alguém"). Oferece à Lume "nunca mais escuro"; ela
+     QUASE aceita (a cena mais difícil). Eles saem livres: ele não precisa prender ninguém. Agora são procurados.
+  6. A CIDADE DOS PAVIOS — fugitivos em Auren: Pavios nas zonas seguras (Marcos vigiados), cartazes novos; aliados:
+     a Guilda do Sargento Brás (vira lado), o Tiago (Herói nº 30 da T1) aparece como herói da Coroa e tem que
+     escolher; missões de DEVOLVER lembranças a Pavios (Osvaldo Candeia volta). Nova mecânica: disfarce em grupo.
+  7. A MINA DE ORIGEM (2 partes) — de onde vem o âmbar: os canos levam ao CORAÇÃO, um poço que desce até os andares
+     de cima da MASMORRA DA T1 (volta nostálgica, inimigos e lugares conhecidos, agora pela lógica de quem extrai).
+     ESCALADA 4: Vesper VENCE uma batalha de verdade: o Seu Jorge troca as próprias lembranças pela vida do grupo e
+     vira Pavio (esquece o 31, esquece eles; dá para devolver só um pedaço no Cap. 10). 2ª EVOLUÇÃO no fundo do poço.
+  8. O INVERNO ESCURO — Vesper apaga Auren de propósito ("para lembrarem por que precisam do Farol"). Cidade no
+     escuro, medo, a Lume no limite. O grupo acende a cidade À MÃO, bairro por bairro, com velas, gente e música
+     (a música da Lume ganha mais um verso). Mecânica: escuridão por bairro, rotas de luz, escolta.
+  9. A SUBIDA DO MORRO — o cerco ao Farol: todos os aliados voltam (Badalada toca, Tico e Dito, Dalva, Brás, Iolanda,
+     Velhágua); masmorra de subida longa, mini-chefes antigos com cara nova; a Ofélia "aparece" pelo Grimório.
+ 10. O FAROL DE CEM INVERNOS (2 partes) — ESCALADA 5: o Farol acende por uma noite; a IRONIA FINAL (Lívia); escolha
+     na luta final; epílogo (o caderno preto vai para a parede da base; o Jorge lembra do 31 um pouquinho) e o GANCHO
+     da trilogia (a carta original assinada com a lanterna de um olho).
+ Cada capítulo: região nova, mecânica nova, 2-3 inimigos, mini-chefe e chefe com animação de ataque caprichada, falas
+ do baú em toda cena, 20-30 min de opcional (missões, baús, Fragmentos), balanceamento por robô nos 3 caminhos.
+=====================================================================
  ESCALA (REGRA FIXA, pedido do usuário: "sempre respeitar o tamanho dos personagens e objetos"):
  - 1 metro = ~29 px. Adulto = 44-53 px de altura (Lume, baixinha: 48; Rita: 53; Seu Jorge: 48). Criança: ~32-36 px.
  - O Baú (forma de baú) é BEM menor que um adulto: ~0,55-0,6 (~28 px de altura na batalha, ao lado de humanos de
@@ -292,6 +324,13 @@
  diálogo entre aspas viram fala dita por ele. De rosto, o retrato do diálogo é o rosto. REGRA: toda cena nova dá ao
  baú pelo menos uma ou duas falas suas. Tirinha do super/dupla (cutIn): o baú aparece (retratoCut usa PT('me') ou o
  rosto quando está em forma humana).
+ NÍVEL E XP (nivel.js, pedido do usuário: "sistema de lvl e xp, muito importante num RPG"): G.nv[id] = {lv, xp};
+ toda vitória dá XP ao grupo (caído ganha metade); xp do inimigo = ENEMY2.xp ou mhp/18 + atk*0,6 (chefe x2);
+ próximo nível = 30 + 20*lv. O nível SUBSTITUI o poder por capítulo: 3,3 níveis = 1 poder (grupoAtual), então o
+ balanceamento do robô continua valendo. Piso: ao começar um capítulo, ninguém fica abaixo de 1 + poder*3,3 - 1.
+ Freio: XP x(1 - 0,2 por nível acima do esperado), de 0,25 a 1,5 (esperado = 1 + (poder+0,8)*3,3). Subir cura 25%
+ de vida e PM. Tela de vitória com barras de XP enchendo e "SUBIU!"; tela de status mostra Nv e barra de XP.
+ Níveis esperados: Cap. 2 ~4-7, Cap. 3 ~7-10, Cap. 4 ~10-14, Cap. 5 ~14-17 ... Cap. 10 ~30-34.
  CAPÍTULO 4 — A CASA DOS QUE ESQUECEM (roteiro; 2 partes como o Cap. 3)
  - LUGAR NA ESCALADA DO VILÃO: passo 2, SUSPEITA. Ele "compra o hospital dos pobres" (o do discurso) e a vila vizinha
    APAGA. O jogador acha papéis com a letra pequena do caderno preto; ainda não há confissão (a revelação é o Cap. 5).
@@ -325,7 +364,8 @@
  - PARTE 2 (Candeia, a vila apagada): o 31 sobe a serra; névoa; moradores parados nas portas sem lembrar o que iam
    fazer; minas de âmbar vazias; RUNA DE GATILHO (4º espaço do Grimório, armadilha na linha do tempo); a Irmã Dalva vai
    morar na base (ENFERMARIA: cura entre lutas com custo de cobres); o Seu Jorge abre a GARAGEM (o 31 viaja entre
-   regiões); chefe nas minas; o Dito encontrado; gancho: a última noite do festival e o Farol (revelação no Cap. 5).
+   regiões); chefe nas minas; o Dito encontrado; gancho: a página arrancada com LÍVIA (revelação no Cap. 5; ver o
+   MAPA DA TEMPORADA no topo: agora são 10 capítulos, e o Farol acende só no Cap. 10).
  - PORTA TRANCADA (world2.js portaTrancada): toda casa do mapa agora tem porta desenhada; as que não levam a lugar
    nenhum avisam "trancada" (com variações de humor) quando o jogador anda contra ela ou aperta A de frente. Para abrir
    uma construção nova no futuro, basta pôr uma 'porta' (ent) na frente dela.
@@ -4020,8 +4060,8 @@ function eqMods(id) { const m = {}; for (const k of Object.values(eqOf(id))) if 
 function grupoAtual() {
   const g = grupoCap1();
   for (const m of g) {
-    const b = (G.poder || 0);
-    m.mhp += b * (m.id === 'bau' ? 14 : 10); m.atk += b * 2; m.mag += b * 2; m.def += b;
+    const b = typeof poderNivel === 'function' ? poderNivel(m.id) : (G.poder || 0);   // nível (nivel.js) ou o poder antigo
+    m.mhp += Math.round(b * (m.id === 'bau' ? 14 : 10)); m.atk += Math.round(b * 2); m.mag += Math.round(b * 2); m.def += Math.round(b);
     const md = eqMods(m.id); for (const [a, v] of Object.entries(md)) m[a] = Math.max(1, (m[a] || 0) + v);
     m.eqFx = eqFx(m.id);
     if (m.eqFx.has('microfone') && m.runas) m.runas = m.runas.map(r => r === 'acalanto' ? 'acalantoCoro' : r);
@@ -8023,6 +8063,7 @@ function telaStatus() {
       g.forEach((u, j) => { const x = X + 8 + j * 30, y = Y + 7, sel = j === i; bx.fillStyle = sel ? UIC.accent : 'rgba(143,227,216,0.25)'; bx.fillRect(x - 1, y - 1, 26, 26); bx.fillStyle = '#0a0612'; bx.fillRect(x, y, 24, 24); const P = PT(u.port); if (P) bx.drawImage(P, 0, 0, P.width, P.height, x, y, 24, 24); if (!sel) { bx.globalAlpha = 0.45; bx.fillStyle = '#0a0612'; bx.fillRect(x, y, 24, 24); bx.globalAlpha = 1; } });
       txt(m.name, X + 104, Y + 8, { col: '#ffffff', sz: 1.5 });
       txt(funcaoDe(m), X + 104, Y + 26, { col: UIC.line });
+      if (typeof nvDe === 'function') { const nv = nvDe(m.id), f = nv.xp / xpProx(nv.lv); txt('Nv ' + nv.lv, X + Wd - 10, Y + 8, { align: 'right', col: '#ffe066', sz: 1.5 }); bx.fillStyle = '#0a0612'; bx.fillRect(X + 104, Y + 37, 118, 3); bx.fillStyle = '#8fe3ff'; bx.fillRect(X + 104, Y + 37, Math.round(118 * f), 3); txt('XP ' + nv.xp + '/' + xpProx(nv.lv), X + Wd - 10, Y + 26, { align: 'right', col: '#8fe3ff' }); }
       // pedestal com círculo de runas e o personagem grande
       const cx = X + 46, cy = Y + 150;
       bx.globalAlpha = 0.35; bx.fillStyle = m.col || UIC.line; bx.beginPath(); bx.ellipse(cx, cy, 34, 9, 0, 0, Math.PI * 2); bx.fill(); bx.globalAlpha = 1;
@@ -9714,6 +9755,90 @@ function cachecolCarniceiro(src) {
   return r;
 }; }
 { const _pm = WHO.me.portrait; WHO.me.portrait = () => { try { if (rostoSt().on && rostoArte() && rostoArte().port) return rostoArte().port[0]; } catch (e) { } return _pm(); }; }
+
+// ================= NÍVEL E EXPERIÊNCIA =================
+// (pedido do usuário: "adicione um sistema de lvl e xp, é algo muito importante em um rpg".)
+// - Cada membro tem NÍVEL e XP (G.nv[id] = { lv, xp }). Toda luta vencida dá XP para o grupo inteiro (quem caiu
+//   ganha metade). XP de cada inimigo: ENEMY2[id].xp, ou pela vida e ataque dele; chefes valem o dobro.
+// - O nível substitui o antigo "poder" por capítulo: cada 3,3 níveis valem 1 de poder (mesma conta de antes), então
+//   o balanceamento feito pelo robô continua valendo. Saves antigos começam no nível equivalente ao poder que tinham.
+// - Freio de subida: quem está ACIMA do nível esperado para o capítulo ganha menos XP; quem está abaixo ganha mais.
+//   Dá para treinar e ficar mais forte, mas o jogo não quebra.
+// - Subir de nível cura 25% da vida e dos PM (regra da T1), toca uma fanfarra e mostra o que cresceu.
+const XP_PODER = 3.3;
+function xpProx(lv) { return 30 + 20 * lv; }
+function nivelEsperado() { return Math.round(1 + ((G.poder || 0) + 0.8) * XP_PODER); }
+function nvDe(id) {
+  G.nv = G.nv || {};
+  const piso = Math.max(1, Math.round(1 + (G.poder || 0) * XP_PODER) - 1);
+  if (!G.nv[id]) G.nv[id] = { lv: piso, xp: 0 };
+  if (G.nv[id].lv < piso) G.nv[id] = { lv: piso, xp: 0 };   // capítulo novo com o grupo muito para trás: alcança
+  return G.nv[id];
+}
+function poderNivel(id) { return (nvDe(id).lv - 1) / XP_PODER; }
+function xpInimigo(id) { const d = ENEMY2[id] || {}; if (d.xp) return d.xp; const b = Math.round((d.mhp || 100) / 18 + (d.atk || 10) * 0.6); return d.boss ? b * 2 : b; }
+// o que cresce por nível (para mostrar na tela; a conta real é a do poder, em grupoAtual)
+const NV_GANHO = { bau: 'PV +4  ATQ/MAG +0,6  DEF +0,3', lume: 'PV +3  ATQ/MAG +0,6  DEF +0,3', rita: 'PV +3  ATQ/MAG +0,6  DEF +0,3' };
+
+// ---------- XP na vitória ----------
+function darXP(party, foes) {
+  const total = foes.reduce((a, f) => a + xpInimigo(f.id || f.kind), 0), out = [];
+  for (const m of party) {
+    const nv = nvDe(m.id), dif = nv.lv - nivelEsperado();
+    const mult = Math.max(0.25, Math.min(1.5, 1 - dif * 0.2)) * (m.hp > 0 ? 1 : 0.5);
+    const ganho = Math.max(1, Math.round(total * mult));
+    const antes = { lv: nv.lv, xp: nv.xp }; let subiu = 0;
+    nv.xp += ganho;
+    while (nv.xp >= xpProx(nv.lv)) { nv.xp -= xpProx(nv.lv); nv.lv++; subiu++; }
+    if (subiu) { m.hp = Math.min(m.mhp, Math.max(m.hp, 0) + Math.round(m.mhp * 0.25 * subiu)); m.mp = Math.min(m.mmp, m.mp + Math.round(m.mmp * 0.25 * subiu)); if (m.hp <= 0) m.hp = 1; }
+    out.push({ m, antes, depois: { lv: nv.lv, xp: nv.xp }, ganho, subiu });
+  }
+  return { total, out };
+}
+{ const _vic = victory; victory = async function () {
+  try { const foes = BT.foes.map(f => ({ id: Object.keys(ENEMY2).find(k => ENEMY2[k].name === f.name && ENEMY2[k].kind === f.kind) || f.kind })); BT.xpRes = darXP(BT.party, foes); }
+  catch (e) { BT.xpRes = null; }
+  BT.xpSom = false;
+  return _vic();
+}; }
+// tela de vitória com as barras de XP enchendo
+drawWin = function () {
+  const w = BT.win; w.t++;
+  const a = Math.min(1, w.t / 20), R = BT.xpRes;
+  bx.globalAlpha = 0.6 * a; bx.fillStyle = '#05030a'; bx.fillRect(-400, 30, 1200, 170); bx.globalAlpha = 1;
+  txt('VITÓRIA!', 120, 38 - (1 - a) * 20, { align: 'center', sz: 2, col: '#ffe066', shadow: true, alpha: a });
+  const s = BT.stats, tt = Math.round(G.time - s.t0);
+  if (w.t > 20) txt(`Perfeitos ${s.perf}  ·  Certeiros ${s.crit}  ·  Quebras ${s.quebra}  ·  ${Math.floor(tt / 60)}:${String(tt % 60).padStart(2, '0')}`, 120, 64, { align: 'center', col: '#b8aecb' });
+  if (R && w.t > 26) {
+    txt(`+${R.total} XP`, 120, 78, { align: 'center', col: '#8fe3ff', shadow: true });
+    const p = Math.min(1, Math.max(0, (w.t - 36) / 60));            // animação das barras
+    R.out.forEach((o, i) => {
+      const y = 96 + i * 30, x = 30;
+      const P = PT(o.m.port); if (P) { bx.imageSmoothingEnabled = false; bx.drawImage(P, 0, 0, 32, 32, x, y - 2, 22, 22); }
+      // nível mostrado: sobe no meio da animação se teve subida
+      const passos = o.subiu + (o.depois.xp / xpProx(o.depois.lv)) - (o.antes.xp / xpProx(o.antes.lv));
+      const prog = (o.antes.xp / xpProx(o.antes.lv)) + passos * ease.out(p);
+      const lvNow = o.antes.lv + Math.floor(prog + 1e-6), frac = prog - Math.floor(prog + 1e-6);
+      txt(o.m.short || o.m.name, x + 28, y, { col: '#ffffff' });
+      txt('Nv ' + lvNow, x + 150, y, { align: 'right', col: lvNow > o.antes.lv ? '#ffe066' : '#e8e0f0', sz: lvNow > o.antes.lv ? 1.25 : 1 });
+      const bw = 150, by = y + 13;
+      bx.fillStyle = '#0a0612'; bx.fillRect(x + 28, by, bw, 5);
+      bx.fillStyle = '#3a6a9a'; bx.fillRect(x + 28, by, Math.round(bw * frac), 5);
+      bx.fillStyle = '#8fe3ff'; bx.fillRect(x + 28, by, Math.round(bw * frac), 2);
+      txt('+' + o.ganho, x + 186, y + 9, { col: '#8fe3ff' });
+      if (lvNow > o.antes.lv) {
+        const k = (w.t % 40) / 40;
+        txt('SUBIU!', x + 74, y, { col: '#ffe066', shadow: true, alpha: 0.7 + 0.3 * Math.sin(w.t * 0.3) });
+        for (let j = 0; j < 3; j++) { const ang = (w.t * 0.08 + j * 2.1 + i); bx.fillStyle = j % 2 ? '#ffe066' : '#ffffff'; bx.fillRect(Math.round(x + 11 + Math.cos(ang) * 14), Math.round(y + 9 + Math.sin(ang) * 12 - k * 4), 1, 1); }
+        if (!o.tocou) { o.tocou = true; if (!BT.xpSom) { BT.xpSom = true; jingle && jingle('G5:2 C6:2 E6:2 G6:6', 220); } }
+      }
+    });
+    if (p >= 1 && R.out.some(o => o.subiu)) txt('Vida e PM: +25% por nível subido', 120, 96 + R.out.length * 30, { align: 'center', col: '#9be58a' });
+  }
+  if (w.t > 100 && w.t % 50 < 34) txt('A', 120, 210, { align: 'center', col: '#ffffff' });
+};
+
+// ---------- tela de status: nível e barra de XP (status3.js chama nvDe/xpProx) ----------
 
 boot2();
 </script>

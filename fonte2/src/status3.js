@@ -44,6 +44,7 @@ function telaStatus() {
       g.forEach((u, j) => { const x = X + 8 + j * 30, y = Y + 7, sel = j === i; bx.fillStyle = sel ? UIC.accent : 'rgba(143,227,216,0.25)'; bx.fillRect(x - 1, y - 1, 26, 26); bx.fillStyle = '#0a0612'; bx.fillRect(x, y, 24, 24); const P = PT(u.port); if (P) bx.drawImage(P, 0, 0, P.width, P.height, x, y, 24, 24); if (!sel) { bx.globalAlpha = 0.45; bx.fillStyle = '#0a0612'; bx.fillRect(x, y, 24, 24); bx.globalAlpha = 1; } });
       txt(m.name, X + 104, Y + 8, { col: '#ffffff', sz: 1.5 });
       txt(funcaoDe(m), X + 104, Y + 26, { col: UIC.line });
+      if (typeof nvDe === 'function') { const nv = nvDe(m.id), f = nv.xp / xpProx(nv.lv); txt('Nv ' + nv.lv, X + Wd - 10, Y + 8, { align: 'right', col: '#ffe066', sz: 1.5 }); bx.fillStyle = '#0a0612'; bx.fillRect(X + 104, Y + 37, 118, 3); bx.fillStyle = '#8fe3ff'; bx.fillRect(X + 104, Y + 37, Math.round(118 * f), 3); txt('XP ' + nv.xp + '/' + xpProx(nv.lv), X + Wd - 10, Y + 26, { align: 'right', col: '#8fe3ff' }); }
       // pedestal com círculo de runas e o personagem grande
       const cx = X + 46, cy = Y + 150;
       bx.globalAlpha = 0.35; bx.fillStyle = m.col || UIC.line; bx.beginPath(); bx.ellipse(cx, cy, 34, 9, 0, 0, Math.PI * 2); bx.fill(); bx.globalAlpha = 1;
