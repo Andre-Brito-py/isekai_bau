@@ -627,7 +627,7 @@ function drawInfo(OX, lados) {
   if (S) d = S.items[S.idx] && S.items[S.idx].d;
   else { const c = cmdsFor(M.m)[M.idx]; d = c && (typeof c.desc === 'function' ? c.desc(M.m) : c.desc); }
   if (!d) return;
-  const nl = Math.min(3, wrapRich(rich(d), 36).length);
+  const nl = wrapRich(rich(d), 36).length;   // a caixa cresce com o texto (nunca corta)
   box(x, y + h - (nl * 10 + 8), w, nl * 10 + 8, { bw: 1 });
   txt(d, x + 6, y + h - (nl * 10 + 8) + 4, { w: 36, col: '#c8d4dc', lh: 10 });
 }

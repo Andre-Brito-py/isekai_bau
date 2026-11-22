@@ -467,9 +467,12 @@
    NA HISTÓRIA o mapa é a MAGIA ESPACIAL do baú se manifestando (ele sente o espaço dobrado dentro da tampa e "vê" o
    mundo pelo avesso). Diálogo na primeira vez que abre (primeiroMapa, flag mapaVisto): o Catálogo registra que mapear
    assim é coisa de meia dúzia de nomes na história; a Rita pede segredo (a Coroa não pode saber).
- - CANTAR PARA O SINO (Cap. 2): na fase 3 da Âncora-Mãe, na vez da Lume, aparece a escolha explícita "Cantar para o sino"
-   (antes era só implícito usar Canção/Acalanto). Quem passou sem cantar: missão opcional "A canção do sino" (só À NOITE,
-   falar com a Irmã Celeste na praça): a Lume canta, o sino cantarola do rio; flag cantoTardio; frasco + pluma + 60c.
+ - CANTAR PARA O SINO (Cap. 2): na fase 3 da Âncora-Mãe, enquanto a Lume não cantou, o anel dela ganha um comando
+   PRÓPRIO, o primeiro e já selecionado: "Cantar p/ o sino" (ícone de nota). Fica lá até ela cantar (antes era uma
+   pergunta que só aparecia uma vez, e o usuário se perdeu). Efeito: o sino bate 25% mais fraco até o fim e a canção
+   cura 25% do grupo; uma dica avisa onde fica o comando. Quem passou sem cantar: missão opcional "A canção do sino"
+   (só À NOITE, Irmã Celeste na praça; flag cantoTardio; frasco + pluma + 60c). A caixa de descrição da batalha agora
+   cresce com o texto e o "Vez de" nunca fica embaixo do anel.
  - DIÁRIO DE MISSÕES (diario.js; menu > Missões): abas EM ANDAMENTO / CONCLUÍDAS; cada missão com tipo, quem pede,
    descrição, última etapa feita (visto) e a atual (seta) — as futuras ficam ESCONDIDAS para não estragar a história —,
    onde (pela busca do mapa), selo de horário, recompensa e barra de andamento. Catálogo DIARIO (principais por capítulo +
@@ -2340,7 +2343,7 @@ function drawInfo(OX, lados) {
   if (S) d = S.items[S.idx] && S.items[S.idx].d;
   else { const c = cmdsFor(M.m)[M.idx]; d = c && (typeof c.desc === 'function' ? c.desc(M.m) : c.desc); }
   if (!d) return;
-  const nl = Math.min(3, wrapRich(rich(d), 36).length);
+  const nl = wrapRich(rich(d), 36).length;   // a caixa cresce com o texto (nunca corta)
   box(x, y + h - (nl * 10 + 8), w, nl * 10 + 8, { bw: 1 });
   txt(d, x + 6, y + h - (nl * 10 + 8) + 4, { w: 36, col: '#c8d4dc', lh: 10 });
 }
@@ -4680,20 +4683,27 @@ function cantouSino(m) {
   hint('A Lume cantou para o sino. Os golpes da Âncora-Mãe ficaram mais fracos.', 300);
 }
 for (const [o, k] of [[RUNA2, 'acalanto'], [RUNA2, 'acalantoCoro'], [RUNA2, 'velaprot'], [TECH2, 'cancao']]) { const f = o[k].run; o[k].run = async (m, t) => { await f(m, t); cantouSino(m); }; }
-// na fase da lembrança, a Lume ganha a escolha explícita de cantar (antes ficava só implícito numa fala)
-{ const _ocS = openCommand; openCommand = function (m) {
-  const b = BT.on && m && m.id === 'lume' && BT.foes.find(f => f.kind === 'ancora' && f.hp > 0 && f.ph === 3);
-  if (!b || b.acalmou || BT._cantoNao) return _ocS(m);
-  BT.busy = true; // o tempo para enquanto a Lume decide
-  (async () => {
-    const c = await choose('* A Dona Badalada treme no escuro. A Lume olha para ela.', ['Cantar para o sino', 'Lutar'], 'n');
-    if (c !== 0) { BT._cantoNao = true; BT.busy = false; hint('Ainda dá para cantar depois: a Canção ou o Acalanto da Lume também servem.', 240); return _ocS(m); }
-    await say('Não precisa ter medo. Alguém ainda canta pra você.', 'lume');
-    await TECH2.cancao.run(m);
-    BT.busy = false; endTurn(m, 'normal');
-  })().catch(e => { console.error(e); BT.busy = false; _ocS(m); });
+// CANTAR PARA O SINO: na fase da lembrança, enquanto a Lume não cantou, aparece um comando PRÓPRIO no anel dela
+// (o primeiro, já selecionado). Antes era uma pergunta que só aparecia uma vez; agora fica disponível até ela cantar.
+// Efeito: o sino se acalma de vez (bate 25% mais fraco até o fim da luta) e a canção cura 25% do grupo. Grátis.
+ICON.cantar = (() => { const c = mk(14, 14), x = c.getContext('2d'); x.fillStyle = '#ffd870';
+  x.fillRect(4, 2, 1, 8); x.fillRect(10, 1, 1, 8); x.fillRect(4, 1, 7, 2); x.fillRect(2, 9, 3, 3); x.fillRect(8, 8, 3, 3); x.fillStyle = '#fff4c0'; x.fillRect(2, 9, 1, 1); x.fillRect(8, 8, 1, 1); return c; })();
+const sinoTriste = () => BT.on && BT.foes.find(f => f.kind === 'ancora' && f.hp > 0 && f.ph === 3 && !f.acalmou);
+CMD.unshift({ k: 'cantarSino', nm: 'Cantar p/ o sino', ic: () => 'cantar', only: m => m.id === 'lume' && !!sinoTriste(),
+  desc: () => 'Ela só quer ouvir alguém cantar. Acalma o sino (25% mais fraco) e cura 25% do grupo.' });
+{ const _dcS = doCommand; doCommand = async function (m, k) {
+  if (k !== 'cantarSino') return _dcS(m, k);
+  await say('Não precisa ter medo. Alguém ainda canta pra você.', 'lume');
+  await act(m, () => TECH2.cancao.run(m));
+  endTurn(m, 'normal'); return true;
 }; }
-{ const _b2S = battle2; battle2 = function (cfg) { BT._cantoNao = false; return _b2S(cfg); }; }
+// ao entrar na fase da lembrança, uma dica clara de onde fica o comando
+{ const _ftS = foeTurn; foeTurn = async function (e) {
+  const r = await _ftS(e);
+  if (sinoTriste() && !BT._dicaCanto) { BT._dicaCanto = true; hint('Na vez da LUME, o primeiro comando do anel é CANTAR PARA O SINO. Fica lá até ela cantar.', 420); }
+  return r;
+}; }
+{ const _b2S = battle2; battle2 = function (cfg) { BT._dicaCanto = false; return _b2S(cfg); }; }
 
 // ---------- trocar de FILEIRA (só onde a luta permite; estreia na Âncora-Mãe) ----------
 CMD.splice(CMD.findIndex(c => c.k === 'defender'), 0, { k: 'fileira', nm: 'Fileira', ic: () => 'fileira', desc: m => m.row === 'back' ? 'Ir para a FRENTE: corpo a corpo com força total. Ação leve.' : 'Ir para TRÁS: escapa da maré e leva menos dano físico, mas o corpo a corpo enfraquece. Ação leve.', only: () => !!(BT.cfg && BT.cfg.fileira) });
@@ -4709,6 +4719,7 @@ CMD.splice(CMD.findIndex(c => c.k === 'defender'), 0, { k: 'fileira', nm: 'Filei
   });
   endTurn(m, 'leve'); return true;
 }; }
+{ const _ocS2 = openCommand; openCommand = function (m) { if (m && m.id === 'lume' && sinoTriste()) { BT.lastCmd = BT.lastCmd || {}; BT.lastCmd.lume = 0; } return _ocS2(m); }; }
 
 // ================= CAPÍTULO 2: VELHÁGUA, A CIDADE QUE AFUNDA =================
 // Mapas em mapas2.js (validados em maps/cap2maps.py). Aqui: moradores (com ROTINAS: cada um faz alguma coisa),
@@ -10567,7 +10578,7 @@ drawComandos = (function (_lista) {
     bx.globalAlpha = 1;
     txt(nm, cx, ly + 1, { align: 'center', col: dis ? '#6a6680' : '#ffffff', alpha: op });
     // de quem é a vez, discreto, do outro lado do anel
-    const vy = ly > cy ? cy - R - 24 : cy + R + 14;
+    const vy = ly > cy ? cy - R - 24 : Math.max(2, ly - 12);   // nunca embaixo do anel (lá fica a caixa de descrição)
     txt('Vez de ' + (m.short || m.name), cx, vy, { align: 'center', col: col, alpha: 0.85 * op, shadow: true });
   };
 })(drawComandos);

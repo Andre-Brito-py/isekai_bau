@@ -310,20 +310,27 @@ function cantouSino(m) {
   hint('A Lume cantou para o sino. Os golpes da Âncora-Mãe ficaram mais fracos.', 300);
 }
 for (const [o, k] of [[RUNA2, 'acalanto'], [RUNA2, 'acalantoCoro'], [RUNA2, 'velaprot'], [TECH2, 'cancao']]) { const f = o[k].run; o[k].run = async (m, t) => { await f(m, t); cantouSino(m); }; }
-// na fase da lembrança, a Lume ganha a escolha explícita de cantar (antes ficava só implícito numa fala)
-{ const _ocS = openCommand; openCommand = function (m) {
-  const b = BT.on && m && m.id === 'lume' && BT.foes.find(f => f.kind === 'ancora' && f.hp > 0 && f.ph === 3);
-  if (!b || b.acalmou || BT._cantoNao) return _ocS(m);
-  BT.busy = true; // o tempo para enquanto a Lume decide
-  (async () => {
-    const c = await choose('* A Dona Badalada treme no escuro. A Lume olha para ela.', ['Cantar para o sino', 'Lutar'], 'n');
-    if (c !== 0) { BT._cantoNao = true; BT.busy = false; hint('Ainda dá para cantar depois: a Canção ou o Acalanto da Lume também servem.', 240); return _ocS(m); }
-    await say('Não precisa ter medo. Alguém ainda canta pra você.', 'lume');
-    await TECH2.cancao.run(m);
-    BT.busy = false; endTurn(m, 'normal');
-  })().catch(e => { console.error(e); BT.busy = false; _ocS(m); });
+// CANTAR PARA O SINO: na fase da lembrança, enquanto a Lume não cantou, aparece um comando PRÓPRIO no anel dela
+// (o primeiro, já selecionado). Antes era uma pergunta que só aparecia uma vez; agora fica disponível até ela cantar.
+// Efeito: o sino se acalma de vez (bate 25% mais fraco até o fim da luta) e a canção cura 25% do grupo. Grátis.
+ICON.cantar = (() => { const c = mk(14, 14), x = c.getContext('2d'); x.fillStyle = '#ffd870';
+  x.fillRect(4, 2, 1, 8); x.fillRect(10, 1, 1, 8); x.fillRect(4, 1, 7, 2); x.fillRect(2, 9, 3, 3); x.fillRect(8, 8, 3, 3); x.fillStyle = '#fff4c0'; x.fillRect(2, 9, 1, 1); x.fillRect(8, 8, 1, 1); return c; })();
+const sinoTriste = () => BT.on && BT.foes.find(f => f.kind === 'ancora' && f.hp > 0 && f.ph === 3 && !f.acalmou);
+CMD.unshift({ k: 'cantarSino', nm: 'Cantar p/ o sino', ic: () => 'cantar', only: m => m.id === 'lume' && !!sinoTriste(),
+  desc: () => 'Ela só quer ouvir alguém cantar. Acalma o sino (25% mais fraco) e cura 25% do grupo.' });
+{ const _dcS = doCommand; doCommand = async function (m, k) {
+  if (k !== 'cantarSino') return _dcS(m, k);
+  await say('Não precisa ter medo. Alguém ainda canta pra você.', 'lume');
+  await act(m, () => TECH2.cancao.run(m));
+  endTurn(m, 'normal'); return true;
 }; }
-{ const _b2S = battle2; battle2 = function (cfg) { BT._cantoNao = false; return _b2S(cfg); }; }
+// ao entrar na fase da lembrança, uma dica clara de onde fica o comando
+{ const _ftS = foeTurn; foeTurn = async function (e) {
+  const r = await _ftS(e);
+  if (sinoTriste() && !BT._dicaCanto) { BT._dicaCanto = true; hint('Na vez da LUME, o primeiro comando do anel é CANTAR PARA O SINO. Fica lá até ela cantar.', 420); }
+  return r;
+}; }
+{ const _b2S = battle2; battle2 = function (cfg) { BT._dicaCanto = false; return _b2S(cfg); }; }
 
 // ---------- trocar de FILEIRA (só onde a luta permite; estreia na Âncora-Mãe) ----------
 CMD.splice(CMD.findIndex(c => c.k === 'defender'), 0, { k: 'fileira', nm: 'Fileira', ic: () => 'fileira', desc: m => m.row === 'back' ? 'Ir para a FRENTE: corpo a corpo com força total. Ação leve.' : 'Ir para TRÁS: escapa da maré e leva menos dano físico, mas o corpo a corpo enfraquece. Ação leve.', only: () => !!(BT.cfg && BT.cfg.fileira) });
@@ -339,3 +346,4 @@ CMD.splice(CMD.findIndex(c => c.k === 'defender'), 0, { k: 'fileira', nm: 'Filei
   });
   endTurn(m, 'leve'); return true;
 }; }
+{ const _ocS2 = openCommand; openCommand = function (m) { if (m && m.id === 'lume' && sinoTriste()) { BT.lastCmd = BT.lastCmd || {}; BT.lastCmd.lume = 0; } return _ocS2(m); }; }

@@ -85,7 +85,7 @@ drawComandos = (function (_lista) {
     bx.globalAlpha = 1;
     txt(nm, cx, ly + 1, { align: 'center', col: dis ? '#6a6680' : '#ffffff', alpha: op });
     // de quem é a vez, discreto, do outro lado do anel
-    const vy = ly > cy ? cy - R - 24 : cy + R + 14;
+    const vy = ly > cy ? cy - R - 24 : Math.max(2, ly - 12);   // nunca embaixo do anel (lá fica a caixa de descrição)
     txt('Vez de ' + (m.short || m.name), cx, vy, { align: 'center', col: col, alpha: 0.85 * op, shadow: true });
   };
 })(drawComandos);
