@@ -91,7 +91,7 @@ function tw2glow() { return new Promise(r => { let k = 0; const f = () => { k++;
 
 // ---------- itens ----------
 const ITEM2 = {
-  frasco: { nm: 'Frasco de Âmbar', preco: 25, d: 'Cura 45% da vida de um aliado.' },
+  frasco: { nm: 'Frasco de Âmbar', preco: 25, d: 'Âmbar de farmácia, diluído, com selo da Coroa (o único permitido aqui em cima). Cura 45% da vida de um aliado.' },
   tinta: { nm: 'Tinta Azul', preco: 20, d: 'Devolve 15 PM.' },
   pluma: { nm: 'Pena de Fênix?', preco: 60, d: 'Levanta um aliado caído. É uma pena de galinha dourada.' }
 };

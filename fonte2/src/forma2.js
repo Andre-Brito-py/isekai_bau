@@ -175,7 +175,7 @@ async function cenaRosto() {
   await say('[Restaram só as runas GRAVADAS NA TAMPA: Brasa, Geada, Seiva. E uma quarta, mais funda: a Runa do Rosto.]', 'cat');
   await say('[As outras não morreram. Estão mudas. Com a tinta certa, elas acordam.]', 'cat');
   await say('E onde se compra tinta de acordar runa?', 'lume');
-  await say('Âmbar aqui em cima é da Coroa. Quem anda com âmbar no bolso é preso. Tinta de runa, então, nem se fala.', 'rita');
+  await say('Âmbar bruto aqui em cima é da Coroa. Fora o frasco de farmácia, com selo, quem anda com âmbar é preso. Tinta de runa, então, nem se fala.', 'rita');
   await say('[As anotações da Ofélia citam uma tinta "de superfície", feita sem âmbar. Registro incompleto. Investigação futura.]', 'cat');
   await say('[Sobre o Rosto: ele funciona. Mas sem âmbar em volta, a runa queima memória quente para segurar a cara. Dura pouco. E cansa.]', 'cat');
   await say('Então é uma máscara com hora pra acabar.', 'rita');

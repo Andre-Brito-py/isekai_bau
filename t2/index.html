@@ -46,6 +46,11 @@
  bauzinho discreto com três pontinhos no canto inferior esquerdo (~2,5 s). GAME OVER TEM PUNIÇÃO: volta ao último
  save (perde XP, cobres, itens e progresso feitos depois). Contra CHEFE: "Tentar de novo" na hora, pagando 20% dos
  cobres. Regra: não espalhar save2 demais nas cenas novas (só fim de cena importante, chefe vencido, capítulo).
+ ÂMBAR NA SUPERFÍCIE (furo apontado pelo usuário: "âmbar é da Coroa", mas o grupo tem e o Bazar vende frascos):
+ ÂMBAR BRUTO é monopólio da Coroa (contrabando dá prisão). O único permitido é o FRASCO DE FARMÁCIA: diluído, um
+ gole, com SELO da Coroa, vendido com imposto em bazares e boticas ("a Coroa proíbe e vende de volta"). Os frascos
+ que o baú trouxe da masmorra NÃO têm selo: ninguém abre a tampa. Gancho (Caps. 6-7): o âmbar de farmácia novo, dos
+ últimos meses, vem dos potes do Descanso e dos Pavios; quem souber o gosto percebe ("esse tem gosto de saudade").
  MENU CIRCULAR DE BATALHA (radial.js, pedido do usuário: a volta do menu circular, "o mais bonito possível"):
  medalhões num anel em volta de quem está na vez; o anel GIRA com mola para trazer o escolhido para a frente (lado
  dos inimigos); halo escuro com furo, aros com marcas de runa girando em sentidos opostos, arco de TENSÃO no aro de
@@ -4184,7 +4189,7 @@ function tw2glow() { return new Promise(r => { let k = 0; const f = () => { k++;
 
 // ---------- itens ----------
 const ITEM2 = {
-  frasco: { nm: 'Frasco de Âmbar', preco: 25, d: 'Cura 45% da vida de um aliado.' },
+  frasco: { nm: 'Frasco de Âmbar', preco: 25, d: 'Âmbar de farmácia, diluído, com selo da Coroa (o único permitido aqui em cima). Cura 45% da vida de um aliado.' },
   tinta: { nm: 'Tinta Azul', preco: 20, d: 'Devolve 15 PM.' },
   pluma: { nm: 'Pena de Fênix?', preco: 60, d: 'Levanta um aliado caído. É uma pena de galinha dourada.' }
 };
@@ -4844,6 +4849,10 @@ async function falaGraca() {
     await say('Bem-vindos ao Bazar! Tem frasco, tem tinta, tem pena de galinha dourada que levanta defunto. Funciona. Não pergunte como.', 'graca');
     await say('E eu vendo pra qualquer um que paga em cobre. Até pra mala. Principalmente pra mala com dente, que mala com dente paga adiantado.', 'graca');
     await say('Ela sabe.', 'rita'); await say('Todo mundo sabe, filha. A Guilda é que finge que não. Ou finge que sabe. Depende do dia.', 'graca');
+    await say('E os frascos são com SELO, viu? Âmbar de farmácia, diluído, autorizado pela Coroa. A Coroa proíbe o âmbar e depois vende de volta, um gole por vez, com imposto.', 'graca');
+    await say('Proíbe e vende de volta. Que coisa.', 'rita');
+    await say('...Os meus não têm selo.', 'me');
+    await say('Então não mostra pra ninguém, mala. Nem pra mim. Principalmente pra mim.', 'graca');
   }
   await loja(['frasco', 'tinta', 'pluma', 'escudoTampa', 'sapatilha', 'microfone']);
   if (!G.flags.gracaMina) { G.flags.gracaMina = true; await say('Ah: desde que a Coroa abriu a mina de âmbar debaixo do bairro velho, a gente afunda mais rápido. Mas isso eu não falei, tá?', 'graca'); }
@@ -5171,7 +5180,9 @@ async function chegadaVelhagua() {
   await say('* A Rita revira os bolsos: um botão, um recibo de pedágio e um grão de areia da masmorra.');
   await say('* Você abre a tampa e procura lá dentro: uma meia, uma pedrinha da masmorra e nenhum vintém.');
   await say('Lá embaixo a gente pagava tudo com âmbar e coragem.', 'lume');
-  await say('Aqui em cima âmbar é da Coroa. Quem anda com âmbar no bolso é preso por contrabando. A moeda do povo é cobre. E a gente tem zero.', 'rita');
+  await say('Aqui em cima âmbar BRUTO é da Coroa. Quem anda com âmbar sem selo é preso por contrabando. O único permitido é o frasco de farmácia, diluído, com o selo da Coroa. A moeda do povo é cobre. E a gente tem zero.', 'rita');
+  await say('E os frascos que eu trouxe lá de baixo? Não têm selo nenhum.', 'me');
+  await say('Então ninguém abre a sua tampa. Nunca. Pra ninguém.', 'rita');
   await say('Relaxa. A primeira viagem é por conta da casa. A segunda também. A terceira eu anoto num caderninho e esqueço.', 'jorge');
   await say('Tá. Então vamos pensar como gente de fora. Eu sou de fora. Eu penso.', 'rita');
   await say('Um: a Guilda tem um QUADRO DE PEDIDOS na taverna. Serviço miúdo, bicho em porão, coisa perdida. Eu tenho licença de escudeira: eles pagam a mim e não perguntam da bagagem.', 'rita');
@@ -6411,7 +6422,7 @@ async function cenaRosto() {
   await say('[Restaram só as runas GRAVADAS NA TAMPA: Brasa, Geada, Seiva. E uma quarta, mais funda: a Runa do Rosto.]', 'cat');
   await say('[As outras não morreram. Estão mudas. Com a tinta certa, elas acordam.]', 'cat');
   await say('E onde se compra tinta de acordar runa?', 'lume');
-  await say('Âmbar aqui em cima é da Coroa. Quem anda com âmbar no bolso é preso. Tinta de runa, então, nem se fala.', 'rita');
+  await say('Âmbar bruto aqui em cima é da Coroa. Fora o frasco de farmácia, com selo, quem anda com âmbar é preso. Tinta de runa, então, nem se fala.', 'rita');
   await say('[As anotações da Ofélia citam uma tinta "de superfície", feita sem âmbar. Registro incompleto. Investigação futura.]', 'cat');
   await say('[Sobre o Rosto: ele funciona. Mas sem âmbar em volta, a runa queima memória quente para segurar a cara. Dura pouco. E cansa.]', 'cat');
   await say('Então é uma máscara com hora pra acabar.', 'rita');

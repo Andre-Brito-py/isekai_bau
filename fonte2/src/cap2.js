@@ -248,6 +248,10 @@ async function falaGraca() {
     await say('Bem-vindos ao Bazar! Tem frasco, tem tinta, tem pena de galinha dourada que levanta defunto. Funciona. Não pergunte como.', 'graca');
     await say('E eu vendo pra qualquer um que paga em cobre. Até pra mala. Principalmente pra mala com dente, que mala com dente paga adiantado.', 'graca');
     await say('Ela sabe.', 'rita'); await say('Todo mundo sabe, filha. A Guilda é que finge que não. Ou finge que sabe. Depende do dia.', 'graca');
+    await say('E os frascos são com SELO, viu? Âmbar de farmácia, diluído, autorizado pela Coroa. A Coroa proíbe o âmbar e depois vende de volta, um gole por vez, com imposto.', 'graca');
+    await say('Proíbe e vende de volta. Que coisa.', 'rita');
+    await say('...Os meus não têm selo.', 'me');
+    await say('Então não mostra pra ninguém, mala. Nem pra mim. Principalmente pra mim.', 'graca');
   }
   await loja(['frasco', 'tinta', 'pluma', 'escudoTampa', 'sapatilha', 'microfone']);
   if (!G.flags.gracaMina) { G.flags.gracaMina = true; await say('Ah: desde que a Coroa abriu a mina de âmbar debaixo do bairro velho, a gente afunda mais rápido. Mas isso eu não falei, tá?', 'graca'); }
@@ -575,7 +579,9 @@ async function chegadaVelhagua() {
   await say('* A Rita revira os bolsos: um botão, um recibo de pedágio e um grão de areia da masmorra.');
   await say('* Você abre a tampa e procura lá dentro: uma meia, uma pedrinha da masmorra e nenhum vintém.');
   await say('Lá embaixo a gente pagava tudo com âmbar e coragem.', 'lume');
-  await say('Aqui em cima âmbar é da Coroa. Quem anda com âmbar no bolso é preso por contrabando. A moeda do povo é cobre. E a gente tem zero.', 'rita');
+  await say('Aqui em cima âmbar BRUTO é da Coroa. Quem anda com âmbar sem selo é preso por contrabando. O único permitido é o frasco de farmácia, diluído, com o selo da Coroa. A moeda do povo é cobre. E a gente tem zero.', 'rita');
+  await say('E os frascos que eu trouxe lá de baixo? Não têm selo nenhum.', 'me');
+  await say('Então ninguém abre a sua tampa. Nunca. Pra ninguém.', 'rita');
   await say('Relaxa. A primeira viagem é por conta da casa. A segunda também. A terceira eu anoto num caderninho e esqueço.', 'jorge');
   await say('Tá. Então vamos pensar como gente de fora. Eu sou de fora. Eu penso.', 'rita');
   await say('Um: a Guilda tem um QUADRO DE PEDIDOS na taverna. Serviço miúdo, bicho em porão, coisa perdida. Eu tenho licença de escudeira: eles pagam a mim e não perguntam da bagagem.', 'rita');
