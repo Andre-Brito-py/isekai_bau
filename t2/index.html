@@ -239,7 +239,25 @@
    GRIMÓRIO (grimorio3.js): Brasa/Geada/Seiva/Fuligem x Dardo/Onda/Véu; 2 elementos = fusão (Vapor, Orvalho, Brasa Viva,
    Fumaça, Geada Negra e o MOFO, que dá errado de propósito); elemento repetido = dobrado. Véus: Manto de Brasa (+30%),
    Couraça, Véu de Fumaça (próximo golpe erra)... MENU > Grimório ou estante da base. G.grim guarda páginas e fusões.
- - PARTE 2 (a fazer): GALERIAS DE FULIGEM (túneis e chaminés sob a capital; escuro: a luz da Lume importa; Pavios
+ - PARTE 2 (IMPLEMENTADA, cap3b.js + evolucao3.js + inimigos3b.js + arte_cap3b.js; mapas galerias1/galerias2/fundo):
+   bueiro do Bairro Baixo (Tico) -> GALERIAS 1 (escuro: raio de luz 70, lustre 96, Farol +26; brasas e Pavios
+   iluminam; BIGORNA para a forja da Rita: Afiar a lança +3 ATQ ou Reforçar o escudo +2 DEF/+10 PV) -> GALERIAS 2
+   (prateleiras de lanternas com nomes; o pote do Dito vazio; o VEIO DE ÂMBAR = cena da EVOLUÇÃO) -> FUNDO (chefe
+   MÃE-FULIGEM; depois, a lanterna do Dito: ele lembra do Tico por um instante; Rita e Lume desconfiam) -> FIM DO CAP. 3.
+   Regra das Galerias: FOGO ALIMENTA FULIGEM (Brasa cura Cinzinha e Mãe). Inimigos: Cinzinha (estoura quando fraca),
+   Rato-Pavio (mordida dupla, apaga vela/manto). Mãe-Fuligem: Fornalha preparada a cada 4 vezes (quebre o escudo),
+   cospe Cinzinhas, Chuva de Cinzas, Engole a Luz (come Tensão e velas); fase 2 a 50%: fornalha aberta, fraca a
+   LUZ/gelo/corte, a luz arranca lembranças presas (popups LEMBR3).
+   EVOLUÇÃO (G.evo3 = farol | vao | escriba; G.flags.c3Forma libera TROCAR DE FORMA em batalha, ação leve, 3 vezes):
+     FAROL: +34 PV, +4 DEF/MDEF, +2 MAG, +2 ATQ; técnica Farol 35T (grupo leva metade por 3 vezes e cada golpe recebido
+       devolve raio de luz 0.6); começa a luta com +15 Tensão.
+     VÃO: +4 ATQ, +3 VEL, +14 PV; Guardar Dentro 25T leve (aliado some: próximo golpe erra, vez adianta); físico x1.2.
+     ESCRIBA: +7 MAG, +18 PM, +10 PV; Marca de Runa 25T leve (magia no alvo +30% e quebra 1 escudo a mais, 3 vezes);
+       magia x1.15, páginas -1 PM, Grimório com 6 páginas.
+   BALANCEAMENTO (robô, acerto 0.6, linhas ferro 'arca' e arcano 'vazio', 7 lutas comuns + chefe): todas as
+   combinações vencem; vida mínima no chefe entre ~20% e ~45%; nenhuma linha fica para trás (o Escriba, mágico,
+   ficou no meio do pacote, de propósito, para não repetir o problema do jogo 1). Mãe-Fuligem final: 4300 PV, ATQ 29.
+ - (plano original da Parte 2, mantido como referência) GALERIAS DE FULIGEM (túneis e chaminés sob a capital; escuro: a luz da Lume importa; Pavios
    trabalhando no escuro; o Dito como missão: devolver uma lembrança) + TROCA DE FORMA EM BATALHA (humano x baú, ação
    leve; forma humana usa equipamento) + a forja da Rita (achar a bigorna) + CHEFE no fundo das Galerias + gancho.
    A EVOLUÇÃO (pedido do usuário: caprichar na história e começar com TRÊS opções), nas Galerias: o âmbar/tinta do
@@ -7249,7 +7267,7 @@ const arvC = v => memo(() => arvoreArt(v));
       ...portas(AUR.estradaDoor, 'estrada', 38, 11, 'left'), ...portas(AUR.papDoor, 'papelaria', ...PA.entra, 'up'),
       ...AUR.festDoor.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: irFestival })),
       marcoEnt(...AUR.marco),
-      morador('tico', ...AUR.tico, { rotina: rot([29, 9, 'limpar', 500, 'up'], [31, 9, 'olhar', 300, 'down']), talk: falaTico }),
+      morador('tico', ...AUR.tico, { rotina: rot([29, 9, 'limpar', 500, 'up'], [31, 9, 'olhar', 300, 'down']), talk: falaTico, gone: () => !!G.flags.c3P1Fim && !G.flags.c3Fim }),
       morador('pavio', ...AUR.pavio, { rotina: rot([20, 10, 'acender', 260, 'left'], [16, 11, 'acender', 260, 'up'], [26, 11, 'acender', 260, 'up']), passo: 20, talk: falaPavio3 }),
       morador('poeta', ...AUR.poeta, { rotina: rot([14, 15, 'olhar', 600, 'down'], [20, 15, 'olhar', 400, 'right']), talk: falaPoeta }),
       morador('guardaA', ...AUR.guarda, { rotina: rot([33, 11, 'olhar', 9000, 'left']), talk: falaGuarda }),
@@ -8071,7 +8089,7 @@ Object.assign(ENEMY2, {
     comeFogo: true, frame: u => cinzaArt(Math.floor(BT.t / 12 + u.x) % 3), dieCols: ['#3e3248', '#6a5a70', '#ffb040'] },
   rato: { name: 'Rato-Pavio', kind: 'rato', mhp: 170, atk: 19, def: 8, mdef: 9, spd: 15, shield: 2, maxShield: 2, weak: ['corte', 'mordida'], ai: 'rato', h: 22, cobres: 10,
     frame: u => ratoArt(Math.floor(BT.t / 8 + u.x) % 2), dieCols: ['#8a7a80', '#f2ecdc', '#ffd060'] },
-  mae: { name: 'Mãe-Fuligem', kind: 'mae', boss: true, mhp: 3300, atk: 25, def: 13, mdef: 12, spd: 10, shield: 6, maxShield: 6, weak: ['gelo', 'mordida'], ai: 'mae', h: 120, cobres: 150, ph: 1,
+  mae: { name: 'Mãe-Fuligem', kind: 'mae', boss: true, mhp: 4300, atk: 29, def: 13, mdef: 12, spd: 10, shield: 6, maxShield: 6, weak: ['gelo', 'mordida'], ai: 'mae', h: 120, cobres: 150, ph: 1,
     comeFogo: true, frame: u => maeFuligemArt(Math.floor(BT.t / (u.armando ? 4 : 14)) % 2, u.ph || 1), dieCols: ['#382a3e', '#6e5c74', '#ffb040', '#fff0a0'], cancelTxt: 'A fornalha engasgou! Golpe cancelado!' }
 });
 FICHA.cinza = 'Cinzinha: fuligem que andou. FOGO A ALIMENTA (Brasa cura!). Gelo e mordida desmancham. Quando está quase sumindo, estoura.';
@@ -8156,6 +8174,401 @@ function fasesMae() {
     e.ph = 2; e.weak = ['luz', 'gelo', 'corte']; e.known = {}; e.maxShield = 7; e.shield = 7; e.spd = 11;
     callout('Fornalha aberta: LUZ, gelo e corte!', '#fff0a0', 100);
   } }];
+}
+
+// ================= A EVOLUÇÃO DA SUPERFÍCIE (Cap. 3, Parte 2) =================
+// No veio de âmbar das Galerias, o baú evolui. TRÊS caminhos, cada um com uma LEMBRANÇA DA TERRA como preço (mostrada
+// antes de escolher). A evolução soma ao que veio do jogo 1 (linha de Ferro ou Arcana) e muda: atributos, uma técnica
+// nova, um traço passivo e a aparência (baú no mapa e na luta, e a forma humana).
+// CALIBRAGEM (pedido do usuário: no jogo 1 o caminho mágico ficou mais fraco que o de ferro): cada caminho foi testado
+// com o bot nas mesmas lutas e no mesmo chefe, nas duas linhas do jogo 1; os números abaixo vêm desses testes.
+//   ARCA-FAROL  : protetor. +34 PV, +4 DEF, +4 RES, +2 MAG. Técnica FAROL (35T): por 3 vezes de cada um, o grupo leva
+//                 metade do dano e cada golpe recebido devolve um raio de luz em quem bateu. Passivo: começa a luta
+//                 com +15 de Tensão.
+//   ARCA DO VÃO : ágil. +4 ATQ, +3 VEL, +14 PV. Técnica GUARDAR DENTRO (25T, leve): guarda um aliado dentro do baú; o
+//                 próximo golpe nele erra e a vez dele adianta. Passivo: a mordida "atravessa" (+20% de dano físico).
+//   ARCA-ESCRIBA: mágico. +7 MAG, +18 PM, +10 PV. Técnica MARCA DE RUNA (25T, leve): marca um inimigo por 3 vezes;
+//                 magia nele bate +30% e quebra 1 escudo a mais. Passivo: Grimório com 6 páginas, feitiços -1 PM e
+//                 +15% de dano mágico.
+const EVO3 = {
+  farol: { nm: 'Arca-Farol', cor: '#ffd060', papel: 'Protetor: aguenta e devolve em luz',
+    d: 'O âmbar vira luz dentro da tampa. Vira um farol que protege o grupo e devolve cada golpe em raio de luz.',
+    preco: 'O ROSTO DA SUA MÃE. A voz fica. O rosto vai.',
+    mods: { mhp: 34, def: 4, mdef: 4, mag: 2, atk: 2 }, tec: 'farol' },
+  vao: { nm: 'Arca do Vão', cor: '#c8a0ff', papel: 'Ágil: guarda aliados dentro, morde atravessando',
+    d: 'O espaço dobrado da tampa fica maior. Dá para guardar alguém dentro no meio da luta, e a mordida atravessa.',
+    preco: 'O CAMINHO DE CASA. O endereço, o nome da rua, o ponto onde você descia do 31.',
+    mods: { atk: 4, spd: 3, mhp: 14 }, tec: 'guardarDentro' },
+  escriba: { nm: 'Arca-Escriba', cor: '#8fe3d8', papel: 'Mágico: marca inimigos e escreve feitiços mais fortes',
+    d: 'A tinta de superfície entra na madeira. O Grimório cresce, os feitiços ficam mais baratos e mais fortes, e dá para escrever runas NOS inimigos.',
+    preco: 'A SUA LETRA. Como você escrevia o próprio nome à mão. A assinatura.',
+    mods: { mag: 7, mmp: 18, mhp: 10 }, tec: 'marcaRuna' }
+};
+function evo3() { return G.evo3 && EVO3[G.evo3] ? G.evo3 : null; }
+
+// ---------- atributos e técnica ----------
+{ const _gc3 = grupoCap1; grupoCap1 = function () {
+  const g = _gc3(), ev = evo3();
+  for (const m of g) {
+    if (m.id === 'bau' && ev) { for (const [a, v] of Object.entries(EVO3[ev].mods)) m[a] = (m[a] || 0) + v; m.techs = [...(m.techs || []), EVO3[ev].tec]; m.evo = ev; if (ev === 'vao') { m.atkNm = 'Mordida do Vão'; m.atkDesc = 'A mordida atravessa o espaço: +20% de dano. A quando o anel fechar = mordida certeira.'; } }
+    if (m.id === 'bau' && G.flags.c3Forma) m.techs = [...(m.techs || []), 'trocaForma'];
+    if (m.id === 'rita' && G.forja && G.forja.lanca) m.atk += 3;
+    if (m.id === 'rita' && G.forja && G.forja.escudo) { m.def += 2; m.mhp += 10; }
+  }
+  return g;
+}; }
+// passivos
+{ const _cd4 = calcDmg; calcDmg = function (a, t, pow, o = {}) {
+  let d = _cd4(a, t, pow, o);
+  if (a && a.id === 'bau' && a.evo === 'vao' && !o.mag) d *= 1.2;
+  if (a && a.id === 'bau' && a.evo === 'escriba' && o.mag) d *= 1.15;
+  if (t && t.st && t.st.marca > 0 && o.mag && a && a.side === 'p') d *= 1.3;
+  return d;
+}; }
+{ const _hf6 = hitFoe; hitFoe = function (a, t, pow, o = {}) {
+  const tinha = t && t.st && t.st.marca > 0 && o.mag && t.shield > 0;
+  const r = _hf6(a, t, pow, o);
+  if (tinha && t.hp > 0 && t.shield > 0 && r > 0) { t.shield = Math.max(0, t.shield - 1); const [x, y] = unitCenter(t); popNum(x + 10, y - 14, 'MARCA', '#8fe3d8'); }
+  return r;
+}; }
+{ const _pg3 = pagina3; pagina3 = function (s) { const P = _pg3(s); if (evo3() === 'escriba') P.mp = Math.max(2, P.mp - 1); return P; }; }
+{ const _ba3 = battle2; battle2 = function (o) { if (evo3() === 'farol' && o) o.tension = Math.min(100, (o.tension || 0) + 15); return _ba3(o); }; }
+// o Farol: metade do dano e raio de luz de volta
+{ const _fs4 = foeStrike; foeStrike = async function (e, t, pow, o = {}) {
+  const prot = t && t.st && t.st.farol > 0 && t.hp > 0;
+  if (prot) t.def0 = true;
+  const r = await _fs4(e, t, pow, o);
+  if (prot && e && e.hp > 0) { const b = BT.party.find(m => m.id === 'bau' && m.hp > 0); if (b) { const [x0, y0] = unitCenter(b), [x1, y1] = unitCenter(e); await tw(8, p => { bx.strokeStyle = '#fff0a0'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(x0, y0 - 10); bx.lineTo(x0 + (x1 - x0) * p, y0 - 10 + (y1 - y0 + 10) * p); bx.stroke(); bx.lineWidth = 1; luzMagia(x0, y0 - 10, 12, '#fff0a0', 0.6); }); hitFoe(b, e, 0.6, { el: 'luz', mag: true, ranged: true }); } }
+  return r;
+}; }
+Object.assign(ST_NAME, { farol: 'FAROL', marca: 'MARCA' });
+Object.assign(TECH2, {
+  farol: { nm: 'Farol', cost: 35, tgt: 'self', d: 'A tampa vira farol: por 3 vezes de cada um, o grupo leva metade do dano e cada golpe recebido devolve um raio de luz.', run: async (m) => {
+    sfx('rune'); flashW(2); const [x, y] = unitCenter(m);
+    await tw(30, p => { luzMagia(x, y - 30, 30 + p * 50, '#fff0a0', 0.9 - p * 0.4); for (let i = 0; i < 8; i++) { const a = p * 2 + i / 8 * Math.PI * 2; bx.globalAlpha = 0.35 * (1 - p); bx.strokeStyle = '#fff0a0'; bx.beginPath(); bx.moveTo(x, y - 30); bx.lineTo(x + Math.cos(a) * 140, y - 30 + Math.sin(a) * 60); bx.stroke(); bx.globalAlpha = 1; } });
+    for (const u of alive(BT.party)) { u.st.farol = 3; const [ux, uy] = unitCenter(u); burst(ux, uy, 10, ['#fff0a0', '#ffffff']); }
+    callout('Farol aceso!', '#fff0a0', 60);
+  } },
+  guardarDentro: { nm: 'Guardar Dentro', cost: 25, tgt: 'ally', w: 'leve', d: 'Guarda um aliado DENTRO do baú: o próximo golpe nele erra e a vez dele adianta. Leve.', run: async (m, t) => {
+    if (t === m) { callout('Escolha outro aliado', '#ff6b6b', 40); BT.tension += 25; return; }
+    sfx('rune'); const [x, y] = unitCenter(t), [bx0, by0] = unitCenter(m);
+    await tw(16, p => { t.sx = 1 - p * 0.7; t.sy = 1 - p * 0.7; t.alpha = 1 - p * 0.6; for (let i = 0; i < 6; i++) { const a = p * 8 + i; bx.fillStyle = '#c8a0ff'; bx.fillRect(Math.round(x + (bx0 - x) * p + Math.cos(a) * 8 * (1 - p)), Math.round(y + (by0 - y) * p + Math.sin(a) * 8 * (1 - p)), 2, 2); } });
+    await tw(12, p => { t.sx = 0.3 + p * 0.7; t.sy = 0.3 + p * 0.7; t.alpha = 0.4 + p * 0.6; fxRing(x, y, 14 * (1 - p), '#c8a0ff', 1 - p); });
+    t.sx = 1; t.sy = 1; t.alpha = 1; t.st.sumido = 2; t.ct = Math.min(99, t.ct + 30);
+    popNum(x, y - 26, 'GUARDADO', '#c8a0ff'); callout(t.name + ' está no Vão', '#c8a0ff', 50);
+  } },
+  marcaRuna: { nm: 'Marca de Runa', cost: 25, tgt: 'enemy', w: 'leve', d: 'Escreve uma runa NO inimigo por 3 vezes: magia nele bate +30% e quebra 1 escudo a mais. Leve.', run: async (m, t) => {
+    sfx('rune'); const [x, y] = unitCenter(t);
+    await projetilMagia({ _pt: [m.x, m.y - m.h + 6] }, t, 'luz', 14);
+    await tw(22, p => { const r = 12; bx.globalAlpha = Math.min(1, p * 2); bx.strokeStyle = '#8fe3d8'; bx.lineWidth = 2; bx.beginPath(); for (let i = 0; i <= 5 * p; i++) { const a = -Math.PI / 2 + i * Math.PI * 4 / 5; const X = x + Math.cos(a) * r, Y = y + Math.sin(a) * r; if (i === 0) bx.moveTo(X, Y); else bx.lineTo(X, Y); } bx.stroke(); bx.lineWidth = 1; bx.globalAlpha = 1; });
+    t.st.marca = 3; popNum(x, y - 26, 'MARCADO', '#8fe3d8'); callout('Runa escrita em ' + t.name, '#8fe3d8', 50);
+  } },
+  // ---------- TROCA DE FORMA EM BATALHA ----------
+  trocaForma: { nm: 'Trocar de Forma', cost: 0, tgt: 'self', w: 'leve', d: 'Baú <-> humano (ação leve). Humano: +4 VEL, +3 MAG, -4 DEF, golpe de corte, feitiços -2 PM. Dura 3 vezes (fôlego).', run: async (m) => { await trocarForma(m); } }
+});
+// ---------- troca de forma ----------
+async function trocarForma(m, volta) {
+  const [x, y] = unitCenter(m); sfx('rune');
+  await tw(14, p => { m.sx = 1 + Math.sin(p * Math.PI) * 0.3; m.sy = 1 - Math.sin(p * Math.PI) * 0.3; luzMagia(x, y, 20, '#ffe8c0', Math.sin(p * Math.PI)); });
+  m.humano = !m.humano && !volta;
+  if (m.humano) { m.spd += 4; m.mag += 3; m.def -= 4; m.humTurnos = 3; m.h = 48; m.atkNm0 = m.atkNm; m.atkNm = 'Golpe de Mão'; m.attack0 = m.attack; m.attack = golpeHumano; }
+  else { m.spd -= 4; m.mag -= 3; m.def += 4; m.h = 26; if (m.atkNm0) m.atkNm = m.atkNm0; if (m.attack0) m.attack = m.attack0; }
+  m.sx = 1; m.sy = 1; for (let i = 0; i < 14; i++) part({ forma: 'estrela', x: x + rand(-10, 10), y: y + rand(-20, 10), vy: -0.5, life: 24, col: '#ffe8c0' });
+  callout(m.humano ? m.name + ' toma forma humana' : m.name + ' volta a ser baú', '#ffe8c0', 50);
+}
+async function golpeHumano(m, t) {
+  const [tx, ty] = unitCenter(t), x0 = m.x, dx = tx - 22 - m.x;
+  await tw(10, p => { m.ox = dx * ease.io(p); m.oy = -Math.sin(p * Math.PI) * 6; });
+  const ok = await timedPrompt(t, 18); slashFx(tx, ty, '#ffe8c0', ok ? 1.4 : 1); sfx('hit');
+  hitFoe(m, t, ok ? 1.25 : 0.95, { el: 'corte', crit: ok });
+  await tw(10, p => { m.ox = dx * (1 - p); m.oy = 0; }); m.ox = 0;
+}
+// fôlego da forma humana: 3 vezes, depois volta sozinho; feitiços mais baratos enquanto humano
+{ const _et3 = endTurn; endTurn = function (u, w) { const r = _et3.apply(this, arguments); if (u && u.humano) { u.humTurnos--; if (u.humTurnos <= 0) { callout('O rosto derrete: volta a ser baú', '#ffe8c0', 50); trocarForma(u, true); } } return r; }; }
+{ const _dc4 = doCommand; doCommand = async function (m, k) { if (m && m.humano && k === 'runas') { const salvo = {}; for (const rk of m.runas || []) { const S = RUNA2[rk]; if (S) { salvo[rk] = S.mp; S.mp = Math.max(2, S.mp - 2); } } try { return await _dc4(m, k); } finally { for (const rk in salvo) RUNA2[rk].mp = salvo[rk]; } } return _dc4(m, k); }; }
+// desenho: baú evoluído (adereço por cima) e forma humana na luta
+const ADERECO = {};
+function aderecoEvo(ev) {
+  if (ADERECO[ev]) return ADERECO[ev]; const P = new Pix(20, 16);
+  if (ev === 'farol') { P.rect(7, 4, 6, 8, '#3a3048'); P.rect(8, 5, 4, 6, '#ffe080'); P.rect(9, 6, 2, 3, '#ffffff'); P.rect(6, 2, 8, 2, '#c8a040'); P.p(10, 0, '#c8a040'); P.p(10, 1, '#c8a040'); P.rect(6, 12, 8, 2, '#c8a040'); }
+  else if (ev === 'vao') { for (let i = 0; i < 22; i++) { const a = i * 0.55, r = i * 0.32; P.p(10 + Math.round(Math.cos(a) * r), 8 + Math.round(Math.sin(a) * r), i % 3 ? '#c8a0ff' : '#ffffff'); } }
+  else { for (let i = 0; i < 12; i++) P.p(4 + i, 12 - i, i < 3 ? '#2a2038' : '#f2ecdc'); for (let i = 3; i < 12; i++) P.p(5 + i, 12 - i, '#c8c0d8'); P.rect(2, 13, 3, 2, '#2a2038'); P.p(14, 14, '#2a2038'); }
+  return ADERECO[ev] = P.outline().canvas();
+}
+{ const _bf = bauFrame; bauFrame = function (u) {
+  if (u && u.humano) { const A = rostoArte(); return A ? A.body[Math.floor(BT.t / 20) % A.body.length] : _bf(u); }
+  return _bf(u);
+}; }
+{ const _du3 = drawUnit; drawUnit = function (u) {
+  const r = _du3(u);
+  if (u && u.id === 'bau' && u.evo && !u.humano && u.hp > 0 && u._X != null) { const A = aderecoEvo(u.evo), w = u._fw * u._sx; bx.drawImage(A, Math.round(u._X + w / 2 - 10), Math.round(u._Y - 10 + Math.sin(BT.t * 0.08))); if (u.evo === 'farol') luzMagia(u._X + w / 2, u._Y - 2, 16, '#ffe080', 0.35); }
+  return r;
+}; }
+// no mapa: o adereço em cima do baú
+{ const _dpE = drawPlayer; drawPlayer = function (ox, oy) {
+  const r = _dpE(ox, oy), ev = evo3();
+  if (ev && !W2.float) { const A = aderecoEvo(ev), x = W2.px - ox, y = W2.py - oy; if (deRosto()) bx.drawImage(A, Math.round(x + 6), Math.round(y - 10), 10, 8); else bx.drawImage(A, Math.round(x - 2), Math.round(y - 14 + Math.sin(W2.t * 0.08))); }
+  return r;
+}; }
+
+// ---------- A CENA DA EVOLUÇÃO ----------
+async function cenaEvolucao() {
+  if (G.evo3) return;
+  await say('* O veio de âmbar pulsa. Não brilha: pulsa, como um coração. E a cada batida, a sua tampa range e puxa na direção dele.');
+  await say('Ei. EI. Você tá sendo puxado. Por que você tá sendo puxado?', 'rita');
+  await say('[Âmbar bruto, tinta de superfície no Grimório e fuligem de lembranças, juntos. São as condições de uma EVOLUÇÃO. O corpo do baú está pedindo forma nova.]', 'cat');
+  await say('Evolução? Que nem lá embaixo? Quando você mudou e...', 'lume');
+  await say('* A Lume para. Ela lembra do que aconteceu da última vez. Você também.');
+  await say('[Toda evolução tem preço. Aqui em cima, o preço é uma lembrança da Terra. Cada caminho cobra uma diferente. Você vai saber qual antes de escolher.]', 'cat');
+  await say('[Três formas respondem ao veio. Escolha com calma. Não dá para desfazer.]', 'cat');
+  let ev = null;
+  while (!ev) {
+    const ks = Object.keys(EVO3);
+    const i = await list({ x: 24, y: 20, w: 192, title: 'Três caminhos', items: ks.map(k => ({ label: EVO3[k].nm, col: EVO3[k].cor, right: '' })), desc: j => EVO3[ks[j]] && (EVO3[ks[j]].papel + '. ' + EVO3[ks[j]].d), descY: 118 });
+    if (i < 0) continue;
+    const E = EVO3[ks[i]];
+    await say(`[${E.nm}. Preço: ${E.preco}]`, 'cat');
+    const c = await choose(`* Evoluir para ${E.nm}?`, ['Evoluir', 'Ver os outros caminhos']);
+    if (c === 0) ev = ks[i];
+  }
+  const E = EVO3[ev];
+  // a lembrança indo embora
+  if (ev === 'farol') {
+    await say('* Você tenta lembrar do rosto da sua mãe. Está lá: o sorriso de canto, a ruga entre as sobrancelhas quando ela fazia conta.');
+    await say('* E então o âmbar entra na madeira, e o rosto fica claro demais, como foto contra o sol. Branco. Some.');
+    await say('* A voz fica. "Leva casaco, menino." A voz fica.');
+  } else if (ev === 'vao') {
+    await say('* Você tenta lembrar do caminho de casa. O ponto do 31. A padaria da esquina. O número no portão, pintado à mão.');
+    await say('* O espaço dentro da tampa se dobra mais uma vez, e o caminho dobra junto. A rua fica sem nome. O ponto fica sem placa. O número no portão escorre.');
+    await say('* Você sabe que tinha uma casa. Você só não sabe mais chegar nela.');
+  } else {
+    await say('* Você tenta lembrar da sua letra. Do jeito que você assinava. O primeiro traço do nome, sempre torto, sempre igual.');
+    await say('* A tinta entra na madeira, e o traço torto se desfaz como risco de giz na chuva.');
+    await say('* Você ainda sabe o seu nome. Só não sabe mais como a sua mão o escrevia.');
+  }
+  await say('...Eu guardo.', 'lume');
+  await say('Eu guardo pra você. Numa música. Toda vez que você esquecer alguma coisa, eu ponho numa música. Aí ela fica em algum lugar.', 'lume');
+  await say('* Ela canta baixinho. Uma frase só. E por um segundo, você quase lembra.');
+  // a transformação
+  sfx('rune'); V.shake = 18; flashW && 0;
+  await say('* O veio apaga. A luz toda entra em você de uma vez.');
+  G.evo3 = ev; G.flags.c3Forma = true; curarTudo();
+  await say(`* {y}${G.name} evoluiu para ${E.nm}!{/}`);
+  if (ev === 'farol') await say('Você virou um FAROL. Com lanterna e tudo. Agora sou eu que vou ficar com ciúme de quem brilha mais.', 'lume');
+  if (ev === 'vao') await say('Tem mais espaço aí dentro? Mais do que antes? Daqui a pouco você guarda a capital inteira.', 'rita');
+  if (ev === 'escriba') await say('[Registro: o Grimório agora tem seis páginas. E uma pena. Você tem uma pena na tampa. Isso não estava previsto.]', 'cat');
+  if (ev === 'escriba') grim().max = 6;
+  await say('E o rosto? Ele ficou... mais firme. Dá pra ver daqui. Menos borrado.', 'rita');
+  await say(`[TÉCNICA NOVA: ${TECH2[E.tec].nm}. E com o corpo novo, a Runa do Rosto aguenta a luta: TROCAR DE FORMA virou técnica (ação leve, sem custo). Humano é rápido e conjura mais barato; baú aguenta mais. Dura 3 vezes.]`, 'cat');
+  save2();
+}
+
+// ---------- a forja da Rita (bigorna das Galerias) ----------
+{ const _ff = falaForja; falaForja = async function () {
+  if (!G.flags.bigorna) return _ff();
+  G.forja = G.forja || {};
+  const op = [!G.forja.lanca ? 'Afiar a lança (+3 ATQ da Rita)' : null, !G.forja.escudo ? 'Reforçar o escudo (+2 DEF, +10 PV da Rita)' : null, 'Agora não'].filter(Boolean);
+  if (op.length === 1) { await say('Lança afiada, escudo reforçado. A forja tá quente, mas eu tô sem ideia. Quando aparecer metal bom, eu faço mais.', 'rita'); return; }
+  const c = await choose('A bigorna chegou! O que eu forjo?', op, 'rita');
+  if (op[c] === 'Agora não' || c < 0) return;
+  sfx('hit'); V.shake = 6; await say('* Tum. Tum. Tum. A Rita bate o ferro com uma alegria que dá medo.');
+  if (op[c].startsWith('Afiar')) { G.forja.lanca = true; await say('Pronto. Agora ela corta até a conta de luz.', 'rita'); } else { G.forja.escudo = true; await say('Escudo novo. Quer dizer, o mesmo escudo, com mais escudo.', 'rita'); }
+  save2();
+}; }
+
+// ================= CAPÍTULO 3 — PARTE 2: AS GALERIAS DE FULIGEM =================
+// Do festival, o grupo desce pela grade do bueiro do Bairro Baixo (o Tico mostra o caminho e fica de guarda lá em cima).
+// GALERIAS 1 (túneis escuros: a luz da Lume é o que deixa ver; brasas nas grades; Cinzinhas e Ratos-Pavio; a BIGORNA da
+// forja velha; um Pavio que carrega lanternas cheias para cima sem saber o que leva) -> GALERIAS 2 (o Salão das
+// Lanternas: prateleiras de vidros com fumaça dentro, etiquetados com NOMES; o VEIO DE ÂMBAR: a EVOLUÇÃO) -> O CORAÇÃO
+// DA FULIGEM (chefe: MÃE-FULIGEM) -> a lanterna do DITO -> o Tico e o irmão (um segundo de lembrança) -> FIM DO CAP. 3.
+// Pistas só no jogo (nunca dizer no chat quem está por trás): os canos sobem "para os postes" e "para o morro do Farol".
+const GA1 = POS3.galerias1, GA2 = POS3.galerias2, FU = POS3.fundo;
+Object.assign(HUMS, { pavioG: Object.assign({}, HUMS.pavio || {}, { coat: '#4a4a5a' }) });
+const NOMES_LANT = ['DITO', 'MARTA DA PONTE', 'SEU LINO', 'IRMÃ CÉLIA', 'JOCA', 'DONA ZILÁ', 'O MOÇO DO SINO', 'BENTINHA'];
+const LUZ_GAL = { galerias1: GA1.brasas, galerias2: [[6, 8], [21, 8], [14, 9]], fundo: [[3, 3], [15, 8]] };
+{ const _mm4 = montarMapas2; montarMapas2 = function () {
+  _mm4.apply(this, arguments);
+  const key = Object.assign({}, KEY_GAL, { '~': KEY2['~'], '_': KEY2['_'] });
+  MAPS2.galerias1 = { rows: ROWS3.galerias1, name: 'Galerias de Fuligem', music: 'afogado', batBg: bgGalerias, bg: '#0c0810', key, escuro: true,
+    props: [
+      ...GA1.brasas.map(([x, y]) => ({ img: () => gradeBrasa(Math.floor(FRAME / 10) % 3), x, y: y + 0.6 })),
+      { img: () => G.flags.bigorna ? EMPTY_C : bigornaArt(), x: GA1.bigorna[0] - 0.4, y: GA1.bigorna[1] + 1, solid: [[GA1.bigorna[0], GA1.bigorna[1], 1, 1]] },
+      { img: () => canoArt(80), x: 24, y: 5, by: 80 }, { img: () => canoArt(80), x: 31, y: 9, by: 80 }
+    ],
+    ents: [
+      ...GA1.subida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: subirBueiro })),
+      marcoEnt(...GA1.marco),
+      inimigo('g1', 'cinza', ...GA1.cinza1, ['cinza'], { spr: t => cinzaArt(Math.floor(t / 12) % 3), h: 24, bg: bgGalerias }),
+      inimigo('g2', 'rato', ...GA1.rato1, ['rato', 'rato'], { spr: t => ratoArt(Math.floor(t / 8) % 2), h: 22, bg: bgGalerias, vision: 5 }),
+      inimigo('g3', 'cinza', ...GA1.cinza2, ['cinza', 'cinza'], { spr: t => cinzaArt(Math.floor(t / 12) % 3), h: 24, bg: bgGalerias }),
+      inimigo('g4', 'rato', ...GA1.rato2, ['rato', 'cinza'], { spr: t => ratoArt(Math.floor(t / 8) % 2), h: 22, bg: bgGalerias, vision: 5 }),
+      inimigo('g5', 'cinza', ...GA1.misto, ['cinza', 'rato', 'cinza'], { spr: t => cinzaArt(Math.floor(t / 12) % 3), h: 24, bg: bgGalerias }),
+      { t: 'sign', x: GA1.bigorna[0], y: GA1.bigorna[1], h: 22, talk: pegarBigorna },
+      morador('pavioG', ...GA1.pavioT, { rotina: rot([25, 16, 'carregar', 400, 'right'], [29, 16, 'carregar', 400, 'left']), talk: falaPavioGal }),
+      bauEnt('galerias1', 'a', ...GA1.bau, () => dar('pluma', 1)),
+      ...GA1.saida.map(([x, y]) => ({ t: 'door', x, y, to: 'galerias2', tx: GA2.entra[0], ty: GA2.entra[1], dir: 'down' }))
+    ],
+    onEnter: async () => { if (!G.flags.c3Gal) { G.flags.c3Gal = true; await cenaDescida(); } }
+  };
+  MAPS2.galerias2 = { rows: ROWS3.galerias2, name: 'Salão das Lanternas', music: 'afogado', batBg: bgGalerias, bg: '#0c0810', key, escuro: true,
+    props: [
+      ...GA2.prat.map(([x, y], i) => ({ img: () => prateleiraArt(i), x: x - 1, y, by: 58 })),
+      { img: () => veioArt(Math.floor(FRAME / 8) % 7, !!G.evo3), x: GA2.veio[0] - 0.25, y: GA2.veio[1] + 1, solid: [[14, 9, 2, 1]] },
+      { img: () => canoArt(110), x: 13, y: 4, by: 110 }, { img: () => canoArt(110), x: 16.5, y: 4, by: 110 }
+    ],
+    ents: [
+      ...GA2.volta.map(([x, y]) => ({ t: 'door', x, y, to: 'galerias1', tx: GA1.saida[0][0], ty: GA1.saida[0][1] - 1, dir: 'up' })),
+      marcoEnt(...GA2.marco),
+      ...GA2.prat.map(([x, y], i) => ({ t: 'sign', x, y, h: 50, talk: () => lerLanterna(i) })),
+      { t: 'sign', x: GA2.veio[0], y: GA2.veio[1], h: 56, talk: falaVeio }, { t: 'sign', x: GA2.veio[0] + 1, y: GA2.veio[1], h: 56, talk: falaVeio },
+      morador('pavioG', ...GA2.pav1, { rotina: rot([5, 16, 'carregar', 300, 'right'], [11, 16, 'carregar', 300, 'left']), talk: falaPavioGal }),
+      morador('pavioG', ...GA2.pav2, { rotina: rot([22, 16, 'carregar', 340, 'left'], [17, 16, 'carregar', 340, 'right']), talk: falaPavioGal }),
+      inimigo('h1', 'cinza', ...GA2.cinza, ['cinza', 'cinza'], { spr: t => cinzaArt(Math.floor(t / 12) % 3), h: 24, bg: bgGalerias }),
+      inimigo('h2', 'rato', ...GA2.rato, ['rato', 'rato', 'cinza'], { spr: t => ratoArt(Math.floor(t / 8) % 2), h: 22, bg: bgGalerias, vision: 5 }),
+      inimigo('h3', 'cinza', ...GA2.misto, ['cinza', 'rato', 'rato'], { spr: t => cinzaArt(Math.floor(t / 12) % 3), h: 24, bg: bgGalerias }),
+      bauEnt('galerias2', 'a', ...GA2.bau, async () => { G.items.tinta = (G.items.tinta || 0) + 2; await say('* Duas {y}Tintas Azuis{/}, esquecidas por algum escriba que desceu e não subiu.'); }),
+      ...GA2.descida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: descerFundo }))
+    ],
+    onEnter: async () => { if (!G.flags.c3Salao) { G.flags.c3Salao = true; await say('* Um salão enorme, de teto alto. Prateleiras do chão ao teto, cheias de lanternas de vidro. Dentro de cada uma, uma fumaça morna que se mexe devagar. No meio, um veio de âmbar bruto, pulsando.'); await say('Tem nome escrito nas lanternas. Nome de gente.', 'rita'); } }
+  };
+  MAPS2.fundo = { rows: ROWS3.fundo, name: 'O Coração da Fuligem', music: 'afogado', batBg: bgGalerias, bg: '#0c0810', key, escuro: true,
+    props: [{ img: () => G.flags.c3Mae ? EMPTY_C : maeFuligemArt(Math.floor(FRAME / 18) % 2, 1), x: 7.9, y: 7, by: 120 }, { img: () => G.flags.c3Mae && !G.flags.c3Dito ? prateleiraArt(0) : EMPTY_C, x: 9, y: 10, by: 58 }],
+    ents: [
+      ...FU.volta.map(([x, y]) => ({ t: 'door', x, y, to: 'galerias2', tx: GA2.descida[0][0], ty: GA2.descida[0][1] - 1, dir: 'up' })),
+      ...FU.gatilho.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: lutaMae })),
+      { t: 'sign', x: FU.lanterna[0], y: FU.lanterna[1], h: 40, talk: pegarLanternaDito }
+    ]
+  };
+  for (const id of ['galerias1', 'galerias2', 'fundo']) { const m = MAPS2[id]; m.baked = null; for (const p of m.props || []) { const f = p.img; p._hld = true; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } }
+  // a grade do bueiro no Bairro Baixo
+  const au = MAPS2.auren; if (au && !au._bueiro) { au._bueiro = true; au.ents.push({ t: 'sign', x: 8, y: 19, h: 10, talk: gradeBueiro }); au.ents.push(morador('tico', 9, 19, { rotina: rot([9, 19, 'olhar', 9000, 'left']), talk: falaTicoGrade, gone: () => !G.flags.c3P1Fim || !!G.flags.c3Fim })); au.props.push({ img: () => gradeBrasa(0), x: 8, y: 19.9 }); }
+}; }
+
+// ---------- escuro das galerias: só se vê onde tem luz (a Lume, as brasas) ----------
+let ESCURO_C = null;
+{ const _ar = HOOK_AR; HOOK_AR = function (m, ox, oy) {
+  if (m && m.escuro) {
+    if (!ESCURO_C || ESCURO_C.width !== W || ESCURO_C.height !== H) ESCURO_C = mk(W, H);
+    const x = ESCURO_C.getContext('2d'); x.globalCompositeOperation = 'source-over'; x.clearRect(0, 0, W, H); x.fillStyle = 'rgba(6,3,12,0.92)'; x.fillRect(0, 0, W, H);
+    x.globalCompositeOperation = 'destination-out';
+    const furo = (cx, cy, r) => { const g = x.createRadialGradient(cx, cy, r * 0.25, cx, cy, r); g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(0.7, 'rgba(0,0,0,0.75)'); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill(); };
+    const rL = (LUSTRE_ON() ? 96 : 70) + Math.sin(W2.t * 0.1) * 2 + (evo3() === 'farol' ? 26 : 0);
+    furo(W2.px + 8 - ox, W2.py - 8 - oy, rL);
+    for (const [bx0, by0] of LUZ_GAL[W2.id] || []) furo(bx0 * TS + 8 - ox, by0 * TS + 4 - oy, 34 + Math.sin(W2.t * 0.13 + bx0) * 3);
+    for (const e of W2.ents) if (e.id === 'pavioG') furo(e.px + 8 - ox, e.py - 30 - oy, 22);
+    x.globalCompositeOperation = 'source-over';
+    bx.drawImage(ESCURO_C, 0, 0);
+    // a luz quente por cima
+    bx.globalCompositeOperation = 'lighter'; luzMundo(W2.px + 8 - ox, W2.py - 8 - oy, rL * 0.7, LUSTRE_ON() ? 'rgba(255,220,140,0.14)' : 'rgba(255,200,120,0.10)'); bx.globalCompositeOperation = 'source-over';
+  }
+  return _ar ? _ar(m, ox, oy) : undefined;
+}; }
+function luzMundo(x, y, r, col) { const g = bx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); bx.fillStyle = g; bx.fillRect(x - r, y - r, r * 2, r * 2); }
+
+// ---------- falas e eventos ----------
+async function gradeBueiro() {
+  if (!G.flags.c3P1Fim) { await say('* Uma grade de bueiro. Lá embaixo, alguma coisa respira devagar, morna, com cheiro de fuligem.'); return; }
+  if (G.flags.c3Fim) { await say('* A grade do bueiro. Lá embaixo, agora, está quieto.'); return; }
+  const c = await choose('* Descer pela grade do bueiro até as Galerias de Fuligem?', ['Descer', 'Ainda não']); if (c !== 0) return;
+  sfx('door'); await fadeOut(16); loadMap2('galerias1', ...GA1.entra, 'down'); await fadeIn(16);
+}
+async function falaTicoGrade() {
+  if (!G.flags.c3TicoGrade) {
+    G.flags.c3TicoGrade = true;
+    await say('Eu vou junto! Eu conheço as Galerias! Mais ou menos! O Dito me levou uma vez!', 'tico');
+    await say('Não. Lá embaixo tem coisa que come luz e coisa que come gente. Você fica aqui e guarda a grade.', 'rita');
+    await say('...Guardar a grade é importante?', 'tico');
+    await say('Importantíssimo. Se alguém fechar, a gente fica preso lá embaixo. Você é a nossa saída.', 'rita');
+    await say('* O Tico estufa o peito e senta em cima da grade com a vassoura no colo, como um soldado.');
+    await say('Desce pela grade. Lá embaixo é escuro de verdade. Fica perto da moça que brilha.', 'tico');
+    return;
+  }
+  await say(G.flags.c3Mae ? 'Vocês voltaram! E o Dito? Acharam alguma coisa do Dito?' : pickOne(['Eu tô guardando! Ninguém fecha essa grade enquanto eu tiver aqui.', 'Lá embaixo dá pra ouvir a cidade respirando. O Dito dizia isso.']), 'tico');
+}
+async function subirBueiro() { sfx('door'); await fadeOut(14); loadMap2('auren', 8, 18, 'up'); await fadeIn(14); }
+async function cenaDescida() {
+  await say('* Escuro. Escuro de verdade, do tipo que a superfície esqueceu. Só a luz da Lume abre um círculo em volta de vocês.');
+  await say('Ninguém sai do meu círculo. Sério. Aqui eu sou importante.', 'lume');
+  await say('[As Galerias de Fuligem: túneis antigos de chaminé e esgoto, debaixo da capital. Aviso: aqui, FOGO ALIMENTA FULIGEM. Brasa cura os bichos daqui.]', 'cat');
+  await say('* (Nas Galerias só se enxerga perto de alguma luz: a Lume e as grades de brasa. De noite, a Lume vira lustre e ilumina muito mais.)');
+}
+async function falaPavioGal() {
+  await say(pickOne(['Boa noite. Eu desço vazio e subo cheio. Toda noite. Eu não sei o que tem dentro. É quentinho.', 'Os canos levam a luz para os postes. E para o morro do Farol. Tudo sobe. Nada desce, só a gente.', 'Eu tinha um irmão? Acho que eu tinha um irmão. Ou um cachorro. Alguém que me esperava.', 'Não pode abrir as lanternas. Ordem é ordem. Eu não lembro quem deu a ordem.']), 'pavio');
+}
+async function pegarBigorna() {
+  if (G.flags.bigorna) return;
+  await say('* Uma bigorna velha, meio enterrada na fuligem. Deve ser da forja que existia aqui quando isso ainda era uma oficina.');
+  await say('UMA BIGORNA. @, guarda. Guarda AGORA. Isso vai pra minha forja.', 'rita');
+  sfx('item'); G.flags.bigorna = true;
+  await say('* Você abre a tampa e a bigorna cai lá dentro, no Interior do Baú, bem no canto da forja. Clang.');
+  await say('* (A forja da Rita, na base, agora funciona.)'); save2();
+}
+async function lerLanterna(i) {
+  const nm = NOMES_LANT[i % NOMES_LANT.length];
+  const txts = ['um menino rindo em cima de um telhado, segurando a mão de alguém menor', 'uma ponte de pedra e uma mulher cantando para o rio', 'o cheiro de um armazém de feijão e um velho contando moedas', 'um sino tocando numa tarde de domingo', 'um pião rodando num chão de terra', 'um bolo de fubá esfriando na janela', 'uma corda de sino gasta de tanta mão', 'um laço de fita vermelha'];
+  await say(`* Uma lanterna de vidro. A etiqueta diz: ${nm}. Dentro, a fumaça se mexe e, por um segundo, parece ${txts[i % txts.length]}.`);
+  if (i === 0 && !G.flags.c3LeuDito) { G.flags.c3LeuDito = true; await say('Dito. O irmão do Tico. ...Mas essa tá vazia. Só tem a etiqueta. Cadê o resto?', 'rita'); await say('[Leitura: a lembrança correspondente foi levada mais para baixo. Para onde a fuligem é mais funda.]', 'cat'); }
+  else if (i === 3) await say('Não abre. Eu não sei o que acontece se abrir. E eu não quero que aconteça na minha frente.', 'lume');
+}
+async function falaVeio() {
+  if (G.evo3) { await say('* O veio de âmbar está apagado, cinza, como carvão frio. Tudo o que ele tinha está em você agora.'); return; }
+  await cenaEvolucao();
+}
+async function descerFundo() {
+  if (!G.evo3) { await say('* A escada desce para onde a fuligem é mais funda. A sua tampa range: o veio de âmbar está puxando você de volta. Primeiro, o veio.'); W2.mv = null; loadMap2('galerias2', 14, 17, 'up'); return; }
+  sfx('door'); await fadeOut(14); loadMap2('fundo', ...FU.entra, 'down'); await fadeIn(14);
+}
+async function lutaMae() {
+  if (G.flags.c3Mae) return;
+  W2.mv = null;
+  await say('* O fundo. Uma caverna redonda, quente como um forno. No meio, uma montanha de fumaça e tijolo de chaminé respira. Cada vez que ela respira, as luzes da cidade, lá em cima, piscam.');
+  await say('* Ela abre os olhos. Dois carvões acesos. E dentro do peito, presas na fuligem, centenas de luzinhas.');
+  await say('Isso é... tudo o que queimou lá em cima vem parar aqui?', 'lume');
+  await say('[Mãe-Fuligem. Fogo a alimenta. Gelo e mordida a desmancham. Ela engole luz, então: cuidado com as velas.]', 'cat');
+  await say('Então nada de fogo, todo mundo mordendo e congelando. Plano simples. Eu gosto de plano simples.', 'rita');
+  const r = await lutaMapa(['mae'], { bg: bgGalerias, music: 'boss', pos: [[186, 168]], intro: async () => { const e = BT.foes[0]; e.phases = fasesMae(); e.ct = 15; callout('MÃE-FULIGEM', '#ffd8a0', 100); } });
+  if (r !== 'win') return;
+  G.flags.c3Mae = true; save2();
+  await say('* A Mãe-Fuligem desmorona como uma chaminé velha. E as luzinhas, soltas, sobem. Centenas. Atravessam o teto da caverna, entram nos canos, sobem para a cidade.');
+  await say('* Lá em cima, por um segundo, cada poste de Auren brilha um pouco diferente. Mais quente. Como se alguém tivesse lembrado de alguma coisa boa.');
+  await say('* Sobra uma única lanterna de vidro no chão, inteira, com uma fumaça teimosa dentro. A etiqueta diz: DITO.');
+}
+async function pegarLanternaDito() {
+  if (!G.flags.c3Mae || G.flags.c3Dito) return;
+  G.flags.c3Dito = true; sfx('item');
+  await say('* Você guarda a lanterna do Dito dentro da tampa, com todo o cuidado que um baú consegue ter.');
+  await cenaFinalCap3();
+}
+async function cenaFinalCap3() {
+  await fadeOut(24);
+  G.hora = 5 * 60 + 30; G.flags.c3Fim = true;
+  CENA.bg = bgAuren; CENA.extra = null;
+  const tico = { x: 150, y: 168, fr: humF('tico', 'f') }, dito = { x: 176, y: 160, fr: humF('dito', 's') };
+  CENA.actors = [{ x: 60, y: 160, fr: standF('lumeh') }, { x: 76, y: 168, fr: chestF() }, { x: 96, y: 162, fr: standF('rita') }, tico, dito];
+  V.scene = 'cena'; playMusic('auren'); await fadeIn(30);
+  await say('* Amanhecendo. Na beira do canal, o Dito acende o último poste da noite. O Tico está do lado dele, segurando a vassoura com as duas mãos.');
+  await say('* Você abre a tampa. A Lume tira a lanterna de dentro e entrega ao Tico. O Tico olha para vocês. Vocês fazem que sim.');
+  await say('* Ele abre a lanterna. A fumaça morna sai, faz uma volta no ar e entra no peito do Dito, como quem volta para casa.');
+  await say('...', 'dito');
+  await say('...Tico?', 'dito');
+  await say('* O Tico larga a vassoura.');
+  await say('Tico. Você cresceu. Por que você cresceu sem me avisar?', 'dito');
+  await say('DITO!', 'tico');
+  await say('* Eles se abraçam. É um abraço curto, porque o Dito, no meio, para. Olha em volta como quem perdeu o fio.');
+  await say('...Bom dia, rapazinho. Eu tenho que acender os postes. Ordem é ordem.', 'dito');
+  await say('* E vai embora. Mas, na esquina, ele olha para trás. Só uma vez. E acena.');
+  await say('Ele lembrou. Um pouquinho. Ele lembrou de mim.', 'tico');
+  await say('* O Tico pega a vassoura e vai atrás do irmão, de longe, como quem vai buscar o resto.');
+  await say('Alguém está colhendo lembrança de gente. Guardando em pote. E mandando pelo cano para cima.', 'rita');
+  await say('Para os postes. E para o morro do Farol, o Pavio disse.', 'lume');
+  await say('* A Lume olha para o morro, onde o Farol de Cem Invernos espera a última noite do festival. Ela não termina o pensamento. Ninguém termina.');
+  await say('[Hipótese não registrada. Registro... adiado.]', 'cat');
+  await fadeOut(40);
+  await cartao(['FIM DO CAPÍTULO 3', 'O Festival da Luz', '', 'Próximo: Capítulo 4']);
+  save2();
+  V.scene = 'world'; loadMap2('auren', 9, 18, 'down'); await fadeIn(20);
+  await say('* (O Capítulo 4 está a caminho. A capital, a base e as Galerias continuam abertas: a forja da Rita, o Grimório e as fusões esperam por você.)');
 }
 
 boot2();

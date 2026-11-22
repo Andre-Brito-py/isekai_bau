@@ -100,7 +100,7 @@ const arvC = v => memo(() => arvoreArt(v));
       ...portas(AUR.estradaDoor, 'estrada', 38, 11, 'left'), ...portas(AUR.papDoor, 'papelaria', ...PA.entra, 'up'),
       ...AUR.festDoor.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: irFestival })),
       marcoEnt(...AUR.marco),
-      morador('tico', ...AUR.tico, { rotina: rot([29, 9, 'limpar', 500, 'up'], [31, 9, 'olhar', 300, 'down']), talk: falaTico }),
+      morador('tico', ...AUR.tico, { rotina: rot([29, 9, 'limpar', 500, 'up'], [31, 9, 'olhar', 300, 'down']), talk: falaTico, gone: () => !!G.flags.c3P1Fim && !G.flags.c3Fim }),
       morador('pavio', ...AUR.pavio, { rotina: rot([20, 10, 'acender', 260, 'left'], [16, 11, 'acender', 260, 'up'], [26, 11, 'acender', 260, 'up']), passo: 20, talk: falaPavio3 }),
       morador('poeta', ...AUR.poeta, { rotina: rot([14, 15, 'olhar', 600, 'down'], [20, 15, 'olhar', 400, 'right']), talk: falaPoeta }),
       morador('guardaA', ...AUR.guarda, { rotina: rot([33, 11, 'olhar', 9000, 'left']), talk: falaGuarda }),

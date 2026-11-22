@@ -234,7 +234,25 @@
    GRIMÓRIO (grimorio3.js): Brasa/Geada/Seiva/Fuligem x Dardo/Onda/Véu; 2 elementos = fusão (Vapor, Orvalho, Brasa Viva,
    Fumaça, Geada Negra e o MOFO, que dá errado de propósito); elemento repetido = dobrado. Véus: Manto de Brasa (+30%),
    Couraça, Véu de Fumaça (próximo golpe erra)... MENU > Grimório ou estante da base. G.grim guarda páginas e fusões.
- - PARTE 2 (a fazer): GALERIAS DE FULIGEM (túneis e chaminés sob a capital; escuro: a luz da Lume importa; Pavios
+ - PARTE 2 (IMPLEMENTADA, cap3b.js + evolucao3.js + inimigos3b.js + arte_cap3b.js; mapas galerias1/galerias2/fundo):
+   bueiro do Bairro Baixo (Tico) -> GALERIAS 1 (escuro: raio de luz 70, lustre 96, Farol +26; brasas e Pavios
+   iluminam; BIGORNA para a forja da Rita: Afiar a lança +3 ATQ ou Reforçar o escudo +2 DEF/+10 PV) -> GALERIAS 2
+   (prateleiras de lanternas com nomes; o pote do Dito vazio; o VEIO DE ÂMBAR = cena da EVOLUÇÃO) -> FUNDO (chefe
+   MÃE-FULIGEM; depois, a lanterna do Dito: ele lembra do Tico por um instante; Rita e Lume desconfiam) -> FIM DO CAP. 3.
+   Regra das Galerias: FOGO ALIMENTA FULIGEM (Brasa cura Cinzinha e Mãe). Inimigos: Cinzinha (estoura quando fraca),
+   Rato-Pavio (mordida dupla, apaga vela/manto). Mãe-Fuligem: Fornalha preparada a cada 4 vezes (quebre o escudo),
+   cospe Cinzinhas, Chuva de Cinzas, Engole a Luz (come Tensão e velas); fase 2 a 50%: fornalha aberta, fraca a
+   LUZ/gelo/corte, a luz arranca lembranças presas (popups LEMBR3).
+   EVOLUÇÃO (G.evo3 = farol | vao | escriba; G.flags.c3Forma libera TROCAR DE FORMA em batalha, ação leve, 3 vezes):
+     FAROL: +34 PV, +4 DEF/MDEF, +2 MAG, +2 ATQ; técnica Farol 35T (grupo leva metade por 3 vezes e cada golpe recebido
+       devolve raio de luz 0.6); começa a luta com +15 Tensão.
+     VÃO: +4 ATQ, +3 VEL, +14 PV; Guardar Dentro 25T leve (aliado some: próximo golpe erra, vez adianta); físico x1.2.
+     ESCRIBA: +7 MAG, +18 PM, +10 PV; Marca de Runa 25T leve (magia no alvo +30% e quebra 1 escudo a mais, 3 vezes);
+       magia x1.15, páginas -1 PM, Grimório com 6 páginas.
+   BALANCEAMENTO (robô, acerto 0.6, linhas ferro 'arca' e arcano 'vazio', 7 lutas comuns + chefe): todas as
+   combinações vencem; vida mínima no chefe entre ~20% e ~45%; nenhuma linha fica para trás (o Escriba, mágico,
+   ficou no meio do pacote, de propósito, para não repetir o problema do jogo 1). Mãe-Fuligem final: 4300 PV, ATQ 29.
+ - (plano original da Parte 2, mantido como referência) GALERIAS DE FULIGEM (túneis e chaminés sob a capital; escuro: a luz da Lume importa; Pavios
    trabalhando no escuro; o Dito como missão: devolver uma lembrança) + TROCA DE FORMA EM BATALHA (humano x baú, ação
    leve; forma humana usa equipamento) + a forja da Rita (achar a bigorna) + CHEFE no fundo das Galerias + gancho.
    A EVOLUÇÃO (pedido do usuário: caprichar na história e começar com TRÊS opções), nas Galerias: o âmbar/tinta do
