@@ -58,10 +58,10 @@ function updateWorld2() {
   if (typeof passaTempo === 'function') passaTempo();
   if (W2.toast && ++W2.toast.t > 150) W2.toast = null;
   // seguidores andam sempre (mesmo com diálogo aberto, terminam o passo)
-  for (const f of W2.fol) if (f.mv) stepTween(f);
+  for (const f of W2.fol) if (f.mv) stepTween(f, W2.passoN || 8);
   for (const e of W2.ents) updateEnt(e);
   if (W2.mv) {
-    if (stepTween(W2, (W2.float ? 10 : 8) * (JOYMAG < 0.55 ? 1.6 : 1))) arrived();
+    if (stepTween(W2, typeof passoJogador === 'function' ? passoJogador() : (W2.float ? 10 : 8))) arrived();
     return;
   }
   if (worldBusy2()) { W2.idle = 0; return; }

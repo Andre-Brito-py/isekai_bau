@@ -83,7 +83,7 @@ function puffRosto() { PUFF = { t: 0, x: W2.px + 8, y: W2.py + 4 }; }
 { const _dp = drawPlayer; drawPlayer = function (ox, oy) {
   if (deRosto() && !W2.float) {
     const moving = !!W2.mv, fr = rostoFrame(moving);
-    const x = W2.px - ox, y = W2.py - oy, hop = moving ? -Math.abs(Math.sin(W2.mv.k / 8 * Math.PI)) * 1 : 0;
+    const x = W2.px - ox, y = W2.py - oy, hop = 0;
     sombraOval(x + 8, y + 15, 14, 0.3);
     // derretendo: o rosto treme e pisca
     const der = G.rosto.f < F_DERRETE, jit = der && W2.t % 8 < 2 ? 1 : 0;
