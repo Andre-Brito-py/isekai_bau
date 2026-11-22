@@ -202,6 +202,7 @@ async function chegaLargo() {
   await say('Ouçam, ouçam! O Acendedor-Mor COMPROU a Casa de Saúde! Lanterna em todo leito, enfermeiro a noite inteira! "Nunca mais um hospital no escuro"! Ouçam!', 'pregoeiro');
   await say('O hospital do discurso. O das velas que acabaram na terceira noite.', 'rita');
   await say('Ele está cumprindo a promessa. Isso é... bom. Não é?', 'lume');
+  await say('Promessa boa não costuma precisar de pregoeiro.', 'me');
   await say('* Ninguém responde. Perto da fonte, um menino com uma vassoura maior que ele acena para vocês.');
 }
 async function falaTico4() {
@@ -211,6 +212,7 @@ async function falaTico4() {
     await say('Pra ALA DO DESCANSO. Disseram que lá ele descansa e "melhora". Eu perguntei melhora do quê. Eles sorriram.', 'tico');
     await say('E não deixam entrar. Na porta tem um Pavio que diz: "só gente, nada de bicho, nada de mala".', 'tico');
     await say('...Nada de mala.', 'rita');
+    await say('Eu sou um baú. Tecnicamente não é mala.', 'me');
     await say('* As duas olham para você ao mesmo tempo.');
     await say('[Sugestão: o rosto (botão B). Gente entra. Mala não.]', 'cat');
     return;
@@ -258,6 +260,7 @@ async function falaDalva() {
     await say('O Dito está na Ala do Descanso. Lá em cima. Visita não pode. Ordem nova, dos donos novos.', 'dalva');
     await say('Eu trabalho nesta casa há trinta anos. Trabalhei no Inverno Escuro. Segurei a mão de muita gente no escuro, filho. Eu sei o que é um hospital sem luz.', 'dalva');
     await say('Agora tem luz em todo leito. E os doentes não sentem mais dor. Nem saudade. Nem medo. Eles DESCANSAM.', 'dalva');
+    await say('Descansar não é isso. Descansar é acordar depois.', 'me');
     await say('* Ela fecha o livro de registro com um pouco de força demais.');
     await say('Eu não posso deixar vocês subirem. Mas a lavanderia, do lado de fora, fica aberta de noite. Para os lençóis.', 'dalva');
     await say('...Eu não disse isso. Vocês não ouviram isso. Bom dia.', 'dalva');
@@ -294,6 +297,7 @@ async function entrarLavanderia() {
     await say('Plano: eu e a Rita entramos no baú. Lá em cima, você é só mais um baú de roupa suja.', 'lume');
     await say('E se alguém abrir a tampa?', 'rita');
     await say('Aí você sai e bate. Com carinho.', 'lume');
+    await say('Ninguém pergunta se o baú quer gente dentro dele. Só pra constar.', 'me');
     await say('* As duas entram na tampa. Lá dentro é maior do que parece. Ninguém comenta. Ninguém nunca comenta.');
   }
   sfx('door'); await fadeOut(12); loadMap2('hosp2', ...H2.entra, 'up'); if (MAPS2.hosp2.onEnter) await MAPS2.hosp2.onEnter(); await fadeIn(12);
@@ -310,6 +314,7 @@ async function camaDito() {
   G.flags.c4CamaDito = true;
   await say('* Uma cama com plaquinha: "DITO — PAVIO Nº 212". Lençol esticado. Ninguém. No pote pendurado sobre a cama, só um fio de fumaça morna no fundo.');
   await say('Ele estava aqui. Ontem, talvez hoje.', 'rita');
+  await say('A gente chegou tarde. De novo.', 'me');
   await say('[O pote tem resto de lembrança. Pouco. A maior parte já subiu pelo fio.]', 'cat');
   await say('Subiu pra onde?', 'lume');
   await say('* O fio sobe pelo teto, entra num cano maior e segue, junto com dezenas de outros, para o lado do morro. Para o lado do Farol.');
@@ -319,12 +324,14 @@ async function lerPotes() {
   await say('[Âmbar novo. Lembrança lida de gente VIVA. Não estava no meu registro que isso era possível.]', 'cat');
   await say('...Estava no seu registro que gente boa faria isso?', 'rita');
   await say('[Não.]', 'cat');
+  await say('...Nem no meu.', 'me');
 }
 async function notaEnfermeira() { await say('* Um bilhete preso no quadro de avisos: "Ronda das 22h às 5h. Lanterna sempre acesa. Os pacientes NÃO podem acordar no escuro. Ordem do Diretor." Embaixo, à mão, outra letra: "e se eles quiserem?"'); }
 async function lutaRelogio() {
   if (G.flags.c4Relogio) return; W2.mv = null;
   await say('* No fim do corredor, na frente da Sala do Diretor, um relógio de pêndulo mais alto que a porta. Os ponteiros param. E se viram para você.');
   await say('Tic. Tac. Fora. De. Hora.', 'n');
+  await say('Um relógio falante. Claro. Por que não.', 'me');
   await say('[Relógio de Plantão. Ele muda a HORA a cada três vezes, e a fraqueza muda junto: manhã gelo, tarde fogo, noite luz. Mordida sempre funciona.]', 'cat');
   const r = await lutaMapa(['relogio'], { bg: bgHospital, music: 'boss', pos: [[186, 160]], intro: async () => { const e = BT.foes[0]; e.hora = 'manha'; e.weak = ['gelo', 'mordida']; e.ct = 10; callout('RELÓGIO DE PLANTÃO', '#f0c050', 100); } });
   if (r !== 'win') return;
@@ -355,9 +362,11 @@ async function mesaDiretor() {
   await say('* "Marta Lins: medo de altura. Pensão paga." "Joaquim Sá: a esposa. Pensão paga." "Dito, Pavio 212: o irmão. Pensão paga."');
   await say('* A letra é pequena, cuidadosa, sem nenhum borrão. Uma letra de quem anota tudo e não erra nada.');
   await say('...Eu já vi essa letra.', 'rita');
+  await say('Eu também.', 'me');
   await say('* Ela não diz onde. Não precisa.');
   await say('[Registro: a letra confere com a anotação vista no Festival. Grau de certeza: alto. Grau de vontade de registrar: baixo.]', 'cat');
   await say('Pode ser outra pessoa. Um secretário. Alguém que... ele é BOM. Ele chorou no discurso, vocês viram.', 'lume');
+  await say('Gente boa também chora, Lume. E gente boa também anota coisa errada.', 'me');
   await say('* A Lume pega a lista. As mãos dela tremem um pouco. As velas no cabelo, também.');
   await checaFimP1();
 }
@@ -381,6 +390,7 @@ async function fimParte1Cap4() {
   await say('Eu vou com vocês até o portão da cidade. Depois eu volto. Alguém tem que ficar com o menino da perna enfaixada.', 'dalva');
   await say('Irmã Dalva... por que você tá ajudando a gente?', 'lume');
   await say('Porque eu lembro, minha filha. E alguém tem que lembrar.', 'dalva');
+  await say('Eu esqueço um pouco cada vez que eu mudo. Então eu lembro do que dá. Disso aqui eu vou lembrar.', 'me');
   G.flags.c4P1Fim = true; G.hora = 6 * 60; save2();
   await fadeOut(40);
   await cartao(['FIM DA PARTE 1', 'A Casa dos Que Esquecem', '', 'Continua na Parte 2:', 'Candeia, a vila que apagou']);
@@ -405,6 +415,7 @@ async function capitulo4() {
     await say('Eu sonhei com as luzinhas. As da Mãe-Fuligem. Elas tinham nome. Cada uma falava o próprio nome, baixinho, sem parar, pra não esquecer.', 'lume');
     await say('Igual a gente faz com número de telefone.', 'rita');
     await say('O que é telefone?', 'lume');
+    await say('Era... uma coisa que tocava. E a gente quase nunca atendia.', 'me');
     await say('* A Rita abre a boca. Fecha. Olha para você. Você também não sabe mais direito. Era uma coisa da Terra. Era importante.');
     await say('Tanto faz. Vamos ver o Tico. Ele disse que o Dito não estava bem de novo.', 'rita');
     await say('[Objetivo: o Tico está no LARGO DO HOSPITAL, na saída leste da Avenida do Festival.]', 'cat');

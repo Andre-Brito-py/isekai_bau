@@ -230,3 +230,15 @@ function cachecolCarniceiro(src) {
 }; }
 // a ponta que voa ao vento usa a cor do cachecol
 { const _cc = corCapa; corCapa = function () { if (rostoArte() && CACHECOL_COR) return CACHECOL_COR; return _cc(); }; }
+
+// ---------- o baú fala ----------
+// (pedido do usuário: "o baú não está tendo linhas de fala".) Falas com 'me' foram espalhadas pelas cenas dos Caps.
+// 1-4. Aqui: escolha de diálogo entre aspas vira fala dita pelo baú (com retrato); e, de rosto, o retrato do diálogo
+// é o rosto, não a tampa.
+{ const _ch = choose; choose = async function (text, options, who, cancel) {
+  const r = await _ch(text, options, who, cancel);
+  const o = Array.isArray(options) && typeof options[r] === 'string' ? options[r].trim() : '';
+  if (/^".+"$/.test(o)) await say(o.slice(1, -1), 'me');
+  return r;
+}; }
+{ const _pm = WHO.me.portrait; WHO.me.portrait = () => { try { if (rostoSt().on && rostoArte() && rostoArte().port) return rostoArte().port[0]; } catch (e) { } return _pm(); }; }

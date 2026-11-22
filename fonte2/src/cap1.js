@@ -480,6 +480,7 @@ async function abertura() {
   await say('* Ninguém ri. Depois todo mundo ri.');
   const H = G.her;
   await say('@, olha. DEDOS. Eu tenho dedos de novo! De dia, pelo menos. Quando o sol bate no âmbar do lustre, ele lembra que eu era gente.', 'lume');
+  await say('E eu tenho... tampa. A mesma tampa de sempre. Tudo bem. Combina comigo.', 'me');
   if (H && H.esc && H.esc.rita) await say('Eu prometi um café pra alguém aqui em cima. Só tô esperando achar um lugar que não tenha afundado.', 'rita');
   else await say('Escudeira Rita, de volta ao serviço. Alguém vai ter que explicar pra Coroa por que tem um baú sentado no banco da frente.', 'rita');
   if (H && H.esc && H.esc.rita) await say('* A Lume olha para a Rita. A Rita olha para a janela. O sol, educado, olha para outro lado.');
@@ -492,7 +493,7 @@ async function abertura() {
   await say('* Em cada poste da beira da estrada, dezenas de cartazes. PROCURADO. Um desenho torto de um baú com dentes. Recompensa: 300 frascos de âmbar.');
   const ren = H && H.renome;
   if (ren === 'Coisa que não devia existir' || ren === 'Lenda de Velhágua') await say('Trezentos frascos. Você vale mais que uma casa, sabia? Eu fico até sem graça de andar do seu lado.', 'lume');
-  else await say('Ah. Você é famoso. Que desenho feio, coitado. Você é bem mais bonito. Para um baú.', 'lume');
+  else { await say('Ah. Você é famoso. Que desenho feio, coitado. Você é bem mais bonito. Para um baú.', 'lume'); await say('Obrigado. Eu acho.', 'me'); }
   await say('* Então um cartaz se dobra sozinho. Depois outro. Bicos de papel. Olhos de brasa.');
   await say('Eles estão olhando pro desenho. E depois pra você. E depois pro desenho.', 'rita');
 }
@@ -505,6 +506,7 @@ async function entreLutas() {
   await say('PEDÁGIO. UM BAÚ PASSA... UM BAÚ FICA.', 'esp');
   await say('Isso é um espantalho de pedágio. Na minha vila tinha um. Ele espantava os corvos, não fazia os corvos.', 'rita');
   await say('@... a lanterna dele tá apagada. Igual eu ficava. Tem alguma coisa lá dentro que ainda não acendeu.', 'lume');
+  await say('Então a gente acende. Depois de apanhar um pouco, provavelmente.', 'me');
 }
 async function fimDemo() {
   CENA.actors = CENA.actors.filter(a => a.fr !== CENA.espF);
@@ -513,6 +515,7 @@ async function fimDemo() {
   await say('Âmbar. É... uma lembrança. Dá pra sentir na mão. Um homem velho cobrando pedágio nessa ponte. Quarenta anos de "bom dia". Alguém leu ele inteiro e deixou só isso.', 'lume');
   await say('A masmorra não engoliu só gente lá embaixo, então. Ela tá subindo.', 'rita');
   await say('Ou alguém tá trazendo ela pra cima.', 'jorge');
+  await say('...Ninguém carrega uma masmorra nas costas de graça.', 'me');
   await say('* A cancela, sem ninguém para segurar, sobe sozinha. Do outro lado da ponte, os sinos de Velhágua tocam meio desafinados, metade deles já embaixo d\'água.');
   await say('* E na guarita do pedágio, num prego, um último cartaz. Não é de PROCURADO. É de BEM-VINDOS. Alguém riscou o "BEM".');
   G.flags.cap1Ponte = true; save2();

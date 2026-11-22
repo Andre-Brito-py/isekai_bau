@@ -138,6 +138,7 @@ async function cenaEvolucao() {
   if (G.evo3) return;
   await say('* O veio de âmbar pulsa. Não brilha: pulsa, como um coração. E a cada batida, a sua tampa range e puxa na direção dele.');
   await say('Ei. EI. Você tá sendo puxado. Por que você tá sendo puxado?', 'rita');
+  await say('Eu não sei! Eu sou um baú, não um manual de instruções!', 'me');
   await say('[Âmbar bruto, tinta de superfície no Grimório e fuligem de lembranças, juntos. São as condições de uma EVOLUÇÃO. O corpo do baú está pedindo forma nova.]', 'cat');
   await say('Evolução? Que nem lá embaixo? Quando você mudou e...', 'lume');
   await say('* A Lume para. Ela lembra do que aconteceu da última vez. Você também.');
@@ -170,6 +171,7 @@ async function cenaEvolucao() {
   }
   await say('...Eu guardo.', 'lume');
   await say('Eu guardo pra você. Numa música. Toda vez que você esquecer alguma coisa, eu ponho numa música. Aí ela fica em algum lugar.', 'lume');
+  await say('...Obrigado, Lume.', 'me');
   await say('* Ela canta baixinho. Uma frase só. E por um segundo, você quase lembra.');
   // a transformação
   sfx('rune'); V.shake = 18; flashW && 0;
@@ -181,6 +183,7 @@ async function cenaEvolucao() {
   if (ev === 'escriba') await say('[Registro: o Grimório agora tem seis páginas. E uma pena. Você tem uma pena na tampa. Isso não estava previsto.]', 'cat');
   if (ev === 'escriba') grim().max = 6;
   await say('E o rosto? Ele ficou... mais firme. Dá pra ver daqui. Menos borrado.', 'rita');
+  await say('Eu tô me sentindo... eu. Um pouco mais eu do que ontem.', 'me');
   await say(`[TÉCNICA NOVA: ${TECH2[E.tec].nm}. E com o corpo novo, a Runa do Rosto aguenta a luta: TROCAR DE FORMA virou técnica (ação leve, sem custo). Humano é rápido e conjura mais barato; baú aguenta mais. Dura 3 vezes.]`, 'cat');
   save2();
 }

@@ -287,6 +287,11 @@
  pescoço + ponta caindo na frente com franja; a outra ponta voa ao vento pelo capaHLD com a mesma cor); o corpo vira
  casaco roxo com mangas, mãos e cinto, com as cores da própria arte. Vale no mapa, nas costas e na luta. As outras
  linhas continuam com a capa/manto da arte original (é o visual delas).
+ O BAÚ FALA (pedido do usuário): o protagonista estava quase mudo na T2. Agora tem falas ('me') nas cenas dos Caps.
+ 1-4, na voz da T1: seco, curto, humor melancólico ("Eu sou um baú."), lembrando a Terra aos pedaços. Escolhas de
+ diálogo entre aspas viram fala dita por ele. De rosto, o retrato do diálogo é o rosto. REGRA: toda cena nova dá ao
+ baú pelo menos uma ou duas falas suas. Tirinha do super/dupla (cutIn): o baú aparece (retratoCut usa PT('me') ou o
+ rosto quando está em forma humana).
  CAPÍTULO 4 — A CASA DOS QUE ESQUECEM (roteiro; 2 partes como o Cap. 3)
  - LUGAR NA ESCALADA DO VILÃO: passo 2, SUSPEITA. Ele "compra o hospital dos pobres" (o do discurso) e a vila vizinha
    APAGA. O jogador acha papéis com a letra pequena do caderno preto; ainda não há confissão (a revelação é o Cap. 5).
@@ -1870,6 +1875,11 @@ async function projectile(from, to, col, n = 18, o = {}) {
   });
 }
 // cena do SUPER e das duplas: faixa diagonal, retratos grandes e o nome do golpe
+// (o baú não tem retrato em IMG.port: usa o mesmo do diálogo, PT('me'), ou o rosto quando está em forma humana)
+function retratoCut(u) {
+  if (u.id === 'bau') { if (u.humano && typeof rostoArte === 'function' && rostoArte() && rostoArte().port) return rostoArte().port[0]; return PT('me'); }
+  return IMG.port[u.port] ? IMG.port[u.port][0] : PT(u.port);
+}
 function cutIn(us, nm, col) {
   sfx('catalog'); BT.dim = 1;
   return tw(70, (p, k) => {
@@ -1879,7 +1889,7 @@ function cutIn(us, nm, col) {
     const sl = ease.out(Math.min(1, p / 0.25)) * (p > 0.85 ? 1 - (p - 0.85) / 0.15 * 1.5 : 1);
     bx.save(); bx.globalAlpha = a; bx.fillStyle = col; bx.beginPath(); bx.moveTo(L0 - 20, 72); bx.lineTo(L0 + RW + 20, 48); bx.lineTo(L0 + RW + 20, 110); bx.lineTo(L0 - 20, 134); bx.fill();
     bx.fillStyle = '#ffffff'; for (let i = 0; i < 9; i++) { const x = ((k * 9 + i * 41) % 300) - 30; bx.fillRect(x, 60 + (i * 13) % 60, 22, 1); }
-    us.forEach((u, i) => { const P = IMG.port[u.port] ? IMG.port[u.port][0] : null; if (P) { bx.imageSmoothingEnabled = false; bx.drawImage(P, Math.round(-70 + sl * (90 + i * 74)), 60 + i * 4, 64, 64); } });
+    us.forEach((u, i) => { const P = retratoCut(u); if (P) { bx.imageSmoothingEnabled = false; bx.drawImage(P, Math.round(-70 + sl * (90 + i * 74)), 60 + i * 4, 64, 64); } });
     bx.restore();
     const big = lineW(rich(nm), 2) <= 220 ? 2 : 1.5; txt(nm, 234 + (1 - Math.min(1, sl)) * 240, 112, { align: 'right', sz: big, col: '#ffffff', shadow: true, alpha: a });
   }).then(() => { BT.dim = 0; });
@@ -2866,6 +2876,7 @@ async function abertura() {
   await say('* Ninguém ri. Depois todo mundo ri.');
   const H = G.her;
   await say('@, olha. DEDOS. Eu tenho dedos de novo! De dia, pelo menos. Quando o sol bate no âmbar do lustre, ele lembra que eu era gente.', 'lume');
+  await say('E eu tenho... tampa. A mesma tampa de sempre. Tudo bem. Combina comigo.', 'me');
   if (H && H.esc && H.esc.rita) await say('Eu prometi um café pra alguém aqui em cima. Só tô esperando achar um lugar que não tenha afundado.', 'rita');
   else await say('Escudeira Rita, de volta ao serviço. Alguém vai ter que explicar pra Coroa por que tem um baú sentado no banco da frente.', 'rita');
   if (H && H.esc && H.esc.rita) await say('* A Lume olha para a Rita. A Rita olha para a janela. O sol, educado, olha para outro lado.');
@@ -2878,7 +2889,7 @@ async function abertura() {
   await say('* Em cada poste da beira da estrada, dezenas de cartazes. PROCURADO. Um desenho torto de um baú com dentes. Recompensa: 300 frascos de âmbar.');
   const ren = H && H.renome;
   if (ren === 'Coisa que não devia existir' || ren === 'Lenda de Velhágua') await say('Trezentos frascos. Você vale mais que uma casa, sabia? Eu fico até sem graça de andar do seu lado.', 'lume');
-  else await say('Ah. Você é famoso. Que desenho feio, coitado. Você é bem mais bonito. Para um baú.', 'lume');
+  else { await say('Ah. Você é famoso. Que desenho feio, coitado. Você é bem mais bonito. Para um baú.', 'lume'); await say('Obrigado. Eu acho.', 'me'); }
   await say('* Então um cartaz se dobra sozinho. Depois outro. Bicos de papel. Olhos de brasa.');
   await say('Eles estão olhando pro desenho. E depois pra você. E depois pro desenho.', 'rita');
 }
@@ -2891,6 +2902,7 @@ async function entreLutas() {
   await say('PEDÁGIO. UM BAÚ PASSA... UM BAÚ FICA.', 'esp');
   await say('Isso é um espantalho de pedágio. Na minha vila tinha um. Ele espantava os corvos, não fazia os corvos.', 'rita');
   await say('@... a lanterna dele tá apagada. Igual eu ficava. Tem alguma coisa lá dentro que ainda não acendeu.', 'lume');
+  await say('Então a gente acende. Depois de apanhar um pouco, provavelmente.', 'me');
 }
 async function fimDemo() {
   CENA.actors = CENA.actors.filter(a => a.fr !== CENA.espF);
@@ -2899,6 +2911,7 @@ async function fimDemo() {
   await say('Âmbar. É... uma lembrança. Dá pra sentir na mão. Um homem velho cobrando pedágio nessa ponte. Quarenta anos de "bom dia". Alguém leu ele inteiro e deixou só isso.', 'lume');
   await say('A masmorra não engoliu só gente lá embaixo, então. Ela tá subindo.', 'rita');
   await say('Ou alguém tá trazendo ela pra cima.', 'jorge');
+  await say('...Ninguém carrega uma masmorra nas costas de graça.', 'me');
   await say('* A cancela, sem ninguém para segurar, sobe sozinha. Do outro lado da ponte, os sinos de Velhágua tocam meio desafinados, metade deles já embaixo d\'água.');
   await say('* E na guarita do pedágio, num prego, um último cartaz. Não é de PROCURADO. É de BEM-VINDOS. Alguém riscou o "BEM".');
   G.flags.cap1Ponte = true; save2();
@@ -4788,6 +4801,7 @@ async function falaPavio() {
     await say('Eu lembro de tudo! Quer dizer, de quase tudo. Eu entrei pros Pavios por um salário. Pra ser Pavio a gente entrega uma coisinha pequena. Um nome, ele disse. "Ninguém sente falta de um nome."', 'pavio');
     await say('Quem disse?', 'rita');
     await say('...Não lembro do rosto. Lembro da luz. Era uma luz muito bonita.', 'pavio');
+    await say('Luz bonita demais é a que mais cega.', 'me');
     await say('Obrigado. De verdade. Tomem, é o que eu tenho: o salário da semana. Pavio não gasta com nada mesmo.', 'pavio');
     f.pavio = 3; G.cobres = (G.cobres || 0) + 50; G.items.tinta = (G.items.tinta || 0) + 2; sfx('item');
     await say('* +50 cobres e {y}Tinta Azul x2{/}.'); save2(); return;
@@ -4796,6 +4810,7 @@ async function falaPavio() {
   await say('Parente da Madame Pavio, lá de baixo? Ela também era meio vela.', 'lume');
   await say('Não sei. Eu não lembro de parentes. Eu não lembro... do meu nome, na verdade. Tinha numa plaquinha. Na minha banca, no Mercado. Antes de afundar.', 'pavio');
   await say('Se vocês descerem lá... e se acharem... não, que bobagem. Ninguém sente falta de um nome.', 'pavio');
+  await say('Eu sinto falta do meu bairro e nem lembro o nome dele. Sentir falta não é bobagem. A gente procura.', 'me');
   if (!p) { f.pavio = 1; await say('* Nova missão: {y}O nome do Pavio{/}. A plaquinha dele está em alguma banca do Mercado Afundado.'); }
 }
 async function falaPedrinho() {
@@ -4849,6 +4864,7 @@ async function primeiroMarco() {
   if (G.flags.tutMarco) return; G.flags.tutMarco = true;
   await say('Essa runa... @, é igual à da sua tampa. Igualzinha. Quem é que espalhou pedra com o seu desenho pela superfície?', 'lume');
   await say('Os antigos chamavam de Marcos. Meu avô dizia que eram de "quando os baús andavam". Eu achava que era jeito de falar.', 'rita');
+  await say('Os baús andavam. Então eu não sou o primeiro. Isso é... reconfortante?', 'me');
   await say('* (MARCO: salva o jogo, cura o grupo e os bichos da região voltam. Se o grupo cair, ele acorda no último Marco.)');
 }
 
@@ -4904,11 +4920,13 @@ async function descobreBoiar() {
   await say('A escada termina na água. O bairro velho tá lá embaixo, e o caminho... é por cima dele.', 'rita');
   await say('Eu nado. A Lume...', 'rita');
   await say('Lustre afunda, Rita. Lustre é feito de ferro e de vergonha.', 'lume');
+  await say('Eu nunca testei se eu boio. Na Terra eu nadava igual pedra.', 'me');
   await say('* Você olha para a água. A água olha para você. Você é um baú. Baú é madeira. Madeira...');
   sfx('splash'); V.shake = 8;
   await say('* Você pula. E BOIA.');
   await say('ELE BOIA! @, você é um BARCO!', 'lume');
   await say('Um barco com dentes. Abre a tampa aí, a gente entra.', 'rita');
+  await say('Eu era um baú. Agora eu sou um barco. Amanhã eu vou ser o quê, um ônibus?', 'me');
   G.flags.boiar = true; save2();
   await say('* (Agora o baú anda na água. Entre na água pela escadaria. As CORRENTEZAS, os riscos brancos, empurram o baú: elas são o caminho.)');
 }
@@ -4924,6 +4942,7 @@ async function pocoChefe() {
     await say('DING... QUEM... QUEM VOCÊS SÃO? EU LEMBRO DE TODO MUNDO. TODO MUNDO QUE CASOU. TODO MUNDO QUE NASCEU. TODO MUNDO QUE FOI EMBORA.', 'ancora');
     await say('MAS ELES ESTÃO ESQUECENDO. A MINA BEBE. BEBE AS LEMBRANÇAS DO FUNDO DO RIO. ENTÃO EU PUXO. EU PUXO A CIDADE PARA BAIXO. PARA PERTO. PARA NINGUÉM SE PERDER.', 'ancora');
     await say('Ela não quer afundar ninguém. Ela tá com medo de esquecer. Eu conheço esse medo, @.', 'lume');
+    await say('Eu também conheço. Eu já esqueci coisa demais pra achar esse medo bobo.', 'me');
     await say('Medo com correntes de navio. Cuidado com a água: o poço sobe quando ela respira.', 'rita');
   } else await say('VOCÊS VOLTARAM. EU LEMBRO DE VOCÊS. EU NÃO ESQUEÇO NINGUÉM.', 'ancora');
   const r = await lutaMapa(['ancora'], { bg: bgPoco, music: 'ancora', pos: [[182, 150]], tension: 20, extra: { fileira: true, bgAnim: bgAnimPoco },
@@ -5008,6 +5027,7 @@ async function fimCap2() {
   } else await say('* Ao passar pelos Pavios, ele cumprimenta cada um: "Boa noite, Pavio." Eles sorriem do jeito de quem não tem outro nome para responder.');
   await say('Ele parece gente boa.', 'rita');
   await say('Parece.', 'lume');
+  await say('...Parece.', 'me');
   await say('* Lá em cima, na torre, a Dona Badalada toca as nove horas. Certinho. Pela primeira vez em cem anos, ninguém precisa lembrar a cidade de que ela tem um sino.');
   G.flags.c2Fim = true; G.hora = 20 * 60 + 30; G.pos = { map: 'praca', x: 15, y: 16, dir: 'down' }; G.marco = { map: 'praca', x: 2, y: 12 }; save2();
   await fadeOut(40);
@@ -5050,6 +5070,7 @@ async function chegadaVelhagua() {
   // ---- não tem um vintém ----
   await say('Passagem são três cobres por cabeça. Quatro cabeças, contando a tampa.', 'jorge');
   await say('Cobre? A gente... tem cobre?', 'lume');
+  await say('Eu tenho três botões e uma meia. Nenhum é cobre.', 'me');
   await say('* A Rita revira os bolsos: um botão, um recibo de pedágio e um grão de areia da masmorra.');
   await say('* Você abre a tampa e procura lá dentro: uma meia, uma pedrinha da masmorra e nenhum vintém.');
   await say('Lá embaixo a gente pagava tudo com âmbar e coragem.', 'lume');
@@ -5063,6 +5084,7 @@ async function chegadaVelhagua() {
   await say('O cobrador?', 'lume');
   await say('Aqui fora ele não é cobrador. É o HERÓI Nº 30. Os heróis que voltaram da masmorra foram chamados para a capital. Tem figurinha dele em tudo que é venda.', 'rita');
   await say('O cobrador virou herói e o @ virou baú. Eu nunca vou superar isso.', 'lume');
+  await say('Nem eu.', 'me');
   await say('Ele mandou carta pelo correio do cais. Vi o selo da Coroa no bazar. Endereçada a "o baú e a moça que brilha".', 'rita');
   await say('* (Dinheiro: cobres. Ganhe com lutas, vendendo materiais no Bazar, com os pedidos da taverna e, de noite, com a Lume cantando na fonte da praça.)');
   await say('* O âmbar do Espantalho, guardado na sua tampa, ainda está quente. Você sente uma coisa voltando, devagar: força antiga. (+ vida, ataque e magia.)');
@@ -5073,6 +5095,7 @@ async function chegadaVelhagua() {
   await say('Então ele não anda. Ele é bagagem. A gente carrega. Quer dizer... ele vai do lado. Bem paradinho quando olharem.', 'lume');
   await say('Bagagem não pisca.', 'rita');
   await say('...Pisca sim. A minha piscava.', 'lume');
+  await say('Eu prometo não piscar. ...Muito.', 'me');
   await say('* (DISFARCE DE BAGAGEM: quando um Caçador parar e OLHAR, com o "!" em cima da cabeça, não se mexa. Pego andando três vezes, eles atacam.)');
   await fadeOut(20);
 }
@@ -6295,9 +6318,11 @@ async function cenaRosto() {
   await say('[As anotações da Ofélia citam uma tinta "de superfície", feita sem âmbar. Registro incompleto. Investigação futura.]', 'cat');
   await say('[Sobre o Rosto: ele funciona. Mas sem âmbar em volta, a runa queima memória quente para segurar a cara. Dura pouco. E cansa.]', 'cat');
   await say('Então é uma máscara com hora pra acabar.', 'rita');
+  await say('Uma cara emprestada de mim mesmo. Com prazo de validade.', 'me');
   await say('Deixa eu ver! Vai, @! Só um pouquinho!', 'lume');
   puffRosto(); sfx('rune'); rostoSt().on = true; await wait(40);
   await say('...É você. A mesma cara lá do fim da masmorra. Eu tinha esquecido como era. Não conta pra ninguém que eu esqueci.', 'lume');
+  await say('...Eu também tinha esquecido.', 'me');
   await say('* Você olha as próprias mãos. Dez dedos. Já está doendo um pouco, lá no fundo da tampa.');
   if (partyKeys().includes('rita')) await momentoRita();
   await say('* (FORMA HUMANA: aperte {y}B{/} no mapa para usar a Runa do Rosto e de novo para voltar a ser baú. De rosto, Caçadores e moradores não desconfiam de você andando.)');
@@ -6379,12 +6404,13 @@ async function momentoRita() {
     CLOSE.fill = 1;
   }
   const c = await choose('* Ela continua olhando. O que você diz?', ['"Você lembra mais de mim do que eu."', '"Pode olhar. Dessa vez eu tô acordado."', '"...Era tão feio assim?"']);
-  if (c === 0) await say('Alguém tinha que lembrar. Você tava ocupado dormindo.', 'rita');
+  if (c === 0) { await say('Alguém tinha que lembrar. Você tava ocupado dormindo.', 'rita'); await say('Eu tava cansado. Eu tava sempre cansado. Nem lembro mais de quê.', 'me'); }
   else if (c === 1) { await say('...', 'rita'); await say('Pois é. Dessa vez você tá acordado.| E eu não sei o que fazer com as mãos. Isso nunca me aconteceu. Eu sou ESCUDEIRA.', 'rita'); shake(2); }
   else await say('Feio não. Cansado. Cara de quem trabalhava demais e dormia de menos.| ...Continua igual, aliás.', 'rita');
   if (promessa) {
     await say('Lá embaixo, na estação, eu disse uma coisa. "Quando você arranjar um rosto, me procura."', 'rita');
     await say('E você arranjou. Com hora pra acabar, derretendo pelas beiradas, mas arranjou.', 'rita');
+    await say('Arranjei. Agora você me deve um pastel.', 'me');
     await say('O pastel continua por minha conta. No dia em que a gente tiver UM cobre que não seja pra comida de verdade. Promessa de escudeira.', 'rita');
     G.flags.pastelRita = true;
     await say('* A Lume, que flutuava logo atrás, de repente acha muito interessante uma gaivota.');
@@ -7402,12 +7428,14 @@ async function rainhaCena() {
   await say('* No fim da estrada, o último poste está torto, com a lanterna arrebentada. Pendurada nele, uma mariposa do tamanho de uma carroça, comendo os restos da luz como quem lambe um prato.');
   await say('Isso aí não é mariposa. Isso é uma mariposa que comeu as outras mariposas.', 'rita');
   await say('Ela tá olhando pra mim. Por que todo bicho de luz olha pra mim?', 'lume');
+  await say('Porque você é a coisa mais brilhante da estrada. Inclusive os postes.', 'me');
   await say('[Mariposa-Rainha. Come luz. Faísca e golpes de luz a CURAM. Use fogo, mordida, a lança. E o Grimório, se você tivesse um.]', 'cat');
   const r = await lutaMapa(['rainha'], { bg: bgEstrada, music: 'boss', pos: [[184, 156]], intro: async () => { const e = BT.foes[0]; e.phases = fasesRainha(); e.ct = 20; callout('MARIPOSA-RAINHA', '#ffd8a0', 100); } });
   if (r !== 'win') return;
   G.flags.c3Rainha = true; save2();
   await say('* A Rainha cai em cima do poste torto, que finalmente desiste e deita na grama. Do meio das asas, sai um pó dourado que sobe e vira um monte de mariposinhas comuns, que vão embora assobiando.');
   await say('Lá na frente: a capital. Dá pra ver daqui. ...É meio-dia e ela tá ACESA.', 'rita');
+  await say('Luz acesa de dia é desperdício. Minha mãe dizia isso. ...Acho que era a minha mãe.', 'me');
 }
 async function chegaAuren() {
   if (!G.flags.c3Rainha) { await say('* O caminho segue para a capital. Mas a Mariposa-Rainha está pendurada no último poste, e ninguém passa por baixo dela.'); W2.mv = null; loadMap2('estrada', 33, 11, 'left'); return; }
@@ -7424,11 +7452,13 @@ async function chegaAuren() {
   await say('...Nem disseram o nome, ou não tinham nome pra dizer?', 'rita');
   await say('* Auren. A capital. Torres lilases, varandas rosa, pontes sobre canais. E postes. Postes em todo canto, de todo tamanho, todos acesos. Ao meio-dia.');
   await say('Ela é linda. Ela é toda... acesa. Ninguém aqui deve ter medo do escuro.', 'lume');
+  await say('Ou ninguém aqui lembra mais como é o escuro.', 'me');
   await say('Bagagem?', 'guardaA');
   await say('Bagagem.', 'rita');
   await say('* O guarda olha para você. Você é bagagem com muita convicção. Ele carimba um papel e abre o portão.');
   await say('O Festival da Luz começa em três dias, à noite, na Avenida. A cidade inteira fica acordada. Ordem do Acendedor-Mor: ninguém dorme no escuro durante a festa.', 'guardaA');
   await say('E a gente dorme onde? A gente tem zero cobres e um ônibus.', 'lume');
+  await say('E um baú. O baú conta como patrimônio.', 'me');
   await say('No ônibus. Eu deixo o 31 no pátio da estação. Tem banco reclinável. Um. Pra quatro.', 'jorge');
   await say('[Lembrete: as anotações da Ofélia citam uma TINTA DE SUPERFÍCIE. Uma capital tem papelaria. Uma papelaria tem quem saiba de tinta.]', 'cat');
   await say('* (Procure uma papelaria no Bairro Baixo. A capital também tem Caçadores: a forma humana ajuda.)');
@@ -7463,6 +7493,7 @@ async function falaTico() {
   await say('Meu irmão, o Dito, também limpava chaminé. Aí ele assinou com o Acendedor-Mor. Salário bom, pensão pra família, tudo certo.', 'tico');
   await say('Só que agora ele passa por mim na rua e diz "bom dia, rapazinho". Como se eu fosse qualquer um.', 'tico');
   await say('...Ele vai lembrar de mim. Na festa. Todo mundo fica feliz na festa.', 'tico');
+  await say('Ele vai, Tico. A gente dá um jeito.', 'me');
   save2();
 }
 async function falaIolanda() {
@@ -7490,7 +7521,7 @@ async function mesaEscrita() {
 }
 // ----- a lágrima: a Lume tenta escrever a música do ônibus -----
 async function cenaLagrima() {
-  await say('Quem escreve aqui? Eu sou baú. A Rita é escudeira. O Catálogo é... o Catálogo.', 'lume');
+  await say('Quem escreve aqui? Eu sou um baú. A Rita é escudeira. O Catálogo é... o Catálogo.', 'me');
   await say('Você escreve, Lume.', 'rita');
   await say('Eu?', 'lume');
   await say('A música. A do fundo do 31. Você cantava toda noite. Alguém escreveu aquilo. E eu tenho quase certeza que foi você.', 'rita');
@@ -7507,6 +7538,7 @@ async function cenaLagrima() {
   await say('Pronto. Tinta de escriba. Feita com o que se perdeu no caminho. É sempre assim.', 'iolanda');
   await say('Eu não sabia que você lembrava da música, Rita.', 'lume');
   await say('Eu lembro do pedaço que você cantava. Duas fileiras na frente. Eu ODIAVA. ...Eu sabia de cor.', 'rita');
+  await say('Eu também sabia. Do banco do fundo. De fone e tudo.', 'me');
   sfx('item'); await say('* Você recebeu a {y}Tinta de Superfície{/}.');
   await cenaGrimorio();
 }
@@ -7542,12 +7574,14 @@ async function cenaVao() {
   await say('* Vocês caem. Não pra baixo: pra dentro. E aterrissam num quartinho de madeira escura, do tamanho de uma sala, que cheira a baú velho e a vela.');
   await say('...É maior por dentro. Eu FALEI. Lá no rio, eu falei que era maior por dentro e ninguém me levou a sério.', 'lume');
   await say('Isso aqui é... você? A gente tá DENTRO de você?', 'rita');
+  await say('...Acho que sim. Não doeu. Fiquem à vontade. Tirem o sapato.', 'me');
   await say('[Interior do Baú. Espaço dobrado pela Runa do Vão. Tudo o que você guardou na vida inteira fica do lado de lá dessas paredes. Por enquanto, sobrou isto.]', 'cat');
   await say('* No canto, uma vela apagada. Na parede, um quadro vazio. No chão, perto da estante, uma meia vermelha listrada. Uma só.');
   await say('A meia. A meia misteriosa. Ela existe. Ela tá AQUI.', 'lume');
   await say('Uma estante vazia, um canto que dá uma forja, uma cama... dá pra morar aqui. Sério. Dá pra morar aqui.', 'rita');
   await say('[A Runa do Vão está ligada aos Marcos: em qualquer Marco, dá para ENTRAR NO BAÚ. A estante guarda o Grimório. A cama, descanso. O resto, a gente arruma.]', 'cat');
   await say('A gente tem casa. Zero cobres, mas tem casa.', 'lume');
+  await say('Eu sou a casa. Isso é muito estranho de dizer em voz alta.', 'me');
   await say('* (BASE: num Marco, escolha "Entrar no Baú". Aqui dentro: estante = Grimório, cama = descansar até de manhã ou à noite. Saia pela porta de baixo.)');
   save2();
 }
@@ -7597,6 +7631,7 @@ async function irFestival() {
     await say('* No meio de tanta luz, um lustre flutuando é só mais um enfeite. Pela primeira vez na superfície, ninguém olha duas vezes para a Lume.');
     await say('Ninguém tá olhando pra mim. Ninguém tá olhando pra mim! Isso é o MELHOR dia da minha vida!', 'lume');
     await say('Tem cheiro de pastel.', 'rita');
+    await say('Tem cheiro de domingo.', 'me');
     await say('* (No festival não há Caçadores. O discurso de abertura é na frente do palco.)');
     save2(); return;
   }
@@ -7669,6 +7704,7 @@ async function discursoVesper() {
   await say('...Cem anos sem escuro.', 'lume');
   await say('* A Lume não está aplaudindo. Está quieta, as velas tremendo, olhando para o palco como quem olha para uma janela acesa numa noite de chuva.');
   await say('Bonito discurso. Só fico pensando de onde vem tanta luz. Âmbar não cai do céu.', 'rita');
+  await say('Na masmorra, âmbar era lembrança de gente. Só lembrando.', 'me');
   await say('* No palco, o Acendedor-Mor passa o olho pela multidão. Para em vocês. Para na Lume. E sorri, com uma gentileza enorme.');
   await say('A senhorita veio. E acesa. Que bom.', 'vesper');
   // o Pavio que cai
@@ -7686,6 +7722,7 @@ async function discursoVesper() {
   await say('* Debaixo dos pés de vocês, pelas grades dos bueiros, sobe um sopro morno, com cheiro de fuligem. E uma voz, muito longe, muito embaixo, que não forma palavras.');
   await say('[Registro. Leitura de lembranças em grande quantidade, abaixo da cidade. Fonte desconhecida. Recomendação: descobrir.]', 'cat');
   await say('Lá embaixo. Tem alguma coisa lá embaixo da cidade.', 'rita');
+  await say('Sempre tem. Eu morei numa masmorra. Eu sei como é o porão das coisas.', 'me');
   await say('O Dito limpava chaminé. Ele conhecia as Galerias de Fuligem. Ele sempre dizia que lá embaixo dava pra ouvir a cidade inteira respirando.', 'tico');
   G.flags.c3P1Fim = true; G.hora = 22 * 60; G.pos = { map: 'festival', x: 20, y: 10, dir: 'down' }; save2();
   await fadeOut(40);
@@ -7721,6 +7758,7 @@ async function capitulo3() {
     await say('E se tiver bicho?', 'lume');
     await say('Na estrada dos lampiões só tem mariposa. Mariposa é bicho de luz. Vocês têm uma lâmpada. Vai dar tudo certo.', 'jorge');
     await say('Eu NÃO sou uma lâmpada.', 'lume');
+    await say('Ela é um lustre. Tem diferença. Lustre tem classe.', 'me');
     await fadeOut(20);
     V.scene = 'world'; loadMap2('estrada', ...ES.chegada, 'right'); await fadeIn(20); save2();
     return;
@@ -8368,6 +8406,7 @@ async function cenaEvolucao() {
   if (G.evo3) return;
   await say('* O veio de âmbar pulsa. Não brilha: pulsa, como um coração. E a cada batida, a sua tampa range e puxa na direção dele.');
   await say('Ei. EI. Você tá sendo puxado. Por que você tá sendo puxado?', 'rita');
+  await say('Eu não sei! Eu sou um baú, não um manual de instruções!', 'me');
   await say('[Âmbar bruto, tinta de superfície no Grimório e fuligem de lembranças, juntos. São as condições de uma EVOLUÇÃO. O corpo do baú está pedindo forma nova.]', 'cat');
   await say('Evolução? Que nem lá embaixo? Quando você mudou e...', 'lume');
   await say('* A Lume para. Ela lembra do que aconteceu da última vez. Você também.');
@@ -8400,6 +8439,7 @@ async function cenaEvolucao() {
   }
   await say('...Eu guardo.', 'lume');
   await say('Eu guardo pra você. Numa música. Toda vez que você esquecer alguma coisa, eu ponho numa música. Aí ela fica em algum lugar.', 'lume');
+  await say('...Obrigado, Lume.', 'me');
   await say('* Ela canta baixinho. Uma frase só. E por um segundo, você quase lembra.');
   // a transformação
   sfx('rune'); V.shake = 18; flashW && 0;
@@ -8411,6 +8451,7 @@ async function cenaEvolucao() {
   if (ev === 'escriba') await say('[Registro: o Grimório agora tem seis páginas. E uma pena. Você tem uma pena na tampa. Isso não estava previsto.]', 'cat');
   if (ev === 'escriba') grim().max = 6;
   await say('E o rosto? Ele ficou... mais firme. Dá pra ver daqui. Menos borrado.', 'rita');
+  await say('Eu tô me sentindo... eu. Um pouco mais eu do que ontem.', 'me');
   await say(`[TÉCNICA NOVA: ${TECH2[E.tec].nm}. E com o corpo novo, a Runa do Rosto aguenta a luta: TROCAR DE FORMA virou técnica (ação leve, sem custo). Humano é rápido e conjura mais barato; baú aguenta mais. Dura 3 vezes.]`, 'cat');
   save2();
 }
@@ -8532,6 +8573,7 @@ async function falaTicoGrade() {
     await say('Não. Lá embaixo tem coisa que come luz e coisa que come gente. Você fica aqui e guarda a grade.', 'rita');
     await say('...Guardar a grade é importante?', 'tico');
     await say('Importantíssimo. Se alguém fechar, a gente fica preso lá embaixo. Você é a nossa saída.', 'rita');
+    await say('Ela tá falando sério, Tico. Ninguém guarda uma grade melhor que você.', 'me');
     await say('* O Tico estufa o peito e senta em cima da grade com a vassoura no colo, como um soldado.');
     await say('Desce pela grade. Lá embaixo é escuro de verdade. Fica perto da moça que brilha.', 'tico');
     return;
@@ -8542,6 +8584,7 @@ async function subirBueiro() { sfx('door'); await fadeOut(14); loadMap2('auren',
 async function cenaDescida() {
   await say('* Escuro. Escuro de verdade, do tipo que a superfície esqueceu. Só a luz da Lume abre um círculo em volta de vocês.');
   await say('Ninguém sai do meu círculo. Sério. Aqui eu sou importante.', 'lume');
+  await say('Você é importante lá em cima também. Lá só tem mais concorrência.', 'me');
   await say('[As Galerias de Fuligem: túneis antigos de chaminé e esgoto, debaixo da capital. Aviso: aqui, FOGO ALIMENTA FULIGEM. Brasa cura os bichos daqui.]', 'cat');
   await say('* (Nas Galerias só se enxerga perto de alguma luz: a Lume e as grades de brasa. De noite, a Lume vira lustre e ilumina muito mais.)');
 }
@@ -8552,6 +8595,7 @@ async function pegarBigorna() {
   if (G.flags.bigorna) return;
   await say('* Uma bigorna velha, meio enterrada na fuligem. Deve ser da forja que existia aqui quando isso ainda era uma oficina.');
   await say('UMA BIGORNA. @, guarda. Guarda AGORA. Isso vai pra minha forja.', 'rita');
+  await say('Eu não sou um depósito, Rita.| ...Tá. Eu sou um depósito.', 'me');
   sfx('item'); G.flags.bigorna = true;
   await say('* Você abre a tampa e a bigorna cai lá dentro, no Interior do Baú, bem no canto da forja. Clang.');
   await say('* (A forja da Rita, na base, agora funciona.)'); save2();
@@ -8561,7 +8605,7 @@ async function lerLanterna(i) {
   const txts = ['um menino rindo em cima de um telhado, segurando a mão de alguém menor', 'uma ponte de pedra e uma mulher cantando para o rio', 'o cheiro de um armazém de feijão e um velho contando moedas', 'um sino tocando numa tarde de domingo', 'um pião rodando num chão de terra', 'um bolo de fubá esfriando na janela', 'uma corda de sino gasta de tanta mão', 'um laço de fita vermelha'];
   await say(`* Uma lanterna de vidro. A etiqueta diz: ${nm}. Dentro, a fumaça se mexe e, por um segundo, parece ${txts[i % txts.length]}.`);
   if (i === 0 && !G.flags.c3LeuDito) { G.flags.c3LeuDito = true; await say('Dito. O irmão do Tico. ...Mas essa tá vazia. Só tem a etiqueta. Cadê o resto?', 'rita'); await say('[Leitura: a lembrança correspondente foi levada mais para baixo. Para onde a fuligem é mais funda.]', 'cat'); }
-  else if (i === 3) await say('Não abre. Eu não sei o que acontece se abrir. E eu não quero que aconteça na minha frente.', 'lume');
+  else if (i === 3) { await say('Não abre. Eu não sei o que acontece se abrir. E eu não quero que aconteça na minha frente.', 'lume'); await say('A gente não abre. A gente leva pro dono.', 'me'); }
 }
 async function falaVeio() {
   if (G.evo3) { await say('* O veio de âmbar está apagado, cinza, como carvão frio. Tudo o que ele tinha está em você agora.'); return; }
@@ -8577,8 +8621,10 @@ async function lutaMae() {
   await say('* O fundo. Uma caverna redonda, quente como um forno. No meio, uma montanha de fumaça e tijolo de chaminé respira. Cada vez que ela respira, as luzes da cidade, lá em cima, piscam.');
   await say('* Ela abre os olhos. Dois carvões acesos. E dentro do peito, presas na fuligem, centenas de luzinhas.');
   await say('Isso é... tudo o que queimou lá em cima vem parar aqui?', 'lume');
+  await say('É a lixeira da cidade. Só que de lembrança.', 'me');
   await say('[Mãe-Fuligem. Fogo a alimenta. Gelo e mordida a desmancham. Ela engole luz, então: cuidado com as velas.]', 'cat');
   await say('Então nada de fogo, todo mundo mordendo e congelando. Plano simples. Eu gosto de plano simples.', 'rita');
+  await say('Morder eu sei. É o meu currículo inteiro.', 'me');
   const r = await lutaMapa(['mae'], { bg: bgGalerias, music: 'boss', pos: [[186, 168]], intro: async () => { const e = BT.foes[0]; e.phases = fasesMae(); e.ct = 15; callout('MÃE-FULIGEM', '#ffd8a0', 100); } });
   if (r !== 'win') return;
   G.flags.c3Mae = true; save2();
@@ -8611,9 +8657,11 @@ async function cenaFinalCap3() {
   await say('...Bom dia, rapazinho. Eu tenho que acender os postes. Ordem é ordem.', 'dito');
   await say('* E vai embora. Mas, na esquina, ele olha para trás. Só uma vez. E acena.');
   await say('Ele lembrou. Um pouquinho. Ele lembrou de mim.', 'tico');
+  await say('Um pouquinho já é começo, Tico. Eu comecei com menos.', 'me');
   await say('* O Tico pega a vassoura e vai atrás do irmão, de longe, como quem vai buscar o resto.');
   await say('Alguém está colhendo lembrança de gente. Guardando em pote. E mandando pelo cano para cima.', 'rita');
   await say('Para os postes. E para o morro do Farol, o Pavio disse.', 'lume');
+  await say('Alguém tá acendendo uma cidade inteira com o que as pessoas esquecem.', 'me');
   await say('* A Lume olha para o morro, onde o Farol de Cem Invernos espera a última noite do festival. Ela não termina o pensamento. Ninguém termina.');
   await say('[Hipótese não registrada. Registro... adiado.]', 'cat');
   await fadeOut(40);
@@ -9082,6 +9130,7 @@ async function chegaLargo() {
   await say('Ouçam, ouçam! O Acendedor-Mor COMPROU a Casa de Saúde! Lanterna em todo leito, enfermeiro a noite inteira! "Nunca mais um hospital no escuro"! Ouçam!', 'pregoeiro');
   await say('O hospital do discurso. O das velas que acabaram na terceira noite.', 'rita');
   await say('Ele está cumprindo a promessa. Isso é... bom. Não é?', 'lume');
+  await say('Promessa boa não costuma precisar de pregoeiro.', 'me');
   await say('* Ninguém responde. Perto da fonte, um menino com uma vassoura maior que ele acena para vocês.');
 }
 async function falaTico4() {
@@ -9091,6 +9140,7 @@ async function falaTico4() {
     await say('Pra ALA DO DESCANSO. Disseram que lá ele descansa e "melhora". Eu perguntei melhora do quê. Eles sorriram.', 'tico');
     await say('E não deixam entrar. Na porta tem um Pavio que diz: "só gente, nada de bicho, nada de mala".', 'tico');
     await say('...Nada de mala.', 'rita');
+    await say('Eu sou um baú. Tecnicamente não é mala.', 'me');
     await say('* As duas olham para você ao mesmo tempo.');
     await say('[Sugestão: o rosto (botão B). Gente entra. Mala não.]', 'cat');
     return;
@@ -9138,6 +9188,7 @@ async function falaDalva() {
     await say('O Dito está na Ala do Descanso. Lá em cima. Visita não pode. Ordem nova, dos donos novos.', 'dalva');
     await say('Eu trabalho nesta casa há trinta anos. Trabalhei no Inverno Escuro. Segurei a mão de muita gente no escuro, filho. Eu sei o que é um hospital sem luz.', 'dalva');
     await say('Agora tem luz em todo leito. E os doentes não sentem mais dor. Nem saudade. Nem medo. Eles DESCANSAM.', 'dalva');
+    await say('Descansar não é isso. Descansar é acordar depois.', 'me');
     await say('* Ela fecha o livro de registro com um pouco de força demais.');
     await say('Eu não posso deixar vocês subirem. Mas a lavanderia, do lado de fora, fica aberta de noite. Para os lençóis.', 'dalva');
     await say('...Eu não disse isso. Vocês não ouviram isso. Bom dia.', 'dalva');
@@ -9174,6 +9225,7 @@ async function entrarLavanderia() {
     await say('Plano: eu e a Rita entramos no baú. Lá em cima, você é só mais um baú de roupa suja.', 'lume');
     await say('E se alguém abrir a tampa?', 'rita');
     await say('Aí você sai e bate. Com carinho.', 'lume');
+    await say('Ninguém pergunta se o baú quer gente dentro dele. Só pra constar.', 'me');
     await say('* As duas entram na tampa. Lá dentro é maior do que parece. Ninguém comenta. Ninguém nunca comenta.');
   }
   sfx('door'); await fadeOut(12); loadMap2('hosp2', ...H2.entra, 'up'); if (MAPS2.hosp2.onEnter) await MAPS2.hosp2.onEnter(); await fadeIn(12);
@@ -9190,6 +9242,7 @@ async function camaDito() {
   G.flags.c4CamaDito = true;
   await say('* Uma cama com plaquinha: "DITO — PAVIO Nº 212". Lençol esticado. Ninguém. No pote pendurado sobre a cama, só um fio de fumaça morna no fundo.');
   await say('Ele estava aqui. Ontem, talvez hoje.', 'rita');
+  await say('A gente chegou tarde. De novo.', 'me');
   await say('[O pote tem resto de lembrança. Pouco. A maior parte já subiu pelo fio.]', 'cat');
   await say('Subiu pra onde?', 'lume');
   await say('* O fio sobe pelo teto, entra num cano maior e segue, junto com dezenas de outros, para o lado do morro. Para o lado do Farol.');
@@ -9199,12 +9252,14 @@ async function lerPotes() {
   await say('[Âmbar novo. Lembrança lida de gente VIVA. Não estava no meu registro que isso era possível.]', 'cat');
   await say('...Estava no seu registro que gente boa faria isso?', 'rita');
   await say('[Não.]', 'cat');
+  await say('...Nem no meu.', 'me');
 }
 async function notaEnfermeira() { await say('* Um bilhete preso no quadro de avisos: "Ronda das 22h às 5h. Lanterna sempre acesa. Os pacientes NÃO podem acordar no escuro. Ordem do Diretor." Embaixo, à mão, outra letra: "e se eles quiserem?"'); }
 async function lutaRelogio() {
   if (G.flags.c4Relogio) return; W2.mv = null;
   await say('* No fim do corredor, na frente da Sala do Diretor, um relógio de pêndulo mais alto que a porta. Os ponteiros param. E se viram para você.');
   await say('Tic. Tac. Fora. De. Hora.', 'n');
+  await say('Um relógio falante. Claro. Por que não.', 'me');
   await say('[Relógio de Plantão. Ele muda a HORA a cada três vezes, e a fraqueza muda junto: manhã gelo, tarde fogo, noite luz. Mordida sempre funciona.]', 'cat');
   const r = await lutaMapa(['relogio'], { bg: bgHospital, music: 'boss', pos: [[186, 160]], intro: async () => { const e = BT.foes[0]; e.hora = 'manha'; e.weak = ['gelo', 'mordida']; e.ct = 10; callout('RELÓGIO DE PLANTÃO', '#f0c050', 100); } });
   if (r !== 'win') return;
@@ -9235,9 +9290,11 @@ async function mesaDiretor() {
   await say('* "Marta Lins: medo de altura. Pensão paga." "Joaquim Sá: a esposa. Pensão paga." "Dito, Pavio 212: o irmão. Pensão paga."');
   await say('* A letra é pequena, cuidadosa, sem nenhum borrão. Uma letra de quem anota tudo e não erra nada.');
   await say('...Eu já vi essa letra.', 'rita');
+  await say('Eu também.', 'me');
   await say('* Ela não diz onde. Não precisa.');
   await say('[Registro: a letra confere com a anotação vista no Festival. Grau de certeza: alto. Grau de vontade de registrar: baixo.]', 'cat');
   await say('Pode ser outra pessoa. Um secretário. Alguém que... ele é BOM. Ele chorou no discurso, vocês viram.', 'lume');
+  await say('Gente boa também chora, Lume. E gente boa também anota coisa errada.', 'me');
   await say('* A Lume pega a lista. As mãos dela tremem um pouco. As velas no cabelo, também.');
   await checaFimP1();
 }
@@ -9261,6 +9318,7 @@ async function fimParte1Cap4() {
   await say('Eu vou com vocês até o portão da cidade. Depois eu volto. Alguém tem que ficar com o menino da perna enfaixada.', 'dalva');
   await say('Irmã Dalva... por que você tá ajudando a gente?', 'lume');
   await say('Porque eu lembro, minha filha. E alguém tem que lembrar.', 'dalva');
+  await say('Eu esqueço um pouco cada vez que eu mudo. Então eu lembro do que dá. Disso aqui eu vou lembrar.', 'me');
   G.flags.c4P1Fim = true; G.hora = 6 * 60; save2();
   await fadeOut(40);
   await cartao(['FIM DA PARTE 1', 'A Casa dos Que Esquecem', '', 'Continua na Parte 2:', 'Candeia, a vila que apagou']);
@@ -9285,6 +9343,7 @@ async function capitulo4() {
     await say('Eu sonhei com as luzinhas. As da Mãe-Fuligem. Elas tinham nome. Cada uma falava o próprio nome, baixinho, sem parar, pra não esquecer.', 'lume');
     await say('Igual a gente faz com número de telefone.', 'rita');
     await say('O que é telefone?', 'lume');
+    await say('Era... uma coisa que tocava. E a gente quase nunca atendia.', 'me');
     await say('* A Rita abre a boca. Fecha. Olha para você. Você também não sabe mais direito. Era uma coisa da Terra. Era importante.');
     await say('Tanto faz. Vamos ver o Tico. Ele disse que o Dito não estava bem de novo.', 'rita');
     await say('[Objetivo: o Tico está no LARGO DO HOSPITAL, na saída leste da Avenida do Festival.]', 'cat');
@@ -9643,6 +9702,18 @@ function cachecolCarniceiro(src) {
 }; }
 // a ponta que voa ao vento usa a cor do cachecol
 { const _cc = corCapa; corCapa = function () { if (rostoArte() && CACHECOL_COR) return CACHECOL_COR; return _cc(); }; }
+
+// ---------- o baú fala ----------
+// (pedido do usuário: "o baú não está tendo linhas de fala".) Falas com 'me' foram espalhadas pelas cenas dos Caps.
+// 1-4. Aqui: escolha de diálogo entre aspas vira fala dita pelo baú (com retrato); e, de rosto, o retrato do diálogo
+// é o rosto, não a tampa.
+{ const _ch = choose; choose = async function (text, options, who, cancel) {
+  const r = await _ch(text, options, who, cancel);
+  const o = Array.isArray(options) && typeof options[r] === 'string' ? options[r].trim() : '';
+  if (/^".+"$/.test(o)) await say(o.slice(1, -1), 'me');
+  return r;
+}; }
+{ const _pm = WHO.me.portrait; WHO.me.portrait = () => { try { if (rostoSt().on && rostoArte() && rostoArte().port) return rostoArte().port[0]; } catch (e) { } return _pm(); }; }
 
 boot2();
 </script>

@@ -342,6 +342,11 @@ async function projectile(from, to, col, n = 18, o = {}) {
   });
 }
 // cena do SUPER e das duplas: faixa diagonal, retratos grandes e o nome do golpe
+// (o baú não tem retrato em IMG.port: usa o mesmo do diálogo, PT('me'), ou o rosto quando está em forma humana)
+function retratoCut(u) {
+  if (u.id === 'bau') { if (u.humano && typeof rostoArte === 'function' && rostoArte() && rostoArte().port) return rostoArte().port[0]; return PT('me'); }
+  return IMG.port[u.port] ? IMG.port[u.port][0] : PT(u.port);
+}
 function cutIn(us, nm, col) {
   sfx('catalog'); BT.dim = 1;
   return tw(70, (p, k) => {
@@ -351,7 +356,7 @@ function cutIn(us, nm, col) {
     const sl = ease.out(Math.min(1, p / 0.25)) * (p > 0.85 ? 1 - (p - 0.85) / 0.15 * 1.5 : 1);
     bx.save(); bx.globalAlpha = a; bx.fillStyle = col; bx.beginPath(); bx.moveTo(L0 - 20, 72); bx.lineTo(L0 + RW + 20, 48); bx.lineTo(L0 + RW + 20, 110); bx.lineTo(L0 - 20, 134); bx.fill();
     bx.fillStyle = '#ffffff'; for (let i = 0; i < 9; i++) { const x = ((k * 9 + i * 41) % 300) - 30; bx.fillRect(x, 60 + (i * 13) % 60, 22, 1); }
-    us.forEach((u, i) => { const P = IMG.port[u.port] ? IMG.port[u.port][0] : null; if (P) { bx.imageSmoothingEnabled = false; bx.drawImage(P, Math.round(-70 + sl * (90 + i * 74)), 60 + i * 4, 64, 64); } });
+    us.forEach((u, i) => { const P = retratoCut(u); if (P) { bx.imageSmoothingEnabled = false; bx.drawImage(P, Math.round(-70 + sl * (90 + i * 74)), 60 + i * 4, 64, 64); } });
     bx.restore();
     const big = lineW(rich(nm), 2) <= 220 ? 2 : 1.5; txt(nm, 234 + (1 - Math.min(1, sl)) * 240, 112, { align: 'right', sz: big, col: '#ffffff', shadow: true, alpha: a });
   }).then(() => { BT.dim = 0; });

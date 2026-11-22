@@ -302,6 +302,7 @@ async function falaPavio() {
     await say('Eu lembro de tudo! Quer dizer, de quase tudo. Eu entrei pros Pavios por um salário. Pra ser Pavio a gente entrega uma coisinha pequena. Um nome, ele disse. "Ninguém sente falta de um nome."', 'pavio');
     await say('Quem disse?', 'rita');
     await say('...Não lembro do rosto. Lembro da luz. Era uma luz muito bonita.', 'pavio');
+    await say('Luz bonita demais é a que mais cega.', 'me');
     await say('Obrigado. De verdade. Tomem, é o que eu tenho: o salário da semana. Pavio não gasta com nada mesmo.', 'pavio');
     f.pavio = 3; G.cobres = (G.cobres || 0) + 50; G.items.tinta = (G.items.tinta || 0) + 2; sfx('item');
     await say('* +50 cobres e {y}Tinta Azul x2{/}.'); save2(); return;
@@ -310,6 +311,7 @@ async function falaPavio() {
   await say('Parente da Madame Pavio, lá de baixo? Ela também era meio vela.', 'lume');
   await say('Não sei. Eu não lembro de parentes. Eu não lembro... do meu nome, na verdade. Tinha numa plaquinha. Na minha banca, no Mercado. Antes de afundar.', 'pavio');
   await say('Se vocês descerem lá... e se acharem... não, que bobagem. Ninguém sente falta de um nome.', 'pavio');
+  await say('Eu sinto falta do meu bairro e nem lembro o nome dele. Sentir falta não é bobagem. A gente procura.', 'me');
   if (!p) { f.pavio = 1; await say('* Nova missão: {y}O nome do Pavio{/}. A plaquinha dele está em alguma banca do Mercado Afundado.'); }
 }
 async function falaPedrinho() {
@@ -363,6 +365,7 @@ async function primeiroMarco() {
   if (G.flags.tutMarco) return; G.flags.tutMarco = true;
   await say('Essa runa... @, é igual à da sua tampa. Igualzinha. Quem é que espalhou pedra com o seu desenho pela superfície?', 'lume');
   await say('Os antigos chamavam de Marcos. Meu avô dizia que eram de "quando os baús andavam". Eu achava que era jeito de falar.', 'rita');
+  await say('Os baús andavam. Então eu não sou o primeiro. Isso é... reconfortante?', 'me');
   await say('* (MARCO: salva o jogo, cura o grupo e os bichos da região voltam. Se o grupo cair, ele acorda no último Marco.)');
 }
 
@@ -418,11 +421,13 @@ async function descobreBoiar() {
   await say('A escada termina na água. O bairro velho tá lá embaixo, e o caminho... é por cima dele.', 'rita');
   await say('Eu nado. A Lume...', 'rita');
   await say('Lustre afunda, Rita. Lustre é feito de ferro e de vergonha.', 'lume');
+  await say('Eu nunca testei se eu boio. Na Terra eu nadava igual pedra.', 'me');
   await say('* Você olha para a água. A água olha para você. Você é um baú. Baú é madeira. Madeira...');
   sfx('splash'); V.shake = 8;
   await say('* Você pula. E BOIA.');
   await say('ELE BOIA! @, você é um BARCO!', 'lume');
   await say('Um barco com dentes. Abre a tampa aí, a gente entra.', 'rita');
+  await say('Eu era um baú. Agora eu sou um barco. Amanhã eu vou ser o quê, um ônibus?', 'me');
   G.flags.boiar = true; save2();
   await say('* (Agora o baú anda na água. Entre na água pela escadaria. As CORRENTEZAS, os riscos brancos, empurram o baú: elas são o caminho.)');
 }
@@ -438,6 +443,7 @@ async function pocoChefe() {
     await say('DING... QUEM... QUEM VOCÊS SÃO? EU LEMBRO DE TODO MUNDO. TODO MUNDO QUE CASOU. TODO MUNDO QUE NASCEU. TODO MUNDO QUE FOI EMBORA.', 'ancora');
     await say('MAS ELES ESTÃO ESQUECENDO. A MINA BEBE. BEBE AS LEMBRANÇAS DO FUNDO DO RIO. ENTÃO EU PUXO. EU PUXO A CIDADE PARA BAIXO. PARA PERTO. PARA NINGUÉM SE PERDER.', 'ancora');
     await say('Ela não quer afundar ninguém. Ela tá com medo de esquecer. Eu conheço esse medo, @.', 'lume');
+    await say('Eu também conheço. Eu já esqueci coisa demais pra achar esse medo bobo.', 'me');
     await say('Medo com correntes de navio. Cuidado com a água: o poço sobe quando ela respira.', 'rita');
   } else await say('VOCÊS VOLTARAM. EU LEMBRO DE VOCÊS. EU NÃO ESQUEÇO NINGUÉM.', 'ancora');
   const r = await lutaMapa(['ancora'], { bg: bgPoco, music: 'ancora', pos: [[182, 150]], tension: 20, extra: { fileira: true, bgAnim: bgAnimPoco },
@@ -522,6 +528,7 @@ async function fimCap2() {
   } else await say('* Ao passar pelos Pavios, ele cumprimenta cada um: "Boa noite, Pavio." Eles sorriem do jeito de quem não tem outro nome para responder.');
   await say('Ele parece gente boa.', 'rita');
   await say('Parece.', 'lume');
+  await say('...Parece.', 'me');
   await say('* Lá em cima, na torre, a Dona Badalada toca as nove horas. Certinho. Pela primeira vez em cem anos, ninguém precisa lembrar a cidade de que ela tem um sino.');
   G.flags.c2Fim = true; G.hora = 20 * 60 + 30; G.pos = { map: 'praca', x: 15, y: 16, dir: 'down' }; G.marco = { map: 'praca', x: 2, y: 12 }; save2();
   await fadeOut(40);
@@ -564,6 +571,7 @@ async function chegadaVelhagua() {
   // ---- não tem um vintém ----
   await say('Passagem são três cobres por cabeça. Quatro cabeças, contando a tampa.', 'jorge');
   await say('Cobre? A gente... tem cobre?', 'lume');
+  await say('Eu tenho três botões e uma meia. Nenhum é cobre.', 'me');
   await say('* A Rita revira os bolsos: um botão, um recibo de pedágio e um grão de areia da masmorra.');
   await say('* Você abre a tampa e procura lá dentro: uma meia, uma pedrinha da masmorra e nenhum vintém.');
   await say('Lá embaixo a gente pagava tudo com âmbar e coragem.', 'lume');
@@ -577,6 +585,7 @@ async function chegadaVelhagua() {
   await say('O cobrador?', 'lume');
   await say('Aqui fora ele não é cobrador. É o HERÓI Nº 30. Os heróis que voltaram da masmorra foram chamados para a capital. Tem figurinha dele em tudo que é venda.', 'rita');
   await say('O cobrador virou herói e o @ virou baú. Eu nunca vou superar isso.', 'lume');
+  await say('Nem eu.', 'me');
   await say('Ele mandou carta pelo correio do cais. Vi o selo da Coroa no bazar. Endereçada a "o baú e a moça que brilha".', 'rita');
   await say('* (Dinheiro: cobres. Ganhe com lutas, vendendo materiais no Bazar, com os pedidos da taverna e, de noite, com a Lume cantando na fonte da praça.)');
   await say('* O âmbar do Espantalho, guardado na sua tampa, ainda está quente. Você sente uma coisa voltando, devagar: força antiga. (+ vida, ataque e magia.)');
@@ -587,6 +596,7 @@ async function chegadaVelhagua() {
   await say('Então ele não anda. Ele é bagagem. A gente carrega. Quer dizer... ele vai do lado. Bem paradinho quando olharem.', 'lume');
   await say('Bagagem não pisca.', 'rita');
   await say('...Pisca sim. A minha piscava.', 'lume');
+  await say('Eu prometo não piscar. ...Muito.', 'me');
   await say('* (DISFARCE DE BAGAGEM: quando um Caçador parar e OLHAR, com o "!" em cima da cabeça, não se mexa. Pego andando três vezes, eles atacam.)');
   await fadeOut(20);
 }

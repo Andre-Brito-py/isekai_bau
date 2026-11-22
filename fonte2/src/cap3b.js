@@ -102,6 +102,7 @@ async function falaTicoGrade() {
     await say('Não. Lá embaixo tem coisa que come luz e coisa que come gente. Você fica aqui e guarda a grade.', 'rita');
     await say('...Guardar a grade é importante?', 'tico');
     await say('Importantíssimo. Se alguém fechar, a gente fica preso lá embaixo. Você é a nossa saída.', 'rita');
+    await say('Ela tá falando sério, Tico. Ninguém guarda uma grade melhor que você.', 'me');
     await say('* O Tico estufa o peito e senta em cima da grade com a vassoura no colo, como um soldado.');
     await say('Desce pela grade. Lá embaixo é escuro de verdade. Fica perto da moça que brilha.', 'tico');
     return;
@@ -112,6 +113,7 @@ async function subirBueiro() { sfx('door'); await fadeOut(14); loadMap2('auren',
 async function cenaDescida() {
   await say('* Escuro. Escuro de verdade, do tipo que a superfície esqueceu. Só a luz da Lume abre um círculo em volta de vocês.');
   await say('Ninguém sai do meu círculo. Sério. Aqui eu sou importante.', 'lume');
+  await say('Você é importante lá em cima também. Lá só tem mais concorrência.', 'me');
   await say('[As Galerias de Fuligem: túneis antigos de chaminé e esgoto, debaixo da capital. Aviso: aqui, FOGO ALIMENTA FULIGEM. Brasa cura os bichos daqui.]', 'cat');
   await say('* (Nas Galerias só se enxerga perto de alguma luz: a Lume e as grades de brasa. De noite, a Lume vira lustre e ilumina muito mais.)');
 }
@@ -122,6 +124,7 @@ async function pegarBigorna() {
   if (G.flags.bigorna) return;
   await say('* Uma bigorna velha, meio enterrada na fuligem. Deve ser da forja que existia aqui quando isso ainda era uma oficina.');
   await say('UMA BIGORNA. @, guarda. Guarda AGORA. Isso vai pra minha forja.', 'rita');
+  await say('Eu não sou um depósito, Rita.| ...Tá. Eu sou um depósito.', 'me');
   sfx('item'); G.flags.bigorna = true;
   await say('* Você abre a tampa e a bigorna cai lá dentro, no Interior do Baú, bem no canto da forja. Clang.');
   await say('* (A forja da Rita, na base, agora funciona.)'); save2();
@@ -131,7 +134,7 @@ async function lerLanterna(i) {
   const txts = ['um menino rindo em cima de um telhado, segurando a mão de alguém menor', 'uma ponte de pedra e uma mulher cantando para o rio', 'o cheiro de um armazém de feijão e um velho contando moedas', 'um sino tocando numa tarde de domingo', 'um pião rodando num chão de terra', 'um bolo de fubá esfriando na janela', 'uma corda de sino gasta de tanta mão', 'um laço de fita vermelha'];
   await say(`* Uma lanterna de vidro. A etiqueta diz: ${nm}. Dentro, a fumaça se mexe e, por um segundo, parece ${txts[i % txts.length]}.`);
   if (i === 0 && !G.flags.c3LeuDito) { G.flags.c3LeuDito = true; await say('Dito. O irmão do Tico. ...Mas essa tá vazia. Só tem a etiqueta. Cadê o resto?', 'rita'); await say('[Leitura: a lembrança correspondente foi levada mais para baixo. Para onde a fuligem é mais funda.]', 'cat'); }
-  else if (i === 3) await say('Não abre. Eu não sei o que acontece se abrir. E eu não quero que aconteça na minha frente.', 'lume');
+  else if (i === 3) { await say('Não abre. Eu não sei o que acontece se abrir. E eu não quero que aconteça na minha frente.', 'lume'); await say('A gente não abre. A gente leva pro dono.', 'me'); }
 }
 async function falaVeio() {
   if (G.evo3) { await say('* O veio de âmbar está apagado, cinza, como carvão frio. Tudo o que ele tinha está em você agora.'); return; }
@@ -147,8 +150,10 @@ async function lutaMae() {
   await say('* O fundo. Uma caverna redonda, quente como um forno. No meio, uma montanha de fumaça e tijolo de chaminé respira. Cada vez que ela respira, as luzes da cidade, lá em cima, piscam.');
   await say('* Ela abre os olhos. Dois carvões acesos. E dentro do peito, presas na fuligem, centenas de luzinhas.');
   await say('Isso é... tudo o que queimou lá em cima vem parar aqui?', 'lume');
+  await say('É a lixeira da cidade. Só que de lembrança.', 'me');
   await say('[Mãe-Fuligem. Fogo a alimenta. Gelo e mordida a desmancham. Ela engole luz, então: cuidado com as velas.]', 'cat');
   await say('Então nada de fogo, todo mundo mordendo e congelando. Plano simples. Eu gosto de plano simples.', 'rita');
+  await say('Morder eu sei. É o meu currículo inteiro.', 'me');
   const r = await lutaMapa(['mae'], { bg: bgGalerias, music: 'boss', pos: [[186, 168]], intro: async () => { const e = BT.foes[0]; e.phases = fasesMae(); e.ct = 15; callout('MÃE-FULIGEM', '#ffd8a0', 100); } });
   if (r !== 'win') return;
   G.flags.c3Mae = true; save2();
@@ -181,9 +186,11 @@ async function cenaFinalCap3() {
   await say('...Bom dia, rapazinho. Eu tenho que acender os postes. Ordem é ordem.', 'dito');
   await say('* E vai embora. Mas, na esquina, ele olha para trás. Só uma vez. E acena.');
   await say('Ele lembrou. Um pouquinho. Ele lembrou de mim.', 'tico');
+  await say('Um pouquinho já é começo, Tico. Eu comecei com menos.', 'me');
   await say('* O Tico pega a vassoura e vai atrás do irmão, de longe, como quem vai buscar o resto.');
   await say('Alguém está colhendo lembrança de gente. Guardando em pote. E mandando pelo cano para cima.', 'rita');
   await say('Para os postes. E para o morro do Farol, o Pavio disse.', 'lume');
+  await say('Alguém tá acendendo uma cidade inteira com o que as pessoas esquecem.', 'me');
   await say('* A Lume olha para o morro, onde o Farol de Cem Invernos espera a última noite do festival. Ela não termina o pensamento. Ninguém termina.');
   await say('[Hipótese não registrada. Registro... adiado.]', 'cat');
   await fadeOut(40);

@@ -179,9 +179,11 @@ async function cenaRosto() {
   await say('[As anotações da Ofélia citam uma tinta "de superfície", feita sem âmbar. Registro incompleto. Investigação futura.]', 'cat');
   await say('[Sobre o Rosto: ele funciona. Mas sem âmbar em volta, a runa queima memória quente para segurar a cara. Dura pouco. E cansa.]', 'cat');
   await say('Então é uma máscara com hora pra acabar.', 'rita');
+  await say('Uma cara emprestada de mim mesmo. Com prazo de validade.', 'me');
   await say('Deixa eu ver! Vai, @! Só um pouquinho!', 'lume');
   puffRosto(); sfx('rune'); rostoSt().on = true; await wait(40);
   await say('...É você. A mesma cara lá do fim da masmorra. Eu tinha esquecido como era. Não conta pra ninguém que eu esqueci.', 'lume');
+  await say('...Eu também tinha esquecido.', 'me');
   await say('* Você olha as próprias mãos. Dez dedos. Já está doendo um pouco, lá no fundo da tampa.');
   if (partyKeys().includes('rita')) await momentoRita();
   await say('* (FORMA HUMANA: aperte {y}B{/} no mapa para usar a Runa do Rosto e de novo para voltar a ser baú. De rosto, Caçadores e moradores não desconfiam de você andando.)');
@@ -263,12 +265,13 @@ async function momentoRita() {
     CLOSE.fill = 1;
   }
   const c = await choose('* Ela continua olhando. O que você diz?', ['"Você lembra mais de mim do que eu."', '"Pode olhar. Dessa vez eu tô acordado."', '"...Era tão feio assim?"']);
-  if (c === 0) await say('Alguém tinha que lembrar. Você tava ocupado dormindo.', 'rita');
+  if (c === 0) { await say('Alguém tinha que lembrar. Você tava ocupado dormindo.', 'rita'); await say('Eu tava cansado. Eu tava sempre cansado. Nem lembro mais de quê.', 'me'); }
   else if (c === 1) { await say('...', 'rita'); await say('Pois é. Dessa vez você tá acordado.| E eu não sei o que fazer com as mãos. Isso nunca me aconteceu. Eu sou ESCUDEIRA.', 'rita'); shake(2); }
   else await say('Feio não. Cansado. Cara de quem trabalhava demais e dormia de menos.| ...Continua igual, aliás.', 'rita');
   if (promessa) {
     await say('Lá embaixo, na estação, eu disse uma coisa. "Quando você arranjar um rosto, me procura."', 'rita');
     await say('E você arranjou. Com hora pra acabar, derretendo pelas beiradas, mas arranjou.', 'rita');
+    await say('Arranjei. Agora você me deve um pastel.', 'me');
     await say('O pastel continua por minha conta. No dia em que a gente tiver UM cobre que não seja pra comida de verdade. Promessa de escudeira.', 'rita');
     G.flags.pastelRita = true;
     await say('* A Lume, que flutuava logo atrás, de repente acha muito interessante uma gaivota.');
