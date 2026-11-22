@@ -64,7 +64,7 @@ Object.assign(AI2, {
     if (e.charge) {
       e.charge = null; callout('SOPRO DE LUZ!', '#ff6b6b', 60); sfx('crit'); flashW(4); bshake(14, 3);
       const [ex, ey] = unitCenter(e);
-      for (const m of alive(BT.party)) { const [x, y] = unitCenter(m); await tw(10, p => { bx.globalAlpha = 0.6 * (1 - p); bx.fillStyle = '#fff0a0'; bx.fillRect(Math.round(ex + (x - ex) * p) - 4, Math.round(ey + (y - ey) * p) - 4, 8, 8); bx.globalAlpha = 1; }); await foeStrike(e, m, 1.25, { n: 26, el: 'luz', noCounter: true, st: 'queimado', stT: 2 }); }
+      for (const m of alive(BT.party)) { const [x, y] = unitCenter(m); await tw(10, p => { bx.globalAlpha = 0.6 * (1 - p); bx.fillStyle = '#fff0a0'; bx.fillRect(Math.round(ex + (x - ex) * p) - 4, Math.round(ey + (y - ey) * p) - 4, 8, 8); bx.globalAlpha = 1; }); await foeStrike(e, m, 1.0, { n: 30, el: 'luz', noCounter: true, st: 'queimado', stT: 2 }); }
       e.pose = null; return;
     }
     if (e.ph >= 2 && e.turns % 3 === 2) {
@@ -73,7 +73,7 @@ Object.assign(AI2, {
     }
     const filhos = alive(BT.foes).filter(f => f.kind === 'mariposa').length;
     const opts = ['rasante', 'po', 'rasante'];
-    if (filhos < 2 && e.turns % 4 === 1) opts.push('filhote', 'filhote');
+    if (filhos < 1 && e.turns % 4 === 1) opts.push('filhote');
     const k = pickOne(opts), t = foeTarget(); if (!t) return;
     if (k === 'filhote') {
       callout('A Rainha chama as filhas!', '#d0a8ff', 50); sfx('encounter');
@@ -84,7 +84,7 @@ Object.assign(AI2, {
       for (const m of alive(BT.party)) { const [x, y] = unitCenter(m); await tw(8, p => { for (let i = 0; i < 6; i++) { bx.fillStyle = '#e8d8c0'; bx.fillRect(Math.round(x - 10 + i * 4), Math.round(y - 20 + p * 16 + (i % 2) * 3), 1, 1); } }); await foeStrike(e, m, 0.55, { n: 22, st: 'tonto', stT: 2, noCounter: true }); }
     } else {
       callout(e.ph >= 2 ? 'Rasante Aceso!' : 'Rasante da Rainha!', '#d0a8ff', 40); e.pose = 1; await foeLunge(e, t, 14, 18);
-      await foeStrike(e, t, e.ph >= 2 ? 1.5 : 1.3, { n: 26, el: e.ph >= 2 ? 'luz' : undefined }); await foeBack(e);
+      await foeStrike(e, t, e.ph >= 2 ? 1.3 : 1.15, { n: 30, el: e.ph >= 2 ? 'luz' : undefined }); await foeBack(e);
     }
     e.pose = null;
   }

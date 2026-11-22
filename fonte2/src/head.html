@@ -191,6 +191,24 @@
    tela; o texto do mundo entra na fila dividido por TXZ; o painel do mapa (HUD) e as janelas ficam no tamanho normal.
    TELA CHEIA: o zoom de cada mapa é o mais longe possível até 1,5 SEM passar do tamanho do mapa (sem faixa preta);
    sala pequena (taverna) chega mais perto e a câmera rola. H agora é 'let' (muda só durante o desenho do mapa).
+ - REGRA DE CHEFE (pedido do usuário, vale para todo chefe e mini-chefe daqui em diante): TODO golpe de chefe tem
+   ANIMAÇÃO DE ATAQUE bem feita, que também serve de TEMPO para a defesa. Implementado em fx3.js (BT.golpe): enquanto o
+   anel fecha, o chefe ARMA (recua, treme, brilha, "!" em cima) e AVANÇA, e o golpe chega no alvo exatamente quando o
+   anel encosta; golpe à distância (luz, sopro) vira projétil que chega no mesmo instante. Chefes novos podem (e devem)
+   ter coreografia própria além dessa base.
+ - ANEL DE AÇÃO (fx3.js): alvo com disco escuro, faixa verde (perfeito) e azul (bom); anel grosso com contorno escuro que
+   muda de cor dentro da janela; botão A pulsando na hora certa; resultado grande (PERFEITO!/BOM/FALHOU).
+ - MAGIAS COM ANIMAÇÃO DE VERDADE (fx3.js): projétil por elemento (bola de fogo com chamas, cristal de gelo girando,
+   semente de seiva, bola de fuligem), impactos (explosão de chamas e brasas, espinhos de gelo que crescem e estilhaçam
+   com flocos, vinhas e folhas, nuvem de fumaça com estrelinhas de tontura, vapor), ONDA que atravessa o campo, VÉUS
+   próprios (chamas em espiral, couraça de placas de gelo, coluna de luz verde com folhas). Vale para as runas antigas e
+   para as páginas do Grimório.
+ - AVALIAR (anim2.js): NÃO gasta a vez do baú; uma vez por vez (BT._avalFeito). Animação de ESCÂNER: feixe em leque da
+   tampa até o alvo, grade e linha de varredura, leituras em hexadecimal, selo ANALISADO.
+ - TELA DE STATUS (status3.js; MENU > Grupo): ficha por personagem com retrato grande em pedestal de runas, função,
+   vida/PM, atributos com barras, equipamento por encaixe e habilidades; < > troca de personagem.
+ - Mariposa-Rainha ficou mais fácil (o usuário não passava): PV 1400, ATQ 20, escudo 4, só 1 filhote por vez, Sopro e
+   Rasante mais fracos. Bot com 60% de acerto vence com folga; com 45%, vence gastando os frascos.
  CAPÍTULO 3 — O FESTIVAL DA LUZ (roteiro; dividido em 2 partes a pedido do usuário)
  - PARTE 1 (IMPLEMENTADA, cap3.js + grimorio3.js + inimigos3.js + arte_cap3.js + maps/cap3maps.py -> mapas3.js):
    ESTRADA DOS LAMPIÕES (o 31 quebra a correia; postes apagados; mariposas comem luz; ACENDER POSTE com a Lume atrai

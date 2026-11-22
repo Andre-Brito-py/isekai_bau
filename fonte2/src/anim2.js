@@ -404,30 +404,42 @@ const FICHA = {
   ancora: 'A Dona Badalada, com medo de ser esquecida. A maré molha quem está na frente; as correntes prendem; no fim, ela só quer ouvir alguém cantar.',
   corrente: 'Corrente de navio segurando um aliado. Corte e fogo partem os elos.'
 };
-CMD.splice(1, 0, { k: 'avaliar', nm: 'Avaliar', ic: () => 'avaliar', desc: () => 'O Catálogo estuda um inimigo: mostra vida, escudo, TODAS as fraquezas e uma dica. Ação leve.', only: m => m.id === 'bau' });
+CMD.splice(1, 0, { k: 'avaliar', nm: 'Avaliar', ic: () => 'avaliar', desc: () => 'O Catálogo escaneia um inimigo: vida, escudo, TODAS as fraquezas e uma dica. NÃO gasta a vez (uma vez por vez).', only: m => m.id === 'bau', need: () => !BT._avalFeito, why: 'Já avaliou nesta vez' });
 { const _dc2 = doCommand; doCommand = async function (m, k) {
   if (k !== 'avaliar') return _dc2(m, k);
   const t = await pickTarget('e', { pref: BT.lastTarget }); if (!t) return false;
   await act(m, async () => {
-    // abre a tampa; um olho de lente sai e varre o alvo de cima a baixo
+    // ESCÂNER: a tampa abre, um feixe em leque sai do baú até o alvo, uma linha de varredura desce sobre ele com
+    // grade e cantoneiras, números de leitura aparecem em volta e no fim um selo "ANALISADO".
     m.pose = 'front'; sfx('catalog');
-    const [ex, ey] = [m.x + m.ox, m.y - m.h + 4], [tx, ty] = unitCenter(t), fr = unitFrame(t), th = fr ? fr.height : 30, tw_ = fr ? fr.width : 30, top = t.y + t.oy - th;
-    await tw(12, p => { const x = ex + (tx - ex) * ease.out(p), y = ey + (ty - ey) * ease.out(p) - Math.sin(p * Math.PI) * 10; fxRing(x, y, 5, '#8fe3ff', 1); fxDisc(x, y, 2, '#ffffff'); });
-    await tw(26, p => {
-      const sy = top + th * p;
-      bx.globalAlpha = 0.18; bx.fillStyle = '#8fe3ff'; bx.fillRect(Math.round(tx - tw_ / 2 - 4), Math.round(top), Math.round(tw_ + 8), Math.round(th * p)); bx.globalAlpha = 1;
-      bx.fillStyle = '#8fe3ff'; bx.fillRect(Math.round(tx - tw_ / 2 - 6), Math.round(sy), Math.round(tw_ + 12), 1);
-      bx.fillStyle = '#ffffff'; bx.fillRect(Math.round(tx - tw_ / 2 - 6), Math.round(sy), 3, 1); bx.fillRect(Math.round(tx + tw_ / 2 + 3), Math.round(sy), 3, 1);
-      for (const [cx, cy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { const X = tx + cx * (tw_ / 2 + 6), Y = (cy < 0 ? top : top + th); bx.fillRect(Math.round(X - (cx > 0 ? 4 : 0)), Math.round(Y), 5, 1); bx.fillRect(Math.round(X), Math.round(Y - (cy > 0 ? 4 : 0)), 1, 5); }
-      if (BT.t % 4 === 0) sfx('move');
+    const [ex, ey] = [m.x + m.ox, m.y - m.h + 4], [tx, ty] = unitCenter(t), fr = unitFrame(t), th = fr ? fr.height : 30, tw_ = fr ? fr.width : 30, top = t.y + t.oy - th, L = tx - tw_ / 2 - 6, Rr = tx + tw_ / 2 + 6;
+    const feixe = (a) => { bx.globalAlpha = 0.16 * a; bx.fillStyle = '#8fe3ff'; bx.beginPath(); bx.moveTo(ex, ey); bx.lineTo(L, top - 4); bx.lineTo(L, top + th + 4); bx.closePath(); bx.fill(); bx.beginPath(); bx.moveTo(ex, ey); bx.lineTo(Rr, top - 4); bx.lineTo(Rr, top + th + 4); bx.lineTo(L, top + th + 4); bx.closePath(); bx.globalAlpha = 0.07 * a; bx.fill(); bx.globalAlpha = 0.6 * a; bx.strokeStyle = '#8fe3ff'; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(ex, ey); bx.lineTo(L, top - 4); bx.moveTo(ex, ey); bx.lineTo(L, top + th + 4); bx.stroke(); bx.globalAlpha = 1; };
+    const cantos = (a) => { bx.globalAlpha = a; bx.fillStyle = '#8fe3ff'; for (const [cx, cy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { const X = cx < 0 ? L : Rr, Y = cy < 0 ? top - 4 : top + th + 4; bx.fillRect(Math.round(X - (cx > 0 ? 5 : 0)), Math.round(Y), 6, 1); bx.fillRect(Math.round(X), Math.round(Y - (cy > 0 ? 5 : 0)), 1, 6); } bx.globalAlpha = 1; };
+    // abre: lente acende na tampa e o feixe se abre
+    await tw(12, p => { brilho(ex, ey, 3 + p * 6, '#8fe3ff', p); fxRing(ex, ey, 2 + p * 5, '#ffffff', 1 - p); feixe(p); cantos(p); });
+    // varredura com grade
+    const leit = [];
+    await tw(34, (p, k) => {
+      feixe(1); cantos(1);
+      const sy = top - 4 + (th + 8) * p;
+      bx.globalAlpha = 0.14; bx.fillStyle = '#8fe3ff'; bx.fillRect(Math.round(L), Math.round(top - 4), Math.round(Rr - L), Math.round(sy - top + 4)); bx.globalAlpha = 1;
+      bx.globalAlpha = 0.3; bx.fillStyle = '#8fe3ff'; for (let gx = L; gx < Rr; gx += 4) bx.fillRect(Math.round(gx), Math.round(top - 4), 1, Math.round(sy - top + 4)); for (let gy = top - 4; gy < sy; gy += 4) bx.fillRect(Math.round(L), Math.round(gy), Math.round(Rr - L), 1); bx.globalAlpha = 1;
+      bx.fillStyle = '#ffffff'; bx.fillRect(Math.round(L - 3), Math.round(sy), Math.round(Rr - L + 6), 1); bx.fillStyle = '#8fe3ff'; bx.fillRect(Math.round(L - 3), Math.round(sy) + 1, Math.round(Rr - L + 6), 1);
+      bx.globalAlpha = 0.25; bx.fillStyle = '#8fe3ff'; bx.fillRect(Math.round(L - 3), Math.round(sy) - 3, Math.round(Rr - L + 6), 3); bx.globalAlpha = 1;
+      if (k % 5 === 0) { leit.push({ x: (k % 10 ? Rr + 4 : L - 22), y: sy, s: (Math.random() * 0xfff | 0).toString(16).toUpperCase().padStart(3, '0'), t: 0 }); sfx('move'); }
+      for (const q of leit) { q.t++; txt(q.s, q.x, q.y - 4, { col: '#8fe3ff', alpha: Math.max(0, 1 - q.t / 30) }); }
     });
+    // selo
+    sfx('item');
+    await tw(18, p => { cantos(1 - p * 0.5); bx.globalAlpha = 1 - p * 0.6; bx.fillStyle = '#0a0612'; bx.fillRect(Math.round(tx - 30), Math.round(top - 18), 60, 11); bx.strokeStyle = '#8fe3ff'; bx.strokeRect(Math.round(tx - 30) + 0.5, Math.round(top - 18) + 0.5, 59, 10); bx.globalAlpha = 1; txt('ANALISADO', tx, top - 19, { align: 'center', col: '#8fe3ff', alpha: 1 - p * 0.4 }); });
     for (const el of ['fogo', 'gelo', 'luz', 'corte', 'mordida']) t.known[el] = t.weak.includes(el) ? 'weak' : 'ok';
     t.avaliado = true; m.pose = null;
     const fraco = t.weak.length ? t.weak.map(e => ({ fogo: 'fogo', gelo: 'gelo', luz: 'luz', corte: 'corte', mordida: 'mordida' }[e] || e)).join(', ') : 'nada';
-    BT.tension = Math.min(100, BT.tension + 4);
     await say(`[AVALIAÇÃO: ${t.name}. Vida ${t.hp}/${t.mhp}. Escudo ${t.shield}/${t.maxShield}. Fraco a: ${fraco}.]`, 'cat');
     const f = FICHA[t.kind || (Object.keys(ENEMY2).find(k => ENEMY2[k].name === t.name))];
     if (f) await say('[' + f + ']', 'cat');
   });
-  endTurn(m, 'leve'); return true;
+  // não gasta a vez: volta ao menu do baú; só uma avaliação por vez
+  BT._avalFeito = true; return false;
 }; }
+{ const _etA = endTurn; endTurn = function (u, w) { BT._avalFeito = false; return _etA.apply(this, arguments); }; }

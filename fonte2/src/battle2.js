@@ -233,7 +233,7 @@ function menuInput() {
   const cs = cmdsFor(M.m);
   if (navp('down')) { M.idx = (M.idx + 1) % cs.length; sfx('move'); }
   if (navp('up')) { M.idx = (M.idx + cs.length - 1) % cs.length; sfx('move'); }
-  if (btnp('a')) { const c = cs[M.idx]; if (c.need && !c.need()) { sfx('cancel'); callout('Precisa de 100 de Tensão', '#ff6b6b', 40); return; } sfx('select'); const p = M.pick; M.pick = null; p && p(c.k); }
+  if (btnp('a')) { const c = cs[M.idx]; if (c.need && !c.need()) { sfx('cancel'); callout(c.why || 'Precisa de 100 de Tensão', '#ff6b6b', 40); return; } sfx('select'); const p = M.pick; M.pick = null; p && p(c.k); }
 }
 // escolher alvo: cursor sobre inimigos (ou aliados)
 function pickTarget(side, o = {}) {
