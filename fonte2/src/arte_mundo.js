@@ -132,15 +132,14 @@ function casaArt(o) {
   for (let y = wy1 - 14; y < wy1; y++) for (let x = 2; x < W - 2; x++) if ((y - (wy1 - 14)) > 4 + Math.sin(x * 0.3) * 2) P.p(x, y, P.tone(ramp('#4a6a4a'), 0.35 + (y - wy1) / 40, x, y));
   // colunas de canto
   P.cyl(0, wy0 - 2, 4, wallH + 2, TR); P.cyl(W - 4, wy0 - 2, 4, wallH + 2, TR);
-  // telhado de telhas, em fileiras desencontradas
-  for (let y = 0; y < roofH; y++) {
-    const inset = Math.max(0, Math.round((roofH - y) * 0.5) - 8);
-    for (let x = inset - 2; x < W - inset + 2; x++) {
-      const row = y >> 2, off = (row % 2) * 4, edge = (y % 4 === 3) || ((x + off) % 8 === 0);
-      P.p(x, y, P.tone(RF, (edge ? 0.25 : 0.62) - y / roofH * 0.2 + (x < W / 2 ? 0.06 : -0.04), x, y));
-    }
+  // telhado visto de cima, estilo HLD: laje chapada com borda grossa colorida, sombra interna e respiro de metal
+  for (let y = 0; y < roofH; y++) for (let x = -1; x < W + 1; x++) {
+    const rim = y < 3 || y >= roofH - 5 || x < 3 || x >= W - 3;
+    let c = rim ? (y < 1 ? RF[4] : y < 3 ? RF[3] : y >= roofH - 2 ? RF[0] : y >= roofH - 5 ? RF[1] : x < 3 ? RF[3] : RF[1]) : ((y < 6 || x < 6) ? RF[2] : RF[3]);
+    if (!rim && (hash(x >> 2, y >> 2, 77) % 23 === 0)) c = RF[2];
+    P.p(x, y, c);
   }
-  P.cyl(-2, roofH - 4, W + 4, 4, RF, true);                                                    // beiral
+  { const vx = W - 22, vy = 6; P.rect(vx, vy, 13, 9, '#5a5a66'); P.rect(vx + 1, vy, 11, 7, '#a8a8b4'); for (let i = 0; i < 4; i++) P.rect(vx + 2 + i * 3, vy + 2, 1, 4, '#4a4a56'); }
   if (o.chimney) { P.cyl(W - 22, -2, 8, 16, ramp('#7a6a6a')); P.rect(W - 23, -3, 10, 2, '#4a3a3a'); }
   // janelas com luz quente e floreira
   for (const dx of (o.win || [])) {
