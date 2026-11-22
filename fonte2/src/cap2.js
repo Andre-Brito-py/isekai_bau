@@ -87,7 +87,7 @@ function plantaArt() { const P = new Pix(14, 18); P.rect(2, 10, 10, 8, ramp('#a8
 function sinoPocoArt() { const src = ancoraFrame(1, 0, false), c = mk(112, 74); c.getContext('2d').drawImage(src, 0, 0, 112, 74, 0, 0, 112, 74); return c; }
 
 // ---------- montagem dos mapas ----------
-const casa = o => memo(() => casaArt(o).img);
+const casa = o => { const f = memo(() => casaArt(o).img); f.casaO = o; return f; };
 const cartazC = memo(cartazArt), toldoV = memo(() => toldoArt('#c83a3a')), toldoA = memo(() => toldoArt('#3a6ab8')), tendaC = memo(tendaArt), plantaC = memo(plantaArt);
 const postes = { on: memo(() => posteArt(true)), off: memo(() => posteArt(false)) };
 const porta = (x, y, to, tx, ty, tdir) => ({ t: 'door', x, y, to, tx, ty, tdir, passa: true });
@@ -109,11 +109,11 @@ function montarMapas2() {
   // ===== CAIS DA PONTE =====
   MAPS2.cais = { rows: ROWS2.cais, name: 'Velhágua · Cais da Ponte', music: 'velhagua', batBg: bgCidade, showMoney: true, bg: '#1c3a54',
     props: [
-      { img: casa({ w: 3, wall: '#8a6a4a', roof: '#6a3a2a', win: [0.6] }), x: 0, y: 8 },
+      { img: casa({ w: 3, wall: '#8a6a4a', roof: '#6a3a2a', win: [0.2], door: 1.3 }), x: 0, y: 8 },
       { img: casa({ w: 7, wall: '#a8704a', roof: '#8a3a2a', door: 5 - 3 - 0.125, win: [0.5, 5], awning: '#c83a3a', signC: '#e8c040', doorWin: true }), x: 3, y: 8 },
-      { img: casa({ w: 6, wall: '#9a7a5a', roof: '#4a4a6a', win: [1, 3.6], chimney: true }), x: 10.5, y: 8 },
-      { img: casa({ w: 11, stone: true, wall: '#7a7480', roof: '#5a3a2a', win: [1, 4, 7.6], signC: '#c8a048' }), x: 17, y: 8 },
-      { img: casa({ w: 4, wall: '#a88060', roof: '#3a5a4a', win: [1] }), x: 32, y: 8 },
+      { img: casa({ w: 6, wall: '#9a7a5a', roof: '#4a4a6a', win: [0.5, 4.2], chimney: true, door: 2.2 }), x: 10.5, y: 8 },
+      { img: casa({ w: 11, stone: true, wall: '#7a7480', roof: '#5a3a2a', win: [1, 3.6, 8.2], signC: '#c8a048', door: 5.6, doorC: '#4a3a3a' }), x: 17, y: 8 },
+      { img: casa({ w: 4, wall: '#a88060', roof: '#3a5a4a', win: [0.4], door: 2.1 }), x: 32, y: 8 },
       ...[[19, 3], [21.5, 2], [24, 4], [26.5, 2]].map(([x, dy]) => ({ img: cartazC, x, y: 5.6, dy, by: 129 })),
       { img: busArt, x: 8, y: 15, solid: [[8, 13, 12, 2]] },
       { img: memo(() => caixoteArt(0)), x: 2, y: 14, solid: [[2, 13, 1, 1]] }, { img: memo(() => caixoteArt(1)), x: 3, y: 14, solid: [[3, 13, 1, 1]] }, { img: memo(() => caixoteArt(1)), x: 2.5, y: 13.1, by: 225 },
@@ -147,7 +147,7 @@ function montarMapas2() {
       { img: casa({ w: 7, wall: '#7a4a2a', roof: '#5a2a2a', door: 4 - 1 - 0.125, win: [0.5, 5], signC: '#c89a40', chimney: true, doorWin: true }), x: 1, y: 8 },
       { img: casa({ w: 7, stone: true, wall: '#8a8290', roof: '#2a3a5a', door: 13 - 9 - 0.125, doorC: '#3a3a4a', win: [0.5, 5.4], signC: '#8a2a2a' }), x: 9, y: 8 },
       { img: casa({ w: 6, wall: '#a8805a', roof: '#3a5a7a', door: 21 - 18.5 - 0.125, win: [0.4, 4.3] }), x: 18.5, y: 8 },
-      { img: casa({ w: 7, wall: '#9a6a4a', roof: '#6a3a3a', win: [1, 4] }), x: 25, y: 8 },
+      { img: casa({ w: 7, wall: '#9a6a4a', roof: '#6a3a3a', win: [0.5, 4.6], door: 2.6 }), x: 25, y: 8 },
       { img: () => (G.flags.c2Boss ? torreSim : torreNao)(), x: 14, y: 14, solid: [[14, 12, 4, 2]] },
       { img: memo(fonteArt), x: 5, y: 17, solid: [[5, 15, 4, 2]] },
       { img: memo(igrejaArt), x: 24.5, y: 20, by: 300 },
@@ -219,7 +219,7 @@ function montarMapas2() {
     props: [{ img: () => G.flags.c2Boss ? null : sinoPocoC(), x: 4.5, y: 4.6, by: 60 }],
     ents: [...portas(PZ.door, 'rua2', 20, 11, 'up'), { t: 'trig', x: PZ.gatilho[0][0], y: PZ.gatilho[0][1], w: 6, h: 1, passa: true, run: pocoChefe }]
   };
-  for (const m of Object.values(MAPS2)) { m.baked = null; for (const p of m.props || []) { const f = p.img; p.img = () => f() || EMPTY_C; } }
+  for (const m of Object.values(MAPS2)) { m.baked = null; for (const p of m.props || []) { const f = p.img; p.casaO = f.casaO; p.img = () => f() || EMPTY_C; } }
 }
 const SINO_MINI = memo(() => { const P = new Pix(14, 14), B = ramp('#a87a3a'); P.ball(7, 9, 6.5, 5, B); P.ball(7, 5, 4, 4, B); P.rect(1, 12, 13, 1, B[1]); P.p(5, 8, '#4a8a7a'); P.p(9, 6, '#4a8a7a'); return P.outline().canvas(); });
 const EMPTY_C = mk(1, 1), torreSim = memo(() => torreArt(true).img), torreNao = memo(() => torreArt(false).img), sinoPocoC = memo(sinoPocoArt);

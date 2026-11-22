@@ -66,7 +66,7 @@ function updateWorld2() {
   }
   if (worldBusy2()) { W2.idle = 0; return; }
   if (btnp('menu')) { run2(menuGrupo); return; }
-  if (btnp('a')) { const [dx, dy] = DIR2[W2.dir], e = entAt2(W2.x + dx, W2.y + dy) || W2.ents.find(q => q.big && q.x <= W2.x + dx && W2.x + dx < q.x + q.big[0] && q.y - q.big[1] < W2.y + dy && W2.y + dy <= q.y); if (e && e.talk) { if (e.t === 'npc') e.dir = ({ up: 'down', down: 'up', left: 'right', right: 'left' })[W2.dir]; run2(() => e.talk(e)); return; } }
+  if (btnp('a')) { const [dx, dy] = DIR2[W2.dir], e = entAt2(W2.x + dx, W2.y + dy) || W2.ents.find(q => q.big && q.x <= W2.x + dx && W2.x + dx < q.x + q.big[0] && q.y - q.big[1] < W2.y + dy && W2.y + dy <= q.y); if (e && e.talk) { if (e.t === 'npc') e.dir = ({ up: 'down', down: 'up', left: 'right', right: 'left' })[W2.dir]; run2(() => e.talk(e)); return; } if (W2.dir === 'up' && portaTrancada(W2.x + dx, W2.y + dy, true)) return; }
   const d = ['up', 'down', 'left', 'right'].find(k => KEYS[k]);
   if (!d) { W2.idle++; return; }
   W2.idle = 0;
@@ -82,7 +82,7 @@ function updateWorld2() {
   }
   W2.dir = d;
   const [dx, dy] = DIR2[d], nx = W2.x + dx, ny = W2.y + dy;
-  if (!canStand(nx, ny, 'player')) { if (W2.t % 16 === 0) sfx('bump'); return; }
+  if (!canStand(nx, ny, 'player')) { if (W2.t % 16 === 0) sfx('bump'); if (d === 'up') portaTrancada(nx, ny); return; }
   tryStep(nx, ny);
 }
 function tryStep(nx, ny) {
@@ -430,4 +430,20 @@ function hudMundo(m) {
     const ys = yc + 11; bx.fillStyle = '#ff8a70'; bx.fillRect(9, ys + 4, 7, 1); bx.fillRect(10, ys + 3, 5, 3); bx.fillStyle = '#120c1c'; bx.fillRect(12, ys + 3, 1, 3);
     for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : 'rgba(255,107,107,0.18)'; bx.fillRect(22 + i * 10, ys + 2, 8, 5); }
   }
+}
+// ---------- porta trancada: construções que não dá para entrar avisam quando o jogador tenta ----------
+const TRANCADA = ['* A porta está trancada.', '* Trancada. Lá dentro, alguém abaixa o volume do rádio e finge que não tem ninguém.', '* Trancada. Tem um bilhete: "Volto já." Não diz quando.', '* A porta está trancada. A maçaneta está fria.'];
+function portaTrancada(nx, ny, apertou) {
+  const m = W2.map; if (!m || worldBusy2()) return false;
+  for (const p of m.props || []) {
+    const o = p.casaO; if (!o || o.door == null) continue;
+    const dx0 = Math.floor(p.x + o.door + 0.25);
+    if (ny !== Math.round(p.y) - 1 || nx < dx0 || nx > dx0 + 1) continue;
+    if (W2.ents.some(e => (e.t === 'door' || e.t === 'sign') && Math.abs(e.x - nx) <= 1 && (e.y === ny || e.y === ny + 1))) return false;   // essa porta abre (ou tem placa)
+    const k = W2.id + ':' + dx0; if (!apertou && (W2._tranc || {})[k] > W2.t) return true;
+    W2._tranc = W2._tranc || {}; W2._tranc[k] = W2.t + 240; sfx('bump');
+    run2(() => say(TRANCADA[hash(dx0, ny, W2.id.length) % TRANCADA.length]));
+    return true;
+  }
+  return false;
 }

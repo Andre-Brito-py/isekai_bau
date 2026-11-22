@@ -219,7 +219,7 @@ function gradeHLD(c) {
 // construções e objetos do mapa: gerados chapados e graduados (com cache)
 { const _mm = montarMapas2; montarMapas2 = function () {
   const r = _mm.apply(this, arguments);
-  for (const m of Object.values(MAPS2)) for (const p of m.props || []) if (!p._hld) { const f = p.img, cache = new Map(); p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : c; }; p._hld = true; }
+  for (const m of Object.values(MAPS2)) for (const p of m.props || []) if (!p._hld) { const f = p.img, cache = new Map(); p.casaO = p.casaO || f.casaO; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : c; }; p._hld = true; }
   return r;
 }; }
 // grupo e baú no mapa

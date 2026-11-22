@@ -196,6 +196,9 @@
    tela; o texto do mundo entra na fila dividido por TXZ; o painel do mapa (HUD) e as janelas ficam no tamanho normal.
    TELA CHEIA: o zoom de cada mapa é o mais longe possível até 1,5 SEM passar do tamanho do mapa (sem faixa preta);
    sala pequena (taverna) chega mais perto e a câmera rola. H agora é 'let' (muda só durante o desenho do mapa).
+ - PORTA TRANCADA (world2.js portaTrancada): toda casa do mapa agora tem porta desenhada; as que não levam a lugar
+   nenhum avisam "trancada" (com variações de humor) quando o jogador anda contra ela ou aperta A de frente. Para abrir
+   uma construção nova no futuro, basta pôr uma 'porta' (ent) na frente dela.
  - BALÕES DE FALA NO MAPA (world2.js): fila BAL desenhada no fim do quadro (depois da noite/telhados), 14 px de altura
    para a fonte, rabinho para quem fala, presos na tela, desviam do painel, relógio, botões e aviso; reação (pri 1) sobe e
    empilha, balão de fundo que bate é descartado; um por pessoa; texto fixo por ciclo (nada de sortear a cada quadro);
@@ -3319,7 +3322,7 @@ function updateWorld2() {
   }
   if (worldBusy2()) { W2.idle = 0; return; }
   if (btnp('menu')) { run2(menuGrupo); return; }
-  if (btnp('a')) { const [dx, dy] = DIR2[W2.dir], e = entAt2(W2.x + dx, W2.y + dy) || W2.ents.find(q => q.big && q.x <= W2.x + dx && W2.x + dx < q.x + q.big[0] && q.y - q.big[1] < W2.y + dy && W2.y + dy <= q.y); if (e && e.talk) { if (e.t === 'npc') e.dir = ({ up: 'down', down: 'up', left: 'right', right: 'left' })[W2.dir]; run2(() => e.talk(e)); return; } }
+  if (btnp('a')) { const [dx, dy] = DIR2[W2.dir], e = entAt2(W2.x + dx, W2.y + dy) || W2.ents.find(q => q.big && q.x <= W2.x + dx && W2.x + dx < q.x + q.big[0] && q.y - q.big[1] < W2.y + dy && W2.y + dy <= q.y); if (e && e.talk) { if (e.t === 'npc') e.dir = ({ up: 'down', down: 'up', left: 'right', right: 'left' })[W2.dir]; run2(() => e.talk(e)); return; } if (W2.dir === 'up' && portaTrancada(W2.x + dx, W2.y + dy, true)) return; }
   const d = ['up', 'down', 'left', 'right'].find(k => KEYS[k]);
   if (!d) { W2.idle++; return; }
   W2.idle = 0;
@@ -3335,7 +3338,7 @@ function updateWorld2() {
   }
   W2.dir = d;
   const [dx, dy] = DIR2[d], nx = W2.x + dx, ny = W2.y + dy;
-  if (!canStand(nx, ny, 'player')) { if (W2.t % 16 === 0) sfx('bump'); return; }
+  if (!canStand(nx, ny, 'player')) { if (W2.t % 16 === 0) sfx('bump'); if (d === 'up') portaTrancada(nx, ny); return; }
   tryStep(nx, ny);
 }
 function tryStep(nx, ny) {
@@ -3683,6 +3686,22 @@ function hudMundo(m) {
     const ys = yc + 11; bx.fillStyle = '#ff8a70'; bx.fillRect(9, ys + 4, 7, 1); bx.fillRect(10, ys + 3, 5, 3); bx.fillStyle = '#120c1c'; bx.fillRect(12, ys + 3, 1, 3);
     for (let i = 0; i < 3; i++) { bx.fillStyle = i < W2.sus ? '#ff6b6b' : 'rgba(255,107,107,0.18)'; bx.fillRect(22 + i * 10, ys + 2, 8, 5); }
   }
+}
+// ---------- porta trancada: construções que não dá para entrar avisam quando o jogador tenta ----------
+const TRANCADA = ['* A porta está trancada.', '* Trancada. Lá dentro, alguém abaixa o volume do rádio e finge que não tem ninguém.', '* Trancada. Tem um bilhete: "Volto já." Não diz quando.', '* A porta está trancada. A maçaneta está fria.'];
+function portaTrancada(nx, ny, apertou) {
+  const m = W2.map; if (!m || worldBusy2()) return false;
+  for (const p of m.props || []) {
+    const o = p.casaO; if (!o || o.door == null) continue;
+    const dx0 = Math.floor(p.x + o.door + 0.25);
+    if (ny !== Math.round(p.y) - 1 || nx < dx0 || nx > dx0 + 1) continue;
+    if (W2.ents.some(e => (e.t === 'door' || e.t === 'sign') && Math.abs(e.x - nx) <= 1 && (e.y === ny || e.y === ny + 1))) return false;   // essa porta abre (ou tem placa)
+    const k = W2.id + ':' + dx0; if (!apertou && (W2._tranc || {})[k] > W2.t) return true;
+    W2._tranc = W2._tranc || {}; W2._tranc[k] = W2.t + 240; sfx('bump');
+    run2(() => say(TRANCADA[hash(dx0, ny, W2.id.length) % TRANCADA.length]));
+    return true;
+  }
+  return false;
 }
 
 // ================= ARTE DO CAP. 2: interiores, igreja afundada, cenários de batalha e a ÂNCORA-MÃE =================
@@ -4424,7 +4443,7 @@ function plantaArt() { const P = new Pix(14, 18); P.rect(2, 10, 10, 8, ramp('#a8
 function sinoPocoArt() { const src = ancoraFrame(1, 0, false), c = mk(112, 74); c.getContext('2d').drawImage(src, 0, 0, 112, 74, 0, 0, 112, 74); return c; }
 
 // ---------- montagem dos mapas ----------
-const casa = o => memo(() => casaArt(o).img);
+const casa = o => { const f = memo(() => casaArt(o).img); f.casaO = o; return f; };
 const cartazC = memo(cartazArt), toldoV = memo(() => toldoArt('#c83a3a')), toldoA = memo(() => toldoArt('#3a6ab8')), tendaC = memo(tendaArt), plantaC = memo(plantaArt);
 const postes = { on: memo(() => posteArt(true)), off: memo(() => posteArt(false)) };
 const porta = (x, y, to, tx, ty, tdir) => ({ t: 'door', x, y, to, tx, ty, tdir, passa: true });
@@ -4446,11 +4465,11 @@ function montarMapas2() {
   // ===== CAIS DA PONTE =====
   MAPS2.cais = { rows: ROWS2.cais, name: 'Velhágua · Cais da Ponte', music: 'velhagua', batBg: bgCidade, showMoney: true, bg: '#1c3a54',
     props: [
-      { img: casa({ w: 3, wall: '#8a6a4a', roof: '#6a3a2a', win: [0.6] }), x: 0, y: 8 },
+      { img: casa({ w: 3, wall: '#8a6a4a', roof: '#6a3a2a', win: [0.2], door: 1.3 }), x: 0, y: 8 },
       { img: casa({ w: 7, wall: '#a8704a', roof: '#8a3a2a', door: 5 - 3 - 0.125, win: [0.5, 5], awning: '#c83a3a', signC: '#e8c040', doorWin: true }), x: 3, y: 8 },
-      { img: casa({ w: 6, wall: '#9a7a5a', roof: '#4a4a6a', win: [1, 3.6], chimney: true }), x: 10.5, y: 8 },
-      { img: casa({ w: 11, stone: true, wall: '#7a7480', roof: '#5a3a2a', win: [1, 4, 7.6], signC: '#c8a048' }), x: 17, y: 8 },
-      { img: casa({ w: 4, wall: '#a88060', roof: '#3a5a4a', win: [1] }), x: 32, y: 8 },
+      { img: casa({ w: 6, wall: '#9a7a5a', roof: '#4a4a6a', win: [0.5, 4.2], chimney: true, door: 2.2 }), x: 10.5, y: 8 },
+      { img: casa({ w: 11, stone: true, wall: '#7a7480', roof: '#5a3a2a', win: [1, 3.6, 8.2], signC: '#c8a048', door: 5.6, doorC: '#4a3a3a' }), x: 17, y: 8 },
+      { img: casa({ w: 4, wall: '#a88060', roof: '#3a5a4a', win: [0.4], door: 2.1 }), x: 32, y: 8 },
       ...[[19, 3], [21.5, 2], [24, 4], [26.5, 2]].map(([x, dy]) => ({ img: cartazC, x, y: 5.6, dy, by: 129 })),
       { img: busArt, x: 8, y: 15, solid: [[8, 13, 12, 2]] },
       { img: memo(() => caixoteArt(0)), x: 2, y: 14, solid: [[2, 13, 1, 1]] }, { img: memo(() => caixoteArt(1)), x: 3, y: 14, solid: [[3, 13, 1, 1]] }, { img: memo(() => caixoteArt(1)), x: 2.5, y: 13.1, by: 225 },
@@ -4484,7 +4503,7 @@ function montarMapas2() {
       { img: casa({ w: 7, wall: '#7a4a2a', roof: '#5a2a2a', door: 4 - 1 - 0.125, win: [0.5, 5], signC: '#c89a40', chimney: true, doorWin: true }), x: 1, y: 8 },
       { img: casa({ w: 7, stone: true, wall: '#8a8290', roof: '#2a3a5a', door: 13 - 9 - 0.125, doorC: '#3a3a4a', win: [0.5, 5.4], signC: '#8a2a2a' }), x: 9, y: 8 },
       { img: casa({ w: 6, wall: '#a8805a', roof: '#3a5a7a', door: 21 - 18.5 - 0.125, win: [0.4, 4.3] }), x: 18.5, y: 8 },
-      { img: casa({ w: 7, wall: '#9a6a4a', roof: '#6a3a3a', win: [1, 4] }), x: 25, y: 8 },
+      { img: casa({ w: 7, wall: '#9a6a4a', roof: '#6a3a3a', win: [0.5, 4.6], door: 2.6 }), x: 25, y: 8 },
       { img: () => (G.flags.c2Boss ? torreSim : torreNao)(), x: 14, y: 14, solid: [[14, 12, 4, 2]] },
       { img: memo(fonteArt), x: 5, y: 17, solid: [[5, 15, 4, 2]] },
       { img: memo(igrejaArt), x: 24.5, y: 20, by: 300 },
@@ -4556,7 +4575,7 @@ function montarMapas2() {
     props: [{ img: () => G.flags.c2Boss ? null : sinoPocoC(), x: 4.5, y: 4.6, by: 60 }],
     ents: [...portas(PZ.door, 'rua2', 20, 11, 'up'), { t: 'trig', x: PZ.gatilho[0][0], y: PZ.gatilho[0][1], w: 6, h: 1, passa: true, run: pocoChefe }]
   };
-  for (const m of Object.values(MAPS2)) { m.baked = null; for (const p of m.props || []) { const f = p.img; p.img = () => f() || EMPTY_C; } }
+  for (const m of Object.values(MAPS2)) { m.baked = null; for (const p of m.props || []) { const f = p.img; p.casaO = f.casaO; p.img = () => f() || EMPTY_C; } }
 }
 const SINO_MINI = memo(() => { const P = new Pix(14, 14), B = ramp('#a87a3a'); P.ball(7, 9, 6.5, 5, B); P.ball(7, 5, 4, 4, B); P.rect(1, 12, 13, 1, B[1]); P.p(5, 8, '#4a8a7a'); P.p(9, 6, '#4a8a7a'); return P.outline().canvas(); });
 const EMPTY_C = mk(1, 1), torreSim = memo(() => torreArt(true).img), torreNao = memo(() => torreArt(false).img), sinoPocoC = memo(sinoPocoArt);
@@ -6459,7 +6478,7 @@ function gradeHLD(c) {
 // construções e objetos do mapa: gerados chapados e graduados (com cache)
 { const _mm = montarMapas2; montarMapas2 = function () {
   const r = _mm.apply(this, arguments);
-  for (const m of Object.values(MAPS2)) for (const p of m.props || []) if (!p._hld) { const f = p.img, cache = new Map(); p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : c; }; p._hld = true; }
+  for (const m of Object.values(MAPS2)) for (const p of m.props || []) if (!p._hld) { const f = p.img, cache = new Map(); p.casaO = p.casaO || f.casaO; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : c; }; p._hld = true; }
   return r;
 }; }
 // grupo e baú no mapa
