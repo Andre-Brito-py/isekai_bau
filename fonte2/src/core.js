@@ -357,6 +357,10 @@ function choose(text, options, who = 'n', cancel = null) { return say(text, who,
 function listHead(o) { const head = o.head || []; return (o.title ? 16 : 6) + head.length * 12 + (head.length ? 4 : 0); }
 function listVis(o) { let mv = o.maxVis || 8; if (o.h) mv = Math.min(mv, Math.max(1, Math.floor((o.h - listHead(o) - 4) / 12))); return mv; }
 function list(o) {
+  // nenhuma opção vaza da caixa: se não cabe, a caixa alarga (e recua para dentro da tela)
+  { const lw = (t) => t ? lineW(rich(String(t))) : 0;
+    const need = Math.max(o.title ? 16 + lw(o.title) + (o.items.length > (o.maxVis || 8) ? 34 : 0) : 0, ...o.items.map(it => 22 + lw(it.label) + (it.right ? 12 + lw(it.right) : 0)));
+    if (need > o.w) { o.w = Math.min(need, 236); o.x = Math.max(2, Math.min(o.x, 238 - o.w)); } }
   const w = {
     type: 'list', o, idx: o.idx || 0, scroll: 0,
     update() {
@@ -390,7 +394,7 @@ function list(o) {
         if (this.scroll + mv < it.length) setaMais(o.x + o.w - 13, ay + 4);
         if (o.title) txt(`${this.idx + 1}/${it.length}`, o.x + o.w - 28, ay, { align: 'right', col: '#8a8099' });
       }
-      if (o.desc && it.length) { const d = o.desc(this.idx); if (d) { const dy = o.descY ?? 182; box(o.x, dy, o.w, 52, { bw: 1 }); txt(d, o.x + 8, dy + 5, { w: Math.floor((o.w - 16) / 6) }); } }
+      if (o.desc && it.length) { const d = o.desc(this.idx); if (d) { const cols = Math.floor((o.w - 16) / 6), nl = wrapRich(rich(d), cols).length, dh = Math.max(52, nl * 12 + 10), dy = Math.max(2, Math.min(o.descY ?? 182, 238 - dh)); box(o.x, dy, o.w, dh, { bw: 1 }); txt(d, o.x + 8, dy + 5, { w: cols }); } }
       if (o.extra) o.extra(this.idx);
     }
   };

@@ -446,7 +446,8 @@
    selo de horário (DE DIA / À NOITE / AO AMANHECER, apagado quando não é a hora). Se a missão é em outro mapa, o
    marcador vai na SAÍDA que leva até lá (busca por portas + LIGA_EXTRA). Missões vêm de missoes() pelas flags: ao
    criar um capítulo novo, ACRESCENTAR as etapas lá (e as regiões novas em REGIOES/REGIAO_DE/ESTRADAS). G.visto guarda
-   os mapas visitados. O menu de campo foi refeito (caixa 144 px, valores à direita, descrição de cada opção embaixo).
+   os mapas visitados. O menu de campo foi refeito (caixa 144 px, valores à direita, descrição de cada opção embaixo). list() (core.js) agora
+   nunca vaza texto: alarga a caixa se uma opção não cabe e a caixa de descrição cresce com o número de linhas.
    NA HISTÓRIA o mapa é a MAGIA ESPACIAL do baú se manifestando (ele sente o espaço dobrado dentro da tampa e "vê" o
    mundo pelo avesso). Diálogo na primeira vez que abre (primeiroMapa, flag mapaVisto): o Catálogo registra que mapear
    assim é coisa de meia dúzia de nomes na história; a Rita pede segredo (a Coroa não pode saber).
@@ -921,6 +922,10 @@ function choose(text, options, who = 'n', cancel = null) { return say(text, who,
 function listHead(o) { const head = o.head || []; return (o.title ? 16 : 6) + head.length * 12 + (head.length ? 4 : 0); }
 function listVis(o) { let mv = o.maxVis || 8; if (o.h) mv = Math.min(mv, Math.max(1, Math.floor((o.h - listHead(o) - 4) / 12))); return mv; }
 function list(o) {
+  // nenhuma opção vaza da caixa: se não cabe, a caixa alarga (e recua para dentro da tela)
+  { const lw = (t) => t ? lineW(rich(String(t))) : 0;
+    const need = Math.max(o.title ? 16 + lw(o.title) + (o.items.length > (o.maxVis || 8) ? 34 : 0) : 0, ...o.items.map(it => 22 + lw(it.label) + (it.right ? 12 + lw(it.right) : 0)));
+    if (need > o.w) { o.w = Math.min(need, 236); o.x = Math.max(2, Math.min(o.x, 238 - o.w)); } }
   const w = {
     type: 'list', o, idx: o.idx || 0, scroll: 0,
     update() {
@@ -954,7 +959,7 @@ function list(o) {
         if (this.scroll + mv < it.length) setaMais(o.x + o.w - 13, ay + 4);
         if (o.title) txt(`${this.idx + 1}/${it.length}`, o.x + o.w - 28, ay, { align: 'right', col: '#8a8099' });
       }
-      if (o.desc && it.length) { const d = o.desc(this.idx); if (d) { const dy = o.descY ?? 182; box(o.x, dy, o.w, 52, { bw: 1 }); txt(d, o.x + 8, dy + 5, { w: Math.floor((o.w - 16) / 6) }); } }
+      if (o.desc && it.length) { const d = o.desc(this.idx); if (d) { const cols = Math.floor((o.w - 16) / 6), nl = wrapRich(rich(d), cols).length, dh = Math.max(52, nl * 12 + 10), dy = Math.max(2, Math.min(o.descY ?? 182, 238 - dh)); box(o.x, dy, o.w, dh, { bw: 1 }); txt(d, o.x + 8, dy + 5, { w: cols }); } }
       if (o.extra) o.extra(this.idx);
     }
   };
