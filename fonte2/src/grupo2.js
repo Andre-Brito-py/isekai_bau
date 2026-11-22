@@ -165,7 +165,7 @@ async function menuGrupo() {
     menuGrupo._idx = ix; const k = ops[ix][0];
     if (k === 'fechar') { menuGrupo._idx = 0; return; }
     if (k === 'grim') { await abrirGrimorio(); continue; }
-    if (k === 'mapa') { await telaMapa(); continue; }
+    if (k === 'mapa') { if (!G.flags.mapaVisto && typeof primeiroMapa === 'function') await primeiroMapa(); await telaMapa(); continue; }
     if (k === 'viajar') { const ks = Object.keys(G.marcos), j = await list({ x: 30, y: 40, w: 180, title: 'Marco de Viagem', items: ks.map(k => ({ label: G.marcos[k].nm })) }); if (j >= 0) { const M = G.marcos[ks[j]]; sfx('rune'); await fadeOut(12); loadMap2(ks[j], M.x, M.y, 'down'); await fadeIn(12); return; } continue; }
     if (k === 'grupo' && typeof telaStatus === 'function') { await telaStatus(); continue; }
     if (k === 'grupo') await panel(g.flatMap(m => [`{y}${m.name}{/}  ${m.hp}/${m.mhp} PV  ${m.mmp ? m.mp + '/' + m.mmp + ' PM' : ''}`, `  ATQ ${m.atk} DEF ${m.def} MAG ${m.mag} VEL ${m.spd}`, ...(Object.values(eqOf(m.id)).filter(Boolean).length ? ['  ' + Object.values(eqOf(m.id)).filter(Boolean).map(k => EQ2[k].nm).join(', ')] : []), '']), { title: 'Grupo' });

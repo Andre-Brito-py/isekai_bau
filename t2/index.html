@@ -447,6 +447,9 @@
    marcador vai na SAÍDA que leva até lá (busca por portas + LIGA_EXTRA). Missões vêm de missoes() pelas flags: ao
    criar um capítulo novo, ACRESCENTAR as etapas lá (e as regiões novas em REGIOES/REGIAO_DE/ESTRADAS). G.visto guarda
    os mapas visitados. O menu de campo foi refeito (caixa 144 px, valores à direita, descrição de cada opção embaixo).
+   NA HISTÓRIA o mapa é a MAGIA ESPACIAL do baú se manifestando (ele sente o espaço dobrado dentro da tampa e "vê" o
+   mundo pelo avesso). Diálogo na primeira vez que abre (primeiroMapa, flag mapaVisto): o Catálogo registra que mapear
+   assim é coisa de meia dúzia de nomes na história; a Rita pede segredo (a Coroa não pode saber).
  - PORTA TRANCADA (world2.js portaTrancada): toda casa do mapa agora tem porta desenhada; as que não levam a lugar
    nenhum avisam "trancada" (com variações de humor) quando o jogador anda contra ela ou aperta A de frente. Para abrir
    uma construção nova no futuro, basta pôr uma 'porta' (ent) na frente dela.
@@ -4293,7 +4296,7 @@ async function menuGrupo() {
     menuGrupo._idx = ix; const k = ops[ix][0];
     if (k === 'fechar') { menuGrupo._idx = 0; return; }
     if (k === 'grim') { await abrirGrimorio(); continue; }
-    if (k === 'mapa') { await telaMapa(); continue; }
+    if (k === 'mapa') { if (!G.flags.mapaVisto && typeof primeiroMapa === 'function') await primeiroMapa(); await telaMapa(); continue; }
     if (k === 'viajar') { const ks = Object.keys(G.marcos), j = await list({ x: 30, y: 40, w: 180, title: 'Marco de Viagem', items: ks.map(k => ({ label: G.marcos[k].nm })) }); if (j >= 0) { const M = G.marcos[ks[j]]; sfx('rune'); await fadeOut(12); loadMap2(ks[j], M.x, M.y, 'down'); await fadeIn(12); return; } continue; }
     if (k === 'grupo' && typeof telaStatus === 'function') { await telaStatus(); continue; }
     if (k === 'grupo') await panel(g.flatMap(m => [`{y}${m.name}{/}  ${m.hp}/${m.mhp} PV  ${m.mmp ? m.mp + '/' + m.mmp + ' PM' : ''}`, `  ATQ ${m.atk} DEF ${m.def} MAG ${m.mag} VEL ${m.spd}`, ...(Object.values(eqOf(m.id)).filter(Boolean).length ? ['  ' + Object.values(eqOf(m.id)).filter(Boolean).map(k => EQ2[k].nm).join(', ')] : []), '']), { title: 'Grupo' });
@@ -11476,6 +11479,21 @@ function desenhaMundo(AX, AY, AW, AH, L, sel, t) {
   bx.strokeStyle = 'rgba(232,210,160,0.45)'; bx.lineWidth = 1; bx.strokeRect(AX + 2.5, AY + 2.5, AW - 5, AH - 5);
   for (const [cx, cy] of [[AX + 2, AY + 2], [AX + AW - 5, AY + 2], [AX + 2, AY + AH - 5], [AX + AW - 5, AY + AH - 5]]) { bx.fillStyle = '#e8d2a0'; bx.fillRect(cx, cy, 3, 3); bx.fillStyle = '#6a5a3a'; bx.fillRect(cx + 1, cy + 1, 1, 1); }
   if (W2.id === 'interior') placa('Você está dentro do baú', AX + 6, AY + AH - 16, '#c8c0d8', 'left');
+}
+
+// ----- a primeira vez: o mapa é a magia espacial do baú se manifestando -----
+async function primeiroMapa() {
+  G.flags.mapaVisto = true;
+  sfx('rune');
+  await say('* Você tenta lembrar o caminho de volta. E, em vez de lembrar, você SENTE: as ruas, as paredes, as portas, tudo dobrado dentro da sua tampa, como roupa guardada.');
+  await say('* Atrás dos seus olhos, que você nem tem, o espaço se desdobra num papel que não existe. Linhas. Saídas. Um pontinho que é você.');
+  await say('...Eu tenho um mapa. Dentro de mim. Eu sou o mapa?', 'me');
+  await say('[Registro: o mímico está medindo o espaço ao redor sem tocar nele. Isso é magia espacial. Dobrar um quarto já era raro. MAPEAR o mundo pelo avesso é coisa de que só se tem notícia em meia dúzia de nomes, em toda a história.]', 'cat');
+  await say('Espera. Você consegue ver onde a gente tem que ir?', 'lume');
+  await say('Mais ou menos. Tem uns pontinhos brilhando. Uns dourados, uns azuis. Parecem coisa por fazer.', 'me');
+  await say('Ótimo. Então para de perguntar o caminho pros outros. Você vive perguntando o caminho e ainda por cima é um baú. Ninguém responde pra baú.', 'rita');
+  await say('E guarda isso entre a gente. Se alguém da Coroa souber que uma mala desenha o mundo por dentro, você vira peça de museu. E a gente, cúmplice.', 'rita');
+  await say('[Dica: o mapa fica no MENU, em "Mapa e missões". O ponto dourado é o caminho da história; os azuis são opcionais. Alguns só funcionam em certas horas do dia.]', 'cat');
 }
 
 boot2();

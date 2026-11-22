@@ -401,3 +401,18 @@ function desenhaMundo(AX, AY, AW, AH, L, sel, t) {
   for (const [cx, cy] of [[AX + 2, AY + 2], [AX + AW - 5, AY + 2], [AX + 2, AY + AH - 5], [AX + AW - 5, AY + AH - 5]]) { bx.fillStyle = '#e8d2a0'; bx.fillRect(cx, cy, 3, 3); bx.fillStyle = '#6a5a3a'; bx.fillRect(cx + 1, cy + 1, 1, 1); }
   if (W2.id === 'interior') placa('Você está dentro do baú', AX + 6, AY + AH - 16, '#c8c0d8', 'left');
 }
+
+// ----- a primeira vez: o mapa é a magia espacial do baú se manifestando -----
+async function primeiroMapa() {
+  G.flags.mapaVisto = true;
+  sfx('rune');
+  await say('* Você tenta lembrar o caminho de volta. E, em vez de lembrar, você SENTE: as ruas, as paredes, as portas, tudo dobrado dentro da sua tampa, como roupa guardada.');
+  await say('* Atrás dos seus olhos, que você nem tem, o espaço se desdobra num papel que não existe. Linhas. Saídas. Um pontinho que é você.');
+  await say('...Eu tenho um mapa. Dentro de mim. Eu sou o mapa?', 'me');
+  await say('[Registro: o mímico está medindo o espaço ao redor sem tocar nele. Isso é magia espacial. Dobrar um quarto já era raro. MAPEAR o mundo pelo avesso é coisa de que só se tem notícia em meia dúzia de nomes, em toda a história.]', 'cat');
+  await say('Espera. Você consegue ver onde a gente tem que ir?', 'lume');
+  await say('Mais ou menos. Tem uns pontinhos brilhando. Uns dourados, uns azuis. Parecem coisa por fazer.', 'me');
+  await say('Ótimo. Então para de perguntar o caminho pros outros. Você vive perguntando o caminho e ainda por cima é um baú. Ninguém responde pra baú.', 'rita');
+  await say('E guarda isso entre a gente. Se alguém da Coroa souber que uma mala desenha o mundo por dentro, você vira peça de museu. E a gente, cúmplice.', 'rita');
+  await say('[Dica: o mapa fica no MENU, em "Mapa e missões". O ponto dourado é o caminho da história; os azuis são opcionais. Alguns só funcionam em certas horas do dia.]', 'cat');
+}
