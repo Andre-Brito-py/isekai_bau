@@ -203,11 +203,15 @@ function montarMapas2() {
   const afog = { music: 'afogado', batBg: bgAfogado, bg: '#0c1e2c', tint: 'rgba(30,50,110,0.12)', key: { '.': { t: 'telha' } },
     overlay: (ox, oy) => { if (W2.t % 900 === 450) sfx('sino', 98); for (let i = 0; i < 6; i++) { const x = (i * 97 + (W2.t >> 2)) % 260 - 10, y = 240 - ((W2.t * 0.4 + i * 53) % 260); bx.globalAlpha = 0.35; bx.fillStyle = '#bfe8ff'; bx.fillRect(Math.round(x), Math.round(y), 1, 1); bx.globalAlpha = 1; } } };
   MAPS2.rua1 = Object.assign({ rows: ROWS2.rua1, name: 'Bairro Afogado · Rua Submersa', onEnter: async () => { if (!G.flags.c2Rua) { G.flags.c2Rua = true; await say('* Debaixo de você, a rua inteira: postes, uma bicicleta, janelas com cortina. Tudo olhando para cima.'); await say('* Os telhados que ainda aparecem viraram ilhas. Riscos brancos na água: CORRENTEZAS. Elas empurram o baú.'); } },
-    props: [{ img: tendaC, x: 13, y: 11, solid: [[13, 10, 2, 1]] }, { img: plantaC, x: 16, y: 12.2, by: 190 }],
+    props: [{ img: tendaC, x: R1.tenda[0], y: R1.tenda[1] + 1, solid: [[R1.tenda[0], R1.tenda[1], 2, 1]] }, { img: plantaC, x: 23, y: 13.2, by: 13.2 * TS }, { img: plantaC, x: 16, y: 13.4, by: 13.4 * TS },
+      { img: () => varalArt(), x: 21.5, y: 11, by: 11 * TS },
+      ...R1.postes.map(([x, y]) => ({ img: () => (G.flags.c2Fim ? postes.on : postes.off)(), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...R1.chamines.map(([x, y]) => ({ img: chamineArt, x: x + 0.05, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...R1.lirios.map(([x, y], i) => ({ img: () => lirioArt(i), x: x - 0.1, y: y + 0.8, by: y * TS }))],
     ents: [
       porta(...R1.pracaDoor, 'praca', ...PP.ruaOut, 'up'), porta(...R1.merDoor, 'rua2', ...R2.chegada, 'right'),
       marcoEnt(...R1.marco),
-      morador('marina', ...R1.marina, { rotina: rot([15, 10, 'regar', 400, 'left'], [16, 11, 'varal', 400, 'down'], [15, 12, 'olhar', 200, 'down']), talk: falaMarina }),
+      morador('marina', ...R1.marina, { rotina: rot([21, 12, 'regar', 400, 'left'], [22, 12, 'varal', 400, 'up'], [20, 14, 'olhar', 200, 'down']), talk: falaMarina }),
       bauEnt('rua1', 'a', ...R1.bau1, () => dar('frasco', 2)), bauEnt('rua1', 'b', ...R1.bau2, async () => { await dar('escudoTampa'); await dar('cobres', 40); }), bauEnt('rua1', 'c', ...R1.bau3, () => dar('sapatilha')),
       inimigo('l1', 'lambe', ...R1.lambe1, ['lambe', 'lambe']), inimigo('l2', 'lambe', ...R1.lambe2, ['lambe']),
       inimigo('k1', 'caranguejo', ...R1.cara1, ['caranguejo']), inimigo('s1', 'sapo', ...R1.sapo1, ['sapo', 'lambe']),
@@ -215,7 +219,10 @@ function montarMapas2() {
     ] }, afog);
   // ===== MERCADO AFUNDADO =====
   MAPS2.rua2 = Object.assign({ rows: ROWS2.rua2, name: 'Bairro Afogado · Mercado Afundado', key: {},
-    props: [{ img: toldoV, x: 9, y: 3, solid: [[9, 2, 2, 1]] }, { img: toldoA, x: 12, y: 13, solid: [[12, 12, 2, 1]] }, { img: memo(() => caixoteArt(1)), x: 19.5, y: 13.2, by: 212 }],
+    props: [{ img: toldoV, x: R2.barracas[0][0], y: R2.barracas[0][1] + 1, solid: [[R2.barracas[0][0], R2.barracas[0][1], 2, 1]] }, { img: toldoA, x: R2.barracas[1][0], y: R2.barracas[1][1] + 1, solid: [[R2.barracas[1][0], R2.barracas[1][1], 2, 1]] },
+      { img: memo(() => caixoteArt(1)), x: 23.5, y: 13.2, by: 13.2 * TS }, { img: memo(() => caixoteArt(0)), x: 7.5, y: 4.3, by: 4.3 * TS },
+      { img: relogioAfundadoArt, x: R2.relogio[0] - 0.6, y: R2.relogio[1] + 1, solid: [[R2.relogio[0], R2.relogio[1], 2, 1]] },
+      ...R2.lirios.map(([x, y], i) => ({ img: () => lirioArt(i + 1), x: x - 0.1, y: y + 0.8, by: y * TS }))],
     ents: [
       porta(...R2.ruaDoor, 'rua1', ...R1.merOut, 'left'), porta(...R2.pocoDoor, 'poco', ...PZ.chegada, 'up'),
       marcoEnt(...R2.marco),
@@ -229,7 +236,7 @@ function montarMapas2() {
   // ===== POÇO DO SINO =====
   MAPS2.poco = { rows: ROWS2.poco, key: { '~': { t: 'agua', water: true, solid: true } }, name: 'Poço do Sino', music: 'afogado', batBg: bgPoco, bg: '#06100a', dark: 'rgba(4,10,8,0.78)', lights: [[7.5, 3, 70]],
     props: [{ img: () => G.flags.c2Boss ? null : sinoPocoC(), x: 4.5, y: 4.6, by: 60 }],
-    ents: [...portas(PZ.door, 'rua2', 20, 11, 'up'), { t: 'trig', x: PZ.gatilho[0][0], y: PZ.gatilho[0][1], w: 6, h: 1, passa: true, run: pocoChefe }]
+    ents: [...portas(PZ.door, 'rua2', ...R2.pocoOut, 'up'), { t: 'trig', x: PZ.gatilho[0][0], y: PZ.gatilho[0][1], w: 6, h: 1, passa: true, run: pocoChefe }]
   };
   for (const m of Object.values(MAPS2)) { m.baked = null; for (const p of m.props || []) { const f = p.img; p.casaO = f.casaO; p.img = () => f() || EMPTY_C; } }
 }

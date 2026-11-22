@@ -69,27 +69,45 @@ SOL['taverna']=[(x,4) for x in range(1,7)]+[(15,3),(16,3),(17,3)]+[(x+i,y) for x
 g=interior(12,10); R(g,1,6,10,3,'~'); R(g,5,6,2,3,'o'); g[9][5]='o'; g[9][6]='o'; M['tobias']=S(g)
 P['tobias']=dict(door=[[5,9],[6,9]], entra=[5,8], tobias=[8,4], cama=[2,3])
 SOL['tobias']=[(1,3),(2,3),(1,4),(2,4)]
-# ---------- Rua Submersa (28x22): ilhas de telhado, água livre e correntezas ----------
-g=grid(28,22,'~')
-R(g,0,0,28,1,'#'); R(g,0,21,28,1,'#'); R(g,0,0,1,22,'#'); R(g,27,0,1,22,'#')
-R(g,1,1,6,4,'.'); R(g,10,2,5,3,'.'); R(g,20,1,6,4,'.'); R(g,2,13,6,5,'.'); R(g,13,9,4,4,'.'); R(g,19,15,7,5,'.')
-R(g,8,5,1,8,'#'); R(g,17,4,1,6,'#'); R(g,9,17,9,1,'#'); R(g,18,11,1,6,'#')
-for x in range(9,25): g[6][x]='>'; g[7][x]='>'
-for y in range(6,12): g[y][25]='v'; g[y][26]='v'
-for x in range(19,27): g[12][x]='<'; g[13][x]='<'
+# ---------- Rua Submersa (40x30) — RUA ALAGADA ORGÂNICA ----------
+# Ilhas de telhado de formas e tamanhos diferentes (não mais retângulos), muros e restos de fachada saindo da água,
+# uma correnteza sinuosa que leva de um lado a outro, postes afundados, vitórias-régias e chaminés nos telhados.
+import math, random
+def blob(g,cx,cy,rx,ry,ch,seed):
+    rnd=random.Random(seed)
+    for y in range(len(g)):
+        for x in range(len(g[0])):
+            a=math.atan2(y-cy,x-cx); k=1+0.18*math.sin(a*3+seed)+0.1*math.sin(a*5+seed*2)
+            if ((x-cx)/rx)**2+((y-cy)/ry)**2 <= k*k and g[y][x] not in '#': g[y][x]=ch
+g=grid(40,30,'~')
+R(g,0,0,40,1,'#'); R(g,0,29,40,1,'#'); R(g,0,0,1,30,'#'); R(g,39,0,1,30,'#')
+for (cx,cy,rx,ry,sd) in [(4.5,3,4,2.4,1),(13,3.2,2.6,1.6,2),(31,3.5,4.4,2.4,3),(19.5,12,5.4,3.2,4),(6,21,4.2,3.2,5),(11,14,2.2,1.6,6),(33,24,5,3.2,7),(25,24,2.4,1.6,8)]:
+    blob(g,cx,cy,rx,ry,'.',sd)
+for (x,y,w,h) in [(9,6,1,5),(26,4,1,5),(14,19,8,1),(27,13,1,5)]: R(g,x,y,w,h,'#')      # restos de muro
+for x in range(10,25): g[8][x]='>'; g[9][x]='>'                                       # a correnteza
+for y in range(8,17): g[y][25]='v'; g[y][26]='v'
+for x in range(17,27): g[17][x]='<'
+g[8][25]='v'; g[9][25]='v'
 M['rua1']=S(g)
-P['rua1']=dict(chegada=[3,2], pracaDoor=[1,1], merDoor=[25,19], merOut=[24,18], bau1=[13,2], bau2=[25,1], guarda=[22,2],
-  marco=[4,14], marina=[15,10], tenda=[13,10], lambe1=[4,9], lambe2=[12,15], cara1=[11,4], sapo1=[21,17], bau3=[2,17])
-SOL['rua1']=[(13,10),(14,10)]
-# ---------- Mercado Afundado (24x18) ----------
-g=grid(24,18,'~'); R(g,0,0,24,1,'#'); R(g,0,17,24,1,'#'); R(g,0,0,1,18,'#'); R(g,23,0,1,18,'#')
-R(g,1,7,5,4,'.'); R(g,8,2,7,4,'.'); R(g,8,12,7,4,'.'); R(g,17,6,5,7,'.'); R(g,6,8,2,2,'.')
-for y in range(1,8): g[y][16]='v'
-for x in range(15,23): g[16][x]='<' if x<22 else '^'
+P['rua1']=dict(chegada=[3,3], pracaDoor=[1,2], merDoor=[37,24], merOut=[36,24], bau1=[13,3], bau2=[33,2], guarda=[30,3],
+  marco=[5,21], marina=[21,12], tenda=[18,11], lambe1=[4,11], lambe2=[12,24], cara1=[16,5], sapo1=[30,19], bau3=[11,14],
+  postes=[[8,15],[23,5],[18,24]], lirios=[[3,8],[15,15],[29,10],[21,27],[35,15],[7,27]], chamines=[[6,2],[33,23],[20,10]])
+SOL['rua1']=[(18,11),(19,11)]+[tuple(p) for p in P['rua1']['postes']+P['rua1']['chamines']]
+# ---------- Mercado Afundado (34x26) — FEIRA ALAGADA ----------
+# Os toldos das bancas viraram ilhas; no meio, o relógio da feira afundado até o mostrador; uma correnteza dá a volta
+# na praça e ajuda (ou atrapalha) a chegar ao telhado do poço.
+g=grid(34,26,'~')
+R(g,0,0,34,1,'#'); R(g,0,25,34,1,'#'); R(g,0,0,1,26,'#'); R(g,33,0,1,26,'#')
+for (cx,cy,rx,ry,sd) in [(4,12,3.6,3,11),(16,4.5,4.4,2.2,12),(14,19.5,5.2,2.6,13),(28,12,4,6,14),(22,13,1.6,1.3,15),(8,4,2.2,1.5,16),(25,21,2,1.4,17)]:
+    blob(g,cx,cy,rx,ry,'.',sd)
+for x in range(8,20): g[10][x]='>'
+for y in range(1,9): g[y][21]='v'
+for x in range(18,31): g[23][x]='<'
 M['rua2']=S(g)
-P['rua2']=dict(chegada=[2,8], ruaDoor=[1,8], pocoDoor=[20,12], marco=[18,7], barco=[13,2], placa=[9,14], anel=[14,15],
-  cara=[11,4], lambe1=[4,13], lambe2=[19,3], sapo=[11,13], bau=[21,6], barracas=[[9,2],[12,12]])
-SOL['rua2']=[(9,2),(10,2),(12,12),(13,12)]
+P['rua2']=dict(chegada=[2,12], ruaDoor=[1,12], pocoDoor=[29,17], pocoOut=[29,16], marco=[27,10], barco=[17,4], placa=[12,19], anel=[18,20],
+  cara=[14,7], lambe1=[5,18], lambe2=[26,4], sapo=[10,15], bau=[30,9], barracas=[[13,4],[15,19]], relogio=[16,12],
+  lirios=[[6,7],[24,3],[9,22],[20,15],[31,22]])
+SOL['rua2']=[(13,4),(14,4),(15,19),(16,19),(16,12),(17,12)]
 # ---------- Poço do Sino (16x14) ----------
 g=grid(16,14,'_'); R(g,0,0,16,2,'#'); R(g,0,0,1,14,'#'); R(g,15,0,1,14,'#'); R(g,0,13,16,1,'#'); R(g,4,2,8,3,'~'); g[13][7]='_'; g[13][8]='_'
 M['poco']=S(g)
@@ -136,6 +154,6 @@ check('bazar',P['bazar']['entra'],on=['door'],near=['balcao'],swim=False)
 check('taverna',P['taverna']['entra'],on=['door','garcom','garconete','balcaoFim','cozinha','bebum','lia','cleide','toninho','marujo','cacadorF','bardo'],near=['balcao','quadro','lareira'],swim=False)
 check('tobias',P['tobias']['entra'],on=['door'],near=['tobias'],swim=False)
 check('rua1',P['rua1']['chegada'],on=['pracaDoor','merDoor','merOut','lambe1','lambe2','cara1','sapo1','guarda'],near=['bau1','bau2','marco','marina','bau3'])
-check('rua2',P['rua2']['chegada'],on=['ruaDoor','pocoDoor','cara','lambe1','lambe2','sapo'],near=['marco','barco','placa','anel','bau'])
+check('rua2',P['rua2']['chegada'],on=['ruaDoor','pocoDoor','pocoOut','cara','lambe1','lambe2','sapo'],near=['marco','barco','placa','anel','bau'])
 check('poco',P['poco']['chegada'],on=['door','gatilho'],swim=False)
 open('/home/claude/rpg2/src/mapas2.js','w').write('// gerado por maps/cap2maps.py (validado: larguras, alcance, correntezas sem prender, entidades em chão válido)\nconst ROWS2 = '+json.dumps(M,ensure_ascii=False)+';\nconst POS2 = '+json.dumps(P,ensure_ascii=False)+';\n')

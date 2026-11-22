@@ -10,6 +10,8 @@
 const VIDA_CFG = {
   praca: { pombos: 3, gatos: 2, borboletas: 3, vagalumes: 6, cartas: true, peixes: true },
   cais: { pombos: 2, gatos: 1, vagalumes: 4, peixes: true, gaivotas: true },
+  rua1: { pombos: 2, borboletas: 2, vagalumes: 6, peixes: true, gaivotas: true },
+  rua2: { pombos: 1, vagalumes: 5, peixes: true, passaros: true },
   auren: { pombos: 3, gatos: 2, borboletas: 2, vagalumes: 5, cartas: true },
   festival: { pombos: 2, gatos: 1, vagalumes: 4, cartas: true },
   largo: { pombos: 2, gatos: 1, borboletas: 3, vagalumes: 4, cartas: true },
