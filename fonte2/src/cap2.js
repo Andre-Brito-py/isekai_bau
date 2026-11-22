@@ -179,7 +179,7 @@ function montarMapas2() {
       morador('neusa', ...POS2.taverna.neusa, { rotina: rot([3, 3, 'limpar', 400, 'down'], [1, 3, 'olhar', 200, 'up'], [5, 3, 'limpar', 300, 'down']), talk: falaNeusa }),
       { t: 'sign', x: POS2.taverna.balcao[0], y: POS2.taverna.balcao[1], h: 30, talk: falaNeusa },
       morador('bebum', ...POS2.taverna.bebum, { rotina: rot([2, 7, 'beber', 500, 'right'], [2, 7, 'cochilar', 600, 'down']), talk: falaBebum }),
-      morador('lia', ...POS2.taverna.pavio, { rotina: rot([10, 5, 'remendar', 600, 'down'], [11, 5, 'beber', 300, 'down']), talk: falaLia })]
+      morador('lia', ...POS2.taverna.lia, { rotina: rot([10, 5, 'remendar', 600, 'down'], [11, 5, 'beber', 300, 'down']), talk: falaLia })]
   };
   // ===== CASA DO SEU TOBIAS (o térreo já está debaixo d'água) =====
   MAPS2.tobias = { rows: ROWS2.tobias, name: 'Casa do Seu Tobias', music: 'velhagua',

@@ -31,9 +31,13 @@ def interior(w,h):
 g=interior(12,10); R(g,4,6,4,2,'r'); g[9][5]='o'; g[9][6]='o'; M['bazar']=S(g)
 P['bazar']=dict(door=[[5,9],[6,9]], entra=[5,8], graca=[6,3], balcao=[6,4])
 SOL['bazar']=[(x,4) for x in range(3,9)]+[(1,3),(2,3),(9,3),(10,3)]
-g=interior(14,10); R(g,5,5,4,3,'r'); g[9][6]='o'; g[9][7]='o'; M['taverna']=S(g)
-P['taverna']=dict(door=[[6,9],[7,9]], entra=[6,8], neusa=[3,3], balcao=[3,4], pavio=[10,5], bebum=[2,7], mesa=[[9,6],[10,6]])
-SOL['taverna']=[(x,4) for x in range(1,6)]+[(9,6),(10,6),(11,6)]
+g=interior(20,13); R(g,6,6,8,5,'r'); g[12][9]='o'; g[12][10]='o'; M['taverna']=S(g)
+# balcão (linha 4, x1-6), lareira (x15-17, linha 3), mesas (3 tiles de largura, 1 de altura), banquinhos de cada lado
+P['taverna']=dict(door=[[9,12],[10,12]], entra=[9,11], neusa=[3,3], balcao=[3,4], quadro=[11,3], lareira=[15,3],
+  mesas=[[2,7],[7,7],[12,7],[2,10],[12,10],[16,7]],
+  bebum=[1,7], lia=[5,10], bardo=[14,3], garcom=[7,5], garconete=[11,5], cleide=[6,7], toninho=[11,7], marujo=[1,10], cacadorF=[15,10],
+  balcaoFim=[7,4], cozinha=[9,3])
+SOL['taverna']=[(x,4) for x in range(1,7)]+[(15,3),(16,3),(17,3)]+[(x+i,y) for x,y in [[2,7],[7,7],[12,7],[2,10],[12,10],[16,7]] for i in range(3)]
 g=interior(12,10); R(g,1,6,10,3,'~'); R(g,5,6,2,3,'o'); g[9][5]='o'; g[9][6]='o'; M['tobias']=S(g)
 P['tobias']=dict(door=[[5,9],[6,9]], entra=[5,8], tobias=[8,4], cama=[2,3])
 SOL['tobias']=[(1,3),(2,3),(1,4),(2,4)]
@@ -101,7 +105,7 @@ check('cais',P['cais']['chegada'],on=['bazarDoor','ruaPraca','pracaIn','bazarOut
 check('praca',P['praca']['caisIn'],on=['caisDoor','tavDoor','tobDoor','tavOut','tobOut','escada','cac1','cac2'],near=['celeste','bras','pedrinho','pavioPoste','marco'],swim=False)
 check('praca',P['praca']['caisIn'],on=['ruaDoor','ruaOut'],swim=True,stuck=False)
 check('bazar',P['bazar']['entra'],on=['door'],near=['balcao'],swim=False)
-check('taverna',P['taverna']['entra'],on=['door'],near=['balcao','pavio','bebum'],swim=False)
+check('taverna',P['taverna']['entra'],on=['door','garcom','garconete','balcaoFim','cozinha','bebum','lia','cleide','toninho','marujo','cacadorF','bardo'],near=['balcao','quadro','lareira'],swim=False)
 check('tobias',P['tobias']['entra'],on=['door'],near=['tobias'],swim=False)
 check('rua1',P['rua1']['chegada'],on=['pracaDoor','merDoor','merOut','lambe1','lambe2','cara1','sapo1','guarda'],near=['bau1','bau2','marco','marina','bau3'])
 check('rua2',P['rua2']['chegada'],on=['ruaDoor','pocoDoor','cara','lambe1','lambe2','sapo'],near=['marco','barco','placa','anel','bau'])

@@ -207,7 +207,7 @@ function drawWorld2() {
   // tudo que tem pé, em ordem de profundidade
   const list = [];
   for (const pr of m.props || []) list.push({ y: pr.by ?? (pr.y * TS), draw: () => bx.drawImage(pr.img(), Math.round(pr.x * TS - ox + (pr.dx || 0)), Math.round(pr.y * TS - oy - pr.img().height + (pr.dy || 0))) });
-  for (const e of W2.ents) { const fr = e.spr ? e.spr(W2.t + e.t0, e.dir, e) : null; if (fr) list.push({ y: e.py + 15, draw: () => { drawFeet(fr, e.px - ox, e.py - oy, e); const k = e.acting || (e.mv && e.leva ? 'carregar' : null); if (k && ACT2[k]) ACT2[k](e, Math.round(e.px - ox), Math.round(e.py - oy), Math.floor(W2.t + e.t0), fr); } }); }
+  for (const e of W2.ents) { const fr = e.spr ? e.spr(W2.t + e.t0, e.dir, e) : null; if (fr) list.push({ y: e.py + 15, draw: () => { drawFeet(fr, e.px - ox, e.py - oy, e); const k = e.acting || (e.mv && e.leva ? (e.leva === true ? 'carregar' : e.leva) : null); if (k && ACT2[k]) ACT2[k](e, Math.round(e.px - ox), Math.round(e.py - oy), Math.floor(W2.t + e.t0), fr); } }); }
   for (const f of W2.fol) { const fr = folSprite(f); if (fr) list.push({ y: f.py + 15, draw: () => drawFeet(fr, f.px - ox, f.py - oy, f) }); }
   list.push({ y: W2.py + 15.5, draw: () => drawPlayer(ox, oy) });
   list.sort((a, b) => a.y - b.y).forEach(d => d.draw());
@@ -282,13 +282,13 @@ function updateRotina(e) {
   const R = e.rotina, r = R[e.ri || 0];
   if (e.acting) {
     e.bob = ACT_BOB[e.acting] ? ACT_BOB[e.acting](W2.t + e.t0) : 0;
-    if (--e.actT <= 0) { e.acting = null; e.bob = 0; e.ri = ((e.ri || 0) + 1) % R.length; e.leva = !!R[e.ri].leva; }
+    if (--e.actT <= 0) { e.acting = null; e.bob = 0; e.ri = ((e.ri || 0) + 1) % R.length; e.leva = R[e.ri].leva || false; }
     return;
   }
   const [tx, ty] = r.at;
   if (e.x === tx && e.y === ty) { e.acting = r.act; e.actT = r.t || 240; if (r.dir) e.dir = r.dir; e.leva = false; return; }
   if (--e.wait > 0) return;
-  e.wait = 6; e.leva = !!r.leva;
+  e.wait = 6; e.leva = r.leva || false;
   const dx = Math.sign(tx - e.x), dy = Math.sign(ty - e.y);
   const tries = Math.abs(tx - e.x) >= Math.abs(ty - e.y) ? [[dx, 0], [0, dy], [0, 1], [0, -1]] : [[0, dy], [dx, 0], [1, 0], [-1, 0]];
   if (dx && dy && canStand(e.x + dx, e.y, e) && canStand(e.x, e.y + dy, e)) tries.unshift([dx, dy]);
