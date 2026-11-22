@@ -232,7 +232,7 @@ function drawWorld2() {
   const [dx, dy] = DIR2[W2.dir], near = entAt2(W2.x + dx, W2.y + dy);
   if (near && near.talk && !worldBusy2() && near.t !== 'door') { const yy = near.py - oy - (near.h || 40) - 6 + Math.round(Math.sin(W2.t / 8)); txt('A', near.px - ox + 6, yy, { col: '#ffe066', shadow: true }); }
   // HUD
-  if (W2.toast) { const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(W / 2 - w / 2, 26, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, W / 2, 28, { align: 'center', col: '#ffe8b0', alpha: a }); }
+  if (!HUD_ADIA) desenhaToast();
   hudMundo(m);
 }
 function drawFeet(fr, x, y, o) {
@@ -411,6 +411,8 @@ function caixaMini() { if (CAIXA_MINI) return CAIXA_MINI; const P = new Pix(14, 
 
 // ---------- HUD do mapa: painel translúcido no canto (vida do grupo em segmentos, cobres, suspeita) ----------
 let HUD_G = null, HUD_T = -99;
+// aviso no topo (nome do mapa etc.): fica no quadro normal, fora do zoom do mapa
+function desenhaToast() { if (!W2.toast) return; const a = Math.min(1, W2.toast.t / 15, (150 - W2.toast.t) / 20), w = lineW(rich(W2.toast.s)) + 20; bx.globalAlpha = 0.8 * a; bx.fillStyle = '#0a0612'; bx.fillRect(W / 2 - w / 2, 26, w, 15); bx.globalAlpha = 1; txt(W2.toast.s, W / 2, 28, { align: 'center', col: '#ffe8b0', alpha: a }); }
 const COBRE_IC = (() => { const c = mk(7, 7), x = c.getContext('2d'); x.fillStyle = '#5a3a10'; x.fillRect(1, 0, 5, 7); x.fillRect(0, 1, 7, 5); x.fillStyle = '#e8a030'; x.fillRect(1, 1, 5, 5); x.fillStyle = '#ffd870'; x.fillRect(2, 1, 2, 1); x.fillRect(1, 2, 1, 2); x.fillStyle = '#5a3a10'; x.fillRect(3, 2, 1, 3); return c; })();
 function hudMundo(m) {
   if (FRAME - HUD_T > 30 || !HUD_G) { try { HUD_G = grupoAtual(); } catch (_) { HUD_G = null; } HUD_T = FRAME; }

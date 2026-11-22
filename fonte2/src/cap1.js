@@ -684,14 +684,18 @@ function tick() {
   if (V.scene === 'world' || V.scene === 'battle2') {
     // mapa e batalha usam a tela larga inteira; janelas e diálogos ficam no meio
     MUNDO_BIG = false;
-    if (V.scene === 'world' && ZOOM_MUNDO > 1) {
-      // câmera de longe: o mapa vai para um quadro maior; o painel (HUD) e as janelas ficam no quadro normal, por cima
-      const Wb = W, Hb = H; W = Math.round(Wb * ZOOM_MUNDO); H = Math.round(Hb * ZOOM_MUNDO);
+    // zoom do mapa: o mais longe possível (até ZOOM_MUNDO) SEM passar do tamanho do mapa, para a tela ficar sempre cheia
+    // (sem faixa preta nas laterais). Sala pequena (taverna) chega mais perto e a câmera rola por ela.
+    const Zm = V.scene === 'world' && W2.map && W2.map.w ? Math.max(0.5, Math.min(ZOOM_MUNDO, W2.map.w * TS / W, W2.map.h * TS / H)) : 1;
+    if (V.scene === 'world' && Math.abs(Zm - 1) > 0.01) {
+      // o mapa vai para um quadro do tamanho da vista; o painel (HUD) e as janelas ficam no quadro normal, por cima
+      const Wb = W, Hb = H, ZZ = Zm; W = Math.floor(Wb * ZZ); H = Math.floor(Hb * ZZ);
       if (WBIG.width !== W || WBIG.height !== H) { WBIG.width = W; WBIG.height = H; }
-      WBX.imageSmoothingEnabled = false; bx = WBX; TXZ = ZOOM_MUNDO; HUD_ADIA = true;
+      WBX.imageSmoothingEnabled = false; bx = WBX; TXZ = W / Wb; HUD_ADIA = true;
       try { updateWorld2(); drawWorld2(); } finally { HUD_ADIA = false; bx = MAIN_BX; W = Wb; H = Hb; TXZ = 1; }
       bx.clearRect(0, 0, W, H); MUNDO_BIG = true;
       if (HUD_PEND) { const m = HUD_PEND; HUD_PEND = null; hudMundo(m); }
+      desenhaToast();
     }
     else if (V.scene === 'world') { updateWorld2(); drawWorld2(); } else { updateBattle2(); drawBattle2(); }
     bx.save(); bx.translate(OX, 0); TXO.x = OX; for (const w of UI.stack) w.draw(); bx.restore(); TXO.x = 0;
