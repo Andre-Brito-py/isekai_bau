@@ -35,6 +35,7 @@ function vidaIniciar() {
   const tetos = (m.props || []).filter(pr => pr.img && (pr.casaO || pr.img.casaO)).map(pr => { const im = pr.img(); return { x0: pr.x * TS + 6, x1: pr.x * TS + im.width - 14, y: pr.y * TS - im.height + 14 }; }).filter(t => t.x1 > t.x0 + 10);
   // também em muretas ('#') com pelo menos 4 tiles seguidos: o gato fica onde dá para ver
   for (let y = 0; y < m.h; y++) { let x0 = -1; for (let x = 0; x <= m.w; x++) { const ehM = x < m.w && m.rows[y][x] === '#'; if (ehM && x0 < 0) x0 = x; if (!ehM && x0 >= 0) { if (x - x0 >= 4) tetos.push({ x0: x0 * TS + 4, x1: x * TS - 8, y: y * TS + 6, mureta: true }); x0 = -1; } } }
+  for (const [x, y] of (C.gatosEm || [])) tetos.push({ x0: x * TS, x1: x * TS + 28, y: y * TS + 12, mureta: true });
   const ordem = tetos.slice().sort((a, b) => (b.mureta ? 1 : 0) - (a.mureta ? 1 : 0));
   for (let i = 0; i < Math.min(C.gatos || 0, ordem.length); i++) { const t = i === 0 ? ordem[0] : ordem[Math.floor(Math.random() * ordem.length)]; VIDA.L.push({ k: 'gato', teto: t, x: rnd(t.x0, t.x1), y: t.y + (t.mureta ? 0 : rnd(-3, 6)), dir: 1, st: 'anda', t: Math.floor(rnd(0, 300)), cor: Math.floor(Math.random() * 3) }); }
   for (let i = 0; i < (C.borboletas || 0); i++) { const p = pontoLivre(m); if (p) VIDA.L.push({ k: 'borb', x: p[0] * TS, y: p[1] * TS, a: rnd(0, 6), cor: ['#ffd060', '#ff8ab0', '#8ad8ff', '#ffffff'][i % 4] }); }

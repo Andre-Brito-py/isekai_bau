@@ -24,7 +24,8 @@ function placaArt(ic) {
   return (PLACA_C[ic] = c);
 }
 // tabuletas: [mapa, x, linha da porta, ícone]
-const TABULETAS = () => [
+const TABULETAS_EXTRA = [];
+const TABULETAS = () => [...TABULETAS_EXTRA.map(f => f()),
   ['praca', POS2.praca.tavDoor[1][0] + 1.3, POS2.praca.tavDoor[0][1], 'caneca'], ['praca', POS2.praca.guildaDoor[0] + 1.2, POS2.praca.guildaDoor[1], 'escudo'],
   ['praca', POS2.praca.tobDoor[1][0] + 1.2, POS2.praca.tobDoor[0][1], 'casa'], ['cais', POS2.cais.bazarDoor[1][0] + 1.2, POS2.cais.bazarDoor[0][1], 'balanca'],
   ['auren', POS3.auren.papDoor[1][0] + 1.2, POS3.auren.papDoor[0][1], 'livro'],
@@ -32,11 +33,12 @@ const TABULETAS = () => [
   ['candeia', POS4B.candeia.pensaoDoor[1][0] + 1.2, POS4B.candeia.pensaoDoor[0][1], 'cama']
 ];
 // lugares com nome que não são saídas (ou que pedem outro nome): mapa -> [[x, y, nome]]
-const ROTULOS = () => ({
+const ROTULOS_EXTRA = {};
+const ROTULOS = () => Object.assign({
   praca: [[...POS2.praca.guildaDoor, 'Posto da Guilda'], [...POS2.praca.igrejaSinais[0], 'Igreja do Sino']],
   largo: [[...POS4.largo.lavDoor, 'Lavanderia']],
   candeia: [[...POS4B.candeia.pensaoDoor[0], 'Pensão dos Transferidos']]
-});
+}, Object.fromEntries(Object.entries(ROTULOS_EXTRA).map(([k, f]) => [k, f()])));
 { const _mmP = montarMapas2; montarMapas2 = function () {
   _mmP.apply(this, arguments);
   for (const [id, x, y, ic] of TABULETAS()) { const m = MAPS2[id]; if (!m || (m._tab || (m._tab = {}))[x + ',' + y]) continue; m._tab[x + ',' + y] = 1; m.props.push({ img: () => placaArt(ic), x: x - 0.1, y, by: y * TS + 1 }); }

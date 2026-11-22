@@ -301,7 +301,7 @@ async function fimCap4() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 4', 'A Casa dos Que Esquecem', '', 'Na base: ENFERMARIA (Irmã Dalva)', 'e GARAGEM (Seu Jorge: viagem rápida)']);
   V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); await fadeIn(20);
-  await say('* (O Capítulo 5 está a caminho. A base, a capital, Velhágua e Candeia continuam abertas.)');
+
 }
 
 // ---------- a base: enfermaria e garagem ----------

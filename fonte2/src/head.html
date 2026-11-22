@@ -511,6 +511,40 @@
  - ANDAR NO MAPA: 8 direções (diagonais com duas teclas ou no direcional de toque; não corta quina de parede, desliza
    pelo eixo livre). Menus e batalha continuam em 4 direções.
 =====================================================================
+ CAPÍTULO 5 — O CADERNO PRETO (implementado; mapas5.js, arte_cap5.js, puzzle5.js, grimorio5.js, inimigos5.js, cap5.js,
+ cap5b.js, cap5_integra.js; mapas em maps/cap5maps.py com validação e simulação do feixe)
+ - LUGAR NA ESCALADA DO VILÃO: passo 3, a CONFISSÃO no chá (o que ele diz está em cap5.js, vesperCha; nada disso vai
+   para o chat). O grupo sai do capítulo PROCURADO pela Coroa (cartazes em Auren, Largo, Festival, Praça e Cais).
+ - FLUXO: base (Lume compara a página com a lista) > Dona Iolanda reconhece o papel-lírio e ensina a RESSONÂNCIA >
+   BONDINHO no Largo (x45, só de dia) > CIDADE ALTA (56x40, jardins de sebe, estufa, fonte, torre de vidro) > o jardineiro
+   Benedito perdeu a TESOURA no LABIRINTO > chave da ESTUFA > três PLACAS de pressão com vasos (levados no VÃO) abrem o
+   ALÇAPÃO (só de noite) > SALA DAS LENTES (feixe de luz com espelhos que giram e mudam de lugar; o cristal vermelho
+   dá alarme) > ARQUIVO DAS VELAS (acender na ordem: Osvaldo Candeia, Joaquim, Dito; o Dito fica no alto e pede a
+   ESCADINHA; errar apaga tudo e chama 3 mariposas) > mini-chefe VITRAL VIVO > ESCRITÓRIO (o caderno) > o chá >
+   TELHADOS (fuga furtiva: holofotes e guardas pegam GENTE sempre e o BAÚ só andando; vãos pedem TÁBUA do Vão; pontos
+   de retorno CP_TELHADO) > chefe GRANDE HOLOFOTE > descida pela torre do sino > base > FIM.
+ - MECÂNICAS NOVAS: (1) VÃO DE BOLSO: o baú guarda UM objeto móvel (vaso, espelho, caixote, escadinha, tábua) e põe na
+   frente (A diante do objeto: Girar/Guardar; A no vazio: pôr). Tábua sobre abismo vira PONTE. (2) FEIXE (tracaFeixe):
+   alvo/alarme checados ANTES da parede (os cristais são sólidos). (3) FURTIVIDADE: cones de holofote e rondas
+   (stealth) > pegoNaLuz > luta (grupoLuz) e volta ao ponto de reinício. (4) ELEMENTO AREIA (corte, quebra 1) com
+   fusões: Vidro (brasa), Granizo (geada), Espinheiro (seiva), Tempestade de Areia (fuligem). (5) RESSONÂNCIA: véu em
+   Rita/Lume faz o próximo golpe dela levar o elemento a +30%. (6) VELA INTERIOR (c5Vela): técnica da Lume e +10% MAG;
+   ela não "esquece" mais a vez.
+ - DIA/NOITE: bondinho e jardineiro de dia; alçapão, mirante e Dona Hortênsia de noite; vigias da Cidade Alta só de
+   noite; o sorvete derrete em ~90 min de jogo (comprar perto das 19h, entregar logo que escurece).
+ - INIMIGOS: Vigia de Vidro 430/33 (espelha magia), Mariposa de Vidro 300/31 (rouba PM), Guarda Real 470/34 (chama
+   reforço). Lutas fixas: mariposas na estufa, vigia+mariposa no arquivo (20,12), guarda+mariposa nos telhados (37,23).
+   VITRAL VIVO 4300/35 (cor muda fraqueza e reflexo; Prisma preparado). GRANDE HOLOFOTE 6500/38 (Varredura, Cegar,
+   Facho Total; fase 2 chama guardas). Robô no Desafio (farol e escriba, 0,6): comuns 10-60% de custo; Vitral deixa
+   ~20-50%; Holofote ~10-35% (bebendo os frascos).
+ - OPCIONAIS: Sorvete de lavanda (Dona Hortênsia, Monóculo do Conde), A pipa do Quinzinho (canto sem saída do
+   labirinto), O mirante (de noite). Diário, missões no mapa, placas e VIDA_CFG da Cidade Alta e dos Telhados prontos.
+ - TELHADOS COM CORPO (cap5b.js telhadoOverlay): fachadas que descem para o escuro com janelas acesas, cumeeiras,
+   beirais e a cidade lá embaixo (casinhas e lampiões).
+ - FLAGS: c5Init, c5Iolanda, resson, c5Alta, c5Tesoura, c5Chave, c5Areia, c5Alcapao, c5Lentes, c5Porta1, c5Velas,
+   c5Vitral, c5Caderno, c5Cha, c5Vela, c5Telhados, c5cp, c5Holofote, c5Fim; opcionais c5Dama, c5Pipa, c5Mirante.
+ - GANCHO DO CAP. 6: o grupo procurado em Auren; os nomes anotados com data ("a gente devolve, um por um").
+=====================================================================
 -->
 <style>
 :root{

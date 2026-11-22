@@ -516,6 +516,40 @@
  - ANDAR NO MAPA: 8 direções (diagonais com duas teclas ou no direcional de toque; não corta quina de parede, desliza
    pelo eixo livre). Menus e batalha continuam em 4 direções.
 =====================================================================
+ CAPÍTULO 5 — O CADERNO PRETO (implementado; mapas5.js, arte_cap5.js, puzzle5.js, grimorio5.js, inimigos5.js, cap5.js,
+ cap5b.js, cap5_integra.js; mapas em maps/cap5maps.py com validação e simulação do feixe)
+ - LUGAR NA ESCALADA DO VILÃO: passo 3, a CONFISSÃO no chá (o que ele diz está em cap5.js, vesperCha; nada disso vai
+   para o chat). O grupo sai do capítulo PROCURADO pela Coroa (cartazes em Auren, Largo, Festival, Praça e Cais).
+ - FLUXO: base (Lume compara a página com a lista) > Dona Iolanda reconhece o papel-lírio e ensina a RESSONÂNCIA >
+   BONDINHO no Largo (x45, só de dia) > CIDADE ALTA (56x40, jardins de sebe, estufa, fonte, torre de vidro) > o jardineiro
+   Benedito perdeu a TESOURA no LABIRINTO > chave da ESTUFA > três PLACAS de pressão com vasos (levados no VÃO) abrem o
+   ALÇAPÃO (só de noite) > SALA DAS LENTES (feixe de luz com espelhos que giram e mudam de lugar; o cristal vermelho
+   dá alarme) > ARQUIVO DAS VELAS (acender na ordem: Osvaldo Candeia, Joaquim, Dito; o Dito fica no alto e pede a
+   ESCADINHA; errar apaga tudo e chama 3 mariposas) > mini-chefe VITRAL VIVO > ESCRITÓRIO (o caderno) > o chá >
+   TELHADOS (fuga furtiva: holofotes e guardas pegam GENTE sempre e o BAÚ só andando; vãos pedem TÁBUA do Vão; pontos
+   de retorno CP_TELHADO) > chefe GRANDE HOLOFOTE > descida pela torre do sino > base > FIM.
+ - MECÂNICAS NOVAS: (1) VÃO DE BOLSO: o baú guarda UM objeto móvel (vaso, espelho, caixote, escadinha, tábua) e põe na
+   frente (A diante do objeto: Girar/Guardar; A no vazio: pôr). Tábua sobre abismo vira PONTE. (2) FEIXE (tracaFeixe):
+   alvo/alarme checados ANTES da parede (os cristais são sólidos). (3) FURTIVIDADE: cones de holofote e rondas
+   (stealth) > pegoNaLuz > luta (grupoLuz) e volta ao ponto de reinício. (4) ELEMENTO AREIA (corte, quebra 1) com
+   fusões: Vidro (brasa), Granizo (geada), Espinheiro (seiva), Tempestade de Areia (fuligem). (5) RESSONÂNCIA: véu em
+   Rita/Lume faz o próximo golpe dela levar o elemento a +30%. (6) VELA INTERIOR (c5Vela): técnica da Lume e +10% MAG;
+   ela não "esquece" mais a vez.
+ - DIA/NOITE: bondinho e jardineiro de dia; alçapão, mirante e Dona Hortênsia de noite; vigias da Cidade Alta só de
+   noite; o sorvete derrete em ~90 min de jogo (comprar perto das 19h, entregar logo que escurece).
+ - INIMIGOS: Vigia de Vidro 430/33 (espelha magia), Mariposa de Vidro 300/31 (rouba PM), Guarda Real 470/34 (chama
+   reforço). Lutas fixas: mariposas na estufa, vigia+mariposa no arquivo (20,12), guarda+mariposa nos telhados (37,23).
+   VITRAL VIVO 4300/35 (cor muda fraqueza e reflexo; Prisma preparado). GRANDE HOLOFOTE 6500/38 (Varredura, Cegar,
+   Facho Total; fase 2 chama guardas). Robô no Desafio (farol e escriba, 0,6): comuns 10-60% de custo; Vitral deixa
+   ~20-50%; Holofote ~10-35% (bebendo os frascos).
+ - OPCIONAIS: Sorvete de lavanda (Dona Hortênsia, Monóculo do Conde), A pipa do Quinzinho (canto sem saída do
+   labirinto), O mirante (de noite). Diário, missões no mapa, placas e VIDA_CFG da Cidade Alta e dos Telhados prontos.
+ - TELHADOS COM CORPO (cap5b.js telhadoOverlay): fachadas que descem para o escuro com janelas acesas, cumeeiras,
+   beirais e a cidade lá embaixo (casinhas e lampiões).
+ - FLAGS: c5Init, c5Iolanda, resson, c5Alta, c5Tesoura, c5Chave, c5Areia, c5Alcapao, c5Lentes, c5Porta1, c5Velas,
+   c5Vitral, c5Caderno, c5Cha, c5Vela, c5Telhados, c5cp, c5Holofote, c5Fim; opcionais c5Dama, c5Pipa, c5Mirante.
+ - GANCHO DO CAP. 6: o grupo procurado em Auren; os nomes anotados com data ("a gente devolve, um por um").
+=====================================================================
 -->
 <style>
 :root{
@@ -11210,7 +11244,7 @@ async function fimCap4() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 4', 'A Casa dos Que Esquecem', '', 'Na base: ENFERMARIA (Irmã Dalva)', 'e GARAGEM (Seu Jorge: viagem rápida)']);
   V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); await fadeIn(20);
-  await say('* (O Capítulo 5 está a caminho. A base, a capital, Velhágua e Candeia continuam abertas.)');
+
 }
 
 // ---------- a base: enfermaria e garagem ----------
@@ -11844,7 +11878,8 @@ function placaArt(ic) {
   return (PLACA_C[ic] = c);
 }
 // tabuletas: [mapa, x, linha da porta, ícone]
-const TABULETAS = () => [
+const TABULETAS_EXTRA = [];
+const TABULETAS = () => [...TABULETAS_EXTRA.map(f => f()),
   ['praca', POS2.praca.tavDoor[1][0] + 1.3, POS2.praca.tavDoor[0][1], 'caneca'], ['praca', POS2.praca.guildaDoor[0] + 1.2, POS2.praca.guildaDoor[1], 'escudo'],
   ['praca', POS2.praca.tobDoor[1][0] + 1.2, POS2.praca.tobDoor[0][1], 'casa'], ['cais', POS2.cais.bazarDoor[1][0] + 1.2, POS2.cais.bazarDoor[0][1], 'balanca'],
   ['auren', POS3.auren.papDoor[1][0] + 1.2, POS3.auren.papDoor[0][1], 'livro'],
@@ -11852,11 +11887,12 @@ const TABULETAS = () => [
   ['candeia', POS4B.candeia.pensaoDoor[1][0] + 1.2, POS4B.candeia.pensaoDoor[0][1], 'cama']
 ];
 // lugares com nome que não são saídas (ou que pedem outro nome): mapa -> [[x, y, nome]]
-const ROTULOS = () => ({
+const ROTULOS_EXTRA = {};
+const ROTULOS = () => Object.assign({
   praca: [[...POS2.praca.guildaDoor, 'Posto da Guilda'], [...POS2.praca.igrejaSinais[0], 'Igreja do Sino']],
   largo: [[...POS4.largo.lavDoor, 'Lavanderia']],
   candeia: [[...POS4B.candeia.pensaoDoor[0], 'Pensão dos Transferidos']]
-});
+}, Object.fromEntries(Object.entries(ROTULOS_EXTRA).map(([k, f]) => [k, f()])));
 { const _mmP = montarMapas2; montarMapas2 = function () {
   _mmP.apply(this, arguments);
   for (const [id, x, y, ic] of TABULETAS()) { const m = MAPS2[id]; if (!m || (m._tab || (m._tab = {}))[x + ',' + y]) continue; m._tab[x + ',' + y] = 1; m.props.push({ img: () => placaArt(ic), x: x - 0.1, y, by: y * TS + 1 }); }
@@ -11927,6 +11963,7 @@ function vidaIniciar() {
   const tetos = (m.props || []).filter(pr => pr.img && (pr.casaO || pr.img.casaO)).map(pr => { const im = pr.img(); return { x0: pr.x * TS + 6, x1: pr.x * TS + im.width - 14, y: pr.y * TS - im.height + 14 }; }).filter(t => t.x1 > t.x0 + 10);
   // também em muretas ('#') com pelo menos 4 tiles seguidos: o gato fica onde dá para ver
   for (let y = 0; y < m.h; y++) { let x0 = -1; for (let x = 0; x <= m.w; x++) { const ehM = x < m.w && m.rows[y][x] === '#'; if (ehM && x0 < 0) x0 = x; if (!ehM && x0 >= 0) { if (x - x0 >= 4) tetos.push({ x0: x0 * TS + 4, x1: x * TS - 8, y: y * TS + 6, mureta: true }); x0 = -1; } } }
+  for (const [x, y] of (C.gatosEm || [])) tetos.push({ x0: x * TS, x1: x * TS + 28, y: y * TS + 12, mureta: true });
   const ordem = tetos.slice().sort((a, b) => (b.mureta ? 1 : 0) - (a.mureta ? 1 : 0));
   for (let i = 0; i < Math.min(C.gatos || 0, ordem.length); i++) { const t = i === 0 ? ordem[0] : ordem[Math.floor(Math.random() * ordem.length)]; VIDA.L.push({ k: 'gato', teto: t, x: rnd(t.x0, t.x1), y: t.y + (t.mureta ? 0 : rnd(-3, 6)), dir: 1, st: 'anda', t: Math.floor(rnd(0, 300)), cor: Math.floor(Math.random() * 3) }); }
   for (let i = 0; i < (C.borboletas || 0); i++) { const p = pontoLivre(m); if (p) VIDA.L.push({ k: 'borb', x: p[0] * TS, y: p[1] * TS, a: rnd(0, 6), cor: ['#ffd060', '#ff8ab0', '#8ad8ff', '#ffffff'][i % 4] }); }
@@ -12103,6 +12140,1392 @@ function relogioAfundadoArt() {
   P('#3e8a48', 6, 32, 3, 3); P('#2f6a3a', 27, 30, 2, 5);
   return (RELA_C = c);
 }
+
+// gerado por maps/cap5maps.py (validado, com simulação do feixe)
+const ROWS5 = {"cidadeAlta": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "mmXXXXXXXXXXXXXXmmXXXXXXXXXXXXXXXXXXXXmmXXXXXXXXXXXXXXXm", "mmXXXXXXXXmmmmmmmmXXXXXXXXXXXXXXXXXXXXmmXXXXXXXXmmmmmmmm", "mmmmmmmmmmmmmmmmmmXXXXXXXXXXXXXXXXXXXXmmmmmmmmmmmmmmmmmm", "mmmmmmmmmmmmmmmmmmXXXXXXXXXXXXXXXXXXXXmmmmmmmmmmmmmmmmmm", "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", "#####==###################====###################==#####", ";;SSSSSSSSSSSSSSSSSSS;;;;;;gg;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;S;;;;;;;;;S;;;;;;;S;;;;;;gg;;;;;;;XXXXXXXXXXXXXXXX;;;;", ";;SSSSSSSSS;SSSSSSS;S;;;;;;gg;;;;;;;XXXXXXXXXXXXXXXX;;;;", ";;S;;;;;S;;;S;;;;;S;S;;;;;;gg;;;;;;;XXXXXXXXXXXXXXXX;;;;", ";;S;SSS;S;SSS;SSS;S;S;;;;XXggXX;;;;;XXXXXXXXXXXXXXXX;;;;", ";;S;;;S;S;S;;;S;S;;;S;;;;XXggXX;;;;;XXXXXXXXXXXXXXXX;;;;", ";;SSS;S;S;S;SSS;SSS;S;;;;XXggXX;;;;;XXXXXXXXXXXXXXXX;;;;", ";;S;;;S;S;S;S;;;;;S;S;;;;;;gg;;;;;;;XXXXXXXXXXXXXXXX;;;;", ";;S;SSS;S;S;S;SSS;S;S;;;;;;gg;;;;;;;;;;;;;;gg;;;;;;;;;;;", ";;S;;;S;;;;;S;;;S;;;;ggggggggggggggggggggggggggggggggg;;", ";;SSSSSSSSSSSSSSSSSSSggggggggggggggg;;;;;;;gg;;;;;;;;;;;", ";;SSSSSSSSSSSSSSSSSSS;;;;;;gg;;;;;;;;;;;;;;gg;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;;;;;;gg;;;;;;;;;;;;;;gg;;;;;;;;;;;", "########==################====################==########", "SSSmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmSSS", "SSSmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmSSS", "SSSmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmSSS", "SSSmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmSSS", "SSSmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmSSS", "SSSmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmSSS", "SSSmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmSSS", "SSSmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmSSS", "SSSmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmSSS", "mmmmmmmmmmmmmmmmmmmmmmmmmppppppmmmmmmmmmmmmmmmmmmmmmmmmm", "mmmmmmmmmmmmmmmmmmmmmmmmmppppppmmmmmmmmmmmmmmmmmmmmmmmmm"], "estufa": ["VVVVVVVVVVVVVVVVVVVVVVVVVV", "VVVVVVVVVVVVVVVVVVVVVVVVVV", "VVVVVVVVVVVVVVVVVVVVVVVVVV", "VggggggggggggggggggggggggV", "VgggggggSSSSgggSSSSggggggV", "VggSSSggSSSSgggSSSSggggggV", "VggSSSggggggggggggggSSSggV", "VgggggggggggggggggggSSSggV", "VgggggggggggggggggggSSSggV", "VggggggggggggggggggggggggV", "VggSSggggggggggggggggggggV", "VggSSggggggggggggggggSSggV", "VggSSggggggggggggggggSSggV", "VggggggggSSSgggggggggSSggV", "VggggggggggggggggggggggggV", "VggggggggggggggggggggggggV", "VggggggggggggggggggggggggV", "VVVVVVVVVVVVggVVVVVVVVVVVV"], "lentes": ["VVVVVVVVVVVVVVVVVVVVVVVVVVVV", "VVVVVVVVVVVVVVVVVVVVVVVVVVVV", "VVVVVVVVVVVVVVVVVVVVVVVVV==V", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmVVVmmV", "VmmmmmmmmmmmmmVmmmmmmmmmmmmV", "VmmmmmmmmmmmmmVmmmmmmmmmmmmV", "VmmmmmmmmmmmmmVmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmVVVVmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VVVVVVVVVVVVVVVVVVVVVVVVVVVV"], "arquivo": ["VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV", "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV", "VVVVVVVVVVVVVVVVVVVVVVVVVVV==V", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmXX,,XXXXXXXXX,,XXXXXXXX,,XmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmXXXXXXX,,XXXXXXXXX,,XXXXXXmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmXX,,XXXXXXXX,,XXXXXXXXX,,XmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmXXXXXXXX,,XXXXXXXXX,,XXXXXmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VmmmmmmmmmmmmmmmmmmmmmmmmmmmmV", "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"], "escritorio": ["VVVVVVVVVVVVVVVVVV", "VVVVVVVVVVVVVVVVVV", "VVVVVVVVVVVVVVVVVV", "VrrrrrrrrrrrrrrrrV", "VrrrrrrXXXXrrrrrrV", "VrrrrrrrrrrrrrrrrV", "VrrrrrrrrrrrrrrrrV", "VrrrrrrrrrrrrrrrrV", "VrrrrrrrrrrrrrrrrV", "VrrrrrrrrrrrrrrrrV", "VrrrrrrrrrrrrrrrrV", "VVVVVVVVrrVVVVVVVV"], "telhados": ["                                                                ", "                                                                ", "                                                                ", "                                            ........            ", "                       .........            ........            ", "                       .........            ........            ", "             .......   .........            ........            ", "             .......   .........            ........            ", "             .......ppp.........            ........            ", "             .......   .........                p               ", "             .......   .........                p               ", "             .......      p                     p               ", "                          p               ........              ", "                          p               ........              ", "                          p               ........  ..........  ", "                      .........           ........  ..........  ", "                      .........           ........p ..........  ", "                      .........  .......  ........  ..........  ", "            ........  .........  .......p ........  ..........  ", "            ........  .........p .......  ........  ..........  ", " .........  ........ p.........  .......  ........  ..........  ", " .........  ........  .........  .......            ..........  ", " ......... p........  .........  .......            ..........  ", " .........  ........  .........  .......            ..........  ", " .........  ........             .......                        ", " .........  ........                                            ", " .........                                                      ", "                                                                ", "                                                                ", "                                                                "]};
+const POS5 = {"cidadeAlta": {"chegada": [27, 37], "bondinho": [[26, 39], [27, 39], [28, 39], [29, 39]], "marco": [6, 33], "portao": [[27, 12], [28, 12]], "estufaDoor": [[43, 23], [44, 23]], "estufaOut": [43, 24], "jardineiro": [21, 24], "tesoura": [11, 20], "bauLab": [3, 16], "bau": [52, 31], "dama": [12, 32], "crianca": [34, 33], "sorveteiro": [20, 33], "guardas": [[26, 13], [29, 13]], "estatua": [27, 22], "mirante": [50, 36], "postes": [[8, 30], [19, 30], [36, 30], [47, 30], [22, 17], [33, 17], [12, 11], [43, 11]], "arvores": [[4, 36], [16, 35], [39, 35], [51, 34], [33, 26], [23, 16]], "bancos": [[13, 36], [41, 36], [24, 33], [31, 33]], "holofotes": [[18, 13, "down"], [37, 13, "down"], [53, 22, "left"]], "vigias": [{"path": [[37, 26], [52, 26]], "at": [44, 26]}], "pavio": [30, 31], "placaTorre": [30, 12]}, "estufa": {"door": [[12, 17], [13, 17]], "entra": [12, 16], "placas": [[6, 8], [13, 7], [19, 10]], "vasos": [[4, 14], [10, 11], [17, 13], [22, 15]], "alcapao": [13, 10], "areia": [22, 4], "mariposas": [7, 3], "plantas": [[2, 4], [13, 4], [23, 3], [2, 15]]}, "lentes": {"entra": [2, 17], "subida": [[25, 2], [26, 2]], "porta": [[25, 3], [26, 3]], "emissor": [1, 10, "right"], "espelhos": [[10, 10, "\\"], [10, 4, "\\"], [20, 4, "/"]], "movel": {"espelho": [4, 17], "caixa": [15, 4]}, "alvo": [26, 15], "alarme": [20, 3], "solucao": {"espelhos": [[10, 10, "/"], [10, 4, "/"], [20, 4, "\\"], [20, 15, "\\"]]}, "vigia": [[3, 6], [3, 15]]}, "arquivo": {"entra": [3, 20], "descida": [[3, 21]], "subida": [[27, 2], [28, 2]], "porta": [[27, 3], [28, 3]], "velas": [[3, 6, "Osvaldo Candeia"], [11, 10, "Joaquim"], [17, 14, "Dito"], [24, 18, "Marta Pena"], [9, 6, "Severino"], [16, 10, "Aurora"], [23, 14, "Lurdinha"], [8, 18, "Benício"], [17, 6, "Ana do Cais"], [22, 10, "Juca"], [7, 14, "Celestino"], [14, 18, "Rosa Maria"]], "ordem": ["Osvaldo Candeia", "Joaquim", "Dito"], "alta": "Dito", "escadinha": [25, 20], "nota": [6, 19], "vitral": [[26, 4], [27, 4], [28, 4]], "vitralPos": [27, 4]}, "escritorio": {"entra": [8, 10], "saida": [[8, 11], [9, 11]], "mesa": [8, 4], "caderno": [9, 4], "janela": [[3, 2], [14, 2]], "vesper": [9, 6], "cha": [12, 5], "estante": [2, 3]}, "telhados": {"entra": [3, 23], "marco": [5, 25], "vaos": [[10, 22], [20, 20], [32, 19], [41, 18], [51, 16]], "tabuas": [[7, 21], [16, 21]], "chamines": [[14, 19], [25, 17], [36, 19], [45, 14], [57, 17], [27, 6]], "holofotes": [[30, 16, "down"], [47, 13, "left"], [16, 8, "down"]], "guardas": [[24, 21], [46, 18]], "fim": [60, 20], "chefe": [60, 17], "descida": [[59, 23], [60, 23]], "bau": [[15, 8], [47, 4]], "gatos": [[5, 21], [36, 18]]}};
+
+// ================= ARTE DO CAP. 5: CIDADE ALTA, ACENDEDORIA, TELHADOS =================
+// Tiles novos (mármore, cascalho, sebe, parede de vidro, abismo dos telhados), a torre de vidro da Acendedoria, a
+// estufa, o bondinho, os objetos de quebra-cabeça (vasos, espelhos, cristais, placas, alçapão, tábuas, escadinha),
+// a estante das velas, a mesa do escritório, fundos de batalha e os inimigos (Vigia de Vidro, Mariposa de Vidro,
+// Guarda Real, o Vitral Vivo e o Grande Holofote).
+const KEY5 = { 'm': { t: 'marmore' }, 'g': { t: 'cascalho' }, 'S': { t: 'sebe', solid: true }, 'V': { t: 'parV', solid: true },
+  ' ': { t: 'abismo', solid: true }, '.': { t: 'telha' }, 'p': { t: 'tabV' }, 'r': { t: 'tapete' }, ';': { t: 'grama' }, ',': { t: 'pedra' },
+  '#': { t: 'muro', solid: true }, '=': { t: 'escada' }, 'X': { t: 'pedra', solid: true } };
+{ const _ta6 = tileArt; tileArt = function (k, v = 0, f = 0) {
+  if (!['marmore', 'cascalho', 'sebe', 'parV', 'abismo'].includes(k)) return _ta6(k, v, f);
+  const key = k + '_' + v + '_' + f; if (TILE2[key]) return TILE2[key];
+  const P = new Pix(16, 16), h = (x, y, s = 5) => hash(x + v * 13, y + v * 29, s) % 100;
+  if (k === 'marmore') {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const rej = x === 15 || y === 15, veio = Math.abs(Math.sin((x + y * 0.6 + v * 3) * 0.5)) < 0.06; P.p(x, y, rej ? '#8a8494' : veio ? '#b8b0c4' : ((x >> 3) + (y >> 3) + v) % 2 ? '#e4e0ea' : '#d6d0de'); }
+  } else if (k === 'cascalho') {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = h(x, y); P.p(x, y, r < 12 ? '#8a7a62' : r < 30 ? '#c8b894' : r < 36 ? '#e8dcc0' : '#b4a482'); }
+  } else if (k === 'sebe') {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = h(x, y, 9); P.p(x, y, y > 12 ? '#1e3a22' : r < 18 ? '#2a5a30' : r < 70 ? '#3a7a3e' : r < 90 ? '#4e9a4e' : '#6ab868'); }
+    if (v % 4 === 0) { P.p(5, 4, '#f0e8f0'); P.p(11, 9, '#ffd0e0'); }
+  } else if (k === 'parV') {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const fr = x === 0 || y === 0 || x === 15; P.p(x, y, fr ? '#8a6a30' : y > 12 ? '#1a2a38' : (x + y + v) % 9 === 0 ? '#6ab8d8' : y < 6 ? '#2a5070' : '#1e3a54'); }
+    P.p(3, 2, '#c8f0ff'); P.p(4, 3, '#c8f0ff'); P.rect(0, 13, 16, 1, '#c8a040');
+  } else {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, y < 3 ? '#1a1420' : '#0a0810');
+    if (h(1, 1, 11) < 35) { P.p(4 + (v % 7), 9, '#ffd060'); } if (h(2, 2, 13) < 20) P.p(10, 12, '#ffb040');
+  }
+  return TILE2[key] = P.canvas();
+}; }
+
+// ---------- a Acendedoria: torre de vidro e latão (20 tiles de largura) ----------
+let TORRE_C = null;
+function acendedoriaArt() {
+  if (TORRE_C) return TORRE_C;
+  const W_ = 320, H_ = 216, P = new Pix(W_, H_), Lt = ramp('#b8903a'), Vd = ['#14283a', '#1e3a54', '#2a5070', '#4a88a8', '#a8e0f0'], Pd = ramp('#cfc6d6');
+  // base de pedra clara
+  for (let y = 150; y < 210; y++) for (let x = 8; x < W_ - 8; x++) { const row = (y - 150) >> 3, off = (row % 2) * 8, edge = ((y - 150) % 8 === 7) || ((x + off) % 16 === 15); P.p(x, y, edge ? Pd[0] : P.tone(Pd, 0.62 - x / W_ * 0.2, x, y)); }
+  // corpo de vidro em gomos, afinando para cima
+  for (let y = 12; y < 150; y++) {
+    const m = Math.round(24 + (150 - y) * 0.25);
+    for (let x = m; x < W_ - m; x++) {
+      const gomo = Math.floor((x - m) / 22), gx = (x - m) % 22, frame = gx === 0 || (y % 26) === 0;
+      P.p(x, y, frame ? P.tone(Lt, 0.55 + (gx === 0 ? 0.2 : 0), x, y) : P.tone(Vd, 0.25 + (gx < 4 ? 0.45 : 0) + Math.sin(y * 0.08 + gomo) * 0.12 + ((x + y) % 31 === 0 ? 0.5 : 0), x, y));
+    }
+  }
+  // janelas acesas (a Acendedoria nunca dorme)
+  for (let y = 30; y < 140; y += 26) for (let x = 60; x < W_ - 60; x += 22) if (hash(x, y, 3) % 3) { P.rect(x + 6, y + 6, 10, 14, '#ffe08a'); P.rect(x + 7, y + 7, 4, 5, '#fff8d8'); }
+  // coroa de latão e a lanterna do topo
+  P.rect(40, 8, W_ - 80, 6, Lt[3]); P.rect(40, 8, W_ - 80, 2, Lt[4]);
+  P.ball(W_ / 2, 6, 16, 10, ['#8a6a20', '#c89a30', '#f0c850', '#ffe8a0', '#fffbe8'], { amb: 0.5 });
+  // o portão em arco
+  const px = W_ / 2 - 26;
+  P.poly([[px, 210], [px, 168], [px + 26, 150], [px + 52, 168], [px + 52, 210]], (x, y) => P.tone(Lt, 0.3 + (x - px) / 120, x, y));
+  P.poly([[px + 4, 210], [px + 4, 170], [px + 26, 155], [px + 48, 170], [px + 48, 210]], (x, y) => (x + y) % 11 === 0 ? '#ffd870' : '#2a1e14');
+  P.rect(W_ / 2 - 1, 156, 2, 54, '#8a6a20');
+  // brasão: um sol com chama
+  P.ball(W_ / 2, 132, 12, 12, ['#8a6a20', '#c89a30', '#f0c850', '#ffe8a0', '#ffffff'], { amb: 0.5 }); for (let a = 0; a < 12; a++) { const an = a / 12 * Math.PI * 2; P.line(W_ / 2 + Math.cos(an) * 14, 132 + Math.sin(an) * 14, W_ / 2 + Math.cos(an) * 19, 132 + Math.sin(an) * 19, '#f0c850'); }
+  // lampiões dos dois lados do portão
+  for (const s of [-1, 1]) { const lx = W_ / 2 + s * 46; P.rect(lx - 1, 166, 3, 34, Lt[1]); P.rect(lx - 5, 156, 11, 12, Lt[2]); P.rect(lx - 3, 158, 7, 8, '#ffe08a'); }
+  return TORRE_C = P.outline().canvas();
+}
+// ---------- a estufa (16 tiles): ferro branco e vidro, plantas dentro ----------
+let ESTUFA_C = null;
+function estufaArt() {
+  if (ESTUFA_C) return ESTUFA_C;
+  const W_ = 256, H_ = 156, P = new Pix(W_, H_), Fe = ramp('#e8e4ea');
+  for (let y = 40; y < 150; y++) for (let x = 4; x < W_ - 4; x++) { const fr = (x - 4) % 20 === 0 || (y - 40) % 22 === 0; P.p(x, y, fr ? P.tone(Fe, 0.7, x, y) : (x + y) % 17 === 0 ? '#c8f0e8' : y > 120 ? '#2a5a3a' : '#3a6a5a'); }
+  for (let i = 0; i < 26; i++) { const x = 10 + (i * 37) % (W_ - 20), y = 70 + (i * 23) % 70; P.ball(x, y, 6 + i % 4, 5 + i % 3, ['#1e4a24', '#2e6a32', '#4a9a4a', '#7ac870', '#b8f0a0'], { amb: 0.35 }); if (i % 5 === 0) P.p(x, y - 3, '#ff8ab0'); }
+  // telhado arredondado
+  P.poly([[2, 42], [W_ / 2, 2], [W_ - 2, 42]], (x, y) => ((x >> 3) + (y >> 3)) % 2 ? '#a8d8d0' : '#c8ece6');
+  for (let i = 0; i <= 12; i++) P.line(2 + i * (W_ - 4) / 12, 42, W_ / 2, 2, '#f0f0f4');
+  P.rect(0, 40, W_, 4, Fe[3]);
+  // porta dupla no meio
+  const dx = 7 * 16 + 2; P.rect(dx - 2, 102, 32, 48, Fe[2]); P.rect(dx, 104, 28, 46, '#244a3a'); P.rect(dx + 13, 104, 2, 46, Fe[3]); P.rect(dx + 4, 108, 8, 12, '#a8e8d8'); P.rect(dx + 16, 108, 8, 12, '#a8e8d8');
+  return ESTUFA_C = P.outline().canvas();
+}
+// fonte grande com a estátua do Acendedor erguendo uma lanterna
+let FONTE5_C = null;
+function fonteEstatuaArt() {
+  if (FONTE5_C) return FONTE5_C;
+  const P = new Pix(96, 92), Pd = ramp('#c8c0d0'), Ag = ['#2a5a8a', '#3a7ab8', '#6ab0e0', '#a8e0ff', '#ffffff'];
+  P.ball(48, 78, 46, 12, Pd, { amb: 0.4 }); P.ball(48, 76, 40, 9, Ag, { amb: 0.5 });
+  P.cyl(42, 52, 12, 24, Pd); P.rect(36, 50, 24, 4, Pd[3]);
+  // a estátua: casaca, cartola, braço erguido com lanterna
+  P.cyl(42, 18, 12, 32, ramp('#8a8494')); P.rect(40, 30, 16, 20, '#7a7484'); P.ball(48, 14, 5, 6, ramp('#9a94a4')); P.rect(43, 4, 10, 6, '#6a6474'); P.rect(41, 9, 14, 2, '#6a6474');
+  P.line(52, 24, 62, 8, '#8a8494', 3); P.rect(60, 0, 7, 9, '#c89a30'); P.rect(61, 2, 5, 5, '#ffe08a');
+  for (let i = 0; i < 6; i++) P.p(20 + i * 11, 73 + (i % 2), '#ffffff');
+  return FONTE5_C = P.outline().canvas();
+}
+// bondinho parado na plataforma
+let BOND_C = null;
+function bondinhoArt() {
+  if (BOND_C) return BOND_C;
+  const P = new Pix(100, 54), Cor = ramp('#b83a3a'), Lt = ramp('#c89a30');
+  P.rect(0, 2, 100, 2, '#3a3440'); P.line(50, 4, 50, 12, '#3a3440');
+  P.poly([[6, 46], [10, 12], [90, 12], [94, 46]], (x, y) => P.tone(Cor, 0.6 - y / 120 + (x < 20 ? 0.15 : 0), x, y));
+  for (let i = 0; i < 5; i++) { P.rect(16 + i * 15, 18, 11, 12, '#a8d8f0'); P.rect(17 + i * 15, 19, 4, 4, '#e8f8ff'); }
+  P.rect(8, 34, 84, 3, Lt[3]); P.rect(4, 44, 92, 4, '#2a2430'); for (const x of [20, 80]) P.ball(x, 49, 5, 5, ramp('#4a4450'));
+  P.rect(44, 34, 12, 10, '#7a2a2a'); P.rect(40, 6, 20, 6, Lt[2]); P.rect(44, 7, 12, 3, '#ffe08a');
+  return BOND_C = P.outline().canvas();
+}
+let SORV_C = null;
+function sorveteArt() {
+  if (SORV_C) return SORV_C;
+  const P = new Pix(34, 34); P.rect(4, 14, 26, 14, '#e8e0f0'); P.rect(4, 14, 26, 3, '#8ad8f0'); P.ball(10, 30, 3, 3, ramp('#4a4450')); P.ball(26, 30, 3, 3, ramp('#4a4450'));
+  P.rect(15, 0, 2, 14, '#6a6474'); P.poly([[2, 4], [16, -2], [30, 4]], '#ff8ab0'); P.poly([[9, 4], [16, -1], [23, 4]], '#ffffff');
+  for (const [x, c] of [[8, '#ffb0c8'], [14, '#fff0a0'], [20, '#a8f0c8'], [26, '#c8a8f0']]) P.ball(x, 12, 3, 3, [c, c, '#ffffff']);
+  return SORV_C = P.outline().canvas();
+}
+// ---------- objetos de quebra-cabeça ----------
+const OBJ5 = {};
+function vasoMovelArt(k = 0) {
+  const key = 'vaso' + k; if (OBJ5[key]) return OBJ5[key];
+  const P = new Pix(18, 26), Cer = ramp(['#b8603a', '#8a6ab8', '#4a8ab0'][k % 3]);
+  P.poly([[3, 14], [15, 14], [13, 25], [5, 25]], (x, y) => P.tone(Cer, 0.7 - (x - 3) / 16, x, y)); P.rect(2, 12, 14, 3, Cer[3]);
+  P.ball(9, 8, 7, 6, ['#1e4a24', '#2e6a32', '#4a9a4a', '#7ac870', '#b8f0a0'], { amb: 0.35 }); if (k % 2) { P.p(6, 5, '#ff8ab0'); P.p(11, 7, '#ffd060'); }
+  return OBJ5[key] = P.outline().canvas();
+}
+function espelhoArt(o) {
+  const key = 'esp' + o; if (OBJ5[key]) return OBJ5[key];
+  const P = new Pix(20, 30), Lt = ramp('#c89a30');
+  P.rect(8, 22, 4, 6, Lt[1]); P.rect(4, 27, 12, 3, Lt[0]);
+  // o vidro inclinado ( / ou \ ) visto de cima-frente
+  const pts = o === '/' ? [[2, 22], [6, 22], [18, 4], [14, 4]] : [[14, 22], [18, 22], [6, 4], [2, 4]];
+  P.poly(pts, (x, y) => (x + y) % 5 === 0 ? '#ffffff' : '#a8e0f0'); P.line(pts[0][0], pts[0][1], pts[3][0], pts[3][1], Lt[3]); P.line(pts[1][0], pts[1][1], pts[2][0], pts[2][1], Lt[2]);
+  return OBJ5[key] = P.outline().canvas();
+}
+function escadinhaArt() { if (OBJ5.esc) return OBJ5.esc; const P = new Pix(18, 28), M = ramp('#8a5a30'); P.line(3, 27, 7, 1, M[2], 2); P.line(15, 27, 11, 1, M[1], 2); for (let i = 0; i < 5; i++) P.rect(5 + i * 0.4, 5 + i * 5, 8 - i * 0.8, 2, M[3]); return OBJ5.esc = P.outline().canvas(); }
+function tabuaArt() { if (OBJ5.tab) return OBJ5.tab; const P = new Pix(18, 14), M = ramp('#9a6a3a'); P.rect(1, 3, 16, 9, M[2]); P.rect(1, 3, 16, 2, M[3]); P.rect(1, 10, 16, 2, M[0]); P.p(4, 6, M[0]); P.p(13, 7, M[0]); return OBJ5.tab = P.outline().canvas(); }
+function placaPressaoArt(on) { const key = 'pp' + (on ? 1 : 0); if (OBJ5[key]) return OBJ5[key]; const P = new Pix(16, 16); P.rect(1, 1, 14, 14, '#5a5462'); P.rect(2, 2, 12, 12, on ? '#ffd060' : '#8a8494'); P.rect(3, 3, 10, 10, on ? '#fff0a0' : '#a8a2b4'); P.rect(5, 5, 6, 6, on ? '#ffd060' : '#7a7484'); return OBJ5[key] = P.canvas(); }
+function alcapaoArt(aberto) { const key = 'alc' + (aberto ? 1 : 0); if (OBJ5[key]) return OBJ5[key]; const P = new Pix(32, 18), M = ramp('#6a4a2a'); if (aberto) { P.rect(2, 4, 28, 12, '#0a0810'); for (let i = 0; i < 4; i++) P.rect(8, 6 + i * 3, 16, 1, '#3a2a20'); P.rect(2, 0, 28, 4, M[3]); } else { P.rect(2, 2, 28, 14, M[2]); for (let x = 2; x < 30; x += 7) P.rect(x, 2, 1, 14, M[0]); P.rect(13, 7, 6, 4, '#c8a040'); P.rect(15, 8, 2, 2, '#3a2a10'); } return OBJ5[key] = P.outline().canvas(); }
+function portaVidroArt(aberta) { const key = 'pv' + (aberta ? 1 : 0); if (OBJ5[key]) return OBJ5[key]; const P = new Pix(32, 44), Lt = ramp('#c89a30'); P.rect(0, 0, 32, 3, Lt[3]); P.rect(0, 0, 2, 44, Lt[2]); P.rect(30, 0, 2, 44, Lt[2]); if (!aberta) { for (let y = 3; y < 44; y++) for (let x = 2; x < 30; x++) P.p(x, y, (x + y) % 9 === 0 ? '#e8fbff' : '#6ab8d8'); P.rect(15, 3, 2, 41, Lt[2]); P.ball(16, 22, 4, 4, ['#8a6a20', '#c89a30', '#f0c850', '#ffe8a0', '#ffffff']); } else { P.rect(2, 3, 5, 41, '#6ab8d8'); P.rect(25, 3, 5, 41, '#6ab8d8'); } return OBJ5[key] = P.outline().canvas(); }
+function cristalArt(cor, aceso) { const key = 'cr' + cor + (aceso ? 1 : 0); if (OBJ5[key]) return OBJ5[key]; const P = new Pix(18, 30), C = cor === 'r' ? ['#5a1a2a', '#a82a3a', '#e85a6a', '#ffa8b0', '#ffffff'] : ['#1a3a5a', '#2a6a9a', '#5ab0e0', '#b8f0ff', '#ffffff'];
+  P.rect(4, 24, 10, 5, '#4a4458'); P.rect(3, 23, 12, 2, '#6a6478'); P.poly([[9, 0], [15, 10], [12, 23], [6, 23], [3, 10]], (x, y) => C[Math.max(0, Math.min(4, (aceso ? 2 : 1) + (x < 9 ? 1 : 0) - (y > 16 ? 1 : 0)))]); if (aceso) { P.p(8, 6, '#ffffff'); P.p(9, 7, '#ffffff'); }
+  return OBJ5[key] = P.outline().canvas(); }
+function emissorArt() { if (OBJ5.emi) return OBJ5.emi; const P = new Pix(18, 30), Lt = ramp('#c89a30'); P.rect(7, 12, 4, 16, Lt[1]); P.rect(3, 27, 12, 3, Lt[0]); P.ball(9, 8, 7, 7, Lt, { amb: 0.4 }); P.ball(11, 8, 4, 4, ['#c8a040', '#ffe08a', '#fff8d8', '#ffffff', '#ffffff']); return OBJ5.emi = P.outline().canvas(); }
+// estante do arquivo: prateleiras com velas (w tiles)
+const EST5 = {};
+function estanteVelasArt(w) {
+  if (EST5[w]) return EST5[w];
+  const P = new Pix(w * 16, 44), M = ramp('#4a3020');
+  P.rect(0, 4, w * 16, 40, M[1]); for (let s = 0; s < 3; s++) { P.rect(0, 14 + s * 12, w * 16, 2, M[3]); }
+  P.rect(0, 2, w * 16, 3, M[2]); P.rect(0, 0, w * 16, 2, M[3]);
+  for (let s = 0; s < 3; s++) for (let x = 3; x < w * 16 - 3; x += 5) { const hh = 4 + hash(x, s, 3) % 4, y = 14 + s * 12; P.rect(x, y - hh, 3, hh, '#e8e0cc'); if (hash(x, s, 9) % 3) { P.p(x + 1, y - hh - 1, '#ffd060'); P.p(x + 1, y - hh - 2, '#fff0a0'); } }
+  return EST5[w] = P.outline().canvas();
+}
+function velaNomeArt(acesa) { const key = 'vn' + (acesa ? 1 : 0); if (OBJ5[key]) return OBJ5[key]; const P = new Pix(10, 22); P.rect(3, 8, 4, 12, '#f0e8d8'); P.rect(3, 8, 1, 12, '#ffffff'); P.rect(1, 19, 8, 3, '#c8a040'); P.p(5, 7, '#3a2a20'); if (acesa) { P.ball(5, 4, 2, 3, ['#c86a20', '#ffb040', '#ffe08a', '#fff8d8', '#ffffff'], { amb: 0.8 }); } return OBJ5[key] = P.outline().canvas(); }
+// escritório: mesa grande com o caderno preto e uma lâmpada verde; janela com a cidade acesa
+let MESA5_C = null;
+function mesaEscritorioArt() {
+  if (MESA5_C) return MESA5_C;
+  const P = new Pix(66, 40), M = ramp('#5a3020');
+  P.rect(0, 12, 66, 6, M[3]); P.rect(0, 18, 66, 18, M[1]); P.rect(4, 22, 26, 12, M[2]); P.rect(36, 22, 26, 12, M[2]); P.rect(15, 27, 4, 2, '#c8a040'); P.rect(47, 27, 4, 2, '#c8a040');
+  P.rect(30, 6, 16, 7, '#1a1418'); P.rect(31, 7, 14, 5, '#2a2228'); P.rect(38, 6, 1, 7, '#8a1a2a');   // o caderno preto, com fita vermelha
+  P.rect(8, 0, 3, 13, '#c89a30'); P.ball(10, 2, 6, 4, ['#1a4a2a', '#2a7a3a', '#4ab060', '#a8f0b8', '#ffffff']);                  // lâmpada verde
+  P.rect(52, 8, 8, 5, '#e8e0d0'); P.rect(53, 6, 6, 3, '#f0e8d8'); P.p(56, 3, '#d8d0c8'); P.p(55, 1, '#d8d0c8');                 // xícara de chá fumegando
+  return MESA5_C = P.outline().canvas();
+}
+let JAN5_C = null;
+function janelaCidadeArt() {
+  if (JAN5_C) return JAN5_C;
+  const P = new Pix(48, 40), Lt = ramp('#c89a30');
+  P.rect(0, 0, 48, 40, Lt[1]); P.rect(3, 3, 42, 34, '#0e1430');
+  for (let i = 0; i < 40; i++) { const x = 4 + (i * 17) % 40, y = 18 + (i * 7) % 18; P.p(x, y, i % 3 ? '#ffd060' : '#ffe8a0'); }
+  P.poly([[30, 37], [36, 12], [40, 37]], '#1a1a2a'); P.rect(35, 9, 3, 4, '#2a2a3a');            // o morro do Farol, apagado
+  P.rect(23, 3, 2, 34, Lt[2]); P.rect(3, 19, 42, 2, Lt[2]);
+  return JAN5_C = P.outline().canvas();
+}
+function guaritaArt() { if (OBJ5.gua) return OBJ5.gua; const P = new Pix(34, 70), Pd = ramp('#6a6274'); P.rect(6, 20, 22, 48, Pd[2]); for (let y = 24; y < 68; y += 6) P.rect(6, y, 22, 1, Pd[0]); P.rect(2, 14, 30, 8, Pd[3]); P.poly([[0, 14], [17, 0], [34, 14]], '#4a3a5a'); P.rect(13, 30, 8, 10, '#ffe08a'); return OBJ5.gua = P.outline().canvas(); }
+// ---------- fundos de batalha ----------
+let BG5 = {};
+function bgCidadeAlta() { if (BG5.ca) return BG5.ca; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 70 ? (y < 30 ? '#0e1430' : '#18204a') : y < 96 ? '#2a5a3a' : ((x >> 4) + (y >> 4)) % 2 ? '#d6d0de' : '#c8c2d2');
+  for (let i = 0; i < 50; i++) P.p((i * 53) % 240, (i * 17) % 30, '#e8e8ff');
+  for (let x = 80; x < 160; x++) for (let y = 4; y < 70; y++) if (Math.abs(x - 120) < 40 - y * 0.15) P.p(x, y, (x - 80) % 12 === 0 ? '#c89a30' : (x + y) % 13 === 0 ? '#ffe08a' : '#1e3a54');
+  for (const x of [20, 60, 180, 220]) { P.ball(x, 78, 18, 12, ['#1e3a22', '#2a5a30', '#3a7a3e', '#4e9a4e', '#6ab868']); }
+  for (const x of [40, 200]) { P.rect(x, 50, 3, 46, '#4a4468'); P.rect(x - 3, 44, 9, 7, '#ffe08a'); }
+  return BG5.ca = P.canvas(); }
+function bgTorre() { if (BG5.to) return BG5.to; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 100 ? ((x % 30 === 0 || y % 34 === 0) ? '#8a6a30' : (x + y) % 23 === 0 ? '#6ab8d8' : y < 50 ? '#1e3a54' : '#2a5070') : ((x >> 4) + (y >> 4)) % 2 ? '#e4e0ea' : '#d6d0de');
+  for (let x = 15; x < 240; x += 30) { P.rect(x + 8, 20, 12, 16, '#ffe08a'); P.rect(x + 10, 22, 4, 5, '#fff8d8'); }
+  for (let i = 0; i < 6; i++) for (let k = 0; k < 100; k += 3) P.p(i * 48 + k * 0.6, k, '#3a6a8a');
+  return BG5.to = P.canvas(); }
+function bgTelhado() { if (BG5.te) return BG5.te; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 60 ? (y < 20 ? '#080c20' : '#101838') : y < 96 ? '#1a1830' : (((x >> 3) + (y >> 2)) % 2 ? '#7a3a2a' : '#8a4632'));
+  for (let i = 0; i < 70; i++) P.p((i * 71) % 240, (i * 13) % 50, i % 5 ? '#c8c8f0' : '#ffffff');
+  for (let x = 0; x < 240; x += 26) { const h = 20 + hash(x, 1, 3) % 30; P.rect(x, 96 - h, 22, h, '#14122a'); if (hash(x, 2, 3) % 2) P.rect(x + 8, 96 - h + 6, 5, 6, '#ffd060'); }
+  for (let y = 0; y < 96; y++) for (let x = 0; x < 240; x++) { const a = 150 - y * 0.57, b2 = 175 - y * 0.57; if (x > a && x < b2 && (x + y) % 3 === 0) P.p(x, y, '#3a3a5a'); }
+  return BG5.te = P.canvas(); }
+
+// ---------- inimigos ----------
+const INI5 = {};
+function vigiaArt(f, espelho) {
+  const key = 'vig' + f + (espelho ? 1 : 0); if (INI5[key]) return INI5[key];
+  const P = new Pix(40, 60), Vd = ['#1a3a5a', '#2a6a9a', '#5ab0e0', '#b8f0ff', '#ffffff'], Lt = ramp('#c89a30'), b = f % 2;
+  for (const s of [-1, 1]) P.poly([[20 + s * 4, 58], [20 + s * 9, 58], [20 + s * 8, 38], [20 + s * 4, 38]], (x, y) => P.tone(Vd, 0.4 + (s < 0 ? 0.2 : 0), x, y));
+  P.poly([[8, 38 + b], [32, 38 + b], [28, 16 + b], [12, 16 + b]], (x, y) => P.tone(Vd, 0.3 + (x < 20 ? 0.35 : 0) + ((x + y) % 7 === 0 ? 0.3 : 0), x, y));
+  P.rect(10, 24 + b, 20, 2, Lt[3]); P.rect(10, 32 + b, 20, 2, Lt[2]);
+  // cabeça-lanterna
+  P.rect(14, 4 + b, 12, 12, Lt[1]); P.rect(15, 5 + b, 10, 10, espelho ? '#ffffff' : '#ffe08a'); P.rect(17, 7 + b, 4, 4, '#fff8d8'); P.rect(12, 2 + b, 16, 3, Lt[3]);
+  // escudo-espelho no braço
+  P.poly([[2, 22 + b], [10, 20 + b], [10, 40 + b], [2, 36 + b]], (x, y) => espelho ? ((x + y) % 3 ? '#e8fbff' : '#ffffff') : '#6ab8d8'); P.line(2, 22 + b, 10, 20 + b, Lt[3]);
+  P.line(32, 22 + b, 38, 10 + b, Lt[2], 2);
+  return INI5[key] = P.outline().canvas();
+}
+function mariposaVidroArt(f) {
+  const key = 'mv' + f; if (INI5[key]) return INI5[key];
+  const P = new Pix(36, 30), a = f % 2 ? 4 : 0;
+  for (const s of [-1, 1]) { P.poly([[18, 15], [18 + s * 17, 3 + a], [18 + s * 14, 18], [18 + s * 6, 24 - a]], (x, y) => (x + y) % 4 === 0 ? '#ffffff' : (Math.abs(x - 18) + y) % 9 < 3 ? '#a8e0f0' : '#5ab0d8'); }
+  P.rect(16, 9, 4, 16, '#c8a040'); P.rect(17, 7, 2, 3, '#ffe08a'); P.p(15, 5, '#c8a040'); P.p(21, 5, '#c8a040');
+  return INI5[key] = P.outline().canvas();
+}
+function guardaRealArt(f) {
+  const key = 'gr' + f; if (INI5[key]) return INI5[key];
+  const P = new Pix(34, 56), b = f % 2, Az = ramp('#2a3a7a'), Lt = ramp('#c89a30');
+  P.rect(11, 40, 5, 16, '#1a1a2a'); P.rect(18, 40, 5, 16, '#1a1a2a');
+  P.cyl(9, 20 + b, 16, 22, Az); P.rect(9, 30 + b, 16, 2, Lt[3]); for (let i = 0; i < 3; i++) P.p(17, 23 + i * 5 + b, Lt[4]);
+  P.ball(17, 13 + b, 6, 6, ramp('#d8a070')); P.rect(10, 2 + b, 14, 9, Az[1]); P.rect(9, 9 + b, 16, 2, Lt[2]); P.rect(16, 0 + b, 2, 3, '#c83a3a');
+  P.rect(14, 13 + b, 2, 2, '#1a1418'); P.rect(19, 13 + b, 2, 2, '#1a1418');
+  P.rect(28, 2 + b, 2, 52, '#6a4a2a'); P.poly([[24, 6 + b], [29, -1], [34, 6 + b], [29, 10 + b]], '#c8c8d8');     // alabarda
+  P.rect(2, 26 + b, 6, 8, Lt[1]); P.rect(3, 27 + b, 4, 6, '#ffe08a');                                                   // lanterna na mão
+  return INI5[key] = P.outline().canvas();
+}
+// o VITRAL VIVO: um guardião de vitral; a cor do vitral muda (vermelho / azul / verde) e muda o que o machuca
+const VIT_COR = { r: ['#4a0a1a', '#8a1a2a', '#d83a4a', '#ff8a8a', '#ffe0e0'], b: ['#0a1a4a', '#1a3a8a', '#3a7ad8', '#8ab8ff', '#e0f0ff'], g: ['#0a3a1a', '#1a6a2a', '#3ab04a', '#8ae88a', '#e0ffe0'] };
+function vitralArt(f, cor, ataque) {
+  const key = 'vit' + f + cor + (ataque ? 1 : 0); if (INI5[key]) return INI5[key];
+  const W_ = 96, H_ = 116, P = new Pix(W_, H_), cx = 48, C = VIT_COR[cor] || VIT_COR.r, Pb = ['#1a1418', '#2a2228', '#3a3238', '#5a5258', '#8a8288'], b = f % 2;
+  // corpo em arco gótico, recortado em vitrais com chumbo
+  const dentro = (x, y) => y > 30 && Math.abs(x - cx) < 30 || (y <= 30 && Math.hypot(x - cx, y - 30) < 30);
+  for (let y = 4; y < 100; y++) for (let x = 14; x < 82; x++) {
+    if (!dentro(x, y - b)) continue;
+    const chumbo = ((x - cx) % 12 === 0) || ((y + x * 0.5) % 16 < 1.2) || ((y - x * 0.5 + 200) % 16 < 1.2);
+    const cel = Math.floor((x + 200) / 12) * 7 + Math.floor((y + x * 0.5) / 16) * 3, sh = [C[1], C[2], C[3], '#ffd870', C[2], '#ffffff'][cel % 6];
+    P.p(x, y, chumbo ? Pb[1] : (x + y) % 13 === 0 ? C[4] : sh);
+  }
+  // rosácea no peito com um olho de luz
+  P.ball(cx, 52 + b, 14, 14, Pb); P.ball(cx, 52 + b, 11, 11, ['#ffd870', C[3], C[2], '#ffffff', '#ffffff'], { amb: 0.6 });
+  for (let a = 0; a < 8; a++) { const an = a / 8 * Math.PI * 2; P.line(cx, 52 + b, cx + Math.cos(an) * 11, 52 + b + Math.sin(an) * 11, Pb[2]); }
+  P.ball(cx, 52 + b, 4, 4, ataque ? ['#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff'] : [C[0], C[1], '#ffffff', '#ffffff', '#ffffff']);
+  // moldura de pedra e pés de pedestal
+  P.rect(14, 98, 68, 8, Pb[3]); P.rect(10, 104, 76, 8, Pb[2]); P.rect(10, 104, 76, 2, Pb[4]);
+  // braços de chumbo com lâminas de vidro
+  const ar = ataque ? -10 : b * 2;
+  for (const s of [-1, 1]) { P.line(cx + s * 28, 44 + b, cx + s * 40, 62 + ar, Pb[2], 3); P.poly([[cx + s * 38, 60 + ar], [cx + s * 46, 56 + ar], [cx + s * 44, 80 + ar], [cx + s * 40, 82 + ar]], (x, y) => (x + y) % 4 ? C[3] : '#ffffff'); }
+  return INI5[key] = P.outline().canvas();
+}
+// o GRANDE HOLOFOTE: a máquina da Guarda na torre do sino; lente enorme, engrenagens, operador
+function holofoteBossArt(f, fase, carga) {
+  const key = 'hol' + f + fase + (carga ? 1 : 0); if (INI5[key]) return INI5[key];
+  const W_ = 104, H_ = 112, P = new Pix(W_, H_), cx = 52, Fe = ramp('#4a4a5a'), Lt = ramp('#c89a30'), b = f % 2;
+  // base de três pés e engrenagens
+  for (const s of [-1, 0, 1]) P.line(cx, 70, cx + s * 30, 108, Fe[2], 4);
+  P.rect(cx - 34, 104, 68, 6, Fe[1]);
+  for (const [gx, gy, r] of [[cx - 22, 76, 10], [cx + 22, 80, 8]]) { P.ball(gx, gy, r, r, Fe); for (let a = 0; a < 8; a++) { const an = a / 8 * Math.PI * 2 + f * 0.4; P.rect(Math.round(gx + Math.cos(an) * (r + 1)) - 1, Math.round(gy + Math.sin(an) * (r + 1)) - 1, 3, 3, Fe[3]); } }
+  // corpo-tambor inclinado
+  P.ball(cx, 44 + b, 32, 30, Fe, { amb: 0.3 });
+  for (let a = 0; a < 16; a++) { const an = a / 16 * Math.PI * 2; P.p(Math.round(cx + Math.cos(an) * 29), Math.round(44 + b + Math.sin(an) * 27), Lt[3]); }
+  // a lente: rachada na fase 2; brancona quando carrega o Facho
+  const L = carga ? ['#fff0a0', '#ffffff', '#ffffff', '#ffffff', '#ffffff'] : ['#8a6a20', '#f0c850', '#ffe8a0', '#fff8d8', '#ffffff'];
+  P.ball(cx + 4, 42 + b, 22, 21, L, { amb: 0.6 });
+  for (let a = 0; a < 6; a++) { const an = a / 6 * Math.PI * 2; P.line(cx + 4, 42 + b, cx + 4 + Math.cos(an) * 20, 42 + b + Math.sin(an) * 19, carga ? '#fff8d8' : '#e8c860'); }
+  if (fase >= 2) { P.line(cx - 8, 28 + b, cx + 10, 46 + b, '#3a2a20'); P.line(cx + 10, 46 + b, cx + 4, 60 + b, '#3a2a20'); P.line(cx + 10, 46 + b, cx + 22, 50 + b, '#3a2a20'); }
+  P.rect(cx - 30, 20 + b, 6, 50, Lt[2]); P.rect(cx + 26, 20 + b, 6, 50, Lt[2]);
+  // o operador da Guarda, de quepe, agarrado às alavancas
+  P.rect(cx + 34, 58, 10, 18, '#2a3a7a'); P.ball(cx + 39, 52, 5, 5, ramp('#d8a070')); P.rect(cx + 33, 45, 12, 4, '#2a3a7a'); P.rect(cx + 33, 48, 12, 1, '#c89a30');
+  P.line(cx + 34, 62, cx + 26, 54 + b * 2, '#c89a30', 2);
+  return INI5[key] = P.outline().canvas();
+}
+
+// ================= QUEBRA-CABEÇAS DO CAP. 5 =================
+// 1) O VÃO DE BOLSO (magia espacial do baú): de frente para um objeto solto (vaso, espelho, caixote, escadinha, tábua),
+//    A = "Guardar no Vão" (some para dentro da tampa). Com algo guardado, A de frente para um chão livre = "Pôr aqui".
+//    Só cabe UM objeto por vez (o Vão é grande, a concentração é pequena). O objeto viaja junto entre mapas.
+//    Tábua posta num VÃO dos telhados vira PONTE (dá para passar e, do outro lado, guardar de novo).
+// 2) PLACAS DE PRESSÃO: só afundam com peso de verdade (vaso com terra, caixote, escadinha). O baú é leve por fora.
+// 3) FEIXE DE LUZ: um emissor lança luz em linha reta; ESPELHOS (/ e \) desviam; caixote, vaso e o próprio baú
+//    BLOQUEIAM; o CRISTAL AZUL abre a porta de vidro; o CRISTAL VERMELHO dispara o alarme (luta com os Vigias).
+//    De frente para um espelho: "Girar" (/ <-> \) ou guardar no Vão.
+// 4) HOLOFOTES (à noite na Cidade Alta; sempre nos telhados): cones que varrem; RONDAS de Vigias (cone de 4).
+//    Na luz: GENTE é pega sempre; o BAÚ só se estiver ANDANDO. Pego = luta e volta ao começo do trecho.
+const NOME_MOV = { vaso: 'o vaso', espelho: 'o espelho', caixa: 'o caixote', escadinha: 'a escadinha', tabua: 'a tábua' };
+const ARTE_MOV = (k, o, i) => k === 'vaso' ? vasoMovelArt(i || 0) : k === 'espelho' ? espelhoArt(o || '/') : k === 'caixa' ? caixoteArt(1) : k === 'escadinha' ? escadinhaArt() : tabuaArt();
+const PESADO = new Set(['vaso', 'caixa', 'escadinha']);
+function movEstado(id) { G.mov = G.mov || {}; return (G.mov[id] = G.mov[id] || {}); }
+function movEnt(mapId, id, d) {
+  return { t: 'movel', id: 'mov_' + id, mid: id, k: d.k, o: d.o, var: d.var || 0, x: d.x, y: d.y, h: 26, ponte: !!d.ponte, passa: !!d.ponte,
+    spr: function () { return this.ponte ? null : ARTE_MOV(this.k, this.o, this.var); }, talk: (e) => falaMovel(e) };
+}
+// monta os objetos do mapa (definições + o que o jogador trouxe/deixou aqui)
+function montaMoveis() {
+  const m = W2.map, id = W2.id, est = movEstado(id), defs = m.moveis || [];
+  W2.ents = W2.ents.filter(e => e.t !== 'movel');
+  for (const d of defs) { if (est[d.id] === null) continue; const s = est[d.id] || d; if (G.carrega && G.carrega.id === d.id) continue; W2.ents.push(Object.assign(movEnt(id, d.id, Object.assign({}, d, s)), { px: (s.x) * TS, py: (s.y) * TS, dir: 'down', mv: null, t0: 0 })); }
+  for (const [k, s] of Object.entries(est)) if (s && !defs.some(d => d.id === k)) W2.ents.push(Object.assign(movEnt(id, k, s), { px: s.x * TS, py: s.y * TS, dir: 'down', mv: null, t0: 0 }));
+}
+{ const _lm5 = loadMap2; loadMap2 = function () { W2.cones5 = null; W2.feixe = null; const r = _lm5.apply(this, arguments); try { montaMoveis(); } catch (e) { console.error(e); } return r; }; }
+async function falaMovel(e) {
+  if (!G.flags.tutVao) {
+    G.flags.tutVao = true;
+    await say('* Você encosta a tampa no ' + (e.k === 'tabua' ? 'pedaço de madeira' : 'objeto') + '. E sente o Vão lá dentro, o quarto dobrado da base, ABRIR um pouquinho. Como uma boca que lembra que já foi boca.');
+    await say('[Magia espacial: o baú pode GUARDAR um objeto solto no Vão e POR em outro lugar. Um por vez. A = guardar; com algo guardado, A de frente para o chão livre = pôr.]', 'cat');
+    await say('Eu sou uma mochila. Uma mochila mágica. A Coroa pagaria uma fortuna por mim. Ainda bem que eu não estou à venda.', 'me');
+  }
+  const ops = e.k === 'espelho' ? ['Girar o espelho', 'Guardar no Vão', 'Deixar'] : ['Guardar no Vão', 'Deixar'];
+  const c = await choose('* ' + NOME_MOV[e.k][0].toUpperCase() + NOME_MOV[e.k].slice(1) + '.', ops, 'n', ops.length - 1);
+  if (e.k === 'espelho' && c === 0) { e.o = e.o === '/' ? '\\' : '/'; movEstado(W2.id)[e.mid] = { k: e.k, o: e.o, x: e.x, y: e.y, var: e.var }; sfx('equip'); return; }
+  if (ops[c] !== 'Guardar no Vão') return;
+  guardarNoVao(e);
+}
+function guardarNoVao(e) {
+  if (G.carrega) { W2.toast = { s: 'O Vão já tem ' + NOME_MOV[G.carrega.k] + '. Ponha em algum lugar antes.', t: 0 }; sfx('bump'); return false; }
+  G.carrega = { id: e.mid, k: e.k, o: e.o, var: e.var, de: W2.id };
+  movEstado(W2.id)[e.mid] = null;
+  W2.ents = W2.ents.filter(q => q !== e);
+  VAO_FX.push({ x: e.x * TS + 8, y: e.y * TS + 6, t: 0, k: 'entra' }); sfx('rune');
+  W2.toast = { s: 'Guardou ' + NOME_MOV[e.k] + ' no Vão', t: 0 };
+  return true;
+}
+function porDoVao(x, y) {
+  const c = G.carrega; if (!c) return false;
+  const T = tileOf(W2.map, x, y), ponte = c.k === 'tabua' && T.t === 'abismo';
+  if (!ponte && (T.solid || T.water || propSolid(W2.map, x, y))) { sfx('bump'); return false; }
+  if (W2.ents.some(e => !e.passa && e.x === x && e.y === y) || W2.fol.some(f => f.x === x && f.y === y)) { sfx('bump'); return false; }
+  const s = { k: c.k, o: c.o, var: c.var, x, y, ponte };
+  movEstado(W2.id)[c.id] = s; G.carrega = null;
+  W2.ents.push(Object.assign(movEnt(W2.id, c.id, s), { px: x * TS, py: y * TS, dir: 'down', mv: null, t0: 0 }));
+  VAO_FX.push({ x: x * TS + 8, y: y * TS + 6, t: 0, k: 'sai' }); sfx('rune');
+  if (ponte) W2.toast = { s: 'A tábua virou ponte', t: 0 };
+  return true;
+}
+const ponteEm = (x, y) => W2.ents.some(e => e.ponte && e.x === x && e.y === y);
+{ const _cs5 = canStand; canStand = function (x, y, who) {
+  if (ponteEm(x, y)) { if (who === 'player') return !W2.ents.some(e => !e.passa && e.x === x && e.y === y); return W2.x !== x || W2.y !== y; }
+  return _cs5(x, y, who);
+}; }
+// A: pôr o que está no Vão, ou guardar uma ponte (que não "fala", porque é chão)
+{ const _uw5 = updateWorld2; updateWorld2 = function () {
+  if (V.scene === 'world' && W2.map && !W2.mv && !worldBusy2() && JP.a) {
+    const [dx, dy] = DIR2[W2.dir], tx = W2.x + dx, ty = W2.y + dy, alvo = W2.ents.find(e => !e.passa && e.x === tx && e.y === ty);
+    const ponte = W2.ents.find(e => e.ponte && e.x === tx && e.y === ty);
+    if (G.carrega && !alvo) { JP.a = false; porDoVao(tx, ty); }
+    else if (!G.carrega && ponte && !alvo) { JP.a = false; guardarNoVao(ponte); }
+  }
+  _uw5();
+  passoPuzzle();
+}; }
+// efeito: o objeto entra/sai girando num redemoinho
+const VAO_FX = [];
+// ---------- placas de pressão ----------
+const placaApertada = (x, y) => W2.ents.some(e => e.t === 'movel' && PESADO.has(e.k) && e.x === x && e.y === y);
+// ---------- feixe de luz ----------
+const REFL5 = { '/': { '1,0': [0, -1], '0,-1': [1, 0], '-1,0': [0, 1], '0,1': [-1, 0] }, '\\': { '1,0': [0, 1], '0,1': [1, 0], '-1,0': [0, -1], '0,-1': [-1, 0] } };
+function tracaFeixe(F) {
+  const D = { right: [1, 0], left: [-1, 0], up: [0, -1], down: [0, 1] };
+  let [x, y] = F.emissor, d = D[F.emissor[2]]; const pts = [[x, y]], vis = new Set();
+  for (let n = 0; n < 300; n++) {
+    x += d[0]; y += d[1]; const k = x + ',' + y + ',' + d;
+    if (vis.has(k)) return { pts, fim: 'loop' }; vis.add(k);
+    if (F.alvo && x === F.alvo[0] && y === F.alvo[1]) { pts.push([x, y]); return { pts, fim: 'alvo' }; }
+    if (F.alarme && x === F.alarme[0] && y === F.alarme[1]) { pts.push([x, y]); return { pts, fim: 'alarme' }; }
+    const T = tileOf(W2.map, x, y);
+    if (T.solid || propSolid(W2.map, x, y)) { pts.push([x - d[0] * 0.5, y - d[1] * 0.5]); return { pts, fim: 'parede' }; }
+    const e = W2.ents.find(q => q.x === x && q.y === y && !q.ponte && q.t !== 'trig' && q.t !== 'door');
+    if (e && e.t === 'movel' && e.k === 'espelho') { pts.push([x, y]); d = REFL5[e.o][d.join(',')]; continue; }
+    if (e || (W2.x === x && W2.y === y)) { pts.push([x - d[0] * 0.4, y - d[1] * 0.4]); return { pts, fim: 'bloqueio' }; }
+  }
+  return { pts, fim: 'longe' };
+}
+// ---------- holofotes ----------
+function coneHolofote(h, t) {
+  const [hx, hy, base] = h, B = { down: Math.PI / 2, up: -Math.PI / 2, left: Math.PI, right: 0 }[base] ?? Math.PI / 2;
+  const ang = B + Math.sin(t * 0.012 + hx * 0.7) * 0.95, out = [];
+  for (let y = hy - 8; y <= hy + 8; y++) for (let x = hx - 8; x <= hx + 8; x++) {
+    const dx = x - hx, dy = y - hy, dist = Math.hypot(dx, dy); if (dist < 1 || dist > 7.5) continue;
+    let da = Math.atan2(dy, dx) - ang; while (da > Math.PI) da -= Math.PI * 2; while (da < -Math.PI) da += Math.PI * 2;
+    if (Math.abs(da) > 0.26 + 0.6 / dist) continue;
+    let ok = true; for (let k = 1; ok && k < dist; k++) { const ix = Math.round(hx + dx * k / dist), iy = Math.round(hy + dy * k / dist); const T = tileOf(W2.map, ix, iy); if ((T.solid && T.t !== 'abismo' && T.t !== 'sebe') || propSolid(W2.map, ix, iy)) ok = false; if (T.t === 'sebe' && k < dist - 0.5) ok = false; }
+    if (ok && x >= 0 && y >= 0 && x < W2.map.w && y < W2.map.h) out.push([x, y]);
+  }
+  return { ang, tiles: out };
+}
+const holofotesAtivos = (m) => (m.holofotes || []).length && (m.holofotesSempre || ehNoite());
+// ---------- o passo de cada quadro: feixe, placas, holofotes, rondas ----------
+function passoPuzzle() {
+  const m = W2.map; if (!m || V.scene !== 'world') return;
+  for (const f of VAO_FX) f.t++; while (VAO_FX.length && VAO_FX[0].t > 24) VAO_FX.shift();
+  if (m.feixe) {
+    const r = tracaFeixe(m.feixe); W2.feixe = r;
+    if (r.fim === 'alvo' && !G.flags[m.feixe.flag]) { G.flags[m.feixe.flag] = true; sfx('rune'); W2.toast = { s: 'A luz acende o cristal: a porta de vidro abre!', t: 0 }; }
+    if (r.fim === 'alarme' && !worldBusy2() && !W2.pego) { W2.alarmeT = (W2.alarmeT || 0) + 1; if (W2.alarmeT === 1) W2.toast = { s: 'O cristal VERMELHO está esquentando!', t: 0 }; if (W2.alarmeT > 70) { W2.alarmeT = 0; W2.pego = true; run2(() => pegoNaLuz(m, 'alarme')); } }
+    else W2.alarmeT = 0;
+  }
+  if (m.placas && m.onPlacas && !G.flags[m.placasFlag]) { if (m.placas.every(([x, y]) => placaApertada(x, y))) { G.flags[m.placasFlag] = true; run2(m.onPlacas); } }
+  if (worldBusy2() || W2.pego) return;
+  // holofotes e rondas
+  const visto = (tiles) => tiles.some(([x, y]) => (x === W2.x && y === W2.y) || (W2.mv && x === W2.mv.tx && y === W2.mv.ty));
+  const pegaria = () => (typeof rostoSt === 'function' && rostoSt().on) || !!W2.mv;
+  if (holofotesAtivos(m)) {
+    W2.cones5 = m.holofotes.map(h => coneHolofote(h, W2.t));
+    for (const c of W2.cones5) if (visto(c.tiles)) { if (pegaria()) { W2.pego = true; run2(() => pegoNaLuz(m, 'holofote')); return; } }
+  } else W2.cones5 = null;
+  if (m.stealth) for (const e of W2.ents) if (e.t === 'ronda' && !(e.gone && e.gone())) {
+    const c = coneRonda(e); if (visto(c)) { if (pegaria()) { W2.pego = true; run2(() => pegoNaLuz(m, 'ronda', e)); return; } if (!e.olhou) { e.olhou = 1; e.emote = { s: pickOne(['Hm. Um baú no jardim?', 'Entrega atrasada...', 'Coisa de rico. Deixa.']), t: 80 }; } }
+    else e.olhou = 0;
+  }
+}
+async function pegoNaLuz(m, como, e) {
+  sfx('cancel'); V.shake = 6; if (e) e.emote = { s: '!', t: 40 };
+  await say(como === 'alarme' ? '* O cristal vermelho apita como uma chaleira. De trás das colunas de vidro, saem os Vigias.' : rostoSt().on ? pickOne(['* "PARADO! Quem anda pelo jardim a essa hora?"', '* A luz para em você. Um apito. Passos de vidro.']) : '* A luz para em você no meio do passo. Baú não anda. Este anda.');
+  if (!G.flags.tutLuz5) { G.flags.tutLuz5 = true; await say('[Na luz: GENTE é pega sempre; o BAÚ só se estiver ANDANDO. Espere o facho passar, ou pare dentro dele.]', 'cat'); }
+  const r = await lutaMapa(m.grupoLuz || ['vigia', 'vigia'], { bg: m.batBg });
+  if (r !== 'win') { W2.pego = false; return; }
+  await fadeOut(12); if (rostoSt().on && typeof desfazRosto === 'function') desfazRosto();
+  const [x, y] = typeof m.reinicio === 'function' ? m.reinicio() : m.reinicio || [W2.x, W2.y];
+  loadMap2(W2.id, x, y, 'up'); W2.pego = false; await fadeIn(12);
+  await say(pickOne(['De volta ao começo. A luz não esquece rápido.', 'Tá. Agora com calma. Eu sou um baú. Baú tem calma.', 'Respira. Espera o facho passar.']), 'me');
+}
+// ---------- desenho: placas (no chão), feixe, holofotes, cones das rondas, o que está no Vão ----------
+{ const _ch5 = HOOK_CHAO; HOOK_CHAO = function (m, ox, oy) {
+  const r = _ch5 ? _ch5(m, ox, oy) : undefined;
+  if (m && m.placas) for (const [x, y] of m.placas) bx.drawImage(placaPressaoArt(placaApertada(x, y)), x * TS - ox, y * TS - oy);
+  for (const e of W2.ents) if (e.ponte) { const im = tabuaArt(); bx.drawImage(im, e.x * TS - ox - 1, e.y * TS - oy + 1); bx.drawImage(im, e.x * TS - ox - 1, e.y * TS - oy + 7); }
+  return r;
+}; }
+{ const _ar5 = HOOK_AR; HOOK_AR = function (m, ox, oy) {
+  const r = _ar5 ? _ar5(m, ox, oy) : undefined;
+  if (!m || V.scene !== 'world') return r;
+  // holofotes: cones de luz quente
+  if (W2.cones5 && m.holofotes && W2.cones5.length === m.holofotes.length) {
+    bx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < W2.cones5.length; i++) { const [hx, hy] = m.holofotes[i], c = W2.cones5[i];
+      for (const [x, y] of c.tiles) { const d = Math.hypot(x - hx, y - hy); bx.fillStyle = `rgba(255,236,170,${0.22 - d * 0.018})`; bx.fillRect(x * TS - ox, y * TS - oy, TS, TS); }
+      bx.fillStyle = 'rgba(255,240,190,0.5)'; bx.beginPath(); bx.arc(hx * TS + 8 - ox, hy * TS + 4 - oy, 5, 0, Math.PI * 2); bx.fill(); }
+    bx.globalCompositeOperation = 'source-over';
+  }
+  if (m.stealth) { bx.globalCompositeOperation = 'lighter'; for (const e of W2.ents) if (e.t === 'ronda' && !(e.gone && e.gone())) for (const [x, y] of coneRonda(e)) { bx.fillStyle = 'rgba(160,220,255,0.12)'; bx.fillRect(x * TS - ox, y * TS - oy, TS, TS); } bx.globalCompositeOperation = 'source-over'; }
+  // o feixe: linha de luz com brilho e faíscas nas pontas
+  if (m.feixe && W2.feixe) {
+    const P = W2.feixe.pts.map(([x, y]) => [x * TS + 8 - ox, y * TS + 6 - oy]), cor = W2.feixe.fim === 'alarme' ? [255, 90, 90] : [255, 232, 150];
+    bx.globalCompositeOperation = 'lighter';
+    for (const [w, a] of [[7, 0.12], [3, 0.35], [1, 0.95]]) { bx.strokeStyle = `rgba(${cor[0]},${cor[1]},${cor[2]},${a})`; bx.lineWidth = w; bx.beginPath(); P.forEach(([x, y], i) => i ? bx.lineTo(x, y) : bx.moveTo(x, y)); bx.stroke(); }
+    const [ex, ey] = P[P.length - 1]; const g = bx.createRadialGradient(ex, ey, 0, ex, ey, 12); g.addColorStop(0, `rgba(${cor[0]},${cor[1]},${cor[2]},0.7)`); g.addColorStop(1, 'rgba(0,0,0,0)'); bx.fillStyle = g; bx.fillRect(ex - 12, ey - 12, 24, 24);
+    for (let i = 0; i < 3; i++) { bx.fillStyle = '#ffffff'; bx.fillRect(Math.round(ex + Math.sin(W2.t * 0.3 + i * 2) * 5), Math.round(ey + Math.cos(W2.t * 0.27 + i) * 4), 1, 1); }
+    bx.globalCompositeOperation = 'source-over';
+  }
+  // redemoinho do Vão
+  for (const f of VAO_FX) { const p = f.t / 24, rr = (f.k === 'entra' ? 1 - p : p) * 14 + 2; bx.strokeStyle = `rgba(190,140,255,${0.8 * (1 - p)})`; bx.lineWidth = 1; for (let i = 0; i < 3; i++) { bx.beginPath(); bx.arc(f.x - ox, f.y - oy, rr * (1 - i * 0.25), f.t * 0.4 + i * 2, f.t * 0.4 + i * 2 + 3.5); bx.stroke(); } }
+  // o que está no Vão: um ícone pequeno girando em cima do baú
+  if (G.carrega && !UI.stack.length) { const im = ARTE_MOV(G.carrega.k, G.carrega.o, G.carrega.var), s = 0.55, bob = Math.sin(W2.t * 0.1) * 1.5, x = W2.px + 8 - ox, y = W2.py - 22 - oy + bob;
+    bx.fillStyle = 'rgba(90,60,140,0.5)'; bx.beginPath(); bx.ellipse(x, y + 4, 9, 6, 0, 0, Math.PI * 2); bx.fill();
+    bx.drawImage(im, Math.round(x - im.width * s / 2), Math.round(y - im.height * s / 2), Math.round(im.width * s), Math.round(im.height * s)); }
+  return r;
+}; }
+
+// ================= O GRIMÓRIO NO CAP. 5: AREIA, FUSÕES NOVAS, RESSONÂNCIA E A VELA INTERIOR =================
+// AREIA (achada na mesa dos vidreiros da Estufa): elemento de CORTE que quebra +1 de escudo. Fusões:
+//   Brasa + Areia = VIDRO (corta e quebra +2 de escudo), Areia + Geada = GRANIZO (três pedradas de gelo e corte),
+//   Areia + Seiva = ESPINHEIRO (corte que drena; véu de espinhos devolve dano), Areia + Fuligem = TEMPESTADE DE AREIA
+//   (todos tontos). Cada uma tem o seu VÉU.
+// RESSONÂNCIA (a Dona Iolanda ensina no começo do capítulo): um VÉU do baú em cima da Rita ou da Lume muda o PRÓXIMO
+//   golpe dela: ganha o elemento do véu e bate 30% mais forte (a lança pega fogo, a luz vira cacos de vidro...).
+// A VELA INTERIOR (a Lume, depois da cena mais difícil do capítulo): técnica nova e a teimosia de não esquecer.
+Object.assign(EL3, { areia: { nm: 'Areia', el: 'corte', col: '#e0c078', cols: ['#e0c078', '#f8e8b0', '#a88848'], d: 'corte; quebra +1 de escudo', brk: 1 } });
+ORD_EL.push('areia');
+Object.assign(FUS3, {
+  'areia+brasa': { nm: 'Vidro', col: '#bff0ff', cols: ['#e8fbff', '#8ad8f0', '#ffffff'], hits: [['corte', 1.1]], brk: 2, d: 'vidro afiado: corta e quebra +2 de escudo', veu: 'vidro', nota: '"Brasa + Areia = Vidro. Corta escudo como faca quente na manteiga. Não lamber."' },
+  'areia+geada': { nm: 'Granizo', col: '#d8f0ff', cols: ['#ffffff', '#bff0ff', '#e0c078'], hits: [['gelo', 0.42], ['corte', 0.42], ['gelo', 0.42]], st: 'frio', brk: 1, d: 'três pedradas de gelo e corte; gela', veu: 'granizo', nota: '"Areia + Geada = Granizo. Chove pedra. Bom para quem tem escudo de vidro, ruim para telhado."' },
+  'areia+seiva': { nm: 'Espinheiro', col: '#a8c870', cols: ['#a8c870', '#e0c078', '#4a7a3a'], hits: [['corte', 0.85]], dreno: 0.35, d: 'espinhos que cortam e devolvem vida', veu: 'espinhos', nota: '"Areia + Seiva = Espinheiro. A planta aprendeu a se defender. Igual eu."' },
+  'areia+fuligem': { nm: 'Tempestade de Areia', col: '#c8a878', cols: ['#c8a878', '#8a7a6a', '#e0c078'], hits: [['corte', 0.6]], tonto: 0.75, d: 'areia nos olhos de todo mundo: quase todos ficam TONTOS', veu: 'redemoinho', nota: '"Areia + Fuligem = Tempestade. Ninguém enxerga nada. Nem eu. Recomendo óculos."' }
+});
+Object.assign(VEU3, {
+  areia: { nm: 'Duna', d: 'o aliado leva metade do próximo golpe e quem bateu fica TONTO' },
+  vidro: { nm: 'Cacos', d: 'o próximo golpe do aliado quebra +2 de escudo' },
+  granizo: { nm: 'Granizo', d: 'couraça (metade do dano) e quem bater nele fica GELADO' },
+  espinhos: { nm: 'Espinhos', d: 'por 2 golpes, devolve 40% do dano a quem bater no aliado' },
+  redemoinho: { nm: 'Redemoinho', d: 'o próximo golpe no aliado erra e a vez dele adianta' }
+});
+Object.assign(ST_NAME, { duna: 'DUNA', cacos: 'CACOS', espinhos: 'ESPINHOS', granizo: 'GRANIZO', resson: 'RESSONÂNCIA', teimosa: 'TEIMOSA' });
+// quebra extra da areia e das fusões com quebra
+{ const _g5 = golpe3; golpe3 = async function (m, alvos, P, F, s, k) {
+  const extra = (P.fus && P.fus.brk) || (!P.fus && EL3[s.e[0]] && EL3[s.e[0]].brk) || 0;
+  BT._brk5 = extra; try { return await _g5(m, alvos, P, F, s, k); } finally { BT._brk5 = 0; }
+}; }
+{ const _hf5 = hitFoe; hitFoe = function (a, t, pow, o = {}) {
+  if (BT._brk5) o = { ...o, brk: (o.brk || 1) + BT._brk5 };
+  // cacos (véu de vidro) e ressonância: o próximo golpe do aliado
+  if (a && a.side === 'p' && a.st) {
+    if (a.st.cacos > 0 && !o.mag) { o = { ...o, brk: (o.brk || 1) + 2 }; a.st.cacos = 0; const [x, y] = unitCenter(t); popNum(x, y - 30, 'CACOS!', '#bff0ff'); }
+    if (a.st.resson && a.id !== 'bau' && !o._resson) {
+      const R = RESSON[a.st.resson]; a.st.resson = 0;
+      if (R) { o = { ...o, el: R.el || o.el, _resson: true }; pow *= 1.3; const [x, y] = unitCenter(t); callout('RESSONÂNCIA: ' + R.nm(a), R.col, 60); burst(x, y, 16, R.cols, { up: 1 }); if (R.st === 'frio') { t.st.frio = 2; } if (R.brk) o.brk = (o.brk || 1) + R.brk; }
+    }
+  }
+  return _hf5(a, t, pow, o);
+}; }
+// véus novos
+{ const _v5 = veu3; veu3 = async function (m, t, P, k) {
+  const K = P.veuK, [x, y] = unitCenter(t);
+  if (['areia', 'vidro', 'granizo', 'espinhos', 'redemoinho'].includes(K)) {
+    await tw(22, p => { fxRing(x, y, 6 + p * 16, P.col, 1 - p); for (let i = 0; i < 8; i++) { const a = p * 7 + i; bx.fillStyle = P.cols[i % P.cols.length]; bx.fillRect(Math.round(x + Math.cos(a) * 15), Math.round(y + 10 - p * 26 + Math.sin(a) * 3), 2, 2); } });
+    if (K === 'areia') { t.st.duna = 1; t.def0 = true; popNum(x, y - 26, 'DUNA', '#e0c078'); }
+    if (K === 'vidro') { t.st.cacos = 1; popNum(x, y - 26, 'CACOS', '#bff0ff'); }
+    if (K === 'granizo') { t.def0 = true; t.st.couraca = 1; t.st.granizo = 1; popNum(x, y - 26, 'GRANIZO', '#d8f0ff'); }
+    if (K === 'espinhos') { t.st.espinhos = Math.round(2 * k); popNum(x, y - 26, 'ESPINHOS', '#a8c870'); }
+    if (K === 'redemoinho') { t.st.sumido = 1; t.ct = Math.min(99, t.ct + 30); popNum(x, y - 26, 'REDEMOINHO', '#c8a878'); }
+  } else await _v5(m, t, P, k);
+  // RESSONÂNCIA: véu do baú numa aliada muda o próximo golpe dela
+  if (G.flags.resson && m.id === 'bau' && t.id !== 'bau' && t.hp > 0) {
+    const el = (P.fus ? Object.keys(FUS3).find(kk => FUS3[kk] === P.fus) : null) || P.veuK;
+    const chave = RESSON[el] ? el : RESSON[P.veuK] ? P.veuK : null;
+    if (chave) { t.st.resson = chave; await wait(6); popNum(x, y - 40, 'RESSONÂNCIA', RESSON[chave].col); sfx('rune'); }
+  }
+}; }
+const RESSON = {
+  brasa: { el: 'fogo', col: '#ffa94d', cols: ['#f07830', '#ffd040'], nm: a => a.id === 'rita' ? 'Lança em Brasa' : 'Faísca de Fogo' },
+  geada: { el: 'gelo', col: '#bff0ff', cols: ['#bff0ff', '#7ad0f0'], st: 'frio', nm: a => a.id === 'rita' ? 'Lança de Gelo' : 'Luz Gelada' },
+  seiva: { el: null, col: '#9be58a', cols: ['#9be58a', '#ffffff'], nm: a => a.id === 'rita' ? 'Lança Viva' : 'Luz Verde' },
+  fuligem: { el: null, col: '#c0b0e0', cols: ['#6a5a7a', '#a898b8'], nm: a => 'Golpe na Fumaça' },
+  areia: { el: 'corte', col: '#e0c078', cols: ['#e0c078', '#f8e8b0'], brk: 1, nm: a => a.id === 'rita' ? 'Lança de Areia' : 'Luz Cortante' },
+  vidro: { el: 'corte', col: '#bff0ff', cols: ['#ffffff', '#8ad8f0'], brk: 2, nm: a => a.id === 'rita' ? 'Lança de Vidro' : 'Luz em Cacos' },
+  vapor: { el: 'fogo', col: '#e8e8f0', cols: ['#ffffff', '#c8d8e8'], nm: a => 'Golpe Escaldante' },
+  orvalho: { el: 'gelo', col: '#a8f0e0', cols: ['#a8f0e0', '#ffffff'], nm: a => 'Golpe de Orvalho' },
+  brasaviva: { el: 'fogo', col: '#ffb040', cols: ['#ffb040', '#9be58a'], nm: a => 'Brasa Viva' },
+  granizo: { el: 'gelo', col: '#d8f0ff', cols: ['#ffffff', '#bff0ff'], st: 'frio', brk: 1, nm: a => 'Golpe de Granizo' },
+  espinhos: { el: 'corte', col: '#a8c870', cols: ['#a8c870', '#4a7a3a'], nm: a => 'Golpe de Espinho' }
+};
+// efeitos defensivos novos (Duna, Granizo, Espinhos) quando o inimigo bate
+{ const _fs5 = foeStrike; foeStrike = async function (e, t, pow, o = {}) {
+  const hp0 = t ? t.hp : 0;
+  const r = await _fs5(e, t, pow, o);
+  if (!t || !t.st || !e || e.hp <= 0) return r;
+  const dano = Math.max(0, hp0 - t.hp), [x, y] = unitCenter(e);
+  if (t.st.duna > 0) { t.st.duna = 0; e.ct = Math.max(0, e.ct - 40); popNum(x, y - 30, 'TONTO', '#d0a8ff'); }
+  if (t.st.granizo > 0) { t.st.granizo = 0; e.st.frio = 2; popNum(x, y - 30, 'GELADO', '#bff0ff'); }
+  if (t.st.espinhos > 0 && dano > 0) { t.st.espinhos--; const d = Math.max(1, Math.round(dano * 0.4)); e.hp = Math.max(1, e.hp - d); popNum(x, y - 20, '-' + d, '#a8c870'); burst(x, y, 8, ['#a8c870', '#4a7a3a']); }
+  return r;
+}; }
+// a descrição do véu avisa da ressonância
+{ const _pg5 = pagina3; pagina3 = function (s) { const P = _pg5(s); if (G.flags && G.flags.resson && s.f === 'veu' && !s.g) P.d += ' · na Rita ou na Lume: RESSONÂNCIA (o próximo golpe dela ganha o elemento, +30%)'; return P; }; }
+
+// ---------- a VELA INTERIOR (Lume) ----------
+TECH2.velaInterior = { nm: 'Vela Interior', cost: 40, tgt: 'self', w: 'normal', d: 'A luz que ninguém acende por ela: cura 20% do grupo, tira os maus estados e deixa o grupo TEIMOSO (não esquece nem treme) por 3 vezes. +10 Tensão.', run: async (m) => {
+  sfx('heal'); jingle('C5:2 E5:2 G5:2 C6:4 G5:2 C6:6', 240);
+  const [x0, y0] = unitCenter(m);
+  await tw(44, (p, k) => { luzMagia(x0, y0 - 10, 20 + p * 70, `rgba(255,220,140,${0.5 * (1 - p)})`, 1); for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2 + k * 0.05; bx.fillStyle = i % 2 ? '#fff0a0' : '#ffd060'; bx.fillRect(Math.round(x0 + Math.cos(a) * (10 + p * 50)), Math.round(y0 - 10 + Math.sin(a) * (6 + p * 30)), 2, 2); } });
+  for (const u of alive(BT.party)) { healUnit(u, Math.round(u.mhp * 0.2)); for (const s of ['queimado', 'frio', 'tonto', 'esquecido', 'preso', 'molhado']) if (u.st[s]) u.st[s] = 0; u.st.teimosa = 3; }
+  BT.tension = Math.min(100, BT.tension + 10); callout('A Lume brilha por conta própria', '#ffe08a', 70);
+} };
+// TEIMOSA: não esquece a vez (névoa, apito)
+{ const _ocT = openCommand; openCommand = function (m) { if (m && m.st && m.st.esquecido > 0 && (m.st.teimosa > 0 || (m.id === 'lume' && G.flags.c5Vela))) { m.st.esquecido = 0; if (m.st.teimosa > 0) m.st.teimosa--; const [x, y] = unitCenter(m); popNum(x, y - 30, 'NÃO ESQUECI!', '#ffe08a'); } return _ocT(m); }; }
+{ const _gaV = grupoAtual; grupoAtual = function () { const g = _gaV(); if (G.flags && G.flags.c5Vela) { const l = g.find(m => m.id === 'lume'); if (l && !(l.techs || []).includes('velaInterior')) l.techs = [...(l.techs || []), 'velaInterior']; if (l) l.mag = Math.round(l.mag * 1.1); } return g; }; }
+
+// ================= INIMIGOS DO CAP. 5: CIDADE ALTA, ACENDEDORIA E TELHADOS =================
+// VIGIA DE VIDRO (ESPELHA: o próximo FEITIÇO nele volta pela metade para quem lançou; corte e mordida racham),
+// MARIPOSA DE VIDRO (voa; pó de vidro rouba PM; fogo e corte), GUARDA REAL (alabarda; chama reforço; lanterna nos
+// olhos atrasa a vez; mordida e gelo), o mini-chefe VITRAL VIVO (muda de COR: vermelho racha com gelo e devolve fogo,
+// azul racha com fogo e devolve gelo, verde racha com corte e devolve seiva; Prisma preparado) e o chefe GRANDE
+// HOLOFOTE (Varredura em todos, Facho Total preparado, Cegar; a lente racha a 50% e chama a Guarda).
+Object.assign(ENEMY2, {
+  vigia: { name: 'Vigia de Vidro', kind: 'vigia', mhp: 430, atk: 33, def: 16, mdef: 18, spd: 11, shield: 4, maxShield: 4, weak: ['corte', 'mordida'], ai: 'vigia', h: 60, cobres: 20,
+    frame: u => vigiaArt(Math.floor(BT.t / 14 + u.x) % 2, !!u.espelho), dieCols: ['#bff0ff', '#5ab0e0', '#ffffff', '#c89a30'] },
+  mvidro: { name: 'Mariposa de Vidro', kind: 'mvidro', fly: true, mhp: 300, atk: 31, def: 9, mdef: 10, spd: 15, shield: 3, maxShield: 3, weak: ['fogo', 'corte'], ai: 'mvidro', h: 30, cobres: 15,
+    frame: u => mariposaVidroArt(Math.floor(BT.t / 6 + u.x) % 2), dieCols: ['#a8e0f0', '#ffffff', '#c8a040'] },
+  guardaR: { name: 'Guarda Real', kind: 'guardaR', mhp: 470, atk: 34, def: 15, mdef: 10, spd: 10, shield: 4, maxShield: 4, weak: ['mordida', 'gelo'], ai: 'guardaR', h: 56, cobres: 22,
+    frame: u => guardaRealArt(Math.floor(BT.t / 16 + u.x) % 2), dieCols: ['#2a3a7a', '#c89a30', '#ffffff'] },
+  vitral: { name: 'Vitral Vivo', kind: 'vitral', boss: true, mhp: 4300, atk: 35, def: 14, mdef: 14, spd: 10, shield: 6, maxShield: 6, weak: ['gelo', 'mordida'], ai: 'vitral', h: 116, cobres: 140, cor: 'r',
+    frame: u => vitralArt(Math.floor(BT.t / 12) % 2, u.cor || 'r', !!u.armando), dieCols: ['#d83a4a', '#3a7ad8', '#3ab04a', '#ffd870', '#ffffff'], cancelTxt: 'O prisma rachou! Nada de arco-íris!' },
+  holofote: { name: 'Grande Holofote', kind: 'holofote', boss: true, mhp: 6500, atk: 38, def: 16, mdef: 12, spd: 10, shield: 7, maxShield: 7, weak: ['corte', 'mordida'], ai: 'holofote', h: 112, cobres: 220, ph: 1,
+    frame: u => holofoteBossArt(Math.floor(BT.t / 10) % 2, u.ph || 1, !!u.armando), dieCols: ['#ffe8a0', '#c89a30', '#4a4a5a', '#ffffff'], cancelTxt: 'A lente engasgou! Facho cancelado!' }
+});
+Object.assign(FICHA, {
+  vigia: 'Vigia de Vidro: guarda da Acendedoria. ESPELHA feitiços (o escudo-espelho brilha): bata com o corpo ou espere ele baixar. Corte e mordida.',
+  mvidro: 'Mariposa de Vidro: o pó das asas rouba PM. Fogo e corte.',
+  guardaR: 'Guarda Real: alabarda, lanterna e apito. Chama reforço. Mordida e gelo.',
+  vitral: 'Vitral Vivo: MUDA DE COR. Vermelho: gelo racha, fogo volta. Azul: fogo racha, gelo volta. Verde: corte racha. Prisma preparado: quebre o escudo!',
+  holofote: 'Grande Holofote: Varredura em todos, Facho Total (quebre o escudo!), Cegar atrasa a vez. Lente: corte e mordida.'
+});
+// VITRAL: a cor manda na fraqueza e no reflexo
+const VIT = { r: { nm: 'VERMELHO', weak: ['gelo', 'mordida'], volta: 'fogo', col: '#ff8a8a' }, b: { nm: 'AZUL', weak: ['fogo', 'mordida'], volta: 'gelo', col: '#8ab8ff' }, g: { nm: 'VERDE', weak: ['corte', 'mordida'], volta: null, col: '#8ae88a' } };
+function vitralCor(e, cor) { e.cor = cor; e.weak = VIT[cor].weak.slice(); e.known = {}; const [x, y] = unitCenter(e); callout('O vitral fica ' + VIT[cor].nm + '!', VIT[cor].col, 70); burst(x, y, 20, VITCOR_CORES[cor]); }
+const VITCOR_CORES = { r: ['#d83a4a', '#ff8a8a', '#ffd870'], b: ['#3a7ad8', '#8ab8ff', '#ffffff'], g: ['#3ab04a', '#8ae88a', '#ffd870'] };
+// ESPELHO (vigia) e REFLEXO (vitral): feitiço volta pela metade
+{ const _hf6 = hitFoe; hitFoe = function (a, t, pow, o = {}) {
+  if (t && a && a.side === 'p' && o.mag && t.hp > 0) {
+    const ref = (t.kind === 'vigia' && t.espelho) || (t.kind === 'vitral' && VIT[t.cor] && VIT[t.cor].volta && o.el === VIT[t.cor].volta);
+    if (ref) {
+      if (t.kind === 'vigia') t.espelho = 0;
+      const [x, y] = unitCenter(t); popNum(x, y - 30, 'ESPELHADO!', '#ffffff'); sfx('guard'); flashW(2);
+      const r = _hf6(a, t, pow * 0.5, o);
+      if (a.hp > 0) { const d = Math.max(1, Math.round((r || 0) * 0.8 + 6)); hurtMember(a, d); const [ax, ay] = unitCenter(a); burst(ax, ay, 10, ['#ffffff', '#bff0ff']); }
+      return r;
+    }
+  }
+  return _hf6(a, t, pow, o);
+}; }
+Object.assign(AI2, {
+  async vigia(e) {
+    const t = foeTarget(); if (!t) return;
+    const [ex, ey] = unitCenter(e), [tx, ty] = unitCenter(t);
+    if (!e.espelho && Math.random() < 0.35) { e.espelho = 1; callout('O Vigia ergue o escudo-ESPELHO', '#ffffff', 60); sfx('guard'); await tw(18, p => fxRing(ex - 10, ey, 6 + p * 14, '#ffffff', 1 - p)); return; }
+    if (Math.random() < 0.5) {
+      callout('Facho', '#ffe08a', 30); sfx('rune');
+      await tw(16, p => { bx.strokeStyle = `rgba(255,232,150,${0.9 * (1 - p * 0.5)})`; bx.lineWidth = 3; bx.beginPath(); bx.moveTo(ex, ey - 22); bx.lineTo(ex + (tx - ex) * Math.min(1, p * 2), ey - 22 + (ty - ey + 22) * Math.min(1, p * 2)); bx.stroke(); });
+      await foeStrike(e, t, 1.15, { n: 22, longe: true }); return;
+    }
+    callout('Golpe de Escudo', '#d0a8ff', 30); await foeLunge(e, t, 12, 14); await foeStrike(e, t, 1.0, { n: 24 }); await foeBack(e);
+  },
+  async mvidro(e) {
+    const t = foeTarget(); if (!t) return;
+    const [tx, ty] = unitCenter(t);
+    if (Math.random() < 0.45) {
+      callout('Pó de Vidro', '#a8e0f0', 40);
+      await tw(20, p => { for (let i = 0; i < 8; i++) { bx.fillStyle = i % 2 ? '#ffffff' : '#a8e0f0'; bx.fillRect(Math.round(tx - 10 + Math.sin(p * 9 + i) * 10), Math.round(ty - 30 + p * 30 + i * 2), 1, 1); } });
+      const r = await foeStrike(e, t, 0.6, { n: 22, longe: true });
+      if (r !== 'perfeito' && t.mmp) { const n = Math.min(t.mp, 8); t.mp -= n; if (n) popNum(tx, ty - 30, '-' + n + ' PM', '#8ab8ff'); }
+      return;
+    }
+    callout('Asa de Vidro', '#d0a8ff', 30); await foeLunge(e, t, 14, 12); await foeStrike(e, t, 1.0, { n: 22 }); await foeBack(e);
+  },
+  async guardaR(e) {
+    const t = foeTarget(); if (!t) return;
+    const n = alive(BT.foes).length;
+    if (n < 3 && !e.chamou && Math.random() < 0.4) {
+      e.chamou = true; callout('"REFORÇO NA CUMEEIRA!"', '#ffd8a0', 60); sfx('encounter');
+      const c = mkFoe(ENEMY2.guardaR, 150 - BT.foes.length * 6, 164); c.ct = 0; c.alpha = 0; c.chamou = true; BT.foes.push(c); await tw(18, p => { c.alpha = p; }); return;
+    }
+    if (Math.random() < 0.3) { callout('Lanterna nos Olhos', '#ffe08a', 40); const [tx, ty] = unitCenter(t); await tw(14, p => luzMagia(tx, ty - 20, 10 + p * 20, 'rgba(255,240,180,0.6)', 1 - p)); await foeStrike(e, t, 0.6, { n: 20, longe: true }); t.ct = Math.max(0, t.ct - 35); popNum(tx, ty - 30, 'OFUSCADO', '#ffe08a'); return; }
+    callout('Alabarda', '#d0a8ff', 30); await foeLunge(e, t, 16, 14); await foeStrike(e, t, 1.2, { n: 26 }); await foeBack(e);
+  },
+  async vitral(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) {
+      e.charge = null; e.armando = false; callout('PRISMA!', '#ffffff', 70); sfx('crit'); flashW(4); bshake(16, 3);
+      await tw(26, p => { const cs = ['#ff5a6a', '#ffd870', '#8ae88a', '#8ab8ff', '#c8a0ff']; for (let i = 0; i < 5; i++) { bx.globalAlpha = 0.6 * (1 - p); bx.fillStyle = cs[i]; bx.fillRect(0, Math.round(ey - 40 + i * 8 - p * 10), W, 6); bx.globalAlpha = 1; } });
+      for (const m of alive(BT.party)) await foeStrike(e, m, e.ph >= 2 ? 1.35 : 1.25, { n: 30, noCounter: true, longe: true });
+      vitralCor(e, { r: 'b', b: 'g', g: 'r' }[e.cor]); return;
+    }
+    // troca de cor a cada 2 vezes (toda vez, na fase 2)
+    if (e.turns > 0 && e.turns % (e.ph >= 2 ? 1 : 2) === 0) { vitralCor(e, { r: 'b', b: 'g', g: 'r' }[e.cor]); await wait(10); }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('A luz junta no peito do vitral... (quebre o escudo!)', '#ff6b6b', 90); sfx('rumble'); await tw(22, p => luzMagia(ex, ey - 10, 12 + p * 24, 'rgba(255,255,255,0.6)', p)); return; }
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.45) {
+      callout('Estilhaços', '#ffffff', 40); sfx('rumble');
+      for (const m of alive(BT.party)) { const [mx, my] = unitCenter(m); await tw(8, p => { for (let i = 0; i < 4; i++) { bx.fillStyle = VITCOR_CORES[e.cor][i % 3]; bx.fillRect(Math.round(ex + (mx - ex) * p + i * 3), Math.round(ey + (my - ey) * p - i * 2), 2, 2); } }); await foeStrike(e, m, 0.7, { n: 20, noCounter: true, longe: true }); }
+      return;
+    }
+    callout('Raio ' + VIT[e.cor].nm.toLowerCase(), VIT[e.cor].col, 40);
+    const [tx, ty] = unitCenter(t);
+    await tw(16, p => { bx.strokeStyle = VIT[e.cor].col; bx.lineWidth = 3; bx.globalAlpha = 1 - p * 0.5; bx.beginPath(); bx.moveTo(ex, ey - 10); bx.lineTo(tx, ty - 10); bx.stroke(); bx.globalAlpha = 1; });
+    await foeStrike(e, t, 1.3, { n: 26, longe: true });
+  },
+  async holofote(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) {
+      e.charge = null; e.armando = false; callout('FACHO TOTAL!', '#ffffff', 70); sfx('crit'); flashW(6); bshake(20, 4);
+      await tw(30, p => { bx.fillStyle = `rgba(255,248,210,${0.85 * (1 - p)})`; bx.beginPath(); bx.moveTo(ex, ey - 20); bx.lineTo(0, ey - 80); bx.lineTo(0, ey + 60); bx.closePath(); bx.fill(); });
+      for (const m of alive(BT.party)) await foeStrike(e, m, e.ph >= 2 ? 1.55 : 1.45, { n: 32, noCounter: true, longe: true });
+      return;
+    }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('A lente esquenta, branca... (quebre o escudo!)', '#ff6b6b', 90); sfx('rumble'); await tw(24, p => luzMagia(ex + 4, ey - 6, 14 + p * 26, 'rgba(255,250,220,0.7)', p)); return; }
+    const guardas = alive(BT.foes).filter(f => f.kind === 'guardaR').length;
+    if (e.ph >= 2 && guardas < 1 && e.turns % 3 === 1) { callout('"Guarda! Na torre do sino!"', '#ffd8a0', 60); sfx('encounter'); const c = mkFoe(ENEMY2.guardaR, 150, 164); c.ct = 0; c.alpha = 0; c.chamou = true; BT.foes.push(c); await tw(18, p => { c.alpha = p; }); return; }
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.5) {
+      callout('Varredura', '#ffe08a', 40); sfx('rumble');
+      const alvos = alive(BT.party);
+      await tw(28, p => { const a = -0.6 + p * 1.2; bx.fillStyle = 'rgba(255,240,180,0.35)'; bx.beginPath(); bx.moveTo(ex, ey - 20); bx.lineTo(ex - 260, ey - 20 + Math.tan(a) * 260 - 30); bx.lineTo(ex - 260, ey - 20 + Math.tan(a) * 260 + 30); bx.closePath(); bx.fill(); });
+      for (const m of alvos) await foeStrike(e, m, m === t ? 1.1 : 0.75, { n: 22, noCounter: true, longe: true });
+      return;
+    }
+    callout('Cegar', '#ffffff', 40); const [tx, ty] = unitCenter(t);
+    await tw(16, p => luzMagia(tx, ty - 20, 8 + p * 30, 'rgba(255,255,255,0.8)', 1 - p));
+    await foeStrike(e, t, 0.85, { n: 24, longe: true }); t.ct = Math.max(0, t.ct - 45); popNum(tx, ty - 30, 'CEGO', '#ffffff');
+  }
+});
+function fasesVitral() {
+  return [{ at: 0.5, run: async (e) => {
+    sfx('rumble'); bshake(24, 3); flashW(4);
+    await say('* Uma rachadura atravessa o vitral de cima a baixo. Pela fresta, a luz sai em todas as cores ao mesmo tempo.');
+    await say('[A cor agora troca TODA vez. Fique de olho no nome da cor antes de lançar.]', 'cat');
+    e.ph = 2; e.spd = 12; e.maxShield = 7; e.shield = 7;
+  } }];
+}
+function fasesHolofote() {
+  return [{ at: 0.5, run: async (e) => {
+    sfx('rumble'); bshake(26, 3); flashW(4);
+    await say('* A lente racha com um estalo de gelo. O facho sai torto, para todo lado, e o operador grita lá de cima.');
+    await say('"GUARDA! NA TORRE DO SINO! TRAZ O QUE TIVER!"', 'n');
+    await say('[A lente rachada: agora o fogo também a faz estalar. Ele vai chamar reforço.]', 'cat');
+    e.ph = 2; e.weak = ['corte', 'mordida', 'fogo']; e.known = {}; e.maxShield = 8; e.shield = 8; e.spd = 11;
+  } }];
+}
+
+// ================= CAPÍTULO 5 — O CADERNO PRETO (Parte 1: A Cidade Alta e a Acendedoria) =================
+// A página arrancada (Candeia) -> a letra é a mesma da LISTA DO DESCANSO -> a Dona Iolanda reconhece o PAPEL-LÍRIO: só a
+// ACENDEDORIA compra (e ensina a RESSONÂNCIA) -> o BONDINHO (só de dia) sobe para a CIDADE ALTA -> o jardineiro perdeu
+// a tesoura no LABIRINTO de sebes (só fala de dia) e dá a chave da ESTUFA -> na estufa: a AREIA dos vidreiros e as
+// PLACAS DE PRESSÃO (vasos guardados no Vão) abrem o ALÇAPÃO -> de NOITE (de dia é expediente lá embaixo; e no jardim,
+// os HOLOFOTES varrem) desce-se à ACENDEDORIA: Sala das Lentes (FEIXE e espelhos) -> Arquivo das Velas (acender, na
+// ordem certa, as velas com nomes que o grupo conhece; uma está alta: a ESCADINHA) -> o VITRAL VIVO -> o ESCRITÓRIO:
+// o caderno preto e o chá com o Acendedor-Mor (a cena mais difícil: a oferta à Lume) -> a fuga pelos TELHADOS (cap5b).
+// SEGREDO: a conversa do chá só acontece dentro do jogo; fora dele, não explicar nada.
+const CA5 = POS5.cidadeAlta, ES5 = POS5.estufa, LE5 = POS5.lentes, AR5 = POS5.arquivo, EC5 = POS5.escritorio, TE5 = POS5.telhados;
+Object.assign(TRACKS, {
+  cidadealta: { bpm: 84, bars: 8, chords: 'F Dm Bb C F Am Bb C', bass: 'root5', bassVol: 0.07,
+    lead: 'A5:4 C6:2 A5:2 F5:8 | D6:4 C6:4 A5:8 | Bb5:4 A5:2 G5:2 F5:4 D5:4 | E5:8 G5:8 | A5:4 C6:2 A5:2 F6:8 | E6:4 C6:4 A5:8 | D6:4 C6:2 Bb5:2 A5:4 G5:4 | F5:16',
+    leadWave: 'triangle', leadVol: 0.055, arp: { rate: 4, vol: 0.014, oct: 1 }, drums: 'k.......s.......', hatVol: 0.012 },
+  acendedoria: { bpm: 72, bars: 4, chords: 'Am F E E', bass: 'oct8', bassVol: 0.09,
+    lead: 'E5:2 .:2 A5:2 .:2 B5:4 C6:4 | A5:4 .:4 F5:4 .:4 | G#5:2 .:2 B5:2 .:2 E6:4 D6:4 | B5:8 G#5:8',
+    leadWave: 'sine', leadVol: 0.06, arp: { rate: 2, vol: 0.012, oct: 1 }, drums: 'k...............', hatVol: 0.01 },
+  cha: { bpm: 60, bars: 4, chords: 'C Em Am F', bass: 'root5', bassVol: 0.06,
+    lead: 'G5:4 E5:4 C5:8 | B4:4 E5:4 G5:8 | A5:4 G5:4 E5:4 C5:4 | F5:8 E5:4 D5:4',
+    leadWave: 'sine', leadVol: 0.05, arp: { rate: 4, vol: 0.01, oct: 1 }, drums: '', hatVol: 0 },
+  telhados: { bpm: 132, bars: 4, chords: 'Em C D B', bass: 'oct8', bassVol: 0.1,
+    lead: 'E5:2 G5:2 B5:2 E6:2 D6:2 B5:2 G5:4 | E5:2 G5:2 C6:2 E6:2 D6:4 C6:4 | D5:2 F#5:2 A5:2 D6:2 C6:2 A5:2 F#5:4 | B4:2 D#5:2 F#5:2 B5:2 A5:4 F#5:4',
+    leadWave: 'square', leadVol: 0.045, arp: { rate: 2, vol: 0.012, oct: 0 }, drums: 'k...h.s.k.k.h.s.', hatVol: 0.025 }
+});
+Object.assign(HUMS, {
+  benedito: { h: 46, skin: '#a8704a', hair: '#e8e4e0', top: '#4a6a3a', bottom: '#4a3a2a', hat: '#c8a060', apron: '#8a7a5a', beard: true },
+  dama: { h: 48, skin: '#e8c8b0', hair: '#c8c0d0', hairStyle: 'coque', top: '#5a2a4a', coat: '#3a1a2a', bottom: '#5a2a4a', acc: '#e8e0f0' },
+  quinzinho: { h: 34, skin: '#d8a078', hair: '#4a2a1a', top: '#e8c050', bottom: '#3a4a7a' },
+  sorveteiro: { h: 47, skin: '#c8906a', hair: '#2a1a1a', top: '#f0f0f8', bottom: '#4a6aa8', hat: '#f0f0f8' },
+  guardaRH: { h: 52, skin: '#d8a070', hair: '#2a1a1a', top: '#2a3a7a', coat: '#2a3a7a', bottom: '#1a1a2a', hat: '#2a3a7a', acc: '#c89a30' }
+});
+Object.assign(WHO, {
+  benedito: { name: () => 'Seu Benedito', portrait: () => portHum('benedito'), voice: voz(260, 'blipLow'), col: '#d8f0c8' },
+  dama: { name: () => 'Dona Hortênsia', portrait: () => portHum('dama'), voice: voz(560, 'blipTri'), col: '#f0d8f0' },
+  quinzinho: { name: () => 'Quinzinho', portrait: () => portHum('quinzinho'), voice: voz(820), col: '#fff0c0' },
+  sorveteiro: { name: () => 'Sorveteiro', portrait: () => portHum('sorveteiro'), voice: voz(480), col: '#e8f8ff' },
+  guardaRH: { name: () => 'Guarda Real', portrait: () => portHum('guardaRH'), voice: voz(220, 'blipLow'), col: '#c8d0f0' }
+});
+Object.assign(EQ2, {
+  monoculo: { nm: 'Monóculo do Conde', slot: 'amuleto', who: ['bau', 'lume', 'rita'], mod: { mag: 2, spd: 1 }, fx: [], preco: 0, d: 'Do falecido marido da Dona Hortênsia. +2 MAG, +1 VEL. Tudo fica com cara de documento importante.' }
+});
+const diaBondinho = () => { const h = hora(); return h >= 7 * 60 && h < 19 * 60; };
+const vigiaSpr = (t, d) => { const f = vigiaArt(Math.floor(t / 14) % 2, false); return d === 'left' ? flipC(f) : f; };
+const guardaSpr = (t, d) => { const f = guardaRealArt(Math.floor(t / 14) % 2); return d === 'left' ? flipC(f) : f; };
+
+{ const _mm5 = montarMapas2; montarMapas2 = function () {
+  _mm5.apply(this, arguments);
+  const grade = (m) => { for (const p of m.props || []) { if (p._hld) continue; const f = p.img; p._hld = true; p.casaO = p.casaO || f.casaO; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } };
+  // ===== CIDADE ALTA =====
+  MAPS2.cidadeAlta = { rows: ROWS5.cidadeAlta, key: KEY5, name: 'Auren · Cidade Alta', music: 'cidadealta', batBg: bgCidadeAlta, bg: '#1c2a4a', showMoney: true,
+    stealth: true, holofotes: CA5.holofotes, grupoLuz: ['vigia', 'vigia'], reinicio: [CA5.marco[0], CA5.marco[1] + 1],
+    props: [
+      { img: acendedoriaArt, x: 18, y: 12 },
+      { img: casa({ w: 8, stone: true, wall: '#d8d0e0', roof: '#4a4a7a', door: 3, doorC: '#3a2a3a', win: [0.5, 2.8, 5.8], signC: '#c89a30', wallH: 106 }), x: 2, y: 10 },
+      { img: casa({ w: 6, stone: true, wall: '#e0c8c8', roof: '#7a3a4a', door: 2.2, win: [0.4, 4.2], chimney: true }), x: 10, y: 9 },
+      { img: casa({ w: 8, stone: true, wall: '#d8d0e0', roof: '#3a5a6a', door: 3, doorC: '#3a2a3a', win: [0.5, 2.8, 5.8], awning: '#5a8ab8', wallH: 106 }), x: 40, y: 10 },
+      { img: casa({ w: 7, stone: true, wall: '#e8dcc8', roof: '#5a3a6a', door: 2.6, win: [0.4, 5.2], chimney: true }), x: 48, y: 9 },
+      ...[[0.4, 8], [16.4, 8], [38.4, 8], [54.6, 8]].map(([x, y], i) => ({ img: arvC(i + 1), x: x - 0.2, y })),
+      { img: estufaArt, x: 36, y: 23 },
+      { img: fonteEstatuaArt, x: 25, y: 22.2 },
+      { img: bondinhoArt, x: 24.8, y: 41.6, by: 39 * TS },
+      { img: () => diaBondinho() ? sorveteArt() : EMPTY_C, x: CA5.sorveteiro[0] - 1.6, y: CA5.sorveteiro[1] + 0.8 },
+      ...CA5.postes.map(([x, y]) => ({ img: () => poste3Art(true, true), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...CA5.arvores.map(([x, y], i) => ({ img: arvC(i + 2), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]], arvore: true })),
+      ...CA5.bancos.map(([x, y]) => ({ img: memo(bancoHArt), x: x - 0.5, y: y + 1 })),
+      ...CA5.holofotes.map(([x, y]) => ({ img: () => poste3Art(ehNoite(), true), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] }))
+    ],
+    ents: [
+      ...CA5.bondinho.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: descerBondinho })),
+      ...CA5.portao.map(([x, y]) => ({ t: 'sign', x, y: y - 1, h: 40, talk: portaoTorre })),
+      ...CA5.guardas.map(([x, y], i) => morador('guardaRH', x, y, { rotina: rot([x, y, 'olhar', 9000, 'down']), talk: falaGuardaPortao })),
+      marcoEnt(...CA5.marco),
+      morador('benedito', ...CA5.jardineiro, { rotina: rot([21, 24, 'regar', 500, 'left'], [23, 26, 'limpar', 400, 'down'], [21, 23, 'olhar', 300, 'left']), gone: () => !diaBondinho(), talk: falaBenedito }),
+      morador('dama', ...CA5.dama, { rotina: rot([12, 32, 'olhar', 600, 'down'], [14, 34, 'olhar', 400, 'right']), talk: falaDama }),
+      morador('quinzinho', ...CA5.crianca, { rotina: rot([34, 33, 'brincar', 400, 'down'], [36, 34, 'brincar', 300, 'left']), gone: () => !diaBondinho(), talk: falaQuinzinho }),
+      morador('sorveteiro', ...CA5.sorveteiro, { rotina: rot([20, 33, 'olhar', 9000, 'down']), gone: () => !diaBondinho(), talk: falaSorveteiro }),
+      morador('pavio', ...CA5.pavio, { rotina: rot([30, 31, 'acender', 260, 'left'], [20, 31, 'acender', 260, 'up'], [37, 31, 'acender', 260, 'up']), passo: 20, gone: () => diaBondinho(), talk: async () => { await say(pickOne(['Boa noite. Eu acendo. É o que eu faço. Não me lembro de fazer outra coisa.', 'A Cidade Alta é a primeira a acender e a última a apagar. Ordem do Acendedor-Mor.']), 'pavio'); } }),
+      ...CA5.vigias.map((v, i) => ({ t: 'ronda', id: 'vigiaCA' + i, x: v.at[0], y: v.at[1], path: v.path, h: 60, passo: 24, spr: vigiaSpr, dir: 'right', gone: () => !ehNoite(), talk: async () => { await say('* O Vigia de Vidro olha através de você. Literalmente: dá para ver o jardim pela barriga dele.'); } })),
+      { t: 'sign', x: CA5.tesoura[0], y: CA5.tesoura[1], h: 12, gone: () => !!G.flags.c5Tesoura, spr: () => G.flags.c5Tesoura ? null : tesouraSpr(), talk: pegarTesoura },
+      ...CA5.estufaDoor.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: entrarEstufa })),
+      { t: 'sign', x: CA5.estatua[0], y: CA5.estatua[1], h: 60, talk: async () => { await say('* Na base da estátua, letras de bronze: "AO ACENDEDOR-MOR, QUE DEVOLVEU A LUZ À CIDADE. DEPOIS DO INVERNO ESCURO, NUNCA MAIS."'); await say('"Nunca mais." Ele gosta dessa frase.', 'rita'); } },
+      { t: 'sign', x: CA5.mirante[0], y: CA5.mirante[1], h: 30, talk: mirante5 },
+      { t: 'sign', x: CA5.placaTorre[0], y: CA5.placaTorre[1], h: 40, talk: async () => { await say('* "ACENDEDORIA REAL. Expediente: 7h às 19h. Fora do expediente, a casa é guardada pela luz."'); } },
+      bauEnt('cidadeAlta', 'lab', ...CA5.bauLab, async () => { await dar('tinta', 2); await dar('cobres', 60); }),
+      bauEnt('cidadeAlta', 'a', ...CA5.bau, () => dar('frasco', 1))
+    ],
+    onEnter: async () => { if (!G.flags.c5Alta) await chegaCidadeAlta(); }
+  };
+  // ===== ESTUFA DOS VIDREIROS =====
+  MAPS2.estufa = { rows: ROWS5.estufa, key: KEY5, name: 'Estufa dos Vidreiros', music: 'cidadealta', batBg: bgCidadeAlta, bg: '#0e1a14', tint: 'rgba(90,180,140,0.06)',
+    moveis: ES5.vasos.map(([x, y], i) => ({ id: 'vaso' + i, k: 'vaso', x, y, var: i })), placas: ES5.placas, placasFlag: 'c5Alcapao', onPlacas: placasEstufa,
+    props: [
+      { img: () => alcapaoArt(!!G.flags.c5Alcapao), x: ES5.alcapao[0] - 0.5, y: ES5.alcapao[1] + 1 },
+      { img: memo(mesaAreiaArt), x: ES5.areia[0] - 1, y: ES5.areia[1] + 1, solid: [[ES5.areia[0] - 1, ES5.areia[1], 3, 1]] },
+      ...ES5.plantas.map(([x, y], i) => ({ img: () => vasoMovelArt(i), x, y: y + 1 }))
+    ],
+    ents: [
+      ...ES5.door.map(([x, y]) => porta(x, y, 'cidadeAlta', ...CA5.estufaOut, 'down')),
+      { t: 'sign', x: ES5.alcapao[0], y: ES5.alcapao[1], h: 10, talk: alcapao },
+      { t: 'sign', x: ES5.areia[0], y: ES5.areia[1] + 1, h: 20, talk: mesaAreia },
+      inimigo('mv1', 'mvidro', ...ES5.mariposas, ['mvidro', 'mvidro'], { spr: (t) => mariposaVidroArt(Math.floor(t / 6) % 2), h: 30, bg: bgCidadeAlta })
+    ],
+    onEnter: async () => { if (!G.flags.c5Estufa) { G.flags.c5Estufa = true; await say('* Lá dentro, o ar é quente e molhado. Plantas de folha enorme, vidro por todo lado, e um cheiro de terra que a Cidade Alta não tem em nenhum outro canto.'); await say('No chão, três placas de bronze. E um alçapão trancado no meio, com uma fechadura que não tem buraco de chave.', 'rita'); await say('[As placas afundam com peso. O alçapão parece ligado a elas.]', 'cat'); await say('Peso eu tenho. Por dentro. Por fora eu sou leve que nem uma promessa.', 'me'); } }
+  };
+  // ===== ACENDEDORIA 1: SALA DAS LENTES =====
+  const portaVidro = (pos, flag) => pos.map(([x, y], i) => i === 0 ? { img: () => portaVidroArt(!!G.flags[flag]), x, y: y + 1, get solid() { return G.flags[flag] ? [] : [[pos[0][0], pos[0][1], pos.length, 1]]; } } : null).filter(Boolean);
+  MAPS2.lentes = { rows: ROWS5.lentes, key: KEY5, name: 'Acendedoria · Sala das Lentes', music: 'acendedoria', batBg: bgTorre, bg: '#0a1420',
+    feixe: { emissor: LE5.emissor, alvo: LE5.alvo, alarme: LE5.alarme, flag: 'c5Porta1' }, grupoLuz: ['vigia', 'vigia'], reinicio: LE5.entra,
+    moveis: [...LE5.espelhos.map(([x, y, o], i) => ({ id: 'esp' + i, k: 'espelho', x, y, o })), { id: 'espM', k: 'espelho', x: LE5.movel.espelho[0], y: LE5.movel.espelho[1], o: '/' }, { id: 'cx', k: 'caixa', x: LE5.movel.caixa[0], y: LE5.movel.caixa[1] }],
+    props: [
+      { img: emissorArt, x: LE5.emissor[0] - 0.05, y: LE5.emissor[1] + 1, solid: [[LE5.emissor[0], LE5.emissor[1], 1, 1]] },
+      { img: () => cristalArt('b', !!G.flags.c5Porta1 || (W2.feixe && W2.feixe.fim === 'alvo')), x: LE5.alvo[0] - 0.05, y: LE5.alvo[1] + 1, solid: [[LE5.alvo[0], LE5.alvo[1], 1, 1]] },
+      { img: () => cristalArt('r', W2.feixe && W2.feixe.fim === 'alarme'), x: LE5.alarme[0] - 0.05, y: LE5.alarme[1] + 1, solid: [[LE5.alarme[0], LE5.alarme[1], 1, 1]] },
+      ...portaVidro(LE5.porta, 'c5Porta1')
+    ],
+    ents: [
+      { t: 'trig', x: LE5.entra[0], y: LE5.entra[1] + 1, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; sfx('door'); await fadeOut(10); loadMap2('estufa', ES5.alcapao[0], ES5.alcapao[1] + 1, 'down'); await fadeIn(10); } },
+      ...LE5.subida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; sfx('door'); await fadeOut(10); loadMap2('arquivo', ...AR5.entra, 'up'); await fadeIn(10); if (MAPS2.arquivo.onEnter) await MAPS2.arquivo.onEnter(); } })),
+      { t: 'sign', x: LE5.emissor[0] + 1, y: LE5.emissor[1] - 1, h: 30, talk: async () => { await say('* Uma lente de farol, pequena, presa no chão. Lança um fio de luz que não esfria nunca.'); await say('[O feixe segue reto. Espelhos desviam. Caixote, vaso e você BLOQUEIAM. Azul abre. Vermelho chama os Vigias.]', 'cat'); } }
+    ],
+    onEnter: async () => { if (!G.flags.c5Lentes) await chegaLentes(); }
+  };
+  // ===== ACENDEDORIA 2: ARQUIVO DAS VELAS =====
+  const est = []; for (let y = 0; y < ROWS5.arquivo.length; y++) { let x0 = -1; const r = ROWS5.arquivo[y]; for (let x = 0; x <= r.length; x++) { const ehX = x < r.length && r[x] === 'X'; if (ehX && x0 < 0) x0 = x; if (!ehX && x0 >= 0) { est.push([x0, y, x - x0]); x0 = -1; } } }
+  MAPS2.arquivo = { rows: ROWS5.arquivo, key: KEY5, name: 'Acendedoria · Arquivo das Velas', music: 'acendedoria', batBg: bgTorre, bg: '#0a0c14', tint: 'rgba(255,200,120,0.05)',
+    moveis: [{ id: 'escadinha', k: 'escadinha', x: AR5.escadinha[0], y: AR5.escadinha[1] }],
+    props: [
+      ...est.map(([x, y, w]) => ({ img: () => estanteVelasArt(w), x, y: y + 1 })),
+      ...AR5.velas.map(([x, y, nm]) => ({ img: () => velaNomeArt(velaAcesa(nm)), x: x + 0.2, y: y + 0.3, by: (y + 1) * TS + 1 })),
+      ...portaVidro(AR5.porta, 'c5Velas'),
+      { img: memo(mesaArt), x: AR5.nota[0] - 1, y: AR5.nota[1] + 0.2, by: (AR5.nota[1] - 0.5) * TS }
+    ],
+    ents: [
+      ...AR5.descida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; sfx('door'); await fadeOut(10); loadMap2('lentes', LE5.subida[0][0], LE5.subida[0][1] + 2, 'down'); await fadeIn(10); } })),
+      ...AR5.velas.map(([x, y, nm]) => ({ t: 'sign', x, y, h: 10, talk: () => falaVelaNome(nm, x, y) })),
+      { t: 'sign', x: AR5.nota[0], y: AR5.nota[1] - 1, h: 20, talk: notaArquivo },
+      ...AR5.vitral.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: lutaVitral })),
+      ...AR5.subida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c5Vitral) return; W2.mv = null; sfx('door'); await fadeOut(12); loadMap2('escritorio', ...EC5.entra, 'up'); await fadeIn(12); if (MAPS2.escritorio.onEnter) await MAPS2.escritorio.onEnter(); } }))
+    ],
+    onEnter: async () => { if (!G.flags.c5Arquivo) await chegaArquivo(); }
+  };
+  // ===== ACENDEDORIA 3: O ESCRITÓRIO =====
+  MAPS2.escritorio = { rows: ROWS5.escritorio, key: KEY5, name: 'Acendedoria · O Escritório', music: 'cha', bg: '#0a0810', tint: 'rgba(255,200,140,0.05)',
+    props: [
+      { img: mesaEscritorioArt, x: 6.9, y: 5.4, solid: [[7, 4, 4, 1]] },
+      ...EC5.janela.map(([x, y]) => ({ img: janelaCidadeArt, x: x - 1, y: y + 1, by: 2 * TS })),
+      { img: memo(() => estanteArt(2)), x: EC5.estante[0], y: EC5.estante[1] + 1, solid: [[EC5.estante[0], EC5.estante[1], 2, 1]] },
+      { img: memo(() => estanteArt(2)), x: 14, y: 4, solid: [[14, 3, 2, 1]] },
+      { img: () => G.flags.c5Cha ? EMPTY_C : null, x: 0, y: 0 }
+    ],
+    ents: [
+      { t: 'sign', x: EC5.caderno[0], y: EC5.caderno[1], h: 20, talk: lerCaderno },
+      ...EC5.saida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c5Cha) { await say('Não. A gente veio pelo caderno. Eu não saio sem ver.', 'lume'); W2.mv = null; return; } await irParaTelhados(); } }))
+    ],
+    onEnter: async () => { if (!G.flags.c5Escritorio) { G.flags.c5Escritorio = true; await say('* O escritório é pequeno. Tapete gasto, duas estantes, uma janela enorme com a cidade inteira acesa lá embaixo. Cheiro de chá e de fuligem.'); await say('* Na mesa, debaixo de uma lâmpada verde, um caderno de capa preta, com uma fita vermelha marcando a página.'); await say('É ele. É ele mesmo.', 'lume'); } }
+  };
+  for (const id of ['cidadeAlta', 'estufa', 'lentes', 'arquivo', 'escritorio']) grade(MAPS2[id]);
+  // o bondinho no Largo do Hospital (lado leste)
+  const lg = MAPS2.largo; if (lg && !lg._bond) { lg._bond = true;
+    for (const y of [15, 16]) lg.ents.push({ t: 'trig', x: 45, y, w: 1, h: 1, passa: true, run: subirBondinho });
+    lg.ents.push({ t: 'sign', x: 44, y: 13, h: 40, talk: async () => { await say('* "BONDINHO DA CIDADE ALTA. Partidas das 7h às 19h. Proibido baús desacompanhados." Alguém riscou "desacompanhados" e escreveu "com dentes".'); } });
+  }
+}; }
+const mesaAreiaArt = () => { const P = new Pix(50, 30), M = ramp('#6a4a2a'); P.rect(0, 10, 50, 6, M[3]); P.rect(2, 16, 4, 14, M[1]); P.rect(44, 16, 4, 14, M[1]); for (let x = 2; x < 48; x++) for (let y = 4; y < 11; y++) P.p(x, y, (x * 7 + y * 3) % 5 ? '#e0c078' : '#f8e8b0'); P.ball(18, 5, 6, 4, ['#a88848', '#e0c078', '#f8e8b0', '#ffffff', '#ffffff']); P.rect(30, 2, 6, 8, '#bff0ff'); P.rect(31, 3, 2, 3, '#ffffff'); return P.outline().canvas(); };
+let TESOURA_C = null; const tesouraSpr = () => TESOURA_C || (TESOURA_C = (() => { const P = new Pix(14, 12); P.line(2, 10, 11, 2, '#e8e8f0', 2); P.line(2, 2, 11, 10, '#c8c8d8', 2); P.ball(3, 10, 2, 2, ['#8a6a20', '#c89a30', '#f0c850', '#fff', '#fff']); return P.outline().canvas(); })());
+
+// ---------- abertura do capítulo ----------
+function iniciarCap5() {
+  if (G.flags.c5Init) return false;
+  G.flags.c5Init = true; G.poder = Math.max(G.poder || 1, 4); curarTudo(); G.hora = 8 * 60; G.dia = (G.dia || 0) + 1;
+  G.items = Object.assign({}, G.items, { frasco: Math.max(3, G.items.frasco || 0) });
+  return true;
+}
+async function capitulo5() {
+  if (!MAPS2.cidadeAlta) montarMapas2();
+  const novo = iniciarCap5();
+  if (!novo) { const p = G.pos && MAPS2[G.pos.map] ? G.pos : { map: 'interior', x: POS3.interior.entra[0], y: POS3.interior.entra[1], dir: 'up' }; loadMap2(p.map, p.x, p.y, p.dir); V.scene = 'world'; await fadeIn(20); return; }
+  await fadeOut(20);
+  await cartao(['CAPÍTULO 5', 'O Caderno Preto']);
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(30);
+  await say('* Madrugada, dentro do baú. A vela da base está quase no fim. A Lume está acordada, sentada no chão, com a página arrancada aberta no colo.');
+  await say('Eu fiquei olhando a letra. Pequena. Cuidadosa. Cada "a" fechadinho, como quem tranca a porta antes de sair.', 'lume');
+  await say('* A Rita acende outra vela, senta do lado e tira do bolso o papel que vocês trouxeram do hospital: a LISTA DO DESCANSO. Põe uma folha do lado da outra.');
+  await say('...É a mesma mão.', 'rita');
+  await say('A mesma letra que escreveu "pensão paga" no hospital escreveu "312 almas" em Candeia. E escreveu um nome mil vezes. E riscou mil vezes.', 'lume');
+  await say('Quem anota tudo assim não anota em papel solto. Anota num caderno. E quem tem um caderno desses não larga ele nunca.', 'me');
+  await say('[Registro: o papel da página é fino, liso, com marca d\'água de lírio. Papel caro. Não é de bazar.]', 'cat');
+  await say('A Dona Iolanda conhece papel como a Dalva conhece febre. Se alguém sabe de onde veio isso, é ela.', 'rita');
+  await say('* A Lume dobra a página com cuidado e guarda no bolso de dentro, perto do peito. Ela não fala mais nada. Mas também não volta a deitar.');
+  await say('[Objetivo: a PAPELARIA PENA & FULIGEM, no Bairro Baixo. Viagem rápida: a GARAGEM do Seu Jorge, aqui na base.]', 'cat');
+  save2();
+}
+// quem já tinha terminado o Cap. 4 entra no Cap. 5 (ao carregar, ou ainda no mapa)
+{ const _c4 = capitulo4; capitulo4 = async function () { if (!MAPS2.largo) montarMapas2(); if (G.flags.c4Fim) return capitulo5(); return _c4(); }; }
+{ const _uw5c = updateWorld2; updateWorld2 = function () { _uw5c(); if (V.scene === 'world' && G.flags.c4Fim && !G.flags.c5Init && !worldBusy2() && !W2.mv) run2(capitulo5); }; }
+
+// ---------- a Dona Iolanda: o papel-lírio e a RESSONÂNCIA ----------
+{ const _fi = falaIolanda; falaIolanda = async function () {
+  if (!G.flags.c5Init || G.flags.c5Iolanda) { if (G.flags.c5Iolanda && !G.flags.c5Fim) { await say(pickOne(['Papel-lírio, Acendedoria, Cidade Alta. E cuidado com a moça: ela anda segurando aquela página como quem segura uma vela no vento.', 'Ressonância é conversa, não grito. Escreva o véu NELA, e deixe o golpe dela cantar.']), 'iolanda'); return; } return _fi(); }
+  G.flags.c5Iolanda = true;
+  await say('Bom dia, bom dia. Vocês têm cara de quem não dormiu e de quem trouxe um papel. Me dá.', 'iolanda');
+  await say('* A Dona Iolanda pega a página pela pontinha, levanta contra a luz da janela, cheira, passa o polegar na borda.');
+  await say('Papel-lírio. Marca d\'água de lírio, tinta de fuligem com goma. Isso aqui sai da Casa Real de Papel, e a Casa Real só vende esse papel para UM cliente na cidade inteira.', 'iolanda');
+  await say('A ACENDEDORIA. Na Cidade Alta. É o papel dos livros de ponto dos Pavios e dos cadernos do próprio Acendedor-Mor.', 'iolanda');
+  await say('* Silêncio na papelaria. Até o gato que não é dela para de lamber a pata.');
+  await say('...Do Acendedor-Mor. O que me deu a pedra do Marco. O que elogiou a minha música.', 'lume');
+  await say('Pode ser de qualquer um lá dentro. Um secretário. Um contador.', 'rita');
+  await say('Pode. E pode não ser. A gente só sabe vendo o caderno.', 'me');
+  await say('Vocês vão entrar na Acendedoria. Eu vejo pela mala. Ela tem cara de quem vai entrar.', 'iolanda');
+  await say('Então levem uma coisa de mim. Tinta de superfície não pega só em papel. Pega em GENTE.', 'iolanda');
+  await say('Quando o baú escrever um VÉU em cima da moça da lança ou da moça de luz, a tinta fica nelas um pouco. E o próximo golpe delas canta a mesma nota da tinta. Fogo na lança. Gelo na luz. Chama-se RESSONÂNCIA.', 'iolanda');
+  G.flags.resson = true; sfx('rune');
+  await say('* {y}RESSONÂNCIA aprendida!{/} Um VÉU do Grimório na Rita ou na Lume faz o PRÓXIMO golpe dela ganhar o elemento do véu e bater 30% mais forte.');
+  await say('Eu vou ter uma lança em brasa? Eu sempre quis uma lança em brasa.', 'rita');
+  await say('E eu vou brilhar de outra cor? ...Eu posso escolher a cor?', 'lume');
+  await say('A cor é a do baú. Reclamem com ele.', 'iolanda');
+  await say('Eu tenho cor? Eu sou marrom. Marrom-baú. Isso é uma cor?', 'me');
+  await say('A Cidade Alta fica no morro, atrás do Largo do Hospital. Sobe de BONDINHO, que só corre de DIA. E de noite... de noite lá em cima tem luz demais. Até para mim.', 'iolanda');
+  await say('[Objetivo: o BONDINHO, no lado leste do Largo do Hospital (só de dia, das 7h às 19h).]', 'cat');
+  save2();
+}; }
+
+// ---------- o bondinho ----------
+async function subirBondinho() {
+  W2.mv = null;
+  if (!G.flags.c5Iolanda) { await say('* O bondinho da Cidade Alta. Vocês não têm o que fazer lá em cima. Ainda.'); return; }
+  if (!diaBondinho()) { await say('* O bondinho está parado no alto, com as luzes apagadas. Uma plaquinha: "Último horário: 19h. Primeiro: 7h."'); await say('[O bondinho só sobe DE DIA. Descanse num Marco até de manhã.]', 'cat'); return; }
+  sfx('door'); await fadeOut(16);
+  await cartao(['O bondinho sobe', 'a cidade inteira encolhe lá embaixo']);
+  V.scene = 'world'; loadMap2('cidadeAlta', ...CA5.chegada, 'up'); await fadeIn(16);
+  if (MAPS2.cidadeAlta.onEnter) await MAPS2.cidadeAlta.onEnter();
+}
+async function descerBondinho() {
+  W2.mv = null;
+  if (!diaBondinho()) { await say('* O bondinho dorme na plataforma. Até amanhã, 7h.'); if (!G.flags.c5Alcapao) await say('[De noite não dá para descer. Mas talvez seja de noite que a Acendedoria fique sem ninguém...]', 'cat'); return; }
+  const c = await choose('* Descer de bondinho para o Largo do Hospital?', ['Descer', 'Ficar'], 'n', 1); if (c !== 0) return;
+  sfx('door'); await fadeOut(14); loadMap2('largo', 44, 15, 'left'); await fadeIn(14);
+}
+async function chegaCidadeAlta() {
+  G.flags.c5Alta = true;
+  await say('* A Cidade Alta. Mármore no chão, sebes cortadas em forma de lustre, uma fonte com estátua. Ninguém corre aqui em cima.');
+  await say('* E, no alto, a ACENDEDORIA: uma torre de vidro e latão, acesa por dentro mesmo de dia, como um coração que não descansa.');
+  await say('É tão bonita que dá raiva.', 'rita');
+  await say('Eu me sinto mal vestido. E eu estou sem roupa. Eu sou um baú.', 'me');
+  await say('Olha os guardas no portão. Da Guarda Real, não Pavios. A gente não entra pela frente.', 'rita');
+  await say('[Objetivo: achar outra entrada para a torre. Gente daqui de cima sempre sabe por onde os empregados entram.]', 'cat');
+  save2();
+}
+async function portaoTorre() { await say(ehNoite() ? '* O portão está fechado e selado com luz: uma película dourada entre as grades. Encostar dói só de olhar.' : '* O portão está aberto, mas dois Guardas Reais e uma fila de gente de cartola decidem quem passa. Um baú com dentes não passa.'); }
+async function falaGuardaPortao() { await say(pickOne(['Acendedoria Real. Só com hora marcada.', 'Circulando. Isso aqui não é lugar de mala.', 'De noite? De noite nem a gente entra. É a luz que toma conta.']), 'guardaRH'); }
+
+// ---------- o jardineiro e o labirinto ----------
+async function falaBenedito() {
+  if (G.flags.c5Chave) { await say(pickOne(['A estufa é toda de vocês. Só não pisem nas begônias. Elas guardam rancor.', 'De noite os holofotes da torre varrem o jardim. Eu vou embora às sete. Velho tem medo de luz.']), 'benedito'); return; }
+  if (G.flags.c5Tesoura) {
+    await say('MINHA TESOURA! De prata, presente da minha falecida. Onde estava? No miolo do labirinto? Eu plantei aquele labirinto e me perdi nele. Duas vezes.', 'benedito');
+    await say('Toma. A chave da estufa. Lá dentro tem um alçapão que desce pros porões da torre, por onde a gente leva a terra dos vasos. Eu nunca abri. Precisa de peso nas placas, e eu tenho é dor nas costas.', 'benedito');
+    await say('E não desçam de dia: é expediente, os escriturários ficam lá embaixo contando vela. De noite não tem ninguém. Só a luz.', 'benedito');
+    G.flags.c5Chave = true; sfx('item'); await say('* Você recebeu a {y}Chave da Estufa{/}.'); save2(); return;
+  }
+  await say('Bom dia. Cuidado com a grama: ela é mais velha que vocês e mais bem tratada também.', 'benedito');
+  await say('Estufa? É minha, quer dizer, é da Coroa, mas quem rega sou eu. Fechada. A chave fica comigo.', 'benedito');
+  await say('Eu emprestava, viu? Se eu estivesse de bom humor. Mas perdi a minha tesoura de prata no LABIRINTO de sebes e estou de péssimo humor.', 'benedito');
+  await say('[Objetivo: achar a tesoura no meio do LABIRINTO de sebes (a entrada fica no lado direito, perto do caminho de cascalho).]', 'cat');
+}
+async function pegarTesoura() { if (G.flags.c5Tesoura) return; G.flags.c5Tesoura = true; sfx('item'); await say('* No miolo do labirinto, presa num galho, uma tesoura de prata com o cabo gasto de tanto uso. Alguém gostava muito dela.'); await say('Eu me sinto um herói. Um herói de jardinagem. Existe isso?', 'me'); await say(diaBondinho() ? '[Leve ao Seu Benedito, perto da entrada do labirinto (ele trabalha de dia).]' : '[O Seu Benedito vai embora à noite. Volte DE DIA.]', 'cat'); }
+
+// ---------- gente da Cidade Alta (e as missões de horário) ----------
+async function falaDama() {
+  if (G.flags.c5Dama) { await say(pickOne(['O meu marido dizia que a cidade de cima é bonita porque a de baixo trabalha. Ele era insuportável. Eu sinto falta.', 'Boa noite, baú. Ou bom dia. Na minha idade a gente cumprimenta o que vier.']), 'dama'); return; }
+  if (G.flags.c5Sorvete && ehNoite()) {
+    if (G.flags.c5SorveteDerreteu) { await say('Isso era um sorvete? Virou sopa. Doce, mas sopa. Obrigada pela intenção.', 'dama'); G.flags.c5Sorvete = false; return; }
+    G.flags.c5Dama = true; G.flags.c5Sorvete = false;
+    await say('* Você tira do Vão um sorvete de lavanda, ainda gelado. A Dona Hortênsia olha para o sorvete, depois para você, depois para o sorvete de novo.');
+    await say('De LAVANDA. Era o que ele me trazia toda noite, escondido, porque o médico tinha proibido. A gente comia aqui, no banco, olhando a cidade de baixo acender.', 'dama');
+    await say('Toma. O monóculo dele. Ele dizia que com isso tudo virava documento importante. Até eu.', 'dama');
+    ganharEquip('monoculo'); sfx('equip'); await say(`* Você recebeu o {y}${EQ2.monoculo.nm}{/}. ${EQ2.monoculo.d}`); save2(); return;
+  }
+  if (!ehNoite()) { await say('Ah, de dia eu não converso. De dia eu só olho. A Cidade Alta de dia é uma vitrine. De NOITE é que ela vira cidade.', 'dama'); return; }
+  await say('Boa noite. Eu venho aqui todo dia depois das sete. O meu marido trazia um sorvete de lavanda, do carrinho, antes do homem ir embora.', 'dama');
+  await say('O sorveteiro só fica de DIA. E sorvete não espera a noite. Morre no caminho.', 'dama');
+  G.flags.c5DamaPediu = true;
+  await say('[Missão: um SORVETE DE LAVANDA para a Dona Hortênsia, à NOITE. Compre do sorveteiro (de dia) bem perto das 19h, guarde no Vão e entregue logo que escurecer.]', 'cat');
+}
+async function falaSorveteiro() {
+  const h = hora();
+  await say('Sorvete! De creme, de fruta, de lavanda! O de lavanda é só pra quem tem bom gosto e 10 cobres.', 'sorveteiro');
+  if (!G.flags.c5DamaPediu || G.flags.c5Dama) return;
+  const c = await choose('* Comprar um sorvete de lavanda (10 cobres)?', ['Comprar', 'Agora não'], 'n', 1); if (c !== 0) return;
+  if ((G.cobres || 0) < 10) { await say('Dez cobres, meu senhor. Baú também paga.', 'sorveteiro'); return; }
+  G.cobres -= 10; G.flags.c5Sorvete = true; G.flags.c5SorveteDerreteu = false; G.flags.c5SorveteHora = G.hora + (G.dia || 0) * 1440; sfx('item');
+  await say('* Você guarda o sorvete no Vão. Lá dentro é fresquinho. Mas não é eterno.');
+  if (h < 18 * 60) await say('[Faltam ' + Math.round((19 * 60 - h) / 60) + ' horas para a noite. Sorvete derrete em cerca de UMA hora...]', 'cat');
+}
+// o sorvete derrete depois de 90 minutos de jogo
+{ const _uwS = updateWorld2; updateWorld2 = function () { _uwS(); if (G.flags && G.flags.c5Sorvete && !G.flags.c5SorveteDerreteu && G.hora + (G.dia || 0) * 1440 - (G.flags.c5SorveteHora || 0) > 90) { G.flags.c5SorveteDerreteu = true; W2.toast = { s: 'O sorvete no Vão derreteu...', t: 0 }; } }; }
+async function falaQuinzinho() {
+  if (G.flags.c5Pipa) { await say(pickOne(['A pipa voa até a torre! Quase encosta no vidro! O guarda grita "DESCE ISSO"!', 'Baú, você voa? Não? Eu achei que voava. Você tem cara de que voa.']), 'quinzinho'); return; }
+  await say('Ei, baú! Você sabe entrar na torre? Ninguém sabe. Só o jardineiro. Ele leva terra pelo alçapão da estufa. Eu vi. Eu vejo tudo, eu tenho nove anos.', 'quinzinho');
+  await say('Perdi a minha pipa no labirinto. Num canto sem saída. Se achar, me dá?', 'quinzinho');
+  if (!G.flags.c5PipaVista) G.flags.c5PipaVista = true;
+}
+async function mirante5() {
+  if (!ehNoite()) { await say('* Do mirante, de dia, a cidade de baixo é um tapete de telhados. Dá para ver o Largo, a Avenida, o canal do Bairro Baixo e, longe, o morro com a torre do Farol.'); return; }
+  await say('* De noite, a cidade de baixo é um céu virado ao contrário. Cada janela uma estrela.');
+  if (!G.flags.c5Mirante) { G.flags.c5Mirante = true; await say('* E, no alto do morro, no Farol apagado, uma luzinha pequena se mexe de janela em janela. Alguém está lá em cima. De noite. Sozinho.'); await say('Quem sobe num farol apagado de noite?', 'lume'); await say('Alguém que está esperando ele acender.', 'me'); await dar('cobres', 40); }
+}
+
+// ---------- a estufa ----------
+async function entrarEstufa() {
+  W2.mv = null;
+  if (!G.flags.c5Chave) { await say('* A porta da estufa está trancada. Pelo vidro embaçado dá para ver plantas enormes e, no chão, um alçapão.'); return; }
+  sfx('door'); await fadeOut(10); loadMap2('estufa', ...ES5.entra, 'up'); await fadeIn(10);
+  if (MAPS2.estufa.onEnter) await MAPS2.estufa.onEnter();
+}
+async function mesaAreia() {
+  if (G.flags.c5Areia) { await say('* A mesa dos vidreiros. A areia ainda tem a forma da sua tampa.'); return; }
+  G.flags.c5Areia = true;
+  await say('* Uma mesa comprida coberta de areia fina, branca, e uns cacos de vidro soprado: a areia que os vidreiros da Coroa usam para fazer as lentes da torre.');
+  await say('* Você chega perto e a areia se mexe sozinha. Desenha uma runa. A mesma letra que o Grimório tem nas margens.');
+  await say('* Antes de você pensar, a tampa abre. E a areia entra. Igual na masmorra: um baú come runa, é o que baús fazem.');
+  grim().elems.push('areia'); sfx('rune');
+  await say('* {y}Elemento AREIA aprendido!{/} Corte; quebra +1 de escudo. Fusões novas esperando nas margens do Grimório.');
+  await say('Você COMEU a mesa?', 'rita');
+  await say('Só a runa. A mesa tá aí. ...Mais ou menos aí.', 'me');
+  await say('[Registro: Areia + Brasa deve dar vidro. Os Vigias desta torre são de vidro. Recomendação: experimentar.]', 'cat');
+  save2();
+}
+async function placasEstufa() {
+  sfx('rune'); await wait(20);
+  await say('* As três placas afundam juntas com um "clonc" de bronze. Debaixo do chão, uma engrenagem gira, preguiçosa. O alçapão destrava.');
+  await say('Três vasos e um baú que não pesa nada. A gente formou uma equipe.', 'me');
+  save2();
+}
+async function alcapao() {
+  if (!G.flags.c5Alcapao) { await say('* Um alçapão de madeira com uma fechadura sem buraco. Quando você encosta, as placas do chão brilham de leve, uma de cada vez.'); return; }
+  if (!ehNoite()) {
+    await say('* Pelo alçapão sobe um barulho de gente: carimbos, cadeiras arrastando, alguém contando "...quatrocentos e dez, quatrocentos e onze...".');
+    await say('Expediente. O jardineiro avisou: de dia tem escriturário lá embaixo.', 'rita');
+    await say('[A Acendedoria trabalha das 7h às 19h. Volte DE NOITE. Cuidado: de noite, os holofotes varrem o jardim.]', 'cat');
+    return;
+  }
+  const c = await choose('* O alçapão está aberto. Lá embaixo, silêncio e uma luz azulada. Descer?', ['Descer', 'Ainda não'], 'n', 1); if (c !== 0) return;
+  sfx('door'); await fadeOut(14); loadMap2('lentes', ...LE5.entra, 'up'); await fadeIn(14);
+  if (MAPS2.lentes.onEnter) await MAPS2.lentes.onEnter();
+}
+// ---------- a Sala das Lentes ----------
+async function chegaLentes() {
+  G.flags.c5Lentes = true;
+  await say('* Embaixo da torre, uma sala de vidro e latão. No meio dela, um fio de luz atravessa o ar, reto, quente, e bate numa parede de vidro.');
+  await say('* Lá no alto, atrás de uma porta de vidro, a escada. Na frente da porta, um cristal azul apagado. Do outro lado, um cristal vermelho.');
+  await say('Espelhos. Ele guarda a escada com espelhos. Que homem organizado.', 'rita');
+  await say('A luz tem que chegar no cristal azul. Sem passar no vermelho.', 'lume');
+  await say('Espelho eu giro. Caixa eu guardo. Esse quebra-cabeça foi feito pra mim e ele nem sabia.', 'me');
+}
+// ---------- o Arquivo das Velas ----------
+const velaAcesa = (nm) => (G.flags.c5VelasAcesas || []).includes(nm) || (G.flags.c5Velas && AR5.ordem.includes(nm));
+async function chegaArquivo() {
+  G.flags.c5Arquivo = true;
+  await say('* O andar de cima é um arquivo. Estantes e estantes, do chão ao teto. Mas em vez de papel, as prateleiras guardam VELAS. Milhares. Cada uma com um nome escrito em letra pequena e cuidadosa.');
+  await say('* Quase todas apagadas. Algumas ainda fumegam, como se alguém tivesse soprado agora.');
+  await say('...São pessoas. Cada vela é uma pessoa.', 'lume');
+  await say('Ali. "Joaquim, sineiro, Candeia." O marido da Dona Ilda.', 'rita');
+  await say('E a porta da escada de cima, de vidro de novo. Com um bilhete na mesa.', 'me');
+}
+async function notaArquivo() {
+  await say('* Um bilhete na mesa do arquivista, letra apressada: "PARA SUBIR: acenda, na ordem do dia, quem consertava as horas, quem as tocava, e quem limpava a fumaça delas. Errar apaga tudo e acorda as mariposas."');
+  await say('Quem consertava as horas... O Pavio de Velhágua! Osvaldo Candeia, conserto de relógios!', 'lume');
+  await say('Quem as tocava: o sineiro. O Joaquim, de Candeia.', 'rita');
+  await say('E quem limpava a fumaça delas... chaminé. O Dito.', 'me');
+  await say('[As velas com esses nomes estão nas estantes. A Lume acende. Uma delas está alta demais: talvez com algo para subir...]', 'cat');
+}
+async function falaVelaNome(nm, x, y) {
+  if (G.flags.c5Velas) { await say('* "' + nm + '". A vela queima baixinho, firme.'); return; }
+  const lista = G.flags.c5VelasAcesas || [];
+  if (lista.includes(nm)) { await say('* A vela de "' + nm + '" está acesa.'); return; }
+  const alta = nm === AR5.alta;
+  if (alta && !W2.ents.some(e => e.t === 'movel' && e.k === 'escadinha' && Math.abs(e.x - x) + Math.abs(e.y - y) === 1)) {
+    await say('* "' + nm + '", lá na prateleira mais alta. A Lume estica o braço. Não alcança. Nem a Rita na ponta do pé.');
+    await say('[Uma ESCADINHA encostada do lado da vela resolveria. Tem uma no canto do arquivo.]', 'cat'); return;
+  }
+  const c = await choose('* "' + nm + '". ' + (alta ? 'A Lume sobe na escadinha.' : '') + ' Acender esta vela?', ['A Lume acende', 'Deixar'], 'n', 1); if (c !== 0) return;
+  const certo = AR5.ordem[lista.length] === nm;
+  sfx('rune'); lista.push(nm); G.flags.c5VelasAcesas = lista;
+  await say('* A Lume encosta o dedo no pavio. A vela acende. O nome escrito nela brilha um segundo, como quem responde "presente".');
+  if (!certo) {
+    await wait(20); sfx('cancel'); G.flags.c5VelasAcesas = [];
+    await say('* Um sopro frio passa pelo arquivo. Todas as velas que vocês acenderam se apagam de uma vez. E, do alto das estantes, desce um farfalhar de asas de vidro.');
+    const r = await lutaMapa(['mvidro', 'mvidro', 'mvidro'], { bg: bgTorre });
+    if (r === 'win') await say('Ordem do dia. Quem consertava, quem tocava, quem limpava. De novo, com calma.', 'rita');
+    return;
+  }
+  if (lista.length === AR5.ordem.length) {
+    G.flags.c5Velas = true; sfx('item');
+    await say('* As três velas queimam juntas. Na porta de vidro, um estalo de trinco. E, por um instante, no arquivo inteiro, todas as velas com nome de gente de Candeia tremem, como se alguém tivesse aberto uma janela.');
+    await say('Osvaldo. Joaquim. Dito. Eles estão bem agora. Lembram de quem são.', 'lume');
+    await say('Mas as velas deles continuam aqui. Numa estante. Com um número.', 'me');
+    save2();
+  }
+}
+async function lutaVitral() {
+  if (G.flags.c5Vitral || !G.flags.c5Velas) return; W2.mv = null;
+  await say('* No patamar da escada, a janela de vitral da torre desce da parede. Pedaço por pedaço, chumbo e vidro colorido, até ficar de pé. No peito, uma rosácea com um olho de luz.');
+  await say('* Ele não fala. Só muda de cor. Vermelho. Azul. Verde. Como quem escolhe a roupa para uma visita.');
+  await say('Vidro que muda de cor. Que noite.', 'rita');
+  await say('[VITRAL VIVO. A COR manda: vermelho racha com GELO e devolve FOGO; azul racha com FOGO e devolve GELO; verde racha com CORTE. Prisma preparado: quebre o escudo.]', 'cat');
+  await say('Eu vou morder um vitral. A minha mãe teria tanto orgulho. Ou vergonha. Eu não lembro qual.', 'me');
+  const r = await lutaMapa(['vitral'], { bg: bgTorre, music: 'boss', pos: [[184, 162]], intro: async () => { const e = BT.foes[0]; e.phases = fasesVitral(); e.ct = 10; callout('VITRAL VIVO', '#ffd870', 90); } });
+  if (r !== 'win') return;
+  G.flags.c5Vitral = true; save2();
+  await say('* O vitral se desmancha numa chuva de cacos coloridos que não machuca ninguém. Pelo vão da janela, entra o vento da noite. A escada de cima está livre.');
+}
+// ---------- o escritório: o caderno e o chá (segredo: só dentro do jogo) ----------
+async function lerCaderno() {
+  if (G.flags.c5Cha) { await say('* A mesa vazia. A lâmpada verde. A xícara fria.'); return; }
+  if (G.flags.c5Caderno) return;
+  G.flags.c5Caderno = true; playMusic('cha');
+  await say('* Você abre o caderno de capa preta. Página por página, a letra pequena e cuidadosa.');
+  await say('* "VELHÁGUA: 41. Rendimento: 2 invernos. Pensões pagas." "HOSPITAL DO LARGO: 118. Rendimento: 9 invernos. Pensões pagas." "CANDEIA: 312. Rendimento: 40 invernos. Pensões pagas."');
+  await say('* Nome por nome. Cada um com uma data, um valor de pensão, e uma vírgula, como quem não termina a frase.');
+  await say('* Na última página escrita, uma conta grande, refeita muitas vezes: "FAROL DE CEM INVERNOS: faltam 47." E, embaixo, sublinhado duas vezes: "Ninguém mais no escuro."');
+  await say('...Ele não está roubando lembranças. Ele está CONTANDO. Pagando. Anotando cada uma.', 'rita');
+  await say('* A Lume não diz nada. Ela vira a página para trás, procura, procura. A página que falta. Do lado do rasgo, ainda dá para ler o começo de um nome: "L".');
+  await say('Isso é pior. É muito pior que roubar.', 'me');
+  await wait(30);
+  await say('Boa noite.', 'vesper');
+  await vesperCha();
+}
+async function vesperCha() {
+  G.flags.c5Cha = true;
+  await say('* Na porta, de chinelo e roupão de lã por cima da camisa, com uma bandeja de chá nas mãos sujas de fuligem, o Conde Ulrico Vesper. O Acendedor-Mor.');
+  await say('Eu ouvi o vitral cair. E as velas de Candeia tremerem. Imaginei que fossem vocês. Ninguém mais sabe aqueles três nomes de cor.', 'vesper');
+  await say('Chá? É de erva-cidreira. Acalma. Eu tomo toda noite, e mesmo assim não durmo.', 'vesper');
+  await say('* Ele põe a bandeja na mesa, ao lado do caderno aberto. Não pede o caderno de volta. Senta na cadeira do outro lado, como quem recebe visita.');
+  const c1 = await choose('* O que dizer?', ['"O senhor não vai negar?"', '"Trezentas e doze pessoas."', '(ficar quieto e encarar)'], 'me');
+  if (c1 === 0) { await say('Negar o quê? Está escrito. Com a minha letra. Eu não escrevo o que não faço.', 'vesper'); }
+  else if (c1 === 1) { await say('Trezentas e doze. Todas com nome. Todas com pensão. Nenhuma no escuro. Eu sei a conta de cor, senhor baú. Eu faço a conta toda noite.', 'vesper'); }
+  else { await say('* Você encara. Ele encara de volta, com uma paciência que não é de quem tem medo. É de quem está cansado.'); await say('O senhor guarda as coisas. Eu também. Somos colegas de profissão, de certa forma.', 'vesper'); }
+  await say('Há doze anos, o âmbar acabou. A capital ficou quarenta noites no escuro. O Inverno Escuro. Vocês já ouviram a velha do Bairro Baixo contar.', 'vesper');
+  await say('Ela conta errado. Ela fala do frio. O frio não é o pior. O pior é o hospital dos pobres sem uma vela. É ouvir alguém chamar no escuro e não saber de que lado vem a voz.', 'vesper');
+  await say('Eu estava acendendo os bairros ricos. Por ordem da Coroa. Rua por rua. Enquanto alguém... alguém chamava no escuro. E eu não estava lá.', 'vesper');
+  await say('* Ele não diz o nome. A Lume aperta a página no bolso.');
+  await say('Quem é Lívia?', 'lume');
+  await say('* Por um segundo, só um, o Acendedor-Mor para de respirar. Depois sorri, com uma gentileza enorme, e põe açúcar no chá.');
+  await say('Alguém que morreu no escuro. Como tanta gente. É por isso que eu faço a conta.', 'vesper');
+  await say('Os Pavios dão pouco. Um nome, umas lembranças. Ninguém sente falta de um nome. E em troca: salário, pensão para a família, e uma cidade que nunca mais apaga. Quando o Farol acender, ninguém mais vai precisar dar nada. Faltam quarenta e sete invernos de luz.', 'vesper');
+  await say('O senhor tirou o Dito do irmão dele. O Tico de onze anos chorava na porta do hospital.', 'rita');
+  await say('E o Tico de onze anos vai crescer numa cidade acesa, escudeira. Eu também choro por eles. Toda noite. Está no caderno. Com data.', 'vesper');
+  playMusic(null);
+  await say('* Então ele vira para a Lume. E a voz dele fica mais baixa, quase de pai.');
+  await say('Senhorita. Eu ouvi a sua música no rio, em Velhágua. Ouvi no festival. A senhorita canta como quem tem medo de parar de cantar e ficar escuro.', 'vesper');
+  await say('Eu conheço esse medo. Eu sei o que a senhorita foi, lá embaixo, na masmorra. Um lustre que ninguém acendia. Esperando no escuro.', 'vesper');
+  await say('* A Lume não responde. As velas da cabeça dela tremem.');
+  await say('Eu posso dar à senhorita uma coisa que ninguém nunca deu. Uma luz que não depende de ninguém. Nunca mais escuro. Nunca mais esperar que alguém volte com o fósforo. É só ficar. Aqui. Com a cidade acesa.', 'vesper');
+  await say('* Ele estende a mão suja de fuligem. A Lume se levanta. Dá um passo. Dois. Os olhos dela estão molhados e as velas, por um instante, ficam fortes como nunca ficaram.');
+  const c2 = await choose('* A Lume está indo. O que você faz?', ['"Lume..."', '(segurar a mão dela com a tampa)', '(não dizer nada e esperar)'], 'n');
+  if (c2 === 0) { await say('Lume...', 'me'); await say('* Só o nome. Nada mais. Ela para no meio do passo, como quem ouve chamarem no escuro e, dessa vez, SABE de que lado vem a voz.'); }
+  else if (c2 === 1) { await say('* Você estica a tampa, desajeitado, e prende a pontinha do vestido dela entre os dentes. Devagar. Sem puxar. Só segurando.'); await say('* Ela olha para baixo. Para você. E ri, um riso molhado, ridículo, o mais bonito da noite.'); }
+  else { await say('* Você não diz nada. Fica. Do jeito que você ficou, por meses, lá embaixo, do lado de um lustre apagado, sem saber se ele ia acender algum dia.'); await say('* A Lume olha para trás. E vê que você ainda está ali. Que sempre esteve.'); }
+  await say('...Não.', 'lume');
+  await say('Eu não fui um lustre que ninguém acendia. Eu fui um lustre que um baú vigiou. Toda noite. Sem pedir nada.', 'lume');
+  await say('Eu tenho medo do escuro, senhor. Muito. Mas eu prefiro ter medo do lado deles do que ter luz do seu lado.', 'lume');
+  sfx('rune'); flashW(3);
+  await say('* As velas da Lume não apagam. Ficam menores, mais firmes, de um dourado que não estava lá antes. Uma luz que não pediu licença para ninguém.');
+  G.flags.c5Vela = true;
+  await say('* {y}A Lume aprendeu VELA INTERIOR!{/} (técnica: cura o grupo, tira os maus estados e deixa todos TEIMOSOS). E agora ela não ESQUECE a vez.');
+  await say('* O Acendedor-Mor baixa a mão. Não parece bravo. Parece um homem que perdeu uma aposta que já esperava perder.', 'n');
+  await say('Uma pena. Era uma oferta sincera.', 'vesper');
+  await say('Podem ir. Levem o que leram. Contem para quem quiserem. Eu não preciso prender ninguém, senhor baú. A cidade gosta de luz. A cidade vai continuar gostando.', 'vesper');
+  await say('* Ele toma um gole de chá. Depois tira do roupão um sininho de prata e toca, uma vez, baixinho.');
+  await say('Por educação, eu aviso a Guarda Real quando recebo visita fora de hora. Eles demoram uns dez minutos para subir. Sugiro o terraço. Os telhados de Auren são lindos à noite.', 'vesper');
+  await say('O senhor está avisando a gente pra fugir?', 'rita');
+  await say('Eu estou avisando a Guarda. O que vocês fazem com o meu aviso é com vocês. Boa noite. E... obrigado pelas velas de Candeia. Eu gostava do Joaquim. Ele tocava o sino fora do tempo.', 'vesper');
+  save2();
+  await say('[Objetivo: sair pela porta e fugir pelos TELHADOS.]', 'cat');
+}
+
+// ================= CAPÍTULO 5 — Parte 2: OS TELHADOS DE AUREN =================
+// Do terraço da Acendedoria, à noite, a fuga por cima da cidade: telhados ligados por cumeeiras; cinco VÃOS onde a
+// cumeeira caiu e só se passa com uma TÁBUA guardada no Vão (são duas: atravessou, vira, guarda de novo, leva adiante);
+// GUARITAS com holofotes e RONDAS da Guarda Real (pego = luta e volta ao último telhado alcançado); gatos e chaminés.
+// No fim, a torre do sino com o GRANDE HOLOFOTE. Depois: a descida pelo Bairro Baixo, os cartazes de PROCURADOS e a
+// base. FIM DO CAPÍTULO 5.
+const CP_TELHADO = [[3, 23], [14, 21], [25, 19], [35, 20], [45, 15], [55, 17]];
+{ const _mm5b = montarMapas2; montarMapas2 = function () {
+  _mm5b.apply(this, arguments);
+  MAPS2.telhados = { rows: ROWS5.telhados, key: KEY5, name: 'Os Telhados de Auren', music: 'telhados', batBg: bgTelhado, bg: '#080c20', tint: 'rgba(30,40,110,0.18)',
+    holofotes: TE5.holofotes, holofotesSempre: true, stealth: true, grupoLuz: ['guardaR', 'guardaR'],
+    reinicio: () => { const i = Math.max(0, Math.min(CP_TELHADO.length - 1, G.flags.c5cp || 0)); trazerTabuas(i); return CP_TELHADO[i]; },
+    moveis: TE5.tabuas.map(([x, y], i) => ({ id: 'tabua' + i, k: 'tabua', x, y })),
+    props: [
+      ...TE5.chamines.map(([x, y]) => ({ img: chamineArt, x: x + 0.05, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...TE5.holofotes.map(([x, y]) => ({ img: guaritaArt, x: x - 0.5, y: y + 1, solid: [[x, y, 1, 1]] })),
+      { img: () => G.flags.c5Holofote ? EMPTY_C : holofoteBossArt(Math.floor(W2.t / 20) % 2, 1, false), x: TE5.chefe[0] - 3, y: TE5.chefe[1] + 0.5, by: TE5.chefe[1] * TS }
+    ],
+    ents: [
+      marcoEnt(...TE5.marco),
+      ...TE5.guardas.map(([x, y], i) => ({ t: 'ronda', id: 'guardaT' + i, x, y, path: i === 0 ? [[23, 21], [29, 21]] : [[43, 18], [48, 18]], h: 56, passo: 24, spr: guardaSpr, dir: 'right', talk: async () => { await say('* O guarda está de costas, resmungando sobre o frio.'); } })),
+      ...TE5.bau.map(([x, y], i) => bauEnt('telhados', 'b' + i, x, y, async () => { await dar(i ? 'pluma' : 'frasco', 1); await dar('cobres', 50); })),
+      { t: 'trig', x: TE5.fim[0], y: TE5.fim[1], w: 3, h: 1, passa: true, run: lutaHolofote },
+      ...TE5.descida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: descerTelhados }))
+    ]
+  };
+  { const m = MAPS2.telhados, grade = p => { if (p._hld) return; const f = p.img; p._hld = true; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; }; m.props.forEach(grade); }
+  // depois do capítulo: cartazes de PROCURADOS pela cidade
+  for (const [id, pos] of [['auren', [[16, 9.6], [33, 10.6]]], ['largo', [[12, 9.4], [34, 9.4]]], ['festival', [[17.6, 7.6], [41.2, 7.6]]], ['praca', [[19.6, 8.6]]], ['cais', [[31, 8.6]]]]) {
+    const m = MAPS2[id]; if (!m || m._procurado) continue; m._procurado = true;
+    for (const [x, y] of pos) m.props.push({ img: () => G.flags.c5Fim ? procuradoArt() : EMPTY_C, x, y, by: (y - 0.2) * TS });
+  }
+}; }
+let PROC_C = null;
+function procuradoArt() {
+  if (PROC_C) return PROC_C;
+  const P = new Pix(22, 28); P.rect(0, 0, 22, 28, '#e8dcc0'); P.rect(1, 1, 20, 26, '#f4ead0'); P.rect(3, 3, 16, 3, '#8a1a2a');
+  P.rect(4, 9, 6, 7, '#8a5a30'); P.rect(4, 9, 6, 2, '#c89a30'); P.rect(12, 9, 6, 8, '#e8c050'); P.rect(13, 10, 4, 4, '#ff7aa8'); P.rect(6, 18, 10, 6, '#c83a3a');
+  for (let i = 0; i < 3; i++) P.rect(4, 19 + i * 2, 14, 1, '#5a4a40'); P.p(2, 2, '#8a8a8a'); P.p(19, 2, '#8a8a8a');
+  return PROC_C = P.outline().canvas();
+}
+// checkpoints: o telhado mais longe alcançado
+{ const _uwT = updateWorld2; updateWorld2 = function () { _uwT(); if (W2.id === 'telhados' && !W2.mv) { for (let i = CP_TELHADO.length - 1; i > 0; i--) if (W2.x >= CP_TELHADO[i][0] - 1) { if ((G.flags.c5cp || 0) < i) { G.flags.c5cp = i; W2.toast = { s: 'Telhado alcançado', t: 0 }; } break; } } }; }
+// se as tábuas ficaram para trás, a Rita as traz (nunca prende o jogador)
+function trazerTabuas(i) {
+  const est = movEstado('telhados'), [cx, cy] = CP_TELHADO[i];
+  TE5.tabuas.forEach(([dx, dy], idx) => {
+    const k = 'tabua' + idx, s = est[k]; if (s === null) return;            // está no Vão: vai junto
+    const x = s ? s.x : dx;
+    if (x < cx - 1) est[k] = { k: 'tabua', x: cx + 1 + idx, y: cy, ponte: false };
+  });
+}
+async function irParaTelhados() {
+  W2.mv = null; await fadeOut(16);
+  await say('* O terraço da Acendedoria. Lá embaixo, a cidade inteira acesa. E, subindo pela escadaria do jardim, botas. Muitas botas. Lanternas azuis da Guarda Real.');
+  playMusic('telhados');
+  V.scene = 'world'; loadMap2('telhados', ...TE5.entra, 'right'); await fadeIn(16);
+  await say('Os telhados! Do terraço dá pra pular pro primeiro!', 'rita');
+  await say('* E dá. Vocês pulam. As telhas estalam. Atrás, alguém grita "NO TELHADO!".');
+  await say('[Os telhados são ligados por cumeeiras. Onde a cumeeira caiu, o VÃO só se atravessa com uma TÁBUA guardada no Vão. Depois de passar, vire e guarde a tábua de novo: você vai precisar dela adiante.]', 'cat');
+  await say('[Holofotes das guaritas e Guardas de ronda: GENTE é pega sempre; o BAÚ só se estiver ANDANDO.]', 'cat');
+  await say('Eu fujo pelos telhados com duas mulheres e duas tábuas dentro de mim. Que vida.', 'me');
+  G.flags.c5Telhados = true; G.flags.c5cp = 0; save2();
+}
+async function lutaHolofote() {
+  if (G.flags.c5Holofote) return; W2.mv = null;
+  await say('* No fim dos telhados, a torre do sino do Bairro Baixo. E, em cima dela, uma máquina enorme: um holofote de bronze com uma lente do tamanho de uma carroça, um operador da Guarda agarrado às alavancas.');
+  await say('"ACHEI! ACHEI OS FUGITIVOS! TODO MUNDO OLHANDO PRA LUZ!"', 'guardaRH');
+  await say('* O facho vira para vocês. É como olhar para o meio-dia.');
+  await say('A descida é atrás dele. Escada da torre. É passar por ele ou passar a noite aqui.', 'rita');
+  await say('[GRANDE HOLOFOTE. Varredura em todos, CEGAR atrasa a vez, FACHO TOTAL preparado: quebre o escudo! A lente racha com corte e mordida. Areia e Vidro vêm a calhar.]', 'cat');
+  await say('Eu sempre quis morder um sol. Hoje é o dia.', 'me');
+  const r = await lutaMapa(['holofote'], { bg: bgTelhado, music: 'boss', pos: [[184, 160]], intro: async () => { const e = BT.foes[0]; e.phases = fasesHolofote(); e.ct = 15; callout('GRANDE HOLOFOTE', '#ffe8a0', 90); } });
+  if (r !== 'win') return;
+  G.flags.c5Holofote = true; save2();
+  await say('* A lente estoura num estalo de vidro e a luz vira só uma lâmpada cansada. O operador sai correndo pela escada, gritando por reforço que não vem.');
+  await say('Pela escada, rápido! Antes de ele lembrar que tem apito!', 'rita');
+}
+async function descerTelhados() {
+  if (!G.flags.c5Holofote) { await say('* A escada da torre do sino. Bloqueada pelo holofote e pelo operador.'); W2.mv = null; return; }
+  if (G.flags.c5Fim) return;
+  W2.mv = null; await fadeOut(24);
+  await say('* A escada da torre desce em caracol até o Bairro Baixo. Vocês saem numa viela escura, atrás da feira, sem fôlego, sujos de fuligem até a tampa.');
+  V.scene = 'world'; loadMap2('auren', ...POS3.auren.bueiroOut, 'down'); playMusic('auren'); await fadeIn(24);
+  await say('* E, no muro da viela, colado agora, ainda com a cola molhada: um cartaz.');
+  await say('* "PROCURADOS PELA COROA: um BAÚ COM DENTES, uma MOÇA DE VELAS, uma ESCUDEIRA. Invasão da Acendedoria Real. Recompensa: 1.000 frascos de âmbar." Embaixo, um desenho de vocês três. O seu ficou até bonito.');
+  await say('Mil frascos. Nós valemos mil frascos.', 'rita');
+  await say('Eu valia trezentos em Velhágua. Eu fui promovido.', 'me');
+  await say('Ele não precisou prender a gente. Só precisou tocar um sininho.', 'lume');
+  await say('* A Lume tira do bolso a página com o nome riscado. Olha muito tempo. Depois guarda de novo, perto do peito.');
+  await say('Quarenta e sete invernos, ele disse. Quantas pessoas são quarenta e sete invernos?', 'lume');
+  await say('Muitas. Mas a gente sabe onde estão os nomes. Todos anotados. Com data.', 'me');
+  await say('Então a gente devolve. Um por um. Igual ele tirou.', 'rita');
+  await fadeOut(30);
+  G.flags.c5Fim = true; G.hora = 23 * 60;
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(30);
+  await say('* Na base, a Irmã Dalva espera com chá. Não é de erva-cidreira. É de hortelã, forte, de hospital.');
+  await say('Eu vi os cartazes. Vocês viraram celebridade. Sentem, que eu cuido dos arranhões. E depois me contem tudo, devagar, desde o começo.', 'dalva');
+  await say('E o 31? Ele tá nos cartazes? Eu também quero estar nos cartazes.', 'jorge');
+  await say('[Registro: a partir de agora, a Guarda Real procura o grupo em Auren. Os Marcos continuam funcionando. Por enquanto.]', 'cat');
+  save2();
+  await fadeOut(40);
+  await cartao(['FIM DO CAPÍTULO 5', 'O Caderno Preto', '', 'A Lume tem uma luz só dela.', 'E o grupo, um preço na cabeça.']);
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); await fadeIn(20);
+  await say('* (O Capítulo 6 está a caminho. A cidade, os telhados e a Cidade Alta continuam abertos.)');
+}
+// ---------- telhados com corpo: fachadas descendo para o escuro, beirais, cumeeiras e a cidade lá embaixo ----------
+let TELH_OV = null;
+function telhadoOverlay(m) {
+  if (TELH_OV && TELH_OV.m === m) return TELH_OV.c;
+  const R = m.rows, H = R.length, Wd = R[0].length, c = mk(Wd * 16, H * 16), x = c.getContext('2d'), P = (col, a, b, w, h) => { x.fillStyle = col; x.fillRect(a, b, w, h); };
+  const roof = (i, j) => j >= 0 && j < H && i >= 0 && i < Wd && R[j][i] === '.', vazio = (i, j) => j < 0 || j >= H || i < 0 || i >= Wd || R[j][i] === ' ';
+  // a cidade lá embaixo: ruas com janelinhas e lampiões, bem longe
+  for (let j = 0; j < H; j++) for (let i = 0; i < Wd; i++) if (vazio(i, j)) {
+    const r = hash(i, j, 41) % 100;
+    if (r < 10) { P('rgba(255,190,90,0.16)', i * 16 + 2, j * 16 + 6, 12, 5); P('#ffcf70', i * 16 + 7, j * 16 + 8, 1, 1); }
+    else if (r < 15) { const X = i * 16 + 3, Y = j * 16 + 5; P('#1c2240', X, Y + 3, 10, 6); P('#1c2240', X + 1, Y + 2, 8, 1); P('#1c2240', X + 3, Y + 1, 4, 1); P('#ffd880', X + 4 + (r % 3), Y + 5, 1, 2); }
+  }
+  // fachadas: debaixo de cada beiral, a parede cai 2 tiles e some no escuro, com janelas acesas
+  for (let j = 0; j < H; j++) for (let i = 0; i < Wd; i++) if (roof(i, j) && vazio(i, j + 1)) {
+    const X = i * 16, Y = (j + 1) * 16, cor = ['#6a4a3a', '#5a4a5a', '#7a5a40'][hash(Math.floor(i / 9), j, 7) % 3];
+    for (let k = 0; k < 30; k++) { if (!vazio(i, j + 1 + Math.floor(k / 16))) break; x.globalAlpha = Math.max(0, 1 - k / 30); P(cor, X, Y + k, 16, 1); if (k % 6 === 5) P('rgba(0,0,0,0.25)', X, Y + k, 16, 1); }
+    x.globalAlpha = 1; P('#2a1a18', X, Y, 16, 2); P('#a86048', X, Y - 1, 16, 1);
+    if (hash(i, j, 3) % 3 === 0) { P('#1a1420', X + 4, Y + 6, 7, 9); P(hash(i, j, 5) % 2 ? '#ffd070' : '#ffb050', X + 5, Y + 7, 5, 7); P('#5a3a20', X + 7, Y + 7, 1, 7); P('#5a3a20', X + 5, Y + 10, 5, 1); P('rgba(255,200,100,0.12)', X + 1, Y + 16, 13, 6); }
+  }
+  // bordas: cumeeira no topo, sombra nas laterais
+  for (let j = 0; j < H; j++) for (let i = 0; i < Wd; i++) if (roof(i, j)) {
+    const X = i * 16, Y = j * 16;
+    if (vazio(i, j - 1)) { P('#d88a68', X, Y, 16, 2); P('#4a2a22', X, Y + 2, 16, 1); }
+    if (vazio(i - 1, j)) { P('#3a2020', X, Y, 2, 16); }
+    if (vazio(i + 1, j)) { P('#3a2020', X + 14, Y, 2, 16); P('rgba(0,0,0,0.25)', X + 12, Y, 2, 16); }
+  }
+  // cumeeira no meio de cada telhado (uma linha clara a cada 4 fileiras)
+  for (let j = 0; j < H; j++) for (let i = 0; i < Wd; i++) if (roof(i, j) && roof(i, j - 1) && roof(i, j + 1) && j % 4 === 1) { P('#b86a50', i * 16, j * 16 + 7, 16, 2); P('#5a3028', i * 16, j * 16 + 9, 16, 1); }
+  TELH_OV = { m, c }; return c;
+}
+{ const _chT = HOOK_CHAO; HOOK_CHAO = function (m, ox, oy) {
+  const r = _chT ? _chT(m, ox, oy) : undefined;
+  if (m && m === MAPS2.telhados) bx.drawImage(telhadoOverlay(m), -ox, -oy);
+  return r;
+}; }
+
+// ================= CAP. 5 NO MAPA, NO DIÁRIO, NAS PLACAS E NA VIDA =================
+Object.assign(REGIAO_DE, { cidadeAlta: 'auren', estufa: 'auren', lentes: 'auren', arquivo: 'auren', escritorio: 'auren', telhados: 'auren' });
+Object.assign(VIDA_CFG, {
+  cidadeAlta: { pombos: 3, gatos: 2, borboletas: 5, vagalumes: 8, cartas: true },
+  telhados: { gatosEm: TE5.gatos, vagalumes: 4, passaros: true }
+});
+ROTULOS_EXTRA.cidadeAlta = () => [[...CA5.portao[0], 'Acendedoria Real'], [...CA5.estufaDoor[0], 'Estufa'], [...CA5.bondinho[1], 'Bondinho (desce)']];
+ROTULOS_EXTRA.largo = () => [[...POS4.largo.lavDoor, 'Lavanderia'], [45, 15, 'Bondinho da Cidade Alta']];
+{ const _mmI = montarMapas2; montarMapas2 = function () {
+  _mmI.apply(this, arguments);
+  const m = MAPS2.cidadeAlta; if (m && !m._tab5) { m._tab5 = true; m.props.push({ img: () => placaArt('casa'), x: 45.2, y: 23, by: 23 * TS + 1 }); }
+  const s = MAPS2.estufa; if (s && !s._lig) { s._lig = true; }
+  // lutas fixas: o vigia com a mariposa no arquivo (dupla nova) e o guarda com mariposa no meio dos telhados
+  const ar = MAPS2.arquivo; if (ar && !ar._foe5) { ar._foe5 = true; ar.ents.push(inimigo('vgA', 'vigia', 20, 12, ['vigia', 'mvidro'], { spr: vigiaSpr, h: 60, bg: bgTorre })); }
+  const th = MAPS2.telhados; if (th && !th._foe5) { th._foe5 = true; th.ents.push(inimigo('grT', 'guardaR', 37, 23, ['guardaR', 'mvidro'], { spr: guardaSpr, h: 56, bg: bgTelhado })); }
+  // a pipa do Quinzinho, num canto sem saída do labirinto
+  const c = MAPS2.cidadeAlta; if (c && !c._pipa) { c._pipa = true; c.ents.push({ t: 'sign', x: 19, y: 16, h: 14, gone: () => !!G.flags.c5PipaAchada, spr: () => pipaSpr(), talk: async () => { G.flags.c5PipaAchada = true; sfx('item'); await say('* Presa na sebe, num canto sem saída, uma pipa vermelha e amarela com rabiola de jornal. Escrito na vareta, torto: QUINZINHO.'); } }); }
+  // o Quinzinho agradece a pipa
+  const q = c && c.ents.find(e => e.id === 'quinzinho'); if (q && !q._pipa) { q._pipa = true; const t0 = q.talk; q.talk = async () => { if (G.flags.c5PipaAchada && !G.flags.c5Pipa) { G.flags.c5Pipa = true; await say('MINHA PIPA! Baú, você é o melhor baú do mundo! Toma, eu achei isso no chão da torre, brilha que nem você.', 'quinzinho'); await dar('tinta', 2); await dar('pluma', 1); save2(); return; } return t0(q); }; }
+}; }
+let PIPA_C = null; const pipaSpr = () => PIPA_C || (PIPA_C = (() => { const P = new Pix(16, 22); P.poly([[8, 0], [15, 7], [8, 14], [1, 7]], (x, y) => x < 8 ? '#e83a3a' : '#f0c040'); P.line(8, 0, 8, 14, '#5a3a20'); P.line(1, 7, 15, 7, '#5a3a20'); for (let i = 0; i < 4; i++) P.rect(7 + (i % 2) * 2, 15 + i * 2, 2, 1, '#e8e0d0'); return P.outline().canvas(); })());
+// ---------- missões no mapa ----------
+{ const _ms = missoes; missoes = function () {
+  const f = G.flags || {};
+  if (!f.c5Init || f.c5Fim) {
+    const L = _ms();
+    if (f.c5Fim && L[0] && L[0].tipo === 'main') { L[0] = { tit: 'Procurados', desc: 'A Guarda Real procura o grupo em Auren. Descanse na base; o Capítulo 6 está a caminho.', map: 'interior', at: [13, 6], tipo: 'main' }; }
+    return L;
+  }
+  const L = _ms().filter(m => m.tipo !== 'main'), pos = (fn) => { try { return fn(); } catch (e) { return null; } };
+  let M;
+  if (f.c5Holofote) M = { tit: 'A descida', desc: 'Desça pela escada da torre do sino até o Bairro Baixo.', map: 'telhados', at: TE5.descida[0] };
+  else if (f.c5Telhados) M = { tit: 'Os telhados', desc: 'Fuja pelos telhados até a torre do sino. Nos vãos, ponha uma TÁBUA do Vão; depois guarde de novo.', map: 'telhados', at: TE5.fim, quando: null };
+  else if (f.c5Cha) M = { tit: 'Fugir', desc: 'Saia do escritório. A Guarda Real está subindo.', map: 'escritorio', at: EC5.saida[0] };
+  else if (f.c5Vitral) M = { tit: 'O caderno preto', desc: 'Suba ao escritório e abra o caderno de capa preta.', map: 'escritorio', at: EC5.caderno };
+  else if (f.c5Velas) M = { tit: 'O vitral', desc: 'Suba a escada do arquivo. Algo guarda o patamar.', map: 'arquivo', at: AR5.vitralPos };
+  else if (f.c5Porta1) M = { tit: 'As velas com nome', desc: 'No Arquivo das Velas, acenda na ordem: quem consertava as horas, quem as tocava, quem limpava a fumaça delas.', map: 'arquivo', at: AR5.nota };
+  else if (f.c5Lentes) M = { tit: 'A luz no cristal', desc: 'Leve o feixe de luz até o cristal AZUL, sem passar pelo vermelho. Gire e mude espelhos de lugar; o caixote bloqueia.', map: 'lentes', at: LE5.alvo };
+  else if (f.c5Alcapao) M = { tit: 'Descer à Acendedoria', desc: 'O alçapão da estufa está aberto. Desça DE NOITE (de dia é expediente).', map: 'estufa', at: ES5.alcapao, quando: 'noite' };
+  else if (f.c5Chave) M = { tit: 'O alçapão', desc: 'Na estufa, ponha peso nas três placas (os vasos, guardados no Vão) para destravar o alçapão.', map: 'estufa', at: ES5.placas[1] };
+  else if (f.c5Tesoura) M = { tit: 'A tesoura de prata', desc: 'Leve a tesoura ao Seu Benedito, o jardineiro (só de dia).', map: 'cidadeAlta', at: CA5.jardineiro, quando: 'dia' };
+  else if (f.c5Alta) M = { tit: 'Outra entrada', desc: 'O jardineiro tem a chave da estufa; ele perdeu a tesoura no LABIRINTO de sebes.', map: 'cidadeAlta', at: CA5.tesoura };
+  else if (f.c5Iolanda) M = { tit: 'O bondinho', desc: 'Suba à Cidade Alta pelo bondinho, no lado leste do Largo do Hospital. Só DE DIA.', map: 'largo', at: [45, 15], quando: 'dia' };
+  else M = { tit: 'O papel-lírio', desc: 'Mostre a página arrancada à Dona Iolanda, na papelaria do Bairro Baixo.', map: 'papelaria', at: POS3.papelaria.iolanda };
+  M.tipo = 'main'; L.unshift(M);
+  const op = (o) => L.push(Object.assign({ tipo: 'side' }, o));
+  if (f.c5DamaPediu && !f.c5Dama) op({ tit: 'Sorvete de lavanda', desc: 'Compre do sorveteiro (de dia) perto das 19h e entregue à Dona Hortênsia logo que escurecer. Derrete em cerca de uma hora.', map: 'cidadeAlta', at: f.c5Sorvete ? CA5.dama : CA5.sorveteiro, quando: f.c5Sorvete ? 'noite' : 'dia' });
+  if (f.c5PipaVista && !f.c5Pipa) op({ tit: 'A pipa do Quinzinho', desc: f.c5PipaAchada ? 'Devolva a pipa ao Quinzinho (de dia).' : 'A pipa caiu num canto sem saída do labirinto.', map: 'cidadeAlta', at: f.c5PipaAchada ? CA5.crianca : [19, 16], quando: f.c5PipaAchada ? 'dia' : null });
+  if (f.c5Alta && !f.c5Mirante) op({ tit: 'O mirante', desc: 'Do mirante da Cidade Alta, de NOITE, dá para ver o morro do Farol.', map: 'cidadeAlta', at: CA5.mirante, quando: 'noite' });
+  return L;
+}; }
+// ---------- diário ----------
+DIARIO.splice(3, 0, { tipo: 'main', cap: 'Capítulo 5 · Cidade Alta', tit: 'O Caderno Preto', vis: () => fl('c5Init'), feita: () => fl('c5Fim'),
+  desc: 'A página arrancada em Candeia tem a mesma letra da lista do hospital. Quem anota assim tem um caderno. E não larga ele nunca.',
+  passos: [['Mostrar a página à Dona Iolanda', () => fl('c5Iolanda')], ['Subir à Cidade Alta de bondinho (de dia)', () => fl('c5Alta')], ['Achar a tesoura do jardineiro no labirinto', () => fl('c5Tesoura')],
+    ['Conseguir a chave da estufa', () => fl('c5Chave')], ['Destravar o alçapão da estufa', () => fl('c5Alcapao')], ['Descer à Acendedoria (de noite)', () => fl('c5Lentes')],
+    ['Levar a luz ao cristal azul', () => fl('c5Porta1')], ['Acender as velas na ordem certa', () => fl('c5Velas')], ['Passar pelo Vitral Vivo', () => fl('c5Vitral')],
+    ['Abrir o caderno preto', () => fl('c5Caderno')], ['Fugir pelos telhados', () => fl('c5Holofote')], ['Voltar para a base', () => fl('c5Fim')]] });
+DIARIO.push(
+  { tipo: 'side', cap: 'Cidade Alta', quem: 'Dona Hortênsia', tit: 'Sorvete de lavanda', vis: () => fl('c5DamaPediu'), feita: () => fl('c5Dama'), quando: 'noite', recompensa: 'Monóculo do Conde',
+    desc: 'O marido dela trazia, toda noite, um sorvete de lavanda do carrinho. O sorveteiro só fica de dia, e sorvete não espera a noite.',
+    passos: [['Comprar o sorvete de lavanda perto das 19h', () => fl('c5Sorvete') || fl('c5Dama')], ['Entregar logo que escurecer, antes de derreter', () => fl('c5Dama')]] },
+  { tipo: 'side', cap: 'Cidade Alta', quem: 'Quinzinho', tit: 'A pipa do Quinzinho', vis: () => fl('c5PipaVista'), feita: () => fl('c5Pipa'), recompensa: 'tinta azul e uma pluma',
+    desc: 'A pipa vermelha e amarela caiu num canto sem saída do labirinto de sebes.',
+    passos: [['Achar a pipa no labirinto', () => fl('c5PipaAchada')], ['Devolver ao Quinzinho (de dia)', () => fl('c5Pipa')]] },
+  { tipo: 'side', cap: 'Cidade Alta', quem: 'a curiosidade', tit: 'O mirante', vis: () => fl('c5Alta'), feita: () => fl('c5Mirante'), quando: 'noite', recompensa: '40 cobres e uma visão',
+    desc: 'Do mirante, a cidade de baixo vira um céu ao contrário. Dizem que de noite se vê o morro do Farol.',
+    passos: [['Olhar do mirante À NOITE', () => fl('c5Mirante')]] }
+);
 
 boot2();
 </script>
