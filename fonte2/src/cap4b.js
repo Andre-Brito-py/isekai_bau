@@ -18,7 +18,7 @@ Object.assign(TRACKS, {
 LUZ_GAL.mina = MI.lampioes;
 { const _mm4b = montarMapas2; montarMapas2 = function () {
   _mm4b.apply(this, arguments);
-  const grade = (m) => { for (const p of m.props || []) { if (p._hld) continue; const f = p.img; p._hld = true; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } };
+  const grade = (m) => { for (const p of m.props || []) { if (p._hld) continue; const f = p.img; p._hld = true; p.casaO = p.casaO || f.casaO; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } };
   // ===== ESTRADA DA SERRA =====
   MAPS2.serra = { rows: ROWS4B.serra, name: 'Estrada da Serra', music: 'candeia', batBg: bgSerra, bg: '#2a3242', nevoa: () => ehNoite() ? 1 : amanhecer() ? 0.35 : 0.75,
     props: [

@@ -3,7 +3,7 @@ src='/home/claude/rpg2/src/'
 head=open(src+'head.html').read()
 font=open('/home/claude/rpg/build/font.json').read()
 harte=open('/home/claude/rpg2/build/heranca_arte.json').read()
-files=['core.js','audio.js','tracks2.js','art2.js','battle2.js','fx2.js','cap1.js','arte_mundo.js','world2.js','arte_cap2.js','grupo2.js','mapas2.js','inimigos2.js','cap2.js','anim2.js','tempo2.js','economia2.js','taverna2.js','atencao2.js','arte_rosto.js','forma2.js','hld2.js','mapas3.js','arte_cap3.js','inimigos3.js','grimorio3.js','cap3.js','fx3.js','status3.js','arte_cap3b.js','inimigos3b.js','evolucao3.js','cap3b.js','mapas4.js','arte_cap4.js','inimigos4.js','cap4.js','fx4.js','anda.js','nivel.js','igreja2.js','tecnicas_nv.js','autosave.js','magia.js','radial.js','mapas4b.js','arte_cap4b.js','inimigos4b.js','gatilho.js','cap4b.js','mapa.js','diario.js','placas.js']
+files=['core.js','audio.js','tracks2.js','art2.js','battle2.js','fx2.js','cap1.js','arte_mundo.js','world2.js','arte_cap2.js','grupo2.js','mapas2.js','inimigos2.js','cap2.js','anim2.js','tempo2.js','economia2.js','taverna2.js','atencao2.js','arte_rosto.js','forma2.js','hld2.js','mapas3.js','arte_cap3.js','inimigos3.js','grimorio3.js','cap3.js','fx3.js','status3.js','arte_cap3b.js','inimigos3b.js','evolucao3.js','cap3b.js','mapas4.js','arte_cap4.js','inimigos4.js','cap4.js','fx4.js','anda.js','nivel.js','igreja2.js','tecnicas_nv.js','autosave.js','magia.js','radial.js','mapas4b.js','arte_cap4b.js','inimigos4b.js','gatilho.js','cap4b.js','mapa.js','diario.js','placas.js','vida.js']
 js=''.join(open(src+f).read()+'\n' for f in files)
 dups=[k for k,v in collections.Counter(re.findall(r'(?m)^(?:async )?function (\w+)', js)).items() if v>1]
 if dups: raise SystemExit('ERRO: funções duplicadas: '+', '.join(dups))
