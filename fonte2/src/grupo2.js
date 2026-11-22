@@ -150,7 +150,10 @@ async function menuGrupo() {
   while (true) {
     const g = grupoAtual();
     const viaja = G.flags.marcoViagem && Object.keys(G.marcos || {}).length > 1;
-    const i = await list({ x: 70, y: 40, w: 100, title: `${G.cobres || 0} cobres`, items: [{ label: 'Grupo' }, { label: 'Equipar' }, { label: 'Itens' }, { label: 'Tempo na luta: ' + (G.flags.tempoAtivo ? 'Ativo' : 'Pausa') }, { label: 'Fechar' }, ...(viaja ? [{ label: 'Viajar (Marco)' }] : [])] });
+    const temGrim = typeof grim === 'function' && grim().ativo;
+    const i0 = await list({ x: 70, y: 40, w: 100, title: `${G.cobres || 0} cobres`, items: [{ label: 'Grupo' }, { label: 'Equipar' }, { label: 'Itens' }, { label: 'Tempo na luta: ' + (G.flags.tempoAtivo ? 'Ativo' : 'Pausa') }, { label: 'Fechar' }, ...(viaja ? [{ label: 'Viajar (Marco)' }] : []), ...(temGrim ? [{ label: 'Grimório' }] : [])] });
+    if (temGrim && i0 === (viaja ? 6 : 5)) { await abrirGrimorio(); continue; }
+    const i = i0;
     if (i < 0 || i === 4) return;
     if (i === 5) { const ks = Object.keys(G.marcos), j = await list({ x: 30, y: 40, w: 180, title: 'Marco de Viagem', items: ks.map(k => ({ label: G.marcos[k].nm })) }); if (j >= 0) { const M = G.marcos[ks[j]]; sfx('rune'); await fadeOut(12); loadMap2(ks[j], M.x, M.y, 'down'); await fadeIn(12); return; } continue; }
     if (i === 0) await panel(g.flatMap(m => [`{y}${m.name}{/}  ${m.hp}/${m.mhp} PV  ${m.mmp ? m.mp + '/' + m.mmp + ' PM' : ''}`, `  ATQ ${m.atk} DEF ${m.def} MAG ${m.mag} VEL ${m.spd}`, ...(Object.values(eqOf(m.id)).filter(Boolean).length ? ['  ' + Object.values(eqOf(m.id)).filter(Boolean).map(k => EQ2[k].nm).join(', ')] : []), '']), { title: 'Grupo' });

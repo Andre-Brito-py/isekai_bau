@@ -191,6 +191,40 @@
    tela; o texto do mundo entra na fila dividido por TXZ; o painel do mapa (HUD) e as janelas ficam no tamanho normal.
    TELA CHEIA: o zoom de cada mapa é o mais longe possível até 1,5 SEM passar do tamanho do mapa (sem faixa preta);
    sala pequena (taverna) chega mais perto e a câmera rola. H agora é 'let' (muda só durante o desenho do mapa).
+ CAPÍTULO 3 — O FESTIVAL DA LUZ (roteiro; dividido em 2 partes a pedido do usuário)
+ - PARTE 1 (IMPLEMENTADA, cap3.js + grimorio3.js + inimigos3.js + arte_cap3.js + maps/cap3maps.py -> mapas3.js):
+   ESTRADA DOS LAMPIÕES (o 31 quebra a correia; postes apagados; mariposas comem luz; ACENDER POSTE com a Lume atrai
+   as mariposas da redondeza para longe do caminho; Bandoleiros afanam cobres; mini-chefe MARIPOSA-RAINHA: come luz,
+   chama filhas, na metade come a lanterna do poste e ACENDE: fraquezas mudam para gelo/corte, Sopro de Luz preparado)
+   -> AUREN, BAIRRO BAIXO (capital acesa ao meio-dia; Jorge chega com a correia trocada por Pavios sem nome; Caçadores;
+   feira, poeta, velha que lembra o Inverno Escuro) -> PAPELARIA PENA & FULIGEM (Dona Iolanda lê a anotação da Ofélia:
+   tinta = FULIGEM DE POSTE (Tico, limpa-chaminé; o irmão dele, DITO, virou Pavio e não o reconhece) + ÓLEO DE LAMPARINA
+   (um Pavio dá; "óleo bom é óleo de lembrança") + LÁGRIMA DE QUEM ESCREVE (a LUME tenta terminar a música do 31, para
+   no verso de sempre, "...e aí teve a curva", chora no tinteiro; a Rita sabia a música de cor)) -> O GRIMÓRIO ACORDA
+   (páginas = ELEMENTO + FORMA; elemento novo FULIGEM; FUSÕES descobertas com anotações da Ofélia nas margens) -> o
+   pingo de tinta reativa a RUNA DO VÃO no fundo da tampa: INTERIOR DO BAÚ (a BASE: vela que a Lume acende, a MEIA
+   misteriosa, estante do Grimório, cama, canto da forja sem bigorna, quadro vazio; entra-se por qualquer Marco) ->
+   AVENIDA DO FESTIVAL (noite de abertura, 3 dias depois; sem Caçadores; o PASTEL DA RITA na barraca da Dona Fátima:
+   exige a forma humana; com a promessa do jogo 1 ela paga; se a herança perdeu a memória do pastel, o gosto VOLTA)
+   -> DISCURSO do Acendedor-Mor (Inverno Escuro, anuncia o FAROL DE CEM INVERNOS para a última noite; a Lume tocada; a
+   Rita desconfiada; o Pavio Dito desmaia e diz "bom dia, rapazinho" ao Tico; o conde anota no caderno preto; as luzes
+   da cidade piscam como respiração; sopro de fuligem dos bueiros) -> cartão FIM DA PARTE 1.
+   GRIMÓRIO (grimorio3.js): Brasa/Geada/Seiva/Fuligem x Dardo/Onda/Véu; 2 elementos = fusão (Vapor, Orvalho, Brasa Viva,
+   Fumaça, Geada Negra e o MOFO, que dá errado de propósito); elemento repetido = dobrado. Véus: Manto de Brasa (+30%),
+   Couraça, Véu de Fumaça (próximo golpe erra)... MENU > Grimório ou estante da base. G.grim guarda páginas e fusões.
+ - PARTE 2 (a fazer): GALERIAS DE FULIGEM (túneis e chaminés sob a capital; escuro: a luz da Lume importa; Pavios
+   trabalhando no escuro; o Dito como missão: devolver uma lembrança) + TROCA DE FORMA EM BATALHA (humano x baú, ação
+   leve; forma humana usa equipamento) + a forja da Rita (achar a bigorna) + CHEFE no fundo das Galerias + gancho.
+   A EVOLUÇÃO (pedido do usuário: caprichar na história e começar com TRÊS opções), nas Galerias: o âmbar/tinta do
+   lugar empurra o baú para uma forma nova da superfície. Três caminhos, cada um com uma memória da Terra como PREÇO
+   (diferente para cada um, mostrada antes de escolher):
+     1) ARCA-FAROL (luz e âmbar: absorve luz e devolve como golpe; protege o grupo no escuro) — preço: o rosto da mãe
+        (sobra a voz). Tema: o mesmo desejo do conde, "ninguém no escuro", pelo outro lado.
+     2) ARCA DO VÃO (espaço: guarda um aliado DENTRO para salvá-lo de um golpe, troca posições, "teleporta" a mordida)
+        — preço: o caminho de casa (o endereço, o ponto do 31). Tema: a casa agora é o próprio baú.
+     3) ARCA-ESCRIBA (tinta: escreve runas NOS inimigos, marcas que explodem; mais páginas no Grimório; ligada à Ofélia)
+        — preço: a própria letra/o nome antigo escrito à mão. Tema: quem escreve guarda; quem guarda esquece.
+   Cada uma muda o sprite (baú e forma humana), dá técnica própria e muda falas (a Rita, a Lume e o Catálogo reagem).
  - PORTA TRANCADA (world2.js portaTrancada): toda casa do mapa agora tem porta desenhada; as que não levam a lugar
    nenhum avisam "trancada" (com variações de humor) quando o jogador anda contra ela ou aperta A de frente. Para abrir
    uma construção nova no futuro, basta pôr uma 'porta' (ent) na frente dela.
