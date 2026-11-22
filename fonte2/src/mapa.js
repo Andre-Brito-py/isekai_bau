@@ -62,6 +62,13 @@ function missoes() {
   if (f.c4Candeia && !f.c4Poco) op({ tit: 'O poço que desceu', desc: 'Os sonâmbulos cochicham que o poço da praça brilha lá no fundo... DE NOITE.', map: 'candeia', at: pos(() => POS4B.candeia.poco), quando: 'noite' });
   if (f.c4Candeia && !f.c4Fim) op({ tit: 'Os que andam dormindo', desc: 'De noite os moradores de Candeia andam até o poço e cochicham pistas. De dia, só ficam parados.', map: 'candeia', at: pos(() => POS4B.candeia.parados[2]), quando: 'noite' });
   if (f.c4Fim) op({ tit: 'Enfermaria', desc: 'A Irmã Dalva trata o grupo de graça e vende frascos com selo mais baratos.', map: 'interior', at: [12, 4] });
+  const tob = f.tob || 0, ped = f.ped || 0, pav = f.pavio || 0;
+  if (tob === 1) op({ tit: 'Carta para o andar de cima', desc: 'Entregar a carta do Seu Tobias à Marina, nos telhados da Rua Submersa.', map: 'rua1', at: pos(() => POS2.rua1.marina) });
+  if (tob === 2) op({ tit: 'Carta para o andar de cima', desc: 'Contar ao Seu Tobias como a Marina reagiu.', map: 'tobias', at: pos(() => POS2.tobias.tobias) });
+  if (ped === 1) op({ tit: 'O barquinho do Pedrinho', desc: 'Achar o barquinho no Mercado Afundado.', map: 'rua2', at: pos(() => POS2.rua2.barco) });
+  if (ped === 2) op({ tit: 'O barquinho do Pedrinho', desc: 'Devolver o barquinho ao Pedrinho, na praça.', map: 'praca', at: pos(() => POS2.praca.pedrinho) });
+  if (pav === 1) op({ tit: 'O nome do Pavio', desc: 'Achar a plaquinha com o nome numa banca do Mercado Afundado.', map: 'rua2', at: pos(() => POS2.rua2.placa) });
+  if (pav === 2) op({ tit: 'O nome do Pavio', desc: 'Devolver o nome ao Pavio da praça.', map: 'praca', at: [11, 9] });
   if (f.c2Boss && !f.cantouSino && !f.cantoTardio) op({ tit: 'A canção do sino', desc: 'De noite, a Dona Badalada ainda zumbe lá do rio, sozinha. A Irmã Celeste acha que ela quer ouvir alguém cantar.', map: 'praca', at: pos(() => POS2.praca.celeste), quando: 'noite' });
   if (f.c2Chegada && typeof noiteId === 'function' && f.cantouNa !== noiteId()) op({ tit: 'A Lume canta na fonte', desc: 'De noite, a Lume pode cantar na fonte da Praça do Sino. O chapéu enche de cobres; se ela for muito bem, às vezes alguém deixa um presente.', map: 'praca', at: [7, 16], quando: 'noite' });
   if (f.c2Chegada && f.quadroTut) op({ tit: 'Quadro de pedidos', desc: 'O quadro da Taverna do Remo Torto sempre tem trabalho que paga em cobres.', map: 'taverna', at: pos(() => POS2.taverna.quadro) });

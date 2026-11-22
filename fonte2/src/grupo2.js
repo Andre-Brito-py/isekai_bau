@@ -157,14 +157,16 @@ async function menuGrupo() {
     const viaja = G.flags.marcoViagem && Object.keys(G.marcos || {}).length > 1;
     const temGrim = typeof grim === 'function' && grim().ativo;
     const ops = [['grupo', 'Grupo', 'Vida, nível, técnicas e atributos de cada um.'], ['equip', 'Equipar', 'Troque o que cada um leva.'], ['itens', 'Itens', 'Use frascos e outras coisas fora da luta.'],
-      ...(typeof telaMapa === 'function' ? [['mapa', 'Mapa e missões', 'Onde você está, para onde ir e o que só dá para fazer em certa hora.', '#ffd060']] : []),
+      ...(typeof telaDiario === 'function' ? [['diario', 'Missões', 'Diário de missões: detalhes e andamento de cada uma.', '#ffd060']] : []),
+      ...(typeof telaMapa === 'function' ? [['mapa', 'Mapa', 'Onde você está, para onde ir e o que só dá para fazer em certa hora.', '#ffd060']] : []),
       ...(temGrim ? [['grim', 'Grimório', 'Escreva e reescreva as páginas de feitiço.']] : []), ...(viaja ? [['viajar', 'Viajar (Marco)', 'Vá até um Marco que você já tocou.']] : []),
       ['tempo', 'Tempo na luta', G.flags.tempoAtivo ? 'ATIVO: os inimigos não esperam você escolher. Mais tenso.' : 'PAUSA: o tempo para enquanto você escolhe. Mais calmo.', null, G.flags.tempoAtivo ? 'Ativo' : 'Pausa'], ['fechar', 'Fechar', 'Voltar ao jogo.']];
-    const ix = await list({ x: 48, y: 22, w: 144, title: `${G.cobres || 0} cobres`, idx: menuGrupo._idx || 0, items: ops.map(o => ({ label: o[1], col: o[3] || undefined, right: o[4] })), desc: j => ops[j][2], descY: 22 + 16 + ops.length * 12 + 10 });
+    const ix = await list({ x: 48, y: 22, w: 144, maxVis: 10, title: `${G.cobres || 0} cobres`, idx: menuGrupo._idx || 0, items: ops.map(o => ({ label: o[1], col: o[3] || undefined, right: o[4] })), desc: j => ops[j][2], descY: 22 + 16 + ops.length * 12 + 10 });
     if (ix < 0) return;
     menuGrupo._idx = ix; const k = ops[ix][0];
     if (k === 'fechar') { menuGrupo._idx = 0; return; }
     if (k === 'grim') { await abrirGrimorio(); continue; }
+    if (k === 'diario') { await telaDiario(); continue; }
     if (k === 'mapa') { if (!G.flags.mapaVisto && typeof primeiroMapa === 'function') await primeiroMapa(); await telaMapa(); continue; }
     if (k === 'viajar') { const ks = Object.keys(G.marcos), j = await list({ x: 30, y: 40, w: 180, title: 'Marco de Viagem', items: ks.map(k => ({ label: G.marcos[k].nm })) }); if (j >= 0) { const M = G.marcos[ks[j]]; sfx('rune'); await fadeOut(12); loadMap2(ks[j], M.x, M.y, 'down'); await fadeIn(12); return; } continue; }
     if (k === 'grupo' && typeof telaStatus === 'function') { await telaStatus(); continue; }
