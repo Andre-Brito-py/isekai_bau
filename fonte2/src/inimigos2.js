@@ -254,7 +254,7 @@ async function mareSobe(e) {
     const d = calcDmg(e, m, 0.35) * (m.eqFx && m.eqFx.has('agua') ? 0.5 : 1);
     hurtMember(m, d); m.st.molhado = 3; const [x, y] = unitCenter(m); popNum(x, y - 20, 'MOLHADO', '#5fd0ff'); burst(x, y + 10, 10, ['#5fd0ff', '#ffffff']);
   }
-  if (!G.flags.tutMare) { G.flags.tutMare = true; hint('MARÉ: quem está na FRENTE fica MOLHADO (lento). FILEIRA (na roda) troca de linha. É uma ação leve. Atrás: leva menos dano físico, mas o corpo a corpo enfraquece.', 520); }
+  if (!G.flags.tutMare) { G.flags.tutMare = true; hint('MARÉ: quem está na FRENTE fica MOLHADO (lento). FILEIRA (nos comandos) troca de linha. É uma ação leve. Atrás: leva menos dano físico, mas o corpo a corpo enfraquece.', 520); }
 }
 async function agarrar(e) {
   const ops = alive(BT.party).filter(m => !m.preso); if (ops.length < 2) { e.lastGrab = e.turns; return AI2.ancora(e); }
@@ -273,7 +273,7 @@ async function agarrar(e) {
 }
 // a água subindo e a corrente até quem está preso (desenhado atrás dos lutadores)
 function bgAnimPoco() {
-  if (BT.mare && BT.mare.lvl > 0) { const y = 158 - BT.mare.lvl; bx.globalAlpha = 0.45; bx.fillStyle = '#2a6080'; bx.fillRect(0, y, W, 162 - y); bx.globalAlpha = 0.8; bx.fillStyle = '#8fd0f0'; for (let x = 0; x < W; x += 6) bx.fillRect(x + (BT.t >> 2) % 6, y + (x % 12 ? 0 : 1), 3, 1); bx.globalAlpha = 1; }
+  if (BT.mare && BT.mare.lvl > 0) { const y = 158 - BT.mare.lvl; const L0 = -(BTV.ox || 0), RW = BTV.w || W; bx.globalAlpha = 0.45; bx.fillStyle = '#2a6080'; bx.fillRect(L0, y, RW, 162 - y); bx.globalAlpha = 0.8; bx.fillStyle = '#8fd0f0'; for (let x = L0 - L0 % 6; x < L0 + RW; x += 6) bx.fillRect(x + (BT.t >> 2) % 6, y + (x % 12 ? 0 : 1), 3, 1); bx.globalAlpha = 1; }
   for (const c of BT.foes) if (c.kind === 'corrente' && c.held && c.hp > 0 && !c.gone) {
     const [x0, y0] = [c.x, c.y - 40], [x1, y1] = unitCenter(c.held);
     for (let i = 0; i <= 8; i++) { const q = i / 8; fxDisc(x0 + (x1 - x0) * q, y0 + (y1 - y0) * q + Math.sin(q * Math.PI) * 6, 1.8, i % 2 ? '#5a5a6a' : '#9a9aaa'); }

@@ -441,7 +441,7 @@ async function pocoChefe() {
     await say('Medo com correntes de navio. Cuidado com a água: o poço sobe quando ela respira.', 'rita');
   } else await say('VOCÊS VOLTARAM. EU LEMBRO DE VOCÊS. EU NÃO ESQUEÇO NINGUÉM.', 'ancora');
   const r = await lutaMapa(['ancora'], { bg: bgPoco, music: 'ancora', pos: [[182, 150]], tension: 20, extra: { fileira: true, bgAnim: bgAnimPoco },
-    intro: async () => { const e = BT.foes[0]; e.phases = fasesAncora(); e.ct = 10; BT.mare = { lvl: 4 }; callout('A ÂNCORA-MÃE', '#e8d8a0', 100); hint('Nesta luta dá para trocar de FILEIRA (ícone de setas na roda): frente ou trás.', 320); } });
+    intro: async () => { const e = BT.foes[0]; e.phases = fasesAncora(); e.ct = 10; BT.mare = { lvl: 4 }; callout('A ÂNCORA-MÃE', '#e8d8a0', 100); hint('Nesta luta dá para trocar de FILEIRA (na lista de comandos): frente ou trás.', 320); } });
   if (r !== 'win') return;
   G.flags.c2Boss = true; save2();
   await fimCap2();

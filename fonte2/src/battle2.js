@@ -39,7 +39,7 @@ async function battle2(cfg) {
   Object.assign(BT, {
     on: true, cfg, party: cfg.party.map(mkMember), foes: cfg.foes.map(f => mkFoe(ENEMY2[f.id], f.x, f.y)),
     anims: [], parts: [], nums: [], call: null, hint: null, stop: 0, shake: 0, flash: 0, t: 0,
-    tension: cfg.tension || 0, tensionShow: 0, menu: null, busy: false, queue: [], over: null, mode: G.flags.modoEspera ? 'espera' : 'ativo',
+    tension: cfg.tension || 0, tensionShow: 0, menu: null, busy: false, queue: [], over: null, mode: G.flags.tempoAtivo ? 'ativo' : 'espera', sub: null,
     stats: { perf: 0, crit: 0, quebra: 0, t0: G.time }, dim: 0, cut: null, bgfn: cfg.bg || ponteBG, ring: null, prompt: null, cursor: null,
     // restos da luta anterior (sem isso o VITÓRIA! da luta dos corvos ficava por cima da luta do chefe)
     win: null, lose: null, waitA: null, phaseQ: [], phaseBusy: false, taunt: null, eco: false, lastTarget: null, lastCmd: {}, call: null, hint: null
@@ -79,10 +79,9 @@ function updateBattle2() {
   if (BT.prompt) updatePrompt();
   if (BT.over) return;
   // trocar o modo de tempo (botão MENU)
-  if (btnp('menu') && !BT.ring && !BT.prompt) { BT.mode = BT.mode === 'ativo' ? 'espera' : 'ativo'; G.flags.modoEspera = BT.mode === 'espera'; callout('Tempo: ' + (BT.mode === 'ativo' ? 'ATIVO' : 'ESPERA'), '#8fe3ff', 60); sfx('select'); }
   if (BT.busy) return;
   // menu aberto: o tempo quase para (ou para, no modo Espera); um inimigo pronto interrompe
-  const slow = BT.menu ? (BT.mode === 'ativo' && !UI.top() && !BT.cursor ? ATIVO_SLOW : 0) : 1;
+  const slow = BT.menu ? (BT.mode === 'ativo' && !UI.top() && !BT.cursor && !BT.sub ? ATIVO_SLOW : 0) : 1;
   if (slow > 0) {
     for (const u of alive(BT.foes)) if (!u.broken && !(u.st.frio > 0 && BT.t % 2)) u.ct += u.spd * TIME_K * slow;
     if (!BT.menu) for (const u of alive(BT.party)) if (!u.preso && !((u.st.frio > 0 || u.st.molhado > 0) && BT.t % 2)) u.ct += u.spd * TIME_K;
@@ -222,9 +221,17 @@ function wheelPick(m) {
 }
 function menuInput() {
   const M = BT.menu; if (!M || M.hidden || BT.busy || UI.top() || BT.cursor) return;
+  if (BT.sub) {
+    const S = BT.sub, n = S.items.length;
+    if (navp('down')) { S.idx = (S.idx + 1) % n; sfx('move'); }
+    if (navp('up')) { S.idx = (S.idx + n - 1) % n; sfx('move'); }
+    if (btnp('a')) { if (S.items[S.idx].disabled) { sfx('cancel'); callout(S.items[S.idx].why || 'Ainda não dá', '#ff8a9a', 40); } else { sfx('select'); BT.sub = null; S.r(S.idx); } }
+    else if (btnp('b')) { sfx('cancel'); BT.sub = null; S.r(-1); }
+    return;
+  }
   const cs = cmdsFor(M.m);
-  if (navp('right') || navp('down')) { M.idx = (M.idx + 1) % cs.length; sfx('move'); }
-  if (navp('left') || navp('up')) { M.idx = (M.idx + cs.length - 1) % cs.length; sfx('move'); }
+  if (navp('down')) { M.idx = (M.idx + 1) % cs.length; sfx('move'); }
+  if (navp('up')) { M.idx = (M.idx + cs.length - 1) % cs.length; sfx('move'); }
   if (btnp('a')) { const c = cs[M.idx]; if (c.need && !c.need()) { sfx('cancel'); callout('Precisa de 100 de Tensão', '#ff6b6b', 40); return; } sfx('select'); const p = M.pick; M.pick = null; p && p(c.k); }
 }
 // escolher alvo: cursor sobre inimigos (ou aliados)
@@ -242,8 +249,8 @@ function cursorInput() {
   else if (btnp('b')) { sfx('cancel'); BT.cursor = null; C.r(null); }
 }
 // listinha de opções (técnicas, runas, itens, duplas)
-function subList(title, items, desc) {
-  return list({ x: 112, y: 22, w: 126, title, items, desc: i => items[i] && items[i].d, descY: 122, edge: '#8fe3ff', maxVis: 5 });
+function subList(title, items) {
+  return new Promise(r => { BT.sub = { title, items, idx: Math.max(0, items.findIndex(i => !i.disabled)), scroll: 0, r }; });
 }
 async function doCommand(m, k) {
   if (k === 'morto') return true;
@@ -268,7 +275,7 @@ async function doCommand(m, k) {
     endTurn(m, 'leve'); return true;
   }
   if (k === 'tecnica') {
-    const ts = m.techs.map(tk => { const T = TECH2[tk]; return { k: tk, label: T.nm, right: T.cost + 'T', disabled: BT.tension < T.cost, d: T.d }; });
+    const ts = m.techs.map(tk => { const T = TECH2[tk]; return { k: tk, label: T.nm, right: T.cost + 'T', disabled: BT.tension < T.cost, why: 'Precisa de ' + T.cost + ' de Tensão', d: T.d }; });
     const i = await subList('Técnicas', ts); if (i < 0) return false;
     const T = TECH2[ts[i].k];
     const t = T.tgt === 'self' ? m : T.tgt === 'all' ? 'all' : T.tgt === 'ally' ? await pickTarget('p', { pref: m }) : await pickTarget('e', { pref: BT.lastTarget });
@@ -276,7 +283,7 @@ async function doCommand(m, k) {
     BT.tension -= T.cost; await act(m, () => T.run(m, t)); endTurn(m, T.w || 'normal'); return true;
   }
   if (k === 'runas') {
-    const rs = m.runas.map(rk => { const S = RUNA2[rk]; return { k: rk, label: S.nm, right: S.mp + 'PM', disabled: m.mp < S.mp, d: S.d }; });
+    const rs = m.runas.map(rk => { const S = RUNA2[rk]; return { k: rk, label: S.nm, right: S.mp + 'PM', disabled: m.mp < S.mp, why: 'PM insuficiente', d: S.d }; });
     const i = await subList(m.magNm || 'Runas', rs); if (i < 0) return false;
     const S = RUNA2[rs[i].k];
     const t = S.tgt === 'all' ? 'all' : S.tgt === 'ally' ? await pickTarget('p', { pref: m }) : await pickTarget('e', { pref: BT.lastTarget });
@@ -287,7 +294,7 @@ async function doCommand(m, k) {
     const ds = Object.entries(DUPLA2).filter(([, D]) => D.who.includes(m.id)).map(([dk, D]) => {
       const p = BT.party.find(u => u.id === D.who.find(w => w !== m.id));
       const ok = p && p.hp > 0 && p.ct >= 50 && BT.tension >= 50;
-      return { k: dk, label: D.nm, right: '50T', disabled: !ok, d: D.d + (p && p.hp > 0 && p.ct < 50 ? ' (' + p.name + ' ainda não está quase na vez.)' : '') };
+      return { k: dk, label: D.nm, right: '50T', disabled: !ok, why: BT.tension < 50 ? 'Precisa de 50 de Tensão' : (p && p.hp > 0 ? p.name + ' ainda não está quase na vez' : 'Parceiro caído'), d: D.d + (p && p.hp > 0 && p.ct < 50 ? ' (' + p.name + ' ainda não está quase na vez.)' : '') };
     });
     const i = await subList('Duplas', ds); if (i < 0) return false;
     const D = DUPLA2[ds[i].k], p = BT.party.find(u => u.id === D.who.find(w => w !== m.id));
@@ -337,9 +344,10 @@ function cutIn(us, nm, col) {
   sfx('catalog'); BT.dim = 1;
   return tw(70, (p, k) => {
     const a = p < 0.15 ? p / 0.15 : p > 0.85 ? (1 - p) / 0.15 : 1;
-    bx.globalAlpha = 0.65 * a; bx.fillStyle = '#05030a'; bx.fillRect(0, 0, W, H); bx.globalAlpha = 1;
+    const L0 = -(BTV.ox || 0), RW = BTV.w || 240;
+    bx.globalAlpha = 0.65 * a; bx.fillStyle = '#05030a'; bx.fillRect(L0, -40, RW, H + 80); bx.globalAlpha = 1;
     const sl = ease.out(Math.min(1, p / 0.25)) * (p > 0.85 ? 1 - (p - 0.85) / 0.15 * 1.5 : 1);
-    bx.save(); bx.globalAlpha = a; bx.fillStyle = col; bx.beginPath(); bx.moveTo(-20, 70); bx.lineTo(260, 50); bx.lineTo(260, 112); bx.lineTo(-20, 132); bx.fill();
+    bx.save(); bx.globalAlpha = a; bx.fillStyle = col; bx.beginPath(); bx.moveTo(L0 - 20, 72); bx.lineTo(L0 + RW + 20, 48); bx.lineTo(L0 + RW + 20, 110); bx.lineTo(L0 - 20, 134); bx.fill();
     bx.fillStyle = '#ffffff'; for (let i = 0; i < 9; i++) { const x = ((k * 9 + i * 41) % 300) - 30; bx.fillRect(x, 60 + (i * 13) % 60, 22, 1); }
     us.forEach((u, i) => { const P = IMG.port[u.port] ? IMG.port[u.port][0] : null; if (P) { bx.imageSmoothingEnabled = false; bx.drawImage(P, Math.round(-70 + sl * (90 + i * 74)), 60 + i * 4, 64, 64); } });
     bx.restore();
@@ -423,21 +431,35 @@ async function defeat() {
   BT.on = false; BT.done(c === 0 ? 'retry' : 'quit');
 }
 
-// ---------- desenho ----------
+// ---------- desenho (v3: campo limpo no meio; grupo, comandos e informação em painéis fixos) ----------
+// Tela larga (celular deitado): cartões do grupo na lateral esquerda, comandos na lateral direita.
+// Tela estreita: cartões numa faixa embaixo e comandos no canto direito do campo.
+const BTV = { ox: 0, w: 240, dy: 24, lados: false };
 function drawBattle2() {
   bx.imageSmoothingEnabled = false;
+  const WF = W, OX = Math.floor((WF - 240) / 2), lados = OX >= 110, DY = lados ? 24 : 18;
+  Object.assign(BTV, { ox: OX, w: WF, dy: DY, lados });
   let sx = 0, sy = 0; if (BT.shake > 0) { BT.shake--; sx = Math.round(rand(-BT.shakeA, BT.shakeA)); sy = Math.round(rand(-BT.shakeA, BT.shakeA)); }
-  bx.save(); bx.translate(sx, sy);
-  bx.fillStyle = '#05030a'; bx.fillRect(-4, -4, W + 8, H + 8);
-  bx.drawImage(BT.bgfn(), 0, 12);
+  // fundo: o cenário no meio, espelhado nas laterais e escurecendo para as bordas; o chão continua para baixo
+  const bg = BT.bgfn();
+  bx.fillStyle = '#05030a'; bx.fillRect(0, 0, WF, H);
+  const by = 12 + DY + sy;
+  bx.save(); bx.translate(OX + sx, 0);
+  bx.drawImage(bg, 0, by);
+  bx.drawImage(bg, 0, bg.height - 2, 240, 2, 0, by + bg.height - 1, 240, H - by - bg.height + 1);
+  if (OX > 0) for (const d of [-1, 1]) { bx.save(); bx.translate(d < 0 ? 0 : 480, 0); bx.scale(-1, 1); bx.drawImage(bg, 0, by); bx.drawImage(bg, 0, bg.height - 2, 240, 2, 0, by + bg.height - 1, 240, H - by - bg.height + 1); bx.restore(); }
+  bx.restore();
+  if (OX > 0) { const g = bx.createLinearGradient(0, 0, OX, 0); g.addColorStop(0, 'rgba(5,3,10,0.82)'); g.addColorStop(1, 'rgba(5,3,10,0)'); bx.fillStyle = g; bx.fillRect(0, 0, OX, H); const g2 = bx.createLinearGradient(OX + 240, 0, WF, 0); g2.addColorStop(0, 'rgba(5,3,10,0)'); g2.addColorStop(1, 'rgba(5,3,10,0.82)'); bx.fillStyle = g2; bx.fillRect(OX + 240, 0, WF - OX - 240, H); }
+  bx.fillStyle = 'rgba(5,3,10,0.55)'; bx.fillRect(0, 0, WF, by);
+  // campo de batalha em coordenadas locais (0..240)
+  bx.save(); bx.translate(OX + sx, DY + sy); W = 240; TXO.x = OX; TXO.y = DY;
   if (BT.cfg.bgAnim) BT.cfg.bgAnim();
-  // sombras e lutadores, por profundidade
   const all = [...BT.foes.filter(u => !u.gone), ...BT.party].sort((a, b) => a.y - b.y);
+  const M = BT.menu, ativo = M && !M.hidden && !BT.busy ? M.m : null;
+  if (ativo) { const p = (BT.t % 40) / 40; bx.globalAlpha = 0.8; bx.strokeStyle = UIC.line; bx.beginPath(); bx.ellipse(ativo.x, ativo.y, 12 + p * 4, 3 + p, 0, 0, Math.PI * 2); bx.stroke(); bx.globalAlpha = 1; }
   for (const u of all) drawUnit(u);
-  // anel de defesa, acerto no tempo
   if (BT.ring) drawRing();
   if (BT.prompt) drawPrompt();
-  // animações agendadas (efeitos)
   for (let i = BT.anims.length - 1; i >= 0; i--) {
     const a = BT.anims[i]; const p = Math.min(1, a.k / a.n);
     a.fn(p, a.k);
@@ -446,22 +468,149 @@ function drawBattle2() {
   }
   for (const p of BT.parts) { bx.globalAlpha = Math.min(1, (p.life - p.t) / 10); bx.fillStyle = p.col; bx.fillRect(Math.round(p.x), Math.round(p.y), p.sz, p.sz); }
   bx.globalAlpha = 1;
-  bx.restore();
-  if (BT.flash > 0) { bx.fillStyle = '#ffffff'; bx.globalAlpha = BT.flash / 4; bx.fillRect(0, 0, W, H); bx.globalAlpha = 1; BT.flash--; }
-  // números de dano
   for (const n of BT.nums) {
     const k = n.t, y = n.y - (k < 10 ? ease.back(k / 10) * 10 : 10 + (k - 10) * 0.15);
     txt(n.s, n.x, Math.round(y), { align: 'center', col: n.col, sz: n.big ? 1.5 : 1, shadow: true, alpha: k > 45 ? (60 - k) / 15 : 1 });
   }
-  drawTimeline(); drawTension(); drawHUD();
-  if (BT.menu && !BT.menu.hidden && !BT.busy && !BT.cursor && !UI.top()) drawWheel();
-  if (BT.cursor) drawCursor();
-  if (BT.call) { const c = BT.call, a = Math.min(1, c.t / 6, (c.n - c.t) / 10); const w = lineW(rich(c.s)) + 16; bx.globalAlpha = a * 0.85; bx.fillStyle = '#0a0612'; bx.fillRect(120 - w / 2, 24, w, 13); bx.globalAlpha = 1; txt(c.s, 120, 25, { align: 'center', col: c.col, alpha: a }); }
-  if (BT.hint && !BT.call) { const h = BT.hint, a = Math.min(1, h.t / 10, (h.n - h.t) / 10), nl = wrapRich(rich(h.s), 36).length; bx.globalAlpha = 0.88 * a; bx.fillStyle = '#0a0612'; bx.fillRect(12, 23, 226, nl * 11 + 4); bx.fillStyle = '#5fd0ff'; bx.fillRect(12, 23 + nl * 11 + 4, 226, 1); bx.globalAlpha = 1; txt(h.s, 16, 25, { w: 36, col: '#b8f0ff', alpha: a, lh: 11 }); }
+  if (BT.cursor) seta(BT.cursor);
   if (BT.win) drawWin();
-  if (BT.lose) { BT.lose.t++; bx.globalAlpha = Math.min(0.6, BT.lose.t / 60); bx.fillStyle = '#200008'; bx.fillRect(0, 0, W, H); bx.globalAlpha = 1; }
+  bx.restore(); W = WF; TXO.x = 0; TXO.y = 0;
+  if (BT.flash > 0) { bx.fillStyle = '#ffffff'; bx.globalAlpha = BT.flash / 4; bx.fillRect(0, 0, WF, H); bx.globalAlpha = 1; BT.flash--; }
+  // painéis (coordenadas da tela)
+  if (!BT.dim) {
+    drawTimeline(OX); drawTension(OX, lados); drawHUD(OX, lados);
+    if (M && !M.hidden && !BT.busy && !UI.top() && !BT.cursor) drawComandos(M, OX, lados);
+    drawInfo(OX, lados);
+  }
+  if (BT.call) { const c = BT.call, a = Math.min(1, c.t / 6, (c.n - c.t) / 10), w = lineW(rich(c.s)) + 18, y = 25; bx.globalAlpha = a; box(OX + 120 - w / 2, y, w, 15, { bw: 1, edge: c.col }); bx.globalAlpha = 1; txt(c.s, OX + 120, y + 2, { align: 'center', col: c.col, alpha: a }); }
+  if (BT.hint && !BT.call) { const h = BT.hint, a = Math.min(1, h.t / 10, (h.n - h.t) / 10), nl = wrapRich(rich(h.s), 36).length; bx.globalAlpha = a; box(OX + 6, 25, 228, nl * 11 + 8, { edge: '#8fe3ff' }); bx.globalAlpha = 1; txt(h.s, OX + 12, 29, { w: 36, col: '#d8f6ff', alpha: a, lh: 11 }); }
+  if (BT.lose) { BT.lose.t++; bx.globalAlpha = Math.min(0.6, BT.lose.t / 60); bx.fillStyle = '#200008'; bx.fillRect(0, 0, WF, H); bx.globalAlpha = 1; }
   menuInput(); cursorInput();
   if (BT.waitA && btnp('a')) { const r = BT.waitA; BT.waitA = null; r(); }
+}
+// seta do alvo, quicando sobre a cabeça (campo local)
+function seta(C) {
+  const u = C.list[C.idx]; if (!u) return;
+  const [x] = unitCenter(u), top = u.y + u.oy - (unitFrame(u) || { height: 20 }).height, b = Math.round(Math.sin(BT.t / 5) * 2);
+  const col = u.side === 'e' ? UIC.accent : '#9be58a';
+  bx.fillStyle = '#000'; for (let i = 0; i < 6; i++) bx.fillRect(Math.round(x) - i - 1, Math.round(top) - 9 + b - i, i * 2 + 3, 1);
+  bx.fillStyle = col; for (let i = 0; i < 5; i++) bx.fillRect(Math.round(x) - i, Math.round(top) - 10 + b - i, i * 2 + 1, 1);
+}
+// --- ordem de vez (topo, no meio): quem age AGORA bem grande, e os próximos ---
+function drawTimeline(OX) {
+  const order = predictOrder(6), x0 = OX + 120 - (20 + 5 * 17) / 2;
+  bx.fillStyle = 'rgba(5,3,10,0.6)'; bx.fillRect(OX, 0, 240, 22);
+  let firstCharge = true;
+  order.forEach((u, i) => {
+    const cur = i === 0, sz = cur ? 18 : 14, x = cur ? x0 : x0 + 20 + (i - 1) * 17 + 2, y = cur ? 2 : 4;
+    const ch = u.side === 'e' && u.charge && firstCharge;
+    const edge = ch ? '#ff6b6b' : u.side === 'p' ? (u.col || UIC.line) : '#b89ad8';
+    bx.globalAlpha = cur ? 1 : 0.85 - i * 0.08;
+    bx.fillStyle = edge; bx.fillRect(x - 1, y - 1, sz + 2, sz + 2); bx.fillStyle = '#140e1e'; bx.fillRect(x, y, sz, sz);
+    bx.drawImage(miniIcon(u), 0, 0, 14, 14, x + (cur ? 2 : 0), y + (cur ? 2 : 0), 14, 14);
+    bx.globalAlpha = 1;
+    if (ch) { firstCharge = false; bx.fillStyle = '#ff6b6b'; bx.fillRect(x + sz - 3, y - 2, 4, 6); bx.fillStyle = '#ffffff'; bx.fillRect(x + sz - 2, y - 1, 2, 3); bx.fillRect(x + sz - 2, y + 3, 2, 1); }
+    if (cur) { bx.fillStyle = UIC.accent; bx.fillRect(x + 5, y + sz + 1, 8, 1); }
+  });
+  txt('AGORA', x0 - 4, 5, { align: 'right', col: '#8a9aa8' });
+}
+// --- Tensão: barra horizontal em 4 gomos (cada gomo = 25) ---
+function drawTension(OX, lados) {
+  const v = BT.tensionShow / 100, full = BT.tension >= 100;
+  const x = lados ? 6 : OX + 4, y = lados ? 6 : 206, w = lados ? Math.min(124, OX - 12) : 60;
+  if (!lados) { bx.fillStyle = 'rgba(5,3,10,0.6)'; bx.fillRect(OX + 4, 24, 48, 9); bx.fillStyle = full ? (BT.t % 10 < 5 ? '#ffffff' : '#ffe066') : '#ffa94d'; bx.fillRect(OX + 5, 25, Math.round(46 * v), 7); txt('T' + Math.floor(BT.tension), OX + 55, 23, { col: '#ffb86a' }); return; }
+  txt('TENSÃO', x, y - 1, { col: full ? '#ffe066' : '#ffb86a' });
+  txt(String(Math.floor(BT.tension)), x + w, y - 1, { align: 'right', col: full ? '#ffe066' : '#c8b8a0' });
+  const bw = (w - 6) / 4;
+  for (let i = 0; i < 4; i++) {
+    const gx = Math.round(x + i * (bw + 2)), f = Math.max(0, Math.min(1, v * 4 - i));
+    bx.fillStyle = 'rgba(255,169,77,0.16)'; bx.fillRect(gx, y + 11, Math.round(bw), 5);
+    bx.fillStyle = full ? (BT.t % 10 < 5 ? '#ffffff' : '#ffe066') : '#ffa94d'; bx.fillRect(gx, y + 11, Math.round(bw * f), 5);
+    if (f > 0) { bx.fillStyle = 'rgba(255,255,255,0.4)'; bx.fillRect(gx, y + 11, Math.round(bw * f), 1); }
+  }
+  if (full && BT.t % 30 < 20) txt('SUPER pronto!', x, y + 18, { col: '#ffe066' });
+}
+// --- cartões do grupo ---
+function drawHUD(OX, lados) {
+  BT.party.forEach((m, i) => {
+    let x, y, w, h;
+    if (lados) { w = Math.min(126, OX - 10); x = OX - w - 4 < 6 ? 6 : 6; y = 36 + i * 32; h = 30; }
+    else { w = 78; x = OX + 1 + i * 79; y = 204; h = 34; }
+    const active = BT.menu && BT.menu.m === m && !BT.menu.hidden && !BT.busy, mirado = BT.cursor && BT.cursor.list[BT.cursor.idx] === m;
+    const edge = mirado ? '#9be58a' : active ? UIC.accent : m.hp <= 0 ? '#6a3040' : undefined;
+    box(x, y, w, h, { edge, fill: active ? 'rgba(40,20,40,0.88)' : undefined });
+    const P = PT(m.port), sh = m.flash > 0 ? Math.round(rand(-1, 1)) : 0;
+    bx.globalAlpha = m.hp <= 0 ? 0.35 : 1; bx.drawImage(P, 0, 0, 32, 32, x + 3 + sh, y + 3, 22, 22); bx.globalAlpha = 1;
+    if (m.hp > 0 && m.hp < m.mhp * 0.3 && BT.t % 40 < 20) { bx.fillStyle = 'rgba(255,60,60,0.3)'; bx.fillRect(x + 3, y + 3, 22, 22); }
+    const tx = x + 28, bw = w - 32;
+    txt(m.short || m.name, tx, y + 1, { col: active ? '#ffffff' : '#c8d4dc' });
+    if (lados) txt(String(m.hp), x + w - 4, y + 1, { align: 'right', col: m.hp <= 0 ? '#ff6b6b' : m.hp < m.mhp * 0.3 ? '#ffb0b0' : '#ffffff' });
+    const hp = m.hp / m.mhp, tr = m.trail / m.mhp;
+    bx.fillStyle = 'rgba(95,255,176,0.12)'; bx.fillRect(tx, y + 14, bw, 4);
+    bx.fillStyle = '#c83a3a'; bx.fillRect(tx, y + 14, Math.round(bw * tr), 4);
+    bx.fillStyle = hp > 0.5 ? '#5fffb0' : hp > 0.25 ? '#ffd060' : '#ff6b6b'; bx.fillRect(tx, y + 14, Math.round(bw * hp), 4);
+    bx.fillStyle = 'rgba(255,255,255,0.35)'; bx.fillRect(tx, y + 14, Math.round(bw * hp), 1);
+    for (let k = 1; k < 10; k++) { bx.fillStyle = 'rgba(5,3,10,0.6)'; bx.fillRect(tx + Math.round(bw * k / 10), y + 14, 1, 4); }
+    if (m.mmp) { bx.fillStyle = 'rgba(90,138,232,0.18)'; bx.fillRect(tx, y + 20, bw, 2); bx.fillStyle = '#7aa8ff'; bx.fillRect(tx, y + 20, Math.round(bw * m.mp / m.mmp), 2); }
+    // barra de vez: enche até a vez da pessoa
+    const ct = Math.max(0, Math.min(1, m.ct / 100)), ready = ct >= 1 || active;
+    bx.fillStyle = 'rgba(255,255,255,0.08)'; bx.fillRect(tx, y + 24, bw, 3);
+    bx.fillStyle = ready ? (BT.t % 8 < 4 ? '#ffffff' : '#ffe066') : (m.col || UIC.line); bx.fillRect(tx, y + 24, Math.round(bw * (active ? 1 : ct)), 3);
+    // estados por cima do retrato
+    let sx = x + 3; for (const k of ['queimado', 'frio', 'tonto', 'vela', 'molhado', 'preso']) if (m.st[k] > 0 || (k === 'preso' && m.preso)) { bx.drawImage(ICON[k === 'frio' ? 'congelado' : k === 'vela' ? 'luz' : k], sx, y + h - 13); sx += 9; }
+    if (m.def0) bx.drawImage(ICON.defender, sx, y + h - 13);
+    if (m.row === 'back') { bx.fillStyle = 'rgba(143,227,216,0.5)'; bx.fillRect(x + 1, y + 4, 1, h - 8); }
+  });
+}
+// --- comandos: lista vertical com ícone e nome; técnicas/runas/itens abrem no mesmo painel ---
+function drawComandos(M, OX, lados) {
+  const m = M.m, S = BT.sub;
+  const w = lados ? Math.min(126, OX - 10) : 100, x = lados ? W - w - 6 : OX + 240 - w - 2, y = lados ? 32 : 26;
+  const items = S ? S.items.map(it => ({ label: it.label, right: it.right, dis: it.disabled, ic: null }))
+    : cmdsFor(m).map(c => ({ label: c.k === 'atacar' ? (m.atkNm || 'Atacar') : c.nmF ? c.nmF(m) : c.nm, ic: c.ic(m), dis: c.need && !c.need(), sup: c.k === 'super' }));
+  const idx = S ? S.idx : M.idx, maxV = lados ? 9 : 7;
+  if (S) { if (idx < S.scroll) S.scroll = idx; if (idx >= S.scroll + maxV) S.scroll = idx - maxV + 1; }
+  const off = S ? S.scroll : 0, n = Math.min(maxV, items.length), h = 18 + n * 13 + 3;
+  box(x, y, w, h, { edge: UIC.accent });
+  tagNome(x + 4, y + 3, S ? S.title : 'Vez de ' + (m.short || m.name), S ? UIC.line : (m.col || UIC.accent));
+  if (S) txt('B volta', x + w - 4, y + 4, { align: 'right', col: '#7a8a98' });
+  for (let i = 0; i < n; i++) {
+    const k = i + off, it = items[k], yy = y + 19 + i * 13, sel = k === idx;
+    if (sel) { bx.fillStyle = UIC.sel; bx.fillRect(x + 2, yy - 1, w - 4, 13); setaSel(x + 3, yy); }
+    let tx = x + 10;
+    if (it.ic && ICON[it.ic]) { bx.globalAlpha = it.dis ? 0.35 : 1; bx.drawImage(ICON[it.ic], tx, yy); bx.globalAlpha = 1; tx += 15; }
+    txt(it.label, tx, yy, { col: it.dis ? '#5a6070' : sel ? '#ffffff' : '#b8c8d0' });
+    if (it.right) txt(it.right, x + w - 5, yy, { align: 'right', col: it.dis ? '#5a6070' : '#ffb86a' });
+    if (it.sup && !it.dis && BT.t % 20 < 10) { bx.fillStyle = '#ffe066'; bx.fillRect(x + w - 8, yy + 4, 3, 3); }
+  }
+  if (S && items.length > maxV) txt((idx + 1) + '/' + items.length, x + w - 5, y + h - 1, { align: 'right', col: '#7a8a98' });
+}
+// --- barra de informação (embaixo, no meio): o que o comando faz, ou a ficha do alvo ---
+function drawInfo(OX, lados) {
+  const x = OX + 8, w = 224, y = lados ? 204 : 168, h = 32;
+  const C = BT.cursor, M = BT.menu, S = BT.sub;
+  if (C) {
+    const u = C.list[C.idx]; if (!u) return;
+    box(x, y, w, h, { edge: u.side === 'e' ? UIC.accent : '#9be58a' });
+    txt(u.name, x + 6, y + 3, { col: '#ffffff' });
+    const hb = 96; bx.fillStyle = 'rgba(255,107,107,0.15)'; bx.fillRect(x + 6, y + 18, hb, 4); bx.fillStyle = u.side === 'e' ? '#ff6b8a' : '#5fffb0'; bx.fillRect(x + 6, y + 18, Math.round(hb * u.hp / u.mhp), 4);
+    if (u.side !== 'e') { txt(u.hp + '/' + u.mhp, x + 108, y + 14, { col: '#c8d4dc' }); return; }
+    // escudo (losangos): zere com golpes da fraqueza para QUEBRAR
+    for (let i = 0; i < u.maxShield; i++) { const sx = x + 108 + i * 7, on = i < u.shield; bx.fillStyle = on ? '#8fe3ff' : 'rgba(143,227,255,0.18)'; bx.fillRect(sx + 2, y + 15, 2, 1); bx.fillRect(sx + 1, y + 16, 4, 1); bx.fillRect(sx, y + 17, 6, 2); bx.fillRect(sx + 1, y + 19, 4, 1); bx.fillRect(sx + 2, y + 20, 2, 1); }
+    if (u.broken > 0) txt('QUEBRADO: dano x2', x + w - 6, y + 3, { align: 'right', col: '#8fe3ff' });
+    else txt('Fraco a', x + w - 6 - 5 * 13 - 4, y + 3, { align: 'right', col: '#7a8a98' });
+    ['fogo', 'gelo', 'luz', 'corte', 'mordida'].forEach((k, i) => { if (u.broken > 0) return; const ix = x + w - 6 - (5 - i) * 13; if (u.known[k] === 'weak') bx.drawImage(ICON[k], ix, y + 3); else if (u.known[k] === 'ok') { bx.globalAlpha = 0.22; bx.drawImage(ICON[k], ix, y + 3); bx.globalAlpha = 1; } else txt('?', ix + 3, y + 3, { col: '#4a5260' }); });
+    if (u.charge) txt('! golpe preparado', x + w - 6, y + 17, { align: 'right', col: '#ff6b6b' });
+    return;
+  }
+  if (!M || M.hidden || BT.busy || UI.top()) return;
+  let d = '';
+  if (S) d = S.items[S.idx] && S.items[S.idx].d;
+  else { const c = cmdsFor(M.m)[M.idx]; d = c && (typeof c.desc === 'function' ? c.desc(M.m) : c.desc); }
+  if (!d) return;
+  const nl = Math.min(3, wrapRich(rich(d), 36).length);
+  box(x, y + h - (nl * 10 + 8), w, nl * 10 + 8, { bw: 1 });
+  txt(d, x + 6, y + h - (nl * 10 + 8) + 4, { w: 36, col: '#c8d4dc', lh: 10 });
 }
 function drawUnit(u) {
   const a = u.alpha ?? 1; if (a <= 0) return;
@@ -501,7 +650,6 @@ function drawPrompt() {
   else txt(P.res === 'certo' ? 'CERTO!' : '...', x, y - 30, { align: 'center', col: P.res === 'certo' ? '#ffe066' : '#8a8099', shadow: true });
 }
 
-// --- linha do tempo (topo) ---
 function predictOrder(n = 8) {
   const sim = [...alive(BT.party), ...alive(BT.foes)].map(u => ({ u, ct: u.ct, spd: u.preso ? 0 : u.spd * (u.st.frio > 0 || u.st.molhado > 0 ? 0.5 : 1), br: u.broken || 0 }));
   const out = []; let guard = 0;
@@ -517,107 +665,6 @@ function miniIcon(u) {
   const src = u.side === 'p' ? PT(u.port) : unitFrame(u);
   if (src) { if (u.side === 'p') x.drawImage(src, 0, 0, 32, 32, 0, 0, 14, 14); else { const s = 14 / Math.max(src.width, src.height) * (u.boss ? 2.1 : 1.2); x.drawImage(src, (14 - src.width * s) / 2, u.boss ? -2 : (14 - src.height * s) / 2, src.width * s, src.height * s); } }
   return u.mini = c;
-}
-function drawTimeline() {
-  bx.fillStyle = '#0a0612'; bx.fillRect(0, 0, W, 21); bx.fillStyle = '#2a2236'; bx.fillRect(0, 20, W, 1);
-  txt('VEZ', 4, 5, { col: '#8a8099' });
-  const order = predictOrder(8);
-  let firstCharge = true;
-  order.forEach((u, i) => {
-    const x = 28 + i * 23, y = 3, cur = i === 0;
-    const edge = u.side === 'p' ? (u.col || '#8fe3ff') : (u.charge && firstCharge ? '#ff6b6b' : '#d0a8ff');
-    bx.fillStyle = edge; bx.fillRect(x - 1, y - 1, 18, 17); bx.fillStyle = '#140e1e'; bx.fillRect(x, y, 16, 15);
-    bx.drawImage(miniIcon(u), x + 1, y + 1);
-    if (u.side === 'e' && u.charge && firstCharge) { firstCharge = false; txt('!', x + 13, y - 2, { col: '#ff6b6b', shadow: true }); }
-    if (cur) { bx.fillStyle = '#ffe066'; bx.fillRect(x + 6, y + 16, 4, 2); }
-  });
-  // modo de tempo
-  txt(BT.mode === 'ativo' ? 'A' : 'E', 234, 5, { col: BT.mode === 'ativo' ? '#9be58a' : '#ffa94d', align: 'right' });
-}
-// --- Tensão (barra vertical à esquerda) ---
-function drawTension() {
-  const x = 2, y = 26, h = 128, v = BT.tensionShow / 100, full = BT.tension >= 100;
-  bx.fillStyle = '#0a0612'; bx.fillRect(x, y, 8, h + 2); bx.fillStyle = '#3a2a4a'; bx.fillRect(x + 1, y + 1, 6, h);
-  const fh = Math.round(h * v), col = full ? (BT.t % 10 < 5 ? '#ffffff' : '#ffe066') : '#ffa94d';
-  bx.fillStyle = col; bx.fillRect(x + 1, y + 1 + h - fh, 6, fh);
-  bx.fillStyle = '#ffd8a0'; if (fh > 2) bx.fillRect(x + 1, y + 1 + h - fh, 6, 1);
-  for (const m of [0.25, 0.5, 0.75]) { bx.fillStyle = '#0a0612'; bx.fillRect(x + 1, y + 1 + Math.round(h * (1 - m)), 6, 1); }
-  txt('T', x + 1, y + h + 3, { col: full ? '#ffe066' : '#ffa94d' });
-  if (full) for (let i = 0; i < 2; i++) part({ x: x + 4 + rand(-3, 3), y: y + rand(0, h), vy: -0.5, life: 16, col: '#ffe066' });
-}
-// --- painéis do grupo (embaixo) ---
-function drawHUD() {
-  const y0 = 162;
-  bx.fillStyle = '#0a0612'; bx.fillRect(0, y0 - 2, W, H - y0 + 2); bx.fillStyle = '#2a2236'; bx.fillRect(0, y0 - 2, W, 1);
-  BT.party.forEach((m, i) => {
-    const x = 2 + i * 79, y = y0 + 1, wd = 77, hgt = 75;
-    const active = BT.menu && BT.menu.m === m && !BT.menu.hidden;
-    const mirado = BT.cursor && BT.cursor.list[BT.cursor.idx] === m;
-    bx.fillStyle = mirado ? (BT.t % 16 < 8 ? '#9be58a' : '#4a8a4a') : active ? '#ffe066' : m.hp <= 0 ? '#4a2030' : '#3a2e4e'; bx.fillRect(x, y, wd, hgt);
-    bx.fillStyle = '#140e1e'; bx.fillRect(x + 1, y + 1, wd - 2, hgt - 2);
-    // retrato com expressão: ferido = treme, caído = cinza
-    const P = PT(m.port), shake = m.flash > 0 ? Math.round(rand(-1, 1)) : 0;
-    bx.globalAlpha = m.hp <= 0 ? 0.35 : 1; bx.drawImage(P, 0, 0, 32, 32, x + 3 + shake, y + 3, 24, 24); bx.globalAlpha = 1;
-    if (m.hp > 0 && m.hp < m.mhp * 0.3 && BT.t % 40 < 20) { bx.fillStyle = 'rgba(255,60,60,0.3)'; bx.fillRect(x + 3, y + 3, 24, 24); }
-    txt(m.short || m.name, x + 30, y + 3, { col: active ? '#ffe066' : '#ffffff' });
-    // PV com rastro vermelho
-    const bw = 44, hp = m.hp / m.mhp, tr = m.trail / m.mhp;
-    bx.fillStyle = '#2a1a24'; bx.fillRect(x + 30, y + 16, bw, 4);
-    bx.fillStyle = '#c83a3a'; bx.fillRect(x + 30, y + 16, Math.round(bw * tr), 4);
-    bx.fillStyle = hp > 0.5 ? '#6ad06a' : hp > 0.25 ? '#e8c040' : '#e85a4a'; bx.fillRect(x + 30, y + 16, Math.round(bw * hp), 4);
-    bx.fillStyle = 'rgba(255,255,255,0.35)'; bx.fillRect(x + 30, y + 16, Math.round(bw * hp), 1);
-    txt(String(m.hp), x + 30, y + 21, { col: '#ffffff' }); txt('/' + m.mhp, x + 30 + lineW(rich(String(m.hp))), y + 21, { col: '#8a8099' });
-    // PM
-    if (m.mmp) { bx.fillStyle = '#1a1a34'; bx.fillRect(x + 3, y + 33, 71, 3); bx.fillStyle = '#5a8ae8'; bx.fillRect(x + 3, y + 33, Math.round(71 * m.mp / m.mmp), 3); txt('PM ' + m.mp, x + 3, y + 37, { col: '#8fb8ff' }); }
-    // barra de vez (enche em tempo real)
-    const ct = Math.max(0, Math.min(1, m.ct / 100));
-    bx.fillStyle = '#241a30'; bx.fillRect(x + 3, y + 51, 71, 5);
-    bx.fillStyle = ct >= 1 ? (BT.t % 8 < 4 ? '#ffffff' : '#ffe066') : m.col; bx.fillRect(x + 3, y + 51, Math.round(71 * ct), 5);
-    txt(m.row === 'back' ? 'trás' : 'frente', x + 3, y + 58, { col: '#6a6078' });
-    // status
-    let sx = x + 74; for (const k of ['queimado', 'frio', 'tonto', 'vela', 'molhado', 'preso']) if (m.st[k] > 0 || (k === 'preso' && m.preso)) { sx -= 13; bx.drawImage(ICON[k === 'frio' ? 'congelado' : k === 'vela' ? 'luz' : k], sx, y + 60); }
-    if (m.def0) { sx -= 13; bx.drawImage(ICON.defender, sx, y + 60); }
-  });
-}
-// --- roda de comandos ---
-function drawWheel() {
-  const M = BT.menu, m = M.m, cs = cmdsFor(m), [cx, cy] = unitCenter(m);
-  const R = 26, n = cs.length;
-  M.rot = (M.rot ?? M.idx) + ((M.idx - (M.rot ?? M.idx)) * 0.3);
-  cs.forEach((c, i) => {
-    const ang = -Math.PI / 2 + (i - M.rot) * (Math.PI * 2 / n), x = Math.round(cx + Math.cos(ang) * R), y = Math.round(cy + Math.sin(ang) * R * 0.8);
-    const sel = i === M.idx, dis = c.need && !c.need();
-    bx.globalAlpha = sel ? 1 : 0.82; bx.fillStyle = sel ? '#ffe066' : '#3a2e4e'; bx.fillRect(x - 9, y - 9, 18, 18); bx.fillStyle = sel ? '#2a1a0a' : '#140e1e'; bx.fillRect(x - 8, y - 8, 16, 16); bx.globalAlpha = 1;
-    bx.globalAlpha = dis ? 0.35 : 1; bx.drawImage(ICON[c.ic(m)], x - 6, y - 6); bx.globalAlpha = 1;
-    if (c.k === 'super' && !dis && BT.t % 20 < 10) fxRing(x, y, 11, '#ffe066', 0.8);
-  });
-  const c = cs[M.idx];
-  const label = c.k === 'atacar' ? (m.atkNm || 'Atacar') : c.nmF ? c.nmF(m) : c.nm;
-  const w = lineW(rich(label)) + 14;
-  bx.fillStyle = '#ffe066'; bx.fillRect(cx - w / 2, cy - 52, w, 14); bx.fillStyle = '#140e1e'; bx.fillRect(cx - w / 2 + 1, cy - 51, w - 2, 12);
-  txt(label, cx, cy - 51, { align: 'center', col: '#ffe066' });
-  const d = typeof c.desc === 'function' ? c.desc(m) : c.desc;
-  if (d) { const nl = Math.min(4, wrapRich(rich(d), 21).length); bx.globalAlpha = 0.9; bx.fillStyle = '#0a0612'; bx.fillRect(104, 158 - nl * 11 - 4, 134, nl * 11 + 3); bx.globalAlpha = 1; txt(d, 107, 158 - nl * 11 - 2, { w: 21, col: '#b8aecb', lh: 11 }); }
-}
-// --- cursor de alvo + ficha do inimigo ---
-function drawCursor() {
-  const C = BT.cursor, u = C.list[C.idx]; if (!u) return;
-  const [x, y] = unitCenter(u), top = u.y + u.oy - (unitFrame(u) || { height: 20 }).height;
-  const b = Math.round(Math.sin(BT.t / 5) * 2);
-  bx.fillStyle = '#ffe066'; for (let i = 0; i < 5; i++) bx.fillRect(Math.round(x) - i, Math.round(top) - 10 + b - i, i * 2 + 1, 1);
-  if (u.side === 'e') {
-    const bxw = 150, X = 86, Y = 24;
-    bx.globalAlpha = 0.92; bx.fillStyle = '#0a0612'; bx.fillRect(X, Y, bxw, 38); bx.globalAlpha = 1; bx.fillStyle = '#d0a8ff'; bx.fillRect(X, Y + 37, bxw, 1);
-    txt(u.name, X + 4, Y + 2, { col: '#ffffff' });
-    bx.fillStyle = '#2a1a24'; bx.fillRect(X + 4, Y + 15, 90, 4); bx.fillStyle = '#e85a4a'; bx.fillRect(X + 4, Y + 15, Math.round(90 * u.hp / u.mhp), 4);
-    // escudo em losangos
-    for (let i = 0; i < u.maxShield; i++) { const sx = X + 100 + i * 7, on = i < u.shield; bx.fillStyle = on ? '#8fe3ff' : '#2a3a4a'; bx.fillRect(sx + 2, Y + 13, 2, 1); bx.fillRect(sx + 1, Y + 14, 4, 1); bx.fillRect(sx, Y + 15, 6, 2); bx.fillRect(sx + 1, Y + 17, 4, 1); bx.fillRect(sx + 2, Y + 18, 2, 1); }
-    // fraquezas: ícone se já descoberta, "?" se não
-    txt('Fraco:', X + 4, Y + 23, { col: '#8a8099' });
-    const kinds = ['fogo', 'gelo', 'luz', 'corte', 'mordida'];
-    kinds.forEach((k, i) => { const ix = X + 44 + i * 16; if (u.known[k] === 'weak') bx.drawImage(ICON[k], ix, Y + 23); else if (u.known[k] === 'ok') { bx.globalAlpha = 0.25; bx.drawImage(ICON[k], ix, Y + 23); bx.globalAlpha = 1; } else txt('?', ix + 3, Y + 23, { col: '#5a5068' }); });
-    if (u.broken > 0) txt('QUEBRADO', X + bxw - 4, Y + 2, { align: 'right', col: '#8fe3ff' });
-  } else txt(u.name, Math.round(x), Math.round(top) - 22, { align: 'center', col: '#ffe066', shadow: true });
 }
 function drawWin() {
   const w = BT.win; w.t++;

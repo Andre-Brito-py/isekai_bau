@@ -399,7 +399,7 @@ function fasesEspantalho() {
       e.ph = 3; e.weak = ['luz']; e.maxShield = 4; e.shield = 4; e.spd = 13; e.mini = null;
       burst(e.x, e.y - 50, 60, ['#d8c8a0', '#b8a070', '#f07830', '#2a1e1a'], { max: 4, life: 50 });
       callout('O coração de âmbar está exposto!', '#ffd060', 90);
-      if (!G.flags.tutSuper) { G.flags.tutSuper = true; hint('Tensão cheia? O SUPER aparece na roda. Duplas: um aliado com a barra de vez pela metade + 50 de Tensão.', 400); }
+      if (!G.flags.tutSuper) { G.flags.tutSuper = true; hint('Tensão cheia? O SUPER aparece na lista de comandos. Duplas: um aliado com a barra de vez pela metade + 50 de Tensão.', 400); }
     } }
   ];
 }
@@ -526,7 +526,7 @@ async function lutaCorvos() {
     const res = await battle2({
       party: grupoCap1(), foes: [{ id: 'corvo', x: 158, y: 92 }, { id: 'corvo', x: 206, y: 110 }], music: 'luta2', tension: 0,
       intro: async () => {
-        if (!G.flags.tut1) { G.flags.tut1 = true; hint('LINHA DO TEMPO no topo: quem age a seguir. As barras embaixo enchem sozinhas. Quando enche, a roda de comandos abre.', 360); }
+        if (!G.flags.tut1) { G.flags.tut1 = true; hint('No topo: quem age AGORA e os próximos. Quando a barrinha de um cartão enche, a vez é dele: o tempo para e os comandos abrem à direita.', 360); }
       }
     });
     if (res === 'win') return true;
@@ -570,7 +570,7 @@ async function capitulo1() {
 function hintOnce() { }
 { const _oc = openCommand; openCommand = function (m) {
   if (m.guarding) { m.guarding.st.guardado = 0; m.guarding = null; }
-  if (!G.flags.tutMenu) { G.flags.tutMenu = true; hint('Direcional gira a roda, A escolhe, B volta. No ataque, aperte A quando o anel amarelo fechar no alvo.', 360); }
+  if (!G.flags.tutMenu) { G.flags.tutMenu = true; hint('Para cima e para baixo escolhe, A confirma, B volta. No ataque, aperte A quando o anel amarelo fechar no alvo.', 360); }
   return _oc(m);
 }; }
 { const _dr = defenseRing; defenseRing = function (m, n, o) {
@@ -679,9 +679,9 @@ function tick() {
   const top = UI.top();
   if (top) top.update();
   const WF = W, OX = Math.floor((WF - 240) / 2);
-  if (V.scene === 'world') {
-    // o mapa usa a tela larga inteira; janelas e diálogos ficam no meio
-    updateWorld2(); drawWorld2();
+  if (V.scene === 'world' || V.scene === 'battle2') {
+    // mapa e batalha usam a tela larga inteira; janelas e diálogos ficam no meio
+    if (V.scene === 'world') { updateWorld2(); drawWorld2(); } else { updateBattle2(); drawBattle2(); }
     bx.save(); bx.translate(OX, 0); TXO.x = OX; for (const w of UI.stack) w.draw(); bx.restore(); TXO.x = 0;
   } else {
     // batalha, cenas e título são quadros de 240x240: desenhados no centro; nas laterais, o próprio quadro desfocado
