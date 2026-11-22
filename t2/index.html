@@ -292,6 +292,14 @@
    SALA DO DIRETOR: ficha do Dito "TRANSFERIDO: CANDEIA (ar de serra)", e a LISTA DO DESCANSO: nomes com a letra pequena e
    cuidadosa (o jogador reconhece a letra do caderno), e no rodapé "pensão paga". A Irmã Dalva chega, vê, e conta que
    CANDEIA (a vila mineira na serra, onde nasceu o âmbar da capital) APAGOU há dois dias. Fim da Parte 1.
+ - PARTE 1 IMPLEMENTADA (cap4.js + arte_cap4.js + inimigos4.js + maps/cap4maps.py -> mapas4.js; mapas largo, hosp1,
+   hosp2, sala). G.poder 3 no início do capítulo. Entrada: saída leste da Avenida do Festival (depois de c3Fim). Mapas
+   "soBau" (Ala, Sala): a Lume e a Rita vão dentro do baú (sem seguidores). Ronda: ents t:'ronda' (path de 2 pontos,
+   pausa nas pontas, dá a volta se o baú bloquear), cone de 4 tiles com linha de visão (coneRonda), escuro próprio
+   (HOOK_AR, noiteHosp). Maçanetas: a porta da Sala exige o rosto. De dia, se o rosto derreter no térreo, te põem para
+   fora. Números: Pesadelo 280 PV/ATQ 28, Lençol 300/26, Relógio de Plantão 3800 PV/ATQ 32 (hora muda a cada 3 vezes,
+   Hora do Descanso preparada a cada 4). Robô 0.6: comuns custam ~10-40%; Relógio termina com ~40-90% (mínimo ~16-32%).
+   Flags: c4Init, c4Largo, c4Tico, c4Hosp, c4Noite, c4Ronda, c4CamaDito, c4Relogio, c4Sala, c4Ficha, c4Lista, c4P1Fim.
  - PARTE 2 (Candeia, a vila apagada): o 31 sobe a serra; névoa; moradores parados nas portas sem lembrar o que iam
    fazer; minas de âmbar vazias; RUNA DE GATILHO (4º espaço do Grimório, armadilha na linha do tempo); a Irmã Dalva vai
    morar na base (ENFERMARIA: cura entre lutas com custo de cobres); o Seu Jorge abre a GARAGEM (o 31 viaja entre
@@ -8595,8 +8603,685 @@ async function cenaFinalCap3() {
   await cartao(['FIM DO CAPÍTULO 3', 'O Festival da Luz', '', 'Próximo: Capítulo 4']);
   save2();
   V.scene = 'world'; loadMap2('auren', 9, 18, 'down'); await fadeIn(20);
-  await say('* (O Capítulo 4 está a caminho. A capital, a base e as Galerias continuam abertas: a forja da Rita, o Grimório e as fusões esperam por você.)');
+  await capitulo4();
 }
+
+// gerado por maps/cap4maps.py (validado: larguras, alcance, entidades em chão válido)
+const ROWS4 = {"largo": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,;;;;;,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,;;;;;,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,;;;;;,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,;;;;;,,,,", ",,,,,,,,,,,,..........,,,;;;;;,,,,", ",,,,,,,,,,,,..........,,,;;;;;,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", "##################################", "##################################"], "hosp1": ["WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", "WhhhhhhhhhhWhhhhhhhhhhhhhhh==W", "WhhhhhhhhhhWhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhWhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhWhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhhhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhhhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhWhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhWhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhWhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhWhhhhhhhhhhhhhhhhhW", "WWWWWWWWWWWWWWhhWWWWWWWWWWWWWW"], "hosp2": ["WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWWWWhhWW", "WhhhhhhhhhhhhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhhhhhhhhhhhhhhhhhhhW", "WWWWhhWhhhhhhWhhWhhhhhhWhhWWWW", "WWWWhhWhhhhhhWhhWhhhhhhWhhWWWW", "WWWWhhWhhhhhhWhhWhhhhhhWhhWWWW", "WWWWhhWhWWWWWWhhWWWhhWWWhhWWWW", "WhhhhhhhhhhhhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhhhhhhhhhhhhhhhhhhhW", "WWWWhhWWWhhWWWhhWWWWWhWWhhWWWW", "WWWWhhWhhhhhhWhhWhhhhhhWhhWWWW", "WWWWhhWhhhhhhWhhWhhhhhhWhhWWWW", "WWWWhhWhhhhhhWhhWhhhhhhWhhWWWW", "WWWWhhWWWWWWWWhhWWWWWWWWhhWWWW", "WhhhhhhhhhhhhhhhhhhhhhhhhhhhhW", "WhhhhhhhhhhhhhhhhhhhhhhhhhhhhW", "WW=WWWWWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"], "sala": ["WWWWWWWWWWWW", "WWWWWWWWWWWW", "WWWWWWWWWWWW", "WhhhhhhhhhhW", "WhhhhhhhhhhW", "WhhrrrrrrhhW", "WhhrrrrrrhhW", "WhhrrrrrrhhW", "WhhhhhhhhhhW", "WWWWWhhWWWWW"]};
+const POS4 = {"largo": {"chegada": [1, 12], "festDoor": [[0, 12], [0, 13]], "hospDoor": [[16, 8], [17, 8]], "hospOut": [16, 9], "lavDoor": [31, 8], "lavOut": [31, 9], "marco": [3, 15], "tico": [10, 11], "pregoeiro": [22, 12], "fila": [[19, 10], [20, 10], [21, 10]], "porteiro": [15, 8], "guarda": [18, 8], "postes": [[6, 9], [27, 9], [6, 16], [27, 16]], "arvores": [[2, 9], [31, 12]], "fonte": [16, 12], "bau": [32, 16], "velho": [12, 16], "banco": [[13, 13], [20, 13]]}, "hosp1": {"door": [[14, 13], [15, 13]], "entra": [14, 12], "dalva": [5, 4], "balcao": [5, 5], "bancos": [[2, 9], [2, 11]], "camas": [[13, 4], [17, 4], [21, 4], [13, 9], [17, 9], [21, 9], [25, 9]], "escada": [[27, 3], [28, 3]], "escOut": [27, 4], "cartaz": [8, 3], "visita": [4, 10], "vaso": [9, 11]}, "hosp2": {"entra": [2, 17], "descida": [[2, 18]], "salaDoor": [[26, 2], [27, 2]], "salaOut": [26, 3], "relogio": [26, 4], "rondas": [{"path": [[2, 9], [27, 9]], "at": [6, 9]}, {"path": [[14, 4], [14, 16]], "at": [14, 13]}, {"path": [[6, 3], [22, 3]], "at": [20, 3]}, {"path": [[24, 16], [24, 5]], "at": [24, 12]}], "pes1": [9, 13], "len1": [19, 13], "pes2": [10, 16], "len2": [8, 6], "misto": [20, 6], "camaDito": [21, 5], "potes": [[18, 12], [22, 12]], "rouparia": [11, 5], "bau": [12, 14], "marco": [1, 16], "nota": [5, 12], "quartoDito": [19, 7]}, "sala": {"door": [[5, 9], [6, 9]], "entra": [5, 8], "mesa": [6, 4], "arquivo": [2, 3], "quadro": [9, 3], "lixo": [10, 7]}};
+
+// ================= ARTE DO CAP. 4 (Parte 1): A CASA DOS QUE ESQUECEM =================
+// Ladrilho verde-água de hospital, paredes de azulejo com faixa, fachada da Casa de Saúde do Largo (três andares,
+// janelas acesas, emblema da vela), camas de ferro com potes de âmbar presos em fios que sobem pelo teto, e os
+// bichos da Ala do Descanso: PESADELO, LENÇOL e o mini-chefe RELÓGIO DE PLANTÃO.
+
+RAMPA_CHAO.ladrilho = ['#1e3438', '#36585a', '#5a8682', '#8ab8aa', '#c8e8d8'].map(hex3);
+CHAO_PISO.add('ladrilho');
+const KEY_HOSP = { 'h': { t: 'ladrilho' }, 'W': { t: 'parH', solid: true }, 'r': { t: 'tapete' }, '=': { t: 'escada' } };
+{ const _ta5 = tileArt; tileArt = function (k, v = 0, f = 0) {
+  if (k !== 'ladrilho' && k !== 'parH') return _ta5(k, v, f);
+  const key = k + '_' + v + '_' + f; if (TILE2[key]) return TILE2[key];
+  const P = new Pix(16, 16);
+  if (k === 'ladrilho') {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const rej = x % 8 === 7 || y % 8 === 7, xadrez = ((x >> 3) + (y >> 3)) % 2; P.p(x, y, rej ? '#4a6e6c' : xadrez ? '#9ac8bc' : '#b8e0d2'); }
+    if (hash(v, 3, 7) % 5 === 0) { P.p(3, 4, '#7aa89c'); P.p(4, 4, '#7aa89c'); }
+  } else {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, y < 9 ? (x % 4 === 3 || y % 4 === 3 ? '#a8bab4' : '#d8e4dc') : y < 11 ? '#3a7a7a' : '#5a6a7a');
+    P.rect(0, 15, 16, 1, '#2a3440');
+  }
+  return TILE2[key] = P.canvas();
+}; }
+
+// ---------- fachada da Casa de Saúde do Largo (18 tiles de largura, 3 andares) ----------
+let FACH_C = null;
+function hospitalArt() {
+  if (FACH_C) return FACH_C;
+  const W_ = 18 * 16, H_ = 176, P = new Pix(W_, H_), Pd = ramp('#d8ccb8'), Tl = ramp('#5a6a8a');
+  // corpo de pedra clara com cantaria
+  for (let y = 40; y < H_; y++) for (let x = 0; x < W_; x++) { const junta = y % 12 === 11 || (x + (Math.floor(y / 12) % 2) * 12) % 24 === 23; P.p(x, y, junta ? '#a89a88' : P.tone(Pd, 0.62 - (x < 6 || x > W_ - 7 ? 0.22 : 0) - (y > H_ - 20 ? 0.1 : 0), x, y)); }
+  // telhado de ardósia em duas águas + frontão central
+  for (let y = 18; y < 42; y++) { const ins = Math.round((42 - y) * 0.5); for (let x = ins; x < W_ - ins; x++) P.p(x, y, P.tone(Tl, 0.35 + (y % 4 === 0 ? 0.15 : 0) + (x < W_ / 2 ? 0.12 : 0), x, y)); }
+  for (let y = 0; y < 42; y++) { const w = Math.round(y * 1.4); for (let x = -w; x <= w; x++) P.p(W_ / 2 + x, y, y > 36 ? '#a89a88' : P.tone(Pd, 0.7 - Math.abs(x) / 120, W_ / 2 + x, y)); }
+  P.rect(W_ / 2 - 46, 38, 92, 3, '#8a7a68');
+  // emblema: uma vela dentro de um círculo (a casa é de caridade, não da Coroa: o emblema é antigo)
+  P.ball(W_ / 2, 24, 9, 9, ['#3a4a6a', '#4a5a7a', '#5a6a8a', '#6a7a9a', '#7a8aaa']);
+  P.rect(W_ / 2 - 2, 22, 4, 8, '#f2ecdc'); P.p(W_ / 2, 19, '#ffd060'); P.p(W_ / 2, 20, '#ffb040'); P.p(W_ / 2 - 1, 21, '#ff9a30');
+  // janelas em três andares (acesas, uma apagada aqui e ali)
+  const jan = (x, y, acesa) => { P.rect(x - 1, y - 1, 16, 22, '#8a7a68'); P.rect(x, y, 14, 20, acesa ? '#ffe8a0' : '#2a3448'); P.rect(x + 6, y, 2, 20, '#6a5a48'); P.rect(x, y + 9, 14, 2, '#6a5a48'); if (acesa) { P.rect(x + 1, y + 1, 4, 3, '#fff8d0'); } P.rect(x - 2, y + 20, 18, 2, '#c8bca8'); };
+  for (let a = 0; a < 3; a++) for (let i = 0; i < 8; i++) { const x = 12 + i * 34 + (i >= 4 ? 8 : 0); if (a === 2 && i >= 3 && i <= 4) continue; jan(x, 50 + a * 40, hash(i, a, 11) % 4 !== 0); }
+  // portal central com escada (a porta fica nos tiles 8 e 9 da fachada)
+  const px = 8 * 16 - 4, pw = 40; P.rect(px - 6, 120, pw + 12, 56, '#a89a88'); for (let y = 120; y < 126; y++) { const w = Math.round(Math.sqrt(Math.max(0, 36 - (126 - y) * (126 - y))) * 3.5); P.rect(px + pw / 2 - w, y, w * 2, 1, '#8a7a68'); }
+  P.rect(px, 128, pw, 48, '#4a3424'); P.rect(px + pw / 2 - 1, 128, 2, 48, '#2a1a14'); for (const dx of [6, pw - 10]) P.rect(px + dx, 146, 3, 3, '#c8a040');
+  P.rect(px - 4, 124, pw + 8, 4, '#c8bca8');
+  // placa
+  P.rect(px - 18, 108, pw + 36, 9, '#2a3448'); P.rect(px - 17, 109, pw + 34, 7, '#3a4a6a'); for (let i = 0; i < 14; i++) P.rect(px - 13 + i * 5, 111, 3, 3, '#e8dcc0');
+  // canos de cobre novos subindo pela parede até o telhado (detalhe sinistro: são novos demais)
+  for (const x of [6, W_ - 10]) for (let y = 30; y < H_ - 4; y++) { P.p(x, y, '#e8a070'); P.p(x + 1, y, '#c87848'); P.p(x + 2, y, '#7a4028'); if (y % 24 === 10) P.rect(x - 1, y, 5, 2, '#5a5a6a'); }
+  return FACH_C = P.outline().canvas();
+}
+// ---------- camas, potes, biombo, bancos ----------
+const CAMAH_C = {};
+function camaHArt(v, ocup, pote) {
+  const key = v + '_' + ocup + '_' + pote; if (CAMAH_C[key]) return CAMAH_C[key];
+  const P = new Pix(20, 44), Fe = ramp('#8a9aa8'), cob = ['#8ab0c8', '#c88aa0', '#a8c890', '#c8b07a'][v % 4];
+  P.cyl(1, 8, 2, 30, Fe); P.cyl(17, 8, 2, 30, Fe); P.rect(1, 8, 18, 2, Fe[3]); for (let x = 4; x < 17; x += 3) P.rect(x, 10, 1, 6, Fe[2]);
+  P.rect(2, 16, 16, 22, '#e8ecea'); P.rect(3, 17, 14, 5, '#ffffff');
+  P.rect(2, 24, 16, 14, cob); P.rect(2, 24, 16, 1, '#ffffff'); for (let y = 26; y < 38; y += 4) P.rect(2, y, 16, 1, '#00000022');
+  if (ocup) { P.ball(10, 20, 4, 3.5, ramp(['#e0b090', '#a8704a', '#c8906a'][v % 3])); P.rect(6, 17, 8, 2, ['#3a2a1a', '#d8d4d0', '#6a4a2a'][v % 3]); P.ball(10, 30, 5, 4, ramp(cob)); }
+  P.rect(1, 38, 2, 6, Fe[1]); P.rect(17, 38, 2, 6, Fe[1]);
+  if (pote) { P.rect(17, 0, 1, 14, '#c87848'); P.rect(15, 12, 5, 7, '#8a9aa8'); P.rect(16, 13, 3, 5, '#ffc040'); P.p(17, 14, '#fff0a0'); P.rect(12, 18, 6, 1, '#c87848'); }
+  return CAMAH_C[key] = P.outline().canvas();
+}
+const POTE_C = {};
+function potesArt(f) {
+  if (POTE_C[f]) return POTE_C[f]; const P = new Pix(22, 40);
+  P.rect(10, 0, 2, 16, '#c87848'); P.rect(2, 14, 18, 2, '#c87848'); P.rect(2, 14, 1, 8, '#c87848'); P.rect(19, 14, 1, 8, '#c87848');
+  P.rect(0, 30, 22, 3, '#6a7a88'); P.rect(1, 33, 2, 7, '#4a5a68'); P.rect(19, 33, 2, 7, '#4a5a68');
+  for (const x of [0, 7, 14]) { P.rect(x, 21, 7, 9, '#9aaab8'); P.rect(x + 1, 22, 5, 7, (f + x) % 3 ? '#ffc040' : '#d88a20'); P.p(x + 2, 23, '#fff0a0'); P.rect(x + 1, 20, 5, 1, '#5a5a6a'); }
+  return POTE_C[f] = P.outline().canvas();
+}
+function bancoHArt() { const P = new Pix(32, 20), M = ramp('#6a4a3a'); P.cyl(0, 6, 32, 4, M, true); P.rect(0, 0, 32, 3, M[2]); P.rect(2, 10, 2, 10, M[1]); P.rect(28, 10, 2, 10, M[1]); return P.outline().canvas(); }
+function biomboArt() { const P = new Pix(30, 40); for (let i = 0; i < 3; i++) { P.rect(i * 10, 2, 9, 32, i % 2 ? '#c8d8d4' : '#e0ece6'); P.rect(i * 10, 2, 1, 32, '#8a9aa8'); } P.rect(0, 0, 30, 2, '#8a9aa8'); for (const x of [1, 28]) P.rect(x, 34, 1, 6, '#6a7a88'); return P.outline().canvas(); }
+function vasoArt() { const P = new Pix(14, 26); P.rect(3, 16, 8, 10, '#a85a3a'); P.rect(2, 16, 10, 2, '#c87a5a'); for (let i = 0; i < 6; i++) { const a = -1.2 + i * 0.5; P.line(7, 16, 7 + Math.round(Math.cos(a) * 6), 16 - 6 - Math.round(Math.abs(Math.sin(a)) * 8), '#4a9a6a'); } P.p(4, 5, '#ff9ab8'); P.p(10, 6, '#ffd060'); return P.outline().canvas(); }
+function cartazHArt() { const P = new Pix(22, 18); P.rect(0, 0, 22, 18, '#e8dcc0'); P.rect(0, 0, 22, 3, '#3a7a7a'); for (let i = 0; i < 4; i++) P.rect(3, 6 + i * 3, 12 + (i % 2) * 4, 1, '#5a5048'); P.rect(16, 6, 4, 6, '#ffc040'); return P.outline().canvas(); }
+function arquivoArt() { const P = new Pix(18, 30), M = ramp('#6a7a88'); P.rect(0, 0, 18, 30, M[2]); for (let i = 0; i < 3; i++) { P.rect(1, 2 + i * 9, 16, 8, M[3]); P.rect(7, 5 + i * 9, 4, 2, '#c8a040'); } return P.outline().canvas(); }
+
+// ---------- fundo de batalha: corredor do hospital, de noite ----------
+let BG_HOSP = null;
+function bgHospital() {
+  if (BG_HOSP) return BG_HOSP;
+  const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) {
+    if (y < 92) P.p(x, y, y < 56 ? (x % 12 === 11 || y % 12 === 11 ? '#5a6a74' : '#7a8c90') : y < 62 ? '#2a5a5a' : '#3a4a58');
+    else { const xadrez = ((x >> 4) + (y >> 3)) % 2; P.p(x, y, xadrez ? '#4a6a68' : '#5a7a76'); }
+  }
+  // janelas com luar
+  for (const x of [20, 100, 180]) { P.rect(x, 14, 40, 34, '#1a2440'); P.rect(x + 19, 14, 2, 34, '#5a6a74'); P.rect(x, 30, 40, 2, '#5a6a74'); P.rect(x + 3, 16, 6, 4, '#c8d8f0'); for (let i = 0; i < 24; i++) P.p(x + 2 + hash(i, x, 2) % 36, 16 + hash(x, i, 3) % 30, '#8a9ac8'); }
+  // fios e potes no alto
+  for (let x = 0; x < 240; x++) P.p(x, 4 + Math.round(Math.sin(x / 20) * 2), '#c87848');
+  for (const x of [60, 150, 220]) { P.rect(x, 4, 1, 22, '#c87848'); P.rect(x - 3, 26, 7, 9, '#9aaab8'); P.rect(x - 2, 27, 5, 7, '#ffc040'); }
+  // luz do chão (lanterna de ronda passando)
+  for (let y = 92; y < 150; y++) for (let x = 0; x < 240; x++) { const d = Math.hypot((x - 120) / 1.8, y - 140); if (d < 60 && (x + y) % 3 === 0) P.p(x, y, '#8aa89a'); }
+  return BG_HOSP = P.canvas();
+}
+
+// ---------- inimigos ----------
+// PESADELO: o que sobra quando tiram a lembrança. Uma sombra de lençol rasgado cheia de olhos que piscam fora de tempo.
+const PES_C = {};
+function pesadeloArt(f) {
+  if (PES_C[f]) return PES_C[f]; const P = new Pix(32, 34), cx = 16, R = ['#0a0612', '#1a1028', '#2a1a3e', '#3e2a58', '#5a4278'];
+  P.ball(cx, 14, 12, 11, R, { amb: 0.15 });
+  for (let y = 18; y < 34; y++) { const w = Math.round(11 - (y - 18) * 0.45); for (let x = -w; x <= w; x++) if ((y + Math.abs(x) + f * 2) % 5 !== 0 || y < 24) P.p(cx + x + Math.round(Math.sin((y + f * 3) / 3) * 2), y, y > 28 ? R[1] : R[2]); }
+  const olhos = [[-5, 10], [4, 9], [-1, 15], [7, 15], [-8, 16], [2, 21]];
+  olhos.forEach(([ox, oy], i) => { const ab = (i + f) % 4 !== 0; if (ab) { P.rect(cx + ox - 1, oy, 3, 2, '#e8e0f8'); P.p(cx + ox, oy, '#ff4a6a'); } else P.rect(cx + ox - 1, oy + 1, 3, 1, '#5a4278'); });
+  return PES_C[f] = P.outline(0.3, '#000000').canvas();
+}
+// LENÇOL: lençol de cama que levantou sozinho; bordado da Casa de Saúde num canto; enrola quem chega perto.
+const LEN_C = {};
+function lencolArt(f) {
+  if (LEN_C[f]) return LEN_C[f]; const P = new Pix(34, 40), cx = 17, Ln = ['#8a9aa8', '#b8c8d0', '#d8e4e8', '#eef4f4', '#ffffff'];
+  P.ball(cx, 12, 11, 10, Ln, { amb: 0.35 });
+  for (let y = 12; y < 38; y++) { const w = Math.round(11 + (y - 12) * 0.2); for (let x = -w; x <= w; x++) { const onda = Math.sin((x + f * 4) / 3) * 2; if (y > 34 + onda) continue; P.p(cx + x, y, x < -w * 0.4 ? Ln[1] : x > w * 0.5 ? Ln[0] : Ln[2]); } }
+  for (let y = 16; y < 36; y += 5) P.line(cx - 6, y, cx - 2, y + 3, '#a8b8c0');
+  P.rect(cx - 5, 10, 3, 4, '#1a1028'); P.rect(cx + 3, 10, 3, 4, '#1a1028');
+  P.rect(cx + 6, 26, 5, 5, '#3a7a7a'); P.p(cx + 8, 27, '#ffd060');
+  for (const s of [-1, 1]) for (let i = 0; i < 6; i++) P.p(cx + s * (12 + i), 18 + Math.round(Math.sin(i + f) * 2) + i, Ln[1]);
+  return LEN_C[f] = P.outline().canvas();
+}
+// RELÓGIO DE PLANTÃO (mini-chefe): relógio de pêndulo do corredor que criou braços de ponteiro. O mostrador muda de
+// cor com a HORA: manhã (azul-claro), tarde (laranja), noite (roxo com estrelas). Bem mais detalhado (chefe).
+const REL_C = {};
+function relogioArt(f, hora, armando) {
+  const key = f + '_' + hora + '_' + (armando ? 1 : 0); if (REL_C[key]) return REL_C[key];
+  const W_ = 72, H_ = 104, P = new Pix(W_, H_), cx = 36, Md = ramp('#6a3a24'), Ou = ['#5a3a10', '#8a5a18', '#c8902a', '#f0c050', '#fff0a0'];
+  const FACE = { manha: ['#5a8ac8', '#8ab8e8', '#c8e4ff'], tarde: ['#c85a20', '#f09040', '#ffd8a0'], noite: ['#2a1a4a', '#4a2a7a', '#8a6ac8'] }[hora] || ['#5a8ac8', '#8ab8e8', '#c8e4ff'];
+  // caixa do relógio (cilindro de madeira com molduras)
+  P.cyl(cx - 14, 30, 28, 60, Md, false, { grain: 5 });
+  P.rect(cx - 16, 30, 32, 3, Md[3]); P.rect(cx - 16, 86, 32, 4, Md[1]); P.rect(cx - 18, 90, 36, 6, Md[2]); P.rect(cx - 18, 90, 36, 1, Md[4]);
+  // pés de garra
+  for (const s of [-1, 1]) { P.rect(cx + s * 14 - 3, 96, 6, 6, Md[1]); for (let i = 0; i < 3; i++) P.p(cx + s * 14 - 2 + i * 2, 102, Ou[2]); }
+  // ornamentos: filete dourado, entalhes em volutas e uma placa de latão "PLANTÃO"
+  for (let y = 34; y < 86; y++) { P.p(cx - 12, y, Ou[1]); P.p(cx + 11, y, Ou[0]); }
+  for (const s of [-1, 1]) for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 1.5; P.p(cx + s * (9 + Math.round(Math.cos(a) * 3)), 38 + Math.round(Math.sin(a) * 3), Md[4]); P.p(cx + s * (9 + Math.round(Math.cos(a) * 3)), 84 - Math.round(Math.sin(a) * 3), Md[0]); }
+  P.rect(cx - 7, 44, 14, 5, Ou[1]); P.rect(cx - 6, 45, 12, 3, Ou[2]); for (let i = 0; i < 5; i++) P.p(cx - 5 + i * 2 + 1, 46, Ou[0]);
+  // engrenagens visíveis pelas frestas (é um relógio que ganhou vontade própria)
+  for (const [gx, gy, r] of [[cx - 10, 60, 3], [cx + 10, 70, 3]]) for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + f * 0.6 * (gx < cx ? 1 : -1); P.p(gx + Math.round(Math.cos(a) * r), gy + Math.round(Math.sin(a) * r), Ou[3]); P.p(gx, gy, Ou[4]); }
+  // janela do pêndulo
+  P.rect(cx - 8, 52, 16, 30, '#1a1020'); const sw = Math.round(Math.sin(f * Math.PI / 2) * 5);
+  P.line(cx, 53, cx + sw, 74, Ou[2]); P.ball(cx + sw, 76, 4, 4, Ou); P.rect(cx - 8, 52, 16, 1, '#3a2a30');
+  for (let i = 0; i < 9; i++) P.p(cx - 6 + i, 54 + i * 2, '#4a3a5a'); P.rect(cx - 9, 51, 18, 1, Ou[2]); P.rect(cx - 9, 82, 18, 1, Ou[1]);
+  // cabeça: mostrador redondo com moldura dourada
+  P.ball(cx, 22, 20, 20, Ou, { amb: 0.3 });
+  for (let y = -16; y <= 16; y++) for (let x = -16; x <= 16; x++) { const d = x * x + y * y; if (d <= 256) P.p(cx + x, 22 + y, d > 196 ? FACE[0] : (x + y) % 9 === 0 ? FACE[2] : FACE[1]); }
+  for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; P.rect(cx + Math.round(Math.cos(a) * 13) - (i % 3 === 0 ? 1 : 0), 22 + Math.round(Math.sin(a) * 13), i % 3 === 0 ? 2 : 1, i % 3 === 0 ? 2 : 1, '#1a1020'); }
+  if (hora === 'noite') for (let i = 0; i < 6; i++) P.p(cx - 8 + hash(i, 2, 5) % 16, 14 + hash(5, i, 2) % 16, '#ffffff');
+  // olhos no mostrador (dois furos de corda) e boca de algarismos
+  for (const s of [-1, 1]) { P.ball(cx + s * 6, 18, 3, 3, ['#1a1020', '#2a1a30', '#3a2a40', '#4a3a50', '#5a4a60']); P.p(cx + s * 6, 18, armando ? '#ff4a4a' : '#ffd060'); }
+  for (let x = -6; x <= 6; x++) P.p(cx + x, 29 + (x % 2 ? 1 : 0), '#1a1020');
+  // ponteiros que viraram braços (giram com f)
+  const ang = f * 0.5 + (armando ? 2.6 : 0);
+  for (const [len, w, a, s] of [[34, 2, ang, -1], [28, 3, -ang * 0.6 + 1, 1]]) {
+    const ox = cx + s * 18, oy = 34; P.line(cx + s * 4, 30, ox, oy, Ou[1], 2);
+    const ex = ox + Math.round(Math.cos(Math.PI / 2 + s * 0.9 + a * 0.2) * len * 0.6 * s), ey = oy + Math.round(Math.sin(Math.PI / 2 + a * 0.2) * len * 0.7);
+    P.line(ox, oy, ex, ey, '#2a1a20', w + 1); P.line(ox, oy, ex, ey, Ou[3], w); P.poly([[ex - 4, ey], [ex + 4, ey], [ex, ey + 7]], Ou[3]);
+  }
+  return REL_C[key] = P.outline().canvas();
+}
+
+// ================= INIMIGOS DO CAP. 4 (Parte 1): A ALA DO DESCANSO =================
+// PESADELO (o que sobra quando tiram a lembrança: dá MEDO = vez atrasada e come Tensão; fraco a luz e fogo),
+// LENÇOL (ENROLA um aliado: ele fica PRESO até alguém rasgar o lençol; fraco a fogo e corte) e o mini-chefe
+// RELÓGIO DE PLANTÃO (a cada 3 vezes o ponteiro gira e muda a HORA, e as fraquezas mudam junto; golpe preparado
+// HORA DO DESCANSO adormece um aliado, cancelável pela quebra).
+const HORA_FRACO = { manha: 'gelo', tarde: 'fogo', noite: 'luz' }, HORA_NM = { manha: 'MANHÃ', tarde: 'TARDE', noite: 'NOITE' };
+Object.assign(ENEMY2, {
+  pesadelo: { name: 'Pesadelo', kind: 'pesadelo', fly: true, mhp: 280, atk: 28, def: 9, mdef: 8, spd: 14, shield: 3, maxShield: 3, weak: ['luz', 'fogo'], ai: 'pesadelo', h: 34, cobres: 14,
+    frame: u => pesadeloArt(Math.floor(BT.t / 9 + u.x) % 4), dieCols: ['#1a1028', '#5a4278', '#e8e0f8'] },
+  lencol: { name: 'Lençol', kind: 'lencol', fly: true, mhp: 300, atk: 26, def: 10, mdef: 10, spd: 10, shield: 3, maxShield: 3, weak: ['fogo', 'corte'], ai: 'lencol', h: 40, cobres: 12,
+    frame: u => lencolArt(Math.floor(BT.t / 10 + u.x) % 4), dieCols: ['#d8e4e8', '#8a9aa8', '#3a7a7a'] },
+  relogio: { name: 'Relógio de Plantão', kind: 'relogio', boss: true, mhp: 3800, atk: 32, def: 13, mdef: 12, spd: 10, shield: 5, maxShield: 5, weak: ['gelo', 'mordida'], ai: 'relogio', h: 104, cobres: 90,
+    frame: u => relogioArt(Math.floor(BT.t / (u.armando ? 5 : 15)) % 4, u.hora || 'manha', !!u.armando), dieCols: ['#6a3a24', '#f0c050', '#8ab8e8', '#ffffff'], cancelTxt: 'O pêndulo travou! Hora do Descanso cancelada!' }
+});
+FICHA.pesadelo = 'Pesadelo: o que sobra quando tiram uma lembrança de alguém. Dá MEDO (atrasa a vez) e come Tensão. Luz e fogo espantam.';
+FICHA.lencol = 'Lençol da Ala do Descanso que levantou sozinho. ENROLA um aliado (PRESO até alguém rasgar o lençol). Fogo e corte.';
+FICHA.relogio = 'Relógio de Plantão: marca a hora do descanso. A cada 3 vezes muda a HORA e a fraqueza muda junto: manhã = gelo, tarde = fogo, noite = luz. Mordida sempre.';
+
+// o lençol rasgado solta quem ele enrolava
+{ const _kf4 = killFoe; killFoe = function (t) {
+  _kf4(t);
+  if (t && t.kind === 'lencol' && t.held) { const h = t.held; h.preso = null; h.ct = Math.max(h.ct, 40); callout(h.name + ' se soltou do lençol!', '#9be58a', 60); t.held = null; }
+}; }
+
+Object.assign(AI2, {
+  async pesadelo(e) {
+    const t = foeTarget(); if (!t) return;
+    const [ex, ey] = unitCenter(e), [tx, ty] = unitCenter(t);
+    if (Math.random() < 0.4) {
+      callout('Sussurro do Medo', '#a898d8', 40); sfx('rumble');
+      await tw(22, p => { for (let i = 0; i < 6; i++) { const q = (p + i / 6) % 1; bx.globalAlpha = 1 - q; bx.fillStyle = '#5a4278'; bx.fillRect(Math.round(ex + (tx - ex) * q + Math.sin(q * 12 + i) * 6), Math.round(ey + (ty - ey) * q), 3, 2); bx.globalAlpha = 1; } });
+      const r = await foeStrike(e, t, 0.7, { n: 22, st: 'tonto', stT: 2, longe: true });
+      if (r !== 'perfeito') { const n = Math.min(BT.tension, 8); BT.tension -= n; if (n) popNum(tx, ty - 34, '-' + n + ' Tensão', '#ffa94d'); t.ct = Math.max(0, t.ct - 25); popNum(tx, ty - 26, 'MEDO', '#a898d8'); }
+      return;
+    }
+    callout('Abraço Frio', '#d0a8ff', 30); await foeLunge(e, t, 12, 12);
+    await foeStrike(e, t, 1.05, { n: 24 }); await foeBack(e);
+  },
+  async lencol(e) {
+    if (e.held) {
+      const h = e.held; if (h.hp <= 0) { h.preso = null; e.held = null; }
+      else { callout('O lençol aperta', '#d8e4e8', 30); const [x, y] = unitCenter(h); await tw(12, p => { fxRing(x, y, 10 - p * 6, '#d8e4e8', 1 - p); }); hurtMember(h, Math.round(e.atk * 0.45 * 60 / (60 + h.def))); return; }
+    }
+    const ops = alive(BT.party).filter(m => !m.preso);
+    if (ops.length >= 2 && Math.random() < 0.45 && !alive(BT.foes).some(f => f.held)) {
+      const t = BT.taunt && BT.taunt.n > 0 && BT.taunt.m.hp > 0 && !BT.taunt.m.preso ? BT.taunt.m : pickOne(ops);
+      callout('Enrolar!', '#ff6b6b', 40); await foeLunge(e, t, 14, 4);
+      const r = await foeStrike(e, t, 0.5, { n: 26, noCounter: true });
+      if (r === 'perfeito') { callout(t.name + ' escapou do lençol!', '#9be58a', 50); await foeBack(e); return; }
+      t.preso = e; e.held = t; t.ct = 0; e.ox = 0; e.oy = 0;
+      callout(t.name + ' está ENROLADO!', '#ff6b6b', 60);
+      if (!G.flags.tutLencol) { G.flags.tutLencol = true; hint('ENROLADO: o aliado não age até alguém rasgar o LENÇOL que o prende (fraco a fogo e corte).', 400); }
+      return;
+    }
+    const t = foeTarget(); if (!t) return;
+    callout('Chicote de Pano', '#d0a8ff', 30); await foeLunge(e, t, 12, 12); await foeStrike(e, t, 1.0, { n: 22, fast: true }); await foeBack(e);
+  },
+  async relogio(e) {
+    const [ex, ey] = unitCenter(e);
+    e.hora = e.hora || 'manha';
+    // golpe preparado: HORA DO DESCANSO
+    if (e.charge) {
+      e.charge = null; e.armando = false; callout('HORA DO DESCANSO', '#c8a0ff', 70); sfx('crit'); flashW(3); bshake(12, 3);
+      const t = foeTarget(); if (!t) return;
+      await tw(24, p => { for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2 + p * 4; fxDisc(ex + Math.cos(a) * (40 - p * 30), ey - 20 + Math.sin(a) * (30 - p * 20), 1.6, '#c8a0ff'); } });
+      const r = await foeStrike(e, t, 1.3, { n: 30, noCounter: true, longe: true });
+      if (r !== 'perfeito' && t.hp > 0) { t.ct = -70; t.st.tonto = 2; const [x, y] = unitCenter(t); popNum(x, y - 30, 'ADORMECEU', '#c8a0ff'); }
+      return;
+    }
+    // a cada 3 vezes o ponteiro gira e a hora muda
+    if (e.turns > 0 && e.turns % 3 === 0) {
+      const ord = ['manha', 'tarde', 'noite'], nova = ord[(ord.indexOf(e.hora) + 1) % 3];
+      callout('O ponteiro gira...', '#f0c050', 50); sfx('rune');
+      await tw(24, p => { luzMagia(ex, ey - 40, 30 + p * 20, nova === 'noite' ? '#8a6ac8' : nova === 'tarde' ? '#f09040' : '#8ab8e8', Math.sin(p * Math.PI)); });
+      e.hora = nova; e.weak = [HORA_FRACO[nova], 'mordida']; e.known = {}; e.shield = e.maxShield;
+      callout('Agora é ' + HORA_NM[nova] + ': fraco a ' + HORA_FRACO[nova] + '!', '#f0c050', 90);
+      if (!G.flags.tutHora) { G.flags.tutHora = true; hint('O Relógio muda a HORA a cada 3 vezes: manhã = gelo, tarde = fogo, noite = luz. O escudo volta cheio a cada troca.', 420); }
+      return;
+    }
+    if (e.turns % 4 === 2) { e.charge = { t: null }; e.armando = true; callout('Tic... tac... (quebre o escudo!)', '#ff6b6b', 90); sfx('rumble'); await tw(20, p => { luzMagia(ex, ey - 40, 20 + p * 20, '#c8a0ff', p); }); return; }
+    const k = pickOne(['ponteiro', 'pendulo', 'badalada', 'ponteiro']), t = foeTarget(); if (!t) return;
+    if (k === 'badalada') {
+      callout('Badalada das Horas', '#f0c050', 50); sfx('gate'); bshake(10, 2);
+      for (const m of alive(BT.party)) { const [x, y] = unitCenter(m); await tw(6, p => fxRing(x, y, 6 + p * 16, '#f0c050', 1 - p)); await foeStrike(e, m, 0.62, { n: 20, noCounter: true, longe: true, st: Math.random() < 0.35 ? 'tonto' : null, stT: 1 }); }
+    } else if (k === 'pendulo') {
+      callout('Pêndulo', '#d0a8ff', 40); await foeLunge(e, t, 14, 18);
+      await foeStrike(e, t, 0.7, { n: 22, fast: true }); if (t.hp > 0) await foeStrike(e, t, 0.7, { n: 18, fast: true }); await foeBack(e);
+    } else {
+      callout('Ponteiro', '#d0a8ff', 40); await foeLunge(e, t, 14, 16); await foeStrike(e, t, 1.15, { n: 26 }); await foeBack(e);
+    }
+  }
+});
+
+// ================= CAPÍTULO 4 — A CASA DOS QUE ESQUECEM (Parte 1) =================
+// Manhã na base -> o Acendedor-Mor compra a CASA DE SAÚDE DO LARGO -> o Dito "esqueceu de novo" e foi levado para a
+// ALA DO DESCANSO -> de dia, só de ROSTO (forma humana) se entra no hospital; a Irmã Dalva -> de noite, pela
+// lavanderia: a RONDA DAS LANTERNAS (cones de luz; baú parado passa, gente na luz é pega) -> Relógio de Plantão ->
+// Sala do Diretor: a ficha do Dito (TRANSFERIDO: CANDEIA) e a LISTA DO DESCANSO com a letra pequena e cuidadosa.
+
+// ---------- gente nova ----------
+Object.assign(HUMS, {
+  dalva: { h: 46, skin: '#a8704a', hair: '#d8d4d0', hairStyle: 'coque', top: '#e8f0ee', bottom: '#5a7a8a', apron: '#ffffff', acc: '#3a7a7a',
+    extra: (P, o) => { if (o.view !== 'b') { P.rect(o.cx - 5, o.hcY - 9, 10, 3, '#ffffff'); P.rect(o.cx - 1, o.hcY - 9, 2, 3, '#3a7a7a'); } else P.rect(o.cx - 5, o.hcY - 9, 10, 3, '#ffffff'); } },
+  enfermeiro: { h: 50, skin: '#c8b0a0', hair: '#2a2a30', top: '#e8f0ee', coat: '#d8e4e0', bottom: '#3a4a58', hat: '#2a2a30',
+    extra: (P, o) => { P.rect(o.cx - 1, o.hcY - 12, 2, 5, '#f2ecdc'); P.p(o.cx, o.hcY - 13, o.fr ? '#ffd060' : '#ff9a30'); const lx = o.cx + (o.view === 's' ? 6 : 7); P.rect(lx, o.tT + 8, 4, 6, '#3a3a48'); P.rect(lx + 1, o.tT + 9, 2, 4, '#ffe080'); } },
+  porteiro: { h: 51, skin: '#c8b0a0', hair: '#3a2a1a', top: '#5a5a6a', coat: '#4a4a5a', bottom: '#2a2a34', hat: '#2a2a30',
+    extra: (P, o) => { P.rect(o.cx - 1, o.hcY - 12, 2, 5, '#f2ecdc'); P.p(o.cx, o.hcY - 13, '#ffb040'); } },
+  pregoeiro: { h: 50, skin: '#e0b090', hair: '#8a4a2a', top: '#c84a4a', bottom: '#3a3048', hat: '#2a2a3a', collar: '#e8dcc0' },
+  velhoL: { h: 44, skin: '#c89070', hair: '#e8e4e0', top: '#6a5a4a', bottom: '#3a3a44', beard: true },
+  pac1: { h: 47, skin: '#d8a078', hair: '#5a3a1a', top: '#c8dce0', bottom: '#c8dce0' },
+  pac2: { h: 44, skin: '#8a5a3a', hair: '#1a1a1a', hairStyle: 'longo', top: '#c8dce0', bottom: '#c8dce0' }
+});
+Object.assign(WHO, {
+  dalva: { name: () => 'Irmã Dalva', portrait: () => portHum('dalva'), voice: voz(360, 'blipTri'), col: '#e8f8f0' },
+  enfermeiro: { name: () => 'Enfermeiro', portrait: () => portHum('enfermeiro'), voice: voz(380), col: '#e8e0d8' },
+  porteiro: { name: () => 'Porteiro', portrait: () => portHum('porteiro'), voice: voz(300, 'blipLow'), col: '#e8e0d8' },
+  pregoeiro: { name: () => 'Pregoeiro', portrait: () => portHum('pregoeiro'), voice: voz(460) },
+  velhoL: { name: () => 'Seu Antero', portrait: () => portHum('velhoL'), voice: voz(260, 'blipLow') },
+  paciente: { name: () => 'Paciente', portrait: () => portHum('pac1'), voice: voz(420) }
+});
+
+// ---------- trilhas ----------
+Object.assign(TRACKS, {
+  hospital: { bpm: 76, bars: 8, chords: 'Am F C G Am F E E', bass: 'root5', bassVol: 0.09,
+    lead: 'E5:4 A5:4 C6:4 B5:4 | A5:4 F5:4 A5:8 | G5:4 C6:4 E6:4 D6:4 | B5:4 G5:4 D5:8 | E5:4 A5:4 C6:4 E6:4 | F6:4 E6:4 C6:8 | B5:4 G#5:4 E5:4 B5:4 | G#5:16',
+    leadWave: 'triangle', leadVol: 0.08, arp: { rate: 4, vol: 0.012, oct: 1 }, drums: '', hatVol: 0 },
+  ronda: { bpm: 96, bars: 4, chords: 'Dm Dm Bb A', bass: 'oct8', bassVol: 0.1,
+    lead: 'D5:2 .:6 F5:2 .:6 | E5:2 .:6 D5:2 .:6 | F5:2 .:2 G5:2 .:2 A5:4 .:4 | C#5:4 .:4 E5:4 .:4',
+    leadWave: 'triangle', leadVol: 0.06, arp: { rate: 2, vol: 0.01, oct: 0 }, drums: 'k.......h.......', hatVol: 0.02 }
+});
+
+// ---------- mapas ----------
+const LG = POS4.largo, H1 = POS4.hosp1, H2 = POS4.hosp2, SA = POS4.sala;
+const gradeProps = (m) => { for (const p of m.props || []) { if (p._hld) continue; const f = p.img; p._hld = true; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } };
+{ const _mm4 = montarMapas2; montarMapas2 = function () {
+  _mm4.apply(this, arguments);
+  // ===== LARGO DO HOSPITAL =====
+  MAPS2.largo = { rows: ROWS4.largo, name: 'Auren · Largo do Hospital', music: 'auren', batBg: bgAuren, showMoney: true, bg: '#1c2a4a',
+    props: [
+      { img: hospitalArt, x: 8, y: 8 },
+      { img: casa({ w: 5, wall: '#c8c0b0', roof: '#5a6a8a', door: 2, win: [0.4, 3.4] }), x: 29, y: 8 },
+      { img: casa({ w: 6, wall: '#9a8ab8', roof: '#c84a7a', door: 2.5, win: [0.5, 4.2] }), x: 0, y: 8 },
+      { img: memo(fonteArt), x: 15, y: 14, solid: [[15, 12, 4, 2]] },
+      ...LG.postes.map(([x, y]) => ({ img: () => poste3Art(true, true), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...LG.arvores.map(([x, y], i) => ({ img: arvC(i + 5), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...LG.banco.map(([x, y]) => ({ img: memo(bancoHArt), x: x - 0.5, y: y + 1 }))
+    ],
+    ents: [
+      ...LG.festDoor.map(([x, y]) => porta(x, y, 'festival', 38, 11, 'left')),
+      ...LG.hospDoor.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: entrarHospital })),
+      { t: 'trig', x: LG.lavDoor[0], y: LG.lavDoor[1], w: 1, h: 1, passa: true, run: entrarLavanderia },
+      marcoEnt(...LG.marco),
+      morador('tico', ...LG.tico, { rotina: rot([10, 11, 'olhar', 9000, 'up']), talk: falaTico4, gone: () => !!G.flags.c4P1Fim }),
+      morador('pregoeiro', ...LG.pregoeiro, { rotina: rot([22, 12, 'olhar', 500, 'down'], [24, 12, 'olhar', 400, 'left']), talk: falaPregoeiro }),
+      morador('porteiro', ...LG.porteiro, { rotina: rot([15, 8, 'olhar', 9000, 'down']), talk: falaPorteiro }),
+      morador('guardaA', ...LG.guarda, { rotina: rot([18, 8, 'olhar', 9000, 'down']), talk: async () => { await say(pickOne(['Fila andando, fila andando. Quem tem ficha entra, quem não tem espera.', 'O Acendedor-Mor comprou a casa. Agora tem lanterna em todo corredor. Coisa fina.']), 'guardaA'); } }),
+      ...LG.fila.map(([x, y], i) => morador(['povo1', 'povo2', 'velha2'][i], x, y, { rotina: rot([x, y, 'olhar', 9000, 'up']), talk: falaFila(i) })),
+      morador('velhoL', ...LG.velho, { rotina: rot([12, 16, 'olhar', 600, 'up'], [14, 16, 'olhar', 400, 'right']), talk: falaAntero }),
+      bauEnt('largo', 'a', ...LG.bau, () => dar('frasco', 1))
+    ],
+    onEnter: async () => { if (!G.flags.c4Largo) await chegaLargo(); }
+  };
+  // ===== CASA DE SAÚDE, TÉRREO =====
+  MAPS2.hosp1 = { rows: ROWS4.hosp1, name: 'Casa de Saúde do Largo', music: 'hospital', batBg: bgHospital, bg: '#0e1a1c', key: KEY_HOSP,
+    props: [
+      { img: memo(() => balcaoArt(6)), x: 3, y: 6, solid: [[3, 5, 6, 1]] },
+      ...H1.camas.map(([x, y], i) => ({ img: memo(() => camaHArt(i, i !== 2, i % 3 === 0)), x: x - 0.12, y: y + 2, solid: [[x, y, 1, 2]] })),
+      ...H1.bancos.map(([x, y]) => ({ img: memo(bancoHArt), x: x - 0.5, y: y + 1, solid: [[x, y, 1, 1]] })),
+      { img: memo(cartazHArt), x: H1.cartaz[0] - 0.2, y: H1.cartaz[1] + 0.2 },
+      { img: memo(vasoArt), x: H1.vaso[0], y: H1.vaso[1] + 1 },
+      { img: memo(biomboArt), x: 24.5, y: 6.4 }
+    ],
+    ents: [
+      ...H1.door.map(([x, y]) => porta(x, y, 'largo', ...LG.hospOut, 'down')),
+      morador('dalva', ...H1.dalva, { rotina: rot([5, 4, 'limpar', 500, 'down'], [8, 4, 'olhar', 300, 'down']), talk: falaDalva }),
+      { t: 'sign', x: H1.balcao[0], y: H1.balcao[1], h: 30, talk: falaDalva },
+      ...H1.camas.map(([x, y], i) => ({ t: 'sign', x, y: y + 1, h: 30, talk: () => falaCama(i) })),
+      ...H1.escada.map(([x, y]) => ({ t: 'sign', x, y, h: 20, talk: escadaFechada })),
+      { t: 'sign', x: H1.cartaz[0], y: H1.cartaz[1], h: 20, talk: async () => { await say('* Cartaz novo, papel bom: "CASA DE SAÚDE DO LARGO — sob os cuidados do Acendedor-Mor. Luz em todos os leitos. Descanso para quem sofre."'); await say('* Embaixo, num canto, um papel velho que ninguém arrancou: "Doações de velas para o inverno: falar com a Irmã Dalva."'); } },
+      morador('pac1', ...H1.visita, { rotina: rot([4, 10, 'olhar', 9000, 'right']), talk: falaVisita })
+    ],
+    onEnter: async () => { if (!G.flags.c4Hosp1) { G.flags.c4Hosp1 = true; await say('* Cheiro de sabão e de vela. Corredor limpo, camas de ferro, gente deitada. E, em cima de algumas camas, um fio de cobre novo que sobe até o teto, com um pote pendurado.'); await say('[O baú usa o rosto. O fôlego corre. Se o rosto derreter aqui dentro, alguém vai notar uma mala muito estranha no meio da enfermaria.]', 'cat'); } }
+  };
+  // ===== ALA DO DESCANSO (noite) =====
+  MAPS2.hosp2 = { rows: ROWS4.hosp2, name: 'Ala do Descanso', music: 'ronda', batBg: bgHospital, bg: '#0a1012', key: KEY_HOSP, noiteHosp: true, soBau: true,
+    props: [
+      { img: memo(() => camaHArt(1, false, true)), x: H2.camaDito[0] - 0.12, y: H2.camaDito[1] + 2, solid: [[H2.camaDito[0], H2.camaDito[1], 1, 2]] },
+      ...H2.potes.map(([x, y], i) => ({ img: () => potesArt(Math.floor(FRAME / 30 + i) % 3), x: x - 0.2, y: y + 1, solid: [[x, y, 1, 1]] })),
+      { img: memo(() => estanteArt(2)), x: H2.rouparia[0], y: H2.rouparia[1] + 1, solid: [[11, 5, 2, 1]] },
+      { img: memo(() => camaHArt(2, true, true)), x: 8.9, y: 14 }, { img: memo(() => camaHArt(3, true, true)), x: 11.9, y: 14 },
+      { img: memo(() => camaHArt(0, true, true)), x: 17.9, y: 7 }, { img: () => G.flags.c4Relogio ? EMPTY_C : relogioArt(Math.floor(FRAME / 15) % 4, 'noite', false), x: 24.6, y: 5.2, solid: [[26, 4, 2, 1]] }
+    ],
+    ents: [
+      { t: 'trig', x: H2.descida[0][0], y: H2.descida[0][1], w: 1, h: 1, passa: true, run: sairLavanderia },
+      marcoEnt(...H2.marco),
+      ...H2.rondas.map((r, i) => ({ t: 'ronda', id: 'ronda' + i, x: r.at[0], y: r.at[1], path: r.path, h: 50, passo: 22, spr: humSpr('enfermeiro'), dir: 'down', talk: async () => { await say('...', 'enfermeiro'); } })),
+      inimigo('p1', 'pesadelo', ...H2.pes1, ['pesadelo'], { spr: (t) => pesadeloArt(Math.floor(t / 9) % 4), h: 34, bg: bgHospital, vision: 3 }),
+      inimigo('l1', 'lencol', ...H2.len1, ['lencol'], { spr: (t) => lencolArt(Math.floor(t / 10) % 4), h: 40, bg: bgHospital, vision: 3 }),
+      inimigo('p2', 'pesadelo', ...H2.pes2, ['pesadelo', 'pesadelo'], { spr: (t) => pesadeloArt(Math.floor(t / 9) % 4), h: 34, bg: bgHospital, vision: 3 }),
+      inimigo('l2', 'lencol', ...H2.len2, ['lencol', 'pesadelo'], { spr: (t) => lencolArt(Math.floor(t / 10) % 4), h: 40, bg: bgHospital, vision: 3 }),
+      inimigo('m1', 'lencol', ...H2.misto, ['lencol', 'pesadelo', 'pesadelo'], { spr: (t) => lencolArt(Math.floor(t / 10) % 4), h: 40, bg: bgHospital, vision: 3 }),
+      { t: 'sign', x: H2.camaDito[0], y: H2.camaDito[1] + 1, h: 30, talk: camaDito },
+      ...H2.potes.map(([x, y]) => ({ t: 'sign', x, y, h: 30, talk: lerPotes })),
+      bauEnt('hosp2', 'a', ...H2.bau, () => dar('pluma', 1)),
+      { t: 'sign', x: H2.rouparia[0], y: H2.rouparia[1], h: 30, talk: async () => { await say('* A rouparia: lençóis dobrados, travesseiros, jalecos. Num canto, uma pilha de lençóis que respira. Melhor não mexer.'); } },
+      { t: 'sign', x: H2.nota[0], y: H2.nota[1] - 1, h: 20, talk: notaEnfermeira },
+      { t: 'trig', x: 25, y: 3, w: 1, h: 3, passa: true, run: lutaRelogio }, { t: 'trig', x: 26, y: 5, w: 2, h: 1, passa: true, run: lutaRelogio },
+      ...H2.salaDoor.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: entrarSala }))
+    ],
+    onEnter: async () => { if (!G.flags.c4Ronda) await tutRonda(); }
+  };
+  // ===== SALA DO DIRETOR =====
+  MAPS2.sala = { rows: ROWS4.sala, name: 'Sala do Diretor', music: 'ronda', bg: '#0a1012', key: KEY_HOSP, soBau: true,
+    props: [{ img: memo(mesaArt), x: 4.8, y: 5, solid: [[5, 4, 3, 1]] }, { img: memo(arquivoArt), x: 1.9, y: 4, solid: [[2, 3, 1, 1]] }, { img: memo(vasoArt), x: 10, y: 8, solid: [[10, 7, 1, 1]] }],
+    ents: [...SA.door.map(([x, y]) => porta(x, y, 'hosp2', ...H2.salaOut, 'down')),
+      { t: 'sign', x: SA.mesa[0], y: SA.mesa[1], h: 26, talk: mesaDiretor }, { t: 'sign', x: SA.arquivo[0], y: SA.arquivo[1], h: 30, talk: arquivoDito },
+      { t: 'sign', x: SA.quadro[0], y: SA.quadro[1] - 1, h: 20, talk: async () => { await say('* Um quadro: a fachada da Casa de Saúde, pintada há muitos anos, com neve no telhado e TODAS as janelas apagadas. Embaixo: "Inverno Escuro. Nunca mais."'); } }]
+  };
+  for (const id of ['largo', 'hosp1', 'hosp2', 'sala']) gradeProps(MAPS2[id]);
+  // a Avenida do Festival ganha a saída leste para o Largo (só depois do Cap. 3)
+  const fe = MAPS2.festival; if (fe && !fe._largo) { fe._largo = true; for (const y of [10, 11]) fe.ents.push({ t: 'trig', x: 39, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c3Fim) { await say('* O Largo do Hospital fica para lá. Hoje não é dia.'); W2.mv = null; return; } sfx('door'); await fadeOut(10); loadMap2('largo', ...LG.chegada, 'right'); if (MAPS2.largo.onEnter) await MAPS2.largo.onEnter(); await fadeIn(10); } }); }
+}; }
+// nos mapas "só baú" a Lume e a Rita vão DENTRO do baú (ninguém segue a pé)
+{ const _lm4 = loadMap2; loadMap2 = function (id) { const r = _lm4.apply(this, arguments); if (MAPS2[id] && MAPS2[id].soBau) W2.fol = []; return r; }; }
+
+// ---------- RONDA DAS LANTERNAS ----------
+// O enfermeiro anda de ponta a ponta do corredor e para um pouco em cada ponta. A lanterna faz um CONE de luz fixo à
+// frente dele (4 tiles; paredes cortam a luz). Gente na luz = pego. Baú na luz só passa se estiver PARADO.
+function coneRonda(e) {
+  const [dx, dy] = DIR2[e.dir], out = [];
+  for (let f = 1; f <= 4; f++) for (let s = -Math.ceil(f / 2); s <= Math.ceil(f / 2); s++) {
+    const tx = e.x + dx * f + dy * s, ty = e.y + dy * f + dx * s;
+    // linha de visão: cada tile entre a lanterna e este precisa ser chão
+    let ok = !tileOf(W2.map, tx, ty).solid;
+    for (let k = 1; ok && k <= f; k++) { const q = k / f, ix = Math.round(e.x + (tx - e.x) * q), iy = Math.round(e.y + (ty - e.y) * q); if (tileOf(W2.map, ix, iy).solid || propSolid(W2.map, ix, iy)) ok = false; }
+    if (ok) out.push([tx, ty]);
+  }
+  return out;
+}
+{ const _ue4 = updateEnt; updateEnt = function (e) {
+  if (e.t !== 'ronda') return _ue4(e);
+  if (e.mv) { stepTween(e, e.passo || 22); return; }
+  if (worldBusy2()) return;
+  const [a, b] = e.path, alvo = e.ida ? b : a;
+  if (e.x === alvo[0] && e.y === alvo[1]) { if ((e.pausa = (e.pausa || 0) + 1) < 70) return; e.pausa = 0; e.ida = !e.ida; return; }
+  const dx = Math.sign(alvo[0] - e.x), dy = dx ? 0 : Math.sign(alvo[1] - e.y); e.dir = dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up';
+  if (W2.x === e.x + dx && W2.y === e.y + dy) { if ((e.trava = (e.trava || 0) + 1) > 50) { e.trava = 0; e.ida = !e.ida; e.emote = { s: pickOne(['Baú no meio do caminho...', 'Hmpf. Dou a volta.']), t: 70 }; } return; }
+  e.trava = 0;
+  startMove(e, e.x + dx, e.y + dy);
+}; }
+{ const _uw4 = updateWorld2; updateWorld2 = function () {
+  _uw4();
+  if (V.scene !== 'world' || !W2.map || !W2.map.noiteHosp || worldBusy2() || W2.pego) return;
+  for (const e of W2.ents) if (e.t === 'ronda') {
+    const cone = coneRonda(e), dentro = cone.some(([x, y]) => (x === W2.x && y === W2.y) || (W2.mv && x === W2.mv.tx && y === W2.mv.ty));
+    if (!dentro) { e.olhou = 0; continue; }
+    if (rostoSt().on || W2.mv) { W2.pego = true; run2(() => pegoNaRonda(e)); return; }
+    if (!e.olhou) { e.olhou = 1; e.emote = { s: pickOne(['Hm. Roupa suja.', 'Quem largou esse baú aqui?', '...Lavanderia amanhã.']), t: 80 }; }
+  }
+}; }
+async function pegoNaRonda(e) {
+  sfx('cancel'); V.shake = 6; e.emote = { s: '!', t: 40 };
+  await say(rostoSt().on ? pickOne(['Visita fora de hora! Para fora, para fora.', 'Ei! A Ala do Descanso está fechada. Como o senhor entrou aqui?']) : pickOne(['...Esse baú ANDOU?', 'Baú de roupa suja não anda. Isso eu tenho certeza.']), 'enfermeiro');
+  if (!G.flags.tutPego) { G.flags.tutPego = true; await say('[Na luz da lanterna: GENTE é pega sempre; BAÚ só passa se estiver parado. Espere o cone passar, ou fique quieto dentro dele.]', 'cat'); }
+  await fadeOut(14);
+  if (rostoSt().on) desfazRosto();
+  loadMap2('hosp2', ...H2.entra, 'up'); W2.pego = false;
+  await fadeIn(14);
+}
+// luz da noite no hospital: escuro, luar nas janelas e os cones das lanternas
+let ESC4_C = null;
+{ const _ar4 = HOOK_AR; HOOK_AR = function (m, ox, oy) {
+  if (_ar4) _ar4(m, ox, oy);
+  if (!m || !m.noiteHosp) return;
+  if (!ESC4_C || ESC4_C.width !== W || ESC4_C.height !== H) ESC4_C = mk(W, H);
+  const x = ESC4_C.getContext('2d'); x.globalCompositeOperation = 'source-over'; x.clearRect(0, 0, W, H); x.fillStyle = 'rgba(4,8,16,0.84)'; x.fillRect(0, 0, W, H);
+  x.globalCompositeOperation = 'destination-out';
+  const furo = (cx, cy, r, a = 1) => { const g = x.createRadialGradient(cx, cy, r * 0.2, cx, cy, r); g.addColorStop(0, `rgba(0,0,0,${a})`); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill(); };
+  furo(W2.px + 8 - ox, W2.py + 4 - oy, 44, 0.85);
+  const cones = [];
+  for (const e of W2.ents) if (e.t === 'ronda') { const c = coneRonda(e); cones.push([e, c]); furo(e.px + 8 - ox, e.py - 20 - oy, 22); for (const [tx, ty] of c) { x.fillStyle = 'rgba(0,0,0,0.78)'; x.fillRect(tx * TS - ox, ty * TS - oy, TS, TS); } }
+  for (let tx = 2; tx < m.w; tx += 6) furo(tx * TS - ox, 3 * TS - oy, 26, 0.45);   // luar das janelas do corredor de cima
+  x.globalCompositeOperation = 'source-over';
+  bx.drawImage(ESC4_C, 0, 0);
+  // a luz quente das lanternas por cima, tremendo um pouco
+  bx.globalCompositeOperation = 'lighter';
+  for (const [e, c] of cones) { const fl = 0.11 + Math.sin(W2.t * 0.3 + e.x) * 0.02; bx.fillStyle = `rgba(255,214,120,${fl})`; for (const [tx, ty] of c) bx.fillRect(tx * TS - ox, ty * TS - oy, TS, TS); luzMundo(e.px + 8 - ox, e.py - 20 - oy, 14, 'rgba(255,220,140,0.25)'); }
+  bx.globalCompositeOperation = 'source-over';
+}; }
+
+// ---------- falas: o Largo ----------
+async function chegaLargo() {
+  G.flags.c4Largo = true;
+  await say('* O Largo do Hospital: uma praça de pedra clara, uma fonte sem água e, ocupando um lado inteiro, a CASA DE SAÚDE DO LARGO. Três andares, janelas acesas em pleno dia.');
+  await say('Ouçam, ouçam! O Acendedor-Mor COMPROU a Casa de Saúde! Lanterna em todo leito, enfermeiro a noite inteira! "Nunca mais um hospital no escuro"! Ouçam!', 'pregoeiro');
+  await say('O hospital do discurso. O das velas que acabaram na terceira noite.', 'rita');
+  await say('Ele está cumprindo a promessa. Isso é... bom. Não é?', 'lume');
+  await say('* Ninguém responde. Perto da fonte, um menino com uma vassoura maior que ele acena para vocês.');
+}
+async function falaTico4() {
+  if (!G.flags.c4Tico) {
+    G.flags.c4Tico = true;
+    await say('Vocês vieram. O Dito... ele esqueceu de novo. Ontem ele me chamou de Tico, hoje de manhã me chamou de "rapazinho". Aí uns enfermeiros de jaleco vieram e levaram ele pra cá.', 'tico');
+    await say('Pra ALA DO DESCANSO. Disseram que lá ele descansa e "melhora". Eu perguntei melhora do quê. Eles sorriram.', 'tico');
+    await say('E não deixam entrar. Na porta tem um Pavio que diz: "só gente, nada de bicho, nada de mala".', 'tico');
+    await say('...Nada de mala.', 'rita');
+    await say('* As duas olham para você ao mesmo tempo.');
+    await say('[Sugestão: o rosto (botão B). Gente entra. Mala não.]', 'cat');
+    return;
+  }
+  if (G.flags.c4P1Fim) return;
+  await say(G.flags.c4Hosp ? 'A Irmã Dalva é boa. Ela me dava pão quando o Dito ia trabalhar. Se ela disse que dá pra entrar de noite, dá.' : 'Entra de rosto. Fala com a Irmã Dalva, ela cuida da recepção. Ela ainda lembra das coisas.', 'tico');
+}
+async function falaPregoeiro() {
+  await say(pickOne(['Casa de Saúde do Largo, agora da Coroa e do Acendedor-Mor! Leito com luz, descanso garantido!', 'O Farol de Cem Invernos acende na última noite do festival! Faltam poucos dias!', 'Pavio novo contratado toda semana! Salário bom, serviço leve! Procurar o escritório do Acendedor!']), 'pregoeiro');
+}
+async function falaPorteiro() {
+  if (ehNoite()) { await say('Fechado. Visitas das oito às seis. Volte de dia.', 'porteiro'); return; }
+  await say(rostoSt().on ? 'Visita? Pode entrar. Sem barulho. Os doentes descansam.' : 'Mala não entra. Bicho não entra. Bagagem fica com o dono do lado de fora.', 'porteiro');
+}
+const falaFila = i => async () => { await say(['Vim tirar a dor do joelho. Dizem que lá no Descanso a dor some. Some tudo, diz a minha vizinha. Ela ficou tão leve...', 'Minha mãe entrou semana passada. Saiu sorrindo. Não lembra o meu nome, mas sorri.', 'Eu trabalhei aqui no Inverno Escuro, sabia? Quarenta noites. Eu lembro de tudo. Tomara que eles não me "curem" disso.'][i], 'povo'); };
+async function falaAntero() {
+  await say('Sessenta anos que eu passo por esse largo. Antes a casa era das irmãs: pobre, fria, cheia de vela. Agora é bonita.', 'velhoL');
+  await say('Mas sabe o que é engraçado? Antes, quem saía de lá saía chorando ou rindo. Agora todo mundo sai igual.', 'velhoL');
+}
+async function entrarHospital() {
+  W2.mv = null;
+  if (ehNoite()) { await say('* A porta grande está trancada. Lá dentro, uma lanterna passa devagar pelo corredor, de janela em janela.'); return; }
+  if (!rostoSt().on) { sfx('bump'); await say('Ei, ei. Mala não entra. Bagagem fica aqui fora.', 'porteiro'); if (!G.flags.tutRostoH) { G.flags.tutRostoH = true; await say('[Aperte B para usar o rosto. O fôlego corre enquanto você é gente: não demore lá dentro.]', 'cat'); } return; }
+  sfx('door'); await fadeOut(10); loadMap2('hosp1', ...H1.entra, 'up'); if (MAPS2.hosp1.onEnter) await MAPS2.hosp1.onEnter(); await fadeIn(10);
+}
+// rosto derreteu dentro do hospital (de dia): põem para fora
+{ const _uw5 = updateWorld2; updateWorld2 = function () {
+  _uw5();
+  if (V.scene === 'world' && W2.id === 'hosp1' && !rostoSt().on && !worldBusy2() && !W2.mv && !W2.expulso) { W2.expulso = true; run2(async () => {
+    await say('* Uma enfermeira olha para baixo e encontra, no lugar da visita, um baú com dentes.');
+    await say('Uma... uma MALA? Quem deixou essa mala na enfermaria? Leva pra fora, leva pra fora!', 'enfermeiro');
+    await fadeOut(12); loadMap2('largo', ...LG.hospOut, 'down'); W2.expulso = false; await fadeIn(12);
+    if (!G.flags.tutExpulso) { G.flags.tutExpulso = true; await say('[O fôlego acabou. Descanse como baú lá fora e tente de novo. Dica: o fôlego enche mais rápido parado.]', 'cat'); }
+  }); }
+}; }
+
+// ---------- falas: o térreo ----------
+async function falaDalva() {
+  if (G.flags.c4P1Fim) { await say('Vão com cuidado na serra. E me tragam o Dito. E os outros também, se puderem.', 'dalva'); return; }
+  if (!G.flags.c4Hosp) {
+    G.flags.c4Hosp = true; save2();
+    await say('Bom dia, meu filho. Visita? Nome do paciente?', 'dalva');
+    await say('Dito. Pavio. O irmão dele, o Tico, está lá fora.', 'rita');
+    await say('* A enfermeira para de escrever. É uma senhora de touca branca, mãos grossas, olhos muito cansados. Ela olha para a porta, para os lados, e baixa a voz.', 'n');
+    await say('O Dito está na Ala do Descanso. Lá em cima. Visita não pode. Ordem nova, dos donos novos.', 'dalva');
+    await say('Eu trabalho nesta casa há trinta anos. Trabalhei no Inverno Escuro. Segurei a mão de muita gente no escuro, filho. Eu sei o que é um hospital sem luz.', 'dalva');
+    await say('Agora tem luz em todo leito. E os doentes não sentem mais dor. Nem saudade. Nem medo. Eles DESCANSAM.', 'dalva');
+    await say('* Ela fecha o livro de registro com um pouco de força demais.');
+    await say('Eu não posso deixar vocês subirem. Mas a lavanderia, do lado de fora, fica aberta de noite. Para os lençóis.', 'dalva');
+    await say('...Eu não disse isso. Vocês não ouviram isso. Bom dia.', 'dalva');
+    await say('[Objetivo: voltar À NOITE e entrar pela LAVANDERIA (a casinha do lado direito do hospital). Para esperar a noite, descanse num Marco.]', 'cat');
+    return;
+  }
+  await say(pickOne(['A lavanderia. De noite. Eu não disse nada.', 'Os enfermeiros novos andam com lanterna a noite inteira. Eles enxergam o que a luz pega. Só o que a luz pega.', 'Cuidado lá em cima. Os lençóis andam sozinhos desde que puseram os potes.']), 'dalva');
+}
+async function falaCama(i) {
+  const F = [
+    ['* Um senhor de bigode, sorrindo para o teto.', 'Reumatismo? Não, não tenho. Nunca tive. Esposa? Também não. Acho. Que bom, não é? Que leve.'],
+    ['* Uma moça abraçando o travesseiro.', 'Eu tinha medo de altura. Agora não tenho mais. Também não lembro... como é mesmo o meu nome? Tem na ficha. A ficha sabe.'],
+    ['* Uma cama vazia, lençol esticado, um pote de vidro VAZIO pendurado no fio.', null],
+    ['* Um menino com a perna enfaixada, acordado, com medo.', 'Moço... eles vão me levar pro andar de cima? Eu não quero esquecer a minha mãe. Ela vem amanhã. Ela vem, né?'],
+    ['* Uma senhora dormindo de boca aberta. Ronca. Pelo menos isso continua igual.', null],
+    ['* Um homem forte, de olhos parados, abrindo e fechando a mão.', 'Eu era ferreiro. Acho. Minha mão lembra. Eu não.'],
+    ['* Uma velha tricotando uma coisa sem fim.', 'É um cachecol. Pra quem? Não sei. Mas eu sei tricotar. Isso eles não levam.']
+  ][i] || ['* Alguém dormindo.', null];
+  await say(F[0]); if (F[1]) await say(F[1], 'paciente');
+  if (i === 3 && !G.flags.c4Menino) { G.flags.c4Menino = true; await say('Ninguém vai te levar a lugar nenhum. A gente promete.', 'lume'); await say('* A Lume não sabe se pode prometer isso. Promete mesmo assim.'); }
+}
+async function falaVisita() { await say('Vim ver meu pai. Ele está ótimo, disseram. Não sente nada. Eu também não sinto nada quando olho pra ele. Ele me olha como se olha um móvel.', 'paciente'); }
+async function escadaFechada() { await say('* A escada para o segundo andar. Uma corrente atravessada, com uma placa: "ALA DO DESCANSO — SÓ FUNCIONÁRIOS". Um cadeado novo, brilhando.'); }
+
+// ---------- a noite: lavanderia e Ala do Descanso ----------
+async function entrarLavanderia() {
+  W2.mv = null;
+  if (G.flags.c4P1Fim) { await say('* A lavanderia. Cheiro de sabão. Lá em cima, a Ala do Descanso está quieta.'); }
+  if (!G.flags.c4Hosp) { await say('* Uma casinha com varal no fundo: a lavanderia do hospital. Trancada. "Só funcionários."'); return; }
+  if (!ehNoite()) { await say('* De dia a lavanderia está cheia de gente batendo lençol. Ninguém vai deixar um baú passear por aqui. Volte À NOITE (descanse num Marco).'); return; }
+  if (!G.flags.c4Noite) {
+    G.flags.c4Noite = true;
+    await say('* A porta da lavanderia está só encostada. Lá dentro: tanques, sabão, cestos de lençol e, no fundo, uma escadinha de serviço que sobe para o segundo andar.');
+    await say('Plano: eu e a Rita entramos no baú. Lá em cima, você é só mais um baú de roupa suja.', 'lume');
+    await say('E se alguém abrir a tampa?', 'rita');
+    await say('Aí você sai e bate. Com carinho.', 'lume');
+    await say('* As duas entram na tampa. Lá dentro é maior do que parece. Ninguém comenta. Ninguém nunca comenta.');
+  }
+  sfx('door'); await fadeOut(12); loadMap2('hosp2', ...H2.entra, 'up'); if (MAPS2.hosp2.onEnter) await MAPS2.hosp2.onEnter(); await fadeIn(12);
+}
+async function sairLavanderia() { W2.mv = null; sfx('door'); await fadeOut(12); loadMap2('largo', ...LG.lavOut, 'down'); await fadeIn(12); }
+async function tutRonda() {
+  G.flags.c4Ronda = true;
+  await say('* O segundo andar. Escuro. Corredores de ladrilho, portas fechadas, fios de cobre no teto zumbindo baixinho. E, lá na frente, uma lanterna andando.');
+  await say('[A RONDA DAS LANTERNAS. Cada enfermeiro faz um cone de luz à frente. GENTE na luz: pega na hora. BAÚ na luz: só se estiver PARADO ("roupa suja"). Espere o cone passar.]', 'cat');
+  await say('[As portas daqui têm maçaneta. Baú não tem mão. Para abrir, use o rosto (B), mas fora da luz.]', 'cat');
+}
+async function camaDito() {
+  if (G.flags.c4CamaDito) { await say('* A cama do Dito. Vazia. O pote, vazio também.'); return; }
+  G.flags.c4CamaDito = true;
+  await say('* Uma cama com plaquinha: "DITO — PAVIO Nº 212". Lençol esticado. Ninguém. No pote pendurado sobre a cama, só um fio de fumaça morna no fundo.');
+  await say('Ele estava aqui. Ontem, talvez hoje.', 'rita');
+  await say('[O pote tem resto de lembrança. Pouco. A maior parte já subiu pelo fio.]', 'cat');
+  await say('Subiu pra onde?', 'lume');
+  await say('* O fio sobe pelo teto, entra num cano maior e segue, junto com dezenas de outros, para o lado do morro. Para o lado do Farol.');
+}
+async function lerPotes() {
+  await say('* Potes de vidro em fila, cada um preso a um fio, cada um com uma luzinha dentro. Etiquetas com letra pequena e cuidadosa: "dor no joelho". "medo de altura". "saudade (esposa)". "o nome".');
+  await say('[Âmbar novo. Lembrança lida de gente VIVA. Não estava no meu registro que isso era possível.]', 'cat');
+  await say('...Estava no seu registro que gente boa faria isso?', 'rita');
+  await say('[Não.]', 'cat');
+}
+async function notaEnfermeira() { await say('* Um bilhete preso no quadro de avisos: "Ronda das 22h às 5h. Lanterna sempre acesa. Os pacientes NÃO podem acordar no escuro. Ordem do Diretor." Embaixo, à mão, outra letra: "e se eles quiserem?"'); }
+async function lutaRelogio() {
+  if (G.flags.c4Relogio) return; W2.mv = null;
+  await say('* No fim do corredor, na frente da Sala do Diretor, um relógio de pêndulo mais alto que a porta. Os ponteiros param. E se viram para você.');
+  await say('Tic. Tac. Fora. De. Hora.', 'n');
+  await say('[Relógio de Plantão. Ele muda a HORA a cada três vezes, e a fraqueza muda junto: manhã gelo, tarde fogo, noite luz. Mordida sempre funciona.]', 'cat');
+  const r = await lutaMapa(['relogio'], { bg: bgHospital, music: 'boss', pos: [[186, 160]], intro: async () => { const e = BT.foes[0]; e.hora = 'manha'; e.weak = ['gelo', 'mordida']; e.ct = 10; callout('RELÓGIO DE PLANTÃO', '#f0c050', 100); } });
+  if (r !== 'win') return;
+  G.flags.c4Relogio = true; save2();
+  await say('* O relógio cai de costas no ladrilho. O pêndulo para. E, pela primeira vez em muito tempo, a Ala do Descanso fica sem tique-taque.');
+  await say('* Atrás dele, a porta da Sala do Diretor.');
+}
+async function entrarSala() {
+  W2.mv = null;
+  if (!G.flags.c4Relogio) { await say('* O relógio está na frente da porta.'); return; }
+  if (!rostoSt().on) { sfx('bump'); await say('* Uma maçaneta redonda, de latão. Você encosta a tampa nela. A maçaneta não se impressiona.'); await say('[Baú não tem mão. Use o rosto (B) aqui fora, longe da luz.]', 'cat'); return; }
+  sfx('door'); await fadeOut(10); loadMap2('sala', ...SA.entra, 'up'); await fadeIn(10);
+  if (!G.flags.c4Sala) { G.flags.c4Sala = true; await say('* A Sala do Diretor. Tapete bom, mesa boa, cheiro de tinta fresca. Ninguém. Uma luminária acesa, como se o dono tivesse saído há um minuto.'); }
+}
+async function arquivoDito() {
+  if (G.flags.c4Ficha) { await say('* "TRANSFERIDO: CANDEIA (ar de serra)."'); return; }
+  G.flags.c4Ficha = true;
+  await say('* No arquivo, uma pasta para cada leito. Você acha a do Dito.');
+  await say('* "DITO, PAVIO Nº 212. Esquecimento recorrente. Resíduo alto. Tratamento: DESCANSO (3 sessões)." E, embaixo, carimbado ontem à noite: "TRANSFERIDO: CANDEIA (ar de serra)."');
+  await say('Candeia? A vila da mina, lá na serra?', 'rita');
+  await say('O Seu Jorge passou por lá uma vez. Disse que era a vila mais acesa do mundo. Tinha âmbar até nas pedras da rua.', 'lume');
+  await checaFimP1();
+}
+async function mesaDiretor() {
+  if (G.flags.c4Lista) { await say('* A LISTA DO DESCANSO. A letra pequena e cuidadosa. O rodapé: "pensão paga".'); return; }
+  G.flags.c4Lista = true;
+  await say('* Sobre a mesa, um livro-caixa aberto: a LISTA DO DESCANSO. Nomes, um por linha. Ao lado de cada nome, uma lembrança, e uma quantia.');
+  await say('* "Marta Lins: medo de altura. Pensão paga." "Joaquim Sá: a esposa. Pensão paga." "Dito, Pavio 212: o irmão. Pensão paga."');
+  await say('* A letra é pequena, cuidadosa, sem nenhum borrão. Uma letra de quem anota tudo e não erra nada.');
+  await say('...Eu já vi essa letra.', 'rita');
+  await say('* Ela não diz onde. Não precisa.');
+  await say('[Registro: a letra confere com a anotação vista no Festival. Grau de certeza: alto. Grau de vontade de registrar: baixo.]', 'cat');
+  await say('Pode ser outra pessoa. Um secretário. Alguém que... ele é BOM. Ele chorou no discurso, vocês viram.', 'lume');
+  await say('* A Lume pega a lista. As mãos dela tremem um pouco. As velas no cabelo, também.');
+  await checaFimP1();
+}
+async function checaFimP1() {
+  if (!G.flags.c4Lista || !G.flags.c4Ficha || G.flags.c4P1Fim) return;
+  await fimParte1Cap4();
+}
+async function fimParte1Cap4() {
+  sfx('door');
+  await say('* A porta se abre. Vocês congelam. Uma touca branca, uma lamparina de vela comum na mão.');
+  await say('Calma. Sou eu.', 'dalva');
+  await say('Eu sabia que vocês vinham. Eu deixei a porta encostada. E torci pra vocês passarem pelo relógio, porque eu nunca consegui.', 'dalva');
+  await say('* Ela vê a lista na mão da Lume. Não pergunta. Senta na cadeira do diretor, devagar, como quem senta pela primeira vez em trinta anos.');
+  await say('Candeia. É pra lá que mandam os que esquecem demais. Os que já não têm muito o que tirar.', 'dalva');
+  await say('Candeia era a vila da mina. Todo o âmbar que acendeu esta cidade nos últimos doze anos saiu de lá. Aí, há dois dias, ela APAGOU.', 'dalva');
+  await say('Apagou como?', 'rita');
+  await say('Apagou. Os postes, as casas, as pessoas. Um carroceiro desceu a serra ontem e disse que o povo de lá fica parado na porta de casa, sem lembrar o que ia fazer.', 'dalva');
+  await say('E o Dito foi mandado pra lá. Pra "respirar ar de serra".', 'lume');
+  await say('* Silêncio. Lá fora, na janela, a cidade inteira acesa, e no alto do morro, apagado ainda, o contorno do Farol de Cem Invernos.');
+  await say('O 31 sobe a serra. O Seu Jorge vai reclamar, mas sobe.', 'rita');
+  await say('Eu vou com vocês até o portão da cidade. Depois eu volto. Alguém tem que ficar com o menino da perna enfaixada.', 'dalva');
+  await say('Irmã Dalva... por que você tá ajudando a gente?', 'lume');
+  await say('Porque eu lembro, minha filha. E alguém tem que lembrar.', 'dalva');
+  G.flags.c4P1Fim = true; G.hora = 6 * 60; save2();
+  await fadeOut(40);
+  await cartao(['FIM DA PARTE 1', 'A Casa dos Que Esquecem', '', 'Continua na Parte 2:', 'Candeia, a vila que apagou']);
+  V.scene = 'world'; loadMap2('largo', ...LG.marco, 'down'); await fadeIn(20);
+  await say('* (A Parte 2 do capítulo está a caminho. A capital, o hospital e a base continuam abertos.)');
+}
+
+// ---------- entrada no capítulo 4 ----------
+function iniciarCap4() {
+  if (G.flags.c4Init) return false;
+  G.flags.c4Init = true; G.poder = Math.max(G.poder || 1, 3); curarTudo(); G.hora = 8 * 60; G.dia = (G.dia || 0) + 1;
+  G.items = Object.assign({}, G.items, { frasco: Math.max(3, G.items.frasco || 0) });
+  return true;
+}
+async function capitulo4() {
+  if (!MAPS2.largo) montarMapas2();
+  const novo = iniciarCap4();
+  if (novo) {
+    await cartao(['CAPÍTULO 4', 'A Casa dos Que Esquecem']);
+    V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(30);
+    await say('* Manhã, dentro do baú. A vela da base queima baixinho. A Lume está sentada na cama, abraçando os joelhos.');
+    await say('Eu sonhei com as luzinhas. As da Mãe-Fuligem. Elas tinham nome. Cada uma falava o próprio nome, baixinho, sem parar, pra não esquecer.', 'lume');
+    await say('Igual a gente faz com número de telefone.', 'rita');
+    await say('O que é telefone?', 'lume');
+    await say('* A Rita abre a boca. Fecha. Olha para você. Você também não sabe mais direito. Era uma coisa da Terra. Era importante.');
+    await say('Tanto faz. Vamos ver o Tico. Ele disse que o Dito não estava bem de novo.', 'rita');
+    await say('[Objetivo: o Tico está no LARGO DO HOSPITAL, na saída leste da Avenida do Festival.]', 'cat');
+    save2(); return;
+  }
+  const p = G.pos && MAPS2[G.pos.map] ? G.pos : { map: 'largo', x: LG.chegada[0], y: LG.chegada[1], dir: 'right' };
+  loadMap2(p.map, p.x, p.y, p.dir); V.scene = 'world'; await fadeIn(20);
+}
+// o fim do Cap. 3 leva ao Cap. 4 (também para quem já tinha terminado e salvou)
+{ const _c3 = capitulo3; capitulo3 = async function () {
+  if (!MAPS2.estrada) montarMapas2();
+  if (G.flags.c3Fim) return capitulo4();
+  return _c3();
+}; }
 
 boot2();
 </script>

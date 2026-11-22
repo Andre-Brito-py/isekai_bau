@@ -287,6 +287,14 @@
    SALA DO DIRETOR: ficha do Dito "TRANSFERIDO: CANDEIA (ar de serra)", e a LISTA DO DESCANSO: nomes com a letra pequena e
    cuidadosa (o jogador reconhece a letra do caderno), e no rodapé "pensão paga". A Irmã Dalva chega, vê, e conta que
    CANDEIA (a vila mineira na serra, onde nasceu o âmbar da capital) APAGOU há dois dias. Fim da Parte 1.
+ - PARTE 1 IMPLEMENTADA (cap4.js + arte_cap4.js + inimigos4.js + maps/cap4maps.py -> mapas4.js; mapas largo, hosp1,
+   hosp2, sala). G.poder 3 no início do capítulo. Entrada: saída leste da Avenida do Festival (depois de c3Fim). Mapas
+   "soBau" (Ala, Sala): a Lume e a Rita vão dentro do baú (sem seguidores). Ronda: ents t:'ronda' (path de 2 pontos,
+   pausa nas pontas, dá a volta se o baú bloquear), cone de 4 tiles com linha de visão (coneRonda), escuro próprio
+   (HOOK_AR, noiteHosp). Maçanetas: a porta da Sala exige o rosto. De dia, se o rosto derreter no térreo, te põem para
+   fora. Números: Pesadelo 280 PV/ATQ 28, Lençol 300/26, Relógio de Plantão 3800 PV/ATQ 32 (hora muda a cada 3 vezes,
+   Hora do Descanso preparada a cada 4). Robô 0.6: comuns custam ~10-40%; Relógio termina com ~40-90% (mínimo ~16-32%).
+   Flags: c4Init, c4Largo, c4Tico, c4Hosp, c4Noite, c4Ronda, c4CamaDito, c4Relogio, c4Sala, c4Ficha, c4Lista, c4P1Fim.
  - PARTE 2 (Candeia, a vila apagada): o 31 sobe a serra; névoa; moradores parados nas portas sem lembrar o que iam
    fazer; minas de âmbar vazias; RUNA DE GATILHO (4º espaço do Grimório, armadilha na linha do tempo); a Irmã Dalva vai
    morar na base (ENFERMARIA: cura entre lutas com custo de cobres); o Seu Jorge abre a GARAGEM (o 31 viaja entre

@@ -190,5 +190,5 @@ async function cenaFinalCap3() {
   await cartao(['FIM DO CAPÍTULO 3', 'O Festival da Luz', '', 'Próximo: Capítulo 4']);
   save2();
   V.scene = 'world'; loadMap2('auren', 9, 18, 'down'); await fadeIn(20);
-  await say('* (O Capítulo 4 está a caminho. A capital, a base e as Galerias continuam abertas: a forja da Rita, o Grimório e as fusões esperam por você.)');
+  await capitulo4();
 }
