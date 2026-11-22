@@ -84,7 +84,7 @@ projectile = async function (from, to, col, n = 18, o = {}) {
 // ---------- investida com rastro e poeira ----------
 function poeira(x, y, dir = 1, n = 6) { for (let i = 0; i < n; i++) part({ x: x + rand(-4, 4), y: y - 1, vx: -dir * rand(0.3, 1.4), vy: rand(-0.8, -0.2), g: 0.03, life: rand(14, 24) | 0, col: pickOne(['#a89a88', '#8a7a6a', '#c8bca8']), sz: Math.random() < 0.4 ? 2 : 1 }); }
 dash = async function (u, tx, ty, n = 14) {
-  const dx = tx - u.x, dy = ty - u.y, dir = Math.sign(dx) || 1;
+  const dx = tx, dy = ty, dir = Math.sign(dx) || 1;   // deslocamento RELATIVO (todos os golpes chamam assim; antes ia para o lugar errado)
   u.anim = 'run';
   // antecipação: agacha um pouquinho antes de sair
   await tw(5, p => { u.sx = 1 + p * 0.12; u.sy = 1 - p * 0.12; });

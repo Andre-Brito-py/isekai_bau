@@ -120,7 +120,7 @@ drawWin = function () {
       const sh = (t * 3 + i * 40) % (bw + 30) - 15; if (sh > 0 && sh < fw) { bx.globalAlpha = 0.6; bx.fillStyle = '#ffffff'; bx.fillRect(x + 30 + sh, by, 3, 6); bx.globalAlpha = 1; }
       txt('+' + Math.round(o.ganho * ease.out(p)), x + 174, y + 12, { align: 'right', col: '#8fe3ff' });
       if (subiuAgora) {
-        txt('SUBIU!', x + 90, y + 1, { col: '#ffe066', shadow: true });
+        txt(o.novas && o.novas.length ? 'TÉCNICA!' : 'SUBIU!', x + (o.novas && o.novas.length ? 78 : 90), y + 1, { col: o.novas && o.novas.length ? '#9be58a' : '#ffe066', shadow: true });
         if (!o.tocou) { o.tocou = true; for (let j = 0; j < 10; j++) w.conf.push({ x: x + 12, y: y + 12, vy: -1 - Math.random() * 1.5, vx: (Math.random() - 0.5) * 2.5, c: j % 2 ? '#ffe066' : '#ffffff', f: j }); if (!BT.xpSom) { BT.xpSom = true; jingle && jingle('G5:2 C6:2 E6:2 G6:6', 220); } }
         for (let j = 0; j < 4; j++) { const ang = t * 0.1 + j * Math.PI / 2; bx.fillStyle = '#ffe066'; bx.fillRect(Math.round(x + 12 + Math.cos(ang) * 16), Math.round(y + 12 + Math.sin(ang) * 16), 1, 1); }
       }

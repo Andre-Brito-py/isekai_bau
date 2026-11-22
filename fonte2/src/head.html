@@ -36,6 +36,22 @@
  10. O FAROL DE CEM INVERNOS (2 partes) — ESCALADA 5: o Farol acende por uma noite; a IRONIA FINAL (Lívia); escolha
      na luta final; epílogo (o caderno preto vai para a parede da base; o Jorge lembra do 31 um pouquinho) e o GANCHO
      da trilogia (a carta original assinada com a lanterna de um olho).
+ O QUE SE APRENDE POR NÍVEL (tecnicas_nv.js, pedido do usuário: "subir de nível deve ser bem importante"):
+ técnicas nos níveis 5/9/13/17/22/27 e passivas em 10/20/30, cada técnica com animação própria.
+   BAÚ: Mordida Gulosa (20T, cura 1/3 do dano), Cuspe de Tralha (25T, todos, tontura), Tampa Refletora (25T leve,
+     próximo golpe faz metade e volta), Mastigar Escudo (35T, 3 mordidas, -1 escudo cada), Inventário (30T leve,
+     item aleatório: pena/frasco/tinta/Tensão), Boca do Vão (55T, todos, atrasa a vez).
+   LUME: Cantiga de Acordar (15T leve, tira status, adianta a vez), Lanterna Ampla (20T, luz em todos + fraquezas),
+     Faísca Tripla (25T), Canção de Ninar (30T, atrasa muito a vez; chefe resiste), Coro de Velas (40T, vela em
+     todos), Aurora (55T, luz forte em todos + cura 20%).
+   RITA: Investida (20T, empurra a vez), Escudo Erguido (15T leve, protege um aliado), Lança Atravessada (30T, 2
+     inimigos), Contragolpe (25T leve, devolve 2 golpes), Grito de Guerra (30T leve, grupo +20% por 3 vezes),
+     Golpe do Pedágio (50T, 2.6, quebra 3).
+   PASSIVAS: 10 = Tampa Grossa (+3 DEF +2 MDEF) / Luz Própria (+3 MAG +8 PM) / Braço de Escudeira (+3 ATQ +1 DEF);
+     20 = Fôlego de Batalha (+5 Tensão inicial por membro); 30 = Veterano(a) (+10% PV).
+ Anúncio: na tela de vitória ("TÉCNICA!") e em falas depois da luta (G.aprendeu guarda o que já foi anunciado).
+ Correção junto: dash() recebe deslocamento RELATIVO (a Estocada e a Lança de Tampa iam para o lado errado).
+ Próximas técnicas (níveis 32+) na T3. Ao criar golpe novo de grupo: dar regra ao robô (bot3b) e testar o balanço.
  O GRUPO (PARTY) MUDA AO LONGO DA HISTÓRIA (pedido do usuário): conforme mais personagens combatentes aparecerem, a
  formação pode mudar, mas SEMPRE NO MÁXIMO 3 NA LUTA AO MESMO TEMPO; dependendo do momento da história pode ser menos
  (ex.: o baú sozinho numa fuga, ou a dupla Lume+baú quando a Rita fica para trás; o Jorge-Pavio, o Tico, o Brás ou o
