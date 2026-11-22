@@ -454,6 +454,8 @@
  - CANTAR PARA O SINO (Cap. 2): na fase 3 da Âncora-Mãe, na vez da Lume, aparece a escolha explícita "Cantar para o sino"
    (antes era só implícito usar Canção/Acalanto). Quem passou sem cantar: missão opcional "A canção do sino" (só À NOITE,
    falar com a Irmã Celeste na praça): a Lume canta, o sino cantarola do rio; flag cantoTardio; frasco + pluma + 60c.
+ - LUME CANTA NA FONTE (economia2.js, só À NOITE, 1x por noite): agora a fonte inteira (8 tiles) é interativa; de dia
+   a Lume avisa que canta depois das sete; aparece no mapa como opcional "A Lume canta na fonte" (À NOITE).
  - PORTA TRANCADA (world2.js portaTrancada): toda casa do mapa agora tem porta desenhada; as que não levam a lugar
    nenhum avisam "trancada" (com variações de humor) quando o jogador anda contra ela ou aperta A de frente. Para abrir
    uma construção nova no futuro, basta pôr uma 'porta' (ent) na frente dela.
@@ -6014,7 +6016,7 @@ const quadroC = memo(() => { const P = new Pix(26, 22), C = ramp('#a87a4a'), Wd 
 // ---------- a Lume canta na fonte (de noite) ----------
 function noiteId() { return hora() >= 19 * 60 ? (G.dia || 0) : (G.dia || 0) - 1; }
 async function fonteDaPraca() {
-  if (!ehNoite()) { await say('* A fonte da praça. Uma moeda velha brilha no fundo, grudada no limo. De noite, dizem, junta gente aqui para ouvir música.'); return; }
+  if (!ehNoite()) { await say('* A fonte da praça. Uma moeda velha brilha no fundo, grudada no limo. De noite, dizem, junta gente aqui para ouvir música.'); await say('De dia todo mundo passa correndo. De NOITE eu canto aqui. Depois das sete, quando o povo sai da taverna.', 'lume'); return; }
   if (G.flags.cantouNa === noiteId()) { await say('Já cantei hoje. Lustre também fica rouco. ...Amanhã de noite tem mais.', 'lume'); return; }
   const c = await choose('* Tem gente voltando da taverna e um chapéu esquecido no banco. A Lume te olha.', ['Cantar na fonte', 'Agora não'], 'n', 1);
   if (c !== 0) return;
@@ -6113,7 +6115,7 @@ async function vender() {
   _mm2();
   MAPS2.taverna.props.push({ img: quadroC, x: 9.4, y: 3.1, by: 1 });
   MAPS2.taverna.ents.push({ t: 'sign', x: 10, y: 3, h: 30, talk: quadroPedidos });
-  MAPS2.praca.ents.push({ t: 'sign', x: 7, y: 16, h: 30, talk: fonteDaPraca }, { t: 'sign', x: 15, y: 8, h: 40, talk: figurinhaTiago });
+  MAPS2.praca.ents.push(...[[5, 15], [6, 15], [7, 15], [8, 15], [5, 16], [6, 16], [7, 16], [8, 16]].map(([x, y]) => ({ t: 'sign', x, y, h: 30, talk: fonteDaPraca })), { t: 'sign', x: 15, y: 8, h: 40, talk: figurinhaTiago });
 }; }
 // itens: o menu mostra os materiais guardados
 { const _uf = usarItemFora; usarItemFora = async function () {
@@ -11196,6 +11198,7 @@ function missoes() {
   if (f.c4Candeia && !f.c4Fim) op({ tit: 'Os que andam dormindo', desc: 'De noite os moradores de Candeia andam até o poço e cochicham pistas. De dia, só ficam parados.', map: 'candeia', at: pos(() => POS4B.candeia.parados[2]), quando: 'noite' });
   if (f.c4Fim) op({ tit: 'Enfermaria', desc: 'A Irmã Dalva trata o grupo de graça e vende frascos com selo mais baratos.', map: 'interior', at: [12, 4] });
   if (f.c2Boss && !f.cantouSino && !f.cantoTardio) op({ tit: 'A canção do sino', desc: 'De noite, a Dona Badalada ainda zumbe lá do rio, sozinha. A Irmã Celeste acha que ela quer ouvir alguém cantar.', map: 'praca', at: pos(() => POS2.praca.celeste), quando: 'noite' });
+  if (f.c2Chegada && typeof noiteId === 'function' && f.cantouNa !== noiteId()) op({ tit: 'A Lume canta na fonte', desc: 'De noite, a Lume pode cantar na fonte da Praça do Sino. O chapéu enche de cobres; se ela for muito bem, às vezes alguém deixa um presente.', map: 'praca', at: [7, 16], quando: 'noite' });
   if (f.c2Chegada && f.quadroTut) op({ tit: 'Quadro de pedidos', desc: 'O quadro da Taverna do Remo Torto sempre tem trabalho que paga em cobres.', map: 'taverna', at: pos(() => POS2.taverna.quadro) });
   return L.filter(m => m.at);
 }

@@ -57,7 +57,7 @@ const quadroC = memo(() => { const P = new Pix(26, 22), C = ramp('#a87a4a'), Wd 
 // ---------- a Lume canta na fonte (de noite) ----------
 function noiteId() { return hora() >= 19 * 60 ? (G.dia || 0) : (G.dia || 0) - 1; }
 async function fonteDaPraca() {
-  if (!ehNoite()) { await say('* A fonte da praça. Uma moeda velha brilha no fundo, grudada no limo. De noite, dizem, junta gente aqui para ouvir música.'); return; }
+  if (!ehNoite()) { await say('* A fonte da praça. Uma moeda velha brilha no fundo, grudada no limo. De noite, dizem, junta gente aqui para ouvir música.'); await say('De dia todo mundo passa correndo. De NOITE eu canto aqui. Depois das sete, quando o povo sai da taverna.', 'lume'); return; }
   if (G.flags.cantouNa === noiteId()) { await say('Já cantei hoje. Lustre também fica rouco. ...Amanhã de noite tem mais.', 'lume'); return; }
   const c = await choose('* Tem gente voltando da taverna e um chapéu esquecido no banco. A Lume te olha.', ['Cantar na fonte', 'Agora não'], 'n', 1);
   if (c !== 0) return;
@@ -156,7 +156,7 @@ async function vender() {
   _mm2();
   MAPS2.taverna.props.push({ img: quadroC, x: 9.4, y: 3.1, by: 1 });
   MAPS2.taverna.ents.push({ t: 'sign', x: 10, y: 3, h: 30, talk: quadroPedidos });
-  MAPS2.praca.ents.push({ t: 'sign', x: 7, y: 16, h: 30, talk: fonteDaPraca }, { t: 'sign', x: 15, y: 8, h: 40, talk: figurinhaTiago });
+  MAPS2.praca.ents.push(...[[5, 15], [6, 15], [7, 15], [8, 15], [5, 16], [6, 16], [7, 16], [8, 16]].map(([x, y]) => ({ t: 'sign', x, y, h: 30, talk: fonteDaPraca })), { t: 'sign', x: 15, y: 8, h: 40, talk: figurinhaTiago });
 }; }
 // itens: o menu mostra os materiais guardados
 { const _uf = usarItemFora; usarItemFora = async function () {

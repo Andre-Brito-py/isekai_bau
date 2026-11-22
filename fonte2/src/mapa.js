@@ -63,6 +63,7 @@ function missoes() {
   if (f.c4Candeia && !f.c4Fim) op({ tit: 'Os que andam dormindo', desc: 'De noite os moradores de Candeia andam até o poço e cochicham pistas. De dia, só ficam parados.', map: 'candeia', at: pos(() => POS4B.candeia.parados[2]), quando: 'noite' });
   if (f.c4Fim) op({ tit: 'Enfermaria', desc: 'A Irmã Dalva trata o grupo de graça e vende frascos com selo mais baratos.', map: 'interior', at: [12, 4] });
   if (f.c2Boss && !f.cantouSino && !f.cantoTardio) op({ tit: 'A canção do sino', desc: 'De noite, a Dona Badalada ainda zumbe lá do rio, sozinha. A Irmã Celeste acha que ela quer ouvir alguém cantar.', map: 'praca', at: pos(() => POS2.praca.celeste), quando: 'noite' });
+  if (f.c2Chegada && typeof noiteId === 'function' && f.cantouNa !== noiteId()) op({ tit: 'A Lume canta na fonte', desc: 'De noite, a Lume pode cantar na fonte da Praça do Sino. O chapéu enche de cobres; se ela for muito bem, às vezes alguém deixa um presente.', map: 'praca', at: [7, 16], quando: 'noite' });
   if (f.c2Chegada && f.quadroTut) op({ tit: 'Quadro de pedidos', desc: 'O quadro da Taverna do Remo Torto sempre tem trabalho que paga em cobres.', map: 'taverna', at: pos(() => POS2.taverna.quadro) });
   return L.filter(m => m.at);
 }
