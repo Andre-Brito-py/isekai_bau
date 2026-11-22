@@ -41,6 +41,11 @@
  10. O FAROL DE CEM INVERNOS (2 partes) — ESCALADA 5: o Farol acende por uma noite; a IRONIA FINAL (Lívia); escolha
      na luta final; epílogo (o caderno preto vai para a parede da base; o Jorge lembra do 31 um pouquinho) e o GANCHO
      da trilogia (a carta original assinada com a lanterna de um olho).
+ O GRUPO (PARTY) MUDA AO LONGO DA HISTÓRIA (pedido do usuário): conforme mais personagens combatentes aparecerem, a
+ formação pode mudar, mas SEMPRE NO MÁXIMO 3 NA LUTA AO MESMO TEMPO; dependendo do momento da história pode ser menos
+ (ex.: o baú sozinho numa fuga, ou a dupla Lume+baú quando a Rita fica para trás; o Jorge-Pavio, o Tico, o Brás ou o
+ Tiago podem entrar como 3º em capítulos específicos). O baú está sempre no grupo, salvo cena especial. Quem fica
+ de fora não ganha XP daquela luta (ou ganha metade, se estiver na reserva da base). partyKeys() decide quem luta.
  Cada capítulo: região nova, mecânica nova, 2-3 inimigos, mini-chefe e chefe com animação de ataque caprichada, falas
  do baú em toda cena, 20-30 min de opcional (missões, baús, Fragmentos), balanceamento por robô nos 3 caminhos.
 =====================================================================
@@ -3525,7 +3530,7 @@ function updateWorld2() {
 function tryStep(nx, ny) {
   const wasFloat = W2.float, toWater = !!tileOf(W2.map, nx, ny).water;
   // seguidores: cada um vai para onde estava o da frente
-  if (!wasFloat && !toWater) { let px = W2.x, py = W2.y; for (const f of W2.fol) { const ox = f.x, oy = f.y; if (ox !== px || oy !== py) { f.dir = px > ox ? 'right' : px < ox ? 'left' : py > oy ? 'down' : 'up'; startMove(f, px, py); } px = ox; py = oy; } }
+  if (!wasFloat && !toWater) { let px = W2.x, py = W2.y; for (const f of W2.fol) { if (f.mv) { f.x = f.mv.tx; f.y = f.mv.ty; f.px = f.x * TS; f.py = f.y * TS; f.mv = null; } const ox = f.x, oy = f.y;   /* termina o passo anterior antes de começar outro: sem voltar para trás */ if (ox !== px || oy !== py) { f.dir = px > ox ? 'right' : px < ox ? 'left' : py > oy ? 'down' : 'up'; startMove(f, px, py); } px = ox; py = oy; } }
   if (!wasFloat && toWater) { sfx('splash'); for (const f of W2.fol) startMove(f, W2.x, W2.y); W2.entering = 8; }
   startMove(W2, nx, ny);
   onMoveStart();
@@ -3554,8 +3559,8 @@ function onMoveStart() { if (W2.map.hunters) hunterSeesMove(); }
 async function goDoor(e) {
   sfx('door'); await fadeOut(10);
   loadMap2(e.to, e.tx, e.ty, e.tdir || W2.dir);
+  await fadeIn(10);                                          // primeiro a tela volta, depois a cena de chegada
   if (MAPS2[e.to].onEnter) await MAPS2[e.to].onEnter();
-  await fadeIn(10);
 }
 
 // ---------- entidades ----------
@@ -9096,7 +9101,7 @@ const gradeProps = (m) => { for (const p of m.props || []) { if (p._hld) continu
   };
   for (const id of ['largo', 'hosp1', 'hosp2', 'sala']) gradeProps(MAPS2[id]);
   // a Avenida do Festival ganha a saída leste para o Largo (só depois do Cap. 3)
-  const fe = MAPS2.festival; if (fe && !fe._largo) { fe._largo = true; for (const y of [10, 11]) fe.ents.push({ t: 'trig', x: 39, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c3Fim) { await say('* O Largo do Hospital fica para lá. Hoje não é dia.'); W2.mv = null; return; } sfx('door'); await fadeOut(10); loadMap2('largo', ...LG.chegada, 'right'); if (MAPS2.largo.onEnter) await MAPS2.largo.onEnter(); await fadeIn(10); } }); }
+  const fe = MAPS2.festival; if (fe && !fe._largo) { fe._largo = true; for (const y of [10, 11]) fe.ents.push({ t: 'trig', x: 39, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c3Fim) { await say('* O Largo do Hospital fica para lá. Hoje não é dia.'); W2.mv = null; return; } sfx('door'); await fadeOut(10); loadMap2('largo', ...LG.chegada, 'right'); await fadeIn(10); if (MAPS2.largo.onEnter) await MAPS2.largo.onEnter(); } }); }
 }; }
 // nos mapas "só baú" a Lume e a Rita vão DENTRO do baú (ninguém segue a pé)
 { const _lm4 = loadMap2; loadMap2 = function (id) { const r = _lm4.apply(this, arguments); if (MAPS2[id] && MAPS2[id].soBau) W2.fol = []; return r; }; }
@@ -9207,7 +9212,7 @@ async function entrarHospital() {
   W2.mv = null;
   if (ehNoite()) { await say('* A porta grande está trancada. Lá dentro, uma lanterna passa devagar pelo corredor, de janela em janela.'); return; }
   if (!rostoSt().on) { sfx('bump'); await say('Ei, ei. Mala não entra. Bagagem fica aqui fora.', 'porteiro'); if (!G.flags.tutRostoH) { G.flags.tutRostoH = true; await say('[Aperte B para usar o rosto. O fôlego corre enquanto você é gente: não demore lá dentro.]', 'cat'); } return; }
-  sfx('door'); await fadeOut(10); loadMap2('hosp1', ...H1.entra, 'up'); if (MAPS2.hosp1.onEnter) await MAPS2.hosp1.onEnter(); await fadeIn(10);
+  sfx('door'); await fadeOut(10); loadMap2('hosp1', ...H1.entra, 'up'); await fadeIn(10); if (MAPS2.hosp1.onEnter) await MAPS2.hosp1.onEnter();
 }
 // rosto derreteu dentro do hospital (de dia): põem para fora
 { const _uw5 = updateWorld2; updateWorld2 = function () {
@@ -9271,7 +9276,7 @@ async function entrarLavanderia() {
     await say('Ninguém pergunta se o baú quer gente dentro dele. Só pra constar.', 'me');
     await say('* As duas entram na tampa. Lá dentro é maior do que parece. Ninguém comenta. Ninguém nunca comenta.');
   }
-  sfx('door'); await fadeOut(12); loadMap2('hosp2', ...H2.entra, 'up'); if (MAPS2.hosp2.onEnter) await MAPS2.hosp2.onEnter(); await fadeIn(12);
+  sfx('door'); await fadeOut(12); loadMap2('hosp2', ...H2.entra, 'up'); await fadeIn(12); if (MAPS2.hosp2.onEnter) await MAPS2.hosp2.onEnter();
 }
 async function sairLavanderia() { W2.mv = null; sfx('door'); await fadeOut(12); loadMap2('largo', ...LG.lavOut, 'down'); await fadeIn(12); }
 async function tutRonda() {
@@ -9588,7 +9593,7 @@ function passoJogador() {
 { const _fsA = folSprite; folSprite = function (f) {
   const fr = _fsA(f);
   if (!fr || (f.k === 'lume' && LUSTRE_ON())) return fr;
-  if (!f.mv) return paradoQuadro(fr, f.dir === 'left' || f.dir === 'right', W2.t + (f.k === 'rita' ? 30 : 0));
+  if (!f.mv && !W2.mv) return paradoQuadro(fr, f.dir === 'left' || f.dir === 'right', W2.t + (f.k === 'rita' ? 30 : 0));
   return andaQuadro(fr, f.dir === 'left' || f.dir === 'right', f.px + f.py + (f.k === 'rita' ? 8 : 0), correndo());
 }; }
 
@@ -9898,6 +9903,76 @@ drawWin = function () {
 };
 
 // ---------- tela de status: nível e barra de XP (status3.js chama nvDe/xpProx) ----------
+
+// ================= A IGREJA DE VELHÁGUA (por dentro, alagada) =================
+// (relato do usuário: "não dá pra entrar na igreja". O portal em arco já aparecia meio debaixo d'água na arte.)
+// Por dentro, a nave está alagada até os bancos: só entra quem BOIA (depois da escadaria e do Sargento Brás).
+// Conteúdo opcional: o livro de batismos da Dona Badalada, o mural, um bilhete da Irmã Celeste e um baú no altar.
+const ROWS_IGR = [
+  'wwwwwwwwwwwwww',
+  'wwwwwwwwwwwwww',
+  'wwwwwwwwwwwwww',
+  'woooooooooooow',
+  'woooooooooooow',
+  'woooooooooooow',
+  'w~~~~~~~~~~~~w',
+  'w~~~~~~~~~~~~w',
+  'w~~~~~~~~~~~~w',
+  'wwwwoooooowwww',
+  'wwwwwwoowwwwww'
+];
+{ const _mmI = montarMapas2; montarMapas2 = function () {
+  _mmI.apply(this, arguments);
+  MAPS2.igreja = { rows: ROWS_IGR, name: 'Velhágua · Igreja do Sino', music: 'afogado', bg: '#0c1e2c', tint: 'rgba(30,50,110,0.10)',
+    props: [
+      { img: memo(mesaArt), x: 5.5, y: 4.2, solid: [[6, 3, 2, 1]] },
+      { img: memo(bancoHArt), x: 2, y: 7.3, by: 90 }, { img: memo(bancoHArt), x: 9, y: 7.3, by: 90 },
+      { img: memo(bancoHArt), x: 2, y: 8.6, by: 120 }, { img: memo(bancoHArt), x: 9, y: 8.6, by: 120 }
+    ],
+    ents: [
+      ...[[6, 10], [7, 10]].map(([x, y]) => porta(x, y, 'praca', 28, 20, 'down')),
+      { t: 'sign', x: 6, y: 3, h: 26, talk: livroBatismos },
+      { t: 'sign', x: 3, y: 2, h: 40, talk: muralBadalada },
+      { t: 'sign', x: 10, y: 2, h: 40, talk: bilheteCeleste },
+      bauEnt('igreja', 'a', 11, 4, async () => { await dar('pluma', 1); await dar('cobres', 30); })
+    ],
+    onEnter: async () => { if (!G.flags.igrejaVista) { G.flags.igrejaVista = true;
+      await say('* Por dentro, a igreja é um lago. A água cobre os bancos até o encosto. Velas boiando em pratinhos de lata, acesas por alguém que vem aqui todo dia.');
+      await say('Missa com bóia. Eu nunca vi isso nem na Terra.', 'me');
+      await say('A Irmã Celeste acende essas velas sozinha. De barco? Nadando? De fé?', 'lume');
+    } }
+  };
+  // a porta da igreja, no alto da escadaria (o portal em arco fica em cima do tile 28)
+  const pr = MAPS2.praca; if (pr && !pr._igreja) { pr._igreja = true; for (const x of [28, 29]) pr.ents.push({ t: 'sign', x, y: 19, h: 60, talk: entrarIgreja }); }
+}; }
+async function entrarIgreja() {
+  if (!G.flags.boiar) {
+    await say('* A porta da igreja está aberta. Lá dentro, a água chega até os bancos. A nave inteira virou um lago escuro.');
+    await say('Sem barco não dá. E eu não vou nadar numa igreja. Tem limite.', 'rita');
+    return;
+  }
+  sfx('door'); await fadeOut(10); loadMap2('igreja', 6, 9, 'up'); await fadeIn(10);
+  if (MAPS2.igreja.onEnter) await MAPS2.igreja.onEnter();
+}
+async function livroBatismos() {
+  await say('* No altar, um livro enorme, inchado de umidade: o LIVRO DE BATISMOS E CASAMENTOS. Cem anos de nomes.');
+  await say('* Ao lado de cada casamento, a mesma anotação, com letras diferentes: "tocou a Badalada". Trezentas e doze vezes.');
+  await say('Ela lembra de todo mundo porque todo mundo escreveu que ela estava lá.', 'lume');
+  await say('Então é isso que segura uma lembrança. Alguém anotar.', 'me');
+}
+async function muralBadalada() {
+  await say('* Um mural pintado na parede, com a tinta descascando: um sino de bronze enorme sendo içado na torre, e a cidade inteira puxando a corda.');
+  await say('* Embaixo, gente de todas as idades. Uma menina de trança segura a ponta da corda. Pela cara, a futura Irmã Celeste.');
+}
+async function bilheteCeleste() {
+  await say('* Um bilhete preso num prego, com letra redonda: "Para quem entrar boiando. Se você chegou até aqui, as velas são suas também. Acenda uma por quem você esqueceu."');
+  if (!G.flags.velaIgreja) {
+    G.flags.velaIgreja = true;
+    await say('* Você empurra um pratinho de lata com a tampa até perto de uma vela acesa. Acende. Fica boiando, pequena, teimosa.');
+    await say('É pra quem?', 'rita');
+    await say('Não sei. Por isso mesmo.', 'me');
+  }
+}
 
 boot2();
 </script>

@@ -73,7 +73,7 @@ function passoJogador() {
 { const _fsA = folSprite; folSprite = function (f) {
   const fr = _fsA(f);
   if (!fr || (f.k === 'lume' && LUSTRE_ON())) return fr;
-  if (!f.mv) return paradoQuadro(fr, f.dir === 'left' || f.dir === 'right', W2.t + (f.k === 'rita' ? 30 : 0));
+  if (!f.mv && !W2.mv) return paradoQuadro(fr, f.dir === 'left' || f.dir === 'right', W2.t + (f.k === 'rita' ? 30 : 0));
   return andaQuadro(fr, f.dir === 'left' || f.dir === 'right', f.px + f.py + (f.k === 'rita' ? 8 : 0), correndo());
 }; }
 

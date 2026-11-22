@@ -88,7 +88,7 @@ function updateWorld2() {
 function tryStep(nx, ny) {
   const wasFloat = W2.float, toWater = !!tileOf(W2.map, nx, ny).water;
   // seguidores: cada um vai para onde estava o da frente
-  if (!wasFloat && !toWater) { let px = W2.x, py = W2.y; for (const f of W2.fol) { const ox = f.x, oy = f.y; if (ox !== px || oy !== py) { f.dir = px > ox ? 'right' : px < ox ? 'left' : py > oy ? 'down' : 'up'; startMove(f, px, py); } px = ox; py = oy; } }
+  if (!wasFloat && !toWater) { let px = W2.x, py = W2.y; for (const f of W2.fol) { if (f.mv) { f.x = f.mv.tx; f.y = f.mv.ty; f.px = f.x * TS; f.py = f.y * TS; f.mv = null; } const ox = f.x, oy = f.y;   /* termina o passo anterior antes de começar outro: sem voltar para trás */ if (ox !== px || oy !== py) { f.dir = px > ox ? 'right' : px < ox ? 'left' : py > oy ? 'down' : 'up'; startMove(f, px, py); } px = ox; py = oy; } }
   if (!wasFloat && toWater) { sfx('splash'); for (const f of W2.fol) startMove(f, W2.x, W2.y); W2.entering = 8; }
   startMove(W2, nx, ny);
   onMoveStart();
@@ -117,8 +117,8 @@ function onMoveStart() { if (W2.map.hunters) hunterSeesMove(); }
 async function goDoor(e) {
   sfx('door'); await fadeOut(10);
   loadMap2(e.to, e.tx, e.ty, e.tdir || W2.dir);
+  await fadeIn(10);                                          // primeiro a tela volta, depois a cena de chegada
   if (MAPS2[e.to].onEnter) await MAPS2[e.to].onEnter();
-  await fadeIn(10);
 }
 
 // ---------- entidades ----------

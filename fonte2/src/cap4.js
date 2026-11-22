@@ -125,7 +125,7 @@ const gradeProps = (m) => { for (const p of m.props || []) { if (p._hld) continu
   };
   for (const id of ['largo', 'hosp1', 'hosp2', 'sala']) gradeProps(MAPS2[id]);
   // a Avenida do Festival ganha a saída leste para o Largo (só depois do Cap. 3)
-  const fe = MAPS2.festival; if (fe && !fe._largo) { fe._largo = true; for (const y of [10, 11]) fe.ents.push({ t: 'trig', x: 39, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c3Fim) { await say('* O Largo do Hospital fica para lá. Hoje não é dia.'); W2.mv = null; return; } sfx('door'); await fadeOut(10); loadMap2('largo', ...LG.chegada, 'right'); if (MAPS2.largo.onEnter) await MAPS2.largo.onEnter(); await fadeIn(10); } }); }
+  const fe = MAPS2.festival; if (fe && !fe._largo) { fe._largo = true; for (const y of [10, 11]) fe.ents.push({ t: 'trig', x: 39, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c3Fim) { await say('* O Largo do Hospital fica para lá. Hoje não é dia.'); W2.mv = null; return; } sfx('door'); await fadeOut(10); loadMap2('largo', ...LG.chegada, 'right'); await fadeIn(10); if (MAPS2.largo.onEnter) await MAPS2.largo.onEnter(); } }); }
 }; }
 // nos mapas "só baú" a Lume e a Rita vão DENTRO do baú (ninguém segue a pé)
 { const _lm4 = loadMap2; loadMap2 = function (id) { const r = _lm4.apply(this, arguments); if (MAPS2[id] && MAPS2[id].soBau) W2.fol = []; return r; }; }
@@ -236,7 +236,7 @@ async function entrarHospital() {
   W2.mv = null;
   if (ehNoite()) { await say('* A porta grande está trancada. Lá dentro, uma lanterna passa devagar pelo corredor, de janela em janela.'); return; }
   if (!rostoSt().on) { sfx('bump'); await say('Ei, ei. Mala não entra. Bagagem fica aqui fora.', 'porteiro'); if (!G.flags.tutRostoH) { G.flags.tutRostoH = true; await say('[Aperte B para usar o rosto. O fôlego corre enquanto você é gente: não demore lá dentro.]', 'cat'); } return; }
-  sfx('door'); await fadeOut(10); loadMap2('hosp1', ...H1.entra, 'up'); if (MAPS2.hosp1.onEnter) await MAPS2.hosp1.onEnter(); await fadeIn(10);
+  sfx('door'); await fadeOut(10); loadMap2('hosp1', ...H1.entra, 'up'); await fadeIn(10); if (MAPS2.hosp1.onEnter) await MAPS2.hosp1.onEnter();
 }
 // rosto derreteu dentro do hospital (de dia): põem para fora
 { const _uw5 = updateWorld2; updateWorld2 = function () {
@@ -300,7 +300,7 @@ async function entrarLavanderia() {
     await say('Ninguém pergunta se o baú quer gente dentro dele. Só pra constar.', 'me');
     await say('* As duas entram na tampa. Lá dentro é maior do que parece. Ninguém comenta. Ninguém nunca comenta.');
   }
-  sfx('door'); await fadeOut(12); loadMap2('hosp2', ...H2.entra, 'up'); if (MAPS2.hosp2.onEnter) await MAPS2.hosp2.onEnter(); await fadeIn(12);
+  sfx('door'); await fadeOut(12); loadMap2('hosp2', ...H2.entra, 'up'); await fadeIn(12); if (MAPS2.hosp2.onEnter) await MAPS2.hosp2.onEnter();
 }
 async function sairLavanderia() { W2.mv = null; sfx('door'); await fadeOut(12); loadMap2('largo', ...LG.lavOut, 'down'); await fadeIn(12); }
 async function tutRonda() {
