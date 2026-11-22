@@ -256,7 +256,7 @@
        magia x1.15, páginas -1 PM, Grimório com 6 páginas.
    BALANCEAMENTO (robô, acerto 0.6, linhas ferro 'arca' e arcano 'vazio', 7 lutas comuns + chefe): todas as
    combinações vencem; vida mínima no chefe entre ~20% e ~45%; nenhuma linha fica para trás (o Escriba, mágico,
-   ficou no meio do pacote, de propósito, para não repetir o problema do jogo 1). Mãe-Fuligem final: 4300 PV, ATQ 29.
+   ficou no meio do pacote, de propósito, para não repetir o problema do jogo 1). Mãe-Fuligem final: 4800 PV, ATQ 31 (endurecida a pedido do usuário: luta ~40% mais longa, vida mínima ~15-30%, o robô passou a beber frascos).
  - (plano original da Parte 2, mantido como referência) GALERIAS DE FULIGEM (túneis e chaminés sob a capital; escuro: a luz da Lume importa; Pavios
    trabalhando no escuro; o Dito como missão: devolver uma lembrança) + TROCA DE FORMA EM BATALHA (humano x baú, ação
    leve; forma humana usa equipamento) + a forja da Rita (achar a bigorna) + CHEFE no fundo das Galerias + gancho.
@@ -8089,7 +8089,7 @@ Object.assign(ENEMY2, {
     comeFogo: true, frame: u => cinzaArt(Math.floor(BT.t / 12 + u.x) % 3), dieCols: ['#3e3248', '#6a5a70', '#ffb040'] },
   rato: { name: 'Rato-Pavio', kind: 'rato', mhp: 170, atk: 19, def: 8, mdef: 9, spd: 15, shield: 2, maxShield: 2, weak: ['corte', 'mordida'], ai: 'rato', h: 22, cobres: 10,
     frame: u => ratoArt(Math.floor(BT.t / 8 + u.x) % 2), dieCols: ['#8a7a80', '#f2ecdc', '#ffd060'] },
-  mae: { name: 'Mãe-Fuligem', kind: 'mae', boss: true, mhp: 4300, atk: 29, def: 13, mdef: 12, spd: 10, shield: 6, maxShield: 6, weak: ['gelo', 'mordida'], ai: 'mae', h: 120, cobres: 150, ph: 1,
+  mae: { name: 'Mãe-Fuligem', kind: 'mae', boss: true, mhp: 4800, atk: 31, def: 13, mdef: 12, spd: 10, shield: 6, maxShield: 6, weak: ['gelo', 'mordida'], ai: 'mae', h: 120, cobres: 150, ph: 1,
     comeFogo: true, frame: u => maeFuligemArt(Math.floor(BT.t / (u.armando ? 4 : 14)) % 2, u.ph || 1), dieCols: ['#382a3e', '#6e5c74', '#ffb040', '#fff0a0'], cancelTxt: 'A fornalha engasgou! Golpe cancelado!' }
 });
 FICHA.cinza = 'Cinzinha: fuligem que andou. FOGO A ALIMENTA (Brasa cura!). Gelo e mordida desmancham. Quando está quase sumindo, estoura.';

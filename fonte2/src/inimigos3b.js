@@ -6,7 +6,7 @@ Object.assign(ENEMY2, {
     comeFogo: true, frame: u => cinzaArt(Math.floor(BT.t / 12 + u.x) % 3), dieCols: ['#3e3248', '#6a5a70', '#ffb040'] },
   rato: { name: 'Rato-Pavio', kind: 'rato', mhp: 170, atk: 19, def: 8, mdef: 9, spd: 15, shield: 2, maxShield: 2, weak: ['corte', 'mordida'], ai: 'rato', h: 22, cobres: 10,
     frame: u => ratoArt(Math.floor(BT.t / 8 + u.x) % 2), dieCols: ['#8a7a80', '#f2ecdc', '#ffd060'] },
-  mae: { name: 'Mãe-Fuligem', kind: 'mae', boss: true, mhp: 4300, atk: 29, def: 13, mdef: 12, spd: 10, shield: 6, maxShield: 6, weak: ['gelo', 'mordida'], ai: 'mae', h: 120, cobres: 150, ph: 1,
+  mae: { name: 'Mãe-Fuligem', kind: 'mae', boss: true, mhp: 4800, atk: 31, def: 13, mdef: 12, spd: 10, shield: 6, maxShield: 6, weak: ['gelo', 'mordida'], ai: 'mae', h: 120, cobres: 150, ph: 1,
     comeFogo: true, frame: u => maeFuligemArt(Math.floor(BT.t / (u.armando ? 4 : 14)) % 2, u.ph || 1), dieCols: ['#382a3e', '#6e5c74', '#ffb040', '#fff0a0'], cancelTxt: 'A fornalha engasgou! Golpe cancelado!' }
 });
 FICHA.cinza = 'Cinzinha: fuligem que andou. FOGO A ALIMENTA (Brasa cura!). Gelo e mordida desmancham. Quando está quase sumindo, estoura.';
