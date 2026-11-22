@@ -84,11 +84,13 @@ function puffRosto() { PUFF = { t: 0, x: W2.px + 8, y: W2.py + 4 }; }
   if (deRosto() && !W2.float) {
     const moving = !!W2.mv, fr = rostoFrame(moving);
     const x = W2.px - ox, y = W2.py - oy, hop = moving ? -Math.abs(Math.sin(W2.mv.k / 8 * Math.PI)) * 1 : 0;
-    bx.globalAlpha = 0.3; bx.fillStyle = '#000'; bx.fillRect(Math.round(x + 2), Math.round(y + 14), 12, 2); bx.globalAlpha = 1;
+    sombraOval(x + 8, y + 15, 14, 0.3);
     // derretendo: o rosto treme e pisca
     const der = G.rosto.f < F_DERRETE, jit = der && W2.t % 8 < 2 ? 1 : 0;
     if (der && W2.t % 20 < 3) bx.globalAlpha = 0.6;
+    if (typeof capaHLD === 'function') capaHLD(x, y + hop, fr, false);
     bx.drawImage(fr, Math.round(x + 8 - fr.width / 2 + jit), Math.round(y + 16 - fr.height + 1 + hop));
+    if (typeof capaHLD === 'function') capaHLD(x, y + hop, fr, true);
     bx.globalAlpha = 1;
     if (der && W2.t % 30 < 15) { bx.fillStyle = '#e8b890'; bx.fillRect(Math.round(x + 7), Math.round(y + 16 - fr.height + 14 + (W2.t % 30) / 3), 1, 2); }
   } else _dp(ox, oy);

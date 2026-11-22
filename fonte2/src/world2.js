@@ -189,12 +189,19 @@ function hunterSeesMove() {
 }
 
 // ---------- desenhar ----------
+let HOOK_CHAO = null, HOOK_AR = null;          // ganchos do passe visual (hld2.js): chão (sombras, poeira) e ar (partículas, vinheta)
 function drawWorld2() {
   const m = W2.map; if (!m) return;
-  const cx = m.w * TS <= W ? (m.w * TS - W) / 2 : Math.max(0, Math.min(m.w * TS - W, W2.px + 8 - W / 2)), cy = m.h * TS <= H ? (m.h * TS - H) / 2 : Math.max(0, Math.min(m.h * TS - H, W2.py + 8 - H / 2 - 8));
+  // câmera com folga: segue o jogador suavemente e olha um pouco para onde ele anda (estilo HLD)
+  const dd = W2.mv ? [Math.sign(W2.mv.tx - W2.mv.fx), Math.sign(W2.mv.ty - W2.mv.fy)] : [0, 0];
+  W2.look = W2.look || [0, 0]; W2.look[0] += (dd[0] * 22 - W2.look[0]) * 0.04; W2.look[1] += (dd[1] * 14 - W2.look[1]) * 0.04;
+  const tx_ = m.w * TS <= W ? (m.w * TS - W) / 2 : Math.max(0, Math.min(m.w * TS - W, W2.px + 8 - W / 2 + W2.look[0])), ty_ = m.h * TS <= H ? (m.h * TS - H) / 2 : Math.max(0, Math.min(m.h * TS - H, W2.py + 8 - H / 2 - 8 + W2.look[1]));
+  if (!W2.camF || W2.camF.id !== W2.id || Math.abs(W2.camF.x - tx_) > 120 || Math.abs(W2.camF.y - ty_) > 120) W2.camF = { id: W2.id, x: tx_, y: ty_ };
+  W2.camF.x += (tx_ - W2.camF.x) * 0.14; W2.camF.y += (ty_ - W2.camF.y) * 0.14;
+  const cx = W2.camF.x, cy = W2.camF.y;
   W2.cam = [Math.round(cx), Math.round(cy)];
   const [ox, oy] = W2.cam;
-  if (m.w * TS < W || m.h * TS < H) { fundoRunas(0, W); bx.fillStyle = 'rgba(0,0,0,0.35)'; bx.fillRect(0, 0, W, H); bx.fillStyle = m.bg || '#0a0812'; bx.fillRect(Math.round(-cx), Math.round(-cy), m.w * TS, m.h * TS); }
+  if (m.w * TS < W || m.h * TS < H) { if (typeof vazioHLD === 'function') vazioHLD(m, cx, cy); else { fundoRunas(0, W); bx.fillStyle = 'rgba(0,0,0,0.35)'; bx.fillRect(0, 0, W, H); } bx.fillStyle = m.bg || '#0a0812'; bx.fillRect(Math.round(-cx), Math.round(-cy), m.w * TS, m.h * TS); }
   else { bx.fillStyle = m.bg || '#0a0812'; bx.fillRect(0, 0, W, H); }
   // água animada
   const wf = Math.floor(W2.t / 14) % 4;
@@ -204,6 +211,7 @@ function drawWorld2() {
     if (shade) { bx.fillStyle = 'rgba(10,20,30,0.45)'; bx.fillRect(sx, sy, 16, 4); bx.fillStyle = '#4a3020'; bx.fillRect(sx + 3, sy, 3, 6); bx.fillRect(sx + 11, sy, 3, 5); }
   }
   bx.drawImage(m.baked, -ox, -oy);
+  if (HOOK_CHAO) HOOK_CHAO(m, ox, oy);
   // tudo que tem pé, em ordem de profundidade
   const list = [];
   for (const pr of m.props || []) list.push({ y: pr.by ?? (pr.y * TS), draw: () => bx.drawImage(pr.img(), Math.round(pr.x * TS - ox + (pr.dx || 0)), Math.round(pr.y * TS - oy - pr.img().height + (pr.dy || 0))) });
@@ -218,6 +226,7 @@ function drawWorld2() {
   if (m.dark) drawDark(ox, oy);
   if (typeof desenhaCeu === 'function') desenhaCeu(m, ox, oy);
   if (m.tint) { bx.fillStyle = m.tint; bx.fillRect(0, 0, W, H); }
+  if (HOOK_AR) HOOK_AR(m, ox, oy);
   desenhaBaloes();
   // indicador de A sobre quem dá para conversar
   const [dx, dy] = DIR2[W2.dir], near = entAt2(W2.x + dx, W2.y + dy);
@@ -228,7 +237,7 @@ function drawWorld2() {
 }
 function drawFeet(fr, x, y, o) {
   const X = Math.round(x + 8 - fr.width / 2), Y = Math.round(y + 15 - fr.height + (o.bob || 0));
-  bx.globalAlpha = 0.3; bx.fillStyle = '#000'; bx.fillRect(Math.round(x + 8 - fr.width * 0.3), Math.round(y + 14), Math.round(fr.width * 0.6), 2); bx.globalAlpha = o.alpha ?? 1;
+  sombraOval(x + 8, y + 15, Math.max(8, Math.round(fr.width * 0.62)), o.bob ? 0.22 : 0.3); bx.globalAlpha = o.alpha ?? 1;
   bx.drawImage(fr, X, Y); bx.globalAlpha = 1;
 }
 function drawPlayer(ox, oy) {
@@ -241,8 +250,20 @@ function drawPlayer(ox, oy) {
     bx.fillStyle = 'rgba(190,230,245,0.7)'; const r = (W2.t / 3) % 10; bx.fillRect(Math.round(x - 1 - r / 3), Math.round(y + 12 + b), Math.round(18 + r / 1.5), 1);
     return;
   }
-  bx.globalAlpha = 0.3; bx.fillStyle = '#000'; bx.fillRect(Math.round(x + 2), Math.round(y + 14), 12, 2); bx.globalAlpha = 1;
-  bx.drawImage(fr, Math.round(x), Math.round(y + hop));
+  // sombra oval que encolhe no pulo; o baú estica no ar, achata ao pousar e inclina para onde vai
+  sombraOval(x + 8, y + 15, Math.round(15 + hop * 0.8), 0.32 + hop * 0.03);
+  const k = moving ? W2.mv.k / 8 : 1, sq = moving ? (k < 0.15 || k > 0.9 ? 1 : 0) : 0, air = moving ? Math.abs(Math.sin(k * Math.PI)) : 0;
+  const sx = 1 + sq * 0.14 - air * 0.06, sy = 1 - sq * 0.12 + air * 0.08, lean = moving ? (W2.dir === 'left' ? -1 : W2.dir === 'right' ? 1 : 0) : 0;
+  const w = Math.round(fr.width * sx), h = Math.round(fr.height * sy);
+  bx.save(); bx.translate(Math.round(x + 8), Math.round(y + fr.height + hop)); if (lean) bx.transform(1, 0, -lean * 0.12, 1, 0, 0);
+  bx.drawImage(fr, -Math.round(w / 2), -h, w, h); bx.restore();
+}
+// sombra em pixel: elipse chapada (sem degradê), como no HLD
+const SOMBRA_C = {};
+function sombraOval(cx, cy, w, a = 0.3) {
+  w = Math.max(4, Math.round(w)); const key = w;
+  if (!SOMBRA_C[key]) { const h = Math.max(3, Math.round(w / 3.2)), c = mk(w, h), x = c.getContext('2d'); x.fillStyle = '#000'; for (let yy = 0; yy < h; yy++) { const t = (yy + 0.5) / h * 2 - 1, half = Math.round(w / 2 * Math.sqrt(1 - t * t)); x.fillRect(Math.round(w / 2) - half, yy, half * 2, 1); } SOMBRA_C[key] = c; }
+  const c = SOMBRA_C[key], a0 = bx.globalAlpha; bx.globalAlpha = a; bx.drawImage(c, Math.round(cx - c.width / 2), Math.round(cy - c.height / 2)); bx.globalAlpha = a0;
 }
 const FOLSPR = {};
 function folSprite(f) {
