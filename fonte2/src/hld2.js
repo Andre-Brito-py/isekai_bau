@@ -125,7 +125,7 @@ HOOK_AR = function (m, ox, oy) {
   }
   bx.globalAlpha = 1;
   // vinheta suave
-  if (!VINH || VINH_W !== W) { VINH_W = W; VINH = mk(W, H); const x = VINH.getContext('2d'), g = x.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.42, W / 2, H / 2, Math.max(W, H) * 0.72); g.addColorStop(0, 'rgba(12,6,28,0)'); g.addColorStop(1, 'rgba(12,6,28,0.55)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+  if (!VINH || VINH_W !== W || VINH.height !== H) { VINH_W = W; VINH = mk(W, H); const x = VINH.getContext('2d'), g = x.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.42, W / 2, H / 2, Math.max(W, H) * 0.72); g.addColorStop(0, 'rgba(12,6,28,0)'); g.addColorStop(1, 'rgba(12,6,28,0.55)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
   bx.drawImage(VINH, 0, 0);
 };
 // sala pequena: vazio escuro com um brilho de cor por baixo (no lugar da estampa de runas)
@@ -243,15 +243,24 @@ humanoFrame = function (o, view, fr) {
   if (o.cape) { const CP = ramp(o.cape); for (let y = tT; y <= tB + Y(4); y++) { const k = (y - tT) / (tB - tT), half = side ? 4 + Math.round(k * 2) : 5 + Math.round(k * 2.5); const x0 = side ? cx + 1 - (fr && y > tB - 3 ? 1 : 0) : cx - half, x1 = side ? cx + 1 + half : cx + half - 1; for (let x = x0; x <= x1; x++) if (back || side || x <= cx - half + 1 || x >= cx + half - 2) P.p(x, y, y > tB + Y(2) ? CP[1] : faixa(CP, x, x0, x1)); } }
   // pernas curtas e botas
   const legT = Y(37), legB = H - 1, lx = side ? [cx - 2, cx + 1] : [cx - 3, cx + 1];
-  lx.forEach((x0, i) => { const up = fr && (i === 0) ? 1 : 0, dx = side ? (fr ? (i ? 1 : -1) : 0) : 0; for (let y = legT; y <= legB - up; y++) for (let x = x0; x < x0 + 3; x++) P.p(x + dx, y, y >= legB - 1 - up ? '#2a1e2a' : (x === x0 ? BT[3] : BT[2])); });
+  lx.forEach((x0, i) => { const up = fr && (i === 0) ? 1 : 0, dx = side ? (fr ? (i ? 1 : -1) : 0) : 0; for (let y = legT; y <= legB - up; y++) for (let x = x0; x < x0 + 3; x++) P.p(x + dx, y, y >= legB - 1 - up ? (y === legB - 1 - up && x === x0 ? '#5a4a5a' : '#2a1e2a') : (x === x0 ? BT[3] : x === x0 + 2 ? BT[1] : BT[2])); });
   // tronco em A
-  for (let y = tT; y <= tB; y++) { const k = (y - tT) / Math.max(1, tB - tT), half = side ? 3 + Math.round(k * 2) : 4 + Math.round(k * k * 3.5) - (y === tT ? 1 : 0); for (let x = cx - half; x <= cx + half - 1; x++) P.p(x, y, y >= tB - 1 ? TP[1] : y <= tT + 1 ? TP[1] : faixa(TP, x, cx - half, cx + half - 1)); }
+  const larg = k => side ? 3 + Math.round(k * 2) : (k < 0.06 ? 4 : k < 0.3 ? 5 : k < 0.55 ? 4 : 4 + Math.round((k - 0.55) / 0.45 * 2.5));
+  for (let y = tT; y <= tB; y++) { const k = (y - tT) / Math.max(1, tB - tT), half = larg(k); for (let x = cx - half; x <= cx + half - 1; x++) P.p(x, y, y >= tB - 1 ? TP[1] : faixa(TP, x, cx - half, cx + half - 1)); }
+  // detalhes de roupa: gola, cinto com fivela, botões, barra clara; e um acessório por pessoa (cachecol, bolsa, pingente)
+  const vari = hash((o.top || '').length * 7 + (o.hair || '').charCodeAt(2), (o.h || 48), 13) % 4, yCin = tT + Math.round((tB - tT) * 0.55);
+  if (!back) { const GC = o.collar || TP[4]; P.rect(cx - 2, tT, 4, 2, GC); if (side) P.rect(cx - 3, tT, 3, 2, GC); }
+  if (!o.apron && !o.coat) { for (let x = cx - larg(0.55); x <= cx + larg(0.55) - 1; x++) P.p(x, yCin, '#2a1e2a'); if (view === 'f') P.p(cx, yCin, '#e0c060'); if (view === 'f') for (let y = tT + 3; y < yCin - 1; y += 3) P.p(cx, y, TP[4]); }
+  for (let x = cx - larg(1); x <= cx + larg(1) - 1; x++) P.p(x, tB, TP[3]);
+  if (vari === 0 && !back) { const AC = ramp(o.acc || '#d8a040'); for (let x = cx - 4; x <= cx + 3 - (side ? 2 : 0); x++) { P.p(x, tT + 1, AC[2]); P.p(x, tT + 2, AC[1]); } if (view === 'f') P.rect(cx + 2, tT + 3, 2, 4, AC[2]); }
+  if (vari === 1) { const BG = ramp('#8a5a3a'); for (let i = 0; i < tB - tT - 2; i++) P.p(view === 'b' ? cx + 3 - Math.round(i * 0.45) : cx - 3 + Math.round(i * 0.45), tT + 1 + i, BG[1]); if (!back) P.rect(side ? cx - 1 : cx + 3, yCin + 1, 3, 3, BG[2]); }
+  if (vari === 3 && view === 'f') { P.p(cx, tT + 2, '#e0c060'); P.p(cx, tT + 3, '#fff0a0'); }
   if (o.apron && !back) { const AP = ramp(o.apron); for (let y = tT + Y(7); y <= tB; y++) for (let x = cx - 3; x <= cx + 2 - (side ? 2 : 0); x++) P.p(x, y, x === cx - 3 ? AP[3] : AP[2]); }
   if (o.coat) { const CO = ramp(o.coat); for (let y = tT; y <= tB + Y(4); y++) { const k = (y - tT) / (tB + Y(4) - tT), half = side ? 4 + Math.round(k * 1.5) : 5 + Math.round(k * 2.5); for (let x = cx - half; x <= cx + half - 1; x++) if (!(view === 'f' && Math.abs(x - cx + 0.5) < 1.5 && y > tT + 3)) P.p(x, y, faixa(CO, x, cx - half, cx + half - 1)); } }
   // braços colados ao corpo (balançam 1 px andando) e mãos
   const AR = o.coat ? ramp(o.coat) : TP, sw = fr ? 1 : 0;
   if (side) { for (let y = tT + 1; y <= tT + Y(11); y++) P.p(cx + sw, y, AR[1]); P.p(cx + sw, tT + Y(12), SK[2]); }
-  else { const half = 4 + 1; for (const [ax, d] of [[cx - half - 1, 1], [cx + half, -1]]) { const yo = d > 0 ? sw : -sw + 1; for (let y = tT + 1 + yo; y <= tT + Y(11) + yo; y++) P.p(ax, y, d > 0 ? AR[2] : AR[1]); P.p(ax, tT + Y(12) + yo, SK[d > 0 ? 3 : 1]); } }
+  else { for (const [ax, d] of [[cx - 7, 1], [cx + 5, -1]]) { const yo = d > 0 ? sw : -sw + 1; for (let y = tT + 1 + yo; y <= tT + Y(11) + yo; y++) { P.p(ax, y, d > 0 ? AR[3] : AR[1]); P.p(ax + 1, y, d > 0 ? AR[2] : AR[0]); } P.rect(ax, tT + Y(11) + yo, 2, 1, AR[0]); P.rect(ax, tT + Y(12) + yo, 2, 1, SK[d > 0 ? 3 : 1]); } }
   // cabeça grande, chapada em faixas
   const hcY = Y(9) + bob, hr = Math.max(5, Math.round(6.8 * s));
   for (let y = -hr - 1; y <= hr; y++) for (let x = -hr; x <= hr; x++) if ((x * x) / (hr * hr) + (y * y) / ((hr + 1) * (hr + 1)) <= 1) P.p(cx + x - (side ? 1 : 0), hcY + y, faixa(SK, x, -hr, hr));
@@ -264,6 +273,7 @@ humanoFrame = function (o, view, fr) {
       const cobre = back ? true : side ? (y < -1 || x > 1) : (y < -2 || (y < 0 && (x + 20) % 4 < 2) || Math.abs(x) >= hr - 0);
       if (cobre) P.p(cx + x - (side ? 1 : 0), hcY + y, y < -hr + 1 && x < 0 ? HR[4] : faixa(HR, x, -hr, hr));
     }
+    if (!back) { P.p(cx - 3, hcY - hr, HR[4]); P.p(cx - 2, hcY - hr, HR[4]); P.p(cx - 4, hcY - hr + 1, HR[4]); } else { P.p(cx - 2, hcY - hr + 1, HR[4]); P.p(cx - 1, hcY - hr + 1, HR[4]); }
     if (hs === 'longo') for (let y = hcY; y < hcY + Y(13); y++) for (let x = cx - hr - 1; x <= cx + hr; x++) if (back || (side ? x > cx + 1 : Math.abs(x - cx + 0.5) > hr - 2)) P.p(x, y, faixa(HR, x, cx - hr - 1, cx + hr));
     if (hs === 'coque') for (let y = -3; y <= 3; y++) for (let x = -3; x <= 3; x++) if (x * x + y * y <= 9) P.p(cx + x + (side ? 3 : 0), hcY - hr - 2 + y, faixa(HR, x, -3, 3));
     if (hs === 'rabo') { for (let y = hcY - 2; y < hcY + Y(14); y++) { const w = y < hcY + 4 ? 3 : 2; for (let x = 0; x < w; x++) P.p((side ? cx + hr - 1 : back ? cx - 1 : cx + hr) + x, y + (fr && y > hcY + 6 ? 1 : 0), HR[x ? 1 : 2]); } }
@@ -271,8 +281,8 @@ humanoFrame = function (o, view, fr) {
   if (o.hat) { const HT = ramp(o.hat); P.rect(cx - hr - 3, hcY - 3, hr * 2 + 6, 2, HT[1]); P.rect(cx - hr - 3, hcY - 4, hr * 2 + 6, 1, HT[3]); for (let y = hcY - hr - 3; y < hcY - 3; y++) for (let x = cx - hr + 1; x <= cx + hr - 1; x++) P.p(x, y, faixa(HT, x, cx - hr + 1, cx + hr - 1)); }
   // rosto mínimo: só os olhos (sem boca); barba em bloco
   const olho = o.eye || '#1a1028';
-  if (view === 'f') { P.p(cx - 3, hcY + 1, olho); P.p(cx + 2, hcY + 1, olho); if (o.eyeGlow) { P.p(cx - 3, hcY, o.eyeGlow); P.p(cx + 2, hcY, o.eyeGlow); } if (o.beard) for (let y = hcY + 3; y <= hcY + 5; y++) for (let x = cx - 3; x <= cx + 2; x++) P.p(x, y, faixa(HR, x, cx - 3, cx + 2)); }
-  if (side) { P.p(cx - 5, hcY + 1, olho); if (o.eyeGlow) P.p(cx - 5, hcY, o.eyeGlow); P.p(cx - hr - 1, hcY + 2, SK[2]); if (o.beard) for (let y = hcY + 3; y <= hcY + 5; y++) for (let x = cx - 6; x <= cx - 1; x++) P.p(x, y, HR[2]); }
+  if (view === 'f') { P.p(cx - 3, hcY + 1, olho); P.p(cx + 2, hcY + 1, olho); P.p(cx - 3, hcY + 2, olho); P.p(cx + 2, hcY + 2, olho); P.p(cx - 3, hcY + 1, olho); if (hs !== 'careca') { P.rect(cx - 4, hcY - 1, 2, 1, HR[1]); P.rect(cx + 2, hcY - 1, 2, 1, HR[1]); } P.p(cx - 1, hcY + 3, SK[1]); P.p(cx - 5, hcY + 3, '#e8907a'); P.p(cx + 4, hcY + 3, '#d8806a'); if (o.eyeGlow) { P.p(cx - 3, hcY, o.eyeGlow); P.p(cx + 2, hcY, o.eyeGlow); } if (o.beard) for (let y = hcY + 3; y <= hcY + 5; y++) for (let x = cx - 3; x <= cx + 2; x++) P.p(x, y, faixa(HR, x, cx - 3, cx + 2)); }
+  if (side) { P.p(cx - 5, hcY + 1, olho); P.p(cx - 5, hcY + 2, olho); P.p(cx - 4, hcY + 4, '#e8907a'); if (o.eyeGlow) P.p(cx - 5, hcY, o.eyeGlow); P.p(cx - hr - 1, hcY + 2, SK[2]); if (o.beard) for (let y = hcY + 3; y <= hcY + 5; y++) for (let x = cx - 6; x <= cx - 1; x++) P.p(x, y, HR[2]); }
   if (o.extra) o.extra(P, { view, fr, cx, hcY, tT, tB, s, H });
   return P.outline().canvas();
 };
@@ -290,3 +300,7 @@ const FIG_GRUPO = {
 // Seu Jorge no mapa também redesenhado: quepe azul, camisa de motorista, bigode grisalho
 FIG_GRUPO.jorge = { h: 48, skin: '#c88a60', hair: '#9a9a9a', hairStyle: 'curto', top: '#8ab0d0', bottom: '#2a3048', hat: '#2a4a8a', beard: true, eye: '#1a1028',
   extra: (P, o) => { if (o.view !== 'b') P.rect(o.cx - 3, o.tT + 2, 2, 2, '#e8dcc0'); } };
+// painel do mapa fora do quadro grande (fica do tamanho normal com a câmera de longe)
+{ const _hmZ = hudMundo; hudMundo = function (m) { if (HUD_ADIA) { HUD_PEND = m; return; } return _hmZ(m); }; }
+// close-up (Rita vendo o rosto) continua do mesmo tamanho na tela
+{ const _dc = desenhaClose; desenhaClose = function () { if (TXZ === 1) return _dc(); const W0 = W; bx.save(); bx.scale(TXZ, TXZ); W = Math.round(W0 / TXZ); try { _dc(); } finally { W = W0; bx.restore(); } }; }

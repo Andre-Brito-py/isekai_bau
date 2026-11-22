@@ -3,7 +3,7 @@
 function mk(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
 function hash(x, y, s = 0) { let h = (x * 374761393 + y * 668265263 + s * 2147483647) >>> 0; h = (h ^ (h >> 13)) * 1274126177 >>> 0; return (h ^ (h >> 16)) >>> 0; }
-let W = 240; const H = 240, TS = 16;   // W cresce com o celular deitado (tela larga); H é sempre 240
+let W = 240, H = 240; const TS = 16;   // W cresce com o celular deitado (tela larga); H é sempre 240
 const cvs = document.getElementById('screen'), ctx = cvs.getContext('2d');
 const buf = mk(W, H); let bx = buf.getContext('2d'); bx.imageSmoothingEnabled = false;
 const lightC = mk(W, H), lx = lightC.getContext('2d');
@@ -81,6 +81,9 @@ function wrapRich(arr, max) {
   return lines;
 }
 const TQ = []; const TXO = { x: 0, y: 0 };
+// câmera de longe no mapa: o mundo é desenhado num quadro maior (ZOOM_MUNDO x) e esticado na tela; o texto do mundo
+// entra na fila já dividido por TXZ (fica do tamanho certo) e o painel do mapa é desenhado depois, em tamanho normal
+let TXZ = 1, HUD_ADIA = false, HUD_PEND = null, ZOOM_MUNDO = 1.5, MUNDO_BIG = false;
 function glyph(c, col, lx_, ly, sz) {
   const g = FG[c] || FG['?']; const gs = TSD * sz; const cellW = 6 * sz * (g.w > 8 ? 2 : 1);
   const dx = Math.round(lx_ * S + (cellW * S - g.w * gs) / 2), dy = Math.round(ly * S + (12 * sz * S - 16 * gs) / 2);
@@ -92,7 +95,7 @@ function txt(s, x, y, o = {}) {
   const lines = o.w ? wrapRich(rich(s, o.col), o.w) : [rich(s, o.col)];
   lines.forEach((ln, i) => {
     let xx = x; if (o.align === 'center') xx = x - lineW(ln, sz) / 2; else if (o.align === 'right') xx = x - lineW(ln, sz);
-    TQ.push({ chars: ln, x: xx + TXO.x, y: y + TXO.y + i * (o.lh || 12 * sz), n: 1e9, sz, shadow: o.shadow, alpha: o.alpha, fx: o.fx });
+    TQ.push({ chars: ln, x: (xx + TXO.x) / TXZ, y: (y + TXO.y + i * (o.lh || 12 * sz)) / TXZ, n: 1e9, sz: sz / TXZ, shadow: o.shadow, alpha: o.alpha, fx: o.fx });
   });
   return lines.length;
 }
@@ -141,7 +144,7 @@ class TW {
     let rem = this.n;
     for (let i = 0; i < this.lines.length; i++) {
       const ln = this.lines[i]; if (rem <= 0) break;
-      TQ.push({ chars: ln, x: x + TXO.x, y: y + TXO.y + i * lh, n: rem, sz: 1, fx: this.fx, shadow: o.shadow });
+      TQ.push({ chars: ln, x: (x + TXO.x) / TXZ, y: (y + TXO.y + i * lh) / TXZ, n: rem, sz: 1 / TXZ, fx: this.fx, shadow: o.shadow });
       rem -= ln.length;
     }
   }

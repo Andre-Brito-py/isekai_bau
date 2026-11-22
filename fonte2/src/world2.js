@@ -340,7 +340,7 @@ function desenhaBaloes() {
   const fila = BAL.splice(0);
   if (UI.stack.length || V.scene !== 'world') return;               // com janela aberta, os balões somem (o texto passaria por cima dela)
   const hud = (typeof HUD_G !== 'undefined' && HUD_G) ? 8 + HUD_G.length * 11 + 12 + (W2.map && W2.map.hunters ? 11 : 0) + (G.flags && G.flags.rostoCena ? 18 : 0) : 60;
-  const postos = [{ x0: 0, y0: 0, x1: 100, y1: hud + 6, fixo: true }, { x0: 98, y0: 0, x1: 160, y1: 22, fixo: true }, { x0: W - 64, y0: 0, x1: W, y1: 30, fixo: true }];
+  const z_ = TXZ, postos = [{ x0: 0, y0: 0, x1: 100 * z_, y1: (hud + 6) * z_, fixo: true }, { x0: 98 * z_, y0: 0, x1: 160 * z_, y1: 22 * z_, fixo: true }, { x0: W - 64 * z_, y0: 0, x1: W, y1: 30 * z_, fixo: true }];
   if (W2.toast) { const tw = lineW(rich(W2.toast.s)) + 20; postos.push({ x0: W / 2 - tw / 2, y0: 24, x1: W / 2 + tw / 2, y1: 43, fixo: true }); }
   // primeiro as reações (pri alto), depois as de fundo; dentro de cada grupo, de cima para baixo
   fila.sort((a, b) => b.pri - a.pri || a.y - b.y);

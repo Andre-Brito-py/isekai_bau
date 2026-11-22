@@ -669,6 +669,7 @@ async function titleFlow2() {
 }
 
 // ---------- laço principal ----------
+const WBIG = mk(360, 360), WBX = WBIG.getContext('2d');
 const INNER = mk(240, 240), INNER_X = INNER.getContext('2d'), MAIN_BX = bx, FILTRO = typeof MAIN_BX.filter === 'string';
 INNER_X.imageSmoothingEnabled = false;
 function tick() {
@@ -682,7 +683,17 @@ function tick() {
   const WF = W, OX = Math.floor((WF - 240) / 2);
   if (V.scene === 'world' || V.scene === 'battle2') {
     // mapa e batalha usam a tela larga inteira; janelas e diálogos ficam no meio
-    if (V.scene === 'world') { updateWorld2(); drawWorld2(); } else { updateBattle2(); drawBattle2(); }
+    MUNDO_BIG = false;
+    if (V.scene === 'world' && ZOOM_MUNDO > 1) {
+      // câmera de longe: o mapa vai para um quadro maior; o painel (HUD) e as janelas ficam no quadro normal, por cima
+      const Wb = W, Hb = H; W = Math.round(Wb * ZOOM_MUNDO); H = Math.round(Hb * ZOOM_MUNDO);
+      if (WBIG.width !== W || WBIG.height !== H) { WBIG.width = W; WBIG.height = H; }
+      WBX.imageSmoothingEnabled = false; bx = WBX; TXZ = ZOOM_MUNDO; HUD_ADIA = true;
+      try { updateWorld2(); drawWorld2(); } finally { HUD_ADIA = false; bx = MAIN_BX; W = Wb; H = Hb; TXZ = 1; }
+      bx.clearRect(0, 0, W, H); MUNDO_BIG = true;
+      if (HUD_PEND) { const m = HUD_PEND; HUD_PEND = null; hudMundo(m); }
+    }
+    else if (V.scene === 'world') { updateWorld2(); drawWorld2(); } else { updateBattle2(); drawBattle2(); }
     bx.save(); bx.translate(OX, 0); TXO.x = OX; for (const w of UI.stack) w.draw(); bx.restore(); TXO.x = 0;
   } else {
     // batalha, cenas e título são quadros de 240x240: desenhados no centro; nas laterais, o próprio quadro desfocado
@@ -705,6 +716,7 @@ function tick() {
   if (V.fade > 0) { bx.fillStyle = `rgba(0,0,0,${V.fade})`; bx.fillRect(0, 0, W, H); }
   let sx = 0, sy = 0; if (V.shake > 0) { V.shake--; sx = Math.round(rand(-2, 2)); sy = Math.round(rand(-2, 2)); }
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cvs.width, cvs.height);
+  if (MUNDO_BIG && V.scene === 'world') ctx.drawImage(WBIG, 0, 0, WBIG.width, WBIG.height, Math.round(sx * S), Math.round(sy * S), cvs.width, cvs.height);
   ctx.drawImage(buf, 0, 0, W, H, Math.round(sx * S), Math.round(sy * S), cvs.width, cvs.height);
   if (sx || sy) for (const t of TQ) { t.x += sx; t.y += sy; }
   flushText();

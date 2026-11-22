@@ -60,7 +60,7 @@ function desenhaCeu(m, ox, oy) {
   if (interior) a *= 0.35;
   if (m.dark) a *= 0.4;
   if (a <= 0.01) return;
-  if (!CEU_C || CEU_C.width !== W) CEU_C = mk(W, H);
+  if (!CEU_C || CEU_C.width !== W || CEU_C.height !== H) CEU_C = mk(W, H);
   const x = CEU_C.getContext('2d');
   x.globalCompositeOperation = 'source-over'; x.clearRect(0, 0, W, H); x.fillStyle = `rgba(${cor},${a})`; x.fillRect(0, 0, W, H);
   const luzes = luzesDoMapa(m, ox, oy, a);
