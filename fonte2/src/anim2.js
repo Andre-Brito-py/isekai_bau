@@ -440,6 +440,6 @@ CMD.splice(1, 0, { k: 'avaliar', nm: 'Avaliar', ic: () => 'avaliar', desc: () =>
     if (f) await say('[' + f + ']', 'cat');
   });
   // não gasta a vez: volta ao menu do baú; só uma avaliação por vez
-  BT._avalFeito = true; return false;
+  BT._avalFeito = true; if (BT.menu) BT.menu.hidden = false; return false;
 }; }
 { const _etA = endTurn; endTurn = function (u, w) { BT._avalFeito = false; return _etA.apply(this, arguments); }; }

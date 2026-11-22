@@ -208,6 +208,7 @@ function openCommand(m) {
 }
 async function runCommand(m) {
   while (true) {
+    if (BT.menu) BT.menu.hidden = false;   // nunca deixar o menu escondido quando é a vez de escolher
     const c = await wheelPick(m);
     if (c === null) continue;
     BT.lastCmd = BT.lastCmd || {}; BT.lastCmd[m.id] = BT.menu.idx;
