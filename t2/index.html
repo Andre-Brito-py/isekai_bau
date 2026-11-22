@@ -459,6 +459,23 @@
    onde (pela busca do mapa), selo de horário, recompensa e barra de andamento. Catálogo DIARIO (principais por capítulo +
    paralelas) + pedidos aceitos do quadro. AO CRIAR CAPÍTULO NOVO: acrescentar a principal e as paralelas em DIARIO e os
    alvos em missoes() (mapa.js). As paralelas antigas do Cap. 2 (Tobias, Pedrinho, Pavio) agora também aparecem no mapa.
+ - CIDADES ORGÂNICAS (pedido do usuário: mapas "muito retilíneos... claustrofobia... parece um beco"; aprovado o piloto
+   da Praça do Sino: "perfeito, pode dar o tratamento em diferentes estilos, mas com o mesmo cuidado"). Cada cidade num estilo:
+   PRAÇA DO SINO (46x34) orgânica: fachadas em profundidades e alturas diferentes (sobrados com wallH maior onde a casa
+   avança), quintais com árvore entre as casas, largo aberto com a torre e a fonte, igreja num patamar com escadaria até
+   o rio em curva. CAIS (48x30) porto de trabalho: armazéns, deque de madeira, três píeres de comprimentos diferentes,
+   barraquinhas, caixotes, o 31 estacionado. BAIRRO BAIXO (44x30) operário: sobrados estreitos, um QUARTEIRÃO SOLTO no
+   meio, pracinha da feira, varais, canal com mureta em curva, viela do bueiro. AVENIDA DO FESTIVAL (52x28) bulevar
+   PLANEJADO: palacetes simétricos, praça recuada com o palco no eixo, alamedas de árvores e postes, varais de lanternas
+   (FE.varais), jardim com canteiros. LARGO DO HOSPITAL (46x30) praça NOBRE: hospital no eixo, jardim formal em cruz com
+   a fonte no centro, bancos, lavanderia afastada. CANDEIA (40x34) MONTANHA EM SOCALCOS: três patamares com muros de
+   arrimo e escadas de pedra; casas encostadas no muro (wallH 74). REGRAS: posições sempre em POS (nada fixo no código);
+   ligações por gatilho em ligaExtra() (mapa.js); árvores com solid 1x1 levam arvore:true (o tempo2 tratava como poste);
+   loadMap2 tira o jogador de dentro de parede se um save antigo cair em lugar que virou sólido. Arte nova em
+   arte_cidades.js (varalArt, canteiroArt). Ainda no formato antigo: Rua Submersa e Mercado (alagados).
+ - PLACAS (placas.js): tabuletas penduradas com ícone nos prédios onde se entra (TABULETAS) e plaquinha com o NOME do
+   destino ao chegar perto (3 tiles) de qualquer entrada/saída em todos os mapas (portas + ligaExtra; ROTULOS acrescenta
+   e renomeia). O texto usa sz: TXZ para ficar nítido no quadro grande do mundo.
  - VIDA NA CIDADE (vida.js; pedido do usuário: gatos nos telhados, pássaros que voam quando se passa perto, coisas
    mágicas): pombos (corvos em Candeia) que ciscam e voam em bando quando o grupo chega perto e voltam depois; gatos andando,
    sentando e se lambendo nas lajes e muretas (olhos brilham de noite); borboletas de dia; vaga-lumes de âmbar de noite ou
