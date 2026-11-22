@@ -13,7 +13,7 @@
   1. A SUPERFÍCIE (feito) — prólogo: estrada, Espantalho do pedágio. Vesper ainda não aparece.
   2. VELHÁGUA (feito) — a cidade que afunda, Dona Badalada. ESCALADA 1: Vesper benfeitor (Marco, convite).
   3. A CAPITAL ACESA (feito, 2 partes) — Auren, festival, discurso, Galerias, Mãe-Fuligem, 1ª EVOLUÇÃO (3 caminhos).
-  4. A CASA DOS QUE ESQUECEM (P1 feita; P2 = CANDEIA, a vila que apagou) — ESCALADA 2: suspeita (a letra da lista).
+  4. A CASA DOS QUE ESQUECEM (P1 e P2 feitas; P2 = CANDEIA, a vila que apagou) — ESCALADA 2: suspeita (a letra da lista).
      P2: Candeia na serra, moradores parados nas portas, minas vazias, RUNA DE GATILHO, o Dito encontrado; Dalva
      abre a ENFERMARIA na base; Jorge a GARAGEM. Gancho: um Pavio de Candeia tem o caderno preto... de outra pessoa?
      (não: tem uma PÁGINA arrancada do caderno, com o nome da filha riscado mil vezes: LÍVIA.)
@@ -412,6 +412,36 @@
    morar na base (ENFERMARIA: cura entre lutas com custo de cobres); o Seu Jorge abre a GARAGEM (o 31 viaja entre
    regiões); chefe nas minas; o Dito encontrado; gancho: a página arrancada com LÍVIA (revelação no Cap. 5; ver o
    MAPA DA TEMPORADA no topo: agora são 10 capítulos, e o Farol acende só no Cap. 10).
+   IMPLEMENTADA (cap4b.js, mapas4b.js via maps/cap4bmaps.py, arte_cap4b.js, inimigos4b.js, gatilho.js): o Jorge no Largo
+   ("Subir a serra") -> ESTRADA DA SERRA (névoa no HOOK_AR: m.nevoa) -> CANDEIA -> casa da DONA ILDA (professora de runas
+   que escreve tudo para não esquecer; ensina a RUNA DE GATILHO e dá a chave da porteira) -> MINA (escura, lampiões) ->
+   CAPELA: CAPATAZ DE CANDEIA (5600 PV/ATQ 36, escudo 6; robô 0.6: mínimo ~23-46%; Apito do Turno preparado quando turns%4===3: bate em todos e
+   um aliado ESQUECE a vez; chama 1 Mineiro Oco; Lanterna Morta come Tensão; fase 2 a 50%: fornalha aberta, fraco a
+   gelo/corte/luz). Comuns: Névoa 300/28 (voa; golpe físico atravessa 35%; come Tensão; pode fazer ESQUECER a vez),
+   Mineiro Oco 390/31 (Desabamento a cada 3 vezes). Fim: os transferidos acordam, o Dito lembra do Tico, a página
+   arrancada no livro de ponto ("312 almas... 40 invernos de luz... pensões pagas" + o nome LÍVIA riscado e reescrito;
+   SEGREDO: não explicar fora do jogo), Candeia acende um pouco, a base ganha ENFERMARIA (Dalva: cura completa grátis,
+   frasco com selo por 20) e GARAGEM (Jorge: viagem rápida entre regiões). Flags: c4Serra, c4Candeia, c4Zezinha, c4Poco,
+   c4IldaVista, c4Gatilho, c4Chave, c4Mina, c4Capataz, c4Fim (+ b_serra_m). Runa de Gatilho: G.grim.gatilho; página
+   com s.g; armar é leve e +2 PM; dardo/onda disparam quando o inimigo vai agir (30% mais forte, +1 quebra, +2 se ele
+   estiver preparando golpe); véu dispara quando o aliado cai abaixo de 35%.
+ - DIA E NOITE SÃO ÚTEIS (regra do usuário: "coisas que só podem ser feitas em determinado horário"). Todo capítulo novo
+   precisa de conteúdo amarrado ao relógio. No Cap. 4: Dona Ilda só recebe de DIA (7h-18h; bilhete na porta à noite);
+   a capela da mina só abre no TURNO DA NOITE (de dia empurra de volta); de noite os moradores de Candeia andam
+   sonâmbulos até o poço e cochicham pistas (de dia só ficam parados); o poço só mostra o tesouro à NOITE; o baú
+   escondido do mirante da serra só aparece AO AMANHECER (5h-8h30, a névoa abre); a Pensão dos Transferidos muda de dia
+   para noite. O hospital (P1) já era: de dia com rosto, de noite pela lavanderia. O Marco descansa até 7h ou 19h30.
+ - MAPA E MISSÕES (mapa.js; pedido do usuário: "um mapa, e nele devem ficar marcados os locais das missões"): menu >
+   "Mapa e missões". Aba AQUI: o mapa atual pintado tile a tile (textura por tipo de chão, paredes com face 3/4 e
+   sombra, água com brilho correndo, escuridão com furos de luz nos mapas escuros, saídas pulsando em âmbar, Marcos,
+   baús ainda fechados, o jogador como um baúzinho); se o mapa não cabe, a vista acompanha o jogador. Aba MUNDO:
+   relevo pintado por altura (luz do noroeste, curvas de nível, neve nos picos), rio que corre, mar, margens de areia,
+   pinheiros com sombra, estradas curvas, sombras de nuvens passando, NÉVOA sobre o que ainda não foi descoberto, noite
+   com luzes acesas, rosa dos ventos e moldura de pergaminho. Missão principal = "!" dourado; opcionais = "?" azul; com
+   selo de horário (DE DIA / À NOITE / AO AMANHECER, apagado quando não é a hora). Se a missão é em outro mapa, o
+   marcador vai na SAÍDA que leva até lá (busca por portas + LIGA_EXTRA). Missões vêm de missoes() pelas flags: ao
+   criar um capítulo novo, ACRESCENTAR as etapas lá (e as regiões novas em REGIOES/REGIAO_DE/ESTRADAS). G.visto guarda
+   os mapas visitados. O menu de campo foi refeito (caixa 144 px, valores à direita, descrição de cada opção embaixo).
  - PORTA TRANCADA (world2.js portaTrancada): toda casa do mapa agora tem porta desenhada; as que não levam a lugar
    nenhum avisam "trancada" (com variações de humor) quando o jogador anda contra ela ou aperta A de frente. Para abrir
    uma construção nova no futuro, basta pôr uma 'porta' (ent) na frente dela.

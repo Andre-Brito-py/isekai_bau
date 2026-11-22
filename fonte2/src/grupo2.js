@@ -156,15 +156,21 @@ async function menuGrupo() {
     const g = grupoAtual();
     const viaja = G.flags.marcoViagem && Object.keys(G.marcos || {}).length > 1;
     const temGrim = typeof grim === 'function' && grim().ativo;
-    const i0 = await list({ x: 70, y: 40, w: 100, title: `${G.cobres || 0} cobres`, items: [{ label: 'Grupo' }, { label: 'Equipar' }, { label: 'Itens' }, { label: 'Tempo na luta: ' + (G.flags.tempoAtivo ? 'Ativo' : 'Pausa') }, { label: 'Fechar' }, ...(viaja ? [{ label: 'Viajar (Marco)' }] : []), ...(temGrim ? [{ label: 'Grimório' }] : [])] });
-    if (temGrim && i0 === (viaja ? 6 : 5)) { await abrirGrimorio(); continue; }
-    const i = i0;
-    if (i < 0 || i === 4) return;
-    if (i === 5) { const ks = Object.keys(G.marcos), j = await list({ x: 30, y: 40, w: 180, title: 'Marco de Viagem', items: ks.map(k => ({ label: G.marcos[k].nm })) }); if (j >= 0) { const M = G.marcos[ks[j]]; sfx('rune'); await fadeOut(12); loadMap2(ks[j], M.x, M.y, 'down'); await fadeIn(12); return; } continue; }
-    if (i === 0 && typeof telaStatus === 'function') { await telaStatus(); continue; }
-    if (i === 0) await panel(g.flatMap(m => [`{y}${m.name}{/}  ${m.hp}/${m.mhp} PV  ${m.mmp ? m.mp + '/' + m.mmp + ' PM' : ''}`, `  ATQ ${m.atk} DEF ${m.def} MAG ${m.mag} VEL ${m.spd}`, ...(Object.values(eqOf(m.id)).filter(Boolean).length ? ['  ' + Object.values(eqOf(m.id)).filter(Boolean).map(k => EQ2[k].nm).join(', ')] : []), '']), { title: 'Grupo' });
-    if (i === 1) await menuEquipar();
-    if (i === 2) await usarItemFora();
-    if (i === 3) { G.flags.tempoAtivo = !G.flags.tempoAtivo; }
+    const ops = [['grupo', 'Grupo', 'Vida, nível, técnicas e atributos de cada um.'], ['equip', 'Equipar', 'Troque o que cada um leva.'], ['itens', 'Itens', 'Use frascos e outras coisas fora da luta.'],
+      ...(typeof telaMapa === 'function' ? [['mapa', 'Mapa e missões', 'Onde você está, para onde ir e o que só dá para fazer em certa hora.', '#ffd060']] : []),
+      ...(temGrim ? [['grim', 'Grimório', 'Escreva e reescreva as páginas de feitiço.']] : []), ...(viaja ? [['viajar', 'Viajar (Marco)', 'Vá até um Marco que você já tocou.']] : []),
+      ['tempo', 'Tempo na luta', G.flags.tempoAtivo ? 'ATIVO: os inimigos não esperam você escolher. Mais tenso.' : 'PAUSA: o tempo para enquanto você escolhe. Mais calmo.', null, G.flags.tempoAtivo ? 'Ativo' : 'Pausa'], ['fechar', 'Fechar', 'Voltar ao jogo.']];
+    const ix = await list({ x: 48, y: 22, w: 144, title: `${G.cobres || 0} cobres`, idx: menuGrupo._idx || 0, items: ops.map(o => ({ label: o[1], col: o[3] || undefined, right: o[4] })), desc: j => ops[j][2], descY: 22 + 16 + ops.length * 12 + 10 });
+    if (ix < 0) return;
+    menuGrupo._idx = ix; const k = ops[ix][0];
+    if (k === 'fechar') { menuGrupo._idx = 0; return; }
+    if (k === 'grim') { await abrirGrimorio(); continue; }
+    if (k === 'mapa') { await telaMapa(); continue; }
+    if (k === 'viajar') { const ks = Object.keys(G.marcos), j = await list({ x: 30, y: 40, w: 180, title: 'Marco de Viagem', items: ks.map(k => ({ label: G.marcos[k].nm })) }); if (j >= 0) { const M = G.marcos[ks[j]]; sfx('rune'); await fadeOut(12); loadMap2(ks[j], M.x, M.y, 'down'); await fadeIn(12); return; } continue; }
+    if (k === 'grupo' && typeof telaStatus === 'function') { await telaStatus(); continue; }
+    if (k === 'grupo') await panel(g.flatMap(m => [`{y}${m.name}{/}  ${m.hp}/${m.mhp} PV  ${m.mmp ? m.mp + '/' + m.mmp + ' PM' : ''}`, `  ATQ ${m.atk} DEF ${m.def} MAG ${m.mag} VEL ${m.spd}`, ...(Object.values(eqOf(m.id)).filter(Boolean).length ? ['  ' + Object.values(eqOf(m.id)).filter(Boolean).map(k => EQ2[k].nm).join(', ')] : []), '']), { title: 'Grupo' });
+    if (k === 'equip') await menuEquipar();
+    if (k === 'itens') await usarItemFora();
+    if (k === 'tempo') { G.flags.tempoAtivo = !G.flags.tempoAtivo; sfx('equip'); }
   }
 }
