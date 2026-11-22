@@ -93,6 +93,22 @@
  Cada capítulo: região nova, mecânica nova, 2-3 inimigos, mini-chefe e chefe com animação de ataque caprichada, falas
  do baú em toda cena, 20-30 min de opcional (missões, baús, Fragmentos), balanceamento por robô nos 3 caminhos.
 =====================================================================
+ EMBELEZAMENTO COM VIDA EM TODOS OS MAPAS (REGRA FIXA, pedido do usuário: "deixe registrado para que todos os mapas
+ tenham esse tratamento de embelezamento com vida"). Todo mapa novo ou refeito (cidade, vila, estrada, interior, masmorra)
+ segue o padrão das cidades orgânicas, cada um num ESTILO PRÓPRIO que combine com o lugar:
+  1. GEOGRAFIA: nada de retângulo-beco. Espaços abertos, fachadas/paredes em profundidades e alturas diferentes, recuos,
+     becos que desembocam em largos, curvas (rios, canais, caminhos), formas orgânicas (blob) quando for natureza ou ruína.
+     Lugares planejados (avenidas, praças nobres) podem ser simétricos, mas espaçosos.
+  2. DETALHES: árvores/quintais entre casas, canteiros, bancos, barracas, caixotes, barris, varais, chaminés, postes,
+     enfeites próprios do lugar (vitórias-régias, relógio afundado, píeres...). Sempre pixel art no mesmo estilo.
+  3. VIDA (vida.js, VIDA_CFG): todo mapa novo entra na configuração com bichos e magia que façam sentido no lugar
+     (pombos/corvos que voam quando o grupo chega perto, gatos em telhados e muretas, borboletas de dia, vaga-lumes de
+     âmbar de noite/no escuro, cartas voadoras nas cidades, peixes na água, bandos no céu; em masmorras, criaturinhas
+     e luzes adequadas ao tema).
+  4. PLACAS: tabuleta com ícone nos prédios onde se entra (TABULETAS) e nome do lugar perto das entradas (automático).
+  5. DIA E NOITE: o mapa muda de noite (luzes, vaga-lumes, quem dorme) e tem pelo menos uma coisa que só se faz em certa hora.
+  6. TÉCNICA: posições todas em POS (nada fixo no código), ligações por gatilho em ligaExtra() (mapa.js), validação no
+     script do mapa, screenshots de dia e de noite antes de publicar; missões novas em missoes() e DIARIO.
  ESCALA (REGRA FIXA, pedido do usuário: "sempre respeitar o tamanho dos personagens e objetos"):
  - 1 metro = ~29 px. Adulto = 44-53 px de altura (Lume, baixinha: 48; Rita: 53; Seu Jorge: 48). Criança: ~32-36 px.
  - O Baú (forma de baú) é BEM menor que um adulto: ~0,55-0,6 (~28 px de altura na batalha, ao lado de humanos de
