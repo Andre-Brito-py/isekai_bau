@@ -462,7 +462,8 @@ function busArt() {
   P.outline();
   return BUS_C = P.canvas();
 }
-function standF(k) { return t => { const S = IMG.spf[k] && IMG.spf[k].s; return S ? flipC(S[Math.floor(t / 30) % S.length]) : null; }; }
+// o sprite de lado da Rita já olha para a direita; os outros olham para a esquerda
+function standF(k) { return t => { const S = IMG.spf[k] && IMG.spf[k].s; if (!S) return null; const f = S[Math.floor(t / 30) % S.length]; return k === 'rita' ? f : flipC(f); }; }
 function chestF() { return t => { const C = IMG.chest[G.species]; return C ? ((t % 160) < 6 ? C.closed : C.three) : null; }; }
 
 // ---------- a história do capítulo ----------

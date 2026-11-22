@@ -211,7 +211,8 @@ async function runCommand(m) {
     const c = await wheelPick(m);
     if (c === null) continue;
     BT.lastCmd = BT.lastCmd || {}; BT.lastCmd[m.id] = BT.menu.idx;
-    const done = await doCommand(m, c);
+    // um erro num golpe nunca pode travar a luta: a vez passa e o jogo segue
+    let done; try { done = await doCommand(m, c); } catch (e) { console.error(e); BT.busy = false; m.ox = 0; m.oy = 0; m.rot = 0; endTurn(m, 'normal'); done = true; }
     if (done) break;
   }
   BT.menu = null;
@@ -453,6 +454,8 @@ function drawBattle2() {
   bx.fillStyle = 'rgba(5,3,10,0.55)'; bx.fillRect(0, 0, WF, by);
   // campo de batalha em coordenadas locais (0..240)
   bx.save(); bx.translate(OX + sx, DY + sy); W = 240; TXO.x = OX; TXO.y = DY;
+  // soco de câmera: zoom curtinho no ponto do golpe forte
+  if (BT.zoom && BT.zoom.k > 0.002) { const z = 1 + BT.zoom.k, Z = BT.zoom; bx.translate(Z.x, Z.y); bx.scale(z, z); bx.translate(-Z.x, -Z.y); if (BT.stop <= 0) Z.k *= 0.82; }
   if (BT.cfg.bgAnim) BT.cfg.bgAnim();
   const all = [...BT.foes.filter(u => !u.gone), ...BT.party].sort((a, b) => a.y - b.y);
   const M = BT.menu, ativo = M && !M.hidden && !BT.busy ? M.m : null;
@@ -466,7 +469,11 @@ function drawBattle2() {
     if (BT.stop <= 0) a.k++;
     if (a.k > a.n) { BT.anims.splice(i, 1); a.r(); }
   }
-  for (const p of BT.parts) { bx.globalAlpha = Math.min(1, (p.life - p.t) / 10); bx.fillStyle = p.col; bx.fillRect(Math.round(p.x), Math.round(p.y), p.sz, p.sz); }
+  for (const p of BT.parts) {
+    bx.globalAlpha = Math.min(1, (p.life - p.t) / 10) * (p.brasa ? 0.6 + 0.4 * Math.sin(p.t * 0.9) : 1);
+    if (p.risco) { bx.strokeStyle = p.col; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(Math.round(p.x) + 0.5, Math.round(p.y) + 0.5); bx.lineTo(Math.round(p.x - p.vx * p.risco) + 0.5, Math.round(p.y - p.vy * p.risco) + 0.5); bx.stroke(); }
+    else { bx.fillStyle = p.col; bx.fillRect(Math.round(p.x), Math.round(p.y), p.sz, p.sz); }
+  }
   bx.globalAlpha = 1;
   for (const n of BT.nums) {
     const k = n.t, y = n.y - (k < 10 ? ease.back(k / 10) * 10 : 10 + (k - 10) * 0.15);
@@ -613,15 +620,24 @@ function drawInfo(OX, lados) {
   txt(d, x + 6, y + h - (nl * 10 + 8) + 4, { w: 36, col: '#c8d4dc', lh: 10 });
 }
 function drawUnit(u) {
+  if (u.sumiu) return;
+  desenhaRastro(u);
   const a = u.alpha ?? 1; if (a <= 0) return;
   const fr = unitFrame(u); if (!fr) return;
   const w = fr.width * (u.sx || 1), h = fr.height * (u.sy || 1);
   const X = Math.round(u.x + u.ox - w / 2), Y = Math.round(u.y + u.oy - h);
-  // sombra
-  bx.globalAlpha = 0.35 * a; bx.fillStyle = '#000'; const sw = u.fly ? fr.width * 0.4 : fr.width * 0.7; bx.fillRect(Math.round(u.x + u.ox - sw / 2), Math.round(u.y + (u.fly ? u.fly : 0)) - 1, Math.round(sw), 3); bx.globalAlpha = a;
+  u._X = X; u._Y = Y; u._sx = u.sx || 1; u._sy = u.sy || 1; u._fw = fr.width; u._fh = fr.height;
+  // sombra (fica no chão: encolhe quando o lutador pula)
+  const alt = Math.max(0, -(u.oy || 0) - (u.baseOy || 0)), sk = Math.max(0.35, 1 - alt / 60);
+  bx.globalAlpha = 0.35 * a * sk; bx.fillStyle = '#000'; const sw = (u.fly ? (u.R ? u.R.w : fr.width) * 0.4 : (u.R ? u.R.w : fr.width) * 0.7) * sk; bx.fillRect(Math.round(u.x + u.ox - sw / 2), Math.round(u.y + (u.fly ? u.fly : 0) + Math.min(0, (u.oy || 0) + alt)) - 1, Math.round(sw), 3); bx.globalAlpha = a;
   if (u.side === 'p' && u.hp <= 0) bx.globalAlpha = 0.45;
+  const rot = u.rot || 0;
+  if (rot) { bx.save(); const cx = X + w / 2, cy = Y + h / 2; bx.translate(cx, cy); bx.rotate(rot); bx.translate(-cx, -cy); }
+  if (u.under) u.under(u, X, Y, w, h);
   bx.drawImage(fr, X, Y, Math.round(w), Math.round(h));
   if (u.flash > 0 && u.flash % 4 < 2) { const c = whiteOf(fr); bx.drawImage(c, X, Y, Math.round(w), Math.round(h)); }
+  if (u.over) u.over(u, X, Y, w, h);
+  if (rot) bx.restore();
   bx.globalAlpha = 1;
   // marcas de estado sobre a cabeça
   if (u.side === 'e' && u.broken > 0) { for (let i = 0; i < 3; i++) { const ang = BT.t / 12 + i * 2.1; txt('*', u.x + Math.cos(ang) * 12, Y - 6 + Math.sin(ang) * 3, { col: '#ffe066', align: 'center' }); } }

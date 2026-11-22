@@ -245,7 +245,7 @@ const FOLSPR = {};
 function folSprite(f) {
   const t = W2.t + (f.k === 'rita' ? 13 : 0);
   if (f.k === 'lume') { const S = IMG.spf.lumeh, F = IMG.sp.lumeHuman; const v = f.dir === 'up' ? S.b : f.dir === 'down' ? F : S.s; const fr = v[Math.floor(t / (f.mv ? 8 : 26)) % v.length]; return f.dir === 'right' ? flipC(fr) : fr; }
-  if (f.k === 'rita') { const S = IMG.spf.rita, F = IMG.sp.rita; const v = f.dir === 'up' ? S.b : f.dir === 'down' ? F : S.s; const fr = v[Math.floor(t / (f.mv ? 8 : 26)) % v.length]; return f.dir === 'right' ? flipC(fr) : fr; }
+  if (f.k === 'rita') { const S = IMG.spf.rita, F = IMG.sp.rita; const v = f.dir === 'up' ? S.b : f.dir === 'down' ? F : S.s; const fr = v[Math.floor(t / (f.mv ? 8 : 26)) % v.length]; return (f.dir === 'left' && v === S.s) ? flipC(fr) : fr; }
   return null;
 }
 function drawHunterUI(e, ox, oy) {
