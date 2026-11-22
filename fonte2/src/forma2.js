@@ -66,7 +66,7 @@ function rostoArte() {
   const A = typeof ARTE_ROSTO !== 'undefined' && (ARTE_ROSTO[k.body] || ARTE_ROSTO.bastiao);
   if (!A) return ROSTO_C[key] = null;
   const fx = cv => { if (k.aura === 'vazio') { const x = cv.getContext('2d'), d = x.getImageData(0, 0, cv.width, cv.height); for (let i = 0; i < d.data.length; i += 4) { const q = i >> 2; if (d.data[i + 3] && ((q % cv.width) + Math.floor(q / cv.width)) % 3 === 0) d.data[i + 3] = 120; } x.putImageData(d, 0, 0); } return cv; };
-  return ROSTO_C[key] = { body: A.body.map(iaRosto).map(fx), port: A.port.map(iaRosto).map(fx) };
+  return ROSTO_C[key] = { body: A.body.map(iaRosto).map(fx), port: A.port.map(iaRosto).map(fx), big: A.big ? A.big.map(iaRosto).map(fx) : null };
 }
 // quadro do mapa: a arte da T1 é de frente (como no fim da T1); de lado ela vira para onde anda; sem arte, cai no gerador
 function rostoFrame(moving) {
@@ -180,11 +180,103 @@ async function cenaRosto() {
   await say('Deixa eu ver! Vai, @! Só um pouquinho!', 'lume');
   puffRosto(); sfx('rune'); rostoSt().on = true; await wait(40);
   await say('...É você. A mesma cara lá do fim da masmorra. Eu tinha esquecido como era. Não conta pra ninguém que eu esqueci.', 'lume');
-  await say('* Você olha as próprias mãos. Dez dedos. Já está doendo um pouco, lá no fundo da tampa.', 'rosto');
-  await say('Cara de quem não dorme há três dias. Serve. Gente assim passa na rua e ninguém olha duas vezes.', 'rita');
+  await say('* Você olha as próprias mãos. Dez dedos. Já está doendo um pouco, lá no fundo da tampa.');
+  if (partyKeys().includes('rita')) await momentoRita();
   await say('* (FORMA HUMANA: aperte {y}B{/} no mapa para usar a Runa do Rosto e de novo para voltar a ser baú. De rosto, Caçadores e moradores não desconfiam de você andando.)');
   await say('* (O {y}FÔLEGO{/} (barra embaixo do grupo) gasta a cada passo. Quando fica vermelho, o rosto derrete e o disfarce falha. No zero, você vira baú na hora, e quem estiver olhando vê.)');
   await say('* (Como baú, o fôlego volta devagar. No Marco, volta todo. Na água o rosto sai, e as lutas sempre começam em forma de baú.)');
   await say('[Recomendação: use o Rosto para atravessar. E volte a ser baú longe dos olhos. De preferência, não no meio da praça.]', 'cat');
   save2();
 }
+
+// ================= A PRIMEIRA VEZ QUE A RITA VÊ O ROSTO =================
+// No jogo 1 (encontro na estação): a Rita passou DOIS ANOS sentada duas fileiras à frente no ônibus 31, olhando o reflexo
+// dele na janela. Se o encontro foi bem (esc.rita), ela prometeu: "Quando você arranjar um rosto, me procura. O pastel é
+// por minha conta." Aqui ela vê o rosto pela primeira vez, no ângulo da janela, e preenche com a memória dela as partes
+// que o protagonista esqueceu (o borrão do rosto). Close-up desenhado por cima do mapa: o reflexo na janela do 31 à noite,
+// depois o rosto de agora, de dia, com o borrão sumindo enquanto ela lembra.
+let CLOSE = null;
+function riscosRosto(big) {
+  if (big._riscos) return big._riscos;
+  const d = big.getContext('2d').getImageData(0, 0, 48, 48).data, at = (x, y) => { const i = (y * 48 + x) * 4; return [d[i], d[i + 1], d[i + 2], d[i + 3]]; };
+  let pele = null; for (const [x, y] of [[16, 28], [31, 28], [14, 26], [33, 26], [24, 16]]) { const c = at(x, y); if (c[3] && c[0] > 150 && c[0] > c[2]) { pele = `rgb(${c[0]},${c[1]},${c[2]})`; break; } }
+  let sd = 311; const R = () => (sd = (sd * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  const n = 3 + rostoKey().blur * 3, L = [];
+  for (let i = 0; i < n; i++) L.push({ x: 13 + Math.floor(R() * 18), y: 18 + Math.floor(R() * 14), w: 5 + Math.floor(R() * 8), ordem: R() });
+  return big._riscos = { pele: pele || '#f0c8a0', L };
+}
+function desenhaClose() {
+  const C = CLOSE, A = rostoArte(); if (!C || !A || !A.big) return;
+  C.t++; if (C.enche && C.fill < 1) C.fill = Math.min(1, C.fill + 1 / 110);
+  const a = Math.min(1, C.t / 18), w = 112, h = 112, x0 = Math.round(W / 2 - w / 2), y0 = 10, ix = x0 + 4, iy = y0 + 4, iw = w - 8, ih = h - 8;
+  bx.globalAlpha = a;
+  // moldura: janela do ônibus 31 (borracha preta, metal, cantos arredondados) ou, de dia, só uma moldura de lembrança
+  bx.fillStyle = '#0a0612'; bx.fillRect(x0 + 2, y0 - 1, w - 4, h + 2); bx.fillRect(x0 - 1, y0 + 2, w + 2, h - 4); bx.fillRect(x0, y0, w, h);
+  bx.fillStyle = C.modo === 'janela' ? '#6a7488' : UIC.line; bx.fillRect(x0 + 2, y0 + 1, w - 4, h - 2); bx.fillRect(x0 + 1, y0 + 2, w - 2, h - 4);
+  bx.fillStyle = '#0a0612'; bx.fillRect(ix, iy, iw, ih);
+  bx.save(); bx.beginPath(); bx.rect(ix, iy, iw, ih); bx.clip();
+  if (C.modo === 'janela') {
+    // noite lá fora, postes passando
+    bx.fillStyle = '#141c34'; bx.fillRect(ix, iy, iw, ih); bx.fillStyle = '#1c2848'; bx.fillRect(ix, iy + ih - 30, iw, 30);
+    for (let k = 0; k < 4; k++) { const px = ix + iw - ((C.t * 3 + k * 47) % (iw + 40)); bx.fillStyle = 'rgba(255,200,110,0.55)'; bx.fillRect(px, iy + 20 + (k % 2) * 9, 18, 2); bx.fillStyle = 'rgba(255,230,170,0.8)'; bx.fillRect(px, iy + 20 + (k % 2) * 9, 3, 2); }
+  } else { bx.fillStyle = '#8ec0e0'; bx.fillRect(ix, iy, iw, ih); bx.fillStyle = '#b8daf0'; bx.fillRect(ix, iy, iw, 30); bx.fillStyle = '#4a7a98'; bx.fillRect(ix, iy + ih - 22, iw, 22); bx.fillStyle = '#6a9ab8'; for (let k = 0; k < 6; k++) bx.fillRect(ix + ((k * 23 + C.t / 4) % iw), iy + ih - 16 + (k % 3) * 4, 6, 1); }
+  // o rosto (2x), piscando de vez em quando; no vidro ele é um reflexo azulado
+  const fr = A.big[(C.t % 150) < 6 ? 2 : 0], fx = ix + (iw - 96) / 2, fy = iy + ih - 96 + 2;
+  bx.globalAlpha = a * (C.modo === 'janela' ? 0.55 : 1); bx.drawImage(fr, fx, fy, 96, 96);
+  if (C.modo === 'janela') { bx.globalAlpha = a * 0.22; bx.fillStyle = '#7aa0ff'; bx.fillRect(ix, iy, iw, ih); }
+  // memória perdida: riscos de borracha; somem conforme a Rita lembra (fill)
+  const Rz = riscosRosto(fr), vis = 1 - C.fill;
+  for (const r of Rz.L) { const sai = Math.max(0, Math.min(1, (C.fill - r.ordem * 0.7) / 0.3)); if (sai >= 1) continue; bx.globalAlpha = a * (C.modo === 'janela' ? 0.55 : 1) * (1 - sai); bx.fillStyle = Rz.pele; bx.fillRect(fx + r.x * 2, fy + r.y * 2, r.w * 2, 4); }
+  if (C.modo === 'janela') { bx.globalAlpha = a * 0.5; bx.fillStyle = '#b8d0ff'; for (let k = 0; k < 9; k++) { const rx = ix + (k * 37 % iw), ry = iy + ((C.t * 2 + k * 29) % (ih + 10)) - 10; bx.fillRect(rx, ry, 1, 4); bx.fillRect(rx + 1, ry + 4, 1, 3); } }
+  // reflexo do vidro
+  bx.globalAlpha = a * 0.18; bx.fillStyle = '#ffffff'; for (let k = 0; k < 30; k++) bx.fillRect(ix + 6 + k, iy + 4 + k * 2, 2, 2);
+  bx.restore(); bx.globalAlpha = 1;
+  if (C.fill > 0 && C.fill < 1) for (let k = 0; k < 3; k++) { bx.fillStyle = k % 2 ? '#fff4d8' : '#ffd8e0'; bx.fillRect(fx + 30 + ((C.t * 7 + k * 31) % 40), fy + 34 + ((C.t * 3 + k * 17) % 30), 1, 1); }
+  if (vis <= 0 && C.fill >= 1 && C.t % 40 < 20) { bx.fillStyle = '#ffd8e0'; bx.fillRect(x0 + w - 10, y0 + 6, 3, 1); bx.fillRect(x0 + w - 9, y0 + 5, 1, 3); }
+}
+{ const _db = desenhaBaloes; desenhaBaloes = function () { if (CLOSE && V.scene === 'world') desenhaClose(); return _db(); }; }
+{ const _hm2 = hudMundo; hudMundo = function (m) { if (CLOSE) return; return _hm2(m); }; }
+async function momentoRita() {
+  G.flags.ritaViuRosto = true;
+  const H = G.her || {}, promessa = !!(H.esc && H.esc.rita), blur = rostoKey().blur, ritaF = W2.fol.find(f => f.k === 'rita');
+  if (ritaF) ritaF.dir = W2.x > ritaF.x ? 'right' : W2.x < ritaF.x ? 'left' : W2.y > ritaF.y ? 'down' : 'up';
+  await say('* A Rita não diz nada. A Rita, que sempre tem uma piada pronta, não diz nada.');
+  await say('* Ela chega perto. Inclina a cabeça para o lado, devagar, até um ângulo muito específico.');
+  CLOSE = { modo: 'janela', t: 0, fill: 0 }; sfx('select');
+  await say('Esse ângulo. Duas fileiras na frente, olhando o reflexo no vidro. Com chuva por cima.', 'rita');
+  await say('Dois anos olhando essa cara de lado, @. Encostada na janela do 31, de boca meio aberta, com o fone remendado de fita isolante.', 'rita');
+  CLOSE.modo = 'agora'; CLOSE.t = 18; sfx('select');
+  await say('E agora ela tá de frente. Pra mim.', 'rita');
+  if (blur >= 1) {
+    await say('...Mas tá faltando coisa. Aqui, ó.', 'rita');
+    await say('* Ela encosta a ponta do dedo no borrão do seu rosto. Ali tinha alguma coisa. Você não lembra o quê.');
+    await say('Tinha uma pinta aqui. Pequenininha. E quando você dormia, essa sobrancelha subia, como se o sonho tivesse feito uma pergunta.', 'rita');
+    CLOSE.enche = true; sfx('rune');
+    await say('* Enquanto ela fala, o borrão vai ficando menos borrão. Não é magia. É só alguém lembrando por você.');
+    while (CLOSE.fill < 1) await wait(4);
+    await say('[Registro: a fidelidade do Rosto aumentou. Fonte da memória: externa. Isso não estava previsto.]', 'cat');
+    G.flags.rostoLembrado = true;
+  } else {
+    await say('Tá tudo aí. A pinta, a sobrancelha torta, a cara de sono. Você lembrou direitinho de você.', 'rita');
+    CLOSE.fill = 1;
+  }
+  const c = await choose('* Ela continua olhando. O que você diz?', ['"Você lembra mais de mim do que eu."', '"Pode olhar. Dessa vez eu tô acordado."', '"...Era tão feio assim?"']);
+  if (c === 0) await say('Alguém tinha que lembrar. Você tava ocupado dormindo.', 'rita');
+  else if (c === 1) { await say('...', 'rita'); await say('Pois é. Dessa vez você tá acordado.| E eu não sei o que fazer com as mãos. Isso nunca me aconteceu. Eu sou ESCUDEIRA.', 'rita'); shake(2); }
+  else await say('Feio não. Cansado. Cara de quem trabalhava demais e dormia de menos.| ...Continua igual, aliás.', 'rita');
+  if (promessa) {
+    await say('Lá embaixo, na estação, eu disse uma coisa. "Quando você arranjar um rosto, me procura."', 'rita');
+    await say('E você arranjou. Com hora pra acabar, derretendo pelas beiradas, mas arranjou.', 'rita');
+    await say('O pastel continua por minha conta. No dia em que a gente tiver UM cobre que não seja pra comida de verdade. Promessa de escudeira.', 'rita');
+    G.flags.pastelRita = true;
+    await say('* A Lume, que flutuava logo atrás, de repente acha muito interessante uma gaivota.');
+    await say('Pastel! Que legal. Eu adoro pastel. Eu também como pastel.| ...Eu não como. Mas adoro.', 'lume');
+  } else {
+    await say('Amigos de ônibus, né? Duas fileiras na frente, como sempre.| Pelo menos agora eu sei pra que lado você olha.', 'rita');
+    await say('* A Lume dá uma volta inteira em você, devagar, olhando de todos os lados, como quem confere se é o mesmo.');
+  }
+  CLOSE = null;
+  await say('Agora anda. Gente assim passa na rua e ninguém olha duas vezes. Mas não deixa derreter na minha frente, tá? Hoje não.', 'rita');
+}
+// saves que já viram a cena do Rosto sem esse momento: acontece na próxima vez que ele vestir o rosto com a Rita junto
+{ const _vr = vestirRosto; vestirRosto = function () { _vr(); if (deRosto() && G.flags.rostoCena && !G.flags.ritaViuRosto && partyKeys().includes('rita') && W2.fol.some(f => f.k === 'rita')) run2(async () => { await wait(30); await say('Peraí. Deixa eu ver isso direito.', 'rita'); await momentoRita(); save2(); }); }; }
