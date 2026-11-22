@@ -166,6 +166,10 @@
    NÃO desconfiam. Abaixo de 15 o rosto DERRETE (pisca, escorre) e o disfarce falha. No zero volta a baú na hora; quem
    estiver olhando vê a troca (sobe suspeita). Água desfaz (gente afunda, baú boia). Luta sempre começa como baú: a
    TROCA DE FORMA EM BATALHA (humano ágil x baú pesado, ação leve) fica para o Cap. 3.
+ - BALÕES DE FALA NO MAPA (world2.js): fila BAL desenhada no fim do quadro (depois da noite/telhados), 14 px de altura
+   para a fonte, rabinho para quem fala, presos na tela, desviam do painel, relógio, botões e aviso; reação (pri 1) sobe e
+   empilha, balão de fundo que bate é descartado; um por pessoa; texto fixo por ciclo (nada de sortear a cada quadro);
+   somem quando há janela aberta.
  - CONTROLE DE TOQUE: ANALÓGICO (pino que segue o dedo, zona morta no centro; empurrar pouco = andar devagar).
  - ANDAR NO MAPA: 8 direções (diagonais com duas teclas ou no direcional de toque; não corta quina de parede, desliza
    pelo eixo livre). Menus e batalha continuam em 4 direções.
@@ -3414,11 +3418,12 @@ function drawWorld2() {
   list.sort((a, b) => a.y - b.y).forEach(d => d.draw());
   // balões de aviso dos caçadores e cone
   for (const e of W2.ents) if (e.t === 'hunter') drawHunterUI(e, ox, oy);
-  for (const e of W2.ents) if (e.emote && e.emote.t-- > 0) balao(Math.round(e.px - ox + 8), Math.round(e.py - oy - (e.h || 48) - 6), e.emote.s);
+  for (const e of W2.ents) if (e.emote && e.emote.t-- > 0) { const fr = e.spr ? e.spr(W2.t + e.t0, e.dir, e) : null; balao(e.px - ox + 8, e.py - oy + 15 - (fr ? fr.height : (e.h || 48)) - 3 + (e.bob || 0), e.emote.s, { pri: 1, ent: e }); }
   if (m.overlay) m.overlay(ox, oy);
   if (m.dark) drawDark(ox, oy);
   if (typeof desenhaCeu === 'function') desenhaCeu(m, ox, oy);
   if (m.tint) { bx.fillStyle = m.tint; bx.fillRect(0, 0, W, H); }
+  desenhaBaloes();
   // indicador de A sobre quem dá para conversar
   const [dx, dy] = DIR2[W2.dir], near = entAt2(W2.x + dx, W2.y + dy);
   if (near && near.talk && !worldBusy2() && near.t !== 'door') { const yy = near.py - oy - (near.h || 40) - 6 + Math.round(Math.sin(W2.t / 8)); txt('A', near.px - ox + 6, yy, { col: '#ffe066', shadow: true }); }
@@ -3509,12 +3514,56 @@ const ACT_BOB = {
 // pontos do corpo no sprite do morador (~48 px): mão e cabeça
 function maoDe(e, x, y, fr) { const top = y + 15 - fr.height; return { mx: x + 8 + (e.dir === 'left' ? -6 : e.dir === 'right' ? 6 : 5), my: top + 30, top, cx: x + 8, f: e.dir === 'left' ? -1 : e.dir === 'right' ? 1 : (e.dir === 'up' ? 0 : 1) }; }
 function px2(x, y, c, w = 1, h = 1) { bx.fillStyle = c; bx.fillRect(Math.round(x), Math.round(y), w, h); }
-function balao(x, y, s, col = '#ffffff') { const w = Math.max(10, lineW(rich(s)) + 6); bx.fillStyle = '#0a0612'; bx.fillRect(x - w / 2 - 1, y - 1, w + 2, 13); bx.fillStyle = '#f2ecdc'; bx.fillRect(x - w / 2, y, w, 11); bx.fillRect(x - 1, y + 11, 3, 2); txt(s, x, y + 1, { align: 'center', col: '#2a1e1a' }); }
+// ---------- balões de fala no mapa ----------
+// Os balões NÃO são desenhados na hora: entram numa fila e são desenhados juntos no fim do quadro (depois da noite e
+// dos telhados), com altura certa para a fonte, rabinho apontando para quem fala, sem sair da tela, sem ficar em cima
+// do painel do grupo e sem um cobrir o outro (o de reação tem prioridade; os de fundo que batem são descartados).
+const BAL = [];
+function balao(x, y, s, o = {}) { BAL.push({ x: Math.round(x), y: Math.round(y), s: String(s), pri: o.pri || 0, ent: o.ent || null }); }
+function desenhaBaloes() {
+  const fila = BAL.splice(0);
+  if (UI.stack.length || V.scene !== 'world') return;               // com janela aberta, os balões somem (o texto passaria por cima dela)
+  const hud = (typeof HUD_G !== 'undefined' && HUD_G) ? 8 + HUD_G.length * 11 + 12 + (W2.map && W2.map.hunters ? 11 : 0) + (G.flags && G.flags.rostoCena ? 18 : 0) : 60;
+  const postos = [{ x0: 0, y0: 0, x1: 100, y1: hud + 6, fixo: true }, { x0: 98, y0: 0, x1: 160, y1: 22, fixo: true }, { x0: W - 64, y0: 0, x1: W, y1: 30, fixo: true }];
+  if (W2.toast) { const tw = lineW(rich(W2.toast.s)) + 20; postos.push({ x0: W / 2 - tw / 2, y0: 24, x1: W / 2 + tw / 2, y1: 43, fixo: true }); }
+  // primeiro as reações (pri alto), depois as de fundo; dentro de cada grupo, de cima para baixo
+  fila.sort((a, b) => b.pri - a.pri || a.y - b.y);
+  // um balão por pessoa
+  const vistos = new Set();
+  for (const b of fila) {
+    if (b.ent) { if (vistos.has(b.ent)) continue; vistos.add(b.ent); }
+    const w = Math.max(12, lineW(rich(b.s)) + 8), h = 14;
+    let bx0 = Math.max(2, Math.min(W - 2 - w, b.x - Math.round(w / 2))), by0 = Math.max(2, b.y - h);
+    const bate = (x0, y0) => postos.find(r => x0 < r.x1 && x0 + w > r.x0 && y0 < r.y1 && y0 + h + 3 > r.y0);
+    let r = bate(bx0, by0), tent = 0;
+    while (r && tent++ < 3) {
+      if (r.fixo) { if (b.pri > 0 && by0 + h + 3 > r.y1 - 2 && r.y1 + 2 + h <= b.y + 6) by0 = r.y1 + 2; else break; }
+      else if (b.pri > 0) by0 = r.y0 - h - 4;                       // reação: sobe e empilha
+      else break;
+      r = bate(bx0, by0);
+    }
+    if (r || by0 < 2) continue;                                       // não coube sem cobrir outro: este fica para depois
+    postos.push({ x0: bx0, y0: by0, x1: bx0 + w, y1: by0 + h + 3 });
+    // corpo com cantos cortados, contorno escuro e sombra
+    const ink = '#1a1020', papel = b.pri > 0 ? '#fff4dc' : '#ece4d2';
+    bx.fillStyle = 'rgba(0,0,0,0.35)'; bx.fillRect(bx0 + 1, by0 + h, w - 2, 1);
+    bx.fillStyle = ink; bx.fillRect(bx0 + 1, by0 - 1, w - 2, h + 2); bx.fillRect(bx0 - 1, by0 + 1, w + 2, h - 2); bx.fillRect(bx0, by0, w, h);
+    bx.fillStyle = papel; bx.fillRect(bx0 + 1, by0, w - 2, h); bx.fillRect(bx0, by0 + 1, w, h - 2);
+    bx.fillStyle = 'rgba(255,255,255,0.6)'; bx.fillRect(bx0 + 2, by0 + 1, w - 4, 1);
+    // rabinho: aponta para quem fala (preso dentro do balão)
+    const tx = Math.max(bx0 + 3, Math.min(bx0 + w - 5, b.x - 1)), ty = by0 + h;
+    if (by0 + h <= b.y + 1) {
+      bx.fillStyle = ink; bx.fillRect(tx - 1, ty, 5, 2); bx.fillRect(tx, ty + 2, 3, 1); bx.fillRect(tx + 1, ty + 3, 1, 1);
+      bx.fillStyle = papel; bx.fillRect(tx, ty - 1, 3, 2); bx.fillRect(tx + 1, ty + 1, 1, 1);
+    }
+    txt(b.s, bx0 + w / 2, by0 + 1, { align: 'center', col: b.pri > 0 ? '#8a2030' : '#2a1e1a' });
+  }
+}
 const ACT2 = {
   // varrer o cais: vassoura indo e vindo, poeirinha
   varrer(e, x, y, t, fr) { const { mx, my, f } = maoDe(e, x, y, fr), s = Math.sin(t / 5) * 4; bx.strokeStyle = '#8a6a3a'; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(mx + 0.5, my - 6); bx.lineTo(mx + f * 6 + s + 0.5, y + 14); bx.stroke(); px2(mx + f * 6 + s - 3, y + 13, '#c8a050', 7, 2); if (t % 12 < 4) px2(mx + f * 9 + s, y + 12 - (t % 12), '#b8a890'); },
   // pescar: vara, linha até a água e a boia subindo e descendo; às vezes fisga
-  pescar(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), dd = DIR2[e.dir], tx = x + 8 + dd[0] * 26, ty = y + 6 + dd[1] * 26, fis = t % 420 > 380; bx.strokeStyle = '#6a4a2a'; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(mx, my); bx.lineTo(mx + dd[0] * 16, my - 14 + dd[1] * 8); bx.stroke(); bx.strokeStyle = 'rgba(240,240,240,0.7)'; bx.beginPath(); bx.moveTo(mx + dd[0] * 16, my - 14 + dd[1] * 8); bx.lineTo(tx, ty + (fis ? 3 : 0)); bx.stroke(); px2(tx - 1, ty - 1 + (fis ? 3 : Math.round(Math.sin(t / 15))), '#e85a4a', 3, 2); px2(tx - 1, ty - 2 + (fis ? 3 : Math.round(Math.sin(t / 15))), '#ffffff', 3, 1); if (fis) balao(x + 8, y - 44, '!'); },
+  pescar(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), dd = DIR2[e.dir], tx = x + 8 + dd[0] * 26, ty = y + 6 + dd[1] * 26, fis = t % 420 > 380; bx.strokeStyle = '#6a4a2a'; bx.lineWidth = 1; bx.beginPath(); bx.moveTo(mx, my); bx.lineTo(mx + dd[0] * 16, my - 14 + dd[1] * 8); bx.stroke(); bx.strokeStyle = 'rgba(240,240,240,0.7)'; bx.beginPath(); bx.moveTo(mx + dd[0] * 16, my - 14 + dd[1] * 8); bx.lineTo(tx, ty + (fis ? 3 : 0)); bx.stroke(); px2(tx - 1, ty - 1 + (fis ? 3 : Math.round(Math.sin(t / 15))), '#e85a4a', 3, 2); px2(tx - 1, ty - 2 + (fis ? 3 : Math.round(Math.sin(t / 15))), '#ffffff', 3, 1); if (fis) balao(x + 8, y + 15 - fr.height - 3, '!', { ent: e }); },
   // carregar caixa na cabeça (andando com e.leva) e empilhar no destino
   carregar(e, x, y, t, fr) { const top = y + 15 - fr.height + (e.bob || 0); bx.drawImage(caixaMini(), Math.round(x + 1), Math.round(top - 9)); },
   empilhar(e, x, y, t, fr) { const top = y + 15 - fr.height, p = Math.min(1, (t % 120) / 40); if (p < 1) bx.drawImage(caixaMini(), Math.round(x + 1 + DIR2[e.dir][0] * 10 * p), Math.round(top - 9 + 30 * p)); },
@@ -3534,10 +3583,10 @@ const ACT2 = {
   beber(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), up = (t % 160) < 40 ? 10 : 0; px2(mx - 2, my - up - 2, '#c8a060', 5, 6); px2(mx - 2, my - up - 2, '#f2ecdc', 5, 1); },
   cochilar(e, x, y, t, fr) { const { top } = maoDe(e, x, y, fr); const k = t % 120; txt(k < 40 ? 'z' : k < 80 ? 'zZ' : 'zZz', x + 16, top - 4 - (k % 40) / 8, { col: '#b8aecb' }); },
   // conversar: balãozinho de reticências que vai e volta
-  conversar(e, x, y, t, fr) { if (t % 200 < 120) balao(x + 8, y + 15 - fr.height - 14, ['...', '!', '?', 'hã!', 'pois é'][Math.floor(t / 200) % 5]); },
+  conversar(e, x, y, t, fr) { if (t % 200 < 120) balao(x + 8, y + 15 - fr.height - 3, ['...', '!', '?', 'hã!', 'pois é'][Math.floor(t / 200) % 5], { ent: e }); },
   // brincar (pula) e olhar o rio (parado, de vez em quando suspira)
-  brincar(e, x, y, t, fr) { if (t % 180 < 40) balao(x + 8, y + 15 - fr.height - 14 + (e.bob || 0), '♪'); },
-  olhar(e, x, y, t, fr) { if (t % 300 < 50) balao(x + 8, y + 15 - fr.height - 14, '...'); },
+  brincar(e, x, y, t, fr) { if (t % 180 < 40) balao(x + 8, y + 15 - fr.height - 3 + (e.bob || 0), '♪', { ent: e }); },
+  olhar(e, x, y, t, fr) { if (t % 300 < 50) balao(x + 8, y + 15 - fr.height - 3, '...', { ent: e }); },
   dancar(e, x, y, t, fr) { if (t % 60 < 30) txt('♪', x + 18, y + 15 - fr.height - 4, { col: '#ffe066' }); },
   rezar(e, x, y, t, fr) { const { top } = maoDe(e, x, y, fr); if (t % 160 < 60) txt('+', x + 18, top - 2 - (t % 160) / 12, { col: '#ffe8b0' }); }
 };
@@ -5681,10 +5730,10 @@ const lousa = memo(() => { const P = new Pix(30, 20); P.rect(0, 0, 30, 20, '#5a3
 Object.assign(ACT2, {
   comer(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), up = (t % 90) < 25 ? 9 : 0; px2(mx - 1, my - up, '#c8c8d8', 3, 1); if ((t % 90) < 25) px2(mx - 1, my - up - 1, '#e8a030', 2, 1); if (t % 30 < 15) px2(mx + 2, my - 14 - (t % 30) / 3, 'rgba(255,255,255,0.5)'); },
   brindar(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), k = t % 160, up = k < 30 ? 12 : 3; px2(mx - 2, my - up - 2, '#c8a060', 5, 6); px2(mx - 2, my - up - 2, '#f2ecdc', 5, 2); if (k > 12 && k < 26) { txt('tim!', x + 8, y + 15 - fr.height - 12, { align: 'center', col: '#ffe066' }); } },
-  rir(e, x, y, t, fr) { if (t % 140 < 50) balao(x + 8, y + 15 - fr.height - 14, pickOne(['hahaha', 'kkkk', 'hehe'])); },
-  tocar(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr); px2(mx - 6, my - 2, '#a86a3a', 9, 6); px2(mx - 5, my - 1, '#5a3a24', 3, 3); px2(mx + 3, my - 6, '#6a4a2a', 1, 6); if (t % 6 < 3) px2(mx - 3, my + 1, '#ffffff'); if (t % 40 < 30) txt(pickOne(['♪', '♫']), x + 14, y + 15 - fr.height - 4 - (t % 40) / 4, { col: '#ffe066' }); },
+  rir(e, x, y, t, fr) { if (t % 140 < 50) balao(x + 8, y + 15 - fr.height - 3, ['hahaha', 'kkkk', 'hehe'][Math.floor(t / 140) % 3], { ent: e }); },
+  tocar(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr); px2(mx - 6, my - 2, '#a86a3a', 9, 6); px2(mx - 5, my - 1, '#5a3a24', 3, 3); px2(mx + 3, my - 6, '#6a4a2a', 1, 6); if (t % 6 < 3) px2(mx - 3, my + 1, '#ffffff'); if (t % 40 < 30) txt(Math.floor(t / 40) % 2 ? '♫' : '♪', x + 14, y + 15 - fr.height - 4 - (t % 40) / 4, { col: '#ffe066' }); },
   pegar(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), k = Math.min(1, (t % 60) / 30); bandejaEm(mx - 4, my - 4 - k * 4); },
-  servir(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), k = Math.min(1, (t % 80) / 30); if (k < 1) bandejaEm(mx - 4 + DIR2[e.dir][0] * 6 * k, my - 8 + DIR2[e.dir][1] * 6 * k); else if (t % 80 < 60) balao(x + 8, y + 15 - fr.height - 14, pickOne(['Prontinho!', 'Bom apetite!', 'Cuidado, quente!'])); },
+  servir(e, x, y, t, fr) { const { mx, my } = maoDe(e, x, y, fr), k = Math.min(1, (t % 80) / 30); if (k < 1) bandejaEm(mx - 4 + DIR2[e.dir][0] * 6 * k, my - 8 + DIR2[e.dir][1] * 6 * k); else if (t % 80 < 60) balao(x + 8, y + 15 - fr.height - 3, ['Prontinho!', 'Bom apetite!', 'Cuidado, quente!'][Math.floor(t / 80) % 3], { ent: e }); },
   bandeja(e, x, y, t, fr) { const top = y + 15 - fr.height; bandejaEm(x + 3 + (e.dir === 'left' ? -4 : 4), top + 14 + (Math.floor(t / 8) % 2)); }
 });
 function bandejaEm(x, y) { x = Math.round(x); y = Math.round(y); px2(x - 1, y + 3, '#2a1a10', 12, 2); px2(x, y + 3, '#a8a8b8', 10, 1); px2(x + 1, y - 2, '#c8a060', 3, 5); px2(x + 1, y - 2, '#f2ecdc', 3, 1); px2(x + 6, y, '#e8e8f0', 4, 3); px2(x + 7, y - 1, '#c87a3a', 2, 1); }
@@ -5996,7 +6045,6 @@ const ROSTO_IC = (() => { const c = mk(8, 8), x = c.getContext('2d'); x.fillStyl
   bx.globalAlpha = r.on ? 1 : 0.55; { const A = rostoArte(); if (A) bx.drawImage(A.port[0], 8, y + 2, 10, 10); else bx.drawImage(ROSTO_IC, 9, y + 3); } bx.globalAlpha = 1;
   const n = Math.ceil(r.f / FMAX * 10), cor = r.f < F_DERRETE ? '#ff6b6b' : r.f < F_MIN ? '#ffd060' : '#ffd8a8';
   for (let k = 0; k < 10; k++) { const pis = r.on && r.f < F_DERRETE && W2.t % 16 < 8; bx.fillStyle = k < n ? (pis ? '#fff' : cor) : 'rgba(255,216,168,0.14)'; bx.fillRect(22 + k * 7, y + 4, 6, 5); }
-  if (!r.on) txt('B', 92 - 7, y + 2, { col: 'rgba(255,216,168,0.6)' });
 }; }
 
 // ---------- a cena: por que as magias sumiram e por que o Rosto dura pouco ----------

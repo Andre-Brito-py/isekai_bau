@@ -161,7 +161,6 @@ const ROSTO_IC = (() => { const c = mk(8, 8), x = c.getContext('2d'); x.fillStyl
   bx.globalAlpha = r.on ? 1 : 0.55; { const A = rostoArte(); if (A) bx.drawImage(A.port[0], 8, y + 2, 10, 10); else bx.drawImage(ROSTO_IC, 9, y + 3); } bx.globalAlpha = 1;
   const n = Math.ceil(r.f / FMAX * 10), cor = r.f < F_DERRETE ? '#ff6b6b' : r.f < F_MIN ? '#ffd060' : '#ffd8a8';
   for (let k = 0; k < 10; k++) { const pis = r.on && r.f < F_DERRETE && W2.t % 16 < 8; bx.fillStyle = k < n ? (pis ? '#fff' : cor) : 'rgba(255,216,168,0.14)'; bx.fillRect(22 + k * 7, y + 4, 6, 5); }
-  if (!r.on) txt('B', 92 - 7, y + 2, { col: 'rgba(255,216,168,0.6)' });
 }; }
 
 // ---------- a cena: por que as magias sumiram e por que o Rosto dura pouco ----------
