@@ -506,8 +506,14 @@ async function fimCap2() {
   await tw2cena(30, p => { lume.alpha = 1 - p; });
   lume.fr = t => IMG.sp.lume ? IMG.sp.lume[Math.floor(t / 20) % IMG.sp.lume.length] : null; lume.oy = -14;
   await tw2cena(30, p => { lume.alpha = p; });
-  await say('* E quando o último pedaço de sol some atrás da serra, a Lume treme, encolhe e volta a ser o que era lá embaixo: um lustre pequeno, de velas tortas, flutuando do seu lado.');
-  await say('...De noite eu volto a ser isso. Esqueci de avisar. Desculpa, @. Eu não queria que você visse.', 'lume');
+  if (!G.flags.lumeNoite) {
+    await say('* E quando o último pedaço de sol some atrás da serra, a Lume treme, encolhe e volta a ser o que era lá embaixo: um lustre pequeno, de velas tortas, flutuando do seu lado.');
+    await say('...De noite eu volto a ser isso. Esqueci de avisar. Desculpa, @. Eu não queria que você visse.', 'lume');
+  } else {
+    await say('* E quando o último pedaço de sol some atrás da serra, a Lume vira lustre, como toda noite. Só que hoje ela vira na frente de um conde, de uma cidade inteira e de três Pavios.');
+    await say('...Todo mundo tá olhando, né. Tudo bem. Eu já me acostumei. Quase.', 'lume');
+  }
+  G.flags.lumeNoite = true;
   await say('Ninguém devia ter medo do escuro, moça.', 'vesper');
   await say('* Ele diz isso com uma gentileza enorme. Depois toca a aba da cartola e vai embora com os Pavios.');
   if ((G.flags.pavio || 0) >= 3) {
@@ -517,7 +523,7 @@ async function fimCap2() {
   await say('Ele parece gente boa.', 'rita');
   await say('Parece.', 'lume');
   await say('* Lá em cima, na torre, a Dona Badalada toca as nove horas. Certinho. Pela primeira vez em cem anos, ninguém precisa lembrar a cidade de que ela tem um sino.');
-  G.flags.c2Fim = true; G.pos = { map: 'praca', x: 15, y: 16, dir: 'down' }; G.marco = { map: 'praca', x: 2, y: 12 }; save2();
+  G.flags.c2Fim = true; G.hora = 20 * 60 + 30; G.pos = { map: 'praca', x: 15, y: 16, dir: 'down' }; G.marco = { map: 'praca', x: 2, y: 12 }; save2();
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 2', 'Velhágua, a cidade que afunda', '', 'Próximo: Capítulo 3', 'O Festival da Luz']);
   titleFlow2();
@@ -541,7 +547,7 @@ function iniciarCap2() {
   G.equipInv = {}; G.eq = {};
   if (!G.equipInv.lancaPedagio) ganharEquip('lancaPedagio'); G.eq.rita = Object.assign({ arma: 'lancaPedagio' }, G.eq.rita);
   if (G.her && G.her.lume && G.her.lume.fone && !G.equipInv.foneRemendado) { ganharEquip('foneRemendado'); G.eq.lume = Object.assign({ amuleto: 'foneRemendado' }, G.eq.lume); }
-  G.items = Object.assign({}, G.items, { frasco: Math.max(3, G.items.frasco || 0), tinta: Math.max(2, G.items.tinta || 0), pluma: Math.max(1, G.items.pluma || 0) });
+  G.hora = 8 * 60; G.items = Object.assign({}, G.items, { frasco: Math.max(3, G.items.frasco || 0), tinta: Math.max(2, G.items.tinta || 0), pluma: Math.max(1, G.items.pluma || 0) });
   G.marco = { map: 'cais', x: PC.chegada[0], y: PC.chegada[1] };
   return true;
 }

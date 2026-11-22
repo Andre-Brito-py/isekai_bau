@@ -452,6 +452,7 @@ function drawBattle2() {
   bx.restore();
   if (OX > 0) { const g = bx.createLinearGradient(0, 0, OX, 0); g.addColorStop(0, 'rgba(5,3,10,0.82)'); g.addColorStop(1, 'rgba(5,3,10,0)'); bx.fillStyle = g; bx.fillRect(0, 0, OX, H); const g2 = bx.createLinearGradient(OX + 240, 0, WF, 0); g2.addColorStop(0, 'rgba(5,3,10,0)'); g2.addColorStop(1, 'rgba(5,3,10,0.82)'); bx.fillStyle = g2; bx.fillRect(OX + 240, 0, WF - OX - 240, H); }
   bx.fillStyle = 'rgba(5,3,10,0.55)'; bx.fillRect(0, 0, WF, by);
+  if (BT.cfg.noite) { bx.fillStyle = 'rgba(10,16,52,0.5)'; bx.fillRect(0, 0, WF, H); }
   // campo de batalha em coordenadas locais (0..240)
   bx.save(); bx.translate(OX + sx, DY + sy); W = 240; TXO.x = OX; TXO.y = DY;
   // soco de câmera: zoom curtinho no ponto do golpe forte

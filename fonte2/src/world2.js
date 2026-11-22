@@ -55,6 +55,7 @@ function stepTween(o, n = 8) { const m = o.mv; m.k++; const p = Math.min(1, m.k 
 function startMove(o, tx, ty) { o.mv = { fx: o.x, fy: o.y, tx, ty, k: 0 }; }
 function updateWorld2() {
   W2.t++;
+  if (typeof passaTempo === 'function') passaTempo();
   if (W2.toast && ++W2.toast.t > 150) W2.toast = null;
   // seguidores andam sempre (mesmo com diálogo aberto, terminam o passo)
   for (const f of W2.fol) if (f.mv) stepTween(f);
@@ -215,6 +216,7 @@ function drawWorld2() {
   for (const e of W2.ents) if (e.emote && e.emote.t-- > 0) balao(Math.round(e.px - ox + 8), Math.round(e.py - oy - (e.h || 48) - 6), e.emote.s);
   if (m.overlay) m.overlay(ox, oy);
   if (m.dark) drawDark(ox, oy);
+  if (typeof desenhaCeu === 'function') desenhaCeu(m, ox, oy);
   if (m.tint) { bx.fillStyle = m.tint; bx.fillRect(0, 0, W, H); }
   // indicador de A sobre quem dá para conversar
   const [dx, dy] = DIR2[W2.dir], near = entAt2(W2.x + dx, W2.y + dy);
@@ -349,7 +351,7 @@ function hudMundo(m) {
   const gs = HUD_G || [], h = 8 + gs.length * 11 + 12 + (m.hunters ? 11 : 0);
   box(4, 4, 92, h, { bw: 1 });
   gs.forEach((u, i) => {
-    const y = 9 + i * 11, p = PT(u.id === 'lume' ? 'lumeh' : u.id === 'bau' ? 'me' : u.id);
+    const y = 9 + i * 11, p = PT(u.port || u.id);
     if (p) { bx.save(); bx.beginPath(); bx.rect(8, y - 1, 10, 10); bx.clip(); bx.drawImage(p, 8, y - 1, 10, 10); bx.restore(); }
     const pt = (G.pt || {})[u.id], hp = pt ? pt.hp : u.mhp, n = Math.ceil(Math.max(0, hp) / u.mhp * 10), cor = hp / u.mhp > 0.5 ? '#5fffb0' : hp / u.mhp > 0.25 ? '#ffd060' : '#ff6b6b';
     for (let k = 0; k < 10; k++) { bx.fillStyle = k < n ? cor : 'rgba(95,255,176,0.14)'; bx.fillRect(22 + k * 7, y + 1, 6, 6); if (k < n) { bx.fillStyle = 'rgba(255,255,255,0.35)'; bx.fillRect(22 + k * 7, y + 1, 6, 1); } }
