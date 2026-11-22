@@ -543,7 +543,7 @@ function cartao(l) { return new Promise(async r => { V.card = { l, r }; V.scene 
 // ---------- entrada no capítulo ----------
 function iniciarCap2() {
   if (G.flags.c2Init) return false;
-  G.flags.c2Init = true; G.cobres = 30; G.gone2 = {}; G.pt = {}; G.poder = 1;
+  G.flags.c2Init = true; G.cobres = 0; G.gone2 = {}; G.pt = {}; G.poder = 1;
   G.equipInv = {}; G.eq = {};
   if (!G.equipInv.lancaPedagio) ganharEquip('lancaPedagio'); G.eq.rita = Object.assign({ arma: 'lancaPedagio' }, G.eq.rita);
   if (G.her && G.her.lume && G.her.lume.fone && !G.equipInv.foneRemendado) { ganharEquip('foneRemendado'); G.eq.lume = Object.assign({ amuleto: 'foneRemendado' }, G.eq.lume); }
@@ -561,6 +561,24 @@ async function chegadaVelhagua() {
   await say('* Na beira do cais, gente sobe a ladeira carregando cadeiras, gaiolas, uma cômoda, um piano inteiro. Ninguém parece surpreso.');
   await say('Ponto final: Cais da Ponte. Eu fico com o 31. Se a cidade afundar, pelo menos o ônibus boia. ...Eu acho.', 'jorge');
   CENA.actors.push({ x: 150, y: 152, fr: standF('lumeh') }, { x: 166, y: 160, fr: chestF() }, { x: 182, y: 156, fr: standF('rita') });
+  // ---- não tem um vintém ----
+  await say('Passagem são três cobres por cabeça. Quatro cabeças, contando a tampa.', 'jorge');
+  await say('Cobre? A gente... tem cobre?', 'lume');
+  await say('* A Rita revira os bolsos: um botão, um recibo de pedágio e um grão de areia da masmorra.');
+  await say('* Você abre a tampa e procura lá dentro: uma meia, uma pedrinha da masmorra e nenhum vintém.');
+  await say('Lá embaixo a gente pagava tudo com âmbar e coragem.', 'lume');
+  await say('Aqui em cima âmbar é da Coroa. Quem anda com âmbar no bolso é preso por contrabando. A moeda do povo é cobre. E a gente tem zero.', 'rita');
+  await say('Relaxa. A primeira viagem é por conta da casa. A segunda também. A terceira eu anoto num caderninho e esqueço.', 'jorge');
+  await say('Tá. Então vamos pensar como gente de fora. Eu sou de fora. Eu penso.', 'rita');
+  await say('Um: a Guilda tem um QUADRO DE PEDIDOS na taverna. Serviço miúdo, bicho em porão, coisa perdida. Eu tenho licença de escudeira: eles pagam a mim e não perguntam da bagagem.', 'rita');
+  await say('Dois: tudo que a gente derrotar deixa alguma coisa. Lodo, telha, sininho. A dona do bazar compra. Aqui em cima, bicho é matéria-prima.', 'rita');
+  await say('Três: eu canto. Na Terra eu tocava violão na praça, de noite. Chapéu no chão, moedinha. Isso funciona em qualquer mundo.', 'lume');
+  await say('E quatro: o Tiago.', 'rita');
+  await say('O cobrador?', 'lume');
+  await say('Aqui fora ele não é cobrador. É o HERÓI Nº 30. Os heróis que voltaram da masmorra foram chamados para a capital. Tem figurinha dele em tudo que é venda.', 'rita');
+  await say('O cobrador virou herói e o @ virou baú. Eu nunca vou superar isso.', 'lume');
+  await say('Ele mandou carta pelo correio do cais. Vi o selo da Coroa no bazar. Endereçada a "o baú e a moça que brilha".', 'rita');
+  await say('* (Dinheiro: cobres. Ganhe com lutas, vendendo materiais no Bazar, com os pedidos da taverna e, de noite, com a Lume cantando na fonte da praça.)');
   await say('* O âmbar do Espantalho, guardado na sua tampa, ainda está quente. Você sente uma coisa voltando, devagar: força antiga. (+ vida, ataque e magia.)');
   await say('Toma, Rita. A lança do pedágio. O Espantalho não vai precisar.', 'lume');
   await say('* A Rita equipou a {y}Lança do Pedágio{/}. (Equipamentos: MENU > Equipar. Só as formas humanas usam.)');

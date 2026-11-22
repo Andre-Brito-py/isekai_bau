@@ -19,7 +19,7 @@ const LUSTRE_ON = () => ehNoite() && G.flags && G.flags.lumeNoite;
 function passaTempo() {
   if (!G.flags || !G.flags.c2Init || V.scene !== 'world' || worldBusy2()) return;
   const antes = ehNoite(), fAntes = fase();
-  G.hora = (hora() + MIN_POR_QUADRO) % 1440;
+  const h0 = hora(); G.hora = (h0 + MIN_POR_QUADRO) % 1440; if (G.hora < h0) G.dia = (G.dia || 0) + 1;
   // caçadores: menos visão no escuro
   if (W2.t % 30 === 0) for (const e of W2.ents) if (e.t === 'hunter') { e.vis0 = e.vis0 ?? e.vis; e.vis = e.vis0 - (ehNoite() ? 2 : 0); e.luz = ehNoite() ? 34 : 0; }
   if (fAntes !== fase() && fase() === 'entardecer') W2.toast = { s: 'Entardece em Velhágua', t: 0 };
@@ -135,7 +135,7 @@ const DORME = ['pedrinho', 'zefa', 'lurdes', 'dita', 'joao', 'nico'];
   const c = await choose('Descansar até quando?', ['Só um pouco (seguir agora)', 'Até a manhã', 'Até a noite'], 'n', 0);
   if (c === 0) return;
   await fadeOut(20);
-  G.hora = c === 1 ? 7 * 60 : 19 * 60 + 30;
+  if (c === 1 || hora() > 19 * 60 + 30) G.dia = (G.dia || 0) + 1; G.hora = c === 1 ? 7 * 60 : 19 * 60 + 30;
   if (c === 2 && !G.flags.lumeNoite) { loadMap2(W2.id, W2.x, W2.y, W2.dir); await fadeIn(16); await primeiraNoite(); save2(); return; }
   save2(); loadMap2(W2.id, W2.x, W2.y, W2.dir); await fadeIn(20);
   W2.toast = { s: (c === 1 ? 'Manhã · ' : 'Noite · ') + relogio(), t: 0 };
