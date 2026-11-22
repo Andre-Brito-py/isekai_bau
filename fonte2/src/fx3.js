@@ -192,7 +192,8 @@ drawPrompt = function () {
   return _dr.apply(this, arguments);
 }; }
 // a Rainha bate as asas mais rápido quando arma o golpe
-ENEMY2.rainha.frame = u => mariposaArt(Math.floor(BT.t / (u.armando ? 3 : 10) + u.x) % 2, true, !!u.acesa);
+ENEMY2.rainha.frame = u => rainhaArt(Math.floor(BT.t / (u.armando ? 3 : 10) + u.x) % 2, !!u.acesa);
+ENEMY2.rainha.h = 100;
 
 // ---------- Mariposa-Rainha: dificuldade ajustada (o usuário não conseguiu passar) ----------
-Object.assign(ENEMY2.rainha, { mhp: 1400, atk: 20, shield: 4, maxShield: 4 });
+Object.assign(ENEMY2.rainha, { mhp: 1550, atk: 21, shield: 4, maxShield: 4 });

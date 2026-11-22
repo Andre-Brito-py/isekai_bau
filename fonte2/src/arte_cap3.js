@@ -181,3 +181,55 @@ function mariposaArt(f, rainha, acesa) {
   if (rainha) { for (let i = 0; i < 5; i++) P.rect(cx - 8 + i * 4, cy - 8 * s - 4 - (i % 2) * 3, 2, 4, '#f0c040'); }
   return MARI_C[key] = P.outline().canvas();
 }
+
+// ---------- MARIPOSA-RAINHA (arte de chefe, mais detalhe) ----------
+// Quatro asas (anteriores grandes com olho de três anéis, nervuras e franja recortada; posteriores menores em degradê
+// rosa-ferrugem com pintas), tórax peludo com gola branca, abdômen em gomos, antenas plumosas enroladas, coroa de
+// chaminhas e olhos que brilham. Acesa: asas douradas com borda de luz. Dois quadros de bater de asa.
+const RAINHA_C = {};
+function rainhaArt(f, acesa) {
+  const key = f + (acesa ? 'a' : ''); if (RAINHA_C[key]) return RAINHA_C[key];
+  const W_ = 128, H_ = 100, P = new Pix(W_, H_), cx = 64, cy = 50, bate = f ? 0.72 : 1;
+  const AF = acesa ? ['#5a3010', '#a8601c', '#e8a038', '#ffd870', '#fff4c0'] : ['#2a1a2a', '#4a3040', '#6e4c58', '#9a7476', '#c8a49a'];
+  const AP = acesa ? ['#6a2a10', '#c05a20', '#f09038', '#ffc860'] : ['#3a1a28', '#7a3a44', '#b0605a', '#d8907a'];
+  const CO = ['#1a0e1a', '#3a2232', '#5a3a48', '#7a5862'];
+  // asas posteriores (atrás)
+  for (const L of [-1, 1]) for (let y = -2; y <= 30; y++) for (let x = 4; x <= 40; x++) {
+    const nx = (x - 4) / 36, ny = (y - 12) / 18; if (nx * nx + ny * ny > 1 || y < 0 && x > 30) continue;
+    const k = (nx + Math.max(0, ny) * 0.5); P.p(cx + L * x, cy + Math.round(y * bate), k < 0.3 ? AP[3] : k < 0.6 ? AP[2] : k < 0.85 ? AP[1] : AP[0]);
+  }
+  for (const L of [-1, 1]) for (let i = 0; i < 7; i++) { const a = 0.2 + i * 0.2, X = cx + L * Math.round(8 + Math.cos(a) * 28), Y = cy + Math.round((12 + Math.sin(a) * 15) * bate); P.p(X, Y, acesa ? '#fff4c0' : '#e8c0a0'); P.p(X, Y + 1, AP[0]); }
+  // asas anteriores (frente), grandes, pontudas
+  for (const L of [-1, 1]) for (let y = -34; y <= 10; y++) for (let x = 3; x <= 62; x++) {
+    const nx = (x - 3) / 59, top = -34 + nx * 22, bot = 10 - nx * nx * 26 + (nx > 0.85 ? (nx - 0.85) * 60 : 0);
+    if (y < top || y > bot) continue;
+    const ry = (y - top) / Math.max(1, bot - top), k = nx * 0.7 + ry * 0.4;
+    let c = k < 0.3 ? AF[3] : k < 0.55 ? AF[2] : k < 0.8 ? AF[1] : AF[0]; if (ry < 0.08) c = AF[4];
+    P.p(cx + L * x, cy + Math.round(y * bate), c);
+  }
+  // nervuras e franja recortada da asa anterior
+  for (const L of [-1, 1]) {
+    for (let v = 0; v < 6; v++) { const ang = -0.55 + v * 0.22; for (let r = 6; r < 58; r++) { const X = cx + L * Math.round(3 + Math.cos(ang) * r), Y = cy + Math.round((Math.sin(ang) * r * 0.62 - 8) * bate); if (P.get(X, Y) && r % 7 !== 0) P.p(X, Y, AF[0]); } }
+    for (let x = 6; x <= 62; x += 3) { const nx = (x - 3) / 59, bot = 10 - nx * nx * 26 + (nx > 0.85 ? (nx - 0.85) * 60 : 0), Y = cy + Math.round(bot * bate); P.p(cx + L * x, Y, AF[4]); P.p(cx + L * (x + 1), Y - 1, AF[3]); }
+    // olho de três anéis
+    const ox = cx + L * 34, oy = cy + Math.round(-12 * bate);
+    for (let y = -8; y <= 8; y++) for (let x = -8; x <= 8; x++) { const d = Math.sqrt(x * x + y * y * 1.3); if (d > 8) continue; P.p(ox + x, oy + Math.round(y * bate), d < 2.2 ? (acesa ? '#ffffff' : '#1a0e1a') : d < 4 ? (acesa ? '#ff9a30' : '#e8c040') : d < 6 ? (acesa ? '#fff4c0' : '#1a0e1a') : (acesa ? '#e8a038' : '#c8a080')); }
+    P.p(ox - 1, oy - 1, '#ffffff');
+    // pintas brancas na ponta da asa
+    for (const [dx, dy] of [[50, -16], [54, -12], [46, -20]]) P.p(cx + L * dx, cy + Math.round(dy * bate), '#ffffff');
+  }
+  // abdômen em gomos
+  for (let y = 4; y <= 40; y++) { const w = Math.round(7 - (y - 4) * 0.15 - (y > 32 ? (y - 32) * 0.5 : 0)); for (let x = -w; x <= w; x++) { const gomo = (y - 4) % 6 < 1; P.p(cx + x, cy + y, gomo ? CO[0] : x < -w / 3 ? CO[3] : x > w / 3 ? CO[1] : CO[2]); } }
+  // tórax peludo e gola branca
+  for (let y = -14; y <= 6; y++) for (let x = -9; x <= 9; x++) if (x * x / 81 + y * y / 110 <= 1) P.p(cx + x, cy + y, (x + y) % 3 === 0 ? CO[3] : x < 0 ? CO[2] : CO[1]);
+  for (let a = 0; a < 40; a++) { const t = a / 40 * Math.PI * 2, r = 10 + (a % 2); P.p(cx + Math.round(Math.cos(t) * r), cy - 14 + Math.round(Math.sin(t) * 4), a % 3 ? '#f2ecdc' : '#c8c0b0'); }
+  // cabeça, olhos e antenas plumosas enroladas
+  for (let y = -6; y <= 4; y++) for (let x = -6; x <= 6; x++) if (x * x + y * y * 1.4 <= 36) P.p(cx + x, cy - 22 + y, x < 0 ? CO[2] : CO[1]);
+  for (const L of [-1, 1]) { P.rect(cx + L * 4 - (L < 0 ? 2 : 0), cy - 24, 3, 3, acesa ? '#fff4c0' : '#ff5a7a'); P.p(cx + L * 4, cy - 24, '#ffffff'); }
+  for (const L of [-1, 1]) for (let i = 0; i < 22; i++) { const t = i / 22, X = cx + L * Math.round(3 + t * 16 + Math.sin(t * 3) * 2), Y = cy - 28 - Math.round(t * 20 - (t > 0.8 ? (t - 0.8) * 40 : 0)); P.p(X, Y, CO[1]); if (i % 2 === 0 && i > 2) { P.p(X + L, Y - 1, CO[2]); P.p(X - L, Y - 1, CO[2]); } }
+  // coroa de chaminhas
+  for (let i = 0; i < 5; i++) { const x = cx - 8 + i * 4, y = cy - 32 - (i % 2) * 3; P.rect(x, y, 2, 4, '#f0c040'); P.p(x, y - 1, f ? '#fff4c0' : '#ffd060'); P.p(x + 1, y - 2, '#ff9a30'); }
+  // patinhas
+  for (const L of [-1, 1]) for (let i = 0; i < 3; i++) { P.p(cx + L * (8 + i), cy + 4 + i * 2, CO[0]); P.p(cx + L * (10 + i), cy + 5 + i * 2, CO[0]); }
+  return RAINHA_C[key] = P.outline().canvas();
+}

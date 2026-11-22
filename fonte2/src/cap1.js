@@ -302,7 +302,7 @@ async function superRita(m) {
 const ENEMY2 = {
   corvo: { name: 'Corvo-Cartaz', mhp: 100, atk: 11, def: 5, spd: 12, shield: 2, maxShield: 2, weak: ['fogo', 'luz', 'corte'], ai: 'corvo', fly: 56, h: 26,
     frame: u => corvoFrame(u.pose ?? (u.flash > 0 ? 3 : Math.floor(BT.t / 7 + u.x) % 2)), dieCols: ['#d8c8a0', '#b8a070', '#2a2a44'] },
-  espantalho: { name: 'Espantalho do Pedágio', boss: true, mhp: 2300, atk: 22, def: 11, mdef: 9, spd: 11, shield: 5, maxShield: 5, weak: ['fogo', 'corte'], ai: 'espantalho', h: 100, ph: 1,
+  espantalho: { name: 'Espantalho do Pedágio', boss: true, mhp: 1750, atk: 19, def: 11, mdef: 9, spd: 11, shield: 5, maxShield: 5, weak: ['fogo', 'corte'], ai: 'espantalho', h: 100, ph: 1,
     frame: u => espFrame(u.ph, u.pose ?? (Math.floor(BT.t / 30) % 2), u.flash > 0), dieCols: ['#c8a048', '#e8a030', '#f2ecdc', '#ffffff'],
     cancelTxt: 'A cancela despencou! Golpe cancelado!' }
 };
@@ -333,7 +333,7 @@ const AI2 = {
       callout('CANCELADA!', '#ff6b6b', 50);
       e.pose = 2; await wait(12); e.pose = 3; sfx('rumble'); bshake(16, 4);
       const [x, y] = unitCenter(t); burst(x, y + 10, 26, ['#c8a048', '#8a6a3a', '#ffffff'], { up: 2 });
-      await foeStrike(e, t, e.ph >= 3 ? 2.9 : 2.5, { n: 30, label: 'GOLPE FORTE' });
+      await foeStrike(e, t, e.ph >= 3 ? 2.1 : 1.8, { n: 32, label: 'GOLPE FORTE' });
       e.pose = null; return;
     }
     const n = e.turns, ph = e.ph;
@@ -352,13 +352,13 @@ const AI2 = {
     const k = pickOne(opts);
     if (k === 'golpe') {
       const t = foeTarget(); if (!t) return; callout('Golpe de Cancela', '#d0a8ff', 40);
-      e.pose = 2; await wait(8); e.pose = 3; sfx('hit'); await foeStrike(e, t, 1.25, { n: 28 }); e.pose = null;
+      e.pose = 2; await wait(8); e.pose = 3; sfx('hit'); await foeStrike(e, t, 1.1, { n: 30 }); e.pose = null;
     } else if (k === 'moedas') {
       callout('Chuva de Moedas!', '#d0a8ff', 50); e.pose = 3; sfx('item');
       for (const m of alive(BT.party)) {
         const [x, y] = unitCenter(m);
         await tw(10, p => { for (let i = 0; i < 5; i++) { const cx = x - 12 + i * 6, cy = y - 50 + p * 46 + (i % 2) * 4; bx.fillStyle = '#d0a030'; bx.fillRect(cx, cy, 3, 3); bx.fillStyle = '#fff0a0'; bx.fillRect(cx, cy, 1, 1); } });
-        await foeStrike(e, m, 0.6, { n: 20, fast: true, noCounter: true });
+        await foeStrike(e, m, 0.5, { n: 22, fast: true, noCounter: true, longe: true });
       }
       e.pose = null;
     } else if (k === 'corvos') {
@@ -370,7 +370,7 @@ const AI2 = {
       for (const m of alive(BT.party)) {
         const [x, y] = unitCenter(m), [ex, ey] = [e.x - 2, e.y - 82];
         await tw(10, p => { for (let i = 0; i < 6; i++) { const q = Math.min(1, p + i * 0.05); bx.fillStyle = pickOne(RP.fogo.slice(1)); bx.fillRect(Math.round(ex + (x - ex) * q + rand(-3, 3)), Math.round(ey + (y - ey) * q + rand(-3, 3)), 3, 3); } });
-        await foeStrike(e, m, 0.8, { n: 22, st: 'queimado', stT: 3, noCounter: true });
+        await foeStrike(e, m, 0.65, { n: 24, st: 'queimado', stT: 3, noCounter: true, longe: true });
       }
       e.pose = null;
     } else if (k === 'taxa') {

@@ -212,8 +212,10 @@
    tampa até o alvo, grade e linha de varredura, leituras em hexadecimal, selo ANALISADO.
  - TELA DE STATUS (status3.js; MENU > Grupo): ficha por personagem com retrato grande em pedestal de runas, função,
    vida/PM, atributos com barras, equipamento por encaixe e habilidades; < > troca de personagem.
- - Mariposa-Rainha ficou mais fácil (o usuário não passava): PV 1400, ATQ 20, escudo 4, só 1 filhote por vez, Sopro e
-   Rasante mais fracos. Bot com 60% de acerto vence com folga; com 45%, vence gastando os frascos.
+ - O chefe difícil era o ESPANTALHO DO PEDÁGIO (Cap. 1 da T2): PV 2300->1750, ATQ 22->19, Cancelada 2.5/2.9->1.8/2.1,
+   Golpe de Cancela 1.25->1.1, moedas e bafo mais fracos e como golpe à distância. Bot 60%: vence com ~30% de vida;
+   45%: vence com ~35%. Rainha levemente ajustada (PV 1550, ATQ 21, 1 filhote por vez) e com ARTE NOVA de chefe
+   (rainhaArt: quatro asas, olhos de três anéis, nervuras, franja, tórax peludo com gola, antenas plumosas, coroa).
  CAPÍTULO 3 — O FESTIVAL DA LUZ (roteiro; dividido em 2 partes a pedido do usuário)
  - PARTE 1 (IMPLEMENTADA, cap3.js + grimorio3.js + inimigos3.js + arte_cap3.js + maps/cap3maps.py -> mapas3.js):
    ESTRADA DOS LAMPIÕES (o 31 quebra a correia; postes apagados; mariposas comem luz; ACENDER POSTE com a Lume atrai
@@ -2614,7 +2616,7 @@ async function superRita(m) {
 const ENEMY2 = {
   corvo: { name: 'Corvo-Cartaz', mhp: 100, atk: 11, def: 5, spd: 12, shield: 2, maxShield: 2, weak: ['fogo', 'luz', 'corte'], ai: 'corvo', fly: 56, h: 26,
     frame: u => corvoFrame(u.pose ?? (u.flash > 0 ? 3 : Math.floor(BT.t / 7 + u.x) % 2)), dieCols: ['#d8c8a0', '#b8a070', '#2a2a44'] },
-  espantalho: { name: 'Espantalho do Pedágio', boss: true, mhp: 2300, atk: 22, def: 11, mdef: 9, spd: 11, shield: 5, maxShield: 5, weak: ['fogo', 'corte'], ai: 'espantalho', h: 100, ph: 1,
+  espantalho: { name: 'Espantalho do Pedágio', boss: true, mhp: 1750, atk: 19, def: 11, mdef: 9, spd: 11, shield: 5, maxShield: 5, weak: ['fogo', 'corte'], ai: 'espantalho', h: 100, ph: 1,
     frame: u => espFrame(u.ph, u.pose ?? (Math.floor(BT.t / 30) % 2), u.flash > 0), dieCols: ['#c8a048', '#e8a030', '#f2ecdc', '#ffffff'],
     cancelTxt: 'A cancela despencou! Golpe cancelado!' }
 };
@@ -2645,7 +2647,7 @@ const AI2 = {
       callout('CANCELADA!', '#ff6b6b', 50);
       e.pose = 2; await wait(12); e.pose = 3; sfx('rumble'); bshake(16, 4);
       const [x, y] = unitCenter(t); burst(x, y + 10, 26, ['#c8a048', '#8a6a3a', '#ffffff'], { up: 2 });
-      await foeStrike(e, t, e.ph >= 3 ? 2.9 : 2.5, { n: 30, label: 'GOLPE FORTE' });
+      await foeStrike(e, t, e.ph >= 3 ? 2.1 : 1.8, { n: 32, label: 'GOLPE FORTE' });
       e.pose = null; return;
     }
     const n = e.turns, ph = e.ph;
@@ -2664,13 +2666,13 @@ const AI2 = {
     const k = pickOne(opts);
     if (k === 'golpe') {
       const t = foeTarget(); if (!t) return; callout('Golpe de Cancela', '#d0a8ff', 40);
-      e.pose = 2; await wait(8); e.pose = 3; sfx('hit'); await foeStrike(e, t, 1.25, { n: 28 }); e.pose = null;
+      e.pose = 2; await wait(8); e.pose = 3; sfx('hit'); await foeStrike(e, t, 1.1, { n: 30 }); e.pose = null;
     } else if (k === 'moedas') {
       callout('Chuva de Moedas!', '#d0a8ff', 50); e.pose = 3; sfx('item');
       for (const m of alive(BT.party)) {
         const [x, y] = unitCenter(m);
         await tw(10, p => { for (let i = 0; i < 5; i++) { const cx = x - 12 + i * 6, cy = y - 50 + p * 46 + (i % 2) * 4; bx.fillStyle = '#d0a030'; bx.fillRect(cx, cy, 3, 3); bx.fillStyle = '#fff0a0'; bx.fillRect(cx, cy, 1, 1); } });
-        await foeStrike(e, m, 0.6, { n: 20, fast: true, noCounter: true });
+        await foeStrike(e, m, 0.5, { n: 22, fast: true, noCounter: true, longe: true });
       }
       e.pose = null;
     } else if (k === 'corvos') {
@@ -2682,7 +2684,7 @@ const AI2 = {
       for (const m of alive(BT.party)) {
         const [x, y] = unitCenter(m), [ex, ey] = [e.x - 2, e.y - 82];
         await tw(10, p => { for (let i = 0; i < 6; i++) { const q = Math.min(1, p + i * 0.05); bx.fillStyle = pickOne(RP.fogo.slice(1)); bx.fillRect(Math.round(ex + (x - ex) * q + rand(-3, 3)), Math.round(ey + (y - ey) * q + rand(-3, 3)), 3, 3); } });
-        await foeStrike(e, m, 0.8, { n: 22, st: 'queimado', stT: 3, noCounter: true });
+        await foeStrike(e, m, 0.65, { n: 24, st: 'queimado', stT: 3, noCounter: true, longe: true });
       }
       e.pose = null;
     } else if (k === 'taxa') {
@@ -6633,8 +6635,8 @@ FIG_GRUPO.jorge = { h: 48, skin: '#c88a60', hair: '#9a9a9a', hairStyle: 'curto',
 { const _dc = desenhaClose; desenhaClose = function () { if (TXZ === 1) return _dc(); const W0 = W; bx.save(); bx.scale(TXZ, TXZ); W = Math.round(W0 / TXZ); try { _dc(); } finally { W = W0; bx.restore(); } }; }
 
 // gerado por maps/cap3maps.py (validado: larguras, alcance, entidades em chão válido)
-const ROWS3 = {"estrada": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T;;;;;;;;;;;;;;;;;;;;;;;;;;;;TTTTTT;;;;T", "T;;;TTTT;;;;;;;;;;;;;;;;;;;;;TTTTTT;;;;T", "T;;;TTTT;;;;;;;;;;;;;;;;;;;;;TTTTTT;;;;T", "T;;;TTTT;;;tttttttttttttt;;;;;;;;;;;;;;T", "T;;;;;;;;;;tttttttttttttt;;;;;;;;;;;;;;T", "T;;;;;;;;;;tt;;;;;;;;;;tt;TT;;;;;;;;;;;T", "T;;;;;;;;;;tt;;;;;;;;;;tt;TT;;;;;;;;;;;T", "ttttttttttttt;;;;;;;;;;tt;;;;;;;;;;;;;;T", "ttttttttttttt;;;;;;;;;;tt;;;;;;;;;;;;;;T", "T;;;;;;;;;;;;;;;;;;;;;;ttttttttttttttttt", "T;;;;;;;;;;;;;;TTTTT;;;ttttttttttttttttt", "T;;;;;;;;;;;;;;TTTTT;;;;;;;;;;;;;;;;;;;T", "T;;;;;;TTTTTT;;TTTTT;;;;;;;;;;;;;;;;;;;T", "T;;;;;;TTTTTT;;TTTTT;;;;;;;;;;~~~~~;;;;T", "T;;;;;;TTTTTT;;;;;;;;;;;;;;;;;~~~~~;;;;T", "T;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "auren": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,;;;;;,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,;;;;;,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,;;;;;,,,,,,,,,,,,,,,,,,,", "tttt,,,,,,,,,,,,,,,,,,,,;;;;;;,,,,,,", "tttt,,,,,,,,,,,,,,,,,,,,;;;;;;,,,,,,", "tttt,,,,,,,,,,,,,,,,,,,,;;;;;;,,,,,,", "tttt,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", "####################################", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"], "papelaria": ["wwwwwwwwwwww", "wwwwwwwwwwww", "wwwwwwwwwwww", "woooooooooow", "woooooooooow", "woooooooooow", "wrrrooooooow", "wrrrooooooow", "woooooooooow", "wwwwwoowwwww"], "festival": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "........................................", ",,,,,,,,,,,,,,............,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", "########################################", "########################################"], "interior": ["wwwwwwwwwwwwww", "wwwwwwwwwwwwww", "wwwwwwwwwwwwww", "woooooooooooow", "woooooooooooow", "woooorrrroooow", "woooorrrroooow", "woooorrrroooow", "woooooooooooow", "wwwwwwoowwwwww"]};
-const POS3 = {"estrada": {"chegada": [2, 10], "onibus": [1, 8], "jorge": [6, 11], "marco": [14, 7], "postes": [[8, 11], [15, 4], [21, 4], [27, 10], [34, 10]], "mar1": [9, 4], "mar2": [19, 8], "mar3": [27, 14], "band": [33, 7], "rainha": [36, 11], "bau1": [3, 16], "bau2": [37, 3], "saida": [[39, 11], [39, 12]], "trava": [35, 11], "arvores": [[3, 6], [10, 15], [20, 3], [33, 15], [37, 6], [17, 10], [26, 16]]}, "auren": {"chegada": [1, 16], "estradaDoor": [[0, 15], [0, 16]], "estradaOut": [1, 15], "papDoor": [[8, 8], [9, 8]], "papOut": [8, 9], "marco": [4, 11], "festDoor": [[35, 12], [35, 13]], "festOut": [34, 12], "tico": [29, 9], "pavio": [20, 10], "iolandaF": [7, 9], "poeta": [14, 15], "guarda": [33, 11], "feira": [[11, 16], [17, 16], [23, 10]], "cacador": [22, 13], "cacPath": [[19, 13], [27, 13], [27, 17], [19, 17]], "bau": [1, 19], "chamine": [30, 8], "postes": [[6, 10], [16, 10], [26, 10], [11, 19], [25, 19]], "arvores": [[13, 13], [27, 16]], "feirante1": [12, 17], "feirante2": [18, 17], "feirante3": [24, 11], "crianca": [15, 12], "velha": [3, 13], "lavadeira": [30, 19]}, "papelaria": {"door": [[5, 9], [6, 9]], "entra": [5, 8], "iolanda": [6, 3], "balcao": [6, 4], "mesa": [2, 5], "estante": [9, 3]}, "festival": {"chegada": [1, 10], "aurenDoor": [[0, 10], [0, 11]], "aurenOut": [1, 11], "palco": [20, 5], "frente": [[18, 8], [19, 8], [20, 8], [21, 8]], "barracas": [[4, 9], [9, 9], [28, 9], [33, 9], [4, 16], [11, 16], [26, 16], [33, 16]], "pastel": [9, 9], "marco": [2, 14], "povo": [[15, 12], [17, 13], [23, 12], [25, 14], [20, 15], [8, 13], [31, 13], [36, 12]], "fatima": [10, 8], "vesperP": [20, 6]}, "interior": {"saida": [[6, 9], [7, 9]], "entra": [6, 8], "vela": [3, 3], "meia": [10, 3], "estante": [6, 3], "cama": [1, 6], "forja": [11, 7], "parede": [8, 3]}};
+const ROWS3 = {"estrada": ["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T;;;;;;;;;;;;;;;;;;;;;;;;;;;;TTTTTT;;;;T", "T;;;TTTT;;;;;;;;;;;;;;;;;;;;;TTTTTT;;;;T", "T;;;TTTT;;;;;;;;;;;;;;;;;;;;;TTTTTT;;;;T", "T;;;TTTT;;;tttttttttttttt;;;;;;;;;;;;;;T", "T;;;;;;;;;;tttttttttttttt;;;;;;;;;;;;;;T", "T;;;;;;;;;;tt;;;;;;;;;;tt;TT;;;;;;;;;;;T", "T;;;;;;;;;;tt;;;;;;;;;;tt;TT;;;;;;;;;;;T", "ttttttttttttt;;;;;;;;;;tt;;;;;;;;;;;;;;T", "ttttttttttttt;;;;;;;;;;tt;;;;;;;;;;;;;;T", "T;;;;;;;;;;;;;;;;;;;;;;ttttttttttttttttt", "T;;;;;;;;;;;;;;TTTTT;;;ttttttttttttttttt", "T;;;;;;;;;;;;;;TTTTT;;;;;;;;;;;;;;;;;;;T", "T;;;;;;TTTTTT;;TTTTT;;;;;;;;;;;;;;;;;;;T", "T;;;;;;TTTTTT;;TTTTT;;;;;;;;;;~~~~~;;;;T", "T;;;;;;TTTTTT;;;;;;;;;;;;;;;;;~~~~~;;;;T", "T;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"], "auren": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,;;;;;,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,;;;;;,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,;;;;;,,,,,,,,,,,,,,,,,,,", "tttt,,,,,,,,,,,,,,,,,,,,;;;;;;,,,,,,", "tttt,,,,,,,,,,,,,,,,,,,,;;;;;;,,,,,,", "tttt,,,,,,,,,,,,,,,,,,,,;;;;;;,,,,,,", "tttt,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", "####################################", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"], "papelaria": ["wwwwwwwwwwww", "wwwwwwwwwwww", "wwwwwwwwwwww", "woooooooooow", "woooooooooow", "woooooooooow", "wrrrooooooow", "wrrrooooooow", "woooooooooow", "wwwwwoowwwww"], "festival": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "........................................", ",,,,,,,,,,,,,,............,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", "########################################", "########################################"], "interior": ["wwwwwwwwwwwwww", "wwwwwwwwwwwwww", "wwwwwwwwwwwwww", "woooooooooooow", "woooooooooooow", "woooorrrroooow", "woooorrrroooow", "woooorrrroooow", "woooooooooooow", "wwwwwwoowwwwww"], "galerias1": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "X,,,,,,XXXXXXXXXXXXXXXXXXXXXXXXXXX", "X,,,,,,XXXXXXXXXXXXXXXXXXXXXXXXXXX", "X,,,,,,XXXXXXXXXXXXXX,,,,,,,,,,XXX", "X,,,,,,XXXXXXXXXXXXXX,,,,,,,,,,XXX", "X,,,,,,XXXXXXXXXXXXXX,,,,,,,,,,XXX", "XXX,,,XXXXXXXXXXXXXXX,,,XXXX,,,XXX", "XXX,,,XXXXXXXXXXXXXXX,,,XXXX,,,XXX", "XXX,,,XXXXXX,,,,,,,,,,,,XXXX,,,XXX", "XXX,,,XXXXXX,,,,,,,,,,,,XXXX,,,XXX", "XXX,,,XXXXXX,,,,,,,,,,,,XXXX,,,XXX", "XXX,,,XXXXXX,,,XXXXXXXXXXXXX,,,XXX", "XXX,,,XXXXXX,,,XXXXXXXXX~~~X,,,XXX", "XXX,,,,,,,,,,,,XXXXXXXXX~~~X,,,XXX", "XXX,,,,,,,,,,,,XXXXXXXXXXXXX,,,XXX", "XXX,,,,,,,,,,,,X,,,,,,,,,,,,,,,XXX", "XXXXXXXXXXXXXXXX,,,,,,,,,,,,,,,XXX", "XXXXX____,,,,,,,,,,,,,,,,,,,,,,XXX", "XXXXX____,,,,,,,,,,XXXXXXXXXXXXXXX", "XXXXX____,,,,,,,,,,XXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"], "galerias2": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "X,,,,,,,,,,,,,,,,,,,,,,,,,,,,X", "X,,,,,,,,,,,,,,,,,,,,,,,,,,,,X", "X,,,,,,,,,,,,,,,,,,,,,,,,,,,,X", "XXXXXXXXXXXXX,,,,XXXXXXXXXXXXX", "XXXXXXXXXXXXX,,,,XXXXXXXXXXXXX", "XXXXXXXXXXXXX,,,,XXXXXXXXXXXXX", "XX,,,,,,,,,,,,,,,,,,,,,,,,,,XX", "XX,,,,~~~,,,,,,,,,,,,~~~,,,,XX", "XX,,,,~~~,,,,,,,,,,,,~~~,,,,XX", "XX,,,,,,,,,,,,,,,,,,,,,,,,,,XX", "XXXXXXXXXXXXX,,,,XXXXXXXXXXXXX", "XXXXXXXXXXXXX,,,,XXXXXXXXXXXXX", "XXXXXXXXXXXXX,,,,XXXXXXXXXXXXX", "XX,,,,,,,,,,,,,,,,,,,,,,,,,,XX", "XX,,,,,,,,,,,,,,,,,,,,,,,,,,XX", "XX,,,,,,,,,,,,,,,,,,,,,,,,,,XX", "XX,,,,,,,,,,,,,,,,,,,,,,,,,,XX", "XXXXXXXXXXXXX,,,,XXXXXXXXXXXXX", "XXXXXXXXXXXXX,,,,XXXXXXXXXXXXX"], "fundo": ["XXXXXXXXX,,XXXXXXXXX", "XXXXXXXXX,,XXXXXXXXX", "XX,,,,,,,,,,,,,,,,XX", "XX,__,,,,,,,,,,,,,XX", "XX,__,,,,,,,,,,,,,XX", "XX,,,,,,,,,,,,,,,,XX", "XX,,,,,,,,,,,,,,,,XX", "XX,,,,,,,,,,,,,,,,XX", "XX,,,,,,,,,,,,,__,XX", "XX,,,,,,,,,,,,,__,XX", "XX,,,,,,,,,,,,,,,,XX", "XX,,,,,,,,,,,,,,,,XX", "XXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXX"]};
+const POS3 = {"estrada": {"chegada": [2, 10], "onibus": [1, 8], "jorge": [6, 11], "marco": [14, 7], "postes": [[8, 11], [15, 4], [21, 4], [27, 10], [34, 10]], "mar1": [9, 4], "mar2": [19, 8], "mar3": [27, 14], "band": [33, 7], "rainha": [36, 11], "bau1": [3, 16], "bau2": [37, 3], "saida": [[39, 11], [39, 12]], "trava": [35, 11], "arvores": [[3, 6], [10, 15], [20, 3], [33, 15], [37, 6], [17, 10], [26, 16]]}, "auren": {"chegada": [1, 16], "estradaDoor": [[0, 15], [0, 16]], "estradaOut": [1, 15], "papDoor": [[8, 8], [9, 8]], "papOut": [8, 9], "marco": [4, 11], "festDoor": [[35, 12], [35, 13]], "festOut": [34, 12], "tico": [29, 9], "pavio": [20, 10], "iolandaF": [7, 9], "poeta": [14, 15], "guarda": [33, 11], "feira": [[11, 16], [17, 16], [23, 10]], "cacador": [22, 13], "cacPath": [[19, 13], [27, 13], [27, 17], [19, 17]], "bau": [1, 19], "chamine": [30, 8], "postes": [[6, 10], [16, 10], [26, 10], [11, 19], [25, 19]], "arvores": [[13, 13], [27, 16]], "feirante1": [12, 17], "feirante2": [18, 17], "feirante3": [24, 11], "crianca": [15, 12], "velha": [3, 13], "lavadeira": [30, 19]}, "papelaria": {"door": [[5, 9], [6, 9]], "entra": [5, 8], "iolanda": [6, 3], "balcao": [6, 4], "mesa": [2, 5], "estante": [9, 3]}, "festival": {"chegada": [1, 10], "aurenDoor": [[0, 10], [0, 11]], "aurenOut": [1, 11], "palco": [20, 5], "frente": [[18, 8], [19, 8], [20, 8], [21, 8]], "barracas": [[4, 9], [9, 9], [28, 9], [33, 9], [4, 16], [11, 16], [26, 16], [33, 16]], "pastel": [9, 9], "marco": [2, 14], "povo": [[15, 12], [17, 13], [23, 12], [25, 14], [20, 15], [8, 13], [31, 13], [36, 12]], "fatima": [10, 8], "vesperP": [20, 6]}, "interior": {"saida": [[6, 9], [7, 9]], "entra": [6, 8], "vela": [3, 3], "meia": [10, 3], "estante": [6, 3], "cama": [1, 6], "forja": [11, 7], "parede": [8, 3]}, "galerias1": {"entra": [2, 2], "subida": [[1, 1], [2, 1]], "marco": [5, 2], "cinza1": [4, 9], "rato1": [13, 9], "cinza2": [22, 4], "rato2": [29, 10], "misto": [20, 16], "bigorna": [6, 18], "bau": [30, 4], "saida": [[17, 19], [18, 19]], "brasas": [[3, 4], [14, 14], [22, 9], [29, 16], [9, 18]], "pavioT": [25, 16]}, "galerias2": {"entra": [14, 2], "volta": [[14, 1], [15, 1]], "veio": [14, 9], "marco": [3, 2], "prat": [[4, 7], [9, 7], [19, 7], [24, 7], [4, 14], [9, 14], [19, 14], [24, 14]], "pav1": [5, 16], "pav2": [22, 16], "pav3": [10, 9], "cinza": [25, 9], "rato": [4, 9], "misto": [21, 15], "descida": [[14, 19], [15, 19]], "bau": [27, 2]}, "fundo": {"entra": [9, 1], "volta": [[9, 0], [10, 0]], "chefe": [10, 5], "gatilho": [[8, 3], [9, 3], [10, 3], [11, 3]], "lanterna": [10, 9]}};
 
 // ================= ARTE DO CAP. 3 (Parte 1): estrada, capital, festival e o interior do baú =================
 // Tudo nasce no estilo do mapa (HLD): cor chapada em faixas, sombra puxando para o violeta, brilhos quadrados.
@@ -6818,6 +6820,58 @@ function mariposaArt(f, rainha, acesa) {
   P.p(cx - 1, cy - 5 * s, acesa ? '#fff0a0' : '#ff7aa8'); P.p(cx + 1, cy - 5 * s, acesa ? '#fff0a0' : '#ff7aa8');
   if (rainha) { for (let i = 0; i < 5; i++) P.rect(cx - 8 + i * 4, cy - 8 * s - 4 - (i % 2) * 3, 2, 4, '#f0c040'); }
   return MARI_C[key] = P.outline().canvas();
+}
+
+// ---------- MARIPOSA-RAINHA (arte de chefe, mais detalhe) ----------
+// Quatro asas (anteriores grandes com olho de três anéis, nervuras e franja recortada; posteriores menores em degradê
+// rosa-ferrugem com pintas), tórax peludo com gola branca, abdômen em gomos, antenas plumosas enroladas, coroa de
+// chaminhas e olhos que brilham. Acesa: asas douradas com borda de luz. Dois quadros de bater de asa.
+const RAINHA_C = {};
+function rainhaArt(f, acesa) {
+  const key = f + (acesa ? 'a' : ''); if (RAINHA_C[key]) return RAINHA_C[key];
+  const W_ = 128, H_ = 100, P = new Pix(W_, H_), cx = 64, cy = 50, bate = f ? 0.72 : 1;
+  const AF = acesa ? ['#5a3010', '#a8601c', '#e8a038', '#ffd870', '#fff4c0'] : ['#2a1a2a', '#4a3040', '#6e4c58', '#9a7476', '#c8a49a'];
+  const AP = acesa ? ['#6a2a10', '#c05a20', '#f09038', '#ffc860'] : ['#3a1a28', '#7a3a44', '#b0605a', '#d8907a'];
+  const CO = ['#1a0e1a', '#3a2232', '#5a3a48', '#7a5862'];
+  // asas posteriores (atrás)
+  for (const L of [-1, 1]) for (let y = -2; y <= 30; y++) for (let x = 4; x <= 40; x++) {
+    const nx = (x - 4) / 36, ny = (y - 12) / 18; if (nx * nx + ny * ny > 1 || y < 0 && x > 30) continue;
+    const k = (nx + Math.max(0, ny) * 0.5); P.p(cx + L * x, cy + Math.round(y * bate), k < 0.3 ? AP[3] : k < 0.6 ? AP[2] : k < 0.85 ? AP[1] : AP[0]);
+  }
+  for (const L of [-1, 1]) for (let i = 0; i < 7; i++) { const a = 0.2 + i * 0.2, X = cx + L * Math.round(8 + Math.cos(a) * 28), Y = cy + Math.round((12 + Math.sin(a) * 15) * bate); P.p(X, Y, acesa ? '#fff4c0' : '#e8c0a0'); P.p(X, Y + 1, AP[0]); }
+  // asas anteriores (frente), grandes, pontudas
+  for (const L of [-1, 1]) for (let y = -34; y <= 10; y++) for (let x = 3; x <= 62; x++) {
+    const nx = (x - 3) / 59, top = -34 + nx * 22, bot = 10 - nx * nx * 26 + (nx > 0.85 ? (nx - 0.85) * 60 : 0);
+    if (y < top || y > bot) continue;
+    const ry = (y - top) / Math.max(1, bot - top), k = nx * 0.7 + ry * 0.4;
+    let c = k < 0.3 ? AF[3] : k < 0.55 ? AF[2] : k < 0.8 ? AF[1] : AF[0]; if (ry < 0.08) c = AF[4];
+    P.p(cx + L * x, cy + Math.round(y * bate), c);
+  }
+  // nervuras e franja recortada da asa anterior
+  for (const L of [-1, 1]) {
+    for (let v = 0; v < 6; v++) { const ang = -0.55 + v * 0.22; for (let r = 6; r < 58; r++) { const X = cx + L * Math.round(3 + Math.cos(ang) * r), Y = cy + Math.round((Math.sin(ang) * r * 0.62 - 8) * bate); if (P.get(X, Y) && r % 7 !== 0) P.p(X, Y, AF[0]); } }
+    for (let x = 6; x <= 62; x += 3) { const nx = (x - 3) / 59, bot = 10 - nx * nx * 26 + (nx > 0.85 ? (nx - 0.85) * 60 : 0), Y = cy + Math.round(bot * bate); P.p(cx + L * x, Y, AF[4]); P.p(cx + L * (x + 1), Y - 1, AF[3]); }
+    // olho de três anéis
+    const ox = cx + L * 34, oy = cy + Math.round(-12 * bate);
+    for (let y = -8; y <= 8; y++) for (let x = -8; x <= 8; x++) { const d = Math.sqrt(x * x + y * y * 1.3); if (d > 8) continue; P.p(ox + x, oy + Math.round(y * bate), d < 2.2 ? (acesa ? '#ffffff' : '#1a0e1a') : d < 4 ? (acesa ? '#ff9a30' : '#e8c040') : d < 6 ? (acesa ? '#fff4c0' : '#1a0e1a') : (acesa ? '#e8a038' : '#c8a080')); }
+    P.p(ox - 1, oy - 1, '#ffffff');
+    // pintas brancas na ponta da asa
+    for (const [dx, dy] of [[50, -16], [54, -12], [46, -20]]) P.p(cx + L * dx, cy + Math.round(dy * bate), '#ffffff');
+  }
+  // abdômen em gomos
+  for (let y = 4; y <= 40; y++) { const w = Math.round(7 - (y - 4) * 0.15 - (y > 32 ? (y - 32) * 0.5 : 0)); for (let x = -w; x <= w; x++) { const gomo = (y - 4) % 6 < 1; P.p(cx + x, cy + y, gomo ? CO[0] : x < -w / 3 ? CO[3] : x > w / 3 ? CO[1] : CO[2]); } }
+  // tórax peludo e gola branca
+  for (let y = -14; y <= 6; y++) for (let x = -9; x <= 9; x++) if (x * x / 81 + y * y / 110 <= 1) P.p(cx + x, cy + y, (x + y) % 3 === 0 ? CO[3] : x < 0 ? CO[2] : CO[1]);
+  for (let a = 0; a < 40; a++) { const t = a / 40 * Math.PI * 2, r = 10 + (a % 2); P.p(cx + Math.round(Math.cos(t) * r), cy - 14 + Math.round(Math.sin(t) * 4), a % 3 ? '#f2ecdc' : '#c8c0b0'); }
+  // cabeça, olhos e antenas plumosas enroladas
+  for (let y = -6; y <= 4; y++) for (let x = -6; x <= 6; x++) if (x * x + y * y * 1.4 <= 36) P.p(cx + x, cy - 22 + y, x < 0 ? CO[2] : CO[1]);
+  for (const L of [-1, 1]) { P.rect(cx + L * 4 - (L < 0 ? 2 : 0), cy - 24, 3, 3, acesa ? '#fff4c0' : '#ff5a7a'); P.p(cx + L * 4, cy - 24, '#ffffff'); }
+  for (const L of [-1, 1]) for (let i = 0; i < 22; i++) { const t = i / 22, X = cx + L * Math.round(3 + t * 16 + Math.sin(t * 3) * 2), Y = cy - 28 - Math.round(t * 20 - (t > 0.8 ? (t - 0.8) * 40 : 0)); P.p(X, Y, CO[1]); if (i % 2 === 0 && i > 2) { P.p(X + L, Y - 1, CO[2]); P.p(X - L, Y - 1, CO[2]); } }
+  // coroa de chaminhas
+  for (let i = 0; i < 5; i++) { const x = cx - 8 + i * 4, y = cy - 32 - (i % 2) * 3; P.rect(x, y, 2, 4, '#f0c040'); P.p(x, y - 1, f ? '#fff4c0' : '#ffd060'); P.p(x + 1, y - 2, '#ff9a30'); }
+  // patinhas
+  for (const L of [-1, 1]) for (let i = 0; i < 3; i++) { P.p(cx + L * (8 + i), cy + 4 + i * 2, CO[0]); P.p(cx + L * (10 + i), cy + 5 + i * 2, CO[0]); }
+  return RAINHA_C[key] = P.outline().canvas();
 }
 
 // ================= INIMIGOS DO CAP. 3 (Parte 1): Estrada dos Lampiões =================
@@ -7156,7 +7210,7 @@ const arvC = v => memo(() => arvoreArt(v));
       { img: busArt, x: 1, y: 9, solid: [[1, 7, 11, 2]] },
       ...ES.postes.map(([x, y], i) => ({ img: () => poste3Art(!!G.flags['c3poste' + i], false), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
       ...ES.arvores.map(([x, y], i) => ({ img: arvC(i), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]] })),
-      { img: () => G.flags.c3Rainha ? poste3Art(false, false) : mariposaArt(Math.floor(FRAME / 20) % 2, true, false), x: 34.5, y: 11.2, by: 176 }
+      { img: () => G.flags.c3Rainha ? poste3Art(false, false) : rainhaArt(Math.floor(FRAME / 20) % 2, false), x: 34, y: 11.4, by: 176 }
     ],
     ents: [
       morador('jorge0', ...ES.jorge, { h: 48, spr: (t, dir) => { const S = IMG.spf.jorge, F = IMG.sp.jorge; const v = dir === 'up' ? S.b : dir === 'down' ? F : S.s, fr = v[Math.floor(t / 26) % v.length]; return dir === 'right' ? flipC(fr) : fr; },
@@ -7801,10 +7855,11 @@ drawPrompt = function () {
   return _dr.apply(this, arguments);
 }; }
 // a Rainha bate as asas mais rápido quando arma o golpe
-ENEMY2.rainha.frame = u => mariposaArt(Math.floor(BT.t / (u.armando ? 3 : 10) + u.x) % 2, true, !!u.acesa);
+ENEMY2.rainha.frame = u => rainhaArt(Math.floor(BT.t / (u.armando ? 3 : 10) + u.x) % 2, !!u.acesa);
+ENEMY2.rainha.h = 100;
 
 // ---------- Mariposa-Rainha: dificuldade ajustada (o usuário não conseguiu passar) ----------
-Object.assign(ENEMY2.rainha, { mhp: 1400, atk: 20, shield: 4, maxShield: 4 });
+Object.assign(ENEMY2.rainha, { mhp: 1550, atk: 21, shield: 4, maxShield: 4 });
 
 // ================= TELA DE STATUS DO GRUPO =================
 // MENU > Grupo abre uma ficha bonita por personagem: retrato grande num pedestal de runas, função, vida e PM, os

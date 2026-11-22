@@ -65,7 +65,7 @@ const arvC = v => memo(() => arvoreArt(v));
       { img: busArt, x: 1, y: 9, solid: [[1, 7, 11, 2]] },
       ...ES.postes.map(([x, y], i) => ({ img: () => poste3Art(!!G.flags['c3poste' + i], false), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
       ...ES.arvores.map(([x, y], i) => ({ img: arvC(i), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]] })),
-      { img: () => G.flags.c3Rainha ? poste3Art(false, false) : mariposaArt(Math.floor(FRAME / 20) % 2, true, false), x: 34.5, y: 11.2, by: 176 }
+      { img: () => G.flags.c3Rainha ? poste3Art(false, false) : rainhaArt(Math.floor(FRAME / 20) % 2, false), x: 34, y: 11.4, by: 176 }
     ],
     ents: [
       morador('jorge0', ...ES.jorge, { h: 48, spr: (t, dir) => { const S = IMG.spf.jorge, F = IMG.sp.jorge; const v = dir === 'up' ? S.b : dir === 'down' ? F : S.s, fr = v[Math.floor(t / 26) % v.length]; return dir === 'right' ? flipC(fr) : fr; },

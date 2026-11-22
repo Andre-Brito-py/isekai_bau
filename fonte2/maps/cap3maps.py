@@ -75,3 +75,32 @@ check('papelaria',P['papelaria']['entra'],on=P['papelaria']['door'],near=[P['pap
 F=P['festival']; check('festival',F['chegada'],on=[F['marco']]+F['frente']+F['povo']+F['aurenDoor'],near=[F['fatima']])
 I=P['interior']; check('interior',I['entra'],on=I['saida'],near=[I['vela'],I['meia'],I['estante'],I['forja'],I['cama'],I['parede']])
 open('/home/claude/rpg2/src/mapas3.js','w').write('// gerado por maps/cap3maps.py (validado: larguras, alcance, entidades em chão válido)\nconst ROWS3 = '+json.dumps(M,ensure_ascii=False)+';\nconst POS3 = '+json.dumps(P,ensure_ascii=False)+';\n')
+
+# ================= PARTE 2: GALERIAS DE FULIGEM =================
+M2={}; P2={}; SOL2={}
+# ---------- Galerias 1: túneis (34x22) ----------
+g=grid(34,22,'X')
+def T_(x,y,w,h,ch=','): R(g,x,y,w,h,ch)
+T_(1,1,6,5); T_(3,6,3,8); T_(3,13,12,3); T_(12,8,3,8); T_(12,8,12,3); T_(21,3,3,8); T_(21,3,10,3); T_(28,6,3,12); T_(16,15,15,3); T_(16,15,3,5); T_(8,17,9,3)
+T_(5,17,4,3,'_'); T_(24,12,3,2,'~'); T_(1,1,2,2,',')
+M2['galerias1']=S(g)
+P2['galerias1']=dict(entra=[2,2], subida=[[1,1],[2,1]], marco=[5,2], cinza1=[4,9], rato1=[13,9], cinza2=[22,4], rato2=[29,10], misto=[20,16], bigorna=[6,18], bau=[30,4],
+  saida=[[17,19],[18,19]], brasas=[[3,4],[14,14],[22,9],[29,16],[9,18]], pavioT=[25,16])
+SOL2['galerias1']=[(6,18)]
+# ---------- Galerias 2: o Salão das Lanternas (30x20) ----------
+g=grid(30,20,'X'); T_(1,1,28,3,','); T_(13,4,4,14); T_(2,7,26,4); T_(2,14,26,4); T_(13,18,4,2)
+T_(6,8,3,2,'~'); T_(21,8,3,2,'~')
+M2['galerias2']=S(g)
+P2['galerias2']=dict(entra=[14,2], volta=[[14,1],[15,1]], veio=[14,9], marco=[3,2], prat=[[4,7],[9,7],[19,7],[24,7],[4,14],[9,14],[19,14],[24,14]],
+  pav1=[5,16], pav2=[22,16], pav3=[10,9], cinza=[25,9], rato=[4,9], misto=[21,15], descida=[[14,19],[15,19]], bau=[27,2])
+SOL2['galerias2']=[(14,9),(15,9)]
+# ---------- O Coração da Fuligem (sala do chefe, 20x14) ----------
+g=grid(20,14,'X'); T_(2,2,16,10); T_(9,0,2,2); T_(3,3,2,2,'_'); T_(15,8,2,2,'_')
+M2['fundo']=S(g)
+P2['fundo']=dict(entra=[9,1], volta=[[9,0],[10,0]], chefe=[10,5], gatilho=[[8,3],[9,3],[10,3],[11,3]], lanterna=[10,9])
+SOL2['fundo']=[]
+for k in M2: M[k]=M2[k]; P[k]=P2[k]; SOL[k]=SOL2[k]
+G1=P['galerias1']; check('galerias1',G1['entra'],on=[G1['marco'],G1['cinza1'],G1['rato1'],G1['cinza2'],G1['rato2'],G1['misto'],G1['pavioT']]+G1['saida']+G1['subida'],near=[G1['bigorna'],G1['bau']]+G1['brasas'])
+G2=P['galerias2']; check('galerias2',G2['entra'],on=[G2['marco'],G2['pav1'],G2['pav2'],G2['pav3'],G2['cinza'],G2['rato'],G2['misto']]+G2['descida']+G2['volta'],near=[G2['veio'],G2['bau']]+G2['prat'])
+F3=P['fundo']; check('fundo',F3['entra'],on=F3['gatilho']+F3['volta']+[F3['chefe'],F3['lanterna']])
+open('/home/claude/rpg2/src/mapas3.js','w').write('// gerado por maps/cap3maps.py (validado: larguras, alcance, entidades em chão válido)\nconst ROWS3 = '+json.dumps(M,ensure_ascii=False)+';\nconst POS3 = '+json.dumps(P,ensure_ascii=False)+';\n')
