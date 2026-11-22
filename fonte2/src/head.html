@@ -7,6 +7,38 @@
   seções "SAVE HERDADO", "INTERFACE DA TEMPORADA 2", "SISTEMA DE BATALHA DA TEMPORADA 2", "MUNDO DA TEMPORADA 2",
   "O VILÃO DA TEMPORADA 2", "RUNAS NA T2". Aqui fica o que já foi implementado e o roteiro por capítulo.)
 =====================================================================
+ MAPA DA TEMPORADA: 10 CAPÍTULOS (pedido do usuário: "pelo menos nove a dez capítulos, já que o primeiro é bem
+ curto"). Meta: 1h-1h30 de história por capítulo (o Cap. 1 é o prólogo curto), 12-15 h no total com o opcional.
+ Os capítulos grandes têm 2 partes. A escalada do Vesper (bíblia da T1) foi esticada para caber em 10:
+  1. A SUPERFÍCIE (feito) — prólogo: estrada, Espantalho do pedágio. Vesper ainda não aparece.
+  2. VELHÁGUA (feito) — a cidade que afunda, Dona Badalada. ESCALADA 1: Vesper benfeitor (Marco, convite).
+  3. A CAPITAL ACESA (feito, 2 partes) — Auren, festival, discurso, Galerias, Mãe-Fuligem, 1ª EVOLUÇÃO (3 caminhos).
+  4. A CASA DOS QUE ESQUECEM (P1 feita; P2 = CANDEIA, a vila que apagou) — ESCALADA 2: suspeita (a letra da lista).
+     P2: Candeia na serra, moradores parados nas portas, minas vazias, RUNA DE GATILHO, o Dito encontrado; Dalva
+     abre a ENFERMARIA na base; Jorge a GARAGEM. Gancho: um Pavio de Candeia tem o caderno preto... de outra pessoa?
+     (não: tem uma PÁGINA arrancada do caderno, com o nome da filha riscado mil vezes: LÍVIA.)
+  5. O CADERNO PRETO (2 partes) — ESCALADA 3, a REVELAÇÃO no meio da temporada: invadir a Acendedoria (escritório
+     do Acendedor-Mor, torre de vidro) atrás do caderno; Vesper os recebe para um chá, não nega nada e explica com
+     calma (o Inverno Escuro, Lívia sem nome dita ainda: ele só diz "alguém"). Oferece à Lume "nunca mais escuro"; ela
+     QUASE aceita (a cena mais difícil). Eles saem livres: ele não precisa prender ninguém. Agora são procurados.
+  6. A CIDADE DOS PAVIOS — fugitivos em Auren: Pavios nas zonas seguras (Marcos vigiados), cartazes novos; aliados:
+     a Guilda do Sargento Brás (vira lado), o Tiago (Herói nº 30 da T1) aparece como herói da Coroa e tem que
+     escolher; missões de DEVOLVER lembranças a Pavios (Osvaldo Candeia volta). Nova mecânica: disfarce em grupo.
+  7. A MINA DE ORIGEM (2 partes) — de onde vem o âmbar: os canos levam ao CORAÇÃO, um poço que desce até os andares
+     de cima da MASMORRA DA T1 (volta nostálgica, inimigos e lugares conhecidos, agora pela lógica de quem extrai).
+     ESCALADA 4: Vesper VENCE uma batalha de verdade: o Seu Jorge troca as próprias lembranças pela vida do grupo e
+     vira Pavio (esquece o 31, esquece eles; dá para devolver só um pedaço no Cap. 10). 2ª EVOLUÇÃO no fundo do poço.
+  8. O INVERNO ESCURO — Vesper apaga Auren de propósito ("para lembrarem por que precisam do Farol"). Cidade no
+     escuro, medo, a Lume no limite. O grupo acende a cidade À MÃO, bairro por bairro, com velas, gente e música
+     (a música da Lume ganha mais um verso). Mecânica: escuridão por bairro, rotas de luz, escolta.
+  9. A SUBIDA DO MORRO — o cerco ao Farol: todos os aliados voltam (Badalada toca, Tico e Dito, Dalva, Brás, Iolanda,
+     Velhágua); masmorra de subida longa, mini-chefes antigos com cara nova; a Ofélia "aparece" pelo Grimório.
+ 10. O FAROL DE CEM INVERNOS (2 partes) — ESCALADA 5: o Farol acende por uma noite; a IRONIA FINAL (Lívia); escolha
+     na luta final; epílogo (o caderno preto vai para a parede da base; o Jorge lembra do 31 um pouquinho) e o GANCHO
+     da trilogia (a carta original assinada com a lanterna de um olho).
+ Cada capítulo: região nova, mecânica nova, 2-3 inimigos, mini-chefe e chefe com animação de ataque caprichada, falas
+ do baú em toda cena, 20-30 min de opcional (missões, baús, Fragmentos), balanceamento por robô nos 3 caminhos.
+=====================================================================
  ESCALA (REGRA FIXA, pedido do usuário: "sempre respeitar o tamanho dos personagens e objetos"):
  - 1 metro = ~29 px. Adulto = 44-53 px de altura (Lume, baixinha: 48; Rita: 53; Seu Jorge: 48). Criança: ~32-36 px.
  - O Baú (forma de baú) é BEM menor que um adulto: ~0,55-0,6 (~28 px de altura na batalha, ao lado de humanos de
@@ -320,7 +352,8 @@
  - PARTE 2 (Candeia, a vila apagada): o 31 sobe a serra; névoa; moradores parados nas portas sem lembrar o que iam
    fazer; minas de âmbar vazias; RUNA DE GATILHO (4º espaço do Grimório, armadilha na linha do tempo); a Irmã Dalva vai
    morar na base (ENFERMARIA: cura entre lutas com custo de cobres); o Seu Jorge abre a GARAGEM (o 31 viaja entre
-   regiões); chefe nas minas; o Dito encontrado; gancho: a última noite do festival e o Farol (revelação no Cap. 5).
+   regiões); chefe nas minas; o Dito encontrado; gancho: a página arrancada com LÍVIA (revelação no Cap. 5; ver o
+   MAPA DA TEMPORADA no topo: agora são 10 capítulos, e o Farol acende só no Cap. 10).
  - PORTA TRANCADA (world2.js portaTrancada): toda casa do mapa agora tem porta desenhada; as que não levam a lugar
    nenhum avisam "trancada" (com variações de humor) quando o jogador anda contra ela ou aperta A de frente. Para abrir
    uma construção nova no futuro, basta pôr uma 'porta' (ent) na frente dela.
