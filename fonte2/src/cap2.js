@@ -275,7 +275,7 @@ async function falaFofoca() {
 async function falaNico() { await say(pickOne(['Mudança. Toda semana é mudança. Eu já subi essa cômoda pro segundo andar, pro sótão e agora pro telhado do vizinho.', 'Se a cidade parar de afundar eu desço tudo de novo. Ou não. Acostumei com a vista.']), 'nico'); }
 async function falaCeleste() {
   const f = G.flags;
-  if (f.c2Boss) { await say('Ela voltou. A Dona Badalada voltou. Tocou o meu batizado, sabia? E hoje tocou de novo, só pra mim. Obrigada.', 'celeste'); return; }
+  if (f.c2Boss) { await celesteDepois(); return; }
   if (f.celeste) { await say('A escadaria da igreja desce para o bairro velho. Vá com Deus. E com cuidado. Deus anda meio ocupado com a enchente.', 'celeste'); return; }
   await say('Ah! Visitas. Desculpem, eu estava tocando o sininho. Tem que tocar na hora certa, senão a cidade esquece que tem sino.', 'celeste');
   await say('Esse aqui é de lata. O de verdade, a Dona Badalada, caiu no rio numa cheia, há cem anos. Ela tocou todos os casamentos, batizados e enterros de Velhágua.', 'celeste');
@@ -614,4 +614,36 @@ async function capitulo2() {
   if (novo || !G.flags.c2Chegada) { await chegadaVelhagua(); G.flags.c2Chegada = true; loadMap2('cais', ...PC.chegada, 'down'); save2(); }
   else { const p = G.pos && MAPS2[G.pos.map] ? G.pos : { map: 'cais', x: PC.chegada[0], y: PC.chegada[1], dir: 'down' }; loadMap2(p.map, p.x, p.y, p.dir); }
   V.scene = 'world'; await fadeIn(20);
+}
+
+// ----- depois do chefe: a canção que ficou devendo (só de NOITE, na hora em que o sino tocava) -----
+async function celesteDepois() {
+  const f = G.flags;
+  if (f.cantouSino || f.cantoTardio) {
+    await say(f.cantoTardio ? pickOne(['Às vezes, de noite, eu ainda ouço ela zumbir a música da senhorita. Lá do rio. Baixinho.', 'Ela não afundou mais nenhum degrau. Acho que ninguém fica com medo depois que alguém canta pra ele.']) : 'Ela voltou. A Dona Badalada voltou. Tocou o meu batizado, sabia? E hoje tocou de novo, só pra mim. Obrigada.', 'celeste'); return;
+  }
+  if (!ehNoite()) {
+    await say('Ela voltou. A Dona Badalada voltou. Obrigada.', 'celeste');
+    await say('Mas sabe... de NOITE, na hora em que ela tocava, eu ainda ouço ela zumbir lá do rio. Sozinha. Como quem espera uma resposta.', 'celeste');
+    await say('[Dica: volte à praça À NOITE.]', 'cat');
+    return;
+  }
+  await say('* A praça está quieta. Do rio, por baixo da água escura, sobe um zumbido de bronze. Grave. Uma nota só, repetida, como quem chama.', 'n');
+  await say('Ouviram? Toda noite. Ela parou de puxar a cidade, mas ainda chama. Eu acho que ela quer ouvir alguém.', 'celeste');
+  const c = await choose('* A Lume olha para o rio.', ['Pedir para a Lume cantar', 'Agora não'], 'n');
+  if (c !== 0) { await say('Ela espera. Sino é paciente. Tem cem anos de prática.', 'celeste'); return; }
+  await say('...Tá. Mas ninguém ri.', 'lume');
+  await say('Eu sou um baú. Eu nem tenho como rir. Quer dizer, tenho. Mas não vou.', 'me');
+  await fadeOut(20); playMusic(null);
+  await say('* A Lume canta. Não é alto. É uma música de ônibus, de quem espera o ponto chegar, de quem pensa "amanhã eu termino". A voz dela treme no começo e depois não treme mais.');
+  sfx('sino', 60);
+  await say('* E, lá do fundo, a Dona Badalada responde. Não toca: cantarola. Um zumbido de bronze que acompanha a melodia, meio fora do tom, feliz.');
+  await say('* As janelas da praça se abrem, uma a uma. Ninguém diz nada. A Irmã Celeste chora de olhos fechados, do jeito que reza.');
+  await fadeIn(20); playMusic('velhagua');
+  await say('Ela cantou junto. Cem anos tocando pros outros, e hoje alguém tocou pra ela.', 'celeste');
+  await say('Nunca é só uma música, né.', 'rita');
+  await say('...Não. Acho que não.', 'lume');
+  await say('Tomem. A paróquia não tem muito, mas o que tem é de quem cuida de coisa velha.', 'celeste');
+  f.cantoTardio = true; await dar('frasco', 1); await dar('pluma', 1); await dar('cobres', 60);
+  save2();
 }

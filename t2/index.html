@@ -451,6 +451,9 @@
    NA HISTÓRIA o mapa é a MAGIA ESPACIAL do baú se manifestando (ele sente o espaço dobrado dentro da tampa e "vê" o
    mundo pelo avesso). Diálogo na primeira vez que abre (primeiroMapa, flag mapaVisto): o Catálogo registra que mapear
    assim é coisa de meia dúzia de nomes na história; a Rita pede segredo (a Coroa não pode saber).
+ - CANTAR PARA O SINO (Cap. 2): na fase 3 da Âncora-Mãe, na vez da Lume, aparece a escolha explícita "Cantar para o sino"
+   (antes era só implícito usar Canção/Acalanto). Quem passou sem cantar: missão opcional "A canção do sino" (só À NOITE,
+   falar com a Irmã Celeste na praça): a Lume canta, o sino cantarola do rio; flag cantoTardio; frasco + pluma + 60c.
  - PORTA TRANCADA (world2.js portaTrancada): toda casa do mapa agora tem porta desenhada; as que não levam a lugar
    nenhum avisam "trancada" (com variações de humor) quando o jogador anda contra ela ou aperta A de frente. Para abrir
    uma construção nova no futuro, basta pôr uma 'porta' (ent) na frente dela.
@@ -4627,6 +4630,20 @@ function cantouSino(m) {
   hint('A Lume cantou para o sino. Os golpes da Âncora-Mãe ficaram mais fracos.', 300);
 }
 for (const [o, k] of [[RUNA2, 'acalanto'], [RUNA2, 'acalantoCoro'], [RUNA2, 'velaprot'], [TECH2, 'cancao']]) { const f = o[k].run; o[k].run = async (m, t) => { await f(m, t); cantouSino(m); }; }
+// na fase da lembrança, a Lume ganha a escolha explícita de cantar (antes ficava só implícito numa fala)
+{ const _ocS = openCommand; openCommand = function (m) {
+  const b = BT.on && m && m.id === 'lume' && BT.foes.find(f => f.kind === 'ancora' && f.hp > 0 && f.ph === 3);
+  if (!b || b.acalmou || BT._cantoNao) return _ocS(m);
+  BT.busy = true; // o tempo para enquanto a Lume decide
+  (async () => {
+    const c = await choose('* A Dona Badalada treme no escuro. A Lume olha para ela.', ['Cantar para o sino', 'Lutar'], 'n');
+    if (c !== 0) { BT._cantoNao = true; BT.busy = false; hint('Ainda dá para cantar depois: a Canção ou o Acalanto da Lume também servem.', 240); return _ocS(m); }
+    await say('Não precisa ter medo. Alguém ainda canta pra você.', 'lume');
+    await TECH2.cancao.run(m);
+    BT.busy = false; endTurn(m, 'normal');
+  })().catch(e => { console.error(e); BT.busy = false; _ocS(m); });
+}; }
+{ const _b2S = battle2; battle2 = function (cfg) { BT._cantoNao = false; return _b2S(cfg); }; }
 
 // ---------- trocar de FILEIRA (só onde a luta permite; estreia na Âncora-Mãe) ----------
 CMD.splice(CMD.findIndex(c => c.k === 'defender'), 0, { k: 'fileira', nm: 'Fileira', ic: () => 'fileira', desc: m => m.row === 'back' ? 'Ir para a FRENTE: corpo a corpo com força total. Ação leve.' : 'Ir para TRÁS: escapa da maré e leva menos dano físico, mas o corpo a corpo enfraquece. Ação leve.', only: () => !!(BT.cfg && BT.cfg.fileira) });
@@ -4920,7 +4937,7 @@ async function falaFofoca() {
 async function falaNico() { await say(pickOne(['Mudança. Toda semana é mudança. Eu já subi essa cômoda pro segundo andar, pro sótão e agora pro telhado do vizinho.', 'Se a cidade parar de afundar eu desço tudo de novo. Ou não. Acostumei com a vista.']), 'nico'); }
 async function falaCeleste() {
   const f = G.flags;
-  if (f.c2Boss) { await say('Ela voltou. A Dona Badalada voltou. Tocou o meu batizado, sabia? E hoje tocou de novo, só pra mim. Obrigada.', 'celeste'); return; }
+  if (f.c2Boss) { await celesteDepois(); return; }
   if (f.celeste) { await say('A escadaria da igreja desce para o bairro velho. Vá com Deus. E com cuidado. Deus anda meio ocupado com a enchente.', 'celeste'); return; }
   await say('Ah! Visitas. Desculpem, eu estava tocando o sininho. Tem que tocar na hora certa, senão a cidade esquece que tem sino.', 'celeste');
   await say('Esse aqui é de lata. O de verdade, a Dona Badalada, caiu no rio numa cheia, há cem anos. Ela tocou todos os casamentos, batizados e enterros de Velhágua.', 'celeste');
@@ -5259,6 +5276,38 @@ async function capitulo2() {
   if (novo || !G.flags.c2Chegada) { await chegadaVelhagua(); G.flags.c2Chegada = true; loadMap2('cais', ...PC.chegada, 'down'); save2(); }
   else { const p = G.pos && MAPS2[G.pos.map] ? G.pos : { map: 'cais', x: PC.chegada[0], y: PC.chegada[1], dir: 'down' }; loadMap2(p.map, p.x, p.y, p.dir); }
   V.scene = 'world'; await fadeIn(20);
+}
+
+// ----- depois do chefe: a canção que ficou devendo (só de NOITE, na hora em que o sino tocava) -----
+async function celesteDepois() {
+  const f = G.flags;
+  if (f.cantouSino || f.cantoTardio) {
+    await say(f.cantoTardio ? pickOne(['Às vezes, de noite, eu ainda ouço ela zumbir a música da senhorita. Lá do rio. Baixinho.', 'Ela não afundou mais nenhum degrau. Acho que ninguém fica com medo depois que alguém canta pra ele.']) : 'Ela voltou. A Dona Badalada voltou. Tocou o meu batizado, sabia? E hoje tocou de novo, só pra mim. Obrigada.', 'celeste'); return;
+  }
+  if (!ehNoite()) {
+    await say('Ela voltou. A Dona Badalada voltou. Obrigada.', 'celeste');
+    await say('Mas sabe... de NOITE, na hora em que ela tocava, eu ainda ouço ela zumbir lá do rio. Sozinha. Como quem espera uma resposta.', 'celeste');
+    await say('[Dica: volte à praça À NOITE.]', 'cat');
+    return;
+  }
+  await say('* A praça está quieta. Do rio, por baixo da água escura, sobe um zumbido de bronze. Grave. Uma nota só, repetida, como quem chama.', 'n');
+  await say('Ouviram? Toda noite. Ela parou de puxar a cidade, mas ainda chama. Eu acho que ela quer ouvir alguém.', 'celeste');
+  const c = await choose('* A Lume olha para o rio.', ['Pedir para a Lume cantar', 'Agora não'], 'n');
+  if (c !== 0) { await say('Ela espera. Sino é paciente. Tem cem anos de prática.', 'celeste'); return; }
+  await say('...Tá. Mas ninguém ri.', 'lume');
+  await say('Eu sou um baú. Eu nem tenho como rir. Quer dizer, tenho. Mas não vou.', 'me');
+  await fadeOut(20); playMusic(null);
+  await say('* A Lume canta. Não é alto. É uma música de ônibus, de quem espera o ponto chegar, de quem pensa "amanhã eu termino". A voz dela treme no começo e depois não treme mais.');
+  sfx('sino', 60);
+  await say('* E, lá do fundo, a Dona Badalada responde. Não toca: cantarola. Um zumbido de bronze que acompanha a melodia, meio fora do tom, feliz.');
+  await say('* As janelas da praça se abrem, uma a uma. Ninguém diz nada. A Irmã Celeste chora de olhos fechados, do jeito que reza.');
+  await fadeIn(20); playMusic('velhagua');
+  await say('Ela cantou junto. Cem anos tocando pros outros, e hoje alguém tocou pra ela.', 'celeste');
+  await say('Nunca é só uma música, né.', 'rita');
+  await say('...Não. Acho que não.', 'lume');
+  await say('Tomem. A paróquia não tem muito, mas o que tem é de quem cuida de coisa velha.', 'celeste');
+  f.cantoTardio = true; await dar('frasco', 1); await dar('pluma', 1); await dar('cobres', 60);
+  save2();
 }
 
 // ================= ANIMAÇÃO DOS PERSONAGENS EM BATALHA (v2) =================
@@ -11146,6 +11195,7 @@ function missoes() {
   if (f.c4Candeia && !f.c4Poco) op({ tit: 'O poço que desceu', desc: 'Os sonâmbulos cochicham que o poço da praça brilha lá no fundo... DE NOITE.', map: 'candeia', at: pos(() => POS4B.candeia.poco), quando: 'noite' });
   if (f.c4Candeia && !f.c4Fim) op({ tit: 'Os que andam dormindo', desc: 'De noite os moradores de Candeia andam até o poço e cochicham pistas. De dia, só ficam parados.', map: 'candeia', at: pos(() => POS4B.candeia.parados[2]), quando: 'noite' });
   if (f.c4Fim) op({ tit: 'Enfermaria', desc: 'A Irmã Dalva trata o grupo de graça e vende frascos com selo mais baratos.', map: 'interior', at: [12, 4] });
+  if (f.c2Boss && !f.cantouSino && !f.cantoTardio) op({ tit: 'A canção do sino', desc: 'De noite, a Dona Badalada ainda zumbe lá do rio, sozinha. A Irmã Celeste acha que ela quer ouvir alguém cantar.', map: 'praca', at: pos(() => POS2.praca.celeste), quando: 'noite' });
   if (f.c2Chegada && f.quadroTut) op({ tit: 'Quadro de pedidos', desc: 'O quadro da Taverna do Remo Torto sempre tem trabalho que paga em cobres.', map: 'taverna', at: pos(() => POS2.taverna.quadro) });
   return L.filter(m => m.at);
 }
