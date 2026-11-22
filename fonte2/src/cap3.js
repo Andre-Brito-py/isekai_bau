@@ -65,16 +65,16 @@ const arvC = v => memo(() => arvoreArt(v));
       { img: busArt, x: 1, y: 9, solid: [[1, 7, 11, 2]] },
       ...ES.postes.map(([x, y], i) => ({ img: () => poste3Art(!!G.flags['c3poste' + i], false), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
       ...ES.arvores.map(([x, y], i) => ({ img: arvC(i), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]] })),
-      { img: () => G.flags.c3Rainha ? poste3Art(false, false) : rainhaArt(Math.floor(FRAME / 20) % 2, false), x: 34, y: 11.4, by: 176 }
+      { img: () => G.flags.c3Rainha ? poste3Art(false, false) : rainhaArt(Math.floor(FRAME / 7) % 6, false), x: 34, y: 11.4, by: 176 }
     ],
     ents: [
       morador('jorge0', ...ES.jorge, { h: 48, spr: (t, dir) => { const S = IMG.spf.jorge, F = IMG.sp.jorge; const v = dir === 'up' ? S.b : dir === 'down' ? F : S.s, fr = v[Math.floor(t / 26) % v.length]; return dir === 'right' ? flipC(fr) : fr; },
         rotina: rot([6, 11, 'remendar', 600, 'up'], [12, 11, 'olhar', 300, 'left']), talk: falaJorge3, gone: () => !!G.flags.c3Rainha }),
       marcoEnt(...ES.marco),
       ...ES.postes.map(([x, y], i) => ({ t: 'sign', x, y, h: 96, talk: () => acenderPoste(i) })),
-      inimigo('m1', 'mariposa', ...ES.mar1, ['mariposa'], { fly: true, spr: (t, dir) => mariposaArt(Math.floor(t / 8) % 2, false, false), h: 28, bg: bgEstrada }),
-      inimigo('m2', 'mariposa', ...ES.mar2, ['mariposa', 'mariposa'], { spr: (t) => mariposaArt(Math.floor(t / 8) % 2, false, false), h: 28, bg: bgEstrada }),
-      inimigo('m3', 'mariposa', ...ES.mar3, ['mariposa', 'bandido'], { spr: (t) => mariposaArt(Math.floor(t / 8) % 2, false, false), h: 28, bg: bgEstrada }),
+      inimigo('m1', 'mariposa', ...ES.mar1, ['mariposa'], { fly: true, spr: (t, dir) => mariposaArt(Math.floor(t / 5) % 6, false, false), h: 28, bg: bgEstrada }),
+      inimigo('m2', 'mariposa', ...ES.mar2, ['mariposa', 'mariposa'], { spr: (t) => mariposaArt(Math.floor(t / 5) % 6, false, false), h: 28, bg: bgEstrada }),
+      inimigo('m3', 'mariposa', ...ES.mar3, ['mariposa', 'bandido'], { spr: (t) => mariposaArt(Math.floor(t / 5) % 6, false, false), h: 28, bg: bgEstrada }),
       inimigo('b1', 'bandido', ...ES.band, ['bandido', 'bandido'], { spr: humSpr('bandido'), h: 48, bg: bgEstrada, vision: 5 }),
       bauEnt('estrada', 'a', ...ES.bau1, async () => { G.items.frasco = (G.items.frasco || 0) + 2; await say('* Dentro, dois {y}Frascos de Âmbar{/}. Alguém esqueceu um piquenique muito específico.'); }),
       bauEnt('estrada', 'b', ...ES.bau2, () => dar('cobres', 45)),

@@ -157,7 +157,7 @@ function mariposaArt(f, rainha, acesa) {
   const key = f + (rainha ? 'r' : '') + (acesa ? 'a' : ''); if (MARI_C[key]) return MARI_C[key];
   const s = rainha ? 3 : 1, W_ = 34 * s, H_ = 28 * s, P = new Pix(W_, H_), cx = W_ / 2, cy = H_ / 2;
   const asa = acesa ? ['#a86a30', '#e8a040', '#ffd060', '#fff0a0'] : ['#3a2a3a', '#6a4a5a', '#9a7a7a', '#c8a890'];
-  const corpo = ['#2a1a28', '#4a3040', '#6a4a50'], bate = f ? 0.55 : 1;
+  const corpo = ['#2a1a28', '#4a3040', '#6a4a50'], bate = BATE6[f % 6] * 0.9 + (f % 6 === 3 ? -0.15 : 0);
   for (const lado of [-1, 1]) {
     for (let y = -11 * s; y <= 8 * s; y++) for (let x = 1; x <= 16 * s; x++) {
       const nx = x / (16 * s), ny = (y + 2 * s) / (11 * s * bate);
@@ -182,6 +182,8 @@ function mariposaArt(f, rainha, acesa) {
   return MARI_C[key] = P.outline().canvas();
 }
 
+// ciclo de bater de asa em 6 quadros: abre, desce devagar, fecha, sobe (graciosa, sem estalo)
+const BATE6 = [1, 0.9, 0.74, 0.58, 0.74, 0.9];
 // ---------- MARIPOSA-RAINHA (arte de chefe, mais detalhe) ----------
 // Quatro asas (anteriores grandes com olho de três anéis, nervuras e franja recortada; posteriores menores em degradê
 // rosa-ferrugem com pintas), tórax peludo com gola branca, abdômen em gomos, antenas plumosas enroladas, coroa de
@@ -189,14 +191,14 @@ function mariposaArt(f, rainha, acesa) {
 const RAINHA_C = {};
 function rainhaArt(f, acesa) {
   const key = f + (acesa ? 'a' : ''); if (RAINHA_C[key]) return RAINHA_C[key];
-  const W_ = 128, H_ = 100, P = new Pix(W_, H_), cx = 64, cy = 50, bate = f ? 0.72 : 1;
+  const W_ = 128, H_ = 100, P = new Pix(W_, H_), cx = 64, cy = 50, bate = BATE6[f % 6], ponta = nx => Math.round((bate - 0.79) * nx * 34);
   const AF = acesa ? ['#5a3010', '#a8601c', '#e8a038', '#ffd870', '#fff4c0'] : ['#2a1a2a', '#4a3040', '#6e4c58', '#9a7476', '#c8a49a'];
   const AP = acesa ? ['#6a2a10', '#c05a20', '#f09038', '#ffc860'] : ['#3a1a28', '#7a3a44', '#b0605a', '#d8907a'];
   const CO = ['#1a0e1a', '#3a2232', '#5a3a48', '#7a5862'];
   // asas posteriores (atrás)
   for (const L of [-1, 1]) for (let y = -2; y <= 30; y++) for (let x = 4; x <= 40; x++) {
     const nx = (x - 4) / 36, ny = (y - 12) / 18; if (nx * nx + ny * ny > 1 || y < 0 && x > 30) continue;
-    const k = (nx + Math.max(0, ny) * 0.5); P.p(cx + L * x, cy + Math.round(y * bate), k < 0.3 ? AP[3] : k < 0.6 ? AP[2] : k < 0.85 ? AP[1] : AP[0]);
+    const k = (nx + Math.max(0, ny) * 0.5); P.p(cx + L * x, cy + Math.round(y * bate) + ponta(nx * 0.7), k < 0.3 ? AP[3] : k < 0.6 ? AP[2] : k < 0.85 ? AP[1] : AP[0]);
   }
   for (const L of [-1, 1]) for (let i = 0; i < 7; i++) { const a = 0.2 + i * 0.2, X = cx + L * Math.round(8 + Math.cos(a) * 28), Y = cy + Math.round((12 + Math.sin(a) * 15) * bate); P.p(X, Y, acesa ? '#fff4c0' : '#e8c0a0'); P.p(X, Y + 1, AP[0]); }
   // asas anteriores (frente), grandes, pontudas
@@ -205,18 +207,18 @@ function rainhaArt(f, acesa) {
     if (y < top || y > bot) continue;
     const ry = (y - top) / Math.max(1, bot - top), k = nx * 0.7 + ry * 0.4;
     let c = k < 0.3 ? AF[3] : k < 0.55 ? AF[2] : k < 0.8 ? AF[1] : AF[0]; if (ry < 0.08) c = AF[4];
-    P.p(cx + L * x, cy + Math.round(y * bate), c);
+    P.p(cx + L * x, cy + Math.round(y * bate) + ponta(nx), c);
   }
   // nervuras e franja recortada da asa anterior
   for (const L of [-1, 1]) {
-    for (let v = 0; v < 6; v++) { const ang = -0.55 + v * 0.22; for (let r = 6; r < 58; r++) { const X = cx + L * Math.round(3 + Math.cos(ang) * r), Y = cy + Math.round((Math.sin(ang) * r * 0.62 - 8) * bate); if (P.get(X, Y) && r % 7 !== 0) P.p(X, Y, AF[0]); } }
-    for (let x = 6; x <= 62; x += 3) { const nx = (x - 3) / 59, bot = 10 - nx * nx * 26 + (nx > 0.85 ? (nx - 0.85) * 60 : 0), Y = cy + Math.round(bot * bate); P.p(cx + L * x, Y, AF[4]); P.p(cx + L * (x + 1), Y - 1, AF[3]); }
+    for (let v = 0; v < 6; v++) { const ang = -0.55 + v * 0.22; for (let r = 6; r < 58; r++) { const X = cx + L * Math.round(3 + Math.cos(ang) * r), Y = cy + Math.round((Math.sin(ang) * r * 0.62 - 8) * bate) + ponta(Math.cos(ang) * r / 59); if (P.get(X, Y) && r % 7 !== 0) P.p(X, Y, AF[0]); } }
+    for (let x = 6; x <= 62; x += 3) { const nx = (x - 3) / 59, bot = 10 - nx * nx * 26 + (nx > 0.85 ? (nx - 0.85) * 60 : 0), Y = cy + Math.round(bot * bate) + ponta(nx); P.p(cx + L * x, Y, AF[4]); P.p(cx + L * (x + 1), Y - 1, AF[3]); }
     // olho de três anéis
-    const ox = cx + L * 34, oy = cy + Math.round(-12 * bate);
+    const ox = cx + L * 34, oy = cy + Math.round(-12 * bate) + ponta(0.53);
     for (let y = -8; y <= 8; y++) for (let x = -8; x <= 8; x++) { const d = Math.sqrt(x * x + y * y * 1.3); if (d > 8) continue; P.p(ox + x, oy + Math.round(y * bate), d < 2.2 ? (acesa ? '#ffffff' : '#1a0e1a') : d < 4 ? (acesa ? '#ff9a30' : '#e8c040') : d < 6 ? (acesa ? '#fff4c0' : '#1a0e1a') : (acesa ? '#e8a038' : '#c8a080')); }
     P.p(ox - 1, oy - 1, '#ffffff');
     // pintas brancas na ponta da asa
-    for (const [dx, dy] of [[50, -16], [54, -12], [46, -20]]) P.p(cx + L * dx, cy + Math.round(dy * bate), '#ffffff');
+    for (const [dx, dy] of [[50, -16], [54, -12], [46, -20]]) P.p(cx + L * dx, cy + Math.round(dy * bate) + ponta(dx / 59), '#ffffff');
   }
   // abdômen em gomos
   for (let y = 4; y <= 40; y++) { const w = Math.round(7 - (y - 4) * 0.15 - (y > 32 ? (y - 32) * 0.5 : 0)); for (let x = -w; x <= w; x++) { const gomo = (y - 4) % 6 < 1; P.p(cx + x, cy + y, gomo ? CO[0] : x < -w / 3 ? CO[3] : x > w / 3 ? CO[1] : CO[2]); } }

@@ -192,7 +192,11 @@ drawPrompt = function () {
   return _dr.apply(this, arguments);
 }; }
 // a Rainha bate as asas mais rápido quando arma o golpe
-ENEMY2.rainha.frame = u => rainhaArt(Math.floor(BT.t / (u.armando ? 3 : 10) + u.x) % 2, !!u.acesa);
+ENEMY2.rainha.frame = u => rainhaArt(Math.floor(BT.t / (u.armando ? 2 : 6) + u.x) % 6, !!u.acesa);
+ENEMY2.rainha.paira = true; ENEMY2.mariposa.paira = true;
+ENEMY2.mariposa.frame = u => mariposaArt(Math.floor(BT.t / 4 + u.x) % 6, false, false);
+// voo gracioso: quem 'paira' sobe e desce no ritmo das asas (sobe quando a asa desce) e balança de leve de lado
+{ const _du = drawUnit; drawUnit = function (u) { if (!u.paira || u.hp <= 0) return _du(u); const per = u.boss ? 36 : 24, ph = (BT.t + (u.x | 0)) / per * Math.PI * 2, oy0 = u.oy, ox0 = u.ox; u.oy = (u.oy || 0) - Math.round(Math.sin(ph) * (u.boss ? 5 : 3)); u.ox = (u.ox || 0) + Math.round(Math.sin(ph * 0.5) * (u.boss ? 4 : 2)); try { return _du(u); } finally { u.oy = oy0; u.ox = ox0; } }; }
 ENEMY2.rainha.h = 100;
 
 // ---------- Mariposa-Rainha: dificuldade ajustada (o usuário não conseguiu passar) ----------
