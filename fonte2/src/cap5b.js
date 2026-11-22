@@ -102,7 +102,6 @@ async function descerTelhados() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 5', 'O Caderno Preto', '', 'A Lume tem uma luz só dela.', 'E o grupo, um preço na cabeça.']);
   V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); await fadeIn(20);
-  await say('* (O Capítulo 6 está a caminho. A cidade, os telhados e a Cidade Alta continuam abertos.)');
 }
 // ---------- telhados com corpo: fachadas descendo para o escuro, beirais, cumeeiras e a cidade lá embaixo ----------
 let TELH_OV = null;

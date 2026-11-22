@@ -545,6 +545,50 @@
    c5Vitral, c5Caderno, c5Cha, c5Vela, c5Telhados, c5cp, c5Holofote, c5Fim; opcionais c5Dama, c5Pipa, c5Mirante.
  - GANCHO DO CAP. 6: o grupo procurado em Auren; os nomes anotados com data ("a gente devolve, um por um").
 =====================================================================
+ CAPÍTULO 6 — A CIDADE DOS PAVIOS (implementado; mapas6.js, arte_cap6.js, disfarce6.js, fabrica6.js, inimigos6.js,
+ lembranca6.js, cap6.js, cap6b.js, cap6_integra.js; mapas em maps/cap6maps.py, com validação e SIMULAÇÃO DAS ESTEIRAS:
+ sem as alavancas não se chega à saída; com elas chega; e de qualquer estado sempre dá para chegar à saída e voltar)
+ - LUGAR NA ESCALADA: depois da revelação, o grupo é PROCURADO. Vesper não aparece em pessoa: manda um BILHETE no fim
+   (a conta das "onze noites de hospital" que as lembranças soltas custaram). Ele não se zanga; ele anota. (Segredo: só
+   no jogo e aqui.) O âmbar "de farmácia" da Coroa é feito das lembranças dos Pavios (o gancho "gosto de saudade").
+ - FLUXO: base (Dalva traz os cartazes e os lençóis: LAVADEIRAS) > Largo: portão novo embaixo à direita (38-39, 28-29)
+   para a VILA DOS PAVIOS (cancela: "roupa de onde?" -> Ala Sete) > OSVALDO CANDEIA (de Velhágua; o baú PROVA o frasco de
+   farmácia do grupo: a lembrança de um menino de farda) > casacos de Pavio no VARAL (de dia, de lavadeira) > de NOITE,
+   de PAVIO, a DONA COTINHA recebe a lembrança: o filho é o SARGENTO BRÁS, que muda de lado (Passe da Guilda; a Caçadora
+   do Festival some) e conta que a CHAVE DO COFRE está com o Herói nº 30 > SEU LÚCIO (o bardo de Velhágua) monta uma
+   TRUPE (teste de ritmo, ritmoLume) > o SHOW de NOITE no palco do Festival: o TIAGO avalia o baú e luta (mini-chefe; na
+   metade ele escolhe; a herança da T1 muda a fala: esc.tiago) e entrega a chave > CASA DO SELO (cancela: crachá 47;
+   só PAVIO): GALPÃO DAS ESTEIRAS (faixa amarela, Selos Vivos de ronda, piso das esteiras com 3 alavancas, corredor das
+   3 PRENSAS) > COFRE DAS LEMBRANÇAS (estantes: achar pela descrição as lembranças do Osvaldo, do cozinheiro que
+   assobia e da lavadeira do dedal; frasco errado vira Frasco Rachado) > a terceira acorda a SELADORA REAL (chefe) >
+   as lembranças voam pelas chaminés de volta para a vila > a CALHA de descarte cai no canal > o Osvaldo lembra da
+   CANDINHA e conserta o RELÓGIO DA VILA (parado nas 3h17) > o bilhete > base: o Seu Jorge reconhece a estrada da
+   etiqueta "MINA DE ORIGEM · pelo cano do CORAÇÃO" (gancho do Cap. 7) > FIM. A Guarda sai do Bairro Baixo "para as minas".
+ - MECÂNICAS NOVAS: (1) DISFARCE EM GRUPO (MENU > Disfarce; figurino() recolore Rita e Lume e enfeiteBau() veste o
+   baú): LAVADEIRA (de dia; Bairro Baixo, Largo, Festival, Vila), PAVIO (de noite; Auren toda, Vila, e dentro do Selo a
+   qualquer hora), TRUPE (qualquer hora, só Festival e Largo). Sem disfarce, guarda que vê = alarme (o baú parado não
+   salva: o cartaz tem as moças). Figurino fora de hora/lugar é pior. CANCELAS (montaBarreira): guarda + pergunta de
+   ofício por figurino (respostas aprendidas: Ala Sete; o relógio parado 3h17; crachá 47). Lutar disfarçado: +20 Tensão.
+   MARCOS VIGIADOS em Auren: só se toca de PAVIO (um Pavio de guarda ao lado). (2) ESTEIRAS (fabrica6.js): pisou, vai
+   até o fim; alavancas viram o sentido. PRENSAS com ritmos diferentes. FAIXA: no Selo, fora da faixa = alarme mesmo de
+   Pavio. (3) DEVOLVER LEMBRANÇAS (lembranca6.js; MENU > Lembranças): 5 frascos (Cotinha, Osvaldo, Afonso, Zélia,
+   Juvenal); abrir perto do dono: o Pavio volta a ser gente (sprite e nome mudam) e dá recompensa. As 5 ensinam ao baú a
+   DEVOLUÇÃO (35T: devolve ao inimigo, mais forte, o último golpe que o grupo levou). (4) SELADO (status): sem técnicas,
+   runas, dupla e super na próxima vez (o robô ataca). (5) BILHETE (status): o próximo golpe dói 40% mais.
+ - INIMIGOS: Selo Vivo 520/36 (carimba = SELADO), Frasco Rachado 360/34 (esquecer a vez; quebrado cura o grupo 6%),
+   Caçadora de Recompensa 560/37 (rede atrasa; lê o cartaz e fica mais forte). TIAGO 4900/38 (Avaliação = BILHETE no mais
+   frágil, TROCO devolve golpe físico, Catraca, Passagem Só de Ida preparada; fase 2 sem troco e mordida pega).
+   SELADORA REAL 7600/41 (Carimbo, Esteira atrasa a vez, PRENSA REAL preparada; 55%: o tanque racha e solta Frascos;
+   25%: SELO REAL em todos e o fogo passa a pegar; 7200 PV depois do robô). Robô (Desafio, farol e escriba, 0,6): comuns
+   custam 10-65%; Tiago deixa o mais frágil em ~20-50%; Seladora vence com mínimos de ~1-40% (o Escriba no limite, como pede o
+   perfil mágico). Lutas de cancela e de Marco vigiado usam guardas (semSurpresa).
+ - DIA/NOITE: lavadeira, varal, Zélia, Seu Lúcio e o teste de dia; Pavio, Cotinha, o show e o Selo de noite.
+ - OPCIONAIS: o pão sem assobio (Afonso: Avental de Padeiro), o dedal (Zélia: Dedal de Prata), a casa sem número
+   (Juvenal: frasco achado na ilha I5 das esteiras), Cinco lembranças (Devolução); baús no galpão e no cofre.
+ - FLAGS: c6Init, c6Vila, c6Osvaldo, c6Casaco, c6Bras, c6Trupe, c6Tiago, c6Chave, c6Selo1, c6Selo2, c6Pegou[],
+   c6SeladoraAcordou, c6Seladora, c6Etiqueta, c6RelogioVolta, c6Fim, c6Devolucao; G.disfarces/G.disfarce, G.lemb, c6belts.
+ - GANCHO DO CAP. 7: a Mina de Origem e o cano do Coração; o Seu Jorge conhece a estrada (e lembra pouco do caminho).
+=====================================================================
 -->
 <style>
 :root{

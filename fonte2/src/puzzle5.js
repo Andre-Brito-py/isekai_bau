@@ -125,20 +125,20 @@ function passoPuzzle() {
   if (worldBusy2() || W2.pego) return;
   // holofotes e rondas
   const visto = (tiles) => tiles.some(([x, y]) => (x === W2.x && y === W2.y) || (W2.mv && x === W2.mv.tx && y === W2.mv.ty));
-  const pegaria = () => (typeof rostoSt === 'function' && rostoSt().on) || !!W2.mv;
+  const pegaria0 = () => (typeof rostoSt === 'function' && rostoSt().on) || !!W2.mv, pegaria = () => typeof pegaHook6 === 'function' ? pegaHook6(m, pegaria0()) : pegaria0();
   if (holofotesAtivos(m)) {
     W2.cones5 = m.holofotes.map(h => coneHolofote(h, W2.t));
     for (const c of W2.cones5) if (visto(c.tiles)) { if (pegaria()) { W2.pego = true; run2(() => pegoNaLuz(m, 'holofote')); return; } }
   } else W2.cones5 = null;
   if (m.stealth) for (const e of W2.ents) if (e.t === 'ronda' && !(e.gone && e.gone())) {
-    const c = coneRonda(e); if (visto(c)) { if (pegaria()) { W2.pego = true; run2(() => pegoNaLuz(m, 'ronda', e)); return; } if (!e.olhou) { e.olhou = 1; e.emote = { s: pickOne(['Hm. Um baú no jardim?', 'Entrega atrasada...', 'Coisa de rico. Deixa.']), t: 80 }; } }
+    const c = coneRonda(e); if (visto(c)) { if (pegaria()) { W2.pego = true; run2(() => pegoNaLuz(m, 'ronda', e)); return; } if (!e.olhou) { e.olhou = 1; e.emote = { s: m.falaOlhou ? m.falaOlhou(e) : pickOne(['Hm. Um baú no jardim?', 'Entrega atrasada...', 'Coisa de rico. Deixa.']), t: 80 }; } }
     else e.olhou = 0;
   }
 }
 async function pegoNaLuz(m, como, e) {
   sfx('cancel'); V.shake = 6; if (e) e.emote = { s: '!', t: 40 };
-  await say(como === 'alarme' ? '* O cristal vermelho apita como uma chaleira. De trás das colunas de vidro, saem os Vigias.' : rostoSt().on ? pickOne(['* "PARADO! Quem anda pelo jardim a essa hora?"', '* A luz para em você. Um apito. Passos de vidro.']) : '* A luz para em você no meio do passo. Baú não anda. Este anda.');
-  if (!G.flags.tutLuz5) { G.flags.tutLuz5 = true; await say('[Na luz: GENTE é pega sempre; o BAÚ só se estiver ANDANDO. Espere o facho passar, ou pare dentro dele.]', 'cat'); }
+  if (m.pegoTxt) await say(m.pegoTxt(como, e)); else await say(como === 'alarme' ? '* O cristal vermelho apita como uma chaleira. De trás das colunas de vidro, saem os Vigias.' : rostoSt().on ? pickOne(['* "PARADO! Quem anda pelo jardim a essa hora?"', '* A luz para em você. Um apito. Passos de vidro.']) : '* A luz para em você no meio do passo. Baú não anda. Este anda.');
+  if (m.tutPego) await m.tutPego(); else if (!G.flags.tutLuz5) { G.flags.tutLuz5 = true; await say('[Na luz: GENTE é pega sempre; o BAÚ só se estiver ANDANDO. Espere o facho passar, ou pare dentro dele.]', 'cat'); }
   const r = await lutaMapa(m.grupoLuz || ['vigia', 'vigia'], { bg: m.batBg });
   if (r !== 'win') { W2.pego = false; return; }
   await fadeOut(12); if (rostoSt().on && typeof desfazRosto === 'function') desfazRosto();
