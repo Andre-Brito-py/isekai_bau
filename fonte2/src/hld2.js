@@ -283,15 +283,10 @@ const FIG_GRUPO = {
   lume: { h: 46, skin: '#f0c8a8', hair: '#f0d070', hairStyle: 'longo', top: '#f0e4c4', bottom: '#d8c49a', eye: '#3a2a10',
     extra: (P, o) => { const fy = o.hcY - Math.round(9 * o.s) - 6 + (o.fr ? -1 : 0); P.rect(o.cx - 1, fy + 3, 2, 3, '#f2ecdc'); P.p(o.cx, fy + 2, '#ffd060'); P.p(o.cx - 1, fy + 1, o.fr ? '#fff0c0' : '#ffb040'); P.p(o.cx, fy, '#fff8e0'); P.rect(o.cx - 5, o.tB - 1, 10, 1, '#e0a030'); } }
 };
-{ const _fsH = folSprite; folSprite = function (f) {
-  if (f.k === 'rita' || (f.k === 'lume' && !LUSTRE_ON())) { const H = humano('grupo_' + f.k, FIG_GRUPO[f.k]); const t = W2.t + (f.k === 'rita' ? 13 : 0); return humanoSprite(H, f.dir, f.mv ? t * 3 : t * 0.6); }
-  return _fsH(f);
-}; }
-// forma humana do protagonista: o mesmo desenho (linha de 4º grau, cores e cachecol), redesenhado no estilo do mapa
-rostoFrame = function (moving) { return humanoSprite(rostoSprite(), W2.dir, moving ? W2.t * 3 : W2.t * 0.4); };
+// Rita, Lume, Seu Jorge e a forma humana do protagonista MANTÊM a arte original (do usuário/T1), só com a grade de cor
+// HLD: o redesenho no gerador ficou "palitinho" demais para os protagonistas (pedido do usuário). FIG_GRUPO fica de reserva.
 // tudo que tem pé no mapa (inimigos, baús, figuras com arte própria) passa pela grade HLD
 { const _df = drawFeet; drawFeet = function (fr, x, y, o) { return _df(gradeHLD(fr), x, y, o); }; }
 // Seu Jorge no mapa também redesenhado: quepe azul, camisa de motorista, bigode grisalho
 FIG_GRUPO.jorge = { h: 48, skin: '#c88a60', hair: '#9a9a9a', hairStyle: 'curto', top: '#8ab0d0', bottom: '#2a3048', hat: '#2a4a8a', beard: true, eye: '#1a1028',
   extra: (P, o) => { if (o.view !== 'b') P.rect(o.cx - 3, o.tT + 2, 2, 2, '#e8dcc0'); } };
-{ const _lm2 = loadMap2; loadMap2 = function (id, x, y, dir) { const r = _lm2(id, x, y, dir); for (const e of W2.ents) if (e.id === 'jorge0') e.spr = (t, d) => humanoSprite(humano('grupo_jorge', FIG_GRUPO.jorge), d, t); return r; }; }
