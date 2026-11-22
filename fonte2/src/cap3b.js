@@ -64,7 +64,7 @@ const LUZ_GAL = { galerias1: GA1.brasas, galerias2: [[6, 8], [21, 8], [14, 9]], 
   };
   for (const id of ['galerias1', 'galerias2', 'fundo']) { const m = MAPS2[id]; m.baked = null; for (const p of m.props || []) { const f = p.img; p._hld = true; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } }
   // a grade do bueiro no Bairro Baixo
-  const au = MAPS2.auren; if (au && !au._bueiro) { au._bueiro = true; au.ents.push({ t: 'sign', x: 8, y: 19, h: 10, talk: gradeBueiro }); au.ents.push(morador('tico', 9, 19, { rotina: rot([9, 19, 'olhar', 9000, 'left']), talk: falaTicoGrade, gone: () => !G.flags.c3P1Fim || !!G.flags.c3Fim })); au.props.push({ img: () => gradeBrasa(0), x: 8, y: 19.9 }); }
+  const au = MAPS2.auren; if (au && !au._bueiro) { au._bueiro = true; au.ents.push({ t: 'sign', x: AUR.bueiro[0], y: AUR.bueiro[1], h: 10, talk: gradeBueiro }); au.ents.push(morador('tico', ...AUR.bueiroTico, { rotina: rot([AUR.bueiroTico[0], AUR.bueiroTico[1], 'olhar', 9000, 'left']), talk: falaTicoGrade, gone: () => !G.flags.c3P1Fim || !!G.flags.c3Fim })); au.props.push({ img: () => gradeBrasa(0), x: AUR.bueiro[0], y: AUR.bueiro[1] + 0.9 }); }
 }; }
 
 // ---------- escuro das galerias: só se vê onde tem luz (a Lume, as brasas) ----------
@@ -109,7 +109,7 @@ async function falaTicoGrade() {
   }
   await say(G.flags.c3Mae ? 'Vocês voltaram! E o Dito? Acharam alguma coisa do Dito?' : pickOne(['Eu tô guardando! Ninguém fecha essa grade enquanto eu tiver aqui.', 'Lá embaixo dá pra ouvir a cidade respirando. O Dito dizia isso.']), 'tico');
 }
-async function subirBueiro() { sfx('door'); await fadeOut(14); loadMap2('auren', 8, 18, 'up'); await fadeIn(14); }
+async function subirBueiro() { sfx('door'); await fadeOut(14); loadMap2('auren', ...AUR.bueiroOut, 'up'); await fadeIn(14); }
 async function cenaDescida() {
   await say('* Escuro. Escuro de verdade, do tipo que a superfície esqueceu. Só a luz da Lume abre um círculo em volta de vocês.');
   await say('Ninguém sai do meu círculo. Sério. Aqui eu sou importante.', 'lume');
@@ -196,6 +196,6 @@ async function cenaFinalCap3() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 3', 'O Festival da Luz', '', 'Próximo: Capítulo 4']);
   save2();
-  V.scene = 'world'; loadMap2('auren', 9, 18, 'down'); await fadeIn(20);
+  V.scene = 'world'; loadMap2('auren', ...AUR.bueiroOut, 'down'); await fadeIn(20);
   await capitulo4();
 }

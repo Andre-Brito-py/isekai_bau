@@ -44,13 +44,21 @@ LUZ_GAL.mina = MI.lampioes;
   const sonambulo = (x, y, i) => ({ get rotina() { return ehNoite() ? rot([x, y, 'olhar', 300, 'down'], [CA.poco[0] - 2 + (i % 5), CA.poco[1] + 2, 'olhar', 400, 'up'], [x, y + 1, 'olhar', 200, 'down']) : rot([x, y, 'olhar', 9000, 'down']); } });
   MAPS2.candeia = { rows: ROWS4B.candeia, name: 'Candeia', music: 'candeia', batBg: bgSerra, bg: '#262c3a', nevoa: () => ehNoite() ? 0.6 : 0.9, tint: 'rgba(120,130,160,0.10)',
     props: [
-      { img: casa({ w: 5, stone: true, wall: '#8a8290', roof: '#4a5a6a', door: 2, win: [0.4, 3.4], signC: '#6a5a8a' }), x: 3, y: 8 },
-      { img: casa({ w: 6, stone: true, wall: '#9a8a80', roof: '#5a4a4a', door: 3, win: [0.4, 4.4] }), x: 8, y: 8 },
-      { img: mineArt, x: 14, y: 8 },
-      { img: casa({ w: 5, stone: true, wall: '#8a8a90', roof: '#3a4a5a', win: [0.4, 3.4], door: 2.5 }), x: 20, y: 8 },
-      { img: casa({ w: 7, stone: true, wall: '#a8987a', roof: '#6a3a3a', door: 2.6, win: [0.5, 5.4], signC: '#8a6a3a' }), x: 24, y: 8 },
-      { img: casa({ w: 3, stone: true, wall: '#8a8290', roof: '#4a4a5a', win: [0.5] }), x: 31, y: 8 },
-      { img: memo(pocoArt), x: CA.poco[0] - 1, y: CA.poco[1] + 1.2, solid: [[15, 13, 4, 2]] },
+      // patamar de cima: casas de pedra e a boca da mina
+      { img: casa({ w: 5, stone: true, wall: '#8a8a90', roof: '#3a4a5a', win: [0.4, 3.4], door: 2 }), x: 3, y: 8 },
+      { img: casa({ w: 6, stone: true, wall: '#9a8a80', roof: '#5a4a4a', door: 3, win: [0.4, 4.4] }), x: 9, y: 7 },
+      { img: mineArt, x: 17, y: 9 },
+      { img: casa({ w: 6, stone: true, wall: '#a8987a', roof: '#4a3a3a', door: 2.5, win: [0.4, 4.4], chimney: true }), x: 25, y: 8 },
+      { img: casa({ w: 5, stone: true, wall: '#8a8290', roof: '#4a4a5a', win: [0.5, 3.4], door: 1.8 }), x: 32, y: 7 },
+      // patamar do meio: a casa da janela roxa (Dona Ilda), outra casa e a Pensão, encostadas no muro de arrimo
+      { img: casa({ w: 5, stone: true, wall: '#8a8290', roof: '#4a5a6a', door: 2, win: [0.4, 3.4], signC: '#6a5a8a', wallH: 74 }), x: 2, y: 20 },
+      { img: casa({ w: 5, stone: true, wall: '#9a9088', roof: '#5a4a3a', door: 2, win: [0.4, 3.4], wallH: 74 }), x: 26, y: 20 },
+      { img: casa({ w: 7, stone: true, wall: '#a8987a', roof: '#6a3a3a', door: 2.6, win: [0.5, 5.4], signC: '#8a6a3a', wallH: 74 }), x: 32, y: 20 },
+      // patamar de baixo
+      { img: casa({ w: 6, stone: true, wall: '#8a8a90', roof: '#3a3a4a', door: 2.5, win: [0.4, 4.4], wallH: 74 }), x: 12, y: 30 },
+      { img: casa({ w: 5, stone: true, wall: '#9a8a80', roof: '#4a3a3a', door: 2, win: [0.5, 3.4], chimney: true, wallH: 74 }), x: 20, y: 30 },
+      ...[[0.6, 7], [7.8, 7], [15.4, 7], [22.6, 7], [37.6, 7]].map(([x, y], i) => ({ img: arvC(i + 2), x: x - 0.2, y })),
+      { img: memo(pocoArt), x: CA.poco[0] - 1, y: CA.poco[1] + 1.2, solid: [[CA.poco[0] - 1, CA.poco[1] - 1, 4, 2]] },
       ...CA.postes.map(([x, y]) => ({ img: () => poste3Art(!!G.flags.c4Fim, false), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
       { img: memo(placaVilaArt), x: CA.placa[0] - 0.7, y: CA.placa[1] + 1 }
     ],
@@ -99,7 +107,7 @@ LUZ_GAL.mina = MI.lampioes;
   };
   for (const id of ['serra', 'candeia', 'ilda', 'mina']) grade(MAPS2[id]);
   // o Jorge no Largo, pronto para subir a serra (depois da Parte 1)
-  const lg = MAPS2.largo; if (lg && !lg._jorge) { lg._jorge = true; lg.ents.push(morador('jorge', 12, 13, { rotina: rot([12, 13, 'olhar', 9000, 'right']), gone: () => !G.flags.c4P1Fim || !!G.flags.c4Fim, talk: falaJorgeLargo })); }
+  const lg = MAPS2.largo; if (lg && !lg._jorge) { lg._jorge = true; lg.ents.push(morador('jorge', ...POS4.largo.jorge, { rotina: rot([POS4.largo.jorge[0], POS4.largo.jorge[1], 'olhar', 9000, 'right']), gone: () => !G.flags.c4P1Fim || !!G.flags.c4Fim, talk: falaJorgeLargo })); }
   // a base ganha a ENFERMARIA da Dalva e a porta da GARAGEM do Jorge (depois do Cap. 4)
   const ib = MAPS2.interior; if (ib && !ib._c4) { ib._c4 = true;
     ib.ents.push(morador('dalva', 12, 4, { rotina: rot([12, 4, 'limpar', 600, 'down'], [12, 5, 'olhar', 400, 'left']), gone: () => !G.flags.c4Fim, talk: enfermaria }));
@@ -273,7 +281,7 @@ async function fimCap4() {
   // volta para Candeia: a vila acende um pouco
   await fadeOut(30);
   G.flags.c4Fim = true; G.hora = 6 * 60;
-  V.scene = 'world'; loadMap2('candeia', 17, 12, 'down'); await fadeIn(30);
+  V.scene = 'world'; loadMap2('candeia', ...CA.fim, 'down'); await fadeIn(30);
   await say('* Amanhece em Candeia. Nos postes da praça, uma luz fraca, teimosa. Nas portas, os moradores piscam, olham as próprias mãos, chamam uns pelos nomes. Nem todos lembram de tudo. Mas lembram de alguma coisa.');
   await say('Vovô! VOVÔ! Você tá segurando o meu casaco!', 'menina');
   await say('* A Dona Ilda está na janela roxa, com um caderno aberto, escrevendo depressa. Ela levanta os olhos e acena com a caneta.');

@@ -3,12 +3,17 @@
 // missões) e MUNDO (as regiões ligadas por estradas). A missão principal é um "!" dourado; as opcionais, um "?" azul.
 // Se a missão é em outro mapa, o marcador vai na SAÍDA que leva até lá (busca pelas portas e ligações).
 // Missões com horário mostram o selo (só de dia / só à noite / ao amanhecer): o relógio também é parte do mapa.
-const LIGA_EXTRA = {
-  estrada: [[39, 11, 'auren']], auren: [[35, 12, 'festival'], [8, 19, 'galerias1'], [0, 15, 'estrada']],
-  festival: [[39, 10, 'largo'], [0, 10, 'auren']], largo: [[16, 8, 'hosp1'], [31, 8, 'hosp2'], [0, 12, 'festival']],
-  hosp2: [[2, 18, 'largo'], [26, 2, 'sala']], galerias1: [[1, 1, 'auren']], galerias2: [[14, 19, 'fundo']],
-  serra: [[33, 3, 'candeia']], candeia: [[0, 19, 'serra'], [5, 8, 'ilda'], [16, 8, 'mina'], [26, 8, 'pensao']], mina: [[1, 17, 'candeia']]
+const LIGA_EXTRA_FIXA = {
+  estrada: [[39, 11, 'auren']], hosp2: [[2, 18, 'largo'], [26, 2, 'sala']], galerias1: [[1, 1, 'auren']], galerias2: [[14, 19, 'fundo']],
+  serra: [[33, 3, 'candeia']], mina: [[1, 17, 'candeia']]
 };
+// ligações por gatilho (não são "porta"): calculadas pelas posições dos mapas, que mudam quando um mapa é refeito
+const ligaExtra = (id) => { try { const A = POS3.auren, F = POS3.festival, L = POS4.largo, C = POS4B.candeia; return ({
+  auren: [[...A.festDoor[0], 'festival'], [...A.bueiro, 'galerias1'], [...A.estradaDoor[0], 'estrada']],
+  festival: [[...F.largoDoor[0], 'largo'], [...F.aurenDoor[0], 'auren']],
+  largo: [[...L.hospDoor[0], 'hosp1'], [...L.lavDoor, 'hosp2'], [...L.festDoor[0], 'festival']],
+  candeia: [[...C.serraDoor[1], 'serra'], [...C.ildaDoor[0], 'ilda'], [...C.minaDoor[0], 'mina']]
+})[id] || LIGA_EXTRA_FIXA[id] || []; } catch (e) { return LIGA_EXTRA_FIXA[id] || []; } };
 const REGIAO_DE = { cais: 'velhagua', bazar: 'velhagua', praca: 'velhagua', taverna: 'velhagua', tobias: 'velhagua', rua1: 'velhagua', rua2: 'velhagua', poco: 'velhagua', igreja: 'velhagua',
   estrada: 'estrada', auren: 'auren', papelaria: 'auren', festival: 'auren', largo: 'auren', hosp1: 'auren', hosp2: 'auren', sala: 'auren', galerias1: 'auren', galerias2: 'auren', fundo: 'auren',
   serra: 'serra', candeia: 'candeia', ilda: 'candeia', mina: 'candeia' };
@@ -44,14 +49,14 @@ function missoes() {
   else if (f.c4Chave) P({ tit: 'O turno da noite', desc: 'Entre na Mina de Candeia e chegue à capela, no alto da galeria. A grade só abre no TURNO DA NOITE.', map: 'mina', at: pos(() => POS4B.mina.chefe), quando: 'noite' });
   else if (f.c4Candeia) P({ tit: 'A professora que escreve', desc: 'Procure a Dona Ilda, na casa da janela roxa. Ela só recebe visita DE DIA e dorme cedo.', map: 'candeia', at: pos(() => POS4B.candeia.ildaDoor[0]), quando: 'dia' });
   else if (f.c4Serra) P({ tit: 'Atravessar a névoa', desc: 'Suba a Estrada da Serra até a entrada de Candeia, lá no alto, a leste.', map: 'serra', at: pos(() => POS4B.serra.cand[1]) });
-  else if (f.c4P1Fim) P({ tit: 'Subir a serra', desc: 'O Dito foi "transferido" para Candeia. O Seu Jorge espera no Largo do Hospital com o 31.', map: 'largo', at: [12, 13] });
+  else if (f.c4P1Fim) P({ tit: 'Subir a serra', desc: 'O Dito foi "transferido" para Candeia. O Seu Jorge espera no Largo do Hospital com o 31.', map: 'largo', at: pos(() => POS4.largo.jorge) });
   else if (f.c4Relogio) P({ tit: 'Os papéis do diretor', desc: 'Vasculhe o arquivo e a mesa da Sala do Diretor.', map: 'sala', at: pos(() => POS4.sala.mesa) });
   else if (f.c4Noite) P({ tit: 'A Ala do Descanso', desc: 'Passe pela ronda sem ser visto e chegue à Sala do Diretor, no fundo da ala.', map: 'hosp2', at: pos(() => POS4.hosp2.salaDoor[0]), quando: 'noite' });
   else if (f.c4Hosp) P({ tit: 'Pela lavanderia', desc: 'A lavanderia nos fundos do hospital sobe para a Ala do Descanso. Vá À NOITE, quando só a ronda está acordada.', map: 'largo', at: pos(() => POS4.largo.lavDoor), quando: 'noite' });
   else if (f.c4Init) P({ tit: 'A Casa de Saúde', desc: 'Entre no hospital do Largo com o rosto humano, DE DIA, horário de visita, e fale com a Irmã Dalva.', map: 'hosp1', at: pos(() => POS4.hosp1.dalva), quando: 'dia' });
   else if (f.c3Mae && !f.c3Fim) P({ tit: 'A lanterna do Dito', desc: 'Pegue a lanterna que sobrou no fundo do Coração da Fuligem.', map: 'fundo', at: pos(() => POS3.fundo.lanterna) });
   else if (f.c3P1Fim) P(f.c3TicoGrade ? { tit: 'Descer às galerias', desc: 'Desça pelas Galerias de Fuligem até o fundo, onde a coisa morna respira.', map: 'fundo', at: pos(() => POS3.fundo.chefe) }
-    : { tit: 'O bueiro', desc: 'O Tico está na grade do bueiro, no Bairro Baixo. Algo respira lá embaixo.', map: 'auren', at: [9, 19] });
+    : { tit: 'O bueiro', desc: 'O Tico está na grade do bueiro, no Bairro Baixo. Algo respira lá embaixo.', map: 'auren', at: pos(() => POS3.auren.bueiroTico) });
   else if (f.c3Noite1) P({ tit: 'O discurso', desc: 'Chegue à frente do palco na Avenida do Festival.', map: 'festival', at: pos(() => POS3.festival.frente[1]), quando: 'noite' });
   else if (f.c3Grim) P({ tit: 'A noite do Festival', desc: 'Siga para a Avenida do Festival, no leste do Bairro Baixo.', map: 'auren', at: pos(() => POS3.auren.festDoor[0]) });
   else if (f.c3Iolanda) {
@@ -91,7 +96,7 @@ function saidasDe(id) {
   const m = MAPS2[id], S = [];
   if (!m) return S;
   for (const e of m.ents || []) if (e.t === 'door' && e.to) S.push([e.x, e.y, e.to]);
-  for (const s of LIGA_EXTRA[id] || []) if (MAPS2[s[2]]) S.push(s);
+  for (const s of ligaExtra(id)) if (MAPS2[s[2]]) S.push(s);
   return S;
 }
 function rotaPara(de, para) {

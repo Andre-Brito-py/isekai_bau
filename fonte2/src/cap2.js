@@ -109,28 +109,34 @@ function montarMapas2() {
   // ===== CAIS DA PONTE =====
   MAPS2.cais = { rows: ROWS2.cais, name: 'Velhágua · Cais da Ponte', music: 'velhagua', batBg: bgCidade, showMoney: true, bg: '#1c3a54',
     props: [
-      { img: casa({ w: 3, wall: '#8a6a4a', roof: '#6a3a2a', win: [0.2], door: 1.3 }), x: 0, y: 8 },
-      { img: casa({ w: 7, wall: '#a8704a', roof: '#8a3a2a', door: 5 - 3 - 0.125, win: [0.5, 5], awning: '#c83a3a', signC: '#e8c040', doorWin: true }), x: 3, y: 8 },
-      { img: casa({ w: 6, wall: '#9a7a5a', roof: '#4a4a6a', win: [0.5, 4.2], chimney: true, door: 2.2 }), x: 10.5, y: 8 },
-      { img: casa({ w: 11, stone: true, wall: '#7a7480', roof: '#5a3a2a', win: [1, 3.6, 8.2], signC: '#c8a048', door: 5.6, doorC: '#4a3a3a' }), x: 17, y: 8 },
-      { img: casa({ w: 4, wall: '#a88060', roof: '#3a5a4a', win: [0.4], door: 2.1 }), x: 32, y: 8 },
-      ...[[19, 3], [21.5, 2], [24, 4], [26.5, 2]].map(([x, dy]) => ({ img: cartazC, x, y: 5.6, dy, by: 129 })),
-      { img: busArt, x: 8, y: 15, solid: [[8, 13, 12, 2]] },
-      { img: memo(() => caixoteArt(0)), x: 2, y: 14, solid: [[2, 13, 1, 1]] }, { img: memo(() => caixoteArt(1)), x: 3, y: 14, solid: [[3, 13, 1, 1]] }, { img: memo(() => caixoteArt(1)), x: 2.5, y: 13.1, by: 225 },
-      { img: memo(barrilArt), x: 33, y: 10, solid: [[33, 9, 1, 1]] },
-      { img: memo(barcoArt), x: 20.3, y: 20.4, by: 300 }
+      // armazéns e lojas em profundidades diferentes (o Bazar e a última casa avançam: sobrados)
+      { img: casa({ w: 3, wall: '#8a6a4a', roof: '#6a3a2a', win: [0.2], door: 1.3, wallH: 106 }), x: 0, y: 9 },
+      { img: casa({ w: 7, wall: '#a8704a', roof: '#8a3a2a', door: 1.875, win: [0.5, 5], awning: '#c83a3a', signC: '#e8c040', doorWin: true, wallH: 122 }), x: 4, y: 10 },
+      { img: casa({ w: 6, wall: '#9a7a5a', roof: '#4a4a6a', win: [0.5, 4.2], chimney: true, door: 2.2 }), x: 13, y: 8 },
+      { img: casa({ w: 11, stone: true, wall: '#7a7480', roof: '#5a3a2a', win: [1, 3.6, 8.2], signC: '#c8a048', door: 5.6, doorC: '#4a3a3a', wallH: 74 }), x: 20, y: 7 },
+      { img: casa({ w: 5, wall: '#a88060', roof: '#3a5a4a', win: [0.4, 3.2], door: 2.1, wallH: 106 }), x: 34, y: 9 },
+      { img: casa({ w: 6, wall: '#b89a7a', roof: '#6a4a3a', win: [0.5, 4.4], door: 2.5, chimney: true }), x: 40, y: 8 },
+      ...[[11.1, 6], [38.6, 7], [45.8, 7]].map(([x, y], i) => ({ img: arvC(i + 2), x: x - 0.2, y })),
+      ...[[22, 3], [24.5, 2], [27, 4], [29.5, 2]].map(([x, dy]) => ({ img: cartazC, x, y: 4.6, dy, by: 113 })),
+      { img: busArt, x: PC.bus[0], y: PC.bus[1] + 2, solid: [[PC.bus[0], PC.bus[1], 12, 2]] },
+      ...PC.caixas.map(([x, y], i) => ({ img: memo(() => caixoteArt(i % 2)), x, y: y + 1, solid: [[x, y, 1, 1]] })),
+      { img: memo(() => caixoteArt(1)), x: 1.5, y: 13.1, by: 13 * TS + 9 },
+      ...PC.barris.map(([x, y]) => ({ img: memo(barrilArt), x, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...PC.barracas.map(([x, y], i) => ({ img: memo(() => barracaCom(['#3a7ab8', '#c86a3a'][i], '#f2ecdc', 'fruta')), x, y: y + 1, solid: [[x, y, 3, 1]] })),
+      ...PC.postes.map(([x, y]) => ({ img: () => (G.flags.c2Fim ? postes.on : postes.off)(), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
+      { img: memo(barcoArt), x: PC.barco[0] - 0.7, y: PC.barco[1] + 1.4, by: (PC.barco[1] + 2) * TS }
     ],
     ents: [
       ...portas(PC.bazarDoor, 'bazar', ...POS2.bazar.entra, 'up'), ...portas(PC.ruaPraca, 'praca', ...PP.caisIn, 'up'),
       marcoEnt(...PC.marco),
       morador('jorge0', ...PC.jorge, { h: 48, spr: (t, dir) => { const S = IMG.spf.jorge, F = IMG.sp.jorge; const v = dir === 'up' ? S.b : dir === 'down' ? F : S.s, fr = v[Math.floor(t / 26) % v.length]; return dir === 'right' ? flipC(fr) : fr; },
-        rotina: rot([21, 14, 'limpar', 520, 'left'], [22, 15, 'olhar', 300, 'down']), talk: falaJorge }),
-      morador('ze', ...PC.ze, { rotina: rot([19, 21, 'pescar', 900, 'down'], [17, 15, 'remendar', 420, 'down']), talk: falaZe }),
-      morador('joao', 32, 10, { rotina: rot([32, 10, 'empilhar', 110, 'right'], [4, 12, 'empilhar', 110, 'down', true]), passo: 18, talk: falaJoao }),
-      morador('dita', 14, 9, { rotina: rot([14, 9, 'varrer', 320, 'down'], [24, 11, 'varrer', 320, 'right'], [26, 13, 'olhar', 200, 'down']), talk: falaDita }),
+        rotina: rot([25, 15, 'limpar', 520, 'left'], [26, 16, 'olhar', 300, 'down']), talk: falaJorge }),
+      morador('ze', ...PC.ze, { rotina: rot([PC.ze[0], PC.ze[1], 'pescar', 900, 'down'], [20, 17, 'remendar', 420, 'down']), talk: falaZe }),
+      morador('joao', 44, 11, { rotina: rot([44, 11, 'empilhar', 110, 'right'], [6, 14, 'empilhar', 110, 'down', true]), passo: 18, talk: falaJoao }),
+      morador('dita', 16, 11, { rotina: rot([16, 11, 'varrer', 320, 'down'], [30, 12, 'varrer', 320, 'right'], [33, 14, 'olhar', 200, 'down']), talk: falaDita }),
       { t: 'sign', x: PC.placa[0], y: PC.placa[1], h: 20, talk: async () => { await say('* PROCURADO: BAÚ COM DENTES. Responde pelo nome de "@". Recompensa: 300 frascos de âmbar. Entregar no Posto da Guilda, Praça do Sino.'); await say('Eles escreveram o seu nome certo. Isso é quase carinhoso.', 'lume'); } },
       cacadorEnt('cais', 'c0', ...PC.cacador, PC.cacPath, { per: 280 }),
-      bauEnt('cais', 'a', 34, 14, () => dar('cobres', 30))
+      bauEnt('cais', 'a', ...PC.bau, () => dar('cobres', 30))
     ],
     hunters: true
   };

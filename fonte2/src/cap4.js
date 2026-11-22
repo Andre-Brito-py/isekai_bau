@@ -44,25 +44,29 @@ const gradeProps = (m) => { for (const p of m.props || []) { if (p._hld) continu
   // ===== LARGO DO HOSPITAL =====
   MAPS2.largo = { rows: ROWS4.largo, name: 'Auren · Largo do Hospital', music: 'auren', batBg: bgAuren, showMoney: true, bg: '#1c2a4a',
     props: [
-      { img: hospitalArt, x: 8, y: 8 },
-      { img: casa({ w: 5, wall: '#c8c0b0', roof: '#5a6a8a', door: 2, win: [0.4, 3.4] }), x: 29, y: 8 },
-      { img: casa({ w: 6, wall: '#9a8ab8', roof: '#c84a7a', door: 2.5, win: [0.5, 4.2] }), x: 0, y: 8 },
-      { img: memo(fonteArt), x: 15, y: 14, solid: [[15, 12, 4, 2]] },
+      { img: hospitalArt, x: 14, y: 10 },
+      { img: casa({ w: 5, wall: '#c8c0b0', roof: '#5a6a8a', door: 2, win: [0.4, 3.4] }), x: 38, y: 8 },
+      { img: casa({ w: 6, wall: '#9a8ab8', roof: '#c84a7a', door: 2.5, win: [0.5, 4.2], wallH: 106 }), x: 2, y: 9 },
+      { img: casa({ w: 5, wall: '#b8a8c8', roof: '#4a5a7a', door: 1.8, win: [0.4, 3.4], chimney: true }), x: 8, y: 8 },
+      ...[[0.2, 7], [13.0, 7], [32.4, 7], [35.0, 7], [43.6, 7]].map(([x, y], i) => ({ img: arvC(i + 1), x: x - 0.2, y })),
+      { img: memo(fonteArt), x: LG.fonte[0], y: LG.fonte[1], solid: [[LG.fonteSol[0][0], LG.fonteSol[0][1], 4, 2]] },
       ...LG.postes.map(([x, y]) => ({ img: () => poste3Art(true, true), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
-      ...LG.arvores.map(([x, y], i) => ({ img: arvC(i + 5), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...LG.arvores.map(([x, y], i) => ({ img: arvC(i + 5), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]], arvore: true })),
+      ...LG.canteiros.map(([x, y], i) => ({ img: () => canteiroArt(i), x: x - 0.5, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...LG.varal.map(([x, y]) => ({ img: () => varalArt(), x, y: y + 1, by: (y + 1) * TS + 2 })),
       ...LG.banco.map(([x, y]) => ({ img: memo(bancoHArt), x: x - 0.5, y: y + 1 }))
     ],
     ents: [
-      ...LG.festDoor.map(([x, y]) => porta(x, y, 'festival', 38, 11, 'left')),
+      ...LG.festDoor.map(([x, y]) => porta(x, y, 'festival', ...POS3.festival.largoOut, 'left')),
       ...LG.hospDoor.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: entrarHospital })),
       { t: 'trig', x: LG.lavDoor[0], y: LG.lavDoor[1], w: 1, h: 1, passa: true, run: entrarLavanderia },
       marcoEnt(...LG.marco),
-      morador('tico', ...LG.tico, { rotina: rot([10, 11, 'olhar', 9000, 'up']), talk: falaTico4, gone: () => !!G.flags.c4P1Fim }),
-      morador('pregoeiro', ...LG.pregoeiro, { rotina: rot([22, 12, 'olhar', 500, 'down'], [24, 12, 'olhar', 400, 'left']), talk: falaPregoeiro }),
-      morador('porteiro', ...LG.porteiro, { rotina: rot([15, 8, 'olhar', 9000, 'down']), talk: falaPorteiro }),
-      morador('guardaA', ...LG.guarda, { rotina: rot([18, 8, 'olhar', 9000, 'down']), talk: async () => { await say(pickOne(['Fila andando, fila andando. Quem tem ficha entra, quem não tem espera.', 'O Acendedor-Mor comprou a casa. Agora tem lanterna em todo corredor. Coisa fina.']), 'guardaA'); } }),
+      morador('tico', ...LG.tico, { rotina: rot([LG.tico[0], LG.tico[1], 'olhar', 9000, 'up']), talk: falaTico4, gone: () => !!G.flags.c4P1Fim }),
+      morador('pregoeiro', ...LG.pregoeiro, { rotina: rot([30, 12, 'olhar', 500, 'down'], [32, 13, 'olhar', 400, 'left']), talk: falaPregoeiro }),
+      morador('porteiro', ...LG.porteiro, { rotina: rot([LG.porteiro[0], LG.porteiro[1], 'olhar', 9000, 'down']), talk: falaPorteiro }),
+      morador('guardaA', ...LG.guarda, { rotina: rot([LG.guarda[0], LG.guarda[1], 'olhar', 9000, 'down']), talk: async () => { await say(pickOne(['Fila andando, fila andando. Quem tem ficha entra, quem não tem espera.', 'O Acendedor-Mor comprou a casa. Agora tem lanterna em todo corredor. Coisa fina.']), 'guardaA'); } }),
       ...LG.fila.map(([x, y], i) => morador(['povo1', 'povo2', 'velha2'][i], x, y, { rotina: rot([x, y, 'olhar', 9000, 'up']), talk: falaFila(i) })),
-      morador('velhoL', ...LG.velho, { rotina: rot([12, 16, 'olhar', 600, 'up'], [14, 16, 'olhar', 400, 'right']), talk: falaAntero }),
+      morador('velhoL', ...LG.velho, { rotina: rot([18, 24, 'olhar', 600, 'up'], [20, 24, 'olhar', 400, 'right']), talk: falaAntero }),
       bauEnt('largo', 'a', ...LG.bau, () => dar('frasco', 1))
     ],
     onEnter: async () => { if (!G.flags.c4Largo) await chegaLargo(); }
@@ -125,7 +129,7 @@ const gradeProps = (m) => { for (const p of m.props || []) { if (p._hld) continu
   };
   for (const id of ['largo', 'hosp1', 'hosp2', 'sala']) gradeProps(MAPS2[id]);
   // a Avenida do Festival ganha a saída leste para o Largo (só depois do Cap. 3)
-  const fe = MAPS2.festival; if (fe && !fe._largo) { fe._largo = true; for (const y of [10, 11]) fe.ents.push({ t: 'trig', x: 39, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c3Fim) { await say('* O Largo do Hospital fica para lá. Hoje não é dia.'); W2.mv = null; return; } sfx('door'); await fadeOut(10); loadMap2('largo', ...LG.chegada, 'right'); await fadeIn(10); if (MAPS2.largo.onEnter) await MAPS2.largo.onEnter(); } }); }
+  const fe = MAPS2.festival; if (fe && !fe._largo) { fe._largo = true; for (const [x, y] of POS3.festival.largoDoor) fe.ents.push({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c3Fim) { await say('* O Largo do Hospital fica para lá. Hoje não é dia.'); W2.mv = null; return; } sfx('door'); await fadeOut(10); loadMap2('largo', ...LG.chegada, 'right'); await fadeIn(10); if (MAPS2.largo.onEnter) await MAPS2.largo.onEnter(); } }); }
 }; }
 // nos mapas "só baú" a Lume e a Rita vão DENTRO do baú (ninguém segue a pé)
 { const _lm4 = loadMap2; loadMap2 = function (id) { const r = _lm4.apply(this, arguments); if (MAPS2[id] && MAPS2[id].soBau) W2.fol = []; return r; }; }

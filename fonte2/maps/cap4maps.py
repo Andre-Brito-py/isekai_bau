@@ -11,14 +11,22 @@ M={}; P={}; SOL={}
 SOLID=set('#XTwW'); WATER=set('~')
 def interior(w,h,fl='h',wl='W'):
     g=grid(w,h,fl); R(g,0,0,w,3,wl); R(g,0,0,1,h,wl); R(g,w-1,0,1,h,wl); R(g,0,h-1,w,1,wl); return g
-# ---------- Largo do Hospital (34x20) ----------
-g=grid(34,20,','); R(g,0,0,34,8,'X'); R(g,0,18,34,2,'#')
-R(g,3,10,5,3,';'); R(g,25,13,5,3,';'); R(g,12,14,10,2,'.')
+# ---------- Largo do Hospital (46x30) — PRAÇA NOBRE COM JARDIM ----------
+# O hospital monumental no eixo, jardim formal em cruz com a fonte no centro, canteiros, bancos e árvores nos cantos;
+# casas e a lavanderia afastadas; rua larga embaixo.
+g=grid(46,30,',')
+R(g,14,0,18,10,'X')                                       # o hospital (fachada de 18 tiles)
+R(g,2,0,6,9,'X'); R(g,8,0,5,8,'X'); R(g,38,0,5,8,'X')     # casas e a lavanderia
+R(g,0,0,2,7,'X'); R(g,13,0,1,7,'X'); R(g,32,0,6,7,'X'); R(g,43,0,3,7,'X')   # quintais
+for (x,y) in [(12,14),(25,14),(12,19),(25,19)]: R(g,x,y,9,3,';')            # canteiros do jardim
+R(g,0,28,46,2,'#')
 M['largo']=S(g)
-P['largo']=dict(chegada=[1,12], festDoor=[[0,12],[0,13]], hospDoor=[[16,8],[17,8]], hospOut=[16,9], lavDoor=[31,8], lavOut=[31,9],
-  marco=[3,15], tico=[10,11], pregoeiro=[22,12], fila=[[19,10],[20,10],[21,10]], porteiro=[15,8], guarda=[18,8],
-  postes=[[6,9],[27,9],[6,16],[27,16]], arvores=[[2,9],[31,12]], fonte=[16,12], bau=[32,16], velho=[12,16], banco=[[13,13],[20,13]])
-SOL['largo']=[tuple(p) for p in P['largo']['postes']]+[tuple(p) for p in P['largo']['arvores']]+[(x,y) for x in range(15,19) for y in (12,13)]
+P['largo']=dict(chegada=[1,16], festDoor=[[0,15],[0,16]], hospDoor=[[22,10],[23,10]], hospOut=[22,11], lavDoor=[40,8], lavOut=[40,9],
+  marco=[4,18], tico=[10,13], pregoeiro=[30,12], fila=[[24,12],[25,12],[26,12]], porteiro=[21,10], guarda=[24,10],
+  postes=[[16,12],[29,12],[16,23],[29,23],[6,15],[40,15]], arvores=[[11,13],[34,13],[11,23],[34,23],[36,10],[3,24]],
+  fonte=[21,19], fonteSol=[[x,y] for x in range(21,25) for y in (17,18)], bau=[44,26], velho=[18,24], banco=[[18,18],[27,18],[22,24],[22,13]],
+  jorge=[8,13], varal=[[35,8]], canteiros=[[13,15],[19,15],[26,15],[32,15],[13,20],[19,20],[26,20],[32,20]])
+SOL['largo']=[tuple(p) for p in P['largo']['postes']]+[tuple(p) for p in P['largo']['arvores']]+[tuple(p) for p in P['largo']['fonteSol']]+[tuple(p) for p in P['largo']['canteiros']]
 # ---------- Casa de Saúde do Largo, térreo (30x14) ----------
 g=interior(30,14); R(g,11,3,1,10,'W'); g[7][11]='h'; g[8][11]='h'; g[13][14]='h'; g[13][15]='h'; g[3][27]='='; g[3][28]='='
 M['hosp1']=S(g)
@@ -64,7 +72,7 @@ def check(name,start,on=[],near=[]):
     for p in on: assert tuple(p) in v, f'{name}: {p} fora do alcance'
     for p in near: assert adj(v,p), f'{name}: {p} sem acesso'
     print(name,'ok',len(v),'tiles')
-L=P['largo']; check('largo',L['chegada'],on=[L['marco'],L['tico'],L['pregoeiro'],L['hospOut'],L['lavOut'],L['velho'],L['guarda'],L['porteiro']]+L['festDoor']+L['hospDoor']+L['fila']+[L['lavDoor']],near=[L['bau']]+L['banco'])
+L=P['largo']; check('largo',L['chegada'],on=[L['marco'],L['tico'],L['pregoeiro'],L['hospOut'],L['lavOut'],L['velho'],L['guarda'],L['porteiro'],L['jorge']]+L['festDoor']+L['hospDoor']+L['fila']+[L['lavDoor']],near=[L['bau']]+L['banco'])
 H1=P['hosp1']; check('hosp1',H1['entra'],on=H1['door']+H1['escada']+[H1['escOut'],H1['visita']],near=[H1['dalva'],H1['cartaz'],H1['vaso']]+H1['camas']+H1['bancos'])
 H2=P['hosp2']; ronda_pts=[p for r in H2['rondas'] for p in r['path']+[r['at']]]
 check('hosp2',H2['entra'],on=H2['descida']+H2['salaDoor']+[H2['salaOut'],H2['relogio'],H2['pes1'],H2['len1'],H2['pes2'],H2['len2'],H2['misto'],H2['marco'],H2['nota'],H2['quartoDito']]+ronda_pts,near=[H2['camaDito'],H2['rouparia'],H2['bau']]+H2['potes'])

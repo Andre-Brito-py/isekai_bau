@@ -7,12 +7,29 @@ def R(g,x,y,w,h,ch):
         for i in range(w): g[y+j][x+i]=ch
 def S(g): return [''.join(r) for r in g]
 M={}; P={}; SOL={}   # SOL: tiles sólidos extras (props) por mapa, só para a validação
-# ---------- Cais da Ponte (36x24): fundo de casas (0-7), cais (8-15), rio (16-23) ----------
-g=grid(36,24,'.'); R(g,0,0,36,8,'X'); R(g,0,16,36,8,'~'); R(g,18,16,2,6,'p'); R(g,29,0,3,8,',')
+# ---------- Cais da Ponte (48x30) — PORTO (estilo: beira-rio de trabalho) ----------
+# Armazéns e lojas em profundidades diferentes, calçada de pedra junto às casas, deque de madeira na beira, três píeres
+# de comprimentos diferentes entrando no rio (o do meio é o do Zé, comprido), barraquinhas de feira, caixotes e barris.
+import math
+g=grid(48,30,',')
+CASAS_CA=[('c1',0,9,3),('baz',4,10,7),('c3',13,8,6),('arm',20,7,11),('c5',34,9,5),('c6',40,8,6)]
+for _,x,y,w in CASAS_CA: R(g,x,0,w,y,'X')
+R(g,11,0,2,6,'X'); R(g,39,0,1,7,'X'); R(g,46,0,2,7,'X'); R(g,3,0,1,9,'X'); R(g,19,0,1,7,'X')   # quintais e muros (árvores cobrem)
+R(g,31,0,3,9,',')                                               # ladeira para a praça
+def topo_ca(x): return 20+int(round(math.sin(x/6.5+1)*1.1))
+for x in range(48):
+    t=topo_ca(x)
+    for y in range(14,t): g[y][x]='.'                            # deque de madeira
+    for y in range(t,30): g[y][x]='~'
+for (px,pw,pl) in [(7,2,5),(21,2,8),(35,3,4)]:                 # píeres
+    for x in range(px,px+pw):
+        for y in range(topo_ca(x),topo_ca(x)+pl): g[y][x]='p'
 M['cais']=S(g)
-P['cais']=dict(chegada=[14,11], bazarDoor=[[5,8],[6,8]], ruaPraca=[[29,0],[30,0],[31,0]], jorge=[21,14], ze=[19,21], cacador=[26,10],
-  cacPath=[[23,10],[28,10],[28,12],[23,12]], placa=[24,8], bazarOut=[5,9], pracaIn=[30,1], caixas=[[2,13],[3,13],[33,9]], marco=[11,9])
-SOL['cais']=[(x,y) for x in range(8,20) for y in (13,14)]+[(2,13),(3,13),(33,9)]
+P['cais']=dict(chegada=[17,12], bazarDoor=[[6,10],[7,10]], ruaPraca=[[31,0],[32,0],[33,0]], jorge=[25,15], ze=[22,topo_ca(22)+7], cacador=[30,13],
+  cacPath=[[27,13],[37,13],[37,16],[27,16]], placa=[24,7], bazarOut=[6,11], pracaIn=[32,1], marco=[11,12],
+  caixas=[[1,13],[2,13],[29,18],[30,18],[44,15]], barris=[[45,10],[46,10],[3,16]], postes=[[10,10],[28,11],[40,17]],
+  barracas=[[36,11],[41,13]], bus=[12,14], bau=[46,17], barco=[34,topo_ca(35)+1])
+SOL['cais']=[(x,y) for x in range(12,24) for y in (14,15)]+[tuple(c) for c in P['cais']['caixas']+P['cais']['barris']+P['cais']['postes']]+[(x+i,y) for x,y in P['cais']['barracas'] for i in range(3)]
 # ---------- Praça do Sino (46x34) — ORGÂNICA (pedido do usuário: "muito retilínea... claustrofobia... parece um beco") ----------
 # Fachadas em profundidades diferentes (recuos e becos), largo aberto no meio (torre + fonte), igreja num patamar à
 # direita, rio que faz curva embaixo com a mureta acompanhando, ladeira para o cais no canto de baixo à esquerda.

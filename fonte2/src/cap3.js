@@ -84,14 +84,20 @@ const arvC = v => memo(() => arvoreArt(v));
     onEnter: async () => { if (!G.flags.c3Estrada) { G.flags.c3Estrada = true; await say('* A estrada dos lampiões: postes de ferro a cada cem passos, todos apagados. Em volta de cada um, um redemoinho de asas.'); } }
   };
   // ===== AUREN: BAIRRO BAIXO =====
-  const casaA = (x, w, wall, roof, door, extra = {}) => ({ img: casa(Object.assign({ w, wall, roof, door, win: [0.5, w - 1.6] }, extra)), x, y: 8 });
+  const casaA = (x, w, wall, roof, door, extra = {}, y = 8) => ({ img: casa(Object.assign({ w, wall, roof, door, win: [0.5, w - 1.6] }, extra)), x, y });
   MAPS2.auren = { rows: ROWS3.auren, name: 'Auren · Bairro Baixo', music: 'auren', batBg: bgAuren, showMoney: true, bg: '#1c2a4a',
     props: [
-      casaA(0, 6, '#9a8ab8', '#c84a7a', 1.6),
-      casaA(6, 6, '#b88aa8', '#7a3a6a', 2.0, { signC: '#e8c040', doorWin: true, awning: '#5a8ab8' }),
-      casaA(12, 7, '#8a90b8', '#a83a6a', 3.0),
-      casaA(19, 8, '#a8a0c0', '#4a4a7a', 3.4, { stone: true, signC: '#c84a7a', doorC: '#3a3a5a' }),
-      casaA(27, 9, '#9a8ab8', '#c84a7a', 1.0, { chimney: true }),
+      // sobrados estreitos em profundidades diferentes
+      casaA(0, 5, '#9a8ab8', '#c84a7a', 1.6, { wallH: 122 }, 10),
+      casaA(6, 6, '#b88aa8', '#7a3a6a', 2.0, { signC: '#e8c040', doorWin: true, awning: '#5a8ab8', wallH: 106 }, 9),
+      casaA(13, 7, '#8a90b8', '#a83a6a', 3.0),
+      casaA(21, 8, '#a8a0c0', '#4a4a7a', 3.4, { stone: true, signC: '#c84a7a', doorC: '#3a3a5a', wallH: 138 }, 11),
+      casaA(30, 6, '#9a8ab8', '#c84a7a', 1.0, { chimney: true }),
+      casaA(37, 7, '#b8a0b0', '#5a3a6a', 2.6, { wallH: 122 }, 10),
+      // o quarteirão solto do meio
+      ...AUR.quarteirao.map(([x, y, w], i) => casaA(x, w, ['#a890a8', '#9aa0c0'][i], ['#6a3a5a', '#3a4a7a'][i], 1.8, { chimney: i === 1 }, y)),
+      ...[[4.8, 9], [11.8, 8], [19.8, 8], [28.8, 8], [35.8, 8]].map(([x, y], i) => ({ img: arvC(i + 4), x: x - 0.2, y })),
+      ...AUR.varais.map(([x, y]) => ({ img: () => varalArt(), x, y: y + 1, by: (y + 1) * TS + 2 })),
       ...AUR.feira.map(([x, y], i) => ({ img: memo(() => barracaCom(['#c84a7a', '#5a8ab8', '#e8a040'][i], '#f2ecdc', ['fruta', 'livro', 'lanterna'][i])), x, y: y + 1, solid: [[x, y, 3, 1]] })),
       ...AUR.postes.map(([x, y]) => ({ img: () => poste3Art(true, true), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
       ...AUR.arvores.map(([x, y], i) => ({ img: arvC(i + 3), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]] }))
@@ -100,16 +106,16 @@ const arvC = v => memo(() => arvoreArt(v));
       ...portas(AUR.estradaDoor, 'estrada', 38, 11, 'left'), ...portas(AUR.papDoor, 'papelaria', ...PA.entra, 'up'),
       ...AUR.festDoor.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: irFestival })),
       marcoEnt(...AUR.marco),
-      morador('tico', ...AUR.tico, { rotina: rot([29, 9, 'limpar', 500, 'up'], [31, 9, 'olhar', 300, 'down']), talk: falaTico, gone: () => !!G.flags.c3P1Fim && !G.flags.c3Fim }),
-      morador('pavio', ...AUR.pavio, { rotina: rot([20, 10, 'acender', 260, 'left'], [16, 11, 'acender', 260, 'up'], [26, 11, 'acender', 260, 'up']), passo: 20, talk: falaPavio3 }),
-      morador('poeta', ...AUR.poeta, { rotina: rot([14, 15, 'olhar', 600, 'down'], [20, 15, 'olhar', 400, 'right']), talk: falaPoeta }),
-      morador('guardaA', ...AUR.guarda, { rotina: rot([33, 11, 'olhar', 9000, 'left']), talk: falaGuarda }),
-      morador('feiraA', ...AUR.feirante1, { rotina: rot([12, 17, 'limpar', 400, 'up']), talk: falaFeira(0) }),
-      morador('feiraB', ...AUR.feirante2, { rotina: rot([18, 17, 'limpar', 400, 'up']), talk: falaFeira(1) }),
-      morador('feiraC', ...AUR.feirante3, { rotina: rot([24, 11, 'limpar', 400, 'up']), talk: falaFeira(2) }),
-      morador('crianca2', ...AUR.crianca, { rotina: rot([15, 12, 'brincar', 300, 'down'], [12, 14, 'brincar', 300, 'down']), talk: falaCrianca3 }),
-      morador('velha2', ...AUR.velha, { rotina: rot([3, 13, 'rezar', 500, 'up'], [5, 13, 'olhar', 300, 'down']), talk: falaVelha3 }),
-      morador('lavadeira', ...AUR.lavadeira, { rotina: rot([30, 19, 'varal', 500, 'up'], [26, 19, 'olhar', 300, 'down']), talk: falaLavadeira }),
+      morador('tico', ...AUR.tico, { rotina: rot([32, 9, 'limpar', 500, 'up'], [34, 9, 'olhar', 300, 'down']), talk: falaTico, gone: () => !!G.flags.c3P1Fim && !G.flags.c3Fim }),
+      morador('pavio', ...AUR.pavio, { rotina: rot([20, 11, 'acender', 260, 'left'], [37, 12, 'acender', 260, 'left'], [12, 22, 'acender', 260, 'left']), passo: 20, talk: falaPavio3 }),
+      morador('poeta', ...AUR.poeta, { rotina: rot([14, 20, 'olhar', 600, 'down'], [19, 21, 'olhar', 400, 'right']), talk: falaPoeta }),
+      morador('guardaA', ...AUR.guarda, { rotina: rot([41, 13, 'olhar', 9000, 'left']), talk: falaGuarda }),
+      morador('feiraA', ...AUR.feirante1, { rotina: rot([10, 17, 'limpar', 400, 'up']), talk: falaFeira(0) }),
+      morador('feiraB', ...AUR.feirante2, { rotina: rot([15, 17, 'limpar', 400, 'up']), talk: falaFeira(1) }),
+      morador('feiraC', ...AUR.feirante3, { rotina: rot([18, 13, 'limpar', 400, 'up']), talk: falaFeira(2) }),
+      morador('crianca2', ...AUR.crianca, { rotina: rot([13, 15, 'brincar', 300, 'down'], [10, 14, 'brincar', 300, 'down']), talk: falaCrianca3 }),
+      morador('velha2', ...AUR.velha, { rotina: rot([3, 15, 'rezar', 500, 'up'], [5, 15, 'olhar', 300, 'down']), talk: falaVelha3 }),
+      morador('lavadeira', ...AUR.lavadeira, { rotina: rot([34, 22, 'varal', 500, 'up'], [30, 22, 'olhar', 300, 'down']), talk: falaLavadeira }),
       cacadorEnt('auren', 'c0', ...AUR.cacador, AUR.cacPath, { per: 300 }),
       bauEnt('auren', 'a', ...AUR.bau, () => dar('cobres', 35))
     ],
@@ -128,9 +134,14 @@ const arvC = v => memo(() => arvoreArt(v));
   const tiposB = ['lanterna', 'pastel', 'fruta', 'livro', 'lanterna', 'fruta', 'livro', 'lanterna'], coresB = ['#c84a7a', '#e8a040', '#5a8ab8', '#8a6ab8', '#4a9a7a', '#c84a7a', '#e8a040', '#5a8ab8'];
   MAPS2.festival = { rows: ROWS3.festival, name: 'Auren · Avenida do Festival', music: 'festival', batBg: bgAuren, showMoney: true, bg: '#1c2a4a',
     props: [
-      { img: palcoArt, x: 14, y: 6, solid: [[14, 5, 12, 1]] },
+      // palacetes simétricos dos dois lados da praça do palco
+      ...[[1, '#c8c0d8', '#4a4a7a'], [9, '#d8c8b8', '#7a3a4a'], [35, '#d8c8b8', '#7a3a4a'], [43, '#c8c0d8', '#4a4a7a']].map(([x, wall, roof], i) => ({ img: casa({ w: 7, stone: true, wall, roof, door: 2.6, doorC: '#3a2a3a', win: [0.4, 5.2], signC: i % 2 ? '#e8c040' : '#c84a7a', chimney: i % 3 === 0, wallH: 74 }), x, y: 7 })),
+      ...[[16.6, 6], [32.6, 6], [50.4, 6]].map(([x, y], i) => ({ img: arvC(i + 2), x: x - 0.2, y })),
+      { img: palcoArt, x: 20, y: 7, solid: [[20, 6, 12, 1]] },
       ...FE.barracas.map(([x, y], i) => ({ img: memo(() => barracaCom(coresB[i], '#f2ecdc', tiposB[i])), x, y: y + 1, solid: [[x, y, 3, 1]] })),
-      ...[[3, 7], [12, 7], [27, 7], [36, 7], [6, 18], [16, 18], [24, 18], [34, 18]].map(([x, y]) => ({ img: () => poste3Art(true, true), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] }))
+      ...FE.arvores.map(([x, y], i) => ({ img: arvC(i), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]], arvore: true })),
+      ...FE.postes.map(([x, y]) => ({ img: () => poste3Art(true, true), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...FE.jardim.map(([x, y], i) => ({ img: () => canteiroArt(i), x: x - 0.5, y: y + 1, solid: [[x, y, 1, 1]] }))
     ],
     overlay: varalLanternas,
     ents: [
@@ -398,7 +409,7 @@ async function irFestival() {
 }
 function varalLanternas(ox, oy) {
   const cores = ['#ff7aa8', '#ffd060', '#8fe3d8', '#ff9a50', '#c8a0ff'];
-  for (const [y0, x0, x1] of [[7.2, 3, 12], [7.2, 27, 36], [18.2, 6, 16], [18.2, 24, 34], [7.2, 12, 27]]) {
+  for (const [y0, x0, x1] of FE.varais) {
     const ax = x0 * TS + 8 - ox, bx_ = x1 * TS + 8 - ox, ay = y0 * TS - 88 - oy;
     for (let i = 0; i <= 20; i++) { const p = i / 20, x = ax + (bx_ - ax) * p, y = ay + Math.sin(p * Math.PI) * 14; bx.fillStyle = '#3a2430'; bx.fillRect(Math.round(x), Math.round(y), 2, 1); if (i % 3 === 1) { const c = cores[(i + x0) % cores.length]; bx.fillStyle = c; bx.fillRect(Math.round(x) - 1, Math.round(y) + 1, 4, 5); bx.fillStyle = '#ffffff'; bx.globalAlpha = 0.5; bx.fillRect(Math.round(x), Math.round(y) + 2, 1, 2); bx.globalAlpha = 1; } }
   }

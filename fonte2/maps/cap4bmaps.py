@@ -18,15 +18,27 @@ M['serra']=S(g)
 P['serra']=dict(chegada=[1,13], onibus=[0,12], marco=[3,11], cand=[[33,2],[33,3],[33,4]], placa=[30,3],
   n1=[10,10], n2=[16,8], m1=[21,6], m2=[14,12], bau=[6,3], velha=[25,8], mirante=[5,4])
 SOL['serra']=[(0,12),(0,13),(0,14),(1,12)]
-# ---------- Candeia (34x24) ----------
-g=grid(34,24,','); R(g,0,0,34,8,'X'); R(g,0,22,34,2,'#')
-R(g,13,12,8,6,';'); R(g,3,14,4,3,';'); R(g,26,15,5,3,';')
+# ---------- Candeia (40x34) — VILA DE MONTANHA EM SOCALCOS ----------
+# Três patamares ligados por escadas de pedra: embaixo a entrada da serra; no meio a praça do poço (Dona Ilda, a Pensão);
+# em cima a boca da mina. Casas encostadas no muro de arrimo de cada patamar; o caminho sobe em zigue-zague.
+g=grid(40,34,',')
+# patamar de cima (mina)
+for x,y,w in [(3,8,5),(9,7,6),(17,9,5),(25,8,6),(32,7,5)]: R(g,x,0,w,y,'X')
+for x,w in [(0,3),(8,1),(15,2),(22,3),(31,1),(37,3)]: R(g,x,0,w,7,'X')
+R(g,0,13,40,1,'#'); g[13][18]='='; g[13][19]='='                 # muro de arrimo com escada
+# patamar do meio (praça do poço)
+for x,y,w in [(2,20,5),(26,20,5),(32,20,7)]: R(g,x,14,w,y-14,'X')
+R(g,0,23,40,1,'#'); g[23][8]='='; g[23][9]='='; g[23][30]='='; g[23][31]='='
+# patamar de baixo (entrada)
+for x,y,w in [(12,30,6),(20,30,5)]: R(g,x,24,w,y-24,'X')
+R(g,0,32,40,2,'#')                                             # beira do barranco
+R(g,14,15,10,7,';'); R(g,3,25,5,3,';'); R(g,30,25,6,4,';'); R(g,26,30,8,2,';'); R(g,10,9,5,3,';')
 M['candeia']=S(g)
-P['candeia']=dict(entra=[1,19], serraDoor=[[0,18],[0,19],[0,20]], minaDoor=[[16,8],[17,8]], minaOut=[16,9],
-  ildaDoor=[[5,8],[6,8]], ildaOut=[5,9], pensaoDoor=[[26,8],[27,8]], marco=[3,19],
-  parados=[[9,9],[12,9],[22,9],[30,9],[8,16],[24,19],[19,20]], postes=[[10,11],[23,11],[10,19],[23,19]], poco=[16,14],
-  bau=[32,20], crianca=[28,13], placa=[14,9])
-SOL['candeia']=[tuple(p) for p in P['candeia']['postes']]+[(x,y) for x in range(15,19) for y in (13,14)]+[tuple(p) for p in P['candeia']['parados']]
+P['candeia']=dict(entra=[1,29], serraDoor=[[0,28],[0,29],[0,30]], minaDoor=[[19,9],[20,9]], minaOut=[19,10],
+  ildaDoor=[[4,20],[5,20]], ildaOut=[4,21], pensaoDoor=[[34,20],[35,20]], marco=[3,29],
+  parados=[[6,9],[12,8],[28,9],[34,8],[9,19],[28,21],[15,31]], postes=[[6,12],[30,12],[12,21],[24,17],[5,26],[26,30]], poco=[18,19],
+  bau=[37,31], crianca=[24,20], placa=[22,10], fim=[18,21])
+SOL['candeia']=[tuple(p) for p in P['candeia']['postes']]+[(x,y) for x in range(17,21) for y in (18,19)]+[tuple(p) for p in P['candeia']['parados']]
 # ---------- Casa da Dona Ilda (12x10, interior) ----------
 def interior(w,h):
     g=grid(w,h,'o'); R(g,0,0,w,3,'w'); R(g,0,0,1,h,'w'); R(g,w-1,0,1,h,'w'); R(g,0,h-1,w,1,'w'); return g
