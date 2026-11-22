@@ -20,7 +20,9 @@ function grupoAtual() {
   const g = grupoCap1();
   for (const m of g) {
     const b = typeof poderNivel === 'function' ? poderNivel(m.id) : (G.poder || 0);   // nível (nivel.js) ou o poder antigo
-    m.mhp += Math.round(b * (m.id === 'bau' ? 14 : 10)); m.atk += Math.round(b * 2); m.mag += Math.round(b * 2); m.def += Math.round(b);
+    // crescimento por nível conforme o PAPEL (pedido do usuário: caminho mágico bate mais forte e aguenta menos)
+    const CR = typeof crescimento === 'function' ? crescimento(m) : { hp: m.id === 'bau' ? 14 : 10, atk: 2, mag: 2, def: 1 };
+    m.mhp += Math.round(b * CR.hp); m.atk += Math.round(b * CR.atk); m.mag += Math.round(b * CR.mag); m.def += Math.round(b * CR.def); if (CR.mdef) m.mdef = (m.mdef || m.def) + Math.round(b * CR.mdef);
     const md = eqMods(m.id); for (const [a, v] of Object.entries(md)) m[a] = Math.max(1, (m[a] || 0) + v);
     m.eqFx = eqFx(m.id);
     if (m.eqFx.has('microfone') && m.runas) m.runas = m.runas.map(r => r === 'acalanto' ? 'acalantoCoro' : r);

@@ -137,7 +137,7 @@ Object.assign(TECH2, {
     m.pose = 'front'; sfx('rumble'); bshake(10, 2);
     await tw(40, (p, k) => { vortexBau(cx, cy, 6 + ease.out(Math.min(1, p * 1.5)) * 26, Math.min(1, p * 3), k * 0.3); for (const f of fs) { f.ox = (cx - unitCenter(f)[0]) * 0.15 * Math.sin(p * Math.PI); } if (k % 2 === 0) part({ x: cx + rand(-40, 40), y: cy + rand(-30, 30), vx: 0, vy: 0, life: 10, col: '#c8a0ff' }); });
     sfx('crit'); flashW(4); hitstop(8); bshake(16, 4);
-    for (const f of fs) { f.ox = 0; hitFoe(m, f, 1.3, { el: 'mordida', brk: 1 }); f.ct = Math.max(0, f.ct - 30); }
+    for (const f of fs) { f.ox = 0; hitFoe(m, f, 1.3, { el: 'mordida', brk: 1, mag: true }); f.ct = Math.max(0, f.ct - 30); }
     m.pose = null;
   } },
   // ===== LUME =====
@@ -149,11 +149,11 @@ Object.assign(TECH2, {
   lanternaAmpla: { nm: 'Lanterna Ampla', cost: 20, tgt: 'all', d: 'Uma onda de luz em todos os inimigos: dano de luz e mostra as fraquezas de todos.', run: async (m) => {
     sfx('rune'); const [x0, y0] = unitCenter(m);
     await tw(28, p => { const r = 10 + ease.out(p) * 150; bx.globalAlpha = 0.35 * (1 - p); bx.fillStyle = '#ffe080'; bx.beginPath(); bx.arc(x0, y0, r, -0.6, 0.6); bx.lineTo(x0, y0); bx.fill(); bx.globalAlpha = 1; fxRing(x0, y0, r, '#fff0a0', 1 - p); });
-    for (const t of alive(BT.foes)) { for (const k of ['fogo', 'gelo', 'luz', 'corte', 'mordida']) t.known[k] = t.weak.includes(k) ? 'weak' : 'ok'; hitFoe(m, t, 0.45, { el: 'luz' }); }
+    for (const t of alive(BT.foes)) { for (const k of ['fogo', 'gelo', 'luz', 'corte', 'mordida']) t.known[k] = t.weak.includes(k) ? 'weak' : 'ok'; hitFoe(m, t, 0.45, { el: 'luz', mag: true }); }
     callout('Tudo à mostra!', '#ffd060', 50);
   } },
   faiscaTripla: { nm: 'Faísca Tripla', cost: 25, tgt: 'enemy', d: 'Três faíscas de luz seguidas num inimigo.', run: async (m, t) => {
-    for (let i = 0; i < 3; i++) { sfx('rune'); await projectile(m, t, i % 2 ? '#fff0a0' : '#ffd060', 10, { r: 2 + i * 0.5 }); const [x, y] = unitCenter(t); burst(x, y, 8, ['#ffd060', '#ffffff']); hitFoe(m, t, 0.62, { el: 'luz' }); if (t.hp <= 0) break; }
+    for (let i = 0; i < 3; i++) { sfx('rune'); await projectile(m, t, i % 2 ? '#fff0a0' : '#ffd060', 10, { r: 2 + i * 0.5 }); const [x, y] = unitCenter(t); burst(x, y, 8, ['#ffd060', '#ffffff']); hitFoe(m, t, 0.62, { el: 'luz', mag: true }); if (t.hp <= 0) break; }
   } },
   ninar: { nm: 'Canção de Ninar', cost: 30, tgt: 'all', d: 'Os inimigos cochilam: a vez de cada um atrasa muito (chefes resistem um pouco).', run: async (m) => {
     sfx('heal'); jingle && jingle('G5:4 E5:4 C5:8', 160);
@@ -168,7 +168,7 @@ Object.assign(TECH2, {
   aurora: { nm: 'Aurora', cost: 55, tgt: 'all', d: 'O céu amanhece dentro da luta: luz forte em todos os inimigos e cura 20% do grupo.', run: async (m) => {
     sfx('rune'); const L0 = -(BTV.ox || 0), RW = BTV.w || 240;
     await tw(44, p => { const a = Math.sin(p * Math.PI); const g = bx.createLinearGradient(0, 0, 0, 160); g.addColorStop(0, `rgba(255,154,90,${0.45 * a})`); g.addColorStop(0.5, `rgba(255,224,128,${0.35 * a})`); g.addColorStop(1, 'rgba(255,255,255,0)'); bx.fillStyle = g; bx.fillRect(L0, 0, RW, 160); for (let i = 0; i < 3; i++) part({ x: L0 + Math.random() * RW, y: 0, vy: 1.4, life: 30, col: '#fff0c0' }); });
-    flashW(3); for (const t of alive(BT.foes)) hitFoe(m, t, 1.0, { el: 'luz' }); for (const u of alive(BT.party)) healUnit(u, Math.round(u.mhp * 0.2));
+    flashW(3); for (const t of alive(BT.foes)) hitFoe(m, t, 1.0, { el: 'luz', mag: true }); for (const u of alive(BT.party)) healUnit(u, Math.round(u.mhp * 0.2));
   } },
   // ===== RITA =====
   investida: { nm: 'Investida', cost: 20, tgt: 'enemy', d: 'Corre com o escudo na frente: dano de corte e empurra a vez do inimigo para trás.', run: async (m, t) => {

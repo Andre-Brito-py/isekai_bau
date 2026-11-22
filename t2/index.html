@@ -46,6 +46,18 @@
  bauzinho discreto com três pontinhos no canto inferior esquerdo (~2,5 s). GAME OVER TEM PUNIÇÃO: volta ao último
  save (perde XP, cobres, itens e progresso feitos depois). Contra CHEFE: "Tentar de novo" na hora, pagando 20% dos
  cobres. Regra: não espalhar save2 demais nas cenas novas (só fim de cena importante, chefe vencido, capítulo).
+ MAGIA QUE VALE A PENA (magia.js, pedido do usuário: caminhos mágicos dão MAIS DANO e são MENOS TANQUE):
+ crescimento por papel (por poder = 3,3 níveis): baú mágico (linha arcana ou Escriba) PV+9 ATQ+1,2 MAG+3,2 DEF+0,6;
+ baú de ferro (ou Farol) PV+17 ATQ+2,6 MAG+1,2 DEF+1,4; Lume PV+9 MAG+2,8; Rita PV+12 ATQ+2,6 DEF+1,3. Dano mágico do
+ grupo +1,5% por nível, e o caminho mágico do baú +20% em cima. REGRA PARA O FUTURO: feitiços novos do baú (Grimório,
+ fusões, Runa de Gatilho, 2ª evolução) devem bater MAIS que o físico na fraqueza; o físico é o seguro (sem PM,
+ aguenta). Todo golpe de luz/feitiço passa { mag: true }. Robô (Cap. 4, Relógio): Escriba arcano vence em 138 s
+ com o baú caindo a 21%; Farol de ferro vence em 168 s com o baú no mínimo em 52%. É o perfil pedido.
+ MAGIA ESPACIAL É RARÍSSIMA (pedido do usuário): dobrar o espaço é a mais difícil das artes rúnicas; menos de dez
+ pessoas na história registrada conseguiram; magos da Coroa estudam a vida inteira sem dobrar uma caixa de fósforos.
+ Um MÍMICO conseguir (por acidente, com um pingo de tinta) é absurdo e perigoso: o grupo esconde a base. Usar isso:
+ quem descobre reage com espanto ou cobiça (a Iolanda desconfia; o Vesper, se souber, vai querer; na T3 há quem caça
+ dobradores de espaço). Cada coisa nova da base (cômodos, a magia espacial em batalha) deve ser tratada como proeza.
  O QUE SE APRENDE POR NÍVEL (tecnicas_nv.js, pedido do usuário: "subir de nível deve ser bem importante"):
  técnicas nos níveis 5/9/13/17/22/27 e passivas em 10/20/30, cada técnica com animação própria.
    BAÚ: Mordida Gulosa (20T, cura 1/3 do dano), Cuspe de Tralha (25T, todos, tontura), Tampa Refletora (25T leve,
@@ -4095,7 +4107,9 @@ function grupoAtual() {
   const g = grupoCap1();
   for (const m of g) {
     const b = typeof poderNivel === 'function' ? poderNivel(m.id) : (G.poder || 0);   // nível (nivel.js) ou o poder antigo
-    m.mhp += Math.round(b * (m.id === 'bau' ? 14 : 10)); m.atk += Math.round(b * 2); m.mag += Math.round(b * 2); m.def += Math.round(b);
+    // crescimento por nível conforme o PAPEL (pedido do usuário: caminho mágico bate mais forte e aguenta menos)
+    const CR = typeof crescimento === 'function' ? crescimento(m) : { hp: m.id === 'bau' ? 14 : 10, atk: 2, mag: 2, def: 1 };
+    m.mhp += Math.round(b * CR.hp); m.atk += Math.round(b * CR.atk); m.mag += Math.round(b * CR.mag); m.def += Math.round(b * CR.def); if (CR.mdef) m.mdef = (m.mdef || m.def) + Math.round(b * CR.mdef);
     const md = eqMods(m.id); for (const [a, v] of Object.entries(md)) m[a] = Math.max(1, (m[a] || 0) + v);
     m.eqFx = eqFx(m.id);
     if (m.eqFx.has('microfone') && m.runas) m.runas = m.runas.map(r => r === 'acalanto' ? 'acalantoCoro' : r);
@@ -7653,6 +7667,10 @@ async function cenaVao() {
   await say('Isso aqui é... você? A gente tá DENTRO de você?', 'rita');
   await say('...Acho que sim. Não doeu. Fiquem à vontade. Tirem o sapato.', 'me');
   await say('[Interior do Baú. Espaço dobrado pela Runa do Vão. Tudo o que você guardou na vida inteira fica do lado de lá dessas paredes. Por enquanto, sobrou isto.]', 'cat');
+  await say('[Registro, com atraso: MAGIA ESPACIAL. Dobrar o espaço é a mais difícil das artes rúnicas. Em toda a história registrada, menos de dez pessoas conseguiram. Magos da Coroa estudam a vida inteira e morrem sem dobrar uma caixa de fósforos.]', 'cat');
+  await say('[E um MÍMICO conseguiu. Por acidente. Com um pingo de tinta. Isso não está no meu registro. Isso é... estatisticamente ofensivo.]', 'cat');
+  await say('Então é melhor ninguém saber disso.', 'rita');
+  await say('Concordo. Eu sou só um baú. Um baú normal. Com um quarto dentro.', 'me');
   await say('* No canto, uma vela apagada. Na parede, um quadro vazio. No chão, perto da estante, uma meia vermelha listrada. Uma só.');
   await say('A meia. A meia misteriosa. Ela existe. Ela tá AQUI.', 'lume');
   await say('Uma estante vazia, um canto que dá uma forja, uma cama... dá pra morar aqui. Sério. Dá pra morar aqui.', 'rita');
@@ -10143,7 +10161,7 @@ Object.assign(TECH2, {
     m.pose = 'front'; sfx('rumble'); bshake(10, 2);
     await tw(40, (p, k) => { vortexBau(cx, cy, 6 + ease.out(Math.min(1, p * 1.5)) * 26, Math.min(1, p * 3), k * 0.3); for (const f of fs) { f.ox = (cx - unitCenter(f)[0]) * 0.15 * Math.sin(p * Math.PI); } if (k % 2 === 0) part({ x: cx + rand(-40, 40), y: cy + rand(-30, 30), vx: 0, vy: 0, life: 10, col: '#c8a0ff' }); });
     sfx('crit'); flashW(4); hitstop(8); bshake(16, 4);
-    for (const f of fs) { f.ox = 0; hitFoe(m, f, 1.3, { el: 'mordida', brk: 1 }); f.ct = Math.max(0, f.ct - 30); }
+    for (const f of fs) { f.ox = 0; hitFoe(m, f, 1.3, { el: 'mordida', brk: 1, mag: true }); f.ct = Math.max(0, f.ct - 30); }
     m.pose = null;
   } },
   // ===== LUME =====
@@ -10155,11 +10173,11 @@ Object.assign(TECH2, {
   lanternaAmpla: { nm: 'Lanterna Ampla', cost: 20, tgt: 'all', d: 'Uma onda de luz em todos os inimigos: dano de luz e mostra as fraquezas de todos.', run: async (m) => {
     sfx('rune'); const [x0, y0] = unitCenter(m);
     await tw(28, p => { const r = 10 + ease.out(p) * 150; bx.globalAlpha = 0.35 * (1 - p); bx.fillStyle = '#ffe080'; bx.beginPath(); bx.arc(x0, y0, r, -0.6, 0.6); bx.lineTo(x0, y0); bx.fill(); bx.globalAlpha = 1; fxRing(x0, y0, r, '#fff0a0', 1 - p); });
-    for (const t of alive(BT.foes)) { for (const k of ['fogo', 'gelo', 'luz', 'corte', 'mordida']) t.known[k] = t.weak.includes(k) ? 'weak' : 'ok'; hitFoe(m, t, 0.45, { el: 'luz' }); }
+    for (const t of alive(BT.foes)) { for (const k of ['fogo', 'gelo', 'luz', 'corte', 'mordida']) t.known[k] = t.weak.includes(k) ? 'weak' : 'ok'; hitFoe(m, t, 0.45, { el: 'luz', mag: true }); }
     callout('Tudo à mostra!', '#ffd060', 50);
   } },
   faiscaTripla: { nm: 'Faísca Tripla', cost: 25, tgt: 'enemy', d: 'Três faíscas de luz seguidas num inimigo.', run: async (m, t) => {
-    for (let i = 0; i < 3; i++) { sfx('rune'); await projectile(m, t, i % 2 ? '#fff0a0' : '#ffd060', 10, { r: 2 + i * 0.5 }); const [x, y] = unitCenter(t); burst(x, y, 8, ['#ffd060', '#ffffff']); hitFoe(m, t, 0.62, { el: 'luz' }); if (t.hp <= 0) break; }
+    for (let i = 0; i < 3; i++) { sfx('rune'); await projectile(m, t, i % 2 ? '#fff0a0' : '#ffd060', 10, { r: 2 + i * 0.5 }); const [x, y] = unitCenter(t); burst(x, y, 8, ['#ffd060', '#ffffff']); hitFoe(m, t, 0.62, { el: 'luz', mag: true }); if (t.hp <= 0) break; }
   } },
   ninar: { nm: 'Canção de Ninar', cost: 30, tgt: 'all', d: 'Os inimigos cochilam: a vez de cada um atrasa muito (chefes resistem um pouco).', run: async (m) => {
     sfx('heal'); jingle && jingle('G5:4 E5:4 C5:8', 160);
@@ -10174,7 +10192,7 @@ Object.assign(TECH2, {
   aurora: { nm: 'Aurora', cost: 55, tgt: 'all', d: 'O céu amanhece dentro da luta: luz forte em todos os inimigos e cura 20% do grupo.', run: async (m) => {
     sfx('rune'); const L0 = -(BTV.ox || 0), RW = BTV.w || 240;
     await tw(44, p => { const a = Math.sin(p * Math.PI); const g = bx.createLinearGradient(0, 0, 0, 160); g.addColorStop(0, `rgba(255,154,90,${0.45 * a})`); g.addColorStop(0.5, `rgba(255,224,128,${0.35 * a})`); g.addColorStop(1, 'rgba(255,255,255,0)'); bx.fillStyle = g; bx.fillRect(L0, 0, RW, 160); for (let i = 0; i < 3; i++) part({ x: L0 + Math.random() * RW, y: 0, vy: 1.4, life: 30, col: '#fff0c0' }); });
-    flashW(3); for (const t of alive(BT.foes)) hitFoe(m, t, 1.0, { el: 'luz' }); for (const u of alive(BT.party)) healUnit(u, Math.round(u.mhp * 0.2));
+    flashW(3); for (const t of alive(BT.foes)) hitFoe(m, t, 1.0, { el: 'luz', mag: true }); for (const u of alive(BT.party)) healUnit(u, Math.round(u.mhp * 0.2));
   } },
   // ===== RITA =====
   investida: { nm: 'Investida', cost: 20, tgt: 'enemy', d: 'Corre com o escudo na frente: dano de corte e empurra a vez do inimigo para trás.', run: async (m, t) => {
@@ -10242,6 +10260,31 @@ function desenhaSalvando() {
   for (let i = 0; i < 3; i++) { bx.fillStyle = i === k % 3 ? '#ffe066' : '#6a6080'; bx.fillRect(x + 14 + i * 4, y + 5, 2, 2); }
   bx.restore();
 }
+
+// ================= MAGIA QUE VALE A PENA =================
+// (pedido do usuário: "faça com que as magias futuramente valham a pena, não somente os ataques físicos, até porque
+// teoricamente caminhos mágicos têm que dar mais dano e ser menos tanque".)
+// 1) CRESCIMENTO POR PAPEL (por "poder" = 3,3 níveis): o baú ARCANO (ou Escriba) cresce em MAG e pouco em vida e
+//    defesa; o baú de FERRO (ou Farol) cresce em vida, defesa e ataque. Lume = maga de apoio; Rita = tanque/física.
+// 2) FEITIÇOS ESCALAM COM O NÍVEL: todo dano mágico do grupo ganha +1,5% por nível, e o caminho mágico do baú
+//    (linha arcana ou Escriba) ganha mais +20%. Assim, no fim da temporada, um feitiço certo na fraqueza bate mais
+//    que um golpe físico; o físico continua mais seguro (não gasta PM, o tanque aguenta).
+function caminhoMagico(m) { return m.id === 'bau' && (G.evo3 === 'escriba' || (G.evo3 !== 'farol' && linhaDe(G.species) !== 'ferro')); }
+function crescimento(m) {
+  if (m.id === 'bau') return caminhoMagico(m) ? { hp: 9, atk: 1.2, mag: 3.2, def: 0.6, mdef: 1.2 } : { hp: 17, atk: 2.6, mag: 1.2, def: 1.4, mdef: 0.8 };
+  if (m.id === 'lume') return { hp: 9, atk: 1, mag: 2.8, def: 0.8, mdef: 1.2 };
+  if (m.id === 'rita') return { hp: 12, atk: 2.6, mag: 0.4, def: 1.3, mdef: 0.8 };
+  return { hp: 10, atk: 2, mag: 2, def: 1 };
+}
+{ const _cdM = calcDmg; calcDmg = function (a, t, pow, o = {}) {
+  let d = _cdM(a, t, pow, o);
+  if (o.mag && a && a.side === 'p' && typeof nvDe === 'function') {
+    const lv = nvDe(a.id).lv;
+    d *= 1 + 0.015 * (lv - 1);
+    if (caminhoMagico(a)) d *= 1.2;
+  }
+  return d;
+}; }
 
 boot2();
 </script>

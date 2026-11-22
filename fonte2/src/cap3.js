@@ -331,6 +331,10 @@ async function cenaVao() {
   await say('Isso aqui é... você? A gente tá DENTRO de você?', 'rita');
   await say('...Acho que sim. Não doeu. Fiquem à vontade. Tirem o sapato.', 'me');
   await say('[Interior do Baú. Espaço dobrado pela Runa do Vão. Tudo o que você guardou na vida inteira fica do lado de lá dessas paredes. Por enquanto, sobrou isto.]', 'cat');
+  await say('[Registro, com atraso: MAGIA ESPACIAL. Dobrar o espaço é a mais difícil das artes rúnicas. Em toda a história registrada, menos de dez pessoas conseguiram. Magos da Coroa estudam a vida inteira e morrem sem dobrar uma caixa de fósforos.]', 'cat');
+  await say('[E um MÍMICO conseguiu. Por acidente. Com um pingo de tinta. Isso não está no meu registro. Isso é... estatisticamente ofensivo.]', 'cat');
+  await say('Então é melhor ninguém saber disso.', 'rita');
+  await say('Concordo. Eu sou só um baú. Um baú normal. Com um quarto dentro.', 'me');
   await say('* No canto, uma vela apagada. Na parede, um quadro vazio. No chão, perto da estante, uma meia vermelha listrada. Uma só.');
   await say('A meia. A meia misteriosa. Ela existe. Ela tá AQUI.', 'lume');
   await say('Uma estante vazia, um canto que dá uma forja, uma cama... dá pra morar aqui. Sério. Dá pra morar aqui.', 'rita');
