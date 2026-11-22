@@ -24,7 +24,7 @@ const ROWS_IGR = [
       { img: memo(bancoHArt), x: 2, y: 8.6, by: 120 }, { img: memo(bancoHArt), x: 9, y: 8.6, by: 120 }
     ],
     ents: [
-      ...[[6, 10], [7, 10]].map(([x, y]) => porta(x, y, 'praca', 28, 20, 'down')),
+      ...[[6, 10], [7, 10]].map(([x, y]) => porta(x, y, 'praca', ...POS2.praca.igrejaOut, 'down')),
       { t: 'sign', x: 6, y: 3, h: 26, talk: livroBatismos },
       { t: 'sign', x: 3, y: 2, h: 40, talk: muralBadalada },
       { t: 'sign', x: 10, y: 2, h: 40, talk: bilheteCeleste },
@@ -37,7 +37,7 @@ const ROWS_IGR = [
     } }
   };
   // a porta da igreja, no alto da escadaria (o portal em arco fica em cima do tile 28)
-  const pr = MAPS2.praca; if (pr && !pr._igreja) { pr._igreja = true; for (const x of [28, 29]) pr.ents.push({ t: 'sign', x, y: 19, h: 60, talk: entrarIgreja }); }
+  const pr = MAPS2.praca; if (pr && !pr._igreja) { pr._igreja = true; for (const [x, y] of POS2.praca.igrejaSinais) pr.ents.push({ t: 'sign', x, y, h: 60, talk: entrarIgreja }); }
 }; }
 async function entrarIgreja() {
   if (!G.flags.boiar) {

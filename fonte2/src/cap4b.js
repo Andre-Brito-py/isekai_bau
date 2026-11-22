@@ -308,7 +308,7 @@ async function enfermaria() {
 }
 async function garagem() {
   const dest = [['Auren · Bairro Baixo', 'auren', ...POS3.auren.marco], ['Auren · Largo do Hospital', 'largo', ...POS4.largo.marco], ['Candeia', 'candeia', ...CA.marco], ['Estrada da Serra', 'serra', ...SE.marco]];
-  if (G.flags.c2Init) dest.unshift(['Velhágua · Praça do Sino', 'praca', 2, 12]);
+  if (G.flags.c2Init) dest.unshift(['Velhágua · Praça do Sino', 'praca', ...POS2.praca.marco]);
   const c = await choose('O 31 está na garagem, de motor quente. Pra onde?', [...dest.map(d => d[0]), 'Ficar na base']);
   if (c < 0 || c >= dest.length) { await say('Tá bom. O 31 também gosta de descansar.', 'jorge'); return; }
   const [nm, map, x, y] = dest[c];

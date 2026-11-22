@@ -21,7 +21,18 @@ const REGIOES = [
   { id: 'candeia', nm: 'Candeia', x: 204, y: 18, ic: 'vila', vis: f => f.c4Serra, al: 'right', lx: 191, ly: -6 }
 ];
 const ESTRADAS = [['velhagua', 'estrada'], ['estrada', 'auren'], ['auren', 'serra'], ['serra', 'candeia'], ['auren', 'farol']];
-{ const _lm = loadMap2; loadMap2 = function (id) { G.visto = G.visto || {}; G.visto[id] = 1; return _lm.apply(this, arguments); }; }
+{ const _lm = loadMap2; loadMap2 = function (id) {
+  G.visto = G.visto || {}; G.visto[id] = 1;
+  const r = _lm.apply(this, arguments);
+  // proteção: se um mapa mudou de forma (ex.: a Praça do Sino refeita), um save antigo nunca nasce dentro de parede
+  const m = W2.map, ruim = (x, y) => { if (x < 0 || y < 0 || x >= m.w || y >= m.h) return true; const T = tileOf(m, x, y); return !!T.solid || propSolid(m, x, y) || (!!T.water && !G.flags.boiar); };
+  if (m && ruim(W2.x, W2.y)) {
+    const vis = new Set([W2.x + ',' + W2.y]), q = [[W2.x, W2.y]];
+    while (q.length) { const [x, y] = q.shift(); if (!ruim(x, y)) { Object.assign(W2, { x, y, px: x * TS, py: y * TS, float: false }); for (const f of W2.fol) Object.assign(f, { x, y, px: x * TS, py: y * TS }); G.pos = { map: id, x, y, dir: W2.dir }; break; }
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const k = (x + dx) + ',' + (y + dy); if (!vis.has(k) && x + dx >= 0 && y + dy >= 0 && x + dx < m.w && y + dy < m.h) { vis.add(k); q.push([x + dx, y + dy]); } } }
+  }
+  return r;
+}; }
 
 // ----- as missões, a partir das flags -----
 function missoes() {
@@ -68,9 +79,9 @@ function missoes() {
   if (ped === 1) op({ tit: 'O barquinho do Pedrinho', desc: 'Achar o barquinho no Mercado Afundado.', map: 'rua2', at: pos(() => POS2.rua2.barco) });
   if (ped === 2) op({ tit: 'O barquinho do Pedrinho', desc: 'Devolver o barquinho ao Pedrinho, na praça.', map: 'praca', at: pos(() => POS2.praca.pedrinho) });
   if (pav === 1) op({ tit: 'O nome do Pavio', desc: 'Achar a plaquinha com o nome numa banca do Mercado Afundado.', map: 'rua2', at: pos(() => POS2.rua2.placa) });
-  if (pav === 2) op({ tit: 'O nome do Pavio', desc: 'Devolver o nome ao Pavio da praça.', map: 'praca', at: [11, 9] });
+  if (pav === 2) op({ tit: 'O nome do Pavio', desc: 'Devolver o nome ao Pavio da praça.', map: 'praca', at: [11, 12] });
   if (f.c2Boss && !f.cantouSino && !f.cantoTardio) op({ tit: 'A canção do sino', desc: 'De noite, a Dona Badalada ainda zumbe lá do rio, sozinha. A Irmã Celeste acha que ela quer ouvir alguém cantar.', map: 'praca', at: pos(() => POS2.praca.celeste), quando: 'noite' });
-  if (f.c2Chegada && typeof noiteId === 'function' && f.cantouNa !== noiteId()) op({ tit: 'A Lume canta na fonte', desc: 'De noite, a Lume pode cantar na fonte da Praça do Sino. O chapéu enche de cobres; se ela for muito bem, às vezes alguém deixa um presente.', map: 'praca', at: [7, 16], quando: 'noite' });
+  if (f.c2Chegada && typeof noiteId === 'function' && f.cantouNa !== noiteId()) op({ tit: 'A Lume canta na fonte', desc: 'De noite, a Lume pode cantar na fonte da Praça do Sino. O chapéu enche de cobres; se ela for muito bem, às vezes alguém deixa um presente.', map: 'praca', at: pos(() => POS2.praca.fonteA), quando: 'noite' });
   if (f.c2Chegada && f.quadroTut) op({ tit: 'Quadro de pedidos', desc: 'O quadro da Taverna do Remo Torto sempre tem trabalho que paga em cobres.', map: 'taverna', at: pos(() => POS2.taverna.quadro) });
   return L.filter(m => m.at);
 }

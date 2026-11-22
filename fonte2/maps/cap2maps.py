@@ -13,18 +13,29 @@ M['cais']=S(g)
 P['cais']=dict(chegada=[14,11], bazarDoor=[[5,8],[6,8]], ruaPraca=[[29,0],[30,0],[31,0]], jorge=[21,14], ze=[19,21], cacador=[26,10],
   cacPath=[[23,10],[28,10],[28,12],[23,12]], placa=[24,8], bazarOut=[5,9], pracaIn=[30,1], caixas=[[2,13],[3,13],[33,9]], marco=[11,9])
 SOL['cais']=[(x,y) for x in range(8,20) for y in (13,14)]+[(2,13),(3,13),(33,9)]
-# ---------- Praça do Sino (32x28) ----------
-g=grid(32,28,','); R(g,0,0,32,8,'X')
-R(g,24,11,8,9,'X')                          # bloco da igreja (o desenho cobre)
-R(g,4,22,28,1,'#')                          # mureta da beira-rio
-R(g,6,23,26,5,'~'); R(g,26,20,2,3,'=')      # rio e escadaria da igreja descendo para a água
-R(g,0,23,6,5,',')                           # ladeira para o cais (canto de baixo à esquerda)
+# ---------- Praça do Sino (46x34) — ORGÂNICA (pedido do usuário: "muito retilínea... claustrofobia... parece um beco") ----------
+# Fachadas em profundidades diferentes (recuos e becos), largo aberto no meio (torre + fonte), igreja num patamar à
+# direita, rio que faz curva embaixo com a mureta acompanhando, ladeira para o cais no canto de baixo à esquerda.
+import math
+g=grid(46,34,',')
+CASAS_PR=[('tav',2,10,7),('gui',12,8,7),('tob',21,11,6),('c4',29,8,6),('c5',37,9,6),('c6',0,19,4)]   # (id, x, linha da porta, largura)
+for _,x,y,w in CASAS_PR: R(g,x,0 if y<=12 else y-5,w,y-(0 if y<=12 else y-5),'X')
+R(g,9,0,3,6,'X'); R(g,19,0,2,7,'X'); R(g,27,0,2,6,'X'); R(g,35,0,2,5,'X'); R(g,43,0,3,7,'X')   # muros/quintais entre as casas
+R(g,33,13,8,9,'X')                                    # bloco da igreja (o desenho cobre)
+def topo_rio(x): return 28+int(round(math.sin(x/5.5)*1.2))
+for x in range(7,46):
+    t=topo_rio(x); g[t-1][x]='#'
+    for y in range(t,34): g[y][x]='~'
+R(g,0,26,7,8,',')                                     # ladeira para o cais
+for y in range(22,topo_rio(35)): g[y][35]='='; g[y][36]='='   # escadaria da igreja descendo para a água
 M['praca']=S(g)
-P['praca']=dict(caisIn=[2,26], caisDoor=[[1,27],[2,27],[3,27]], tavDoor=[[4,8],[5,8]], tobDoor=[[21,8],[22,8]], guildaDoor=[13,8],
-  tavOut=[4,9], tobOut=[21,9], celeste=[15,14], bras=[12,9], pedrinho=[8,18], pavioPoste=[11,11], marco=[2,11],
-  cac1=[6,12], cac1Path=[[4,12],[11,12]], cac2=[14,19], cac2Path=[[10,19],[21,19]], escada=[[26,20],[27,20]],
-  ruaDoor=[31,27], ruaOut=[30,26], fonte=[5,17], postes=[[10,9],[19,9],[9,20],[20,20]])
-SOL['praca']=[(x,y) for x in range(14,18) for y in (12,13)]+[(x,y) for x in range(5,9) for y in (15,16)]+[tuple(p) for p in P['praca']['postes']]
+P['praca']=dict(caisIn=[2,31], caisDoor=[[1,33],[2,33],[3,33]], tavDoor=[[5,10],[6,10]], tobDoor=[[23,11],[24,11]], guildaDoor=[16,8],
+  tavOut=[5,11], tobOut=[23,12], celeste=[17,20], bras=[15,9], pedrinho=[9,24], pavioPoste=[11,12], marco=[3,14],
+  cac1=[8,15], cac1Path=[[5,15],[16,15]], cac2=[22,23], cac2Path=[[16,23],[30,23]], escada=[[35,22],[36,22]],
+  ruaDoor=[45,33], ruaOut=[44,32], fonte=[7,23], fonteSol=[[x,y] for x in range(7,11) for y in (21,22)], fonteA=[8,23],
+  postes=[[10,12],[28,13],[15,24],[29,24]], torre=[16,20], igrejaSinais=[[37,21],[38,21]], igrejaOut=[37,22],
+  arvores=[[28,16],[3,23],[42,12],[30,20],[23,25],[7,12]], bau=[44,11], figurinha=[18,8])
+SOL['praca']=[(x,y) for x in range(16,20) for y in (18,19)]+[tuple(p) for p in P['praca']['fonteSol']]+[tuple(p) for p in P['praca']['postes']]+[tuple(p) for p in P['praca']['arvores']]
 # ---------- interiores ----------
 def interior(w,h):
     g=grid(w,h,'o'); R(g,0,0,w,3,'w'); R(g,0,0,1,h,'w'); R(g,w-1,0,1,h,'w'); R(g,0,h-1,w,1,'w'); return g
@@ -102,7 +113,7 @@ def check(name,start,on=[],near=[],swim=True,stuck=True):
         for p in v: assert tuple(start) in reach(name,p,swim), f'{name}: preso em {p}'
     print(name,'ok',len(v))
 check('cais',P['cais']['chegada'],on=['bazarDoor','ruaPraca','pracaIn','bazarOut','cacador'],near=['jorge','ze','placa','marco'],swim=False)
-check('praca',P['praca']['caisIn'],on=['caisDoor','tavDoor','tobDoor','tavOut','tobOut','escada','cac1','cac2'],near=['celeste','bras','pedrinho','pavioPoste','marco'],swim=False)
+check('praca',P['praca']['caisIn'],on=['caisDoor','tavDoor','tobDoor','tavOut','tobOut','escada','cac1','cac2','igrejaOut','bau','figurinha','guildaDoor','fonteA'],near=['celeste','bras','pedrinho','pavioPoste','marco'],swim=False)
 check('praca',P['praca']['caisIn'],on=['ruaDoor','ruaOut'],swim=True,stuck=False)
 check('bazar',P['bazar']['entra'],on=['door'],near=['balcao'],swim=False)
 check('taverna',P['taverna']['entra'],on=['door','garcom','garconete','balcaoFim','cozinha','bebum','lia','cleide','toninho','marujo','cacadorF','bardo'],near=['balcao','quadro','lareira'],swim=False)

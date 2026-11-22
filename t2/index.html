@@ -4324,8 +4324,8 @@ async function menuGrupo() {
 }
 
 // gerado por maps/cap2maps.py (validado: larguras, alcance, correntezas sem prender, entidades em chão válido)
-const ROWS2 = {"cais": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "....................................", "....................................", "....................................", "....................................", "....................................", "....................................", "....................................", "....................................", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"], "praca": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX", ",,,,,,,,,,,,,,,,,,,,,,,,,,==,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,==,,,,", ",,,,######################==####", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~"], "bazar": ["wwwwwwwwwwww", "wwwwwwwwwwww", "wwwwwwwwwwww", "woooooooooow", "woooooooooow", "woooooooooow", "wooorrrrooow", "wooorrrrooow", "woooooooooow", "wwwwwoowwwww"], "taverna": ["wwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwww", "woooooooooooooooooow", "woooooooooooooooooow", "woooooooooooooooooow", "wooooorrrrrrrrooooow", "wooooorrrrrrrrooooow", "wooooorrrrrrrrooooow", "wooooorrrrrrrrooooow", "wooooorrrrrrrrooooow", "woooooooooooooooooow", "wwwwwwwwwoowwwwwwwww"], "tobias": ["wwwwwwwwwwww", "wwwwwwwwwwww", "wwwwwwwwwwww", "woooooooooow", "woooooooooow", "woooooooooow", "w~~~~oo~~~~w", "w~~~~oo~~~~w", "w~~~~oo~~~~w", "wwwwwoowwwww"], "rua1": ["############################", "#......~~~~~~~~~~~~~......~#", "#......~~~.....~~~~~......~#", "#......~~~.....~~~~~......~#", "#......~~~.....~~#~~......~#", "#~~~~~~~#~~~~~~~~#~~~~~~~~~#", "#~~~~~~~#>>>>>>>>>>>>>>>>vv#", "#~~~~~~~#>>>>>>>>>>>>>>>>vv#", "#~~~~~~~#~~~~~~~~#~~~~~~~vv#", "#~~~~~~~#~~~~....#~~~~~~~vv#", "#~~~~~~~#~~~~....~~~~~~~~vv#", "#~~~~~~~#~~~~....~#~~~~~~vv#", "#~~~~~~~#~~~~....~#<<<<<<<<#", "#~......~~~~~~~~~~#<<<<<<<<#", "#~......~~~~~~~~~~#~~~~~~~~#", "#~......~~~~~~~~~~#.......~#", "#~......~~~~~~~~~~#.......~#", "#~......~#########~.......~#", "#~~~~~~~~~~~~~~~~~~.......~#", "#~~~~~~~~~~~~~~~~~~.......~#", "#~~~~~~~~~~~~~~~~~~~~~~~~~~#", "############################"], "rua2": ["########################", "#~~~~~~~~~~~~~~~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~~~~~~~~~v.....~#", "#.....~~~~~~~~~~v.....~#", "#.......~~~~~~~~~.....~#", "#.......~~~~~~~~~.....~#", "#.....~~~~~~~~~~~.....~#", "#~~~~~~~~~~~~~~~~.....~#", "#~~~~~~~.......~~.....~#", "#~~~~~~~.......~~~~~~~~#", "#~~~~~~~.......~~~~~~~~#", "#~~~~~~~.......~~~~~~~~#", "#~~~~~~~~~~~~~~<<<<<<<^#", "########################"], "poco": ["################", "################", "#___~~~~~~~~___#", "#___~~~~~~~~___#", "#___~~~~~~~~___#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#######__#######"]};
-const POS2 = {"cais": {"chegada": [14, 11], "bazarDoor": [[5, 8], [6, 8]], "ruaPraca": [[29, 0], [30, 0], [31, 0]], "jorge": [21, 14], "ze": [19, 21], "cacador": [26, 10], "cacPath": [[23, 10], [28, 10], [28, 12], [23, 12]], "placa": [24, 8], "bazarOut": [5, 9], "pracaIn": [30, 1], "caixas": [[2, 13], [3, 13], [33, 9]], "marco": [11, 9]}, "praca": {"caisIn": [2, 26], "caisDoor": [[1, 27], [2, 27], [3, 27]], "tavDoor": [[4, 8], [5, 8]], "tobDoor": [[21, 8], [22, 8]], "guildaDoor": [13, 8], "tavOut": [4, 9], "tobOut": [21, 9], "celeste": [15, 14], "bras": [12, 9], "pedrinho": [8, 18], "pavioPoste": [11, 11], "marco": [2, 11], "cac1": [6, 12], "cac1Path": [[4, 12], [11, 12]], "cac2": [14, 19], "cac2Path": [[10, 19], [21, 19]], "escada": [[26, 20], [27, 20]], "ruaDoor": [31, 27], "ruaOut": [30, 26], "fonte": [5, 17], "postes": [[10, 9], [19, 9], [9, 20], [20, 20]]}, "bazar": {"door": [[5, 9], [6, 9]], "entra": [5, 8], "graca": [6, 3], "balcao": [6, 4]}, "taverna": {"door": [[9, 12], [10, 12]], "entra": [9, 11], "neusa": [3, 3], "balcao": [3, 4], "quadro": [11, 3], "lareira": [15, 3], "mesas": [[2, 7], [7, 7], [12, 7], [2, 10], [12, 10], [16, 7]], "bebum": [1, 7], "lia": [5, 10], "bardo": [14, 3], "garcom": [7, 5], "garconete": [11, 5], "cleide": [6, 7], "toninho": [11, 7], "marujo": [1, 10], "cacadorF": [15, 10], "balcaoFim": [7, 4], "cozinha": [9, 3]}, "tobias": {"door": [[5, 9], [6, 9]], "entra": [5, 8], "tobias": [8, 4], "cama": [2, 3]}, "rua1": {"chegada": [3, 2], "pracaDoor": [1, 1], "merDoor": [25, 19], "merOut": [24, 18], "bau1": [13, 2], "bau2": [25, 1], "guarda": [22, 2], "marco": [4, 14], "marina": [15, 10], "tenda": [13, 10], "lambe1": [4, 9], "lambe2": [12, 15], "cara1": [11, 4], "sapo1": [21, 17], "bau3": [2, 17]}, "rua2": {"chegada": [2, 8], "ruaDoor": [1, 8], "pocoDoor": [20, 12], "marco": [18, 7], "barco": [13, 2], "placa": [9, 14], "anel": [14, 15], "cara": [11, 4], "lambe1": [4, 13], "lambe2": [19, 3], "sapo": [11, 13], "bau": [21, 6], "barracas": [[9, 2], [12, 12]]}, "poco": {"chegada": [7, 11], "door": [[7, 13], [8, 13]], "gatilho": [[5, 7], [6, 7], [7, 7], [8, 7], [9, 7], [10, 7]], "ancora": [7, 4]}};
+const ROWS2 = {"cais": ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,,XXXX", "....................................", "....................................", "....................................", "....................................", "....................................", "....................................", "....................................", "....................................", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~pp~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"], "praca": [",,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", ",,XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,,XXXXXXXXX", ",,XXXXXXX,,,XXXXXXXXXXXXXXX,,XXXXXX,,XXXXXXXXX", ",,XXXXXXX,,,XXXXXXX,,XXXXXX,,XXXXXX,,XXXXXX,,,", ",,XXXXXXX,,,,,,,,,,,,XXXXXX,,,,,,,,,,XXXXXX,,,", ",,XXXXXXX,,,,,,,,,,,,XXXXXX,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,XXXXXX,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX,,,,,", "XXXX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX,,,,,", "XXXX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX,,,,,", "XXXX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX,,,,,", "XXXX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX,,,,,", "XXXX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,XXXXXXXX,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,==,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,==,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,==,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,==,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,,#############,,==,,,,,,,,,", ",,,,,,,,,,,,,,,#####~~~~~~~~~~~~~##==,,,,,,,,,", ",,,,,,,########~~~~~~~~~~~~~~~~~~~~~~#########", ",,,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", ",,,,,,,~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"], "bazar": ["wwwwwwwwwwww", "wwwwwwwwwwww", "wwwwwwwwwwww", "woooooooooow", "woooooooooow", "woooooooooow", "wooorrrrooow", "wooorrrrooow", "woooooooooow", "wwwwwoowwwww"], "taverna": ["wwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwww", "woooooooooooooooooow", "woooooooooooooooooow", "woooooooooooooooooow", "wooooorrrrrrrrooooow", "wooooorrrrrrrrooooow", "wooooorrrrrrrrooooow", "wooooorrrrrrrrooooow", "wooooorrrrrrrrooooow", "woooooooooooooooooow", "wwwwwwwwwoowwwwwwwww"], "tobias": ["wwwwwwwwwwww", "wwwwwwwwwwww", "wwwwwwwwwwww", "woooooooooow", "woooooooooow", "woooooooooow", "w~~~~oo~~~~w", "w~~~~oo~~~~w", "w~~~~oo~~~~w", "wwwwwoowwwww"], "rua1": ["############################", "#......~~~~~~~~~~~~~......~#", "#......~~~.....~~~~~......~#", "#......~~~.....~~~~~......~#", "#......~~~.....~~#~~......~#", "#~~~~~~~#~~~~~~~~#~~~~~~~~~#", "#~~~~~~~#>>>>>>>>>>>>>>>>vv#", "#~~~~~~~#>>>>>>>>>>>>>>>>vv#", "#~~~~~~~#~~~~~~~~#~~~~~~~vv#", "#~~~~~~~#~~~~....#~~~~~~~vv#", "#~~~~~~~#~~~~....~~~~~~~~vv#", "#~~~~~~~#~~~~....~#~~~~~~vv#", "#~~~~~~~#~~~~....~#<<<<<<<<#", "#~......~~~~~~~~~~#<<<<<<<<#", "#~......~~~~~~~~~~#~~~~~~~~#", "#~......~~~~~~~~~~#.......~#", "#~......~~~~~~~~~~#.......~#", "#~......~#########~.......~#", "#~~~~~~~~~~~~~~~~~~.......~#", "#~~~~~~~~~~~~~~~~~~.......~#", "#~~~~~~~~~~~~~~~~~~~~~~~~~~#", "############################"], "rua2": ["########################", "#~~~~~~~~~~~~~~~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~.......~v~~~~~~#", "#~~~~~~~~~~~~~~~v.....~#", "#.....~~~~~~~~~~v.....~#", "#.......~~~~~~~~~.....~#", "#.......~~~~~~~~~.....~#", "#.....~~~~~~~~~~~.....~#", "#~~~~~~~~~~~~~~~~.....~#", "#~~~~~~~.......~~.....~#", "#~~~~~~~.......~~~~~~~~#", "#~~~~~~~.......~~~~~~~~#", "#~~~~~~~.......~~~~~~~~#", "#~~~~~~~~~~~~~~<<<<<<<^#", "########################"], "poco": ["################", "################", "#___~~~~~~~~___#", "#___~~~~~~~~___#", "#___~~~~~~~~___#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#______________#", "#######__#######"]};
+const POS2 = {"cais": {"chegada": [14, 11], "bazarDoor": [[5, 8], [6, 8]], "ruaPraca": [[29, 0], [30, 0], [31, 0]], "jorge": [21, 14], "ze": [19, 21], "cacador": [26, 10], "cacPath": [[23, 10], [28, 10], [28, 12], [23, 12]], "placa": [24, 8], "bazarOut": [5, 9], "pracaIn": [30, 1], "caixas": [[2, 13], [3, 13], [33, 9]], "marco": [11, 9]}, "praca": {"caisIn": [2, 31], "caisDoor": [[1, 33], [2, 33], [3, 33]], "tavDoor": [[5, 10], [6, 10]], "tobDoor": [[23, 11], [24, 11]], "guildaDoor": [16, 8], "tavOut": [5, 11], "tobOut": [23, 12], "celeste": [17, 20], "bras": [15, 9], "pedrinho": [9, 24], "pavioPoste": [11, 12], "marco": [3, 14], "cac1": [8, 15], "cac1Path": [[5, 15], [16, 15]], "cac2": [22, 23], "cac2Path": [[16, 23], [30, 23]], "escada": [[35, 22], [36, 22]], "ruaDoor": [45, 33], "ruaOut": [44, 32], "fonte": [7, 23], "fonteSol": [[7, 21], [7, 22], [8, 21], [8, 22], [9, 21], [9, 22], [10, 21], [10, 22]], "fonteA": [8, 23], "postes": [[10, 12], [28, 13], [15, 24], [29, 24]], "torre": [16, 20], "igrejaSinais": [[37, 21], [38, 21]], "igrejaOut": [37, 22], "arvores": [[28, 16], [3, 23], [42, 12], [30, 20], [23, 25], [7, 12]], "bau": [44, 11], "figurinha": [18, 8]}, "bazar": {"door": [[5, 9], [6, 9]], "entra": [5, 8], "graca": [6, 3], "balcao": [6, 4]}, "taverna": {"door": [[9, 12], [10, 12]], "entra": [9, 11], "neusa": [3, 3], "balcao": [3, 4], "quadro": [11, 3], "lareira": [15, 3], "mesas": [[2, 7], [7, 7], [12, 7], [2, 10], [12, 10], [16, 7]], "bebum": [1, 7], "lia": [5, 10], "bardo": [14, 3], "garcom": [7, 5], "garconete": [11, 5], "cleide": [6, 7], "toninho": [11, 7], "marujo": [1, 10], "cacadorF": [15, 10], "balcaoFim": [7, 4], "cozinha": [9, 3]}, "tobias": {"door": [[5, 9], [6, 9]], "entra": [5, 8], "tobias": [8, 4], "cama": [2, 3]}, "rua1": {"chegada": [3, 2], "pracaDoor": [1, 1], "merDoor": [25, 19], "merOut": [24, 18], "bau1": [13, 2], "bau2": [25, 1], "guarda": [22, 2], "marco": [4, 14], "marina": [15, 10], "tenda": [13, 10], "lambe1": [4, 9], "lambe2": [12, 15], "cara1": [11, 4], "sapo1": [21, 17], "bau3": [2, 17]}, "rua2": {"chegada": [2, 8], "ruaDoor": [1, 8], "pocoDoor": [20, 12], "marco": [18, 7], "barco": [13, 2], "placa": [9, 14], "anel": [14, 15], "cara": [11, 4], "lambe1": [4, 13], "lambe2": [19, 3], "sapo": [11, 13], "bau": [21, 6], "barracas": [[9, 2], [12, 12]]}, "poco": {"chegada": [7, 11], "door": [[7, 13], [8, 13]], "gatilho": [[5, 7], [6, 7], [7, 7], [8, 7], [9, 7], [10, 7]], "ancora": [7, 4]}};
 
 // ================= INIMIGOS DO CAP. 2: Bairro Afogado, Guilda dos Caçadores e a ÂNCORA-MÃE =================
 // Lambe-Lodo (rouba PM), Caranguejo-Telha (casco: escudo alto), Sapo-Sino (deixa TONTO, coaxo preparado),
@@ -4815,31 +4815,37 @@ function montarMapas2() {
   // ===== PRAÇA DO SINO =====
   MAPS2.praca = { rows: ROWS2.praca, name: 'Velhágua · Praça do Sino', music: 'velhagua', batBg: bgCidade, showMoney: true, bg: '#1c3a54',
     props: [
-      { img: casa({ w: 7, wall: '#7a4a2a', roof: '#5a2a2a', door: 4 - 1 - 0.125, win: [0.5, 5], signC: '#c89a40', chimney: true, doorWin: true }), x: 1, y: 8 },
-      { img: casa({ w: 7, stone: true, wall: '#8a8290', roof: '#2a3a5a', door: 13 - 9 - 0.125, doorC: '#3a3a4a', win: [0.5, 5.4], signC: '#8a2a2a' }), x: 9, y: 8 },
-      { img: casa({ w: 6, wall: '#a8805a', roof: '#3a5a7a', door: 21 - 18.5 - 0.125, win: [0.4, 4.3] }), x: 18.5, y: 8 },
-      { img: casa({ w: 7, wall: '#9a6a4a', roof: '#6a3a3a', win: [0.5, 4.6], door: 2.6 }), x: 25, y: 8 },
-      { img: () => (G.flags.c2Boss ? torreSim : torreNao)(), x: 14, y: 14, solid: [[14, 12, 4, 2]] },
-      { img: memo(fonteArt), x: 5, y: 17, solid: [[5, 15, 4, 2]] },
-      { img: memo(igrejaArt), x: 24.5, y: 20, by: 300 },
+      // fachadas em profundidades e alturas diferentes (sobrados onde a casa avança)
+      { img: casa({ w: 7, wall: '#7a4a2a', roof: '#5a2a2a', door: 2.875, win: [0.5, 5], signC: '#c89a40', chimney: true, doorWin: true, wallH: 122 }), x: 2, y: 10 },
+      { img: casa({ w: 7, stone: true, wall: '#8a8290', roof: '#2a3a5a', door: 3.875, doorC: '#3a3a4a', win: [0.5, 5.4], signC: '#8a2a2a' }), x: 12, y: 8 },
+      { img: casa({ w: 6, wall: '#a8805a', roof: '#3a5a7a', door: 2.375, win: [0.4, 4.3], wallH: 138 }), x: 21, y: 11 },
+      { img: casa({ w: 6, wall: '#9a6a4a', roof: '#6a3a3a', win: [0.5, 4.6], door: 2.6 }), x: 29, y: 8 },
+      { img: casa({ w: 6, wall: '#8a9a8a', roof: '#4a3a5a', win: [0.4, 4.4], door: 2.5, chimney: true, wallH: 106 }), x: 37, y: 9 },
+      { img: casa({ w: 4, wall: '#b08a6a', roof: '#5a4a3a', win: [0.5], door: 1.5 }), x: 0, y: 19 },
+      // quintais com árvore entre as casas
+      ...[[9.2, 6], [18.8, 7], [26.8, 6], [34.8, 5], [43.3, 7]].map(([x, y], i) => ({ img: arvC(i + 1), x: x - 0.2, y })),
+      ...PP.arvores.map(([x, y], i) => ({ img: arvC(i + 3), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]], arvore: true })),
+      { img: () => (G.flags.c2Boss ? torreSim : torreNao)(), x: PP.torre[0], y: PP.torre[1], solid: [[PP.torre[0], PP.torre[1] - 2, 4, 2]] },
+      { img: memo(fonteArt), x: PP.fonte[0], y: PP.fonte[1], solid: [[PP.fonteSol[0][0], PP.fonteSol[0][1], 4, 2]] },
+      { img: memo(igrejaArt), x: 33.5, y: 22, by: 300 },
       ...PP.postes.map(([x, y]) => ({ img: () => (G.flags.c2Fim ? postes.on : postes.off)(), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
-      { img: cartazC, x: 9.6, y: 5.8, by: 129 }, { img: cartazC, x: 15.2, y: 5.6, by: 129 }
+      { img: cartazC, x: 12.6, y: 5.8, by: 129 }, { img: cartazC, x: 18.2, y: 5.6, by: 129 }
     ],
     ents: [
       ...portas(PP.caisDoor, 'cais', ...PC.pracaIn, 'down'), ...portas(PP.tavDoor, 'taverna', ...POS2.taverna.entra, 'up'), ...portas(PP.tobDoor, 'tobias', ...POS2.tobias.entra, 'up'),
       porta(...PP.ruaDoor, 'rua1', ...R1.chegada, 'down'),
       { t: 'sign', x: PP.guildaDoor[0], y: PP.guildaDoor[1], h: 58, talk: async () => { await say('* POSTO DA GUILDA DOS CAÇADORES. Um bilhete na porta: "Fechado para almoço." A data do bilhete é de ontem.'); } },
       marcoEnt(...PP.marco),
-      morador('celeste', ...PP.celeste, { rotina: rot([15, 14, 'sino', 500, 'up'], [13, 15, 'rezar', 300, 'up'], [16, 15, 'olhar', 200, 'down']), talk: falaCeleste }),
-      morador('bras', ...PP.bras, { rotina: rot([12, 9, 'olhar', 420, 'down'], [17, 10, 'conversar', 300, 'left']), gone: () => !!G.flags.brasSumiu, talk: falaBras }),
-      morador('pavio', 11, 9, { rotina: rot([11, 9, 'acender', 260, 'left'], [20, 9, 'acender', 260, 'left'], [10, 20, 'acender', 260, 'left'], [21, 20, 'acender', 260, 'left']), passo: 20, talk: falaPavio }),
-      morador('pedrinho', ...PP.pedrinho, { get rotina() { return G.flags.ped >= 3 ? rot([8, 18, 'brincar', 400, 'down'], [3, 19, 'brincar', 300, 'down'], [9, 21, 'olhar', 200, 'down']) : rot([8, 18, 'olhar', 500, 'down'], [10, 21, 'olhar', 400, 'down']); }, talk: falaPedrinho }),
-      morador('zefa', 19, 15, { rotina: rot([19, 15, 'conversar', 9000, 'right']), talk: falaFofoca }),
-      morador('lurdes', 20, 15, { rotina: rot([20, 15, 'conversar', 600, 'left'], [22, 10, 'varal', 500, 'up']), talk: falaFofoca }),
-      morador('nico', 3, 25, { rotina: rot([3, 25, 'empilhar', 100, 'down'], [7, 10, 'empilhar', 100, 'up', true]), passo: 20, talk: falaNico }),
+      morador('celeste', ...PP.celeste, { rotina: rot([17, 20, 'sino', 500, 'up'], [15, 21, 'rezar', 300, 'up'], [18, 21, 'olhar', 200, 'down']), talk: falaCeleste }),
+      morador('bras', ...PP.bras, { rotina: rot([15, 9, 'olhar', 420, 'down'], [20, 10, 'conversar', 300, 'left']), gone: () => !!G.flags.brasSumiu, talk: falaBras }),
+      morador('pavio', 11, 12, { rotina: rot([11, 12, 'acender', 260, 'left'], [29, 13, 'acender', 260, 'left'], [16, 24, 'acender', 260, 'left'], [30, 24, 'acender', 260, 'left']), passo: 20, talk: falaPavio }),
+      morador('pedrinho', ...PP.pedrinho, { get rotina() { return G.flags.ped >= 3 ? rot([9, 24, 'brincar', 400, 'down'], [5, 24, 'brincar', 300, 'down'], [12, 25, 'olhar', 200, 'down']) : rot([9, 24, 'olhar', 500, 'down'], [12, 25, 'olhar', 400, 'down']); }, talk: falaPedrinho }),
+      morador('zefa', 27, 18, { rotina: rot([27, 18, 'conversar', 9000, 'right']), talk: falaFofoca }),
+      morador('lurdes', 28, 18, { rotina: rot([28, 18, 'conversar', 600, 'left'], [32, 10, 'varal', 500, 'up']), talk: falaFofoca }),
+      morador('nico', 4, 29, { rotina: rot([4, 29, 'empilhar', 100, 'down'], [9, 13, 'empilhar', 100, 'up', true]), passo: 20, talk: falaNico }),
       cacadorEnt('praca', 'c1', ...PP.cac1, PP.cac1Path, { per: 300 }), cacadorEnt('praca', 'c2', ...PP.cac2, PP.cac2Path, { per: 250, vis: 6 }),
       { t: 'trig', x: PP.escada[0][0], y: PP.escada[0][1], w: 2, h: 1, passa: true, run: escadaIgreja },
-      bauEnt('praca', 'a', 30, 9, () => dar('frasco', 1))
+      bauEnt('praca', 'a', ...PP.bau, () => dar('frasco', 1))
     ],
     hunters: true
   };
@@ -5205,7 +5211,7 @@ async function fimCap2() {
   await say('Parece.', 'lume');
   await say('...Parece.', 'me');
   await say('* Lá em cima, na torre, a Dona Badalada toca as nove horas. Certinho. Pela primeira vez em cem anos, ninguém precisa lembrar a cidade de que ela tem um sino.');
-  G.flags.c2Fim = true; G.hora = 20 * 60 + 30; G.pos = { map: 'praca', x: 15, y: 16, dir: 'down' }; G.marco = { map: 'praca', x: 2, y: 12 }; save2();
+  G.flags.c2Fim = true; G.hora = 20 * 60 + 30; G.pos = { map: 'praca', x: 17, y: 22, dir: 'down' }; G.marco = { map: 'praca', x: PP.marco[0], y: PP.marco[1] + 1 }; save2();
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 2', 'Velhágua, a cidade que afunda', '', 'Próximo: Capítulo 3', 'O Festival da Luz']);
   titleFlow2();
@@ -5887,7 +5893,7 @@ const DORME = ['pedrinho', 'zefa', 'lurdes', 'dita', 'joao', 'nico'];
   _mm();
   for (const m of Object.values(MAPS2)) for (const e of m.ents || []) if (DORME.includes(e.id)) { const g0 = e.gone; e.gone = () => (g0 && g0()) || ehNoite(); }
   // postes acendem no entardecer (os Pavios passam acendendo)
-  for (const m of Object.values(MAPS2)) for (const pr of m.props || []) if (pr.solid && pr.solid.length === 1 && pr.solid[0][2] === 1 && pr.solid[0][3] === 1 && pr.x % 1 !== 0 && m === MAPS2.praca) { pr.poste = true; pr.img = () => (h => (h >= 18 * 60 || h < 5.5 * 60 || G.flags.c2Fim) ? postes.on() : postes.off())(hora()); }
+  for (const m of Object.values(MAPS2)) for (const pr of m.props || []) if (pr.solid && pr.solid.length === 1 && pr.solid[0][2] === 1 && pr.solid[0][3] === 1 && pr.x % 1 !== 0 && !pr.arvore && m === MAPS2.praca) { pr.poste = true; pr.img = () => (h => (h >= 18 * 60 || h < 5.5 * 60 || G.flags.c2Fim) ? postes.on() : postes.off())(hora()); }
   // o Zé pesca de noite com lampião
   const ze = MAPS2.cais.ents.find(e => e.id === 'ze'); if (ze) Object.defineProperty(ze, 'luz', { get: () => ehNoite() ? 30 : 0, enumerable: true, configurable: true });
 }; }
@@ -6122,7 +6128,7 @@ async function vender() {
   _mm2();
   MAPS2.taverna.props.push({ img: quadroC, x: 9.4, y: 3.1, by: 1 });
   MAPS2.taverna.ents.push({ t: 'sign', x: 10, y: 3, h: 30, talk: quadroPedidos });
-  MAPS2.praca.ents.push(...[[5, 15], [6, 15], [7, 15], [8, 15], [5, 16], [6, 16], [7, 16], [8, 16]].map(([x, y]) => ({ t: 'sign', x, y, h: 30, talk: fonteDaPraca })), { t: 'sign', x: 15, y: 8, h: 40, talk: figurinhaTiago });
+  MAPS2.praca.ents.push(...POS2.praca.fonteSol.map(([x, y]) => ({ t: 'sign', x, y, h: 30, talk: fonteDaPraca })), { t: 'sign', x: POS2.praca.figurinha[0], y: POS2.praca.figurinha[1], h: 40, talk: figurinhaTiago });
 }; }
 // itens: o menu mostra os materiais guardados
 { const _uf = usarItemFora; usarItemFora = async function () {
@@ -10097,7 +10103,7 @@ const ROWS_IGR = [
       { img: memo(bancoHArt), x: 2, y: 8.6, by: 120 }, { img: memo(bancoHArt), x: 9, y: 8.6, by: 120 }
     ],
     ents: [
-      ...[[6, 10], [7, 10]].map(([x, y]) => porta(x, y, 'praca', 28, 20, 'down')),
+      ...[[6, 10], [7, 10]].map(([x, y]) => porta(x, y, 'praca', ...POS2.praca.igrejaOut, 'down')),
       { t: 'sign', x: 6, y: 3, h: 26, talk: livroBatismos },
       { t: 'sign', x: 3, y: 2, h: 40, talk: muralBadalada },
       { t: 'sign', x: 10, y: 2, h: 40, talk: bilheteCeleste },
@@ -10110,7 +10116,7 @@ const ROWS_IGR = [
     } }
   };
   // a porta da igreja, no alto da escadaria (o portal em arco fica em cima do tile 28)
-  const pr = MAPS2.praca; if (pr && !pr._igreja) { pr._igreja = true; for (const x of [28, 29]) pr.ents.push({ t: 'sign', x, y: 19, h: 60, talk: entrarIgreja }); }
+  const pr = MAPS2.praca; if (pr && !pr._igreja) { pr._igreja = true; for (const [x, y] of POS2.praca.igrejaSinais) pr.ents.push({ t: 'sign', x, y, h: 60, talk: entrarIgreja }); }
 }; }
 async function entrarIgreja() {
   if (!G.flags.boiar) {
@@ -11131,7 +11137,7 @@ async function enfermaria() {
 }
 async function garagem() {
   const dest = [['Auren · Bairro Baixo', 'auren', ...POS3.auren.marco], ['Auren · Largo do Hospital', 'largo', ...POS4.largo.marco], ['Candeia', 'candeia', ...CA.marco], ['Estrada da Serra', 'serra', ...SE.marco]];
-  if (G.flags.c2Init) dest.unshift(['Velhágua · Praça do Sino', 'praca', 2, 12]);
+  if (G.flags.c2Init) dest.unshift(['Velhágua · Praça do Sino', 'praca', ...POS2.praca.marco]);
   const c = await choose('O 31 está na garagem, de motor quente. Pra onde?', [...dest.map(d => d[0]), 'Ficar na base']);
   if (c < 0 || c >= dest.length) { await say('Tá bom. O 31 também gosta de descansar.', 'jorge'); return; }
   const [nm, map, x, y] = dest[c];
@@ -11163,7 +11169,18 @@ const REGIOES = [
   { id: 'candeia', nm: 'Candeia', x: 204, y: 18, ic: 'vila', vis: f => f.c4Serra, al: 'right', lx: 191, ly: -6 }
 ];
 const ESTRADAS = [['velhagua', 'estrada'], ['estrada', 'auren'], ['auren', 'serra'], ['serra', 'candeia'], ['auren', 'farol']];
-{ const _lm = loadMap2; loadMap2 = function (id) { G.visto = G.visto || {}; G.visto[id] = 1; return _lm.apply(this, arguments); }; }
+{ const _lm = loadMap2; loadMap2 = function (id) {
+  G.visto = G.visto || {}; G.visto[id] = 1;
+  const r = _lm.apply(this, arguments);
+  // proteção: se um mapa mudou de forma (ex.: a Praça do Sino refeita), um save antigo nunca nasce dentro de parede
+  const m = W2.map, ruim = (x, y) => { if (x < 0 || y < 0 || x >= m.w || y >= m.h) return true; const T = tileOf(m, x, y); return !!T.solid || propSolid(m, x, y) || (!!T.water && !G.flags.boiar); };
+  if (m && ruim(W2.x, W2.y)) {
+    const vis = new Set([W2.x + ',' + W2.y]), q = [[W2.x, W2.y]];
+    while (q.length) { const [x, y] = q.shift(); if (!ruim(x, y)) { Object.assign(W2, { x, y, px: x * TS, py: y * TS, float: false }); for (const f of W2.fol) Object.assign(f, { x, y, px: x * TS, py: y * TS }); G.pos = { map: id, x, y, dir: W2.dir }; break; }
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const k = (x + dx) + ',' + (y + dy); if (!vis.has(k) && x + dx >= 0 && y + dy >= 0 && x + dx < m.w && y + dy < m.h) { vis.add(k); q.push([x + dx, y + dy]); } } }
+  }
+  return r;
+}; }
 
 // ----- as missões, a partir das flags -----
 function missoes() {
@@ -11210,9 +11227,9 @@ function missoes() {
   if (ped === 1) op({ tit: 'O barquinho do Pedrinho', desc: 'Achar o barquinho no Mercado Afundado.', map: 'rua2', at: pos(() => POS2.rua2.barco) });
   if (ped === 2) op({ tit: 'O barquinho do Pedrinho', desc: 'Devolver o barquinho ao Pedrinho, na praça.', map: 'praca', at: pos(() => POS2.praca.pedrinho) });
   if (pav === 1) op({ tit: 'O nome do Pavio', desc: 'Achar a plaquinha com o nome numa banca do Mercado Afundado.', map: 'rua2', at: pos(() => POS2.rua2.placa) });
-  if (pav === 2) op({ tit: 'O nome do Pavio', desc: 'Devolver o nome ao Pavio da praça.', map: 'praca', at: [11, 9] });
+  if (pav === 2) op({ tit: 'O nome do Pavio', desc: 'Devolver o nome ao Pavio da praça.', map: 'praca', at: [11, 12] });
   if (f.c2Boss && !f.cantouSino && !f.cantoTardio) op({ tit: 'A canção do sino', desc: 'De noite, a Dona Badalada ainda zumbe lá do rio, sozinha. A Irmã Celeste acha que ela quer ouvir alguém cantar.', map: 'praca', at: pos(() => POS2.praca.celeste), quando: 'noite' });
-  if (f.c2Chegada && typeof noiteId === 'function' && f.cantouNa !== noiteId()) op({ tit: 'A Lume canta na fonte', desc: 'De noite, a Lume pode cantar na fonte da Praça do Sino. O chapéu enche de cobres; se ela for muito bem, às vezes alguém deixa um presente.', map: 'praca', at: [7, 16], quando: 'noite' });
+  if (f.c2Chegada && typeof noiteId === 'function' && f.cantouNa !== noiteId()) op({ tit: 'A Lume canta na fonte', desc: 'De noite, a Lume pode cantar na fonte da Praça do Sino. O chapéu enche de cobres; se ela for muito bem, às vezes alguém deixa um presente.', map: 'praca', at: pos(() => POS2.praca.fonteA), quando: 'noite' });
   if (f.c2Chegada && f.quadroTut) op({ tit: 'Quadro de pedidos', desc: 'O quadro da Taverna do Remo Torto sempre tem trabalho que paga em cobres.', map: 'taverna', at: pos(() => POS2.taverna.quadro) });
   return L.filter(m => m.at);
 }
@@ -11707,6 +11724,78 @@ function telaDiario() {
   };
   return openWin(w);
 }
+
+// ================= PLACAS (pedido do usuário: "coloque placa nos lugares, principalmente os que dão para entrar") =================
+// 1) TABULETAS penduradas, com ícone, nos prédios onde se entra (taverna, guilda, bazar, papelaria, casa da Ilda...).
+// 2) NOME DO LUGAR: ao chegar perto (até 3 tiles) de qualquer entrada/saída, aparece uma plaquinha com o nome do destino.
+//    Vale para todos os mapas (usa as portas + LIGA_EXTRA do mapa.js); ROTULOS acrescenta/renomeia lugares.
+const PLACA_C = {};
+function placaArt(ic) {
+  if (PLACA_C[ic]) return PLACA_C[ic];
+  const c = mk(20, 40), x = c.getContext('2d'), P = (col, a, b, w, h) => { x.fillStyle = col; x.fillRect(a, b, w, h); };
+  // braço de ferro e correntinhas
+  P('#1a1418', 0, 1, 16, 2); P('#4a4048', 0, 1, 15, 1); P('#1a1418', 0, 0, 2, 5);
+  P('#6a6070', 3, 3, 1, 3); P('#6a6070', 13, 3, 1, 3);
+  // tábua com sombra e borda
+  P('rgba(0,0,0,0.35)', 2, 7, 15, 12); P('#2a1a10', 1, 6, 15, 12); P('#7a5230', 2, 7, 13, 10); P('#9a6a40', 2, 7, 13, 1); P('#5a3a20', 2, 16, 13, 1);
+  // ícone
+  const I = (col, a, b, w, h) => P(col, 2 + a, 7 + b, w, h);
+  if (ic === 'caneca') { I('#e8e0d0', 4, 2, 5, 6); I('#d8a040', 4, 4, 5, 4); I('#e8e0d0', 9, 3, 2, 1); I('#e8e0d0', 10, 4, 1, 3); I('#e8e0d0', 9, 6, 2, 1); I('#ffffff', 4, 1, 5, 2); }
+  else if (ic === 'escudo') { I('#c8c8d8', 3, 1, 7, 5); I('#c8c8d8', 4, 6, 5, 2); I('#c8c8d8', 5, 8, 3, 1); I('#8a2a2a', 6, 2, 1, 6); I('#8a2a2a', 4, 4, 5, 1); }
+  else if (ic === 'casa') { I('#c84a3a', 3, 3, 7, 1); I('#c84a3a', 4, 2, 5, 1); I('#c84a3a', 5, 1, 3, 1); I('#e8d8b0', 4, 4, 5, 4); I('#5a3a20', 6, 6, 1, 2); }
+  else if (ic === 'balanca') { I('#e8c860', 6, 1, 1, 7); I('#e8c860', 2, 2, 9, 1); I('#e8c860', 2, 3, 1, 2); I('#e8c860', 10, 3, 1, 2); I('#e8c860', 1, 5, 3, 1); I('#e8c860', 9, 5, 3, 1); I('#e8c860', 4, 8, 5, 1); }
+  else if (ic === 'livro') { I('#3a5a9a', 2, 2, 4, 6); I('#9a3a3a', 7, 2, 4, 6); I('#f0e8d8', 6, 2, 1, 6); I('#f0e8d8', 3, 3, 2, 1); I('#f0e8d8', 8, 3, 2, 1); }
+  else if (ic === 'pena') { I('#f0f0f8', 7, 1, 2, 2); I('#f0f0f8', 6, 2, 2, 2); I('#f0f0f8', 5, 3, 2, 2); I('#c8c8e0', 4, 5, 2, 2); I('#2a2a3a', 3, 7, 1, 2); I('#a868d8', 9, 6, 2, 2); }
+  else if (ic === 'picareta') { I('#8a8a9a', 2, 2, 8, 1); I('#8a8a9a', 1, 3, 2, 1); I('#8a8a9a', 9, 3, 2, 1); I('#8a5a30', 5, 3, 1, 6); I('#f0b850', 9, 6, 2, 2); }
+  else if (ic === 'cama') { I('#e8e0d0', 2, 4, 9, 2); I('#8a5a3a', 1, 3, 1, 5); I('#8a5a3a', 11, 5, 1, 3); I('#8a3a3a', 3, 3, 3, 1); I('#5a3a20', 1, 6, 11, 1); }
+  return (PLACA_C[ic] = c);
+}
+// tabuletas: [mapa, x, linha da porta, ícone]
+const TABULETAS = () => [
+  ['praca', POS2.praca.tavDoor[1][0] + 1.3, POS2.praca.tavDoor[0][1], 'caneca'], ['praca', POS2.praca.guildaDoor[0] + 1.2, POS2.praca.guildaDoor[1], 'escudo'],
+  ['praca', POS2.praca.tobDoor[1][0] + 1.2, POS2.praca.tobDoor[0][1], 'casa'], ['cais', POS2.cais.bazarDoor[1][0] + 1.2, POS2.cais.bazarDoor[0][1], 'balanca'],
+  ['auren', POS3.auren.papDoor[1][0] + 1.2, POS3.auren.papDoor[0][1], 'livro'],
+  ['candeia', POS4B.candeia.ildaDoor[1][0] + 1.2, POS4B.candeia.ildaDoor[0][1], 'pena'], ['candeia', POS4B.candeia.minaDoor[1][0] + 1.2, POS4B.candeia.minaDoor[0][1], 'picareta'],
+  ['candeia', POS4B.candeia.pensaoDoor[1][0] + 1.2, POS4B.candeia.pensaoDoor[0][1], 'cama']
+];
+// lugares com nome que não são saídas (ou que pedem outro nome): mapa -> [[x, y, nome]]
+const ROTULOS = () => ({
+  praca: [[...POS2.praca.guildaDoor, 'Posto da Guilda'], [...POS2.praca.igrejaSinais[0], 'Igreja do Sino']],
+  largo: [[...POS4.largo.lavDoor, 'Lavanderia']],
+  candeia: [[...POS4B.candeia.pensaoDoor[0], 'Pensão dos Transferidos']]
+});
+{ const _mmP = montarMapas2; montarMapas2 = function () {
+  _mmP.apply(this, arguments);
+  for (const [id, x, y, ic] of TABULETAS()) { const m = MAPS2[id]; if (!m || (m._tab || (m._tab = {}))[x + ',' + y]) continue; m._tab[x + ',' + y] = 1; m.props.push({ img: () => placaArt(ic), x: x - 0.1, y, by: y * TS + 1 }); }
+}; }
+// nomes curtos: "Velhágua · Igreja do Sino" -> "Igreja do Sino"
+const nomeCurto = (s) => String(s || '').split(' · ').pop();
+function lugaresDe(id) {
+  const out = new Map(), R = ROTULOS()[id] || [];
+  for (const [x, y, to] of (typeof saidasDe === 'function' ? saidasDe(id) : [])) { if (!MAPS2[to]) continue; const k = to; const o = out.get(k) || { xs: [], y, nm: nomeCurto(MAPS2[to].name) }; o.xs.push(x); out.set(k, o); }
+  for (const [x, y, nm] of R) { for (const [k, o] of out) if (o.xs.includes(x) && o.y === y) out.delete(k); out.set('r' + x + ',' + y, { xs: [x], y, nm }); }
+  return [...out.values()].map(o => ({ x: o.xs.reduce((a, b) => a + b, 0) / o.xs.length, y: o.y, nm: o.nm, xs: o.xs }));
+}
+{ const _arP = HOOK_AR; HOOK_AR = function (m, ox, oy) {
+  const r = _arP ? _arP(m, ox, oy) : undefined;
+  if (!m || UI.stack.length || V.scene !== 'world') return r;
+  if (!W2._lug || W2._lug.id !== W2.id) W2._lug = { id: W2.id, L: lugaresDe(W2.id) };
+  for (const L of W2._lug.L) {
+    const d = Math.min(...L.xs.map(x => Math.max(Math.abs(x - W2.x), Math.abs(L.y - W2.y))));
+    if (d > 3) continue;
+    const a = d <= 1 ? 1 : d === 2 ? 0.85 : 0.55;
+    // o mundo é desenhado num quadro maior (TXZ) e encolhido: a placa usa a escala da tela para o texto ficar nítido
+    const z = TXZ, w = Math.round((lineW(rich(L.nm)) + 10) * z), hh = Math.round(14 * z), sx = Math.max(2, Math.min(W - w - 2, Math.round(L.x * TS - ox + 8 - w / 2))), sy = Math.round(L.y * TS - oy - 30 - hh), u = Math.max(1, Math.round(z));
+    bx.globalAlpha = a;
+    bx.fillStyle = 'rgba(0,0,0,0.45)'; bx.fillRect(sx + u, sy + u, w, hh);
+    bx.fillStyle = 'rgba(16,10,6,0.92)'; bx.fillRect(sx, sy, w, hh);
+    bx.fillStyle = '#c8a060'; bx.fillRect(sx, sy, w, u); bx.fillRect(sx, sy + hh - u, w, u); bx.fillRect(sx, sy, u, hh); bx.fillRect(sx + w - u, sy, u, hh);
+    bx.fillRect(sx + Math.round(w / 2) - u, sy + hh, u * 3, u); bx.fillRect(sx + Math.round(w / 2), sy + hh + u, u, u);
+    bx.globalAlpha = 1;
+    txt(L.nm, sx + 5 * z, sy + 1 * z, { col: '#f0e0b8', alpha: a, sz: z });
+  }
+  return r;
+}; }
 
 boot2();
 </script>

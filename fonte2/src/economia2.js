@@ -156,7 +156,7 @@ async function vender() {
   _mm2();
   MAPS2.taverna.props.push({ img: quadroC, x: 9.4, y: 3.1, by: 1 });
   MAPS2.taverna.ents.push({ t: 'sign', x: 10, y: 3, h: 30, talk: quadroPedidos });
-  MAPS2.praca.ents.push(...[[5, 15], [6, 15], [7, 15], [8, 15], [5, 16], [6, 16], [7, 16], [8, 16]].map(([x, y]) => ({ t: 'sign', x, y, h: 30, talk: fonteDaPraca })), { t: 'sign', x: 15, y: 8, h: 40, talk: figurinhaTiago });
+  MAPS2.praca.ents.push(...POS2.praca.fonteSol.map(([x, y]) => ({ t: 'sign', x, y, h: 30, talk: fonteDaPraca })), { t: 'sign', x: POS2.praca.figurinha[0], y: POS2.praca.figurinha[1], h: 40, talk: figurinhaTiago });
 }; }
 // itens: o menu mostra os materiais guardados
 { const _uf = usarItemFora; usarItemFora = async function () {

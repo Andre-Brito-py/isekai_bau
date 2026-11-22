@@ -144,31 +144,37 @@ function montarMapas2() {
   // ===== PRAÇA DO SINO =====
   MAPS2.praca = { rows: ROWS2.praca, name: 'Velhágua · Praça do Sino', music: 'velhagua', batBg: bgCidade, showMoney: true, bg: '#1c3a54',
     props: [
-      { img: casa({ w: 7, wall: '#7a4a2a', roof: '#5a2a2a', door: 4 - 1 - 0.125, win: [0.5, 5], signC: '#c89a40', chimney: true, doorWin: true }), x: 1, y: 8 },
-      { img: casa({ w: 7, stone: true, wall: '#8a8290', roof: '#2a3a5a', door: 13 - 9 - 0.125, doorC: '#3a3a4a', win: [0.5, 5.4], signC: '#8a2a2a' }), x: 9, y: 8 },
-      { img: casa({ w: 6, wall: '#a8805a', roof: '#3a5a7a', door: 21 - 18.5 - 0.125, win: [0.4, 4.3] }), x: 18.5, y: 8 },
-      { img: casa({ w: 7, wall: '#9a6a4a', roof: '#6a3a3a', win: [0.5, 4.6], door: 2.6 }), x: 25, y: 8 },
-      { img: () => (G.flags.c2Boss ? torreSim : torreNao)(), x: 14, y: 14, solid: [[14, 12, 4, 2]] },
-      { img: memo(fonteArt), x: 5, y: 17, solid: [[5, 15, 4, 2]] },
-      { img: memo(igrejaArt), x: 24.5, y: 20, by: 300 },
+      // fachadas em profundidades e alturas diferentes (sobrados onde a casa avança)
+      { img: casa({ w: 7, wall: '#7a4a2a', roof: '#5a2a2a', door: 2.875, win: [0.5, 5], signC: '#c89a40', chimney: true, doorWin: true, wallH: 122 }), x: 2, y: 10 },
+      { img: casa({ w: 7, stone: true, wall: '#8a8290', roof: '#2a3a5a', door: 3.875, doorC: '#3a3a4a', win: [0.5, 5.4], signC: '#8a2a2a' }), x: 12, y: 8 },
+      { img: casa({ w: 6, wall: '#a8805a', roof: '#3a5a7a', door: 2.375, win: [0.4, 4.3], wallH: 138 }), x: 21, y: 11 },
+      { img: casa({ w: 6, wall: '#9a6a4a', roof: '#6a3a3a', win: [0.5, 4.6], door: 2.6 }), x: 29, y: 8 },
+      { img: casa({ w: 6, wall: '#8a9a8a', roof: '#4a3a5a', win: [0.4, 4.4], door: 2.5, chimney: true, wallH: 106 }), x: 37, y: 9 },
+      { img: casa({ w: 4, wall: '#b08a6a', roof: '#5a4a3a', win: [0.5], door: 1.5 }), x: 0, y: 19 },
+      // quintais com árvore entre as casas
+      ...[[9.2, 6], [18.8, 7], [26.8, 6], [34.8, 5], [43.3, 7]].map(([x, y], i) => ({ img: arvC(i + 1), x: x - 0.2, y })),
+      ...PP.arvores.map(([x, y], i) => ({ img: arvC(i + 3), x: x - 1.25, y: y + 1, solid: [[x, y, 1, 1]], arvore: true })),
+      { img: () => (G.flags.c2Boss ? torreSim : torreNao)(), x: PP.torre[0], y: PP.torre[1], solid: [[PP.torre[0], PP.torre[1] - 2, 4, 2]] },
+      { img: memo(fonteArt), x: PP.fonte[0], y: PP.fonte[1], solid: [[PP.fonteSol[0][0], PP.fonteSol[0][1], 4, 2]] },
+      { img: memo(igrejaArt), x: 33.5, y: 22, by: 300 },
       ...PP.postes.map(([x, y]) => ({ img: () => (G.flags.c2Fim ? postes.on : postes.off)(), x: x - 0.06, y: y + 1, solid: [[x, y, 1, 1]] })),
-      { img: cartazC, x: 9.6, y: 5.8, by: 129 }, { img: cartazC, x: 15.2, y: 5.6, by: 129 }
+      { img: cartazC, x: 12.6, y: 5.8, by: 129 }, { img: cartazC, x: 18.2, y: 5.6, by: 129 }
     ],
     ents: [
       ...portas(PP.caisDoor, 'cais', ...PC.pracaIn, 'down'), ...portas(PP.tavDoor, 'taverna', ...POS2.taverna.entra, 'up'), ...portas(PP.tobDoor, 'tobias', ...POS2.tobias.entra, 'up'),
       porta(...PP.ruaDoor, 'rua1', ...R1.chegada, 'down'),
       { t: 'sign', x: PP.guildaDoor[0], y: PP.guildaDoor[1], h: 58, talk: async () => { await say('* POSTO DA GUILDA DOS CAÇADORES. Um bilhete na porta: "Fechado para almoço." A data do bilhete é de ontem.'); } },
       marcoEnt(...PP.marco),
-      morador('celeste', ...PP.celeste, { rotina: rot([15, 14, 'sino', 500, 'up'], [13, 15, 'rezar', 300, 'up'], [16, 15, 'olhar', 200, 'down']), talk: falaCeleste }),
-      morador('bras', ...PP.bras, { rotina: rot([12, 9, 'olhar', 420, 'down'], [17, 10, 'conversar', 300, 'left']), gone: () => !!G.flags.brasSumiu, talk: falaBras }),
-      morador('pavio', 11, 9, { rotina: rot([11, 9, 'acender', 260, 'left'], [20, 9, 'acender', 260, 'left'], [10, 20, 'acender', 260, 'left'], [21, 20, 'acender', 260, 'left']), passo: 20, talk: falaPavio }),
-      morador('pedrinho', ...PP.pedrinho, { get rotina() { return G.flags.ped >= 3 ? rot([8, 18, 'brincar', 400, 'down'], [3, 19, 'brincar', 300, 'down'], [9, 21, 'olhar', 200, 'down']) : rot([8, 18, 'olhar', 500, 'down'], [10, 21, 'olhar', 400, 'down']); }, talk: falaPedrinho }),
-      morador('zefa', 19, 15, { rotina: rot([19, 15, 'conversar', 9000, 'right']), talk: falaFofoca }),
-      morador('lurdes', 20, 15, { rotina: rot([20, 15, 'conversar', 600, 'left'], [22, 10, 'varal', 500, 'up']), talk: falaFofoca }),
-      morador('nico', 3, 25, { rotina: rot([3, 25, 'empilhar', 100, 'down'], [7, 10, 'empilhar', 100, 'up', true]), passo: 20, talk: falaNico }),
+      morador('celeste', ...PP.celeste, { rotina: rot([17, 20, 'sino', 500, 'up'], [15, 21, 'rezar', 300, 'up'], [18, 21, 'olhar', 200, 'down']), talk: falaCeleste }),
+      morador('bras', ...PP.bras, { rotina: rot([15, 9, 'olhar', 420, 'down'], [20, 10, 'conversar', 300, 'left']), gone: () => !!G.flags.brasSumiu, talk: falaBras }),
+      morador('pavio', 11, 12, { rotina: rot([11, 12, 'acender', 260, 'left'], [29, 13, 'acender', 260, 'left'], [16, 24, 'acender', 260, 'left'], [30, 24, 'acender', 260, 'left']), passo: 20, talk: falaPavio }),
+      morador('pedrinho', ...PP.pedrinho, { get rotina() { return G.flags.ped >= 3 ? rot([9, 24, 'brincar', 400, 'down'], [5, 24, 'brincar', 300, 'down'], [12, 25, 'olhar', 200, 'down']) : rot([9, 24, 'olhar', 500, 'down'], [12, 25, 'olhar', 400, 'down']); }, talk: falaPedrinho }),
+      morador('zefa', 27, 18, { rotina: rot([27, 18, 'conversar', 9000, 'right']), talk: falaFofoca }),
+      morador('lurdes', 28, 18, { rotina: rot([28, 18, 'conversar', 600, 'left'], [32, 10, 'varal', 500, 'up']), talk: falaFofoca }),
+      morador('nico', 4, 29, { rotina: rot([4, 29, 'empilhar', 100, 'down'], [9, 13, 'empilhar', 100, 'up', true]), passo: 20, talk: falaNico }),
       cacadorEnt('praca', 'c1', ...PP.cac1, PP.cac1Path, { per: 300 }), cacadorEnt('praca', 'c2', ...PP.cac2, PP.cac2Path, { per: 250, vis: 6 }),
       { t: 'trig', x: PP.escada[0][0], y: PP.escada[0][1], w: 2, h: 1, passa: true, run: escadaIgreja },
-      bauEnt('praca', 'a', 30, 9, () => dar('frasco', 1))
+      bauEnt('praca', 'a', ...PP.bau, () => dar('frasco', 1))
     ],
     hunters: true
   };
@@ -534,7 +540,7 @@ async function fimCap2() {
   await say('Parece.', 'lume');
   await say('...Parece.', 'me');
   await say('* Lá em cima, na torre, a Dona Badalada toca as nove horas. Certinho. Pela primeira vez em cem anos, ninguém precisa lembrar a cidade de que ela tem um sino.');
-  G.flags.c2Fim = true; G.hora = 20 * 60 + 30; G.pos = { map: 'praca', x: 15, y: 16, dir: 'down' }; G.marco = { map: 'praca', x: 2, y: 12 }; save2();
+  G.flags.c2Fim = true; G.hora = 20 * 60 + 30; G.pos = { map: 'praca', x: 17, y: 22, dir: 'down' }; G.marco = { map: 'praca', x: PP.marco[0], y: PP.marco[1] + 1 }; save2();
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 2', 'Velhágua, a cidade que afunda', '', 'Próximo: Capítulo 3', 'O Festival da Luz']);
   titleFlow2();

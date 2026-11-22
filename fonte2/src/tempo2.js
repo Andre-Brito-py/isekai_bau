@@ -120,7 +120,7 @@ const DORME = ['pedrinho', 'zefa', 'lurdes', 'dita', 'joao', 'nico'];
   _mm();
   for (const m of Object.values(MAPS2)) for (const e of m.ents || []) if (DORME.includes(e.id)) { const g0 = e.gone; e.gone = () => (g0 && g0()) || ehNoite(); }
   // postes acendem no entardecer (os Pavios passam acendendo)
-  for (const m of Object.values(MAPS2)) for (const pr of m.props || []) if (pr.solid && pr.solid.length === 1 && pr.solid[0][2] === 1 && pr.solid[0][3] === 1 && pr.x % 1 !== 0 && m === MAPS2.praca) { pr.poste = true; pr.img = () => (h => (h >= 18 * 60 || h < 5.5 * 60 || G.flags.c2Fim) ? postes.on() : postes.off())(hora()); }
+  for (const m of Object.values(MAPS2)) for (const pr of m.props || []) if (pr.solid && pr.solid.length === 1 && pr.solid[0][2] === 1 && pr.solid[0][3] === 1 && pr.x % 1 !== 0 && !pr.arvore && m === MAPS2.praca) { pr.poste = true; pr.img = () => (h => (h >= 18 * 60 || h < 5.5 * 60 || G.flags.c2Fim) ? postes.on() : postes.off())(hora()); }
   // o Zé pesca de noite com lampião
   const ze = MAPS2.cais.ents.find(e => e.id === 'ze'); if (ze) Object.defineProperty(ze, 'luz', { get: () => ehNoite() ? 30 : 0, enumerable: true, configurable: true });
 }; }
