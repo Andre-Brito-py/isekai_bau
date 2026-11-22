@@ -9845,7 +9845,7 @@ drawWin = function () {
   L.forEach((ch, i) => { const tt = t - 4 - i * 3; if (tt < 0) return; const q = Math.min(1, tt / 12), bounce = q < 1 ? (1 - q) * -26 + Math.sin(q * Math.PI) * -6 : Math.sin((t + i * 6) * 0.08) * 1.2; txt(ch, x0 + i * lw, 30 + bounce, { align: 'center', sz: 2, col: '#fff4c0', shadow: true }); });
   if (t < 18) return;
   // cartão de recompensas sobe
-  const ca = ease.out(Math.min(1, (t - 18) / 18)), CX = 22, CW = 196, CY = 62 + (1 - ca) * 140, CH = 140;
+  const ca = ease.out(Math.min(1, (t - 18) / 18)), CX = 22, CW = 196, CY = 58 + (1 - ca) * 140, CH = 132;
   bx.globalAlpha = ca; box(CX, CY, CW, CH); bx.globalAlpha = 1;
   if (ca < 1) return;
   // linha 1: recompensas contando
@@ -9854,13 +9854,13 @@ drawWin = function () {
   if (R) { iconeWin('xp', CX + 104, CY + 9); txt('+' + Math.round(R.total * Math.max(0, cnt)) + ' XP', CX + 114, CY + 8, { col: '#8fe3ff' }); }
   // linha 2: estatísticas com ícones
   const s = BT.stats, tt = Math.round(G.time - s.t0);
-  [['perf', s.perf], ['crit', s.crit], ['quebra', s.quebra], ['tempo', `${Math.floor(tt / 60)}:${String(tt % 60).padStart(2, '0')}`]].forEach(([k, v], i) => { const x = CX + 12 + i * 46; iconeWin(k, x, CY + 25); txt(String(v), x + 8, CY + 23, { col: '#d8d0e8' }); });
+  [['perf', s.perf], ['crit', s.crit], ['quebra', s.quebra], ['tempo', `${Math.floor(tt / 60)}:${String(tt % 60).padStart(2, '0')}`]].forEach(([k, v], i) => { const x = CX + 12 + i * 40; iconeWin(k, x, CY + 25); txt(String(v), x + 8, CY + 23, { col: '#d8d0e8' }); });
   bx.fillStyle = 'rgba(143,227,216,0.25)'; bx.fillRect(CX + 8, CY + 37, CW - 16, 1);
   // membros
   if (R) {
     const p = Math.min(1, Math.max(0, (t - 44) / 60));
     R.out.forEach((o, i) => {
-      const y = CY + 43 + i * 29, x = CX + 10;
+      const y = CY + 42 + i * 27, x = CX + 10;
       // moldura do retrato
       bx.fillStyle = o.m.col || '#8fe3ff'; bx.fillRect(x - 1, y - 1, 26, 26); bx.fillStyle = '#0a0612'; bx.fillRect(x, y, 24, 24);
       const P = typeof retratoCut === 'function' ? retratoCut(o.m) : PT(o.m.port); if (P) { bx.imageSmoothingEnabled = false; bx.drawImage(P, 0, 0, P.width, P.height, x, y, 24, 24); }
@@ -9873,29 +9873,28 @@ drawWin = function () {
       bx.fillStyle = subiuAgora ? '#c88a20' : '#2a2440'; bx.fillRect(bxX, y, 44, 12); bx.fillStyle = subiuAgora ? `rgba(255,240,160,${gl})` : '#3a3458'; bx.fillRect(bxX, y, 44, 2);
       txt('Nv ' + lvNow, bxX + 22, y + 1, { align: 'center', col: subiuAgora ? '#fff4c0' : '#e8e0f0' });
       // barra de XP com brilho
-      const bw = 140, by = y + 15;
+      const bw = 112, by = y + 15;
       bx.fillStyle = '#0a0612'; bx.fillRect(x + 30, by, bw, 6);
       const fw = Math.round(bw * frac);
       bx.fillStyle = '#2a5a8a'; bx.fillRect(x + 30, by, fw, 6); bx.fillStyle = '#5aa8e0'; bx.fillRect(x + 30, by, fw, 3); bx.fillStyle = '#c8f0ff'; bx.fillRect(x + 30, by, fw, 1);
       const sh = (t * 3 + i * 40) % (bw + 30) - 15; if (sh > 0 && sh < fw) { bx.globalAlpha = 0.6; bx.fillStyle = '#ffffff'; bx.fillRect(x + 30 + sh, by, 3, 6); bx.globalAlpha = 1; }
-      txt('+' + Math.round(o.ganho * ease.out(p)), x + 174, y + 13, { align: 'right', col: '#8fe3ff' });
+      txt('+' + Math.round(o.ganho * ease.out(p)), x + 174, y + 12, { align: 'right', col: '#8fe3ff' });
       if (subiuAgora) {
         txt('SUBIU!', x + 90, y + 1, { col: '#ffe066', shadow: true });
         if (!o.tocou) { o.tocou = true; for (let j = 0; j < 10; j++) w.conf.push({ x: x + 12, y: y + 12, vy: -1 - Math.random() * 1.5, vx: (Math.random() - 0.5) * 2.5, c: j % 2 ? '#ffe066' : '#ffffff', f: j }); if (!BT.xpSom) { BT.xpSom = true; jingle && jingle('G5:2 C6:2 E6:2 G6:6', 220); } }
         for (let j = 0; j < 4; j++) { const ang = t * 0.1 + j * Math.PI / 2; bx.fillStyle = '#ffe066'; bx.fillRect(Math.round(x + 12 + Math.cos(ang) * 16), Math.round(y + 12 + Math.sin(ang) * 16), 1, 1); }
       }
     });
-    if (p >= 1 && R.out.some(o => o.subiu)) txt('Subir de nível recupera 25% da vida e dos PM', 120, CY + CH - 12, { align: 'center', col: '#9be58a' });
   }
   // NOTA da luta, carimbada no canto do cartão
   if (t > 112) {
-    const q = Math.min(1, (t - 112) / 10), sc = 1 + (1 - ease.out(q)) * 2, nx = CX + CW - 4, ny = CY - 2, [c1, c2] = NOTA_COR[w.nota];
+    const q = Math.min(1, (t - 112) / 10), sc = 1 + (1 - ease.out(q)) * 2, nx = CX + CW - 16, ny = CY + 15, [c1, c2] = NOTA_COR[w.nota];
     if (!w.carimbo) { w.carimbo = true; sfx('crit'); }
     bx.save(); bx.translate(nx, ny); bx.rotate(-0.25 * q); bx.scale(sc, sc); bx.globalAlpha = q;
     bx.fillStyle = c2; bx.beginPath(); bx.arc(0, 0, 13, 0, Math.PI * 2); bx.fill(); bx.fillStyle = c1; bx.beginPath(); bx.arc(0, 0, 11, 0, Math.PI * 2); bx.fill(); bx.fillStyle = '#1a1028'; bx.beginPath(); bx.arc(0, 0, 9, 0, Math.PI * 2); bx.fill();
     bx.restore(); txt(w.nota, nx + 1, ny - 7, { align: 'center', sz: 1.5, col: c1, shadow: true, alpha: q });
   }
-  if (t > 100 && t % 50 < 34) txt('A  continuar', 120, CY + CH + 6, { align: 'center', col: '#ffffff' });
+  if (t > 100 && t % 50 < 34) txt('A  continuar', 120, CY + CH - 13, { align: 'center', col: '#ffffff' });
 };
 
 // ---------- tela de status: nível e barra de XP (status3.js chama nvDe/xpProx) ----------
