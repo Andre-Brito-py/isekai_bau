@@ -772,7 +772,9 @@
    pela primeira vez; as velas da padaria acendem). O BEIJO tem QUADRO (beijo.js, pedido do usuário: "bem
    marcante, um quadro deles se beijando"): ilustração 208x136 animada numa moldura dourada (pôr do sol no Largo, Farol
    apagado no morro, padaria com velas acendendo, varal de lampiões, mesinha com cafés, vapor em coração, pão de queijo
-   queimado; ele de rosto com as cores tiradas da arte herdada; a Lume com o adereço da evolução; mãos dadas). Abaixo: o pé encostado embaixo da mesa, "agora tem tempo". A RITA tem
+   queimado). OS DOIS SÃO DESENHADOS COM A ARTE ORIGINAL (pedido do usuário: "seguir a arte original é essencial"): o
+   rosto herdado de frente (A.body) e a Lume humana de lado (IMG.spf.lumeh.s) a 2x, sem rotação nem retoque; ela na
+   ponta do pé encostando o rosto no dele. O rosto dele só existe de frente: nunca inventar perfil. Abaixo: o pé encostado embaixo da mesa, "agora tem tempo". A RITA tem
    o momento dela (ela foi a primeira a vê-lo, no 31; rouba um gole: "o próximo é meu. Como amiga."). T3: continuar o
    casal a partir daqui.
  - A MOÇA (fim do arco da T2): nomeada pelo jogador, fundida ao Catálogo; Leitura permanente; depois do nome, bosses às
@@ -19545,48 +19547,30 @@ function beijoArt(f) {
   for (let y = 92; y < H_; y++) for (let x = 46; x < W_; x++) P.p(x, y, ((x >> 3) + (y >> 2)) % 2 ? '#6a5a6a' : '#74647a');
   for (let y = 92; y < H_; y++) for (let x = 0; x < 46; x++) P.p(x, y, '#5a4a5a');
   const mx = 101;
-  // ---- ELE (esquerda, olhando para a direita), de rosto ----
-  const Pe = ramp(C.pele), Cb = ramp(C.cabelo), Rp = ramp(C.roupa), a1 = 88, b1 = 60;
-  P.poly([[a1 - 24, 136], [a1 - 26, b1 + 38], [a1 - 18, b1 + 22], [a1 - 2, b1 + 18], [a1 + 8, b1 + 24], [a1 + 10, b1 + 38], [a1 + 6, 136]], (x, y) => P.tone(Rp, 0.8 - (x - a1 + 26) / 50, x, y));
-  P.rect(a1 - 4, b1 + 10, 8, 9, Pe[2]); P.rect(a1 - 4, b1 + 10, 2, 9, Pe[1]); P.line(a1 - 2, b1 + 20, a1 + 2, b1 + 30, Rp[1]);
-  P.line(a1 + 6, b1 + 32, mx - 1, b1 + 38, Rp[2], 4); P.ball(mx, b1 + 38, 3, 2, Pe, { amb: 0.6 });
-  P.ball(a1, b1, 11, 12, Pe, { amb: 0.55, k: 0.6 });
-  P.poly([[a1 + 9, b1 - 3], [a1 + 13, b1 + 3], [a1 + 9, b1 + 4]], Pe[3]); P.p(a1 + 12, b1 + 3, Pe[1]);
-  P.poly([[a1 + 5, b1 + 7], [a1 + 11, b1 + 7], [a1 + 10, b1 + 10], [a1 + 3, b1 + 12]], Pe[3]); P.p(a1 + 10, b1 + 7, '#b04a5a'); P.p(a1 + 9, b1 + 7, '#b04a5a');
-  P.line(a1 + 3, b1 - 1, a1 + 6, b1 - 1, '#2a1a20'); P.p(a1 + 7, b1, '#2a1a20'); P.p(a1 + 4, b1 - 3, Cb[1]); P.p(a1 + 5, b1 - 3, Cb[1]);
-  P.rect(a1 + 4, b1 + 3, 2, 1, '#ff9aa8');
-  P.ball(a1 - 5, b1 + 1, 2, 3, Pe, { amb: 0.5 }); P.p(a1 - 5, b1 + 1, Pe[1]);
-  P.poly([[a1 - 12, b1 + 4], [a1 - 12, b1 - 8], [a1 - 6, b1 - 13], [a1 + 4, b1 - 13], [a1 + 10, b1 - 8], [a1 + 9, b1 - 4], [a1 + 4, b1 - 6], [a1 - 2, b1 - 5], [a1 - 6, b1 - 1], [a1 - 8, b1 + 6]], (x, y) => P.tone(Cb, 0.85 - (x - a1 + 12) / 40 - (y - b1 + 13) / 60, x, y));
-  for (let i = 0; i < 3; i++) P.line(a1 + 4 + i * 2, b1 - 7, a1 + 6 + i * 2, b1 - 3, Cb[1]);
-  // ---- A LUME (direita, olhando para a esquerda), na ponta do pé ----
-  const Cr = ['#a89878', '#c8b898', '#e8dcc0', '#f8f0dc', '#ffffff'], Ou = ramp('#d8a830'), Ln = ['#a8701a', '#d8a030', '#f0c850', '#ffe080', '#fff4c0'], Pl = ['#c08068', '#e0a088', '#f4c4a4', '#ffe0c8', '#fff4e8'];
-  const a2 = 110, b2 = 64;
-  P.poly([[a2 - 6, b2 - 10], [a2 + 5, b2 - 14], [a2 + 13, b2 - 8], [a2 + 19, b2 + 6], [a2 + 25, b2 + 30], [a2 + 31, b2 + 54], [a2 + 15, b2 + 56], [a2 + 11, b2 + 30], [a2 + 7, b2 + 10]], (x, y) => P.tone(Ln, 0.9 - (x - a2 + 6) / 60 + (((x * 2 + y) % 11 === 0) ? 0.15 : 0) - (y - b2) / 140, x, y));
-  for (let i = 0; i < 6; i++) { const x = a2 + 15 + i * 3, y = b2 + 52 + (i % 2) * 2; P.poly([[x - 1, y], [x + 1, y + 6 + ((f + i) % 3)], [x + 3, y]], i % 2 ? '#ff8a30' : '#ffb040'); P.p(x + 1, y + 3, '#fff0a0'); }
-  P.poly([[a2 - 6, b2 + 20], [a2 + 10, b2 + 16], [a2 + 20, b2 + 28], [a2 + 24, 136], [a2 - 8, 136], [a2 - 10, b2 + 36]], (x, y) => P.tone(Cr, 0.75 - (x - a2 + 10) / 60, x, y));
-  P.line(a2 - 8, 132, a2 + 24, 132, Ou[3], 2); for (let i = 0; i < 3; i++) P.p(a2 - 2, b2 + 40 + i * 7, '#c8a8f0');
-  P.rect(a2 - 3, b2 + 9, 7, 9, Pl[2]);
-  P.line(a2 - 4, b2 + 28, mx + 2, b2 + 34, Cr[2], 4); P.ball(mx + 2, b2 + 35, 2.5, 2, Pl, { amb: 0.6 });
-  P.ball(a2, b2, 10, 11, Pl, { amb: 0.5, k: 0.65 });
-  P.poly([[a2 - 9, b2 - 2], [a2 - 13, b2 + 2], [a2 - 9, b2 + 3]], Pl[3]); P.p(a2 - 12, b2 + 2, Pl[1]);
-  P.poly([[a2 - 4, b2 + 6], [a2 - 10, b2 + 6], [a2 - 9, b2 + 9], [a2 - 3, b2 + 11]], Pl[3]); P.p(a2 - 10, b2 + 6, '#d0506a'); P.p(a2 - 9, b2 + 6, '#d0506a');
-  P.line(a2 - 6, b2 - 1, a2 - 3, b2 - 1, '#5a2a30'); P.p(a2 - 7, b2 - 2, '#5a2a30'); P.p(a2 - 8, b2 - 2, '#5a2a30');
-  P.rect(a2 - 5, b2 + 2, 3, 2, '#ff8aa0');
-  P.ball(a2 + 4, b2 + 1, 2, 3, Pl); P.ball(a2 + 4, b2 + 6, 1.5, 2, ['#7a5ab8', '#a888e0', '#c8a8f0', '#e8d8ff', '#ffffff']);
-  P.poly([[a2 - 10, b2 - 3], [a2 - 9, b2 - 9], [a2 - 3, b2 - 13], [a2 + 7, b2 - 12], [a2 + 11, b2 - 6], [a2 + 5, b2 - 7], [a2 - 1, b2 - 6], [a2 - 6, b2 - 3]], (x, y) => P.tone(Ln, 0.95 - (x - a2 + 10) / 40, x, y));
-  if (ev === 'lareira') { P.rect(a2 + 3, b2 - 14, 8, 2, Ou[3]); P.ball(a2 + 12, b2 - 13, 2, 2, ['#7a2a0a', '#c8501a', '#ff8a30', '#ffc870', '#fff0c0']); P.poly([[a2 - 1, b2 - 16], [a2 + 2, b2 - 13], [a2 - 1, b2 - 11]], '#f08a3a'); P.poly([[a2 + 5, b2 - 16], [a2 + 2, b2 - 13], [a2 + 5, b2 - 11]], '#f08a3a'); }
-  else if (ev === 'alvorada') { for (let i = 0; i < 12; i++) P.p(a2 - 5 + i, b2 - 13 - Math.round(Math.sin(i / 11 * Math.PI) * 2), '#e8eef8'); for (let q = 0; q < 5; q++) { const an = Math.PI + q / 4 * Math.PI; P.line(a2 + 1, b2 - 15, a2 + 1 + Math.cos(an) * 4, b2 - 15 + Math.sin(an) * 3, q % 2 ? '#fff0b0' : '#ffd0e0'); } P.p(a2 + 1, b2 - 15, '#ffffff'); }
-  else { for (let i = 0; i < 3; i++) { P.rect(a2 - 1 + i * 4, b2 - 16, 1, 3, '#f4ecdc'); P.p(a2 - 1 + i * 4, b2 - 17, '#ffb040'); } P.rect(a2 - 2, b2 - 13, 10, 1, Ou[3]); }
+  const FUNDO = P; const P2 = new Pix(W_, H_);
   // ---- a mesinha NA FRENTE deles: xícaras, vapor em coração, pão de queijo queimado do lado esquerdo ----
-  P.ball(mx, 108, 38, 7, ['#6a4a2a', '#8a5a32', '#a87040', '#c89058', '#e8b880']); P.rect(mx - 38, 108, 77, 2, '#5a3a22'); P.rect(mx - 2, 112, 4, 24, '#4a3020');
-  for (const [x, s2] of [[mx - 24, -1], [mx + 24, 1]]) { P.rect(x - 5, 99, 10, 7, '#f4ecdc'); P.rect(x - 5, 99, 10, 1, '#5a3a2a'); P.rect(x - 4, 100, 8, 1, '#3a2018'); P.rect(x + (s2 > 0 ? 5 : -7), 100, 2, 4, '#f4ecdc'); P.rect(x - 7, 106, 14, 1, '#d8ccb8'); }
-  const vp = f % 8; for (let i = 0; i < 7; i++) { const y = 96 - i * 3 - (vp % 2), q = i / 6; P.p(mx - 24 + Math.round(Math.sin(i + vp) * 1.5 + q * 14), y, '#f4ecff'); P.p(mx + 24 - Math.round(Math.sin(i + vp) * 1.5 + q * 14), y, '#f4ecff'); }
-  { const hx = mx, hy = 82 - (vp % 4); for (const [dx, dy] of [[-3, 0], [-2, -1], [-1, -1], [1, -1], [2, -1], [3, 0], [-3, 1], [3, 1], [-2, 2], [2, 2], [-1, 3], [1, 3], [0, 4], [0, 0]]) P.p(hx + dx, hy + dy, '#ffc8dc'); }
-  P.rect(mx - 9, 101, 18, 3, '#e8e0d0'); P.ball(mx - 4, 101, 3, 2, ['#8a5a1a', '#c8882a', '#e8b040', '#f8d070', '#fff0b0']); P.ball(mx + 4, 101, 3, 2, ['#8a5a1a', '#c8882a', '#e8b040', '#f8d070', '#fff0b0']); P.p(mx - 7, 101, '#3a2010'); P.p(mx - 6, 102, '#3a2010');
+  P2.ball(mx, 108, 38, 7, ['#6a4a2a', '#8a5a32', '#a87040', '#c89058', '#e8b880']); P2.rect(mx - 38, 108, 77, 2, '#5a3a22'); P2.rect(mx - 2, 112, 4, 24, '#4a3020');
+  for (const [x, s2] of [[mx - 24, -1], [mx + 24, 1]]) { P2.rect(x - 5, 99, 10, 7, '#f4ecdc'); P2.rect(x - 5, 99, 10, 1, '#5a3a2a'); P2.rect(x - 4, 100, 8, 1, '#3a2018'); P2.rect(x + (s2 > 0 ? 5 : -7), 100, 2, 4, '#f4ecdc'); P2.rect(x - 7, 106, 14, 1, '#d8ccb8'); }
+  const vp = f % 8; for (let i = 0; i < 7; i++) { const y = 96 - i * 3 - (vp % 2), q = i / 6; P2.p(mx - 24 + Math.round(Math.sin(i + vp) * 1.5 + q * 14), y, '#f4ecff'); P2.p(mx + 24 - Math.round(Math.sin(i + vp) * 1.5 + q * 14), y, '#f4ecff'); }
+  { const hx = mx, hy = 82 - (vp % 4); for (const [dx, dy] of [[-3, 0], [-2, -1], [-1, -1], [1, -1], [2, -1], [3, 0], [-3, 1], [3, 1], [-2, 2], [2, 2], [-1, 3], [1, 3], [0, 4], [0, 0]]) P2.p(hx + dx, hy + dy, '#ffc8dc'); }
+  P2.rect(mx - 9, 101, 18, 3, '#e8e0d0'); P2.ball(mx - 4, 101, 3, 2, ['#8a5a1a', '#c8882a', '#e8b040', '#f8d070', '#fff0b0']); P2.ball(mx + 4, 101, 3, 2, ['#8a5a1a', '#c8882a', '#e8b040', '#f8d070', '#fff0b0']); P2.p(mx - 7, 101, '#3a2010'); P2.p(mx - 6, 102, '#3a2010');
   // ---- a luz do momento: a chama das pontas sobe, faíscas e um halo morno entre os rostos ----
-  for (let i = 0; i < 12; i++) { const x = 92 + ((i * 17 + f * 5) % 40), y = 70 - ((i * 11 + f * 6) % 60); if (y < 4) continue; P.p(x, y, i % 3 ? '#ffd070' : '#fff0c0'); }
-  for (let r = 0; r < 3; r++) for (let a2 = 0; a2 < 20; a2++) { const an = a2 / 20 * Math.PI * 2 + f * 0.1; if ((a2 + r) % 3) continue; P.p(Math.round(99 + Math.cos(an) * (10 + r * 6)), Math.round(66 + Math.sin(an) * (8 + r * 5)), r === 2 ? '#ffe0a0' : '#fff4d8'); }
-  return BEIJO_C[k] = P.outline().canvas();
+  for (let i = 0; i < 12; i++) { const x = 92 + ((i * 17 + f * 5) % 40), y = 70 - ((i * 11 + f * 6) % 60); if (y < 4) continue; P2.p(x, y, i % 3 ? '#ffd070' : '#fff0c0'); }
+  for (let r = 0; r < 3; r++) for (let a2 = 0; a2 < 20; a2++) { const an = a2 / 20 * Math.PI * 2 + f * 0.1; if ((a2 + r) % 3) continue; P2.p(Math.round(99 + Math.cos(an) * (10 + r * 6)), Math.round(66 + Math.sin(an) * (8 + r * 5)), r === 2 ? '#ffe0a0' : '#fff4d8'); }
+  // ---- os dois, com a ARTE ORIGINAL (o rosto herdado, de frente; a Lume humana de lado, na ponta do pé) ----
+  const c = mk(W_, H_), x = c.getContext('2d'); x.imageSmoothingEnabled = false;
+  x.drawImage(FUNDO.canvas(), 0, 0);
+  const A = typeof rostoArte === 'function' ? rostoArte() : null, ele = A && A.body ? A.body[0] : null, ela = IMG.spf && IMG.spf.lumeh ? IMG.spf.lumeh.s[0] : null, s2 = 2;
+  // brilho morno atrás dos dois
+  x.globalCompositeOperation = 'lighter'; const gr = x.createRadialGradient(101, 52, 2, 101, 52, 46); gr.addColorStop(0, 'rgba(255,220,150,0.45)'); gr.addColorStop(1, 'rgba(255,200,120,0)'); x.fillStyle = gr; x.fillRect(40, 0, 130, 120); x.globalCompositeOperation = 'source-over';
+  if (ele) { const w = ele.width * s2, h = ele.height * s2; x.drawImage(ele, 98 - w + 8, 124 - h, w, h); }
+  if (ela) { const w = ela.width * s2, h = ela.height * s2, bob = [0, 1, 1, 0][f % 4]; x.drawImage(ela, 86, 120 - bob - h, w, h); }
+  x.drawImage(P2.canvas(), 0, 0);
+  // um coraçãozinho de luz e faíscas subindo, no ponto onde os rostos se encontram
+  const hx = 88, hy = 30 - (f % 8);
+  x.fillStyle = '#ffd8e8'; for (const [dx, dy] of [[-2, 0], [-1, -1], [1, -1], [2, 0], [-2, 1], [2, 1], [-1, 2], [1, 2], [0, 3], [0, 0], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1], [0, 2]]) x.fillRect(hx + dx, hy + dy, 1, 1);
+  for (let i = 0; i < 10; i++) { const px = 84 + ((i * 17 + f * 5) % 36), py = 60 - ((i * 11 + f * 6) % 56); if (py < 4) continue; x.fillStyle = i % 3 ? '#ffd070' : '#fff0c0'; x.fillRect(px, py, 1, 1); }
+  return BEIJO_C[k] = c;
 }
 // a moldura por cima do mapa (como o close-up da Rita): aparece, fica, some
 function desenhaQuadro10() {
