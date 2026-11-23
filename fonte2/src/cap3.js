@@ -69,7 +69,7 @@ const arvC = v => memo(() => arvoreArt(v));
     ],
     ents: [
       morador('jorge0', ...ES.jorge, { h: 48, spr: (t, dir) => { const S = IMG.spf.jorge, F = IMG.sp.jorge; const v = dir === 'up' ? S.b : dir === 'down' ? F : S.s, fr = v[Math.floor(t / 26) % v.length]; return dir === 'right' ? flipC(fr) : fr; },
-        rotina: rot([6, 11, 'remendar', 600, 'up'], [12, 11, 'olhar', 300, 'left']), talk: falaJorge3, gone: () => !!G.flags.c3Rainha }),
+        rotina: rot([6, 9, 'remendar', 600, 'up'], [12, 11, 'olhar', 300, 'left']), talk: falaJorge3, gone: () => !!G.flags.c3Rainha }),
       marcoEnt(...ES.marco),
       ...ES.postes.map(([x, y], i) => ({ t: 'sign', x, y, h: 96, talk: () => acenderPoste(i) })),
       inimigo('m1', 'mariposa', ...ES.mar1, ['mariposa'], { fly: true, spr: (t, dir) => mariposaArt(Math.floor(t / 5) % 6, false, false), h: 28, bg: bgEstrada }),

@@ -4092,13 +4092,13 @@ function drawWorld2() {
   // tudo que tem pé, em ordem de profundidade
   const list = [];
   for (const pr of m.props || []) list.push({ y: pr.by ?? (pr.y * TS), draw: () => bx.drawImage(pr.img(), Math.round(pr.x * TS - ox + (pr.dx || 0)), Math.round(pr.y * TS - oy - pr.img().height + (pr.dy || 0))) });
-  for (const e of W2.ents) { const fr = e.spr ? e.spr(W2.t + e.t0, e.dir, e) : null; if (fr) list.push({ y: e.py + 15, draw: () => { drawFeet(fr, e.px - ox, e.py - oy, e); const k = e.acting || (e.mv && e.leva ? (e.leva === true ? 'carregar' : e.leva) : null); if (k && ACT2[k]) ACT2[k](e, Math.round(e.px - ox), Math.round(e.py - oy), Math.floor(W2.t + e.t0), fr); } }); }
+  for (const e of W2.ents) { const fr = e.spr ? e.spr(tNpc(e), e.dir, e) : null; if (fr) list.push({ y: e.py + 15, draw: () => { drawFeet(fr, e.px - ox, e.py - oy, e); const k = e.acting || (e.mv && e.leva ? (e.leva === true ? 'carregar' : e.leva) : null); if (k && ACT2[k]) ACT2[k](e, Math.round(e.px - ox), Math.round(e.py - oy), Math.floor(W2.t + e.t0), fr); } }); }
   for (const f of W2.fol) { const fr = folSprite(f); if (fr) list.push({ y: f.py + 15, draw: () => drawFeet(fr, f.px - ox, f.py - oy, f) }); }
   list.push({ y: W2.py + 15.5, draw: () => drawPlayer(ox, oy) });
   list.sort((a, b) => a.y - b.y).forEach(d => d.draw());
   // balões de aviso dos caçadores e cone
   for (const e of W2.ents) if (e.t === 'hunter') drawHunterUI(e, ox, oy);
-  for (const e of W2.ents) if (e.emote && e.emote.t-- > 0) { const fr = e.spr ? e.spr(W2.t + e.t0, e.dir, e) : null; balao(e.px - ox + 8, e.py - oy + 15 - (fr ? fr.height : (e.h || 48)) - 3 + (e.bob || 0), e.emote.s, { pri: 1, ent: e }); }
+  for (const e of W2.ents) if (e.emote && e.emote.t-- > 0) { const fr = e.spr ? e.spr(tNpc(e), e.dir, e) : null; balao(e.px - ox + 8, e.py - oy + 15 - (fr ? fr.height : (e.h || 48)) - 3 + (e.bob || 0), e.emote.s, { pri: 1, ent: e }); }
   if (m.overlay) m.overlay(ox, oy);
   if (m.dark) drawDark(ox, oy);
   if (typeof desenhaCeu === 'function') desenhaCeu(m, ox, oy);
@@ -4174,6 +4174,8 @@ function drawDark(ox, oy) {
   bx.drawImage(DARKC, 0, 0);
 }
 
+// morador parado de lado ou de costas não fica "andando no lugar": o quadro de caminhada só anima quando ele se mexe
+function tNpc(e) { return (e.t === 'npc' && !e.mv && e.dir !== 'down') ? 0 : W2.t + e.t0; }
 // ---------- ROTINAS DOS MORADORES: andam até um ponto e FAZEM alguma coisa lá ----------
 // e.rotina = [{ at: [x, y], act: 'varrer', t: quadros, dir, leva: true (carrega caixa no caminho até aqui) }, ...]
 function updateRotina(e) {
@@ -7889,7 +7891,7 @@ const arvC = v => memo(() => arvoreArt(v));
     ],
     ents: [
       morador('jorge0', ...ES.jorge, { h: 48, spr: (t, dir) => { const S = IMG.spf.jorge, F = IMG.sp.jorge; const v = dir === 'up' ? S.b : dir === 'down' ? F : S.s, fr = v[Math.floor(t / 26) % v.length]; return dir === 'right' ? flipC(fr) : fr; },
-        rotina: rot([6, 11, 'remendar', 600, 'up'], [12, 11, 'olhar', 300, 'left']), talk: falaJorge3, gone: () => !!G.flags.c3Rainha }),
+        rotina: rot([6, 9, 'remendar', 600, 'up'], [12, 11, 'olhar', 300, 'left']), talk: falaJorge3, gone: () => !!G.flags.c3Rainha }),
       marcoEnt(...ES.marco),
       ...ES.postes.map(([x, y], i) => ({ t: 'sign', x, y, h: 96, talk: () => acenderPoste(i) })),
       inimigo('m1', 'mariposa', ...ES.mar1, ['mariposa'], { fly: true, spr: (t, dir) => mariposaArt(Math.floor(t / 5) % 6, false, false), h: 28, bg: bgEstrada }),
