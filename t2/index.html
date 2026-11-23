@@ -634,6 +634,50 @@
  - ROBÔ (Desafio, 0,6, farol e escriba, depois do ajuste): comuns 10-80% (a dupla de cães com guarda é a mais dura);
    Broca ~20-45%; Guarda-Musgo ~15-65%; Extrator ~0-40% (o Escriba no limite, sem frascos sobrando).
 =====================================================================
+ CAPÍTULO 8 — O INVERNO ESCURO (implementado; mapas8.js, arte_cap8.js, inverno8.js, inimigos8.js, evolucaoLume.js, cap8.js,
+ cap8b.js, cap8_integra.js; mapas em maps/cap8maps.py, salões de gelo verificados por scratchpad/ice/gen2.py)
+ - ESCALADA (segredo; só jogo e bíblia): o Vesper "cobra" a troca do Jorge apagando Auren bairro por bairro, 7 noites de
+   inverno. A cidade se acende à mão (braseiros, velas, a Lume). No fim, vendo a cidade acesa sem ele, o Vesper escreve no
+   caderno: "Eles não precisam do Farol." ...Então está na hora de acendê-lo. Gancho do Cap. 9 (o Morro). A fita
+   cor-de-rosa da gaiola da Friagem é a 3ª coisa dele na parede da base (página riscada, bilhete, fita: LÍVIA).
+ - PARTE 1 (Auren de noite): ESCURIDÃO POR BAIRRO (auren, largo, festival, ruaPavios; dark 0,8 -> 0,5 quando aceso),
+   CHAMA DA LUME (G.chama, 100; +20 de máx. com as velas de Velhágua; barra no HUD; a luz em volta do grupo cresce com
+   ela), BRASEIROS (só de noite; custam 25 de chama, 15 com o lampião da Ilda, ou 1 vela G.velas), FRIAGENS no escuro
+   (somem de dia ou com o bairro aceso), ESCOLTAS (medo sobe no escuro +0,24, desce na luz; em 100 a pessoa foge; chegou =
+   +15 de chama): Nair e Bento -> bueiro (base); Nonato, Cida e Pipo -> hospital; Zefa, Lino e Osvaldo -> Festival.
+   Na Vila, os Pavios devolvidos acendem braseiros sozinhos. Pontos de calor: lareira do abrigo (hospital), a Dalva.
+   Cameo do Jorge-Pavio na Vila (c8Jorge). NOITE DA MÚSICA no palco: ritmo da Lume, VERSO NOVO (técnica), luta contra o
+   CAPITÃO DA GUARDA APAGADORA (mini-chefe) e a fonte do Largo racha (c8P1).
+ - PARTE 2 (AS CISTERNAS): salão dos canais (braseiros), Seu Tomé procura a NINA; SALÃO DE GELO 1 (escorrega até bater;
+   braseiro aceso derrete o gelo em volta e vira chão molhado); câmara da Nina; ESCOLTA pelo corredor escuro (alavanca da
+   grade); o pai abre a COMPORTA; SALÃO DE GELO 2; descida; O CORAÇÃO FRIO: A FRIAGEM (chefe). Cena: a fita na gaiola, a
+   Lume cai sem chama, o Largo cheio de gente com velas, EVOLUÇÃO DA LUME, amanhecer, o caderno na torre, base, cartão.
+ - EVOLUÇÃO DA LUME (evolucaoLume.js, pedido do usuário): a única evolução que NÃO cobra preço (foi dada). LAREIRA (apoio:
+   +24 PV, +4 RES, +2 MAG; Lareira Viva cura 25%, limpa e AQUECIDO 3; passiva cura 3% do grupo na vez dela) / ALVORADA
+   (ofensiva: +6 MAG, +8 PV; Raio da Alvorada x1,35 nas criaturas do escuro e do frio; luz +20%). Visual: lustre novo de
+   noite (lustreEvoArt), adereço de dia (aderecoLumeArt). G.evoLume. Próximas: na T3, uma 3ª para ela também.
+ - INIMIGOS: Friagem 640/42, Apagador 660/42 (apaga bônus), Lobo de Fuligem 600/44, Geada Viva 520/41 (congela = esquece a
+   vez). CAPITÃO 4800/45 (chama apagadores; GRANDE APAGÃO zera a Tensão; fase 2 bate 2 vezes). A FRIAGEM 8000/47 (fases em
+   66% e 33%; a 3ª mira a Lume; fraca a fogo, luz e mordida). Arte de chefe caprichada: capitaoArt (poses atk/carga) e
+   friagemBossArt 150x148 (capuz, rostos congelados no manto, gaiola de lanterna com a fita).
+ - VOLTAS COM A VIAGEM RÁPIDA: velas da Igreja do Sino (Velhágua: +10 velas, chama máx. +20); lampião da Dona Ilda
+   (Candeia: braseiro custa 15); velas de âmbar da Dama (Cidade Alta: +6 velas); a Iolanda vende velas de dia (4 cobres).
+ - A MOÇA DA BARCA VOLTA (pedido do usuário: "como a Ciel do Rimuru, para o baú"): ela fugiu no fim da T1 e não tinha
+   aparecido na T2. SEMENTE NO CAP. 8: o FIO DE ÂMBAR nas Cisternas (c8Fio): o Catálogo dá erro de leitura, uma voz de
+   dentro do baú diz "...trinta e um?" (WHO eco8, '???', âmbar), e o Catálogo corrige "ninguém falou". No fim do capítulo
+   (sempre) o Catálogo admite "uma linha no meu registro que eu não escrevi" e diz "não sei" pela primeira vez.
+   ARCO PLANEJADO: Cap. 9: ela fala às vezes pelo Catálogo (âmbar, sem colchetes, não consegue dizer o nome); o AVALIAR
+   passa a mostrar o PRÓXIMO GOLPE do inimigo (ela lê intenções); uma volta com viagem rápida atrás de rastros dela
+   (Velhágua / a boca da masmorra fechada). Cap. 10: no Farol, ela e o Catálogo se FUNDEM e o baú dá um NOME a ela (o
+   jogador escolhe; tema do nome da Ofélia/Clara): vira companheira com personalidade e passiva própria. SEGREDO (nunca no
+   chat): ela é a metade de Ada que sente culpa (ver SEGREDO DA TRILOGIA na T1); na T3 ela encara a outra metade. Ela
+   nunca diz o nome de Ada; sabe que "ela vai chamar de novo".
+ - FLAGS: c8Init, c8B_<bairro>, c8VilaAjuda, c8Jorge, c8Verso, c8P1, c8Cist, c8Tome, c8NinaAchou, c8Grade, c8Nina,
+   c8Comporta, c8Coracao, c8Friagem, c8Fio, c8Fim; c8VelasVelhagua, c8Lampiao, c8Hortensia; G.chama, G.velas, G.evoLume.
+ - ROBÔ (Desafio, 0,6): comuns 10-85% (o par de lobos é o mais duro; o Lobo ficou 0,55 x2 depois do ajuste); Capitão
+   (5600 -> 4800, golpes menores) deixa ~20-40%; Friagem (10200 -> 8000, fase 3 mira a Lume 40%) deixa ~5-30% no Farol e
+   25-85% no Escriba, os dois na 1ª tentativa. Antes do ajuste o Escriba perdia 7-24 vezes no Capitão.
+=====================================================================
 -->
 <style>
 :root{
@@ -15973,7 +16017,6 @@ async function fimCap7() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 7', 'A Mina de Origem', '', 'Alguém tem que ficar pra achar.']);
   V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(20);
-  await say('* (O Capítulo 8 está a caminho. Os Marcos levam aonde vocês já foram: ainda há o que devolver pelo caminho.)');
 }
 
 // o veio de âmbar ilumina o escuro (cada tile 'a' é uma luz pequena)
@@ -16097,6 +16140,1045 @@ DIARIO.push(
     desc: 'O primeiro chefe que você venceu deixou uma semente. Ela quer terra boa.', passos: [['Entregar ao Seu Benedito (Cidade Alta, de dia)', () => !!fl('c7Plantou')], ['Voltar no dia seguinte', () => fl('c7Flor')]] },
   { tipo: 'side', cap: 'Mina de Origem', quem: 'a Ofélia', tit: 'A página seca', vis: () => fl('c7Pagina'), feita: () => fl('c7PaginaFeita'), recompensa: '+1 página no Grimório',
     desc: 'Uma página seca numa biblioteca afogada, na letra de uma bibliotecária conhecida.', passos: [['Levar à Dona Iolanda, em Auren', () => fl('c7PaginaFeita')]] }
+);
+
+// gerado por maps/cap8maps.py (salões de gelo verificados)
+const ROWS8 = {"cisternas": ["RRRRRRRRRRRRRRRRRRRRRRRRRRRrrRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrr~~~~~~rr~~~~~~~~~~~~~~~rr~~~~~~~~~~~~~~~rr~~~~~~rrRR", "RRrr~~~~~~rr~~~~~~~~~~~~~~~rr~~~~~~~~~~~~~~~rr~~~~~~rrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrr~~~~rr~~~~~~~~~~~~~~~rr~~~~~~~~~~~~~~~rr~~~~rrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrRRRRRRRRRrRRRRRRRRRRRRRRRRRRRRRRRRRRrRRRRRRRRRRRRRRR", "RRrrRRRRRRRRRrRRRRRRRRRRRRRRRRRRRRRRRRRRrRRRRRRRRRRRRRRR", "RRrrRRRiiiiiiriiiiiiRRRRRRRRRRRRRiiiiiiiriiiiiiiRRRRRRRR", "RRrrRRRiiiiRiiiRiiiiRRRRRRRRRRRRRiiiiiiRiiiiiiRiRRRRRRRR", "RRrrRRRiiiiiiiiiiiiRRRRRRRRRRRRRRRiiiiiiiiiiiRiiRRRRRRRR", "RRrrRRRiiiiiiiiiiiiiRRRRRRRRRRRRRiRiiiRiRiiiiiiiRRRRRRRR", "RRrrRRRiRiiiiiiiiiiiRRRRRRRRRRRRRiiiiiiiiiiiiiiiRRRRRRRR", "RRrrRRRiiiiRRiiiiiiiRRRRRRRRRRRRRiRiiiiiiiiiiiiiRRRRRRRR", "RRrrRRRiiiiiiRiiiiiiRRRRRRRRRRRRRiiiRiiiiRiiiiiiRRRRRRRR", "RRrrRRRiiiiiiiiiiiiiRRRRRRRRRRRRRiiiiiiiiiiiiiiiRRRRRRRR", "RRrrRRRiiiiRiiiiiiiiRRRRRRRRRRRRRiiiiiiiiiiiRiiiRRRRRRRR", "RRrrRRRiiiiiiiiiiRiiRRRRRRRRRRRRRRiiiiiiiiiiiiiiRRRRRRRR", "RRrrRRRRRRRRRrRRRRRRRRRRRRRRRRRRRiiiiiiiiiiiiiiiRRRRRRRR", "RRrrRRRRRRRRRrRRRRRRRRRRRRRRRRRRRRRRRRRRrRRRRRRRRRRRRRRR", "RRrrrrrrrrrrrrrrrrrrrrrrrRRRRRRRRRRRRRRRrRRRRRRRRRRRRRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrRRRRRrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrRRRRRrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrRRRRRrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrRRRRRrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrRRRRRrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrRRRRRrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrRRRRRrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"], "friagem8": ["RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRiiirrrrrrrrrrrrrrrrrrrriiiRRR", "RRRiiirrrrrrrrrrrrrrrrrrrriiiRRR", "RRRiiirrrrrrrrrrrrrrrrrrrriiiRRR", "RRRiiiiiiiiiiiiiiiiiiiiiiiiiiRRR", "RRRiiiiiiiiiiiiiiiiiiiiiiiiiiRRR", "RRRiiiiiiiiiiiiiiiiiiiiiiiiiiRRR", "RRRiiiiiiiiiiiiiiiiiiiiiiiiiiRRR", "RRRiiiiiiiiiiiiiiiiiiiiiiiiiiRRR", "RRRiiiiiiiiiiiiiiiiiiiiiiiiiiRRR", "RRRiiiiiiiiiiiiiiiiiiiiiiiiiiRRR", "RRRiiiiiiiiiiiiiiiiiiiiiiiiiiRRR", "RRRiiiiiiiiiiiiiiiiiiiiiiiiiiRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRrrrrrrrrrrrrrrrrrrrrrrrrrrRRR", "RRRRRRRRRRRRRRRrrRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRrrRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRrrRRRRRRRRRRRRRRR"]};
+const POS8 = {"cisternas": {"entra": [27, 1], "saida": [[27, 0], [28, 0]], "gelo1": {"x": 6, "y": 11, "braz": {"B0": [13, 20], "B1": [16, 17]}, "w": 15, "h": 12}, "gelo2": {"x": 32, "y": 11, "braz": {"B0": [34, 16], "B1": [40, 20], "B2": [43, 14]}, "w": 17, "h": 13}, "comporta": [[40, 10]], "pai": [36, 8], "nina": [20, 28], "escuroBraz": [[3, 22], [2, 17], [3, 12], [8, 27]], "canalBraz": [[8, 1], [20, 8], [34, 1], [48, 8]], "descida": [[40, 37], [41, 37]], "grade": [[2, 10], [3, 10]], "alavancaGrade": [5, 25], "foes": [[16, 5], [40, 5], [12, 29], [44, 29]], "marco": [30, 2], "bau": [[50, 30], [22, 25]], "salao": [[2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1], [10, 1], [11, 1], [12, 1], [13, 1], [14, 1], [15, 1], [16, 1], [17, 1], [18, 1], [19, 1], [20, 1], [21, 1], [22, 1], [23, 1], [24, 1], [25, 1], [26, 1], [27, 1], [28, 1], [29, 1], [30, 1], [31, 1], [32, 1], [33, 1], [34, 1], [35, 1], [36, 1], [37, 1], [38, 1], [39, 1], [40, 1], [41, 1], [42, 1], [43, 1], [44, 1], [45, 1], [46, 1], [47, 1], [48, 1], [49, 1], [50, 1], [51, 1], [52, 1], [53, 1]]}, "friagem8": {"entra": [15, 22], "volta": [[15, 23], [16, 23]], "frente": [[8, 16], [9, 16], [10, 16], [11, 16], [12, 16], [13, 16], [14, 16], [15, 16], [16, 16], [17, 16], [18, 16], [19, 16], [20, 16], [21, 16], [22, 16], [23, 16]], "trono": [16, 6], "lume": [14, 18]}};
+
+// ================= ARTE DO CAP. 8 — O INVERNO ESCURO =================
+// Gelo, braseiros (apagado/aceso, chama animada), velas, neve caindo, as Cisternas e o Coração Frio; inimigos (Friagem,
+// Apagador, Lobo de Fuligem, Geada Viva); o mini-chefe CAPITÃO APAGADOR e a chefe A FRIAGEM (artes grandes, com pose de
+// fase, de golpe e de golpe preparado), e as formas evoluídas da LUME (Lareira e Alvorada: lustre de noite e adereço
+// de dia). Pedido do usuário: "caprichar na arte dos boss, todos merecem atenção especial".
+const KEY8 = Object.assign({}, KEY7, { 'i': { t: 'gelo8' } });
+{ const _ta9 = tileArt; tileArt = function (k, v = 0, f = 0) {
+  if (k !== 'gelo8' && k !== 'molhado8') return _ta9(k, v, f);
+  const key = k + '_' + v + '_' + f; if (TILE2[key]) return TILE2[key];
+  const P = new Pix(16, 16), h = (x, y, s = 5) => hash(x + v * 13, y + v * 29, s) % 100;
+  if (k === 'gelo8') { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = h(x >> 1, y >> 1, 7); P.p(x, y, r < 12 ? '#9ad0e8' : r < 60 ? '#b8e4f4' : '#c8ecf8'); } P.line(2 + v % 5, 3, 9 + v % 4, 11, '#e8fbff'); P.p(12, 4, '#ffffff'); if (v % 3 === 0) P.line(10, 12, 14, 9, '#8ac0d8'); }
+  else { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = h(x, y, 3); P.p(x, y, r < 20 ? '#3a4a58' : r < 70 ? '#4a5866' : '#566470'); } P.rect(3 + v % 6, 6, 5, 3, '#6a8aa0'); P.p(4 + v % 6, 6, '#a8d0e8'); }
+  return TILE2[key] = P.canvas();
+}; }
+const OBJ8 = {};
+const o8 = (k, f) => OBJ8[k] || (OBJ8[k] = f());
+// braseiro: tripé de ferro com cuba; aceso, a chama em 4 quadros
+function braseiroArt(aceso, f = 0) { return o8('br' + (aceso ? 1 : 0) + (aceso ? f % 4 : 0), () => {
+  const P = new Pix(22, 34), Fe = ramp('#4a4450');
+  P.line(4, 33, 9, 18, Fe[1], 2); P.line(18, 33, 13, 18, Fe[1], 2); P.line(11, 33, 11, 20, Fe[2], 1);
+  P.ball(11, 17, 9, 4, Fe); P.rect(2, 15, 19, 2, Fe[3]);
+  if (aceso) {
+    const fh = [10, 12, 9, 11][f % 4], sw = [0, 1, -1, 0][f % 4];
+    P.rect(4, 13, 14, 3, '#c83a1a');
+    P.poly([[4, 15], [11 + sw, 15 - fh - 4], [18, 15]], '#e86a20'); P.poly([[7, 15], [11 + sw, 15 - fh], [15, 15]], '#ffb040'); P.poly([[9, 15], [11 + sw, 15 - fh + 4], [13, 15]], '#fff0a0');
+    for (let i = 0; i < 3; i++) P.p(6 + i * 5 + (f + i) % 2, 15 - fh - 6 - (f + i) % 3, '#ffd070');
+  } else { P.rect(5, 13, 12, 3, '#2a2228'); P.p(8, 13, '#5a5060'); P.p(13, 14, '#5a5060'); for (let i = 0; i < 3; i++) P.p(7 + i * 4, 10 - i, '#8a8a96'); }
+  return P.outline().canvas(); }); }
+function velaChaoArt(f) { return o8('vc' + (f % 3), () => { const P = new Pix(8, 14); P.rect(2, 6, 4, 8, '#f2ecdc'); P.rect(2, 6, 1, 8, '#d8d0c0'); P.p(4, 5, '#2a2228'); P.poly([[2, 5], [4, [0, 1, 2][f % 3]], [6, 5]], '#ffb040'); P.p(4, 3, '#fff0a0'); return P.outline().canvas(); }); }
+function gradeArt(aberta) { return o8('gr' + (aberta ? 1 : 0), () => { const P = new Pix(32, 40); if (aberta) { for (let x = 1; x < 32; x += 5) P.rect(x, 0, 2, 6, '#4a4450'); P.rect(0, 0, 32, 2, '#6a6470'); } else { for (let x = 1; x < 32; x += 5) P.rect(x, 0, 2, 40, '#4a4450'); P.rect(0, 0, 32, 3, '#6a6470'); P.rect(0, 18, 32, 2, '#6a6470'); P.rect(14, 22, 4, 6, '#c89a30'); } return P.outline().canvas(); }); }
+function comportaArt(aberta) { return o8('cp' + (aberta ? 1 : 0), () => { const P = new Pix(20, 40), Fe = ramp('#5a6a7a'); if (aberta) { P.rect(0, 0, 20, 6, Fe[1]); } else { P.rect(0, 0, 20, 40, Fe[1]); for (let y = 2; y < 40; y += 6) P.rect(0, y, 20, 1, Fe[0]); P.ball(10, 20, 5, 5, ramp('#8a6a30')); for (let x = 2; x < 20; x += 4) P.p(x, 36, '#e8fbff'); } return P.outline().canvas(); }); }
+function caroçoGeloArt() { return o8('cg', () => { const P = new Pix(18, 22); P.poly([[2, 21], [5, 4], [9, 0], [13, 6], [16, 21]], (x, y) => (x + y) % 5 === 0 ? '#e8fbff' : y < 10 ? '#b8e4f4' : '#8ac0d8'); return P.outline().canvas(); }); }
+// neve caindo sobre o mundo (Cap. 8)
+function neveFx(ox, oy, t, forte) {
+  bx.fillStyle = '#ffffff';
+  for (let i = 0; i < (forte ? 90 : 45); i++) { const sx = ((i * 97 + t * (0.3 + (i % 3) * 0.15) + Math.sin(t / 40 + i) * 12) % (W + 20)) - 10, sy = ((i * 61 + t * (0.6 + (i % 4) * 0.2)) % (H + 20)) - 10; bx.globalAlpha = 0.45 + (i % 3) * 0.15; bx.fillRect(Math.round(sx), Math.round(sy), i % 5 === 0 ? 2 : 1, i % 5 === 0 ? 2 : 1); }
+  bx.globalAlpha = 1;
+}
+// ---------- fundos ----------
+const BG8 = {};
+function bgAurenEscura() { if (BG8.a) return BG8.a; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 96 ? (y < 30 ? '#06080e' : '#0c1018') : ((x >> 3) + (y >> 3)) % 2 ? '#2a2e38' : '#262a34');
+  for (let k = 0; k < 7; k++) { const x0 = k * 36 - 6, hh = 40 + (k * 13) % 22; P.rect(x0, 96 - hh, 32, hh, '#141820'); P.poly([[x0 - 2, 96 - hh], [x0 + 16, 96 - hh - 12], [x0 + 34, 96 - hh]], '#10141c'); for (let j = 0; j < 3; j++) P.rect(x0 + 5 + j * 9, 96 - hh + 10, 5, 6, (k + j) % 4 === 0 ? '#ffb040' : '#1a1e28'); }
+  for (let i = 0; i < 80; i++) P.p((i * 53) % 240, (i * 29) % 140, '#e8f0ff');
+  return BG8.a = P.canvas(); }
+function bgCisternas() { if (BG8.c) return BG8.c; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 96 ? ((hash(x >> 3, y >> 3, 4) % 5 === 0) ? '#1a2430' : '#141c26') : y < 110 ? '#2a4a5a' : ((x + y) % 9 < 4 ? '#8ac0d8' : '#b8e4f4'));
+  for (const x of [20, 80, 140, 200]) { P.rect(x - 8, 0, 16, 96, '#1e2a36'); for (let y = 0; y < 96; y += 12) P.rect(x - 8, y, 16, 1, '#141c26'); P.poly([[x - 8, 70], [x - 4, 96], [x, 78], [x + 4, 96], [x + 8, 70]], '#b8e4f4'); }
+  return BG8.c = P.canvas(); }
+function bgCoracaoFrio() { if (BG8.f) return BG8.f; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) { const d = Math.hypot(x - 120, (y - 50) * 1.4); P.p(x, y, y >= 96 ? ((x + y) % 7 < 3 ? '#c8ecf8' : '#a8d8ec') : d < 50 ? '#0a1420' : d < 90 ? '#101c2a' : '#18283a'); }
+  for (let i = 0; i < 18; i++) { const x = i * 14 + 4, h = 18 + (i * 7) % 26; P.poly([[x, 0], [x + 6, 0], [x + 3, h]], i % 2 ? '#b8e4f4' : '#8ac0d8'); }
+  for (let i = 0; i < 40; i++) P.p((i * 71) % 240, 20 + (i * 23) % 70, '#e8fbff');
+  return BG8.f = P.canvas(); }
+// ---------- inimigos ----------
+const INI8 = {};
+function friagemArt(f) { const k = 'fg' + f; if (INI8[k]) return INI8[k]; const P = new Pix(34, 44), b = f % 2;
+  P.poly([[17, 2 + b], [30, 20], [28, 42], [22, 36], [17, 43], [12, 36], [6, 42], [4, 20]], (x, y) => (x + y * 2) % 7 === 0 ? '#3a4a6a' : y < 14 ? '#2a3450' : '#1e2640');
+  P.rect(11, 13 + b, 4, 3, '#bff0ff'); P.rect(19, 13 + b, 4, 3, '#bff0ff'); P.p(12, 14 + b, '#ffffff'); P.p(20, 14 + b, '#ffffff');
+  for (let i = 0; i < 5; i++) P.p(8 + i * 4, 24 + (i + f) % 3, '#e8fbff');
+  return INI8[k] = P.outline().canvas(); }
+function apagadorArt(f, armando) { const k = 'ap' + f + (armando ? 1 : 0); if (INI8[k]) return INI8[k]; const P = new Pix(40, 58), b = f % 2, Az = ramp('#2a3a6a');
+  P.rect(13, 42, 5, 16, '#1a1a2a'); P.rect(21, 42, 5, 16, '#1a1a2a');
+  P.cyl(11, 20 + b, 18, 24, Az); P.rect(11, 32 + b, 18, 2, '#c89a30');
+  P.ball(20, 12 + b, 6, 6, ramp('#c8906a')); P.rect(13, 3 + b, 14, 6, '#1a1a2a'); P.rect(12, 8 + b, 16, 2, '#2a2a3a');
+  P.rect(16, 12 + b, 2, 2, '#1a1418'); P.rect(22, 12 + b, 2, 2, '#1a1418');
+  // o apagador de velas numa vara comprida
+  const ty = armando ? 0 : 8; P.line(30, 50, 34, ty + 6, '#5a3a20', 2); P.poly([[29, ty + 6], [39, ty + 6], [34, ty - 2]], '#6a6a7a'); P.rect(29, ty + 6, 11, 2, '#8a8a96');
+  return INI8[k] = P.outline().canvas(); }
+function loboFuligemArt(f) { const k = 'lf' + f; if (INI8[k]) return INI8[k]; const P = new Pix(50, 36), b = f % 2;
+  P.cyl(8, 12 + b, 30, 14, ['#0a0a10', '#1a1a24', '#2a2a36', '#3a3a48', '#4a4a5a'], true);
+  P.ball(41, 12 + b, 8, 7, ['#0a0a10', '#1a1a24', '#2a2a36', '#3a3a48', '#4a4a5a']); P.poly([[44, 14 + b], [50, 17 + b], [44, 19 + b]], '#1a1a24');
+  P.poly([[37, 6 + b], [39, 0 + b], [41, 6 + b]], '#2a2a36'); P.poly([[42, 6 + b], [45, 0 + b], [46, 7 + b]], '#2a2a36');
+  P.rect(43, 10 + b, 2, 2, '#ff6a3a'); P.p(44, 10 + b, '#ffd070');
+  for (const x of [11, 18, 30, 36]) P.rect(x, 24, 3, 11 - ((x / 3 + f) % 2), '#1a1a24');
+  for (let i = 0; i < 6; i++) P.p(4 - (i % 3) * 2 + b, 10 + i * 2, i % 2 ? '#3a3a48' : '#5a5a6a');                 // a fumaça do rabo
+  return INI8[k] = P.outline().canvas(); }
+function geadaVivaArt(f) { const k = 'gv' + f; if (INI8[k]) return INI8[k]; const P = new Pix(36, 46), b = f % 2;
+  for (let a = 0; a < 6; a++) { const an = a / 6 * Math.PI * 2 + f * 0.15, x1 = 18 + Math.cos(an) * 15, y1 = 22 + Math.sin(an) * 15; P.line(18, 22 + b, x1, y1 + b, '#b8e4f4', 2); P.line(x1, y1 + b, x1 + Math.cos(an + 0.8) * 4, y1 + b + Math.sin(an + 0.8) * 4, '#e8fbff'); P.line(x1, y1 + b, x1 + Math.cos(an - 0.8) * 4, y1 + b + Math.sin(an - 0.8) * 4, '#e8fbff'); }
+  P.ball(18, 22 + b, 7, 7, ['#4a7a9a', '#8ac0d8', '#b8e4f4', '#e8fbff', '#ffffff']); P.rect(15, 20 + b, 2, 2, '#1a2a3a'); P.rect(20, 20 + b, 2, 2, '#1a2a3a');
+  return INI8[k] = P.outline().canvas(); }
+// O CAPITÃO APAGADOR: capitão da Guarda dos Apagões. Capacete-gaiola de lanterna (vazia), sobretudo de fuligem com
+// galões, o GRANDE APAGADOR (um cone de latão do tamanho de um sino numa haste de lança), um cinto de pavios
+// arrancados como troféus. Poses: idle (2), 'atk' (a haste baixa), 'carga' (o cone erguido sobre a cabeça, sugando a
+// luz), fase 2 (o sobretudo pegou fogo nas pontas; a gaiola do capacete acende sozinha: ele odeia isso).
+function capitaoArt(f, pose, fase) { const k = 'cap' + f + pose + fase; if (INI8[k]) return INI8[k];
+  const W_ = 84, H_ = 112, P = new Pix(W_, H_), b = f % 2, cx = 38, Sb = ramp('#2a2430'), Az = ramp('#2a3a6a'), Lt = ramp('#c89a30'), Pl = ramp('#b8805a');
+  const atk = pose === 'atk', carga = pose === 'carga';
+  // pernas e botas
+  for (const [x0, dx] of [[cx - 12, 0], [cx + 3, 0]]) { P.cyl(x0, 70, 10, 30, ['#0a0a12', '#1a1a24', '#24242e', '#30303c', '#3a3a48']); P.rect(x0 - 2, 98, 14, 10, '#1a1210'); P.rect(x0 - 2, 98, 14, 2, '#3a2a20'); P.rect(x0 + 2, 104, 2, 4, Lt[2]); }
+  // sobretudo de fuligem, comprido, aberto em baixo
+  P.poly([[cx - 18, 34 + b], [cx + 18, 34 + b], [cx + 26, 96], [cx + 8, 90], [cx, 98], [cx - 8, 90], [cx - 26, 96]], (x, y) => P.tone(Sb, 0.6 - (x - cx + 26) / 90 + ((x * 3 + y) % 11 === 0 ? 0.25 : 0) - (y > 88 ? 0.2 : 0), x, y));
+  if (fase >= 2) for (let i = 0; i < 9; i++) { const x = cx - 24 + i * 6, y = 92 + (i % 2) * 3; P.poly([[x - 2, y], [x + 1, y - 6 - (f + i) % 3], [x + 3, y]], (i % 2) ? '#ff8a30' : '#ffd070'); }
+  // casaca azul por dentro, galões e botões
+  P.poly([[cx - 8, 36 + b], [cx + 8, 36 + b], [cx + 6, 70 + b], [cx - 6, 70 + b]], (x, y) => P.tone(Az, 0.7 - (x - cx + 8) / 30, x, y));
+  for (let i = 0; i < 5; i++) { P.p(cx - 3, 40 + i * 6 + b, Lt[4]); P.p(cx + 3, 40 + i * 6 + b, Lt[4]); }
+  for (const s of [-1, 1]) { P.rect(cx + s * 17 - 6, 33 + b, 12, 4, Lt[3]); for (let i = 0; i < 5; i++) P.p(cx + s * 17 - 5 + i * 2, 37 + b, Lt[2]); }
+  // cinto de pavios arrancados (troféus)
+  P.rect(cx - 16, 62 + b, 32, 4, '#3a2418'); P.rect(cx - 2, 62 + b, 4, 4, Lt[3]);
+  for (let i = 0; i < 7; i++) { const x = cx - 14 + i * 4; P.rect(x, 66 + b, 2, 8 + (i % 3) * 2, '#f2ecdc'); P.p(x, 66 + b, '#2a2228'); }
+  // braço esquerdo com a lanterna-gaiola presa ao punho (vazia)
+  P.line(cx - 17, 38 + b, cx - 24, 58 + b, Sb[2], 6); P.ball(cx - 25, 60 + b, 4, 4, Pl);
+  P.rect(cx - 30, 62 + b, 10, 12, '#1a1418'); for (let x = cx - 30; x < cx - 20; x += 3) P.rect(x, 62 + b, 1, 12, '#6a6470'); P.rect(cx - 31, 61 + b, 12, 2, Lt[2]);
+  // cabeça: rosto duro, bigode, cicatriz; capacete-gaiola
+  P.ball(cx, 22 + b, 9, 10, Pl); P.rect(cx - 6, 26 + b, 12, 2, '#3a2a20'); P.rect(cx - 5, 20 + b, 3, 2, '#1a1418'); P.rect(cx + 3, 20 + b, 3, 2, '#1a1418'); P.line(cx + 4, 16 + b, cx + 7, 25 + b, '#8a5a40');
+  P.rect(cx - 10, 6 + b, 20, 12, '#1a1418');
+  for (let x = cx - 9; x < cx + 10; x += 3) P.rect(x, 6 + b, 1, 12, '#6a6470');
+  P.rect(cx - 11, 5 + b, 22, 2, Lt[3]); P.rect(cx - 11, 16 + b, 22, 2, Lt[2]); P.rect(cx - 2, 0 + b, 4, 5, Lt[3]);
+  if (fase >= 2) P.ball(cx, 11 + b, 4, 4, ['#a83a1a', '#ff8a30', '#ffd070', '#fff0a0', '#ffffff']);                   // a gaiola acende sozinha
+  // braço direito e o GRANDE APAGADOR
+  let hx, hy, tx, ty;
+  if (carga) { hx = cx + 14; hy = 18 + b; tx = cx + 6; ty = -2; } else if (atk) { hx = cx + 26; hy = 50 + b; tx = cx + 44; ty = 66; } else { hx = cx + 22; hy = 46 + b; tx = cx + 34; ty = 12; }
+  P.line(cx + 17, 38 + b, hx, hy, Sb[2], 6); P.ball(hx, hy, 4, 4, Pl);
+  const bx0 = hx + (tx - hx) * 1.0, by0 = hy + (ty - hy) * 1.0;
+  P.line(hx - (tx - hx) * 0.4, hy - (ty - hy) * 0.4, bx0, by0, '#5a3a20', 3);
+  // o cone (sino) na ponta
+  const ang = Math.atan2(ty - hy, tx - hx), ca = Math.cos(ang), sa = Math.sin(ang), nx = -sa, ny = ca;
+  const tip = [bx0, by0], base0 = [bx0 + ca * 20 + nx * 12, by0 + sa * 20 + ny * 12], base1 = [bx0 + ca * 20 - nx * 12, by0 + sa * 20 - ny * 12];
+  P.poly([tip, base0, base1], (x, y) => P.tone(Lt, 0.5 + ((x - bx0) * ca + (y - by0) * sa) / 50 + ((x + y) % 5 === 0 ? 0.15 : 0), x, y));
+  P.line(base0[0], base0[1], base1[0], base1[1], Lt[4], 2);
+  if (carga) for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; P.p(Math.round(bx0 + ca * 20 + Math.cos(a) * 16), Math.round(by0 + sa * 20 + Math.sin(a) * 9), i % 2 ? '#ffd070' : '#ff8a30'); }
+  return INI8[k] = P.outline().canvas(); }
+// A FRIAGEM: o frio que voltou do Inverno Escuro. Um manto de neve do tamanho de uma casa, com o capuz cheio de
+// pingentes, mãos compridas de gelo (6 dedos), rostos congelados na barra do manto (os que o Inverno levou), e no
+// peito uma GAIOLA DE LANTERNA vazia, com uma fita de cabelo presa na grade. Fase 1: manto inteiro. Fase 2: o manto
+// racha e mostra a gaiola. Fase 3: a gaiola abre e dentro há só escuro (fogo e luz pegam em cheio).
+function friagemBossArt(f, fase, pose) { const k = 'fb' + f + fase + pose; if (INI8[k]) return INI8[k];
+  const W_ = 150, H_ = 148, P = new Pix(W_, H_), cx = 75, b = Math.round(Math.sin(f * 0.7) * 2);
+  const Mn = ['#2a3a50', '#5a7a9a', '#8ab0c8', '#c8e4f0', '#f4fcff'], Gl = ['#3a6a8a', '#6aa8c8', '#9ad0e8', '#c8ecf8', '#ffffff'];
+  const carga = pose === 'carga', atk = pose === 'atk';
+  // o manto (um sino de neve com a barra rasgada)
+  P.poly([[cx - 22, 30 + b], [cx + 22, 30 + b], [cx + 62, 140], [cx + 44, 132], [cx + 34, 144], [cx + 18, 134], [cx, 146], [cx - 18, 134], [cx - 34, 144], [cx - 44, 132], [cx - 62, 140]],
+    (x, y) => P.tone(Mn, 0.78 - Math.abs(x - cx) / 110 - (y - 30) / 360 + ((x * 7 + y * 3) % 23 === 0 ? 0.18 : 0) + (((x - cx) % 14 === 0) && y > 60 ? -0.25 : 0), x, y));
+  // rostos congelados na barra do manto
+  for (let i = 0; i < 5; i++) { const fx = cx - 40 + i * 20, fy = 116 + (i % 2) * 6; P.ball(fx, fy, 5, 6, ['#4a6a8a', '#7a9ab8', '#9ab8d0', '#b8d0e4', '#d8e8f4']); P.p(fx - 2, fy - 1, '#2a3a50'); P.p(fx + 2, fy - 1, '#2a3a50'); P.rect(fx - 1, fy + 2, 3, 1, '#2a3a50'); }
+  // o capuz com pingentes
+  P.ball(cx, 26 + b, 24, 22, Mn, { amb: 0.35 });
+  P.ball(cx, 30 + b, 15, 14, ['#02040a', '#06101a', '#0a1824', '#0e1e2c', '#122434']);
+  for (let i = 0; i < 9; i++) { const x = cx - 22 + i * 5.5, hh = 6 + (i * 5) % 9; P.poly([[x - 2, 44 + b], [x + 2, 44 + b], [x, 44 + b + hh]], i % 2 ? Gl[2] : Gl[3]); }
+  // os olhos: dois pontos de geada no escuro do capuz
+  const oc = carga ? '#ffffff' : '#bff0ff';
+  P.rect(cx - 8, 28 + b, 4, 3, oc); P.rect(cx + 4, 28 + b, 4, 3, oc); if (carga) { P.rect(cx - 9, 27 + b, 6, 1, '#e8fbff'); P.rect(cx + 3, 27 + b, 6, 1, '#e8fbff'); }
+  // a gaiola no peito (aparece a partir da fase 2)
+  if (fase >= 2) {
+    P.poly([[cx - 16, 58 + b], [cx + 16, 58 + b], [cx + 20, 100 + b], [cx - 20, 100 + b]], '#0a1018');
+    P.rect(cx - 12, 62 + b, 24, 32, '#1a1418'); for (let x = cx - 11; x < cx + 12; x += 4) P.rect(x, 62 + b, 1, fase >= 3 ? 6 : 32, '#8a8a96');
+    P.rect(cx - 13, 61 + b, 26, 2, '#c89a30'); P.rect(cx - 13, 93 + b, 26, 2, '#c89a30'); P.rect(cx - 2, 56 + b, 4, 6, '#c89a30');
+    P.rect(cx + 5, 70 + b, 4, 2, '#e86a8a'); P.p(cx + 6, 72 + b, '#e86a8a'); P.p(cx + 8, 73 + b, '#c84a6a');                     // a fita de cabelo presa na grade
+    if (fase >= 3) for (let i = 0; i < 10; i++) P.p(cx - 9 + (i * 7) % 18, 66 + b + (i * 5) % 24, '#04060a');
+    P.line(cx - 24, 52 + b, cx - 10, 70 + b, Gl[0]); P.line(cx + 26, 56 + b, cx + 14, 74 + b, Gl[0]);
+  }
+  // braços compridos de gelo, mãos de seis dedos
+  for (const s of [-1, 1]) {
+    const up = carga ? -36 : atk && s > 0 ? 18 : 0, ex = cx + s * 50, ey = 62 + b + up * (s > 0 || carga ? 1 : 0);
+    P.line(cx + s * 18, 44 + b, cx + s * 34, 56 + b + up / 2, Mn[2], 7); P.line(cx + s * 34, 56 + b + up / 2, ex, ey, Gl[2], 5);
+    for (let d = 0; d < 6; d++) { const a = (s > 0 ? -0.9 : Math.PI + 0.9) + (d - 2.5) * 0.28 * s + (carga ? -s * 0.8 : 0); P.line(ex, ey, ex + Math.cos(a) * 12, ey + Math.sin(a) * 12, Gl[3]); P.p(Math.round(ex + Math.cos(a) * 13), Math.round(ey + Math.sin(a) * 13), '#ffffff'); }
+  }
+  if (carga) for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2; P.p(Math.round(cx + Math.cos(a) * 58), Math.round(30 + Math.sin(a) * 22), '#e8fbff'); }
+  // pingentes caindo do manto
+  for (let i = 0; i < 6; i++) P.p(cx - 50 + i * 20, 80 + ((f * 3 + i * 7) % 40), '#e8fbff');
+  return INI8[k] = P.outline().canvas(); }
+// ---------- a LUME evoluída ----------
+// de noite, o lustre novo (no lugar do lustre do jogo 1); de dia, um adereço sobre a moça
+function lustreEvoArt(ev, f) { const k = 'le' + ev + (f % 4); return o8(k, () => {
+  const P = new Pix(36, 56), b = Math.round(Math.sin(f * 1.5) * 1.5);
+  if (ev === 'lareira') {
+    const Fe = ramp('#6a4a30'), Lt = ramp('#c89a30');
+    P.line(18, 0, 18, 10, '#4a4450'); P.ball(18, 22 + b, 14, 10, Fe); P.rect(4, 26 + b, 28, 4, Lt[2]);
+    P.poly([[6, 28 + b], [30, 28 + b], [24, 46 + b], [12, 46 + b]], (x, y) => P.tone(Fe, 0.6 - (y - 28) / 40, x, y));
+    P.ball(18, 38 + b, 7, 5, ['#8a2a0a', '#e86a20', '#ffb040', '#fff0a0', '#ffffff']);                                  // a lareira no ventre
+    for (const vx of [6, 18, 30]) { P.rect(vx - 2, 12 + b, 4, 10, '#f2ecdc'); P.poly([[vx - 3, 12 + b], [vx, 4 + b - (f + vx) % 3], [vx + 3, 12 + b]], '#ffb040'); P.p(vx, 7 + b, '#fff0a0'); }
+    P.rect(9, 48 + b, 18, 3, Lt[3]); for (let i = 0; i < 3; i++) P.rect(11 + i * 6, 51 + b, 2, 3, '#e86a20');
+  } else {
+    const Pr = ['#5a6a8a', '#8aa0c8', '#c8d8f0', '#e8f0ff', '#ffffff'];
+    P.line(18, 0, 18, 8, '#8a8aa8');
+    for (let a = 0; a < 8; a++) { const an = a / 8 * Math.PI * 2 + f * 0.1, r = a % 2 ? 16 : 11; P.line(18, 26 + b, 18 + Math.cos(an) * r, 26 + b + Math.sin(an) * r, a % 2 ? '#fff0b0' : '#bff0ff', a % 2 ? 1 : 2); }
+    P.ball(18, 26 + b, 9, 9, Pr); P.ball(18, 26 + b, 5, 5, ['#ffd070', '#fff0a0', '#ffffff', '#ffffff', '#ffffff']);
+    for (const vx of [5, 31]) { P.rect(vx - 1, 30 + b, 3, 8, '#e8f0ff'); P.p(vx, 28 + b, '#bff0ff'); }
+    P.poly([[12, 38 + b], [24, 38 + b], [18, 52 + b]], (x, y) => (x + y) % 3 ? '#c8d8f0' : '#ffffff');
+  }
+  return P.outline().canvas(); }); }
+function aderecoLumeArt(ev) { return o8('al' + ev, () => {
+  const P = new Pix(22, 14);
+  if (ev === 'lareira') { P.rect(2, 9, 18, 3, '#a8503a'); P.rect(2, 9, 18, 1, '#e8a060'); for (let i = 0; i < 4; i++) P.poly([[3 + i * 5, 9], [5 + i * 5, 2 + (i % 2) * 2], [7 + i * 5, 9]], i % 2 ? '#ffb040' : '#e86a20'); P.p(11, 3, '#fff0a0'); }
+  else { for (let a = 0; a < 8; a++) { const an = a / 8 * Math.PI * 2; P.line(11, 7, 11 + Math.cos(an) * (a % 2 ? 9 : 6), 7 + Math.sin(an) * (a % 2 ? 6 : 4), a % 2 ? '#fff0b0' : '#bff0ff'); } P.ball(11, 7, 3, 3, ['#ffd070', '#fff0a0', '#ffffff', '#ffffff', '#ffffff']); }
+  return P.outline().canvas(); }); }
+
+// ================= MECÂNICAS DO CAP. 8 — O INVERNO ESCURO =================
+// ESCURIDÃO POR BAIRRO: no Cap. 8, de NOITE, Bairro Baixo, Largo, Festival e Vila dos Pavios ficam no escuro (a
+// Acendedoria cortou o âmbar). BRASEIROS espalhados pelas ruas: a Lume acende (gasta CHAMA, ou uma VELA). Braseiro
+// aceso é luz que fica, e espanta a FRIAGEM (sombras de frio que só andam no escuro). A CHAMA DA LUME (0-100) volta
+// perto de braseiro aceso, de lareira (base, hospital) e cada vez que alguém chega são e salvo.
+// ESCOLTA: gente presa em casa no escuro segue o grupo (de noite) até o abrigo; no escuro elas ficam com MEDO; medo
+// cheio e elas fogem de volta para casa. ROTAS DE LUZ: acenda o caminho antes de levar alguém.
+// GELO (Cisternas): quem pisa escorrega até bater; braseiro aceso derrete o gelo em volta.
+// De DIA: sem sombras, braseiro não pega no vento; é hora de comprar velas, achar músicos e fazer as voltas.
+const c8Ativo = () => !!(G.flags && G.flags.c8Init && !G.flags.c8Fim);
+const BAIRROS8 = ['auren', 'largo', 'festival', 'ruaPavios'];
+const luz8 = () => (G.flags.c8luz = G.flags.c8luz || {});
+const chama = () => (G.chama ?? (G.chama = 100));
+function setChama(v) { G.chama = Math.max(0, Math.min(chamaMax(), v)); }
+const chamaMax = () => 100 + (G.flags.c8VelasVelhagua ? 20 : 0);
+const escuro8 = () => c8Ativo() && ehNoite();
+// acha um chão livre perto de (x,y): sem parede, sem objeto, com espaço em volta (para não fechar rua)
+function chaoLivre8(m, x0, y0, usados = new Set()) {
+  for (let r = 0; r < 7; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+    if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+    const x = x0 + dx, y = y0 + dy; if (x < 1 || y < 1 || y >= m.rows.length - 1 || x >= m.rows[0].length - 1) continue;
+    const k = x + ',' + y; if (usados.has(k)) continue;
+    const ok = (a, b) => { const T = (m.key && m.key[m.rows[b][a]]) || KEY2[m.rows[b][a]] || KEY2['.']; return !T.solid && !T.water && !propSolidM(m, a, b) && !(m.ents || []).some(e => e.x === a && e.y === b && !e.passa); };
+    if (!ok(x, y)) continue;
+    let viz = 0; for (const [ax, ay] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (ok(x + ax, y + ay)) viz++;
+    if (viz >= 3) { usados.add(k); return [x, y]; }
+  }
+  return null;
+}
+function propSolidM(m, x, y) { for (const p of m.props || []) { const s = typeof p.solid === 'function' ? p.solid() : p.solid; if (s) for (const [a, b, w, h] of s) if (x >= a && x < a + w && y >= b && y < b + h) return true; } return false; }
+// ---------- braseiros nos bairros ----------
+const PERTO8 = { auren: () => [...POS3.auren.postes, [24, 22], [9, 20]], largo: () => [...POS4.largo.postes.slice(0, 5)], festival: () => [...POS3.festival.postes || [], [10, 18], [36, 18], [26, 12]].slice(0, 5), ruaPavios: () => VP.postes.slice(0, 5) };
+function brasDe(id) { const m = MAPS2[id]; return (m && m._bras8) || []; }
+function brasAceso(id, i) { return (luz8()[id] || []).includes(i); }
+function bairroAceso(id) { const B = brasDe(id); return B.length > 0 && B.every((_, i) => brasAceso(id, i)); }
+async function acenderBraseiro(id, i) {
+  if (brasAceso(id, i)) { if (escuro8()) { setChama(chama() + 20); W2.toast = { s: 'A Lume se aquece no braseiro. Chama ' + Math.round(chama()), t: 0 }; } else await say('* O braseiro aceso, estalando. Em volta dele, a neve derrete num círculo perfeito.'); return; }
+  if (!c8Ativo()) { await say('* Um braseiro de ferro, apagado, com neve dentro.'); return; }
+  if (!ehNoite() && W2.id !== 'cisternas') { await say('* De dia o vento do Inverno apaga qualquer fogo de rua antes de pegar. Braseiro é coisa de noite.'); return; }
+  const vela = (G.velas || 0) > 0;
+  const custo = G.flags.c8Lampiao ? 15 : 25;
+  if (!vela && chama() < custo) { await say('* A Lume encosta a mão no braseiro. A chama dela treme e não pega.'); await say('Eu... tô fraca. Preciso de uma vela, ou de esquentar perto de um fogo.', 'lume'); if (!G.flags.tutChama8) { G.flags.tutChama8 = true; await say('[CHAMA DA LUME: acender gasta 25. Volta perto de braseiro aceso, nas lareiras (base, hospital) e quando alguém chega são e salvo. VELAS acendem sem gastar chama: a Dona Iolanda vende.]', 'cat'); } return; }
+  if (vela) G.velas--; else setChama(chama() - custo);
+  sfx('rune'); (luz8()[id] = luz8()[id] || []).push(i);
+  W2.toast = { s: (vela ? 'Uma vela acende o braseiro.' : 'A Lume acende o braseiro. Chama ' + Math.round(chama())) + ' (' + (luz8()[id].length) + '/' + brasDe(id).length + ')', t: 0 };
+  if (!G.flags.tutBras8) { G.flags.tutBras8 = true; await say('Pegou! Olha, a neve derreteu em volta!', 'lume'); await say('[Braseiro aceso fica aceso. A Friagem não entra na luz. Acenda o caminho antes de levar gente.]', 'cat'); }
+  if (bairroAceso(id) && typeof bairroCompleto8 === 'function') await bairroCompleto8(id);
+}
+{ const _mmB8 = montarMapas2; montarMapas2 = function () {
+  _mmB8.apply(this, arguments);
+  for (const id of BAIRROS8) {
+    const m = MAPS2[id]; if (!m || m._b8) continue; m._b8 = true;
+    const us = new Set(); m._bras8 = PERTO8[id]().map(([x, y]) => chaoLivre8(m, x + 1, y, us)).filter(Boolean);
+    m._bras8.forEach(([x, y], i) => m.ents.push({ t: 'sign', id: 'bras8_' + i, x, y, h: 30, gone: () => !c8Ativo() && !brasAceso(id, i), spr: () => braseiroArt(brasAceso(id, i), Math.floor(W2.t / 6)), get luz() { return brasAceso(id, i) ? 80 : 0; }, talk: () => acenderBraseiro(id, i) }));
+    const d0 = Object.getOwnPropertyDescriptor(m, 'dark');
+    const l0 = Object.getOwnPropertyDescriptor(m, 'lights');
+    Object.defineProperty(m, 'lights', { get: () => [...((l0 && (l0.get ? l0.get.call(m) : l0.value)) || []), ...(escuro8() ? luzLume8() : [])], configurable: true });
+    Object.defineProperty(m, 'dark', { get: () => escuro8() ? (bairroAceso(id) ? 'rgba(6,8,16,0.5)' : 'rgba(4,6,14,0.8)') : (d0 ? (d0.get ? d0.get.call(m) : d0.value) : undefined), configurable: true });
+    // a Friagem anda pelo escuro (some quando o bairro acende, e de dia)
+    const sp = [...(m._bras8 || [])].slice(0, 3).map(([x, y]) => chaoLivre8(m, x + 4, y + 2, us)).filter(Boolean);
+    sp.forEach(([x, y], i) => m.ents.push(inimigo('fr8' + id + i, 'friagem', x, y, i % 2 ? ['friagem', 'friagem'] : ['friagem', 'loboFuligem'], { spr: (t) => friagemArt(Math.floor(t / 10) % 2), h: 30, bg: bgAurenEscura, gone: () => !escuro8() || bairroAceso(id) })));
+  }
+}; }
+// ---------- a chama na tela ----------
+{ const _hm8 = hudMundo; hudMundo = function (m) {
+  _hm8(m);
+  if (!c8Ativo() || V.scene !== 'world') return;
+  const x = 4, y = H - 22, w = 70; box(x, y, w + 26, 18, { edge: '#ffb040' });
+  const p = chama() / chamaMax(); bx.fillStyle = '#2a1a10'; bx.fillRect(x + 20, y + 7, w, 5); bx.fillStyle = p > 0.5 ? '#ffb040' : p > 0.25 ? '#e86a20' : '#c83a1a'; bx.fillRect(x + 20, y + 7, Math.round(w * p), 5);
+  const fl = Math.floor(W2.t / 6) % 3; bx.fillStyle = '#e86a20'; bx.fillRect(x + 8, y + 5 + fl % 2, 6, 8); bx.fillStyle = '#ffd070'; bx.fillRect(x + 9, y + 8, 4, 5);
+  if ((G.velas || 0) > 0) txt('v' + G.velas, x + w + 6, y + 4, { col: '#f2ecdc' });
+}; }
+// ---------- escolta ----------
+// ESC8[id] = { nm, hum, map, at:[x,y] (casa), dest:{map, at, r}, fala }
+const ESC8 = {};
+const escSt = () => (G.escolta = G.escolta || []);
+const escMedo = {};
+function escAtivo(id) { return escSt().includes(id); }
+function escEntregue(id) { return !!G.flags['c8E_' + id]; }
+function montaEscolta(id, o) {
+  ESC8[id] = o;
+  const m = MAPS2[o.map]; if (!m || m['_esc_' + id]) return; m['_esc_' + id] = true;
+  const pos = chaoLivre8(m, o.at[0], o.at[1]) || o.at; o.casa = pos;
+  m.ents.push(morador(o.hum, pos[0], pos[1], { id: 'esc_' + id, dir: 'down', gone: () => escAtivo(id) || escEntregue(id) || !c8Ativo(), talk: () => pedirEscolta(id) }));
+}
+async function pedirEscolta(id) {
+  const o = ESC8[id];
+  if (!ehNoite()) { await say(o.dia || 'De dia dá pra ver a rua, mas tá todo mundo trancado. De noite a gente tem medo. Volta quando escurecer e a rua tiver luz?', o.who || 'n'); return; }
+  if (escSt().length >= 3) { await say('Vocês já tão levando gente demais. Leva esses primeiro.', o.who || 'n'); return; }
+  await say(o.fala || 'Vocês levam a gente? Mas tem que ter luz no caminho. Eu não ando no escuro.', o.who || 'n');
+  const c = await choose('* Levar até ' + o.destNm + '?', ['Vamos juntos', 'Ainda não'], 'me', 1); if (c !== 0) return;
+  escSt().push(id); escMedo[id] = 0; sfx('item'); criaEscoltaEnts();
+  if (!G.flags.tutEsc8) { G.flags.tutEsc8 = true; await say('[ESCOLTA: eles seguem atrás. No ESCURO o medo sobe (o balão fica vermelho); com medo cheio, voltam correndo para casa. Ande pelas ruas com braseiro aceso. Chegando em ' + o.destNm + ', estão salvos.]', 'cat'); }
+}
+function criaEscoltaEnts() {
+  W2.ents = W2.ents.filter(e => e.t !== 'escolta');
+  escSt().forEach((id, i) => { const o = ESC8[id]; W2.ents.push({ t: 'escolta', id: 'segue_' + id, k: id, passa: true, x: W2.x, y: W2.y, px: W2.px, py: W2.py, dir: W2.dir, h: 44, spr: humSpr(o.hum), t0: 0 }); });
+}
+{ const _lmE = loadMap2; loadMap2 = function () { const r = _lmE.apply(this, arguments); W2.hist8 = []; if (escSt().length) criaEscoltaEnts(); return r; }; }
+function iluminado8(x, y) {
+  if (!escuro8()) return true;
+  if (Math.abs(x - W2.x) + Math.abs(y - W2.y) <= 2) return true;
+  for (const e of W2.ents) if (e.luz && Math.hypot(e.x - x, e.y - y) <= e.luz / 16) return true;
+  for (const L of (W2.map && W2.map.lights) || []) if (Math.hypot(L[0] - x, L[1] - y) <= L[2] / 16) return true;
+  return false;
+}
+{ const _uwE8 = updateWorld2; updateWorld2 = function () {
+  const ax = W2.x, ay = W2.y;
+  _uwE8();
+  if (V.scene !== 'world') return;
+  const h = (W2.hist8 = W2.hist8 || []); if (!h.length || h[h.length - 1][0] !== W2.x || h[h.length - 1][1] !== W2.y) { h.push([W2.x, W2.y]); if (h.length > 40) h.shift(); }
+  const es = W2.ents.filter(e => e.t === 'escolta');
+  es.forEach((e, i) => {
+    const alvo = h[Math.max(0, h.length - 1 - (3 + i * 2))] || [W2.x, W2.y];
+    const tx = alvo[0] * TS, ty = alvo[1] * TS, dx = tx - e.px, dy = ty - e.py, d = Math.hypot(dx, dy);
+    if (d > 0.5) { const sp = Math.min(d, 1.7); e.px += dx / d * sp; e.py += dy / d * sp; e.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); e.t0 = (e.t0 || 0) + 1; }
+    e.x = Math.round(e.px / TS); e.y = Math.round(e.py / TS);
+    if (worldBusy2()) return;
+    const id = e.k, o = ESC8[id];
+    const md = (escMedo[id] = (escMedo[id] || 0) + (iluminado8(e.x, e.y) ? -0.6 : 0.24));
+    escMedo[id] = Math.max(0, Math.min(100, md));
+    if (escMedo[id] > 60 && W2.t % 40 === 0) e.emote = { s: escMedo[id] > 85 ? 'NÃO! Tá escuro!' : 'Tá escuro...', t: 40 };
+    if (escMedo[id] >= 100) { G.escolta = escSt().filter(k => k !== id); W2.ents = W2.ents.filter(x => x !== e); sfx('cancel'); W2.toast = { s: o.nm + ' teve medo do escuro e voltou correndo para casa.', t: 0 }; return; }
+    if (o.dest.map === W2.id && Math.abs(e.x - o.dest.at[0]) + Math.abs(e.y - o.dest.at[1]) <= (o.dest.r || 2)) {
+      G.escolta = escSt().filter(k => k !== id); W2.ents = W2.ents.filter(x => x !== e); G.flags['c8E_' + id] = true; setChama(chama() + 15); sfx('item');
+      W2.toast = { s: o.nm + ' chegou em ' + o.destNm + '! (chama +15)', t: 0 };
+      if (o.chegou) run2(o.chegou);
+    }
+  });
+  // a chama volta devagar perto de braseiro aceso
+  if (c8Ativo() && W2.t % 30 === 0) for (const e of W2.ents) if (e.luz && e.id && String(e.id).startsWith('bras8_') && Math.abs(e.x - W2.x) + Math.abs(e.y - W2.y) <= 2) { setChama(chama() + 2); break; }
+}; }
+// desenho da escolta: medo como um aro em cima da cabeça
+{ const _arE8 = HOOK_AR; HOOK_AR = function (m, ox, oy) {
+  const r = _arE8 ? _arE8(m, ox, oy) : undefined;
+  if (!m || V.scene !== 'world') return r;
+  for (const e of W2.ents) if (e.t === 'escolta') { const md = escMedo[e.k] || 0; if (md > 5) { const x = Math.round(e.px - ox + 2), y = Math.round(e.py - oy - 42); bx.fillStyle = '#1a1418'; bx.fillRect(x, y, 12, 3); bx.fillStyle = md > 70 ? '#e83a3a' : md > 40 ? '#e8a030' : '#8fe3d8'; bx.fillRect(x, y, Math.round(12 * md / 100), 3); } }
+  if (c8Ativo() && (BAIRROS8.includes(W2.id) || W2.id === 'cidadeAlta')) neveFx(ox, oy, W2.t, ehNoite());
+  return r;
+}; }
+// ---------- gelo (Cisternas) ----------
+const gelo8 = () => (G.flags.c8gelo = G.flags.c8gelo || {});
+function derretido(x, y) { for (const [k, [bx_, by_]] of Object.entries(BRAZ8 || {})) if (gelo8()[k] && Math.abs(bx_ - x) <= 1 && Math.abs(by_ - y) <= 1) return true; return false; }
+let BRAZ8 = null;
+{ const _toG = tileOf; tileOf = function (m, x, y) { const T = _toG(m, x, y); if (T && T.t === 'gelo8' && m === MAPS2.cisternas && derretido(x, y)) return KEY8._molhado || (KEY8._molhado = { t: 'molhado8' }); return T; }; }
+{ const _uwG = updateWorld2; updateWorld2 = function () {
+  if (V.scene === 'world' && W2.id === 'cisternas' && !W2.mv && !worldBusy2() && !W2.pego && W2.deslize) {
+    const T = tileOf(W2.map, W2.x, W2.y);
+    if (T.t === 'gelo8') { const [dx, dy] = DIR2[W2.deslize]; if (canStand(W2.x + dx, W2.y + dy, 'player')) { W2.dir = W2.deslize; tryStep(W2.x + dx, W2.y + dy); if (W2.t % 5 === 0) sfx('step'); } else W2.deslize = null; }
+    else W2.deslize = null;
+  }
+  const antes = W2.mv; _uwG();
+  if (W2.id === 'cisternas' && W2.mv && W2.mv !== antes) { const T = tileOf(W2.map, W2.mv.tx, W2.mv.ty); if (T.t === 'gelo8') W2.deslize = W2.dir; }
+}; }
+{ const _chG = HOOK_CHAO; HOOK_CHAO = function (m, ox, oy) {
+  const r = _chG ? _chG(m, ox, oy) : undefined;
+  if (m && m === MAPS2.cisternas && BRAZ8) for (const [k, [bx_, by_]] of Object.entries(BRAZ8)) if (gelo8()[k]) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const x = bx_ + dx, y = by_ + dy; if (m.rows[y] && m.rows[y][x] === 'i') bx.drawImage(tileArt('molhado8', (x + y) % 4), x * TS - ox, y * TS - oy); }
+  return r;
+}; }
+
+// a luz da própria Lume (maior que a lanterna comum): no Inverno Escuro, ela é a vela do grupo
+function luzLume8() { const r = 60 + Math.round(chama() * 0.5); return [[W2.px / TS, W2.py / TS - 0.3, r]]; }
+
+// ================= INIMIGOS DO CAP. 8: O INVERNO ESCURO =================
+// FRIAGEM (sombra de frio; Sopro congela a vez; fogo e luz), APAGADOR (guarda dos apagões: APAGA os efeitos bons e
+// rouba Tensão; gelo e mordida), LOBO DE FULIGEM (rápido, mordida dupla; fogo e luz), GEADA VIVA (flocos que
+// CONGELAM: perde a vez; fogo e mordida). Mini-chefe: CAPITÃO APAGADOR (Grande Apagão preparado zera a Tensão; chama
+// apagadores; fase 2 o sobretudo pega fogo e a gaiola do capacete acende: ele fica furioso, golpes dobrados).
+// Chefe: A FRIAGEM (Sopro do Inverno, Mão de Gelo, Pingentes; INVERNO ESCURO preparado; fase 2 o manto racha e solta
+// Geadas; fase 3 a gaiola abre: fogo e luz em cheio, e ela mira a Lume).
+Object.assign(ST_NAME, { congelado: 'CONGELADO' });
+Object.assign(ENEMY2, {
+  friagem: { name: 'Friagem', kind: 'friagem', fly: true, mhp: 640, atk: 42, def: 12, mdef: 16, spd: 13, shield: 4, maxShield: 4, weak: ['fogo', 'luz'], ai: 'friagem', h: 44, cobres: 24,
+    frame: u => friagemArt(Math.floor(BT.t / 10 + u.x) % 2), dieCols: ['#2a3450', '#bff0ff', '#e8fbff'] },
+  apagador: { name: 'Apagador', kind: 'apagador', mhp: 660, atk: 42, def: 16, mdef: 12, spd: 12, shield: 5, maxShield: 5, weak: ['gelo', 'mordida'], ai: 'apagador', h: 58, cobres: 30,
+    frame: u => apagadorArt(Math.floor(BT.t / 14 + u.x) % 2, !!u.armando), dieCols: ['#2a3a6a', '#c89a30', '#8a8a96'] },
+  loboFuligem: { name: 'Lobo de Fuligem', kind: 'loboFuligem', mhp: 600, atk: 44, def: 12, mdef: 10, spd: 17, shield: 3, maxShield: 3, weak: ['fogo', 'luz'], ai: 'loboFuligem', h: 36, cobres: 26,
+    frame: u => loboFuligemArt(Math.floor(BT.t / 7 + u.x) % 2), dieCols: ['#1a1a24', '#4a4a5a', '#ff6a3a'] },
+  geadaViva: { name: 'Geada Viva', kind: 'geadaViva', fly: true, mhp: 520, atk: 41, def: 10, mdef: 18, spd: 14, shield: 3, maxShield: 3, weak: ['fogo', 'mordida'], ai: 'geadaViva', h: 46, cobres: 20,
+    frame: u => geadaVivaArt(Math.floor(BT.t / 6 + u.x) % 8), dieCols: ['#b8e4f4', '#e8fbff', '#ffffff'] },
+  capitao: { name: 'Capitão Apagador', kind: 'capitao', boss: true, mhp: 4800, atk: 45, def: 19, mdef: 14, spd: 11, shield: 8, maxShield: 8, weak: ['gelo', 'mordida'], ai: 'capitao', h: 112, cobres: 220, ph: 1,
+    frame: u => capitaoArt(Math.floor(BT.t / 16) % 2, u.armando ? 'carga' : u._atk > 0 ? 'atk' : '', u.ph || 1), dieCols: ['#2a2430', '#c89a30', '#ff8a30', '#ffffff'], cancelTxt: 'O cone entortou! Nada de apagão!' },
+  friagemB: { name: 'A Friagem', kind: 'friagemB', boss: true, fly: false, mhp: 8000, atk: 47, def: 18, mdef: 18, spd: 11, shield: 9, maxShield: 9, weak: ['fogo'], ai: 'friagemB', h: 148, cobres: 400, ph: 1,
+    frame: u => friagemBossArt(Math.floor(BT.t / 9), u.ph || 1, u.armando ? 'carga' : u._atk > 0 ? 'atk' : ''), dieCols: ['#c8e4f0', '#8ab0c8', '#ffffff', '#e86a8a'], cancelTxt: 'O frio rachou por dentro! Inverno cancelado!' }
+});
+Object.assign(FICHA, {
+  friagem: 'Friagem: sombra de frio que só anda no escuro. O Sopro faz perder a vez. Fogo e luz.',
+  apagador: 'Apagador: guarda dos apagões. APAGA os efeitos bons do alvo e rouba Tensão. Gelo e mordida.',
+  loboFuligem: 'Lobo de Fuligem: rápido, mordida dupla, olhos de brasa. Fogo e luz.',
+  geadaViva: 'Geada Viva: floco de gelo do tamanho de um gato. CONGELA: quem leva perde a próxima vez. Fogo e mordida.',
+  capitao: 'Capitão Apagador: o Grande Apagão (quebre o escudo!) zera a TENSÃO. Chama apagadores. Na metade, o sobretudo pega fogo e ele fica furioso. Gelo e mordida.',
+  friagemB: 'A Friagem: o frio do Inverno Escuro. Inverno Escuro (quebre o escudo!). O manto racha (Geadas); depois a gaiola do peito abre: aí a LUZ também pega, e ela mira a Lume. Fogo.'
+});
+// CONGELADO: perde a próxima vez (usa o mesmo mecanismo de 'esquecido'; a Lume com Vela Interior não congela)
+function congelar(t) { if (!t || t.hp <= 0) return; t.st.esquecido = 1; const [x, y] = unitCenter(t); popNum(x, y - 34, 'CONGELOU', '#bff0ff'); }
+function apagarBuffs(t) { if (!t) return; let n = 0; for (const k of ['farol', 'escudo', 'baluarte', 'biblio', 'veu', 'resson', 'regen', 'atkUp', 'magUp']) if (t.st[k]) { t.st[k] = 0; n++; } t.def0 = false; const [x, y] = unitCenter(t); popNum(x, y - 30, n ? 'APAGADO' : 'ABAFADO', '#8a8a96'); }
+const golpeAtk = (e, n = 18) => { e._atk = n; };
+Object.assign(AI2, {
+  async friagem(e) {
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.4) { callout('Sopro', '#bff0ff', 30); const [ex, ey] = unitCenter(e), [tx, ty] = unitCenter(t); await tw(18, p => { for (let i = 0; i < 8; i++) { bx.fillStyle = i % 2 ? '#e8fbff' : '#bff0ff'; bx.fillRect(Math.round(ex + (tx - ex) * p + Math.sin(i + p * 8) * 6), Math.round(ey + (ty - ey) * p + (i - 4) * 2), 2, 2); } }); const r = await foeStrike(e, t, 0.7, { n: 22, longe: true }); if (r === 'falhou' && Math.random() < 0.5) congelar(t); return; }
+    callout('Toque Frio', '#d0a8ff', 30); await foeLunge(e, t, 12, 12); await foeStrike(e, t, 1.05, { n: 22 }); await foeBack(e);
+  },
+  async apagador(e) {
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.45) { e.armando = true; callout('Apagar', '#8a8a96', 40); await foeLunge(e, t, 14, 12); const r = await foeStrike(e, t, 0.8, { n: 22 }); e.armando = false; await foeBack(e); if (r !== 'perfeito') { apagarBuffs(t); const k = Math.min(BT.tension, 15); BT.tension -= k; } return; }
+    callout('Haste', '#d0a8ff', 30); await foeLunge(e, t, 14, 14); await foeStrike(e, t, 1.1, { n: 24 }); await foeBack(e);
+  },
+  async loboFuligem(e) {
+    const t = foeTarget(); if (!t) return;
+    callout(Math.random() < 0.5 ? 'Mordida Dupla' : 'Bote de Fumaça', '#d0a8ff', 30); await foeLunge(e, t, 10, 16);
+    await foeStrike(e, t, 0.55, { n: 18, fast: true }); if (t.hp > 0) await foeStrike(e, t, 0.55, { n: 18, fast: true }); await foeBack(e);
+  },
+  async geadaViva(e) {
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.45 && !(t.st.congelado > 0)) { callout('Congelar', '#bff0ff', 40); const [tx, ty] = unitCenter(t); await tw(18, p => fxRing(tx, ty - 10, 4 + p * 18, '#e8fbff', 1 - p)); const r = await foeStrike(e, t, 0.6, { n: 22, longe: true }); if (r !== 'perfeito') congelar(t); return; }
+    callout('Estilhaço de Gelo', '#d0a8ff', 30); await foeLunge(e, t, 12, 10); await foeStrike(e, t, 1.0, { n: 22, fast: true }); await foeBack(e);
+  },
+  async capitao(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) {
+      e.charge = null; e.armando = false; callout('GRANDE APAGÃO!', '#ffffff', 70); sfx('crit'); bshake(20, 3);
+      await tw(30, p => { bx.fillStyle = `rgba(0,0,0,${Math.min(0.85, p * 1.4)})`; bx.fillRect(0, 0, W, H); for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; bx.fillStyle = '#ffd070'; bx.fillRect(Math.round(ex + Math.cos(a) * (120 * (1 - p))), Math.round(ey - 60 + Math.sin(a) * (60 * (1 - p))), 3, 3); } });
+      BT.tension = 0; popNum(120, 60, 'TENSÃO APAGADA', '#8a8a96');
+      for (const m of alive(BT.party)) { const r = await foeStrike(e, m, e.ph >= 2 ? 1.3 : 1.2, { n: 30, noCounter: true, longe: true }); if (r !== 'perfeito') apagarBuffs(m); }
+      return;
+    }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('Ele ergue o Grande Apagador... a luz da sala é sugada (quebre o escudo!)', '#ff6b6b', 90); sfx('rumble'); await tw(24, p => luzMagia(ex + 8, ey - 70, 30 - p * 20, 'rgba(255,208,112,0.6)', 1 - p)); return; }
+    const ap = alive(BT.foes).filter(f => f.kind === 'apagador').length;
+    if (ap < 2 && e.turns % 5 === 1) { callout('"APAGADORES! Em forma!"', '#ffd8a0', 60); sfx('encounter'); const c = mkFoe(ENEMY2.apagador, 150 - BT.foes.length * 10, 150); c.ct = 0; c.alpha = 0; BT.foes.push(c); await tw(18, p => { c.alpha = p; }); return; }
+    const vezes = e.ph >= 2 ? 2 : 1;
+    for (let v = 0; v < vezes; v++) {
+      const t = foeTarget(); if (!t) return;
+      if (Math.random() < 0.35) { callout('Abafar', '#8a8a96', 40); golpeAtk(e, 30); await foeLunge(e, t, 16, 16); const r = await foeStrike(e, t, 0.95, { n: 24 }); await foeBack(e); if (r !== 'perfeito') apagarBuffs(t); continue; }
+      callout(e.ph >= 2 ? 'Golpe em Brasa' : 'Golpe de Haste', '#d0a8ff', 30); golpeAtk(e, 30); await foeLunge(e, t, 18, 16); const r = await foeStrike(e, t, e.ph >= 2 ? 0.9 : 1.2, { n: 26 }); await foeBack(e); if (e.ph >= 2 && r === 'falhou') t.st.queimado = 2;
+    }
+  },
+  async friagemB(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) {
+      e.charge = null; e.armando = false; callout('INVERNO ESCURO!', '#ffffff', 80); sfx('crit'); flashW(4); bshake(26, 4);
+      await tw(36, p => { bx.fillStyle = `rgba(4,8,16,${Math.min(0.9, p * 1.5)})`; bx.fillRect(0, 0, W, H); bx.fillStyle = '#ffffff'; for (let i = 0; i < 60; i++) bx.fillRect(Math.round((i * 53 + p * 300) % W), Math.round((i * 31 + p * 200) % H), 2, 2); });
+      BT.tension = Math.max(0, BT.tension - 25);
+      for (const m of alive(BT.party)) { const r = await foeStrike(e, m, e.ph >= 3 ? 1.45 : 1.35, { n: 30, noCounter: true, longe: true }); if (r === 'falhou' && Math.random() < 0.4) congelar(m); }
+      return;
+    }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('Ela abre os braços. A sala inteira escurece... (quebre o escudo!)', '#ff6b6b', 100); sfx('rumble'); await tw(26, p => { bx.fillStyle = `rgba(0,0,10,${p * 0.4})`; bx.fillRect(0, 0, W, H); }); return; }
+    const ge = alive(BT.foes).filter(f => f.kind === 'geadaViva').length;
+    if (e.ph >= 2 && ge < 2 && e.turns % 3 === 1) { callout('O manto solta flocos vivos', '#bff0ff', 60); sfx('encounter'); const c = mkFoe(ENEMY2.geadaViva, 140 - BT.foes.length * 10, 118 + (BT.foes.length % 2) * 30); c.ct = 0; c.alpha = 0; BT.foes.push(c); await tw(18, p => { c.alpha = p; }); return; }
+    const L = alive(BT.party).find(m => m.id === 'lume');
+    const t = e.ph >= 3 && L && Math.random() < 0.4 ? L : foeTarget(); if (!t) return;
+    const r0 = Math.random();
+    if (r0 < 0.3) { callout('Sopro do Inverno', '#bff0ff', 40); golpeAtk(e, 34); await tw(26, p => { for (let i = 0; i < 20; i++) { bx.fillStyle = i % 2 ? '#e8fbff' : '#bff0ff'; bx.fillRect(Math.round(ex - p * 200 + Math.sin(i * 3 + p * 9) * 18), Math.round(ey - 40 + (i % 10) * 9), 3, 2); } }); for (const m of alive(BT.party)) { const r = await foeStrike(e, m, 0.7, { n: 24, noCounter: true, longe: true }); if (r === 'falhou' && Math.random() < 0.35) congelar(m); } return; }
+    if (r0 < 0.55) { callout('Pingentes', '#e8fbff', 40); golpeAtk(e, 34); for (let i = 0; i < 3; i++) { const m = pickOne(alive(BT.party)); if (!m) break; const [mx, my] = unitCenter(m); await tw(10, p => { bx.fillStyle = '#e8fbff'; bx.fillRect(Math.round(mx - 2), Math.round(my - 90 + p * 70), 4, 12); }); await foeStrike(e, m, 0.6, { n: 18, fast: true, noCounter: true, longe: true }); } return; }
+    if (e.ph >= 2 && r0 < 0.7) { callout('Lembrança do Inverno', '#c8d8f0', 50); const [tx, ty] = unitCenter(t); await tw(22, p => fxRing(tx, ty - 20, 30 * (1 - p) + 4, '#c8d8f0', p)); const r = await foeStrike(e, t, 0.8, { n: 22, longe: true }); if (r !== 'perfeito' && t.hp > 0) { t.st.esquecido = 1; popNum(tx, ty - 24, 'LEMBROU DO FRIO', '#c8d8f0'); } return; }
+    callout('Mão de Gelo', '#d0a8ff', 30); golpeAtk(e, 34); await foeLunge(e, t, 20, 18); await foeStrike(e, t, 1.15, { n: 26 }); await foeBack(e);
+  }
+});
+// a pose de golpe dura alguns quadros
+{ const _du8 = drawUnit; drawUnit = function (u) { if (u && u._atk > 0) u._atk--; return _du8(u); }; }
+function fasesCapitao() { return [{ at: 0.5, run: async (e) => {
+  sfx('crit'); bshake(18, 3); flashW(3);
+  await say('* Uma brasa da Lume pega na barra do sobretudo de fuligem do Capitão. O sobretudo inteiro acende como pavio. E a gaiola vazia do capacete dele, que nunca teve vela, acende SOZINHA.');
+  await say('NÃO! Apaga! APAGA ISSO! Eu sou o Capitão dos Apagões, eu NÃO acendo!', 'capitao');
+  await say('[Furioso: ele bate DUAS vezes por vez, mais fraco cada uma. Os golpes em brasa queimam.]', 'cat');
+  e.ph = 2; e.spd = 13; e.maxShield = 9; e.shield = 9;
+} }]; }
+function fasesFriagem() { return [{ at: 0.66, run: async (e) => {
+  sfx('rumble'); bshake(22, 3); flashW(3);
+  await say('* O manto de neve da Friagem racha no peito. Por dentro, uma gaiola de lanterna. Vazia. Uma fita de cabelo cor-de-rosa presa na grade, dura de gelo.');
+  await say('Isso... isso é uma lanterna de criança. Daquelas de procissão.', 'rita');
+  await say('[Fase 2: o manto solta Geadas Vivas e a Friagem faz LEMBRAR do frio (perde a vez).]', 'cat');
+  e.ph = 2; e.maxShield = 10; e.shield = 10; e.spd = 12;
+} }, { at: 0.33, run: async (e) => {
+  sfx('crit'); bshake(26, 4); flashW(5);
+  await say('* A gaiola abre. Dentro dela não tem nada. Só escuro. Um escuro que dá frio de olhar.');
+  await say('Ela tá vazia. Ela é um lugar onde tinha uma luz e não tem mais.', 'lume');
+  await say('* A Friagem vira o capuz para a Lume. Devagar. Como quem reconhece.');
+  e.ph = 3; e.weak = ['fogo', 'luz', 'mordida']; e.known = {}; e.spd = 13;
+  callout('A gaiola aberta: LUZ e mordida também! Ela vai atrás da Lume!', '#8fe3ff', 100);
+} }]; }
+
+// ================= A EVOLUÇÃO DA LUME (Cap. 8) e o VERSO NOVO =================
+// Pedido do usuário: "planeje uma evolução para a Lume também, ela já é só um candelabro há muito tempo".
+// A única evolução do grupo que NÃO cobra preço: foi DADA (o povo de Auren acende velas em volta dela quando a chama
+// quase apaga). Duas formas:
+//  LAREIRA (apoio): +24 PV, +4 RES, +2 MAG. Técnica LAREIRA VIVA (40 PM): cura 25% de todos, tira os males e deixa
+//    "aquecido" por 3 vezes (cura 6% no começo da vez). Passivo: na vez dela, o grupo cura 3%.
+//  ALVORADA (ofensiva): +6 MAG, +8 PV. Técnica RAIO DA ALVORADA (36 PM): luz em todos os inimigos, x1,5 nas criaturas do
+//    escuro e do frio. Passivo: a luz dela bate 20% mais.
+// Visual: de noite um lustre novo (lustreEvoArt) no lugar do do jogo 1; de dia um adereço (aderecoLumeArt).
+// VERSO NOVO (ganho no show do Cap. 8, antes da evolução): técnica da Lume (30 PM): o grupo bate 25% mais por 3 vezes
+// e ganha 20 de Tensão. A música da Lume ganhou mais um verso.
+const EVOL = {
+  lareira: { nm: 'Lume-Lareira', cor: '#ffb040', d: 'O lustre vira lareira: aquece, cura, segura o grupo de pé.', mods: { mhp: 24, mdef: 4, mag: 2 }, tec: 'lareiraViva' },
+  alvorada: { nm: 'Lume-Alvorada', cor: '#bff0ff', d: 'O lustre vira estrela da manhã: a luz que machuca o escuro.', mods: { mag: 6, mhp: 8 }, tec: 'raioAurora' }
+};
+const ESCURO_K = ['friagem', 'friagemB', 'loboFuligem', 'apagador', 'capitao', 'geadaViva', 'sombra', 'fuligem'];
+{ const _gcL = grupoCap1; grupoCap1 = function () {
+  const g = _gcL(), ev = G.evoLume;
+  for (const m of g) if (m.id === 'lume') {
+    if (G.flags.c8Verso && !(m.techs || []).includes('versoNovo')) m.techs = [...(m.techs || []), 'versoNovo'];
+    if (ev && EVOL[ev]) { for (const [a, v] of Object.entries(EVOL[ev].mods)) m[a] = (m[a] || 0) + v; m.techs = [...(m.techs || []), EVOL[ev].tec]; m.evoLume = ev; }
+  }
+  return g;
+}; }
+{ const _cdL = calcDmg; calcDmg = function (a, t, pow, o = {}) {
+  let d = _cdL(a, t, pow, o);
+  if (a && a.st && a.st.verso > 0 && a.side === 'p') d *= 1.25;
+  if (a && a.id === 'lume' && a.evoLume === 'alvorada' && o.el === 'luz') d *= 1.2;
+  return d;
+}; }
+{ const _ocL = openCommand; openCommand = function (m) {
+  if (m && m.side === 'p' && m.st && !m._ocL8) {
+    m._ocL8 = BT.t;
+    if (m.st.aquecido > 0) { m.st.aquecido--; healUnit(m, Math.round(m.mhp * 0.06)); }
+    if (m.st.verso > 0) m.st.verso--;
+    if (m.id === 'lume' && m.evoLume === 'lareira') for (const u of alive(BT.party)) healUnit(u, Math.round(u.mhp * 0.03));
+  }
+  return _ocL(m);
+}; }
+{ const _etL = endTurn; endTurn = function (u) { if (u) u._ocL8 = 0; return _etL.apply(this, arguments); }; }
+Object.assign(ST_NAME, { verso: 'VERSO', aquecido: 'AQUECIDO' });
+Object.assign(TECH2, {
+  versoNovo: { nm: 'Verso Novo', cost: 30, tgt: 'all_p', d: 'O verso que Auren cantou junto: o grupo bate 25% mais por 3 vezes e ganha 20 de Tensão.', run: async (m) => {
+    sfx('rune'); jingle('C5:2 E5:2 G5:2 C6:4 B5:2 G5:2 E5:4', 200); const [x, y] = unitCenter(m);
+    await tw(36, p => { for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2 + p * 3; bx.fillStyle = i % 2 ? '#ffd070' : '#fff0c0'; bx.fillRect(Math.round(x + Math.cos(a) * (14 + p * 40)), Math.round(y - 30 + Math.sin(a) * (8 + p * 20) - p * 20), 2, 3); } });
+    for (const u of alive(BT.party)) { u.st.verso = 3; const [ux, uy] = unitCenter(u); popNum(ux, uy - 30, 'VERSO', '#ffd070'); }
+    BT.tension = Math.min(100, BT.tension + 20); callout('Auren canta junto.', '#ffd070', 60);
+  } },
+  lareiraViva: { nm: 'Lareira Viva', cost: 40, tgt: 'all_p', d: 'Cura 25% de todos, tira queimadura, frio, tontura e esquecimento, e deixa AQUECIDO por 3 vezes (6% no começo da vez).', run: async (m) => {
+    sfx('heal'); const [x, y] = unitCenter(m);
+    await tw(30, p => { brilho(x, y - 20, 30 + p * 80, 'rgba(255,170,80,0.35)', 1 - p * 0.5); });
+    for (const u of alive(BT.party)) { healUnit(u, Math.round(u.mhp * 0.25)); for (const s of ['queimado', 'frio', 'tonto', 'esquecido', 'preso', 'molhado', 'selado', 'bilhete']) if (u.st[s]) u.st[s] = 0; u.st.aquecido = 3; }
+    callout('Ninguém passa frio perto de uma lareira.', '#ffb040', 60);
+  } },
+  raioAurora: { nm: 'Raio da Alvorada', cost: 36, tgt: 'all', d: 'Luz de amanhecer em todos os inimigos. Nas criaturas do escuro e do frio, uma vez e meia.', run: async (m) => {
+    sfx('crit'); flashW(3); const [x, y] = unitCenter(m);
+    await tw(26, p => { bx.fillStyle = `rgba(255,240,200,${0.5 * (1 - p)})`; bx.fillRect(0, 0, W, H); luzMagia(x, y - 30, 20 + p * 100, '#fff0b0', 1 - p); });
+    for (const t of alive(BT.foes)) { const [tx, ty] = unitCenter(t); burst(tx, ty, 12, ['#fff0b0', '#bff0ff', '#ffffff']); hitFoe(m, t, ESCURO_K.includes(t.kind) ? 1.35 : 0.9, { el: 'luz', mag: true }); }
+  } }
+});
+// ---------- visual ----------
+{ const _lfL = lustreFrame; lustreFrame = function (u) { if (G.evoLume && u && u.hp > 0) { const c = lustreEvoArt(G.evoLume, Math.floor(BT.t / 8)); return c; } return _lfL(u); }; }
+{ const _fsL = folSprite; folSprite = function (f) {
+  const fr = _fsL(f);
+  if (f.k !== 'lume' || !G.evoLume || !fr) return fr;
+  if (typeof LUSTRE_ON === 'function' && LUSTRE_ON() && !G.flags.lumeCoberta) return lustreEvoArt(G.evoLume, Math.floor(W2.t / 8));
+  const key = '_ad' + G.evoLume; if (fr[key]) return fr[key];
+  const c = mk(fr.width, fr.height + 6), x = c.getContext('2d'); x.drawImage(fr, 0, 6); x.drawImage(aderecoLumeArt(G.evoLume), Math.round(fr.width / 2 - 11), 0); return (fr[key] = c);
+}; }
+{ const _duL = drawUnit; drawUnit = function (u) {
+  const r = _duL(u);
+  if (u && u.id === 'lume' && u.evoLume && !u.lustre && u.hp > 0 && u._X != null) { const w = (u._fw || 24) * (u._sx || 1); bx.drawImage(aderecoLumeArt(u.evoLume), Math.round(u._X + w / 2 - 11), Math.round(u._Y - 6 + Math.sin(BT.t * 0.08) * 1)); }
+  return r;
+}; }
+async function cenaEvolucaoLume() {
+  if (G.evoLume) return;
+  await say('[A Lume... a chama dela está mudando de cor. Ela está escolhendo. Eu não posso escolher por ela. Ninguém pode.]', 'cat');
+  let ev = null;
+  while (!ev) {
+    const ks = ['lareira', 'alvorada'];
+    const i = await list({ x: 20, y: 30, w: 200, title: 'O que a Lume vai ser?', items: ks.map(k => ({ label: EVOL[k].nm, col: EVOL[k].cor })), desc: j => EVOL[ks[j]] && (EVOL[ks[j]].d + ' Técnica: ' + TECH2[EVOL[ks[j]].tec].nm + '. ' + TECH2[EVOL[ks[j]].tec].d), descY: 112 });
+    if (i < 0) continue;
+    const c = await choose('* ' + EVOL[ks[i]].nm + '?', ['É ela.', 'Pensar de novo']); if (c === 0) ev = ks[i];
+  }
+  G.evoLume = ev; sfx('rune'); V.shake = 14; curarTudo();
+  await say(ev === 'lareira' ? '* As velas em volta da Lume se inclinam todas para ela, como gente se inclinando para um fogão. A chama dela desce do alto da cabeça e se acomoda no peito, larga, baixa, quente. Uma lareira.' : '* As velas em volta da Lume apagam ao mesmo tempo. Por um segundo, escuro. E então ela acende de uma vez, branca, azul nas bordas, como o céu cinco minutos antes do sol. Uma alvorada.');
+  await say('* {y}A Lume evoluiu para ' + EVOL[ev].nm + '!{/} (Nenhum preço foi cobrado. Isso foi dado.)');
+  await say('[TÉCNICA NOVA: ' + TECH2[EVOL[ev].tec].nm + '. ' + TECH2[EVOL[ev].tec].d + ']', 'cat');
+  save2();
+}
+
+// ================= CAPÍTULO 8 — O INVERNO ESCURO (Parte 1: Auren acesa à mão) =================
+// O Acendedor-Mor corta o âmbar de Auren "por sete noites, para lembrarem". O grupo acende a cidade À MÃO, bairro por
+// bairro, EM QUALQUER ORDEM: Bairro Baixo (braseiros + duas famílias levadas para dentro do baú), Largo (braseiros +
+// três pacientes levados ao hospital, que vira abrigo), Vila dos Pavios (os Pavios proibidos de acender; os que tiveram a
+// lembrança devolvida acendem por conta própria; o Jorge está lá, de casaco cinza) e o Festival (braseiros + os três
+// MÚSICOS trazidos de cada bairro). Com tudo aceso: A NOITE DA MÚSICA, a Lume ganha o VERSO NOVO, e o CAPITÃO APAGADOR
+// (mini-chefe) vem apagar o show. Parte 2 (cap8b): o frio sobe das Cisternas.
+// Voltas com viagem rápida: velas da Igreja do Sino (Velhágua), lampiões de Candeia (Dona Ilda), velas de âmbar da
+// Cidade Alta (Dona Hortênsia), e o Jorge na Vila.
+Object.assign(TRACKS, {
+  inverno: { bpm: 66, bars: 4, chords: 'Dm Bb Gm A', bass: 'root5', bassVol: 0.05,
+    lead: 'D5:4 F5:4 A5:8 | D6:4 C6:4 Bb5:8 | G5:4 Bb5:4 D6:8 | C#6:4 E6:4 A5:8', leadWave: 'sine', leadVol: 0.045, arp: { rate: 4, vol: 0.01, oct: 1 }, drums: '', hatVol: 0 },
+  concerto: { bpm: 126, bars: 4, chords: 'D Bm G A', bass: 'root5', bassVol: 0.09,
+    lead: 'F#5:2 A5:2 D6:4 C#6:2 B5:2 A5:4 | B5:2 D6:2 F#6:4 E6:2 D6:2 B5:4 | G5:2 B5:2 D6:4 B5:2 G5:2 B5:4 | A5:2 C#6:2 E6:4 D6:2 C#6:2 A5:4',
+    leadWave: 'square', leadVol: 0.05, arp: { rate: 4, vol: 0.015, oct: 1 }, drums: 'k.h.s.h.k.k.s.h.', hatVol: 0.025 }
+});
+Object.assign(HUMS, {
+  nair: { h: 44, skin: '#8a5a3a', hair: '#d8d8d8', hairStyle: 'coque', top: '#6a4a7a', bottom: '#3a2a4a' },
+  bento: { h: 50, skin: '#c8a088', hair: '#e8e4e0', top: '#5a5a4a', bottom: '#2a2a2a', acc: '#1a1a1a' },
+  nonato: { h: 48, skin: '#a8704a', hair: '#c8c8c8', top: '#4a6a8a', bottom: '#3a3a44' },
+  cida: { h: 44, skin: '#d8a078', hair: '#6a4a3a', hairStyle: 'longo', top: '#8a6a4a', bottom: '#4a3a2a', apron: '#e8e0d0' },
+  pipo: { h: 34, skin: '#c8906a', hair: '#3a2a1a', top: '#c84a3a', bottom: '#3a3a5a' },
+  zefa: { h: 46, skin: '#6a4a2a', hair: '#1a1a1a', hairStyle: 'coque', top: '#d8a030', bottom: '#5a3a2a', acc: '#c83a3a' },
+  lino: { h: 52, skin: '#c8a088', hair: '#8a8a8a', top: '#3a5a3a', bottom: '#2a2a3a' },
+  jorgeP: { h: 52, skin: '#c8906a', hair: '#9a9aa0', top: '#6a6a7a', coat: '#5a5a6a', bottom: '#3a3a44', hat: '#2a2a30', extra: HUMS.pavio.extra },
+  capitaoH: { h: 56, skin: '#b8805a', hair: '#1a1418', top: '#2a3a6a', coat: '#2a2430', bottom: '#1a1a24', hat: '#1a1418', acc: '#c89a30' },
+  arauto: { h: 50, skin: '#c8a088', hair: '#3a2a1a', top: '#6a6a7a', coat: '#5a5a6a', bottom: '#3a3a44', hat: '#2a2a30', extra: HUMS.pavio.extra }
+});
+Object.assign(WHO, {
+  nair: { name: () => 'Dona Nair', portrait: () => portHum('nair'), voice: voz(480), col: '#f0d8f0' },
+  bento: { name: () => 'Seu Bento', portrait: () => portHum('bento'), voice: voz(260, 'blipLow'), col: '#e8e0d0' },
+  nonato: { name: () => 'Seu Nonato', portrait: () => portHum('nonato'), voice: voz(280, 'blipLow'), col: '#d8e8f0' },
+  cida: { name: () => 'Dona Cida', portrait: () => portHum('cida'), voice: voz(500), col: '#f0e0d0' },
+  pipo: { name: () => 'Pipo', portrait: () => portHum('pipo'), voice: voz(700), col: '#ffd8c8' },
+  zefa: { name: () => 'Dona Zefa', portrait: () => portHum('zefa'), voice: voz(420), col: '#ffe8a0' },
+  lino: { name: () => 'Seu Lino', portrait: () => portHum('lino'), voice: voz(320), col: '#d8f0d8' },
+  capitao: { name: () => 'Capitão Apagador', portrait: () => portHum('capitaoH'), voice: voz(180, 'blipLow'), col: '#c8c8d8' },
+  arauto: { name: () => 'Pavio arauto', portrait: () => portHum('arauto'), voice: voz(380), col: '#e8e0d8' }
+});
+// ---------- começo ----------
+function iniciarCap8() {
+  if (G.flags.c8Init) return false;
+  G.flags.c8Init = true; G.poder = Math.max(G.poder || 1, 7); curarTudo(); G.hora = 18 * 60 + 40; G.dia = (G.dia || 0) + 1; G.chama = 100;
+  G.items = Object.assign({}, G.items, { frasco: Math.max(3, G.items.frasco || 0) }); G.velas = (G.velas || 0) + 3;
+  return true;
+}
+async function capitulo8() {
+  if (!MAPS2.cisternas) montarMapas2();
+  const novo = iniciarCap8();
+  if (!novo) { const p = G.pos && MAPS2[G.pos.map] ? G.pos : { map: 'interior', x: POS3.interior.entra[0], y: POS3.interior.entra[1], dir: 'up' }; loadMap2(p.map, p.x, p.y, p.dir); V.scene = 'world'; await fadeIn(20); return; }
+  await fadeOut(20);
+  await cartao(['CAPÍTULO 8', 'O Inverno Escuro']);
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('inverno'); await fadeIn(30);
+  await say('* Três noites depois do Coração. A primeira neve do ano. E, pela janela alta da base, o Bairro Baixo inteiro no escuro, como uma boca fechada.');
+  await say('* Na rua, um Pavio de casaco cinza lê um papel em voz alta, sem emoção nenhuma, em cada esquina.');
+  await say('"Por ordem do Acendedor-Mor: a cidade de Auren ficará sem âmbar por sete noites. Para que lembre. Para que nunca mais esqueça por que precisa do Farol."', 'arauto');
+  await say('Sete noites. No inverno. Os velhos não aguentam sete noites de frio no escuro, ele SABE disso.', 'dalva');
+  await say('Ele quer que a cidade implore.', 'rita');
+  await say('* A Lume está na janela. A chama dela está baixa, menor do que vocês já viram, e ela não percebe.');
+  await say('Então a gente acende. Com a mão. Uma rua de cada vez.', 'lume');
+  await say('Com o quê? Não tem âmbar.', 'rita');
+  await say('Comigo. Eu sou uma vela, Rita. Eu sempre fui uma vela. Vela não precisa de âmbar.', 'lume');
+  await say('[CHAMA DA LUME: a barra de fogo no canto. Acender um braseiro gasta 25. Volta perto de braseiro aceso, nas lareiras e quando alguém chega a salvo. VELAS acendem sem gastar.]', 'cat');
+  await say('* A Irmã Dalva põe três velas grossas na mão da Lume e fecha os dedos dela em volta.');
+  await say('A lareira do hospital ainda tem lenha. Os velhos do Largo ficaram em casa, com medo de andar no escuro. Tragam eles. E aqui dentro do baú cabe muita gente, @. Você sabe disso.', 'dalva');
+  await say('E música. O Seu Lúcio sempre diz: gente que canta junto não tem medo do escuro. Se cada bairro mandar um músico pro palco do Festival...', 'lume');
+  await say('[QUATRO BAIRROS, em qualquer ordem: BAIRRO BAIXO, LARGO, VILA DOS PAVIOS e FESTIVAL. De NOITE: acender braseiros e levar gente. De DIA: comprar velas (Dona Iolanda), achar os músicos, e as voltas pelos Marcos.]', 'cat');
+  save2();
+}
+{ const _c7 = capitulo7; capitulo7 = async function () { if (!MAPS2.cisternas) montarMapas2(); if (G.flags.c7Fim) return capitulo8(); return _c7(); }; }
+{ const _uw8c = updateWorld2; updateWorld2 = function () { _uw8c(); if (V.scene === 'world' && G.flags.c7Fim && !G.flags.c8Init && !worldBusy2() && !W2.mv) run2(capitulo8); }; }
+// ---------- quem precisa ser levado ----------
+{ const _mmE8 = montarMapas2; montarMapas2 = function () {
+  _mmE8.apply(this, arguments);
+  const AU = POS3.auren, LG = POS4.largo, FE = POS3.festival;
+  const bueiro = { map: 'auren', at: AU.bueiro, r: 2 }, hosp = { map: 'largo', at: LG.hospOut, r: 2 }, palco = { map: 'festival', at: FE.frente[1], r: 3 };
+  montaEscolta('nair', { nm: 'Dona Nair e os netos', hum: 'nair', who: 'nair', map: 'auren', at: [26, 17], dest: bueiro, destNm: 'o baú (o bueiro)', fala: 'Os meninos não dormem, com o frio. Vocês têm um baú quente? Leva a gente. Mas pela rua acesa, que os meninos têm medo.', chegou: async () => { await say('* A Dona Nair olha o bueiro, olha o baú aberto lá embaixo, e entra com os dois netos pela tampa, sem perguntar nada. Lá dentro, a Irmã Dalva já tem sopa.'); } });
+  montaEscolta('bento', { nm: 'Seu Bento', hum: 'bento', who: 'bento', map: 'auren', at: [36, 18], dest: bueiro, destNm: 'o baú (o bueiro)', fala: 'Eu sou cego, moça. Escuro pra mim é sempre. Mas o frio não. E o medo dos outros eu escuto. Me leva? Me avisa quando tiver luz, que eu sinto o calor na cara.', chegou: async () => { await say('Tá quente aqui. Quente de gente. Obrigado, mala.', 'bento'); } });
+  montaEscolta('nonato', { nm: 'Seu Nonato', hum: 'nonato', who: 'nonato', map: 'largo', at: [40, 10], dest: hosp, destNm: 'o hospital', fala: 'O hospital? Tem fogo lá? Então eu vou. Devagar, que o joelho não ajuda. E pela luz.', chegou: async () => { await say('* O Seu Nonato entra no hospital esfregando as mãos. A porta, que vivia trancada de noite, hoje está escancarada.'); } });
+  montaEscolta('cida', { nm: 'Dona Cida', hum: 'cida', who: 'cida', map: 'largo', at: [8, 22], dest: hosp, destNm: 'o hospital', fala: 'Meu marido morreu no Inverno de doze anos atrás, no escuro. Eu não fico mais uma noite no escuro. Leva eu.' });
+  montaEscolta('pipo', { nm: 'Pipo', hum: 'pipo', who: 'pipo', map: 'largo', at: [33, 24], dest: hosp, destNm: 'o hospital', fala: 'A minha avó tá no hospital e eu fiquei sozinho. Vocês são do cartaz! O baú com dente! Me leva? Eu não tenho medo. Muito.' });
+  montaEscolta('zefa', { nm: 'Dona Zefa (tambor)', hum: 'zefa', who: 'zefa', map: 'auren', at: [14, 18], dest: palco, destNm: 'o palco do Festival', dia: 'O tambor? De dia eu batuco pra ninguém. Vem de noite, quando a rua tiver luz, que eu vou pro palco com vocês.', fala: 'Música no Festival? No escuro? ...Tá. Eu levo o tambor. Mas eu só ando onde eu vejo o chão.', chegou: async () => { await say('* A Dona Zefa sobe no palco e bate três vezes no tambor, só para ver se o tambor ainda é dela. É.'); } });
+  montaEscolta('lino', { nm: 'Seu Lino (rabeca)', hum: 'lino', who: 'lino', map: 'largo', at: [24, 13], dest: palco, destNm: 'o palco do Festival', dia: 'A rabeca tá aqui no colo. De noite, se tiver luz, eu toco no palco. De dia, ninguém escuta.', fala: 'Eu toquei no Festival antes do Farol existir. Vou tocar de novo, então. Pela luz, por favor, que rabequeiro velho tropeça.', chegou: async () => { await say('* O Seu Lino afina a rabeca no palco. Um "lá" comprido, tremido, que atravessa a praça escura.'); } });
+  montaEscolta('osvaldoM', { nm: 'Osvaldo (assobio)', hum: 'osvaldoV', who: 'osvaldo', map: 'ruaPavios', at: [27, 17], dest: palco, destNm: 'o palco do Festival', dia: 'De noite, quando a vila tiver luz, eu vou com vocês. O meu assobio é o tique-taque do relógio. É o único instrumento que eu tenho.', fala: 'Um relojoeiro no palco? A Candinha ia rir até chorar. Vamos. Pela rua acesa.' });
+  // o Jorge, de casaco cinza, na Vila (de noite)
+  const V_ = MAPS2.ruaPavios; if (V_ && !V_._jorge8) { V_._jorge8 = true; V_.ents.push(morador('jorgeP', 34, 9, { id: 'jorgeVila', dir: 'down', gone: () => !c8Ativo() || !ehNoite(), rotina: rot([34, 9, 'acender', 300, 'down'], [38, 9, 'acender', 300, 'down']), talk: falaJorgePavio })); }
+  // o abrigo: o hospital aberto de noite, com lareira
+  const H = MAPS2.hosp1; if (H && !H._c8) { H._c8 = true; H.ents.push({ t: 'sign', x: 15, y: 4, h: 30, spr: () => braseiroArt(true, Math.floor(W2.t / 6)), get luz() { return c8Ativo() ? 90 : 0; }, gone: () => !c8Ativo(), talk: lareiraAbrigo }); }
+}; }
+{ const _eh = entrarHospital; entrarHospital = async function () { if (c8Ativo()) { W2.mv = null; sfx('door'); await fadeOut(10); loadMap2('hosp1', ...POS4.hosp1.entra, 'up'); await fadeIn(10); if (!G.flags.c8Abrigo) { G.flags.c8Abrigo = true; await say('* O hospital dos pobres, de portas abertas pela primeira vez de noite. A Irmã Dalva acendeu a lareira do salão e empurrou as camas para perto dela.'); await say('Hoje entra tudo. Gente, mala, cachorro. Quem tiver frio entra.', 'dalva'); } return; } return _eh(); }; }
+async function lareiraAbrigo() { setChama(chamaMax()); sfx('heal'); await say('* A lareira do hospital. A Lume senta na frente dela e a chama dela cresce, devagar, até o tamanho de sempre.'); W2.toast = { s: 'Chama cheia (' + Math.round(chama()) + ')', t: 0 }; }
+// a lareira da base também enche a chama
+{ const _eB = falaDalva; if (typeof falaDalva === 'function') falaDalva = async function () { if (c8Ativo()) { setChama(chamaMax()); await say(pickOne(['Senta perto do fogão, Lume. Isso. Pega calor. Quem dá luz precisa receber de volta.', 'Já tem onze pessoas aqui dentro do baú. Onze! O Seu Bento contou piada pra todo mundo.']), 'dalva'); W2.toast = { s: 'Chama cheia', t: 0 }; return; } return _eB(); }; }
+// ---------- os bairros ----------
+const BAIRRO_NM = { auren: 'Bairro Baixo', largo: 'Largo do Hospital', festival: 'Festival', ruaPavios: 'Vila dos Pavios' };
+const BAIRRO_ESC = { auren: ['nair', 'bento'], largo: ['nonato', 'cida', 'pipo'], festival: ['zefa', 'lino', 'osvaldoM'], ruaPavios: [] };
+function bairroPronto(id) { return bairroAceso(id) && BAIRRO_ESC[id].every(escEntregue); }
+async function bairroCompleto8(id) {
+  if (G.flags['c8B_' + id] || !bairroPronto(id)) return;
+  G.flags['c8B_' + id] = true; sfx('rune');
+  const n = BAIRROS8.filter(b => G.flags['c8B_' + b]).length;
+  W2.toast = { s: BAIRRO_NM[id] + ' aceso! (' + n + '/4)', t: 0 };
+  const falas = {
+    auren: ['* No Bairro Baixo, uma janela acende com uma vela. Depois outra. Ninguém mandou. As pessoas viram o braseiro da esquina e foram buscar as velas da gaveta.', 'Ninguém precisa de ordem pra acender uma vela. Só de ver alguém acendendo primeiro.'],
+    largo: ['* O Largo do Hospital, aceso por braseiros e por uma fila de lamparinas de lata que os vizinhos foram pondo no peitoril. O hospital brilha como um navio.', 'O hospital dos pobres aceso no meio do apagão. Ele vai ver isso lá da torre.'],
+    festival: ['* O Festival aceso. A praça onde o Acendedor-Mor anunciou o Farol, acesa sem um grama de âmbar.', 'Falta só a música.'],
+    ruaPavios: ['* A Vila dos Pavios acesa. Por Pavios. Os que lembram acenderam primeiro; os outros olharam, olharam, e alguns foram atrás, devagar, com a lanterna da Coroa.', 'Pavio acendendo poste por vontade própria. Isso nunca aconteceu.']
+  }[id];
+  await say(falas[0]); await say(falas[1], id === 'auren' || id === 'festival' ? 'lume' : 'rita');
+  if (n >= 4) await say('[Os quatro bairros acesos. Os músicos no palco. O Festival espera a NOITE DA MÚSICA.]', 'cat');
+  save2();
+}
+// a checagem roda também quando alguém chega (escolta)
+{ const _uwB = updateWorld2; updateWorld2 = function () { _uwB(); if (V.scene === 'world' && c8Ativo() && !worldBusy2() && W2.t % 45 === 0) for (const b of BAIRROS8) if (!G.flags['c8B_' + b] && bairroPronto(b)) { run2(() => bairroCompleto8(b)); break; } }; }
+// ---------- a Vila dos Pavios: quem lembra, acende ----------
+{ const _ab = acenderBraseiro; acenderBraseiro = async function (id, i) {
+  if (id === 'ruaPavios' && c8Ativo() && ehNoite() && !brasAceso(id, i) && !G.flags.c8VilaAjuda) {
+    G.flags.c8VilaAjuda = true;
+    const quem = Object.keys(LEMB6).filter(devolvida);
+    await say('* Antes da Lume encostar no braseiro, uma mão de casaco cinza segura a dela. O Osvaldo.');
+    await say('Deixa com a gente. Ordem do Acendedor: Pavio não acende essa semana. Mas a ordem não falou nada sobre quem LEMBRA que é gente.', 'osvaldo');
+    const B = brasDe('ruaPavios'); let k = 0;
+    for (const nome of quem) { const j = B.findIndex((_, x) => !brasAceso('ruaPavios', x)); if (j < 0) break; (luz8().ruaPavios = luz8().ruaPavios || []).push(j); k++; }
+    if (k) await say(`* ${quem.map(q => LEMB6[q].dono).join(', ')}: cada um pega uma brasa e acende um braseiro da vila. ${k} de ${B.length}.`);
+    else await say('Eu sozinho não dou conta. Ninguém aqui lembra o bastante pra desobedecer. Ainda.', 'osvaldo');
+    if (k < Object.keys(LEMB6).length) await say('[Pavios com a lembrança devolvida (Cap. 6) acendem sozinhos. Os outros braseiros, a Lume acende.]', 'cat');
+    if (bairroAceso('ruaPavios')) await bairroCompleto8('ruaPavios');
+    return;
+  }
+  return _ab(id, i);
+}; }
+async function falaJorgePavio() {
+  if (!G.flags.c8Jorge) {
+    G.flags.c8Jorge = true; playMusic('perda');
+    await say('* Um Pavio parado na frente da casa 9, de casaco cinza, com a lanterna da Coroa apagada na mão. O bigode. As mãos de mecânico.');
+    await say('Boa noite. Hoje eu não acendo. Ordem.', 'pavioG');
+    await say('Seu Jorge. Sou eu. A Lume.', 'lume');
+    await say('* Ele olha para ela com educação. Com gentileza, até. Com a gentileza que se tem com estranhos.');
+    await say('Prazer, moça. Que nome bonito. Combina com vela.', 'pavioG');
+    await say('* A Lume não chora. Ela canta, baixinho, a música da estrada, aquela que ele pediu lá no fundo do Coração.');
+    await say('* O Pavio escuta. No meio do segundo verso, os dedos dele batem duas vezes na lanterna. Pom, pom. Como quem dá duas bombadas num pedal.');
+    await say('...Que música é essa? Eu conheço. Não, não conheço. Desculpa. Boa noite.', 'pavioG');
+    await say('Ele bateu duas vezes. Ele bateu DUAS vezes, Rita.', 'lume');
+    await say('Eu vi.', 'rita');
+    playMusic('vila'); save2(); return;
+  }
+  await say(pickOne(['Boa noite. Hoje eu não acendo. Ordem.', 'Boa noite, moça da vela.', '(ele bate duas vezes na lanterna, sem perceber)']), 'pavioG');
+}
+// ---------- velas: a Dona Iolanda vende ----------
+{ const _fIo8 = falaIolanda; falaIolanda = async function () {
+  if (c8Ativo() && !ehNoite()) {
+    if (!G.flags.c8Iolanda) { G.flags.c8Iolanda = true; await say('Velas? Eu faço vela com a sobra da cera de selar carta. Cera boa, de papelaria. Quatro cobres cada, e eu tô no prejuízo.', 'iolanda'); }
+    const c = await choose('Velas da Dona Iolanda (4 cobres cada). Você tem ' + (G.cobres || 0) + '.', ['Comprar 1', 'Comprar 5', 'Nada'], 'iolanda', 2);
+    const n = c === 0 ? 1 : c === 1 ? 5 : 0;
+    if (n) { if ((G.cobres || 0) < n * 4) { await say('Fiado não. Nem pra mala do cartaz.', 'iolanda'); } else { G.cobres -= n * 4; G.velas = (G.velas || 0) + n; sfx('item'); W2.toast = { s: '+' + n + ' vela(s) (' + G.velas + ')', t: 0 }; } }
+    return;
+  }
+  return _fIo8();
+}; }
+// ---------- a Noite da Música ----------
+function musicosProntos() { return ['zefa', 'lino', 'osvaldoM'].every(escEntregue); }
+{ const _pt8 = palcoTiago; palcoTiago = async function () {
+  if (!c8Ativo()) return _pt8();
+  if (G.flags.c8P1) { await say('* O palco do Festival. As cadeiras viradas, os braseiros ainda acesos. Alguém esqueceu um tambor.'); return; }
+  const n = BAIRROS8.filter(b => G.flags['c8B_' + b]).length;
+  if (n < 4 || !musicosProntos()) { await say('* O palco do Festival, vazio e escuro. O Seu Lúcio está sentado na beira, de sanfona fechada no colo.'); await say(`Música sozinha não esquenta ninguém, mala. Preciso de gente: um músico de cada bairro (${['zefa', 'lino', 'osvaldoM'].filter(escEntregue).length}/3), e a cidade acesa pra vir escutar (${n}/4 bairros).`, 'lucio'); return; }
+  if (!ehNoite()) { await say('O show é de noite. É de noite que precisa.', 'lucio'); return; }
+  await noiteDaMusica();
+}; }
+async function noiteDaMusica() {
+  W2.mv = null; playMusic('concerto');
+  await say('* A Noite da Música. O Festival cheio: o Bairro Baixo, o Largo, os Pavios que lembram e alguns que não lembram, os velhos do hospital enrolados em cobertor. Cada um com uma vela.');
+  await say('* No palco: a Dona Zefa no tambor, o Seu Lino na rabeca, o Osvaldo assobiando o tique-taque, o Seu Lúcio na sanfona. E a Lume no meio, com a chama quase apagada de tanto acender.');
+  await say('Eu não tenho mais chama pra cantar alto.', 'lume');
+  await say('Então canta baixo. A gente canta alto por você.', 'rita');
+  const r = await ritmoLume();
+  await say(r.perf + r.bom >= 4 ? '* A Lume começa baixinho. O tambor entra. A rabeca entra. E então a praça inteira entra, mil vozes desafinadas cantando uma música que ninguém sabia que sabia.' : '* A Lume erra a entrada, ri, começa de novo. A praça ri junto e entra cantando, mil vozes desafinadas, e ninguém mais lembra do erro.');
+  await say('* E no meio da música, a Lume canta uma coisa que nunca cantou. Um verso novo. Ninguém ensinou. Saiu.');
+  await say('"E se a luz da casa apagar, / acende a do vizinho; / que vela só fica sozinha / quando esquece o caminho."', 'lume');
+  G.flags.c8Verso = true; sfx('rune');
+  await say('* {y}A música da Lume ganhou um verso! Técnica nova: VERSO NOVO{/} (o grupo bate 25% mais por 3 vezes e ganha 20 de Tensão).');
+  await wait(20); playMusic(null);
+  await say('* Um apito. Dois. Dez. Da rua do Largo, em fila, homens de sobretudo preto com varas compridas e cones de latão na ponta. Os APAGADORES.');
+  await say('* Na frente deles, um homem enorme de capacete-gaiola, com um cone do tamanho de um sino na ponta da lança. O povo abre espaço sem querer, como quem abre espaço para o frio.');
+  await say('Reunião sem licença. Fogo sem âmbar. Música sem horário. Três infrações. Apagadores, APAGUEM.', 'capitao');
+  await say('Ninguém apaga nada aqui hoje.', 'me');
+  const rr = await lutaMapa(['capitao', 'apagador'], { bg: bgAurenEscura, music: 'boss', pos: [[190, 158], [130, 150]], intro: async () => { const e = BT.foes[0]; e.phases = fasesCapitao(); e.ct = 12; callout('CAPITÃO APAGADOR', '#c8c8d8', 90); } });
+  if (rr !== 'win') return;
+  G.flags.c8P1 = true; playMusic('concerto');
+  await say('* O Capitão Apagador cai sentado no meio da praça, de sobretudo chamuscado, com a gaiola do capacete ainda acesa. Ele tenta apagar com a luva. Não apaga.');
+  await say('* A Dona Cida, a viúva do Inverno, chega perto dele com a vela dela. E acende a dele, de propósito, olhando nos olhos.');
+  await say('Pronto. Agora você também.', 'cida');
+  await say('* Os Apagadores vão embora sem o capitão. O Festival canta até a madrugada.');
+  await wait(20);
+  await say('* E de madrugada, quando o último braseiro já é só brasa, o frio muda. Não é mais frio de inverno. É frio de dentro. Das pedras. Dos bueiros.');
+  await say('* No Largo, a fonte do hospital estala. Racha. Por baixo dela, uma escada de pedra que ninguém sabia que existia, coberta de gelo, descendo.');
+  await say('[O frio está vindo de baixo. Das Cisternas de Auren.]', 'cat');
+  G.hora = 5 * 60; save2();
+}
+
+// ================= CAPÍTULO 8 — Parte 2: AS CISTERNAS e A FRIAGEM =================
+// A fonte do Largo racha: uma escada desce para as CISTERNAS de Auren. Salão dos canais (braseiros, sombras), o Seu Tomé
+// (o cisterneiro) procura a filha NINA, que foi atrás de um gato. SALÃO DE GELO 1 (escorrega; braseiros derretem) ->
+// a câmara da Nina -> ESCOLTA de volta pelo corredor escuro (a grade só abre por dentro) -> o pai abre a COMPORTA ->
+// SALÃO DE GELO 2 -> a descida -> O CORAÇÃO FRIO: A FRIAGEM (chefe). Depois: a fita na gaiola (segredo do jogo), a Lume
+// sem chama, o povo de Auren com as velas, a EVOLUÇÃO DA LUME, o amanhecer; na torre, o Acendedor-Mor fecha o caderno.
+// Voltas: velas da Igreja do Sino (Velhágua), lampiões de Candeia, velas de âmbar da Cidade Alta.
+const CI8 = POS8.cisternas, FR8 = POS8.friagem8;
+Object.assign(HUMS, {
+  tome: { h: 52, skin: '#8a5a3a', hair: '#2a1a1a', top: '#3a5a6a', bottom: '#2a2a2a', hat: '#5a4a3a' },
+  nina: { h: 32, skin: '#c8906a', hair: '#3a2a1a', hairStyle: 'longo', top: '#e86a8a', bottom: '#5a3a5a' }
+});
+Object.assign(WHO, {
+  tome: { name: () => 'Seu Tomé', portrait: () => portHum('tome'), voice: voz(260, 'blipLow'), col: '#d8e8f0' },
+  nina: { name: () => 'Nina', portrait: () => portHum('nina'), voice: voz(760), col: '#ffd8e8' }
+});
+BRAZ8 = Object.assign({}, ...Object.entries(CI8.gelo1.braz).map(([k, v]) => ({ ['g1' + k]: v })), ...Object.entries(CI8.gelo2.braz).map(([k, v]) => ({ ['g2' + k]: v })));
+{ const _mm8b = montarMapas2; montarMapas2 = function () {
+  _mm8b.apply(this, arguments);
+  const grade = (m) => { for (const p of m.props || []) { if (p._hld) continue; const f = p.img; p._hld = true; p.casaO = p.casaO || f.casaO; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } };
+  const brasC = (id, [x, y], derrete) => ({ t: 'sign', id: 'bras8_' + id, x, y, h: 30, spr: () => braseiroArt(!!(derrete ? gelo8()[id] : (luz8().cisternas || []).includes(id)), Math.floor(W2.t / 6)), get luz() { return (derrete ? gelo8()[id] : (luz8().cisternas || []).includes(id)) ? 76 : 0; }, talk: () => acenderCisterna(id, derrete) });
+  MAPS2.cisternas = { rows: ROWS8.cisternas, key: KEY8, name: 'Auren · As Cisternas', music: 'inverno', batBg: bgCisternas, bg: '#060a10', semCeu: true, dark: 'rgba(4,8,14,0.72)', get lights() { return luzLume8(); },
+    props: [
+      { img: () => gradeArt(!!G.flags.c8Grade), x: CI8.grade[0][0], y: CI8.grade[0][1] + 1.5, by: (CI8.grade[0][1] - 1) * TS, get solid() { return G.flags.c8Grade ? [] : [[CI8.grade[0][0], CI8.grade[0][1], 2, 1]]; } },
+      { img: () => comportaArt(!!G.flags.c8Comporta), x: CI8.comporta[0][0] - 0.1, y: CI8.comporta[0][1] + 1.5, by: (CI8.comporta[0][1] - 1) * TS, get solid() { return G.flags.c8Comporta ? [] : [[CI8.comporta[0][0], CI8.comporta[0][1], 1, 1]]; } },
+      ...[[14, 2], [24, 9], [37, 2], [50, 9], [30, 28], [46, 31]].map(([x, y]) => ({ img: caroçoGeloArt, x: x - 0.1, y: y + 1, solid: [[x, y, 1, 1]] }))
+    ],
+    ents: [
+      ...CI8.saida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; sfx('door'); await fadeOut(10); loadMap2('largo', ...escadaLargo(), 'down'); await fadeIn(10); } })),
+      ...CI8.canalBraz.map((p, i) => brasC('c' + i, p, false)),
+      ...CI8.escuroBraz.map((p, i) => brasC('e' + i, p, false)),
+      ...Object.entries(BRAZ8).map(([k, p]) => brasC(k, p, true)),
+      morador('tome', ...CI8.pai, { dir: 'down', gone: () => !!G.flags.c8Fim, talk: falaTome }),
+      morador('nina', ...CI8.nina, { dir: 'down', gone: () => !!G.flags.c8Nina || escAtivo('nina'), talk: falaNina }),
+      { t: 'sign', x: CI8.alavancaGrade[0], y: CI8.alavancaGrade[1], h: 26, spr: () => alavancaArt(G.flags.c8Grade ? 1 : 0), talk: async () => { if (G.flags.c8Grade) return; G.flags.c8Grade = true; sfx('door'); V.shake = 4; await say('* A alavanca range. Lá no fim do corredor escuro, uma grade de ferro sobe. O caminho de volta, sem gelo.'); } },
+      marcoEnt(...CI8.marco),
+      ...CI8.bau.map(([x, y], i) => bauEnt('cisternas', 'b' + i, x, y, async () => { if (i) { G.velas = (G.velas || 0) + 3; await say('* Dentro: {y}3 velas{/}.'); await dar('frasco', 1); } else { await dar('pluma', 1); await dar('cobres', 90); } })),
+      inimigo('cf1', 'friagem', ...CI8.foes[0], ['friagem', 'geadaViva'], { spr: (t) => friagemArt(Math.floor(t / 10) % 2), h: 30, bg: bgCisternas }),
+      inimigo('cf2', 'loboFuligem', ...CI8.foes[1], ['loboFuligem', 'loboFuligem'], { spr: (t, d) => { const c = loboFuligemArt(Math.floor(t / 7) % 2); return d === 'left' ? flipC(c) : c; }, h: 24, bg: bgCisternas }),
+      inimigo('cf3', 'geadaViva', ...CI8.foes[2], ['geadaViva', 'geadaViva', 'friagem'], { spr: (t) => geadaVivaArt(Math.floor(t / 6) % 8), h: 30, bg: bgCisternas }),
+      inimigo('cf4', 'friagem', ...CI8.foes[3], ['friagem', 'loboFuligem', 'geadaViva'], { spr: (t) => friagemArt(Math.floor(t / 10) % 2), h: 30, bg: bgCisternas }),
+      ...CI8.descida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; await fadeOut(14); loadMap2('friagem8', ...FR8.entra, 'up'); await fadeIn(14); if (MAPS2.friagem8.onEnter) await MAPS2.friagem8.onEnter(); } }))
+    ],
+    onEnter: async () => { if (!G.flags.c8Cist) { G.flags.c8Cist = true; await say('* As Cisternas de Auren. Arcos de pedra, canais de água preta e, por cima de tudo, uma crosta de gelo que estala como osso.'); await say('* O frio aqui embaixo não é de inverno. É mais velho. Tem cheiro de casa fechada há muito tempo.'); await say('[Braseiros: aqui embaixo pegam a qualquer hora (não tem vento). No GELO se escorrega até bater; braseiro aceso derrete o gelo em volta.]', 'cat'); } }
+  };
+  MAPS2.friagem8 = { rows: ROWS8.friagem8, key: KEY8, name: 'As Cisternas · O Coração Frio', music: 'inverno', batBg: bgCoracaoFrio, bg: '#04080e', semCeu: true, dark: 'rgba(6,10,18,0.45)', get lights() { return luzLume8(); },
+    props: [],
+    ents: [
+      ...FR8.volta.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; await fadeOut(10); loadMap2('cisternas', CI8.descida[0][0], CI8.descida[0][1] - 1, 'up'); await fadeIn(10); } })),
+      ...FR8.frente.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, gone: () => !!G.flags.c8Friagem, run: lutaFriagem }))
+    ],
+    onEnter: async () => { if (!G.flags.c8Coracao) { G.flags.c8Coracao = true; await say('* O Coração Frio. Uma câmara redonda, de gelo do chão ao teto. No meio, uma coisa sentada. Um manto de neve do tamanho de uma casa, de costas.'); await say('* Ela respira. Cada vez que ela solta o ar, lá em cima, em Auren, mais uma janela congela.'); } }
+  };
+  grade(MAPS2.cisternas);
+  // a escada no Largo (aparece na Parte 2)
+  const L = MAPS2.largo; if (L && !L._cist8) { L._cist8 = true; const [x, y] = escadaLargo(); L.ents.push({ t: 'trig', x, y: y + 1, w: 1, h: 1, passa: true, gone: () => !G.flags.c8P1, run: async () => { W2.mv = null; if (!ehNoite() && !G.flags.c8Cist) await say('* A escada de gelo debaixo da fonte rachada.'); sfx('door'); await fadeOut(12); loadMap2('cisternas', ...CI8.entra, 'down'); await fadeIn(12); if (MAPS2.cisternas.onEnter) await MAPS2.cisternas.onEnter(); } }); L.props.push({ img: caroçoGeloArt, x: x - 0.1, y: y + 1, get by() { return G.flags.c8P1 ? (y + 1) * TS : -9999; } }); }
+  // a escolta da Nina (dentro das Cisternas): a volta pelo corredor escuro
+  montaEscolta('nina', { nm: 'Nina', hum: 'nina', who: 'nina', map: 'cisternas', at: CI8.nina, dest: { map: 'cisternas', at: CI8.pai, r: 2 }, destNm: 'o pai dela', fala: 'Vocês vieram me buscar? O gato fugiu pro gelo e eu fui atrás. Agora eu não acho a volta. Tá muito escuro lá.', chegou: chegouNina });
+  // voltas: Igreja do Sino (Velhágua)
+  const Ig = MAPS2.igreja; if (Ig && !Ig._c8) { Ig._c8 = true; const p = chaoLivre8(Ig, 6, 6) || [6, 6]; Ig.ents.push({ t: 'sign', x: p[0], y: p[1], h: 20, spr: () => velaChaoArt(Math.floor(W2.t / 8)), gone: () => !c8Ativo() || !!G.flags.c8VelasVelhagua, talk: velasIgreja }); }
+}; }
+function escadaLargo() { const L = MAPS2.largo; if (L && L._esc8) return L._esc8; const p = (L && chaoLivre8(L, 20, 21)) || [20, 21]; if (L) L._esc8 = p; return p; }
+async function acenderCisterna(id, derrete) {
+  const aceso = derrete ? gelo8()[id] : (luz8().cisternas || []).includes(id);
+  if (aceso) { setChama(chama() + 20); W2.toast = { s: 'A Lume se aquece. Chama ' + Math.round(chama()), t: 0 }; return; }
+  const custo = G.flags.c8Lampiao ? 15 : 25, vela = (G.velas || 0) > 0;
+  if (!vela && chama() < custo) { await say('Tô sem chama. Uma vela, ou um fogo pra esquentar...', 'lume'); return; }
+  if (vela) G.velas--; else setChama(chama() - custo);
+  sfx('rune');
+  if (derrete) { gelo8()[id] = true; W2.toast = { s: 'Fsssss... o gelo em volta derrete.', t: 0 }; if (!G.flags.tutDerrete8) { G.flags.tutDerrete8 = true; await say('O gelo derreteu em volta do fogo! Ali dá pra parar sem escorregar.', 'rita'); } }
+  else { (luz8().cisternas = luz8().cisternas || []).push(id); W2.toast = { s: 'O braseiro acende.', t: 0 }; }
+}
+async function falaTome() {
+  if (G.flags.c8Nina) { await say(G.flags.c8Friagem ? 'A Nina não larga o gato. Nem eu largo a Nina. Obrigado, mala. Obrigado, moças.' : pickOne(['A comporta tá aberta. O frio vem lá de baixo, do Coração Frio, onde a água para de andar. Cuidado.', 'Eu trabalho aqui faz vinte anos. Nunca vi esse gelo. Nunca.']), 'tome'); return; }
+  if (!G.flags.c8Tome) {
+    G.flags.c8Tome = true;
+    await say('* Um homem de capa de oleado, com uma lanterna de cisterneiro apagada, andando de um lado para o outro na frente de uma comporta de ferro.');
+    await say('A Nina! A minha filha! Ela foi atrás do gato e entrou no gelo, pelo lado de lá, pela passagem da esquerda! Eu tentei ir e escorreguei até o fim da sala e voltei batendo a cabeça.', 'tome');
+    await say('O gelo escorrega até bater. Tem braseiro velho lá dentro, do tempo que as cisternas tinham vigia. Se acender, o gelo derrete em volta.', 'tome');
+    await say('E essa comporta?', 'rita');
+    await say('Dá pro Coração Frio. De onde o frio vem. Eu tenho a chave. Mas sem a Nina eu não abro nada.', 'tome');
+    return;
+  }
+  await say('Pela passagem da esquerda. Pelo gelo. A Nina, por favor.', 'tome');
+}
+async function falaNina() {
+  if (!G.flags.c8NinaAchou) { G.flags.c8NinaAchou = true; await say('* Uma menina de casaco cor-de-rosa, sentada no chão abraçada num gato cinza e magro, no fim de uma câmara escura.'); await say('O Fumaça! Eu achei o Fumaça! Mas agora eu não acho o caminho. E tem coisa andando no escuro.', 'nina'); await say('[A volta sem gelo é pelo CORREDOR ESCURO da esquerda: puxe a alavanca da grade. Acenda os braseiros do caminho antes, ou ela vai ter medo.]', 'cat'); }
+  return pedirEscolta('nina');
+}
+async function chegouNina() {
+  G.flags.c8Nina = true; G.flags.c8Comporta = true; sfx('door');
+  await say('* A Nina larga o gato e se joga no pai. O gato, ofendido, sobe nos ombros da Rita.');
+  await say('Vocês trouxeram ela. No escuro. Pela luz. Tomem.', 'tome');
+  await say('* O Seu Tomé gira a chave grande na comporta. A comporta range e sobe. Do outro lado, mais gelo, e o vento frio vindo de baixo.');
+  await say('Quando eu era menina, no Inverno, eu tinha uma lanterna de procissão. Rosa. Eu levei ela pra cá, uma vez, e perdi. O pai disse que o frio comeu.', 'nina');
+  save2();
+}
+async function lutaFriagem() {
+  if (G.flags.c8Friagem) return; W2.mv = null;
+  await say('* A Friagem se vira. O capuz é um buraco. Dois pontos de geada lá dentro olham para a Lume, e só para ela.');
+  await say('Ela tá olhando pra mim.', 'lume');
+  await say('Ela tá olhando pra luz. É o que ela não tem.', 'me');
+  const r = await lutaMapa(['friagemB'], { bg: bgCoracaoFrio, music: 'boss', pos: [[180, 184]], intro: async () => { const e = BT.foes[0]; e.phases = fasesFriagem(); e.ct = 14; callout('A FRIAGEM', '#bff0ff', 100); } });
+  if (r !== 'win') return;
+  G.flags.c8Friagem = true;
+  await cenaFim8();
+}
+async function cenaFim8() {
+  playMusic(null);
+  await say('* A Friagem desmancha. Não morre: desmancha, como neve no sol, devagar, sem barulho. O manto vira água. O capuz vira vapor.');
+  await say('* No chão, sobra a gaiola de lanterna, aberta. E presa na grade, a fita de cabelo cor-de-rosa, dura de gelo.');
+  await say('* A Lume se abaixa para pegar a fita. E cai.');
+  playMusic('perda');
+  await say('Lume? LUME!', 'rita');
+  await say('* A chama dela está do tamanho de uma unha. Azul. Tremendo. Ela gastou tudo: cada braseiro, cada rua, cada nota da música.');
+  await say('Eu tô bem. Eu só... eu só tô com sono. Vela também dorme, né, @?', 'lume');
+  await say('Não dorme. Não agora. NÃO AGORA.', 'me');
+  await fadeOut(20); G.hora = 5 * 60 + 30;
+  V.scene = 'world'; loadMap2('largo', ...escadaLargo(), 'up'); await fadeIn(20);
+  await say('* Vocês sobem as escadas de gelo carregando a Lume. A Rita na frente, o baú embaixo, segurando o peso. Saem no Largo do Hospital, de madrugada.');
+  await say('* E o Largo está cheio.');
+  await say('* A Dona Nair com os netos. O Seu Bento, que não vê, de mão dada com a Dona Cida. O Pipo. O Seu Nonato. A Dona Zefa sem o tambor. O Seu Lino. O Osvaldo e os Pavios que lembram, e alguns que não lembram. O Brás e a mãe dele. O Seu Tomé com a Nina no colo e o gato na cabeça.');
+  await say('* Cada um com uma vela. Ninguém combinou. Eles viram a fonte rachar e vieram.');
+  await say('Ela acendeu a nossa rua. A gente acende ela.', 'nair');
+  await say('* Eles fecham um círculo em volta da Lume. E chegam as velas perto dela, todas ao mesmo tempo, como quem esquenta as mãos num fogo que está apagando.');
+  await cenaEvolucaoLume();
+  playMusic('concerto');
+  await say('* A Lume abre os olhos. Olha o círculo de velas. Olha você.');
+  await say('Ninguém nunca me acendeu. Eu sempre acendi os outros. É... é assim que é? É quente assim?', 'lume');
+  await say('É. É exatamente quente assim.', 'me');
+  await say('* O sol nasce atrás da serra. Pela primeira vez em sete noites, ninguém em Auren precisa dele.');
+  await wait(30);
+  playMusic(null);
+  await say('* Lá no alto, na torre de vidro da Acendedoria, uma janela iluminada. Um homem de luvas olha a cidade acesa à mão. Fica muito tempo olhando.');
+  await say('* Ele abre o caderno preto. Escreve uma linha. Fecha.');
+  await say('"Eles não precisam do Farol." ...Então está na hora de acendê-lo.', 'vesper');
+  save2();
+  await fadeOut(40);
+  G.flags.c8Fim = true; G.hora = 10 * 60; G.dia = (G.dia || 0) + 1;
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(30);
+  await say('* Na base. A fita cor-de-rosa secou em cima do fogão. A Rita pendurou ela no gancho da porta, ao lado da página do nome riscado e do bilhete com a letra pequena.');
+  await say('Três coisas dele na parede. A gente tá fazendo uma coleção.', 'rita');
+  await say('[Registro: âmbar de Auren restabelecido às nove da manhã. Por ordem do Acendedor-Mor. "Para comemorar."]', 'cat');
+  await say('Comemorar o quê?', 'lume');
+  await say('A gente vai descobrir. No morro.', 'me');
+  save2();
+  await fadeOut(40);
+  await cartao(['FIM DO CAPÍTULO 8', 'O Inverno Escuro', '', 'que vela só fica sozinha', 'quando esquece o caminho.']);
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); await fadeIn(20);
+  await say('* (O Capítulo 9 está a caminho: a Subida do Morro. Os Marcos levam aonde vocês já foram.)');
+}
+// ---------- voltas ----------
+async function velasIgreja() {
+  G.flags.c8VelasVelhagua = true; sfx('item');
+  await say('* No canto da Igreja do Sino, um caixote de madeira com "VELAS DE PROCISSÃO" escrito a carvão. Dentro, dezenas de velas grossas, de cera velha.');
+  await say('* Num papel pregado na tampa: "Para quando a luz faltar. Que vai faltar. — o sacristão, no ano do Inverno."');
+  G.velas = (G.velas || 0) + 10;
+  await say('* {y}+10 velas.{/} E a Lume, segurando a caixa, sente a chama crescer: ela aguenta mais. ({y}Chama máxima +20{/})');
+  setChama(chamaMax());
+}
+{ const _fI8 = falaIlda; falaIlda = async function () {
+  if (c8Ativo() && !G.flags.c8Lampiao) {
+    G.flags.c8Lampiao = true; sfx('item');
+    await say('Auren apagou? Hm. Candeia apagou faz três anos, e a gente aprendeu uma coisa: fogo de rua se acende com lampião de mina, não com vela. Gasta menos. Dura mais.', 'ilda');
+    await say('* Ela dá à Lume um lampião de mina pequeno, de vidro grosso, e ensina a acender braseiro pela boca do lampião, sem gastar a chama inteira.');
+    await say('* {y}Lampiões de Candeia:{/} acender braseiro gasta só 15 de chama (era 25).');
+    return;
+  }
+  return _fI8();
+}; }
+{ const _fD8 = falaDama; falaDama = async function () {
+  if (c8Ativo() && !G.flags.c8Hortensia) {
+    G.flags.c8Hortensia = true;
+    await say('* A Cidade Alta, acesa. Toda. Os jardins com lanternas de âmbar, as estufas brilhando. Lá embaixo, Auren no escuro.');
+    await say('Eles não apagaram aqui em cima. Claro que não. Aqui mora quem paga.', 'dama');
+    await say('Eu fiquei a noite toda olhando lá pra baixo. O meu marido nasceu no Bairro Baixo. Tomem. Velas de âmbar, dessas de jantar de rico. Não servem pra nada aqui em cima, que aqui nunca falta.', 'dama');
+    G.velas = (G.velas || 0) + 6; sfx('item'); await say('* {y}+6 velas de âmbar.{/}');
+    return;
+  }
+  return _fD8();
+}; }
+// ---------- semente (Cap. 8): O FIO DE ÂMBAR nas Cisternas ----------
+// Primeira aparição na T2 da MOÇA DA BARCA (a moça de âmbar que fugiu no fim da T1). Ideia do usuário: ela vira, aos
+// poucos, a voz-companheira do baú, morando dentro do Catálogo (arco planejado na bíblia, Caps. 8-10 e T3).
+Object.assign(WHO, { eco8: { name: () => '???', voice: voz(640), col: '#ffd890', edge: '#c8902a' } });
+function fioAmbarArt(f) {
+  const c = mk(14, 30), x = c.getContext('2d'), p = (Math.sin(f * 0.25) + 1) / 2;
+  x.fillStyle = '#3a2a1a'; x.fillRect(5, 0, 4, 4); x.fillStyle = '#1a1208'; x.fillRect(6, 1, 2, 3);
+  x.fillStyle = '#c8802a'; x.fillRect(6, 3, 2, 20); x.fillStyle = '#ffc860'; x.fillRect(6, 3 + (f % 20), 2, 3);
+  x.fillStyle = `rgba(255,216,120,${0.5 + p * 0.5})`; x.fillRect(7, 4, 1, 18);
+  x.fillStyle = '#a8681c'; x.fillRect(3, 24, 8, 3); x.fillStyle = '#ffb848'; x.fillRect(4, 24, 6, 2); x.fillStyle = '#fff0b0'; x.fillRect(5, 24, 2, 1);
+  x.fillStyle = `rgba(255,200,100,${0.15 + p * 0.2})`; x.fillRect(1, 22, 12, 7);
+  return c;
+}
+{ const _mmF8 = montarMapas2; montarMapas2 = function () {
+  _mmF8.apply(this, arguments);
+  const m = MAPS2.cisternas; if (!m || m._fio8) return; m._fio8 = true;
+  const p = chaoLivre8(m, 36, 26) || [36, 26];
+  m.ents.push({ t: 'sign', id: 'fio8', x: p[0], y: p[1], h: 30, spr: () => fioAmbarArt(Math.floor(W2.t / 4)), get luz() { return G.flags.c8Fio ? 20 : 46; }, talk: fioAmbar8 });
+}; }
+async function fioAmbar8() {
+  if (G.flags.c8Fio) { await say('* O fio de âmbar continua ali, morno no meio do gelo. Ele não fala mais. Mas parece que ele espera.'); return; }
+  G.flags.c8Fio = true; playMusic(null);
+  await say('* Um fio de âmbar escorre de uma rachadura na parede. No meio de todo esse gelo, ele está morno. E pulsa, devagar, como quem respira.');
+  await say('Âmbar? Aqui embaixo? Isso não devia estar nas lanternas lá de cima?', 'lume');
+  sfx('catalog'); await say('[Registro: âmbar bruto. Origem: ...]', 'cat');
+  await say('[Origem: ...]', 'cat');
+  await say('[Erro de leitura.]', 'cat');
+  await wait(20);
+  await say('...trinta e um?', 'eco8');
+  await say('* A voz não veio do fio. Veio de dentro. De dentro do baú, do lugar onde o Catálogo fala.');
+  await say('Quem falou?', 'me');
+  await say('Você subiu. Que bom. Eu também subi.| Está frio aqui. Eu fiquei tanto tempo no frio.', 'eco8');
+  await say('Rita. Você ouviu isso?', 'lume');
+  await say('Ouvi o fio estalar. Por quê?', 'rita');
+  sfx('catalog'); await say('[Correção: ninguém falou. Não há ninguém no registro além de mim.]', 'cat');
+  await say('[O Catálogo nunca precisou corrigir uma coisa que não aconteceu.]', 'me');
+  await say('* O fio de âmbar esfria um pouco. Mas não apaga.');
+  playMusic('inverno');
+}
+{ const _cf8 = cenaFim8; cenaFim8 = async function () {
+  const _say = say; let feito = false;
+  say = async function (t, w) {
+    const r = await _say.apply(this, arguments);
+    if (!feito && w === 'cat' && typeof t === 'string' && t.startsWith('[Registro: âmbar de Auren')) {
+      feito = true; say = _say;
+      await _say('[Nota interna: há uma linha no meu registro que eu não escrevi. Letra redonda, sem assinatura.]', 'cat');
+      await _say(G.flags.c8Fio ? '[Ela diz: "obrigada por não deixar a vela apagar. eu sei como é o frio."]' : '[Ela diz só: "achei você."]', 'cat');
+      await _say('Catálogo. Quem escreveu isso?', 'me');
+      await _say('[...Verificando.]| [Não sei.]| [É a primeira vez que eu digo isso.]', 'cat');
+    }
+    return r;
+  };
+  try { return await _cf8.apply(this, arguments); } finally { say = _say; }
+}; }
+
+// ================= CAP. 8 NO MAPA, NO DIÁRIO E NA VIDA =================
+Object.assign(REGIAO_DE, { cisternas: 'auren', friagem8: 'auren' });
+Object.assign(VIDA_CFG, { cisternas: { vagalumes: 6 }, friagem8: { vagalumes: 4 } });
+ROTULOS_EXTRA.cisternas = () => [[...CI8.saida[0], 'Largo do Hospital'], [...CI8.comporta[0], 'Comporta'], [...CI8.descida[0], 'O Coração Frio'], [CI8.nina[0], CI8.nina[1], 'A câmara da Nina']];
+Object.assign(LIGA_EXTRA_FIXA, { cisternas: [[...CI8.saida[0], 'largo'], [...CI8.descida[0], 'friagem8']], friagem8: [[...FR8.volta[0], 'cisternas']] });
+{ const _ms8 = missoes; missoes = function () {
+  const f = G.flags || {};
+  if (!f.c8Init) return _ms8();
+  const L = _ms8().filter(m => m.tipo !== 'main');
+  let M;
+  const nb = BAIRROS8.filter(b => f['c8B_' + b]).length;
+  if (f.c8Fim) M = { tit: 'O Morro do Farol', desc: '"Está na hora de acendê-lo." O Capítulo 9 está a caminho.', map: 'interior', at: [13, 6] };
+  else if (f.c8Friagem) M = { tit: 'Amanhecer', desc: 'Suba com a Lume.', map: 'friagem8', at: FR8.volta[0] };
+  else if (f.c8Nina) M = { tit: 'O Coração Frio', desc: 'A comporta está aberta. Atravesse o segundo salão de gelo e desça.', map: 'cisternas', at: CI8.descida[0] };
+  else if (f.c8Tome) M = { tit: 'A Nina', desc: 'A menina entrou no gelo pela passagem da esquerda. Braseiros derretem o gelo. A volta é pelo corredor escuro (alavanca da grade).', map: 'cisternas', at: CI8.nina };
+  else if (f.c8P1) M = { tit: 'As Cisternas', desc: 'A fonte do Largo rachou: uma escada desce para as Cisternas. O frio vem de lá.', map: 'largo', at: escadaLargo() };
+  else if (nb >= 4 && musicosProntos()) M = { tit: 'A Noite da Música', desc: 'DE NOITE, no palco do Festival.', map: 'festival', at: POS3.festival.frente[1], quando: 'noite' };
+  else M = { tit: 'Acender Auren (' + nb + '/4)', desc: 'DE NOITE: acenda os braseiros e leve as pessoas pelas ruas acesas. Bairro Baixo (para dentro do baú), Largo (para o hospital), Vila dos Pavios (quem lembra ajuda), Festival (os músicos de cada bairro para o palco). Velas: Dona Iolanda, de dia.', map: BAIRROS8.find(b => !f['c8B_' + b]) || 'festival', at: [10, 10], quando: 'noite' };
+  M.tipo = 'main'; L.unshift(M);
+  const op = (o) => L.push(Object.assign({ tipo: 'side' }, o));
+  if (!f.c8Fim) {
+    if (!f.c8VelasVelhagua) op({ tit: 'Velas de procissão', desc: 'Dizem que a Igreja do Sino, em Velhágua, guardava velas para o dia em que a luz faltasse.', map: 'igreja', at: [6, 6] });
+    if (!f.c8Lampiao) op({ tit: 'Os lampiões de Candeia', desc: 'Candeia apagou três anos atrás e aprendeu a viver assim. A Dona Ilda sabe como.', map: 'candeia', at: POS4B.candeia.ildaDoor[0] });
+    if (!f.c8Hortensia) op({ tit: 'A Cidade Alta acesa', desc: 'Lá em cima ninguém apagou nada. A Dona Hortênsia está na janela.', map: 'cidadeAlta', at: CA5.dama });
+    if (f.c8Init && !f.c8Jorge) op({ tit: 'O Pavio da casa 9', desc: 'Na Vila dos Pavios, de noite, um Pavio de bigode e mãos de mecânico.', map: 'ruaPavios', at: [34, 9], quando: 'noite' });
+  }
+  return L;
+}; }
+DIARIO.splice(6, 0, { tipo: 'main', cap: 'Capítulo 8 · Auren', tit: 'O Inverno Escuro', vis: () => fl('c8Init'), feita: () => fl('c8Fim'),
+  desc: 'Sete noites sem âmbar, "para lembrarem". A Lume diz que vela não precisa de âmbar.',
+  passos: [['Acender o Bairro Baixo', () => fl('c8B_auren')], ['Acender o Largo', () => fl('c8B_largo')], ['Acender a Vila dos Pavios', () => fl('c8B_ruaPavios')], ['Acender o Festival', () => fl('c8B_festival')],
+    ['A Noite da Música', () => fl('c8P1')], ['Achar a Nina', () => fl('c8Nina')], ['A Friagem', () => fl('c8Friagem')], ['Amanhecer', () => fl('c8Fim')]] });
+DIARIO.push(
+  { tipo: 'side', cap: 'Inverno Escuro', quem: 'o sacristão', tit: 'Velas de procissão', vis: () => fl('c8Init'), feita: () => fl('c8VelasVelhagua'), recompensa: '10 velas e +20 de chama máxima', desc: 'Velhágua guardou velas para o dia em que a luz faltasse.', passos: [['Igreja do Sino, Velhágua', () => fl('c8VelasVelhagua')]] },
+  { tipo: 'side', cap: 'Inverno Escuro', quem: 'Dona Ilda', tit: 'Os lampiões de Candeia', vis: () => fl('c8Init'), feita: () => fl('c8Lampiao'), recompensa: 'braseiro custa 15', desc: 'A vila que apagou primeiro sabe acender melhor.', passos: [['Falar com a Dona Ilda, em Candeia', () => fl('c8Lampiao')]] },
+  { tipo: 'side', cap: 'Inverno Escuro', quem: 'Dona Hortênsia', tit: 'A Cidade Alta acesa', vis: () => fl('c8Init'), feita: () => fl('c8Hortensia'), recompensa: '6 velas', desc: 'Lá em cima ninguém apagou nada.', passos: [['Falar com a Dona Hortênsia', () => fl('c8Hortensia')]] },
+  { tipo: 'side', cap: 'Inverno Escuro', quem: 'o Pavio da casa 9', tit: 'Duas bombadas', vis: () => fl('c8Init'), feita: () => fl('c8Jorge'), quando: 'noite', recompensa: '—', desc: 'Um Pavio de bigode, na Vila, de noite.', passos: [['Cantar para ele', () => fl('c8Jorge')]] }
 );
 
 boot2();

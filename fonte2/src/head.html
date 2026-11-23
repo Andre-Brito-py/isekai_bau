@@ -629,6 +629,50 @@
  - ROBÔ (Desafio, 0,6, farol e escriba, depois do ajuste): comuns 10-80% (a dupla de cães com guarda é a mais dura);
    Broca ~20-45%; Guarda-Musgo ~15-65%; Extrator ~0-40% (o Escriba no limite, sem frascos sobrando).
 =====================================================================
+ CAPÍTULO 8 — O INVERNO ESCURO (implementado; mapas8.js, arte_cap8.js, inverno8.js, inimigos8.js, evolucaoLume.js, cap8.js,
+ cap8b.js, cap8_integra.js; mapas em maps/cap8maps.py, salões de gelo verificados por scratchpad/ice/gen2.py)
+ - ESCALADA (segredo; só jogo e bíblia): o Vesper "cobra" a troca do Jorge apagando Auren bairro por bairro, 7 noites de
+   inverno. A cidade se acende à mão (braseiros, velas, a Lume). No fim, vendo a cidade acesa sem ele, o Vesper escreve no
+   caderno: "Eles não precisam do Farol." ...Então está na hora de acendê-lo. Gancho do Cap. 9 (o Morro). A fita
+   cor-de-rosa da gaiola da Friagem é a 3ª coisa dele na parede da base (página riscada, bilhete, fita: LÍVIA).
+ - PARTE 1 (Auren de noite): ESCURIDÃO POR BAIRRO (auren, largo, festival, ruaPavios; dark 0,8 -> 0,5 quando aceso),
+   CHAMA DA LUME (G.chama, 100; +20 de máx. com as velas de Velhágua; barra no HUD; a luz em volta do grupo cresce com
+   ela), BRASEIROS (só de noite; custam 25 de chama, 15 com o lampião da Ilda, ou 1 vela G.velas), FRIAGENS no escuro
+   (somem de dia ou com o bairro aceso), ESCOLTAS (medo sobe no escuro +0,24, desce na luz; em 100 a pessoa foge; chegou =
+   +15 de chama): Nair e Bento -> bueiro (base); Nonato, Cida e Pipo -> hospital; Zefa, Lino e Osvaldo -> Festival.
+   Na Vila, os Pavios devolvidos acendem braseiros sozinhos. Pontos de calor: lareira do abrigo (hospital), a Dalva.
+   Cameo do Jorge-Pavio na Vila (c8Jorge). NOITE DA MÚSICA no palco: ritmo da Lume, VERSO NOVO (técnica), luta contra o
+   CAPITÃO DA GUARDA APAGADORA (mini-chefe) e a fonte do Largo racha (c8P1).
+ - PARTE 2 (AS CISTERNAS): salão dos canais (braseiros), Seu Tomé procura a NINA; SALÃO DE GELO 1 (escorrega até bater;
+   braseiro aceso derrete o gelo em volta e vira chão molhado); câmara da Nina; ESCOLTA pelo corredor escuro (alavanca da
+   grade); o pai abre a COMPORTA; SALÃO DE GELO 2; descida; O CORAÇÃO FRIO: A FRIAGEM (chefe). Cena: a fita na gaiola, a
+   Lume cai sem chama, o Largo cheio de gente com velas, EVOLUÇÃO DA LUME, amanhecer, o caderno na torre, base, cartão.
+ - EVOLUÇÃO DA LUME (evolucaoLume.js, pedido do usuário): a única evolução que NÃO cobra preço (foi dada). LAREIRA (apoio:
+   +24 PV, +4 RES, +2 MAG; Lareira Viva cura 25%, limpa e AQUECIDO 3; passiva cura 3% do grupo na vez dela) / ALVORADA
+   (ofensiva: +6 MAG, +8 PV; Raio da Alvorada x1,35 nas criaturas do escuro e do frio; luz +20%). Visual: lustre novo de
+   noite (lustreEvoArt), adereço de dia (aderecoLumeArt). G.evoLume. Próximas: na T3, uma 3ª para ela também.
+ - INIMIGOS: Friagem 640/42, Apagador 660/42 (apaga bônus), Lobo de Fuligem 600/44, Geada Viva 520/41 (congela = esquece a
+   vez). CAPITÃO 4800/45 (chama apagadores; GRANDE APAGÃO zera a Tensão; fase 2 bate 2 vezes). A FRIAGEM 8000/47 (fases em
+   66% e 33%; a 3ª mira a Lume; fraca a fogo, luz e mordida). Arte de chefe caprichada: capitaoArt (poses atk/carga) e
+   friagemBossArt 150x148 (capuz, rostos congelados no manto, gaiola de lanterna com a fita).
+ - VOLTAS COM A VIAGEM RÁPIDA: velas da Igreja do Sino (Velhágua: +10 velas, chama máx. +20); lampião da Dona Ilda
+   (Candeia: braseiro custa 15); velas de âmbar da Dama (Cidade Alta: +6 velas); a Iolanda vende velas de dia (4 cobres).
+ - A MOÇA DA BARCA VOLTA (pedido do usuário: "como a Ciel do Rimuru, para o baú"): ela fugiu no fim da T1 e não tinha
+   aparecido na T2. SEMENTE NO CAP. 8: o FIO DE ÂMBAR nas Cisternas (c8Fio): o Catálogo dá erro de leitura, uma voz de
+   dentro do baú diz "...trinta e um?" (WHO eco8, '???', âmbar), e o Catálogo corrige "ninguém falou". No fim do capítulo
+   (sempre) o Catálogo admite "uma linha no meu registro que eu não escrevi" e diz "não sei" pela primeira vez.
+   ARCO PLANEJADO: Cap. 9: ela fala às vezes pelo Catálogo (âmbar, sem colchetes, não consegue dizer o nome); o AVALIAR
+   passa a mostrar o PRÓXIMO GOLPE do inimigo (ela lê intenções); uma volta com viagem rápida atrás de rastros dela
+   (Velhágua / a boca da masmorra fechada). Cap. 10: no Farol, ela e o Catálogo se FUNDEM e o baú dá um NOME a ela (o
+   jogador escolhe; tema do nome da Ofélia/Clara): vira companheira com personalidade e passiva própria. SEGREDO (nunca no
+   chat): ela é a metade de Ada que sente culpa (ver SEGREDO DA TRILOGIA na T1); na T3 ela encara a outra metade. Ela
+   nunca diz o nome de Ada; sabe que "ela vai chamar de novo".
+ - FLAGS: c8Init, c8B_<bairro>, c8VilaAjuda, c8Jorge, c8Verso, c8P1, c8Cist, c8Tome, c8NinaAchou, c8Grade, c8Nina,
+   c8Comporta, c8Coracao, c8Friagem, c8Fio, c8Fim; c8VelasVelhagua, c8Lampiao, c8Hortensia; G.chama, G.velas, G.evoLume.
+ - ROBÔ (Desafio, 0,6): comuns 10-85% (o par de lobos é o mais duro; o Lobo ficou 0,55 x2 depois do ajuste); Capitão
+   (5600 -> 4800, golpes menores) deixa ~20-40%; Friagem (10200 -> 8000, fase 3 mira a Lume 40%) deixa ~5-30% no Farol e
+   25-85% no Escriba, os dois na 1ª tentativa. Antes do ajuste o Escriba perdia 7-24 vezes no Capitão.
+=====================================================================
 -->
 <style>
 :root{

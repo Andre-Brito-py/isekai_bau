@@ -217,7 +217,6 @@ async function fimCap7() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 7', 'A Mina de Origem', '', 'Alguém tem que ficar pra achar.']);
   V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(20);
-  await say('* (O Capítulo 8 está a caminho. Os Marcos levam aonde vocês já foram: ainda há o que devolver pelo caminho.)');
 }
 
 // o veio de âmbar ilumina o escuro (cada tile 'a' é uma luz pequena)
