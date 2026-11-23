@@ -33,10 +33,10 @@
      de cima da MASMORRA DA T1 (volta nostálgica, inimigos e lugares conhecidos, agora pela lógica de quem extrai).
      ESCALADA 4: Vesper VENCE uma batalha de verdade: o Seu Jorge troca as próprias lembranças pela vida do grupo e
      vira Pavio (esquece o 31, esquece eles; dá para devolver só um pedaço no Cap. 10). 2ª EVOLUÇÃO no fundo do poço.
-  8. O INVERNO ESCURO — Vesper apaga Auren de propósito ("para lembrarem por que precisam do Farol"). Cidade no
+  8. O INVERNO ESCURO (feito) — Vesper apaga Auren de propósito ("para lembrarem por que precisam do Farol"). Cidade no
      escuro, medo, a Lume no limite. O grupo acende a cidade À MÃO, bairro por bairro, com velas, gente e música
      (a música da Lume ganha mais um verso). Mecânica: escuridão por bairro, rotas de luz, escolta.
-  9. A SUBIDA DO MORRO — o cerco ao Farol: todos os aliados voltam (Badalada toca, Tico e Dito, Dalva, Brás, Iolanda,
+  9. A SUBIDA DO MORRO (feito) — o cerco ao Farol: todos os aliados voltam (Badalada toca, Tico e Dito, Dalva, Brás, Iolanda,
      Velhágua); masmorra de subida longa, mini-chefes antigos com cara nova; a Ofélia "aparece" pelo Grimório.
  10. O FAROL DE CEM INVERNOS (2 partes) — ESCALADA 5: o Farol acende por uma noite; a IRONIA FINAL (Lívia); escolha
      na luta final; epílogo (o caderno preto vai para a parede da base; o Jorge lembra do 31 um pouquinho) e o GANCHO
@@ -677,6 +677,64 @@
  - ROBÔ (Desafio, 0,6): comuns 10-85% (o par de lobos é o mais duro; o Lobo ficou 0,55 x2 depois do ajuste); Capitão
    (5600 -> 4800, golpes menores) deixa ~20-40%; Friagem (10200 -> 8000, fase 3 mira a Lume 40%) deixa ~5-30% no Farol e
    25-85% no Escriba, os dois na 1ª tentativa. Antes do ajuste o Escriba perdia 7-24 vezes no Capitão.
+=====================================================================
+ CAPÍTULO 9 — A SUBIDA DO MORRO (implementado; mapas9.js, arte_cap9.js, mecanicas9.js, inimigos9.js, cap9.js, cap9b.js,
+ moca9.js, cap9_integra.js; mapas em maps/cap9maps.py: vento simulado e feixe resolvido por busca)
+ - ESCALADA (segredo; só jogo e bíblia): o Farol acende "quando estiver cheio": toda noite uma fila de Pavios sobe com
+   potes (as lembranças). No fim do capítulo, o grupo entra na escada do Farol (paredes de vidro, milhares de potes) e o
+   Farol ACENDE lá de cima; o Vesper, na sala da lanterna: "Ninguém mais vai morrer no escuro." (gancho do Cap. 10, a
+   IRONIA de Lívia acontece lá).
+ - PARTE 1, O QUADRO DO CERCO (base): ALIADOS pelos Marcos, cada um com um trunfo: DALVA (base; tenda no sopé: cura e
+   frascos), IOLANDA (Papelaria, de dia; o avô polia as lentes; o Grimório se escreve sozinho com a letra da Ofélia: a
+   dica dos três espelhos, e "tem alguém morando no seu Catálogo, seja gentil com ela"; OBRIGATÓRIA), TICO E DITO (Bairro
+   Baixo, de dia; o sinal de três batidas na calha faz o Dito lembrar da Chaminé Velha: atalho na Encosta), BRÁS (Vila
+   dos Pavios, de noite, com a mãe; a Guilda arma uma briga na cancela; pede para trazer de volta quem ainda for gente:
+   c9PromessaBras), DONA BADALADA (Velhágua; a Lume canta (ritmo); o sino toca meia-noite pela 1ª vez em cem anos:
+   metade das rondas da Encosta desce). Iolanda + 2 bastam; "Hoje à noite" no quadro.
+ - PARTE 2, O MORRO: SOPÉ (tendas, cancela: briga da Guilda ou luta guardaR x2 + cão) -> ENCOSTA (6 patamares em
+   zigue-zague; VENTANIA: rajada a cada ~5 s com aviso de ~1,4 s; o vento empurra para o SUL; abrigo = pedra/rocha logo
+   ao NORTE, encostar numa MURETA, ou estar na escada; cair da beira = cair no patamar de baixo; rondas com cone (stealth,
+   pego = luta e volta ao começo do patamar); holofotes nos 2 patamares de cima SÓ DE NOITE; a Chaminé Velha (1º -> 3º
+   patamar) se o Tico veio; o ESPANTALHO DO CERCO no 3º patamar) -> CRISTA (o Jardim das Lentes: feixe da Lente do
+   Luar, 3 espelhos móveis pelo Vão, alarme vermelho na beira leste; solução mínima de 3 espelhos, conferida por busca;
+   o ATRIL mostra a página da Ofélia; a porta abre e a luz atrai a RAINHA DO FAROL) -> PÁTIO DO FAROL (o TIAGO de guarda
+   na porta, "eu guardo o troco": luta junto contra O FAROLEIRO jogando o TROCO a cada 3 ações; na fase 3 a moça racha a
+   lente e o troco vem a cada 2). Final: o velho faroleiro (cem anos esperando o substituto) pode parar; a escada; a moça
+   lembra de "uma escada assim, para fugir de uma voz; no fim tinha uma barca; eu tinha uma metade"; o Farol acende.
+ - INIMIGOS: Sentinela de Latão 700/45 (Lanterna nos Olhos: tonto), Gralha do Morro 560/44 (rajada em todos, rouba
+   Tensão), Mariposa de Âmbar 430/42 (COME LUZ). MINI-CHEFES ANTIGOS COM CARA NOVA: ESPANTALHO DO CERCO 5800/46 (o do
+   Cap. 1 remendado pela Guarda com os cartazes do Farol e um pote de Pavio na cabeça; PEDÁGIO DO MORRO preparado;
+   Rajada atrasa a vez; fase 2 a lanterna velha acende: gelo/mordida, Bafo, Cobrança) e A RAINHA DO FAROL 4500/46 (a
+   Mariposa-Rainha do Cap. 3: na fase 1 a LUZ A CURA; filhas; SOPRO DO FAROL; fase 2 incandescente: gelo/corte, Come a
+   Luz). CHEFE: O FAROLEIRO 8600/48 (Varredura faz esquecer a vez; Manivela; Gancho queima; LEITURA TOTAL tira 30 de
+   Tensão; fase 2 Sentinelas e Raios; fase 3 a lente racha: escudo quebra, luz e corte pegam). Arte de chefe caprichada
+   (espantalhoCercoArt 124x150, rainhaFarolArt 140x120, faroleiroArt 156x156).
+ - A MOÇA DA BARCA (arco pedido pelo usuário, "como a Ciel do Rimuru"): no Cap. 9 ela fala ÀS VEZES pelo Catálogo (WHO
+   eco8, em âmbar, minúsculas, sem colchetes): lista os aliados, avisa do vento, agradece a Ofélia, racha a lente do
+   Faroleiro ("eu também sei ler"), consola o velho faroleiro. O Catálogo: "ela corrige a minha ortografia". RASTROS DE
+   ÂMBAR (opcional com viagem): fios mornos nas Cisternas (Cap. 8), no Poço do Sino (Velhágua: a barca sem remo, "a
+   tampa da noite com furinhos", o sino que ela ouvia lá de baixo) e na Câmara do Despertar (ela viu o 31 acordar,
+   presa no âmbar do teto; riu quando ele mordeu o Musgo, "eu não ria fazia trezentos anos"; o nome "está atrás de uma
+   porta, lá em cima eu abro"). Com os 3: LEITURA (Avaliar deixa o alvo LIDO por 3 golpes: ela avisa e o anel de defesa
+   fica mais largo: perfeito ±5, bom ±12). Cap. 10: o NOME (o jogador escolhe) e a fusão com o Catálogo.
+ - A PENSÃO SEM REMETENTE (opcional com viagem): Dona Cida (Largo) -> Dona Ilda (Candeia: 30 envelopes, "Lamento" na
+   letra pequena do bilhete) -> Dona Hortênsia (Cidade Alta: o lacre da chama pequena é o do Conde Ulrico; "Contabilidade,
+   senhora. Eu sei exatamente quanto cada luz custou."). Recompensa: Lacre Partido (+12 PV, +3 RES).
+ - DIA E NOITE: aliados por horário (Iolanda e Tico de dia, Brás de noite); na Encosta os holofotes só de noite (esperar
+   o dia num Marco é uma escolha); a noite do cerco começa às 21h30.
+ - A LUME EVOLUÍDA, ARTE REFEITA (pedido do usuário: "têm que ficar lindas", "cuidado para não ficarem grandes demais"):
+   lustreEvoArt em 32x48 (o lustre do jogo 1 é 24x48), com o ROSTO do lustre original (olhos grandes com brilho,
+   bochecha rosada, pisca). LAREIRA: lustre-fogão de cobre e ferro, chaminé com fumaça, velas grossas com cera escorrida,
+   cachecol tricotado com a ponta voando, fogo de lenha na barriga, berloques de brasa. ALVORADA: aro de sol nascendo
+   girando atrás, globo de pérola rosada, lua crescente de ouro, velas finas de chama clara, fios de contas de vidro com
+   gotas que trocam de cor. Adereços de dia: pente de latão com lanterninha de brasa e laço (Lareira); tiara de prata
+   com raios e pérola (Alvorada). O retrato do cartão de batalha de noite usa o rosto novo.
+ - FLAGS: c9Init, c9A_<aliado>, c9Pagina, c9Tico1, c9PromessaBras, c9P2, c9Cancela, c9Encosta, c9Quedas, c9Chamine,
+   c9Espantalho, c9Crista, c9Porta, c9Rainha, c9Patio, c9Faroleiro, c9Fim; c9FioPoco, c9FioAndar, c9Leitura; c9Pensao
+   (1-2), c9PensaoFim.
+ - ROBÔ (Desafio, 0,6): comuns 12-90%; Espantalho (5000 -> 5800, golpes maiores) deixa ~30-55%; Rainha (5400 -> 4500, filhas
+   limitadas, luz cura 30%) deixa ~15-30% (a mais dura dos mini-chefes: a luz da Alvorada a cura na fase 1); Faroleiro
+   (8600, com o Tiago) deixa ~10-30% no mais ferido, os dois caminhos na 1ª tentativa.
 =====================================================================
 -->
 <style>
@@ -16309,28 +16367,79 @@ function friagemBossArt(f, fase, pose) { const k = 'fb' + f + fase + pose; if (I
   return INI8[k] = P.outline().canvas(); }
 // ---------- a LUME evoluída ----------
 // de noite, o lustre novo (no lugar do lustre do jogo 1); de dia, um adereço sobre a moça
+function rostoLume(P, cx, cy, f) {      // o rostinho do lustre do jogo 1: olhos grandes com brilho, pálpebra, bochecha rosada
+  const pisca = f % 16 === 15;
+  for (const s of [-1, 1]) { const ex = cx + s * 3 + (s > 0 ? 0 : -1);
+    if (pisca) { P.rect(ex - 1, cy + 1, 3, 1, '#2a1418'); continue; }
+    P.rect(ex - 1, cy - 1, 3, 1, '#2a1418'); P.rect(ex - 1, cy, 3, 2, '#3a1a26'); P.p(ex, cy, '#ffffff'); }
+  P.rect(cx - 7, cy + 2, 2, 1, '#ff8a9a'); P.rect(cx + 5, cy + 2, 2, 1, '#ff8a9a');
+  P.p(cx - 1, cy + 3, '#7a2a2a'); P.p(cx, cy + 3, '#7a2a2a');
+}
+function chamaVela(P, x, y, f, cores) { const h = [4, 6, 4, 5][f % 4], sw = [0, 1, 0, -1][f % 4]; P.poly([[x - 1, y], [x + sw, y - h], [x + 2, y]], cores[0]); P.rect(x, y - 2, 1, 2, cores[1]); P.p(x, y - 1, cores[2]); }
+// tamanho do lustre do jogo 1 (24x48): as formas novas ficam em 32x48, quase o mesmo porte
 function lustreEvoArt(ev, f) { const k = 'le' + ev + (f % 4); return o8(k, () => {
-  const P = new Pix(36, 56), b = Math.round(Math.sin(f * 1.5) * 1.5);
+  const P = new Pix(32, 48), b = [0, 1, 1, 0][f % 4], cx = 16;
   if (ev === 'lareira') {
-    const Fe = ramp('#6a4a30'), Lt = ramp('#c89a30');
-    P.line(18, 0, 18, 10, '#4a4450'); P.ball(18, 22 + b, 14, 10, Fe); P.rect(4, 26 + b, 28, 4, Lt[2]);
-    P.poly([[6, 28 + b], [30, 28 + b], [24, 46 + b], [12, 46 + b]], (x, y) => P.tone(Fe, 0.6 - (y - 28) / 40, x, y));
-    P.ball(18, 38 + b, 7, 5, ['#8a2a0a', '#e86a20', '#ffb040', '#fff0a0', '#ffffff']);                                  // a lareira no ventre
-    for (const vx of [6, 18, 30]) { P.rect(vx - 2, 12 + b, 4, 10, '#f2ecdc'); P.poly([[vx - 3, 12 + b], [vx, 4 + b - (f + vx) % 3], [vx + 3, 12 + b]], '#ffb040'); P.p(vx, 7 + b, '#fff0a0'); }
-    P.rect(9, 48 + b, 18, 3, Lt[3]); for (let i = 0; i < 3; i++) P.rect(11 + i * 6, 51 + b, 2, 3, '#e86a20');
+    // LAREIRA: um lustre-fogão de ferro e latão, gordinho e quente: o rosto no globo de cobre, um fogo de verdade na
+    // barriga, velas grossas, um cachecol tricotado e berloques de brasa.
+    const Cu = ['#8a3a14', '#c8641e', '#f09a30', '#ffc860', '#fff0b8'], Fe = ['#1e1418', '#2e2228', '#40323a', '#56464e', '#6e5c64'], Lt = ramp('#c89a30');
+    P.line(cx, 0, cx, 3, '#4a4450');
+    P.rect(cx - 2, 4 + b, 5, 3, Fe[2]); P.rect(cx - 3, 6 + b, 7, 1, Lt[3]); P.p(cx + (f % 2), 2 + b, '#b8b0c0');
+    for (const s of [-1, 1]) {
+      for (let t = 0; t <= 9; t++) { const x = cx + s * (6 + t), y = 16 + b - Math.round(Math.sin(t / 9 * Math.PI) * 3) - (t > 7 ? (t - 7) * 2 : 0); P.p(x, y, Lt[t % 3 + 1]); P.p(x, y + 1, Lt[1]); }
+      const vx = cx + s * 14, vy = 7 + b; P.rect(vx - 2, vy + 5, 5, 1, Lt[2]); P.rect(vx - 1, vy, 3, 5, '#f4ecdc'); P.p(vx + 1, vy + 1, '#d8ccb8'); P.p(vx - 1, vy + 2, '#fffaf0');
+      chamaVela(P, vx, vy, f + vx, ['#ff8a30', '#ffd070', '#fff8c0']);
+    }
+    P.ball(cx, 13 + b, 8, 7, Cu, { amb: 0.35 }); P.rect(cx - 7, 7 + b, 15, 1, Lt[3]);
+    rostoLume(P, cx, 13 + b, f);
+    for (let x = cx - 7; x <= cx + 7; x++) { const y = 20 + b; P.rect(x, y, 1, 2, (x >> 1) % 2 ? '#d84a2a' : '#f08a3a'); }
+    const pt = [0, 1, 1, 0][f % 4]; P.poly([[cx + 4, 21 + b], [cx + 9 + pt, 26 + b], [cx + 7, 27 + b], [cx + 2, 22 + b]], (x, y) => (x + y) % 3 ? '#d84a2a' : '#f08a3a');
+    P.poly([[cx - 7, 22 + b], [cx + 7, 22 + b], [cx + 6, 33 + b], [cx - 6, 33 + b]], (x, y) => P.tone(Fe, 0.75 - (x - cx + 7) / 22, x, y));
+    P.rect(cx - 4, 26 + b, 8, 5, '#3a0e08'); P.rect(cx - 4, 25 + b, 8, 1, Fe[4]);
+    for (let i = 0; i < 3; i++) { const hh = [3, 4, 2, 4][(f + i) % 4]; P.poly([[cx - 4 + i * 3, 30 + b], [cx - 3 + i * 3, 30 + b - hh], [cx - 1 + i * 3, 30 + b]], i === 1 ? '#ffd070' : '#ff8a30'); }
+    P.rect(cx - 3, 30 + b, 6, 1, '#6a3a1a'); P.p(cx - 2, 29 + b, '#ffd070');
+    P.rect(cx - 7, 33 + b, 15, 2, Lt[2]); P.rect(cx - 7, 33 + b, 15, 1, Lt[4]);
+    for (const [dx, L] of [[-5, 2], [0, 5], [5, 2]]) { P.line(cx + dx, 35 + b, cx + dx, 35 + b + L, Lt[1]); P.ball(cx + dx, 37 + b + L, 1.6, 2, ['#7a2a0a', '#c8501a', '#ff8a30', '#ffc870', '#fff0c0']); }
   } else {
-    const Pr = ['#5a6a8a', '#8aa0c8', '#c8d8f0', '#e8f0ff', '#ffffff'];
-    P.line(18, 0, 18, 8, '#8a8aa8');
-    for (let a = 0; a < 8; a++) { const an = a / 8 * Math.PI * 2 + f * 0.1, r = a % 2 ? 16 : 11; P.line(18, 26 + b, 18 + Math.cos(an) * r, 26 + b + Math.sin(an) * r, a % 2 ? '#fff0b0' : '#bff0ff', a % 2 ? 1 : 2); }
-    P.ball(18, 26 + b, 9, 9, Pr); P.ball(18, 26 + b, 5, 5, ['#ffd070', '#fff0a0', '#ffffff', '#ffffff', '#ffffff']);
-    for (const vx of [5, 31]) { P.rect(vx - 1, 30 + b, 3, 8, '#e8f0ff'); P.p(vx, 28 + b, '#bff0ff'); }
-    P.poly([[12, 38 + b], [24, 38 + b], [18, 52 + b]], (x, y) => (x + y) % 3 ? '#c8d8f0' : '#ffffff');
+    // ALVORADA: um lustre de cristal ao amanhecer: um aro de sol nascendo atrás, o globo de pérola rosada com o rosto,
+    // a lua crescente de ouro no alto, velas finas de chama clara, fios de contas de vidro com gotas de todas as cores.
+    const Ag = ramp('#a8b0c8');
+    P.line(cx, 0, cx, 2, '#9aa0b8');
+    for (let y = -15; y <= 15; y++) for (let x = -15; x <= 15; x++) { const d = Math.hypot(x, y * 1.1); if (d > 11.5 && d < 12.8) P.p(cx + x, 14 + b + y, (x + y + f) % 4 ? '#ffe8b0' : '#ffffff'); }
+    for (let a = 0; a < 12; a++) { const an = a / 12 * Math.PI * 2 + f * 0.13, r1 = a % 2 ? 16 : 14.5; for (let t = 13.5; t <= r1; t++) P.p(Math.round(cx + Math.cos(an) * t), Math.round(14 + b + Math.sin(an) * t * 0.92), a % 3 === 0 ? '#ffffff' : a % 2 ? '#ffd8a8' : '#c8ecff'); }
+    for (const s of [-1, 1]) {
+      for (let t = 0; t <= 10; t++) { const x = cx + s * (5 + t), y = 18 + b - Math.round(Math.sin(t / 10 * Math.PI) * 5); P.p(x, y, Ag[3]); }
+      const vx = cx + s * 15, vy = 9 + b; P.rect(vx - 1, vy + 5, 3, 1, Ag[3]); P.rect(vx, vy, 1, 5, '#f4f6ff'); chamaVela(P, vx, vy, f + vx, ['#ffc060', '#fff4c8', '#ffffff']);
+    }
+    for (let y = -3; y <= 3; y++) for (let x = -3; x <= 3; x++) if (x * x + y * y <= 9 && (x - 2) * (x - 2) + (y + 1) * (y + 1) > 5) P.p(cx - 1 + x, 4 + b + y, x < -1 ? '#ffe090' : '#e8b040');
+    P.p(cx + 3, 2 + b, '#ffffff');
+    P.ball(cx, 14 + b, 8, 7, ['#c87a6a', '#f0a890', '#ffd8b8', '#fff2e0', '#ffffff'], { amb: 0.42 });
+    P.p(cx - 5, 9 + b, '#ffffff'); P.p(cx - 4, 9 + b, '#ffffff');
+    rostoLume(P, cx, 14 + b, f);
+    P.rect(cx - 7, 21 + b, 15, 1, Ag[3]); P.rect(cx - 7, 22 + b, 15, 1, Ag[1]);
+    const cores = [['#c8e0ff', '#8ab8e8'], ['#ffd0e0', '#e898b8'], ['#fff0b0', '#e8c060'], ['#bff0ff', '#6ac0e0']];
+    [[-6, 3], [-2, 7], [2, 7], [6, 3]].forEach(([dx, L], i) => { const x = cx + dx; for (let y = 0; y < L; y += 2) P.p(x, 23 + b + y, '#f4f8ff'); const c = cores[(i + f) % 4]; P.ball(x, 24 + b + L, 1.5, 2, [c[1], c[1], c[0], '#ffffff', '#ffffff']); P.p(x, 26 + b + L, c[1]); });
+    P.ball(cx, 37 + b, 1.6, 3, ['#a8b0c8', '#c8d0e8', '#e8f0ff', '#ffffff', '#ffffff']); P.line(cx, 23 + b, cx, 34 + b, '#e8eef8');
+    for (let i = 0; i < 2; i++) { const an = (f * 0.7 + i * 3.1), x = Math.round(cx + Math.cos(an) * 14), y = Math.round(20 + b + Math.sin(an) * 10); P.p(x, y, '#ffffff'); P.p(x - 1, y, '#bff0ff'); P.p(x + 1, y, '#bff0ff'); P.p(x, y - 1, '#bff0ff'); P.p(x, y + 1, '#bff0ff'); }
   }
   return P.outline().canvas(); }); }
-function aderecoLumeArt(ev) { return o8('al' + ev, () => {
+function aderecoLumeArt(ev) { return o8('al2' + ev, () => {
   const P = new Pix(22, 14);
-  if (ev === 'lareira') { P.rect(2, 9, 18, 3, '#a8503a'); P.rect(2, 9, 18, 1, '#e8a060'); for (let i = 0; i < 4; i++) P.poly([[3 + i * 5, 9], [5 + i * 5, 2 + (i % 2) * 2], [7 + i * 5, 9]], i % 2 ? '#ffb040' : '#e86a20'); P.p(11, 3, '#fff0a0'); }
-  else { for (let a = 0; a < 8; a++) { const an = a / 8 * Math.PI * 2; P.line(11, 7, 11 + Math.cos(an) * (a % 2 ? 9 : 6), 7 + Math.sin(an) * (a % 2 ? 6 : 4), a % 2 ? '#fff0b0' : '#bff0ff'); } P.ball(11, 7, 3, 3, ['#ffd070', '#fff0a0', '#ffffff', '#ffffff', '#ffffff']); }
+  if (ev === 'lareira') {
+    // um pente de latão no cabelo com uma lanterninha de brasa pendurada e um laço de fita laranja
+    const Lt = ramp('#c89a30');
+    P.rect(3, 8, 11, 2, Lt[3]); P.rect(3, 9, 11, 1, Lt[1]); for (let x = 4; x < 14; x += 2) P.p(x, 10, Lt[2]);
+    P.ball(16, 6, 3, 3, ['#7a2a0a', '#c8501a', '#ff8a30', '#ffc870', '#fff0c0']); P.rect(15, 2, 3, 1, Lt[2]); P.p(16, 1, Lt[3]); P.p(16, 5, '#fff0c0');
+    P.poly([[2, 4], [6, 7], [2, 9]], '#f08a3a'); P.poly([[11, 4], [7, 7], [11, 9]], '#f08a3a'); P.rect(6, 6, 2, 2, '#d84a2a'); P.p(3, 5, '#ffc890'); P.p(10, 5, '#ffc890');
+    P.line(6, 8, 4, 12, '#d84a2a'); P.line(7, 8, 9, 13, '#d84a2a');
+  } else {
+    // uma tiara de prata de amanhecer: aro fino, raios, uma pedra de pérola e gotinhas de cristal azul
+    const Ag = ramp('#a8b0c8');
+    for (let x = 2; x <= 19; x++) { const y = 10 - Math.round(Math.sin((x - 2) / 17 * Math.PI) * 3); P.p(x, y, Ag[3]); P.p(x, y + 1, Ag[1]); }
+    for (let a = 0; a < 7; a++) { const an = Math.PI + a / 6 * Math.PI, r = a % 2 ? 7 : 5; P.line(11, 6, Math.round(11 + Math.cos(an) * r), Math.round(6 + Math.sin(an) * r * 0.8), a % 2 ? '#fff0b0' : '#ffd0e0'); }
+    P.ball(11, 6, 2, 2, ['#f0b8d0', '#ffd0e0', '#fff0f4', '#ffffff', '#ffffff']); P.p(10, 5, '#ffffff');
+    for (const x of [5, 17]) { P.p(x, 9, '#bff0ff'); P.p(x, 10, '#8ac8f0'); P.p(x, 11, '#bff0ff'); }
+  }
   return P.outline().canvas(); }); }
 
 // ================= MECÂNICAS DO CAP. 8 — O INVERNO ESCURO =================
@@ -16682,11 +16791,11 @@ Object.assign(TECH2, {
   if (f.k !== 'lume' || !G.evoLume || !fr) return fr;
   if (typeof LUSTRE_ON === 'function' && LUSTRE_ON() && !G.flags.lumeCoberta) return lustreEvoArt(G.evoLume, Math.floor(W2.t / 8));
   const key = '_ad' + G.evoLume; if (fr[key]) return fr[key];
-  const c = mk(fr.width, fr.height + 6), x = c.getContext('2d'); x.drawImage(fr, 0, 6); x.drawImage(aderecoLumeArt(G.evoLume), Math.round(fr.width / 2 - 11), 0); return (fr[key] = c);
+  const c = mk(fr.width, fr.height + 3), x = c.getContext('2d'); x.drawImage(fr, 0, 3); x.drawImage(aderecoLumeArt(G.evoLume), Math.round(fr.width / 2 - 11), 0); return (fr[key] = c);
 }; }
 { const _duL = drawUnit; drawUnit = function (u) {
   const r = _duL(u);
-  if (u && u.id === 'lume' && u.evoLume && !u.lustre && u.hp > 0 && u._X != null) { const w = (u._fw || 24) * (u._sx || 1); bx.drawImage(aderecoLumeArt(u.evoLume), Math.round(u._X + w / 2 - 11), Math.round(u._Y - 6 + Math.sin(BT.t * 0.08) * 1)); }
+  if (u && u.id === 'lume' && u.evoLume && !u.lustre && u.hp > 0 && u._X != null) { const w = (u._fw || 24) * (u._sx || 1); bx.drawImage(aderecoLumeArt(u.evoLume), Math.round(u._X + w / 2 - 11), Math.round(u._Y - 1)); }
   return r;
 }; }
 async function cenaEvolucaoLume() {
@@ -16705,6 +16814,13 @@ async function cenaEvolucaoLume() {
   await say('[TÉCNICA NOVA: ' + TECH2[EVOL[ev].tec].nm + '. ' + TECH2[EVOL[ev].tec].d + ']', 'cat');
   save2();
 }
+// o retrato do cartão de batalha (de noite) também mostra o lustre novo: recorte do rosto
+const PT_LUME = {};
+{ const _ptL = PT; PT = function (k) {
+  if (k === 'lume' && G.evoLume && typeof LUSTRE_ON === 'function' && LUSTRE_ON()) { const ev = G.evoLume; if (PT_LUME[ev]) return PT_LUME[ev];
+    const c = mk(32, 32), x = c.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(lustreEvoArt(ev, 0), 0, -1, 32, 32, 0, 0, 32, 32); return (PT_LUME[ev] = c); }
+  return _ptL(k);
+}; }
 
 // ================= CAPÍTULO 8 — O INVERNO ESCURO (Parte 1: Auren acesa à mão) =================
 // O Acendedor-Mor corta o âmbar de Auren "por sete noites, para lembrarem". O grupo acende a cidade À MÃO, bairro por
@@ -17055,7 +17171,7 @@ async function cenaFim8() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 8', 'O Inverno Escuro', '', 'que vela só fica sozinha', 'quando esquece o caminho.']);
   V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); await fadeIn(20);
-  await say('* (O Capítulo 9 está a caminho: a Subida do Morro. Os Marcos levam aonde vocês já foram.)');
+  // (o Capítulo 9 começa sozinho, no próximo passo do mapa)
 }
 // ---------- voltas ----------
 async function velasIgreja() {
@@ -17179,6 +17295,1200 @@ DIARIO.push(
   { tipo: 'side', cap: 'Inverno Escuro', quem: 'Dona Ilda', tit: 'Os lampiões de Candeia', vis: () => fl('c8Init'), feita: () => fl('c8Lampiao'), recompensa: 'braseiro custa 15', desc: 'A vila que apagou primeiro sabe acender melhor.', passos: [['Falar com a Dona Ilda, em Candeia', () => fl('c8Lampiao')]] },
   { tipo: 'side', cap: 'Inverno Escuro', quem: 'Dona Hortênsia', tit: 'A Cidade Alta acesa', vis: () => fl('c8Init'), feita: () => fl('c8Hortensia'), recompensa: '6 velas', desc: 'Lá em cima ninguém apagou nada.', passos: [['Falar com a Dona Hortênsia', () => fl('c8Hortensia')]] },
   { tipo: 'side', cap: 'Inverno Escuro', quem: 'o Pavio da casa 9', tit: 'Duas bombadas', vis: () => fl('c8Init'), feita: () => fl('c8Jorge'), quando: 'noite', recompensa: '—', desc: 'Um Pavio de bigode, na Vila, de noite.', passos: [['Cantar para ele', () => fl('c8Jorge')]] }
+);
+
+// gerado por maps/cap9maps.py (vento e feixe verificados)
+const ROWS9 = {"sope9": ["RRRRRRRRRRRRRRRRRRRRRRRccRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRccRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRccRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRnnnccnnnRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRnnnnnnnccnnnnnnnRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRnnnnnnnnnnnccnnnnnnnnnnnRRRRRRRRRRRR", "RRRRRRRRRnnnnnnnnnnnnnnccnnnnnnnnnnnnnnRRRRRRRRR", "RRRRRRnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnRRRRRR", "RRRnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnRRR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "nnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnn", "nnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnn", "nnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnncccccccccccccccccccccnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "RnnnnnnnnnnnnnnnnnnnnnnccnnnnnnnnnnnnnnnnnnnnnnR", "ccccccccccccccccccccccccccnnnnnnnnnnnnnnnnnnnnnR", "ccccccccccccccccccccccccccnnnnnnnnnnnnnnnnnnnnnR", "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnR", "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"], "encosta9": ["RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnNnnnnnnnnNnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnNnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRcncncnNNNNcncncnNNNNNncncNNNNncncnRRR", "RRR                              ee  RRR", "RRR                              ee  RRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReeRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReeRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReeRRRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnNnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnNnnnnnnnnnnNnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRcnNNNNcncncNNNNNcncncNNNNncncncncnRRR", "RRR ee                               RRR", "RRR ee                               RRR", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnNnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnNnnnnnnnnnnnnnnnnnnnNnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRcncnNNNNNNcncnNNNNcncncnNNNNNNcncnRRR", "RRR                              ee  RRR", "RRR                              ee  RRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReeRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReeRRRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnNnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnNnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRcncncnNNNNNncncncNNNNncncnNNNNcncnRRR", "RRR ee                               RRR", "RRR ee                               RRR", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnNnnnnnnnnnnnnnnnnnnnNnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnNnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRcncNNNNncncnNNNNcncncncNNNNNcncncnRRR", "RRR                              ee  RRR", "RRR                              ee  RRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReeRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReeRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReeRRRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnNnnnnnnnnnnnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnNnnnnnnnnnRRR", "RRRnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnRRR", "RRRcncnNNNNcnNNNNcncncnNNNNNncNNNNncnRRR", "RRR                ee                RRR", "RRR                ee                RRR", "RRRRRRRRRRRRRRRRRRReeRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRReeRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRReeRRRRRRRRRRRRRRRRRRR"], "crista9": ["RRRRRRRRRRRRRRRRRRRRRRRllRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRllRRRRRRRRRRRRRRRRRRRRRRR", "RRRrRRrRRrRRrRRrRRrRRRRllRRRRRrRRrRRrRRrRRrRRrRR", "RrRrrRrrRrrRrrRrrRrrRRRllRRRrRrrRrrRrrRrrRrrRrrR", "RrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrR", "RrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrR", "RrrrrrrrrrrrrrrrrrrrrrrRrRrrrrrrrrrrRnnnnnnnrrrR", "RrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRnnnnnnnrrrR", "RrrrrrrrrrrrrrrrrRrrrrrrrrrrrrrrrrrrnnnnnnnnrrrR", "RrrrrrrrrrrrrrrrrRrrrrrrrrrrrrrrrrrrnnnnnnnnrrrR", "RrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrnnnnnnnnrrrR", "RrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRRrrrrnnnnnnnnrrrR", "RrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrR", "RrrrrrrrrRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrR", "RrrrrrrrrRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrR", "RrrrrrrrrRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrR", "RrrrrrrrrrrrrrrrrrrrRrrrrrrrrrrrrRrrrrrrrrrrrrrR", "RrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrR", "RrrrrrnnnnnnnnnnrrrrrrrrrrrrrrnnnnnnnnnnnnrrrrrR", "RrrrrrnnnnnnnnRRrrrrrrrrrrrrrrnnnnnnnnnnRnrrrrrR", "RrrrrrnnnnnnnnnnrrrrrrrrrrrrrrnnnnnnnnnnnnrrrrrR", "RrrrrrnnnnnnnnnnrrrrrrrrrrrrRrnnnnnnnnnnnnrrrrrR", "RrrrrrnnnnnnnnnnrrrrrrrrrrrrrrnnnnnnnnnnnnrrrrrR", "RrrrrrnnnnnnnnnnrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrR", "RrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrR", "R r r r r r r r r r r r r r r r r r r r r r r rR", "R   ee                                         R", "R   ee                                         R", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRReeRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"], "farol9": ["RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRllRRRRRRRRRRRRRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRRnllllllllllllllllllllllllnRRR", "RRR          lleell          RRR", "RRR          lleell          RRR", "RRR          lleell          RRR", "RRR          lleell          RRR"]};
+const POS9 = {"sope9": {"entra": [1, 27], "saida": [[0, 27], [0, 28]], "cancela": [[23, 8], [24, 8]], "acima": [[23, 0], [24, 0]], "cancelaGuarda": [[22, 9], [25, 9]], "fogueira": [18, 21], "tenda": [6, 17], "dalva": [9, 20], "guilda": [[32, 16], [38, 16]], "bras": [30, 19], "iolanda": [14, 14], "mesa": [13, 13], "tico": [40, 12], "dito": [42, 12], "chamine": [41, 9], "marco": [5, 25], "fila": [[27, 12], [28, 11], [29, 10], [30, 9]], "pinheiros": [[3, 5], [7, 7], [41, 6], [45, 5], [2, 14], [44, 26], [37, 29], [14, 30], [30, 29]], "tiago": [24, 12], "bau": [46, 24]}, "encosta9": {"entra": [19, 62], "volta": [[19, 63], [20, 63]], "saida": [[4, 0], [5, 0]], "patamares": [{"y0": 54, "h": 5, "ent": [19, 58]}, {"y0": 44, "h": 5, "ent": [33, 47]}, {"y0": 34, "h": 5, "ent": [4, 37]}, {"y0": 23, "h": 7, "ent": [33, 28]}, {"y0": 13, "h": 5, "ent": [4, 16]}, {"y0": 3, "h": 5, "ent": [33, 6]}], "rampas": [[33, 49, 54], [4, 39, 44], [33, 30, 34], [4, 18, 23], [33, 8, 13]], "mureta": [[7, 58], [8, 58], [9, 58], [10, 58], [13, 58], [14, 58], [15, 58], [16, 58], [23, 58], [24, 58], [25, 58], [26, 58], [27, 58], [30, 58], [31, 58], [32, 58], [33, 58], [6, 48], [7, 48], [8, 48], [9, 48], [15, 48], [16, 48], [17, 48], [18, 48], [26, 48], [27, 48], [28, 48], [29, 48], [30, 48], [9, 38], [10, 38], [11, 38], [12, 38], [13, 38], [20, 38], [21, 38], [22, 38], [23, 38], [29, 38], [30, 38], [31, 38], [32, 38], [7, 29], [8, 29], [9, 29], [10, 29], [11, 29], [12, 29], [17, 29], [18, 29], [19, 29], [20, 29], [27, 29], [28, 29], [29, 29], [30, 29], [31, 29], [32, 29], [5, 17], [6, 17], [7, 17], [8, 17], [14, 17], [15, 17], [16, 17], [17, 17], [18, 17], [24, 17], [25, 17], [26, 17], [27, 17], [9, 7], [10, 7], [11, 7], [12, 7], [19, 7], [20, 7], [21, 7], [22, 7], [23, 7], [28, 7], [29, 7], [30, 7], [31, 7]], "pedras": [[17, 55], [27, 56], [11, 45], [21, 46], [31, 45], [15, 35], [25, 36], [12, 25], [22, 24], [32, 25], [10, 14], [19, 15], [30, 15], [14, 4], [23, 4], [33, 5]], "chamineA": [3, 45], "chamineB": [3, 24], "rondas": [[[8, 45], [30, 45]], [[30, 36], [8, 36]], [[10, 16], [28, 16]]], "holofotes": [[12, 12, "down"], [26, 2, "down"]], "espantalho": [20, 24], "espTrig": [[16, 23], [16, 24], [16, 25], [16, 26], [16, 27], [16, 28], [16, 29]], "marco": [26, 25], "foes": [[12, 56], [22, 37], [16, 6]], "bau": [[35, 55], [4, 14]], "fila": [[30, 55], [33, 47]]}, "crista9": {"entra": [4, 26], "volta": [[4, 29], [5, 29]], "porta": [[23, 3], [24, 3]], "saida": [[23, 0], [24, 0]], "emissor": [2, 14, "right"], "alvo": [24, 3], "alarme": [45, 5], "espelhos": [[8, 22], [38, 22], [42, 9]], "atril": [12, 17], "rainha": [24, 9], "rainhaTrig": [[19, 7], [20, 7], [21, 7], [22, 7], [23, 7], [24, 7], [25, 7], [26, 7], [27, 7], [28, 7], [29, 7]], "marco": [6, 24], "bau": [[44, 24], [2, 4]], "foes": [[30, 16], [16, 8]], "solucao": [[8, 14, "/"], [8, 4, "/"], [24, 4, "/"]]}, "farol9": {"entra": [15, 24], "volta": [[15, 25], [16, 25]], "porta": [[15, 6], [16, 6]], "tiago": [18, 8], "trig": [[4, 13], [5, 13], [6, 13], [7, 13], [8, 13], [9, 13], [10, 13], [11, 13], [12, 13], [13, 13], [14, 13], [15, 13], [16, 13], [17, 13], [18, 13], [19, 13], [20, 13], [21, 13], [22, 13], [23, 13], [24, 13], [25, 13], [26, 13], [27, 13]], "postes": [[6, 9], [25, 9], [6, 18], [25, 18]], "frente": [16, 11]}};
+
+// ================= ARTE DO CAP. 9 — A SUBIDA DO MORRO =================
+// Tiles de neve (neve, trilha batida, laje do Farol, degraus), o Sopé (barracas dos aliados, cancela da Guarda, a chaminé
+// velha, pinheiros com neve), a Encosta (muretas, pedras-abrigo, holofotes, a cidade lá embaixo no abismo, o vento), a
+// Crista (a Lente do Luar, a Porta das Lentes, o atril), a base da torre do Farol. Inimigos: Sentinela de Latão, Gralha
+// do Morro, Mariposa de Âmbar. Chefes (arte caprichada, pedido do usuário): O ESPANTALHO DO CERCO (o do Cap. 1, refeito
+// com os cartazes novos), A RAINHA DO FAROL (a Mariposa-Rainha, de asas de âmbar) e O FAROLEIRO (o guardião de latão
+// com a lente que LÊ).
+const KEY9 = Object.assign({}, KEY8, { 'n': { t: 'neve9' }, 'c': { t: 'trilha9' }, 'l': { t: 'laje9' }, 'e': { t: 'degrau9' }, 'N': { t: 'neve9', solid: true } });
+{ const _ta9 = tileArt; tileArt = function (k, v = 0, f = 0) {
+  if (!['neve9', 'trilha9', 'laje9', 'degrau9'].includes(k)) return _ta9(k, v, f);
+  const key = k + '_' + v + '_' + f; if (TILE2[key]) return TILE2[key];
+  const P = new Pix(16, 16), h = (x, y, s = 5) => hash(x + v * 17, y + v * 31, s) % 100;
+  if (k === 'neve9') {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = h(x >> 1, y >> 1, 7); P.p(x, y, r < 18 ? '#c8d4e2' : r < 70 ? '#dbe4ee' : r < 92 ? '#e6edf4' : '#f2f6fa'); }
+    if (v % 5 === 1) { P.rect(4, 5, 2, 3, '#b0bccc'); P.rect(9, 9, 2, 3, '#b0bccc'); }              // pegadas
+    if (v % 7 === 3) { P.rect(10, 4, 3, 2, '#5a5464'); P.rect(10, 3, 3, 1, '#f2f6fa'); }             // pedrinha
+    if (v % 3 === 0) P.p(h(1, 1) % 14 + 1, h(2, 2) % 14 + 1, '#ffffff');                              // brilho
+  } else if (k === 'trilha9') {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = h(x, y, 3); P.p(x, y, r < 14 ? '#9aa4b2' : r < 60 ? '#b4bcc8' : r < 90 ? '#c2cad4' : '#8a7e74'); }
+    P.rect(3, 0, 1, 16, '#a0a8b4'); P.rect(12, 0, 1, 16, '#a0a8b4');
+  } else if (k === 'laje9') {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = h(x >> 2, y >> 2, 9); P.p(x, y, r < 30 ? '#5e5c6a' : r < 70 ? '#686674' : '#72707e'); }
+    for (let i = 0; i < 16; i++) { P.p(i, 7, '#d8e0ea'); P.p(i, 15, '#d8e0ea'); } for (let y = 0; y < 8; y++) { P.p((v % 2 ? 4 : 10), y, '#d8e0ea'); P.p((v % 2 ? 12 : 6), y + 8, '#d8e0ea'); }
+  } else {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, (y % 4) < 1 ? '#4a4652' : (y % 4) < 2 ? '#8a8494' : '#76707e');
+    for (let y = 0; y < 16; y += 4) for (let x = 0; x < 16; x++) if (h(x, y) < 40) P.p(x, y + 1, '#e6edf4');
+  }
+  return TILE2[key] = P.canvas();
+}; }
+const OBJ9 = {};
+const o9 = (k, f) => OBJ9[k] || (OBJ9[k] = f());
+// ---------- o Sopé ----------
+function pinheiroNeveArt(v) { return o9('pn' + v, () => { const P = new Pix(36, 66), Vd = ramp(v % 2 ? '#24503a' : '#2e5e44');
+  P.rect(16, 52, 4, 14, '#4a3020'); P.rect(16, 52, 1, 14, '#6a4a30');
+  for (let k = 0; k < 4; k++) { const y0 = 6 + k * 12, w = 6 + k * 5; P.poly([[18 - w, y0 + 14], [18, y0], [18 + w, y0 + 14]], (x, y) => P.tone(Vd, 0.75 - (x - 18 + w) / (w * 3) - (y - y0) / 40, x, y));
+    for (let x = 18 - w + 1; x < 18 + w; x++) { const yy = y0 + 13 - Math.round(Math.abs(x - 18) * 0.9); if ((x + k) % 3) P.p(x, Math.max(y0 + 3, yy - 1), '#eef3f8'); P.p(x, y0 + 13, x % 2 ? '#dbe4ee' : '#f2f6fa'); } }
+  P.rect(16, 3, 4, 3, '#f2f6fa'); return P.outline().canvas(); }); }
+function tendaAliadaArt(cor, emb) { return o9('te' + cor + emb, () => { const P = new Pix(56, 44), L = ramp(cor), Wd = ramp('#6a4a2a');
+  P.poly([[2, 42], [28, 4], [54, 42]], (x, y) => P.tone(L, 0.8 - (x - 2) / 70 + ((x + y) % 9 === 0 ? 0.1 : 0), x, y));
+  P.poly([[20, 42], [28, 18], [36, 42]], '#1a1418'); P.poly([[22, 42], [28, 22], [28, 42]], L[1]);
+  P.line(28, 4, 28, 0, Wd[1], 2); P.rect(28, 0, 8, 5, emb === 'cruz' ? '#f2ecdc' : emb === 'guilda' ? '#2a3a6a' : '#c8902a');
+  if (emb === 'cruz') { P.rect(31, 1, 2, 3, '#c83a3a'); P.rect(30, 2, 4, 1, '#c83a3a'); }
+  if (emb === 'guilda') { P.p(31, 2, '#ffd070'); P.p(33, 2, '#ffd070'); P.p(32, 1, '#ffd070'); }
+  for (let x = 4; x < 52; x++) { const y = 42 - Math.round(Math.abs(x - 28) * 1.45); if (x % 3) P.p(x, Math.max(5, y), '#f2f6fa'); }
+  P.line(0, 43, 6, 36, Wd[1]); P.line(55, 43, 49, 36, Wd[1]);
+  return P.outline().canvas(); }); }
+function mesaMapasArt(f) { return o9('mm' + (f % 3), () => { const P = new Pix(34, 26), Wd = ramp('#7a4a2a');
+  P.rect(2, 10, 30, 4, Wd[3]); P.rect(2, 14, 30, 2, Wd[1]); P.rect(4, 16, 2, 10, Wd[1]); P.rect(28, 16, 2, 10, Wd[1]);
+  P.rect(6, 6, 16, 5, '#e8dcc0'); for (let i = 0; i < 6; i++) P.p(8 + i * 2, 8 + (i % 2), '#8a5a3a'); P.line(10, 7, 18, 9, '#c83a3a');
+  P.rect(25, 4, 3, 7, '#f2ecdc'); P.poly([[25, 4], [26, [1, 0, 2][f % 3]], [28, 4]], '#ffb040'); P.p(26, 2, '#fff0a0');
+  return P.outline().canvas(); }); }
+function cancelaMorroArt(aberta) { return o9('ca' + (aberta ? 1 : 0), () => { const P = new Pix(70, 52), Wd = ramp('#5a4a3a'), Az = ramp('#2a3a6a');
+  P.rect(0, 14, 18, 36, Az[1]); P.rect(0, 14, 18, 3, Az[3]); P.poly([[-2, 14], [9, 4], [20, 14]], '#2a2430'); P.rect(4, 22, 10, 8, '#ffd070'); P.rect(4, 22, 10, 1, '#fff0c0'); P.rect(6, 34, 6, 16, '#1a1418');
+  for (let x = 0; x < 19; x++) P.p(x, 4 + Math.round(Math.abs(x - 9) * 1.1) - 1, '#f2f6fa');
+  P.rect(19, 30, 4, 20, Wd[1]);
+  if (aberta) { for (let i = 0; i < 40; i++) P.rect(20 + Math.round(i * 0.15), 30 - i, 3, 1, (i >> 2) % 2 ? '#c83a3a' : '#f2ecdc'); }
+  else { for (let x = 22; x < 70; x++) P.rect(x, 31, 1, 3, ((x - 22) >> 2) % 2 ? '#c83a3a' : '#f2ecdc'); P.rect(66, 34, 2, 16, Wd[1]); }
+  return P.outline().canvas(); }); }
+function chamineVelhaArt(aberta) { return o9('ch' + (aberta ? 1 : 0), () => { const P = new Pix(30, 76), Tj = ramp('#8a4a3a');
+  for (let y = 4; y < 76; y++) for (let x = 3; x < 27; x++) { const row = y >> 2, off = row % 2 ? 3 : 0; P.p(x, y, ((x + off) % 6 === 0 || y % 4 === 0) ? Tj[0] : P.tone(Tj, 0.7 - (x - 3) / 40, x, y)); }
+  P.rect(1, 0, 28, 6, Tj[1]); P.rect(1, 0, 28, 2, '#f2f6fa'); P.rect(6, 1, 18, 3, '#1a1014');
+  P.rect(8, 52, 14, 24, '#120c10'); P.rect(8, 52, 14, 2, Tj[0]);
+  if (!aberta) for (const y of [54, 60, 66, 72]) P.rect(7, y, 16, 3, '#6a4a2a');
+  for (let i = 0; i < 5; i++) P.p(4 + i * 5, 6, '#2a2a2a');
+  return P.outline().canvas(); }); }
+// ---------- a Encosta ----------
+function muretaArt(v) { return o9('mu' + (v % 3), () => { const P = new Pix(16, 16), Pd = ramp('#6a6474');
+  for (let y = 4; y < 16; y++) for (let x = 0; x < 16; x++) { const r = ((x >> 2) + (y >> 2) + v) % 3; P.p(x, y, (y % 4 === 0 || (x + (y >> 2) * 2) % 8 === 0) ? Pd[0] : P.tone(Pd, 0.55 + r * 0.08, x, y)); }
+  for (let x = 0; x < 16; x++) { P.p(x, 3, '#f2f6fa'); P.p(x, 4, x % 3 ? '#dbe4ee' : '#f2f6fa'); if ((x + v) % 5 === 0) P.p(x, 2, '#f2f6fa'); }
+  return P.canvas(); }); }
+function pedraAbrigoArt(v) { return o9('pa' + (v % 3), () => { const P = new Pix(22, 24), Pd = ['#2a2632', '#3e3846', '#544c5c', '#6a6274', '#847c8e'];
+  P.ball(11, 15, 10, 9, Pd, { amb: 0.25 }); P.ball(8 + v % 3, 9, 6, 5, Pd);
+  for (let x = 3; x < 19; x++) { const y = 7 + Math.round(Math.abs(x - 10) * 0.5); P.p(x, y, '#f2f6fa'); if (x % 2) P.p(x, y + 1, '#dbe4ee'); }
+  P.p(13, 15, '#2a2632'); P.p(14, 16, '#2a2632'); return P.outline().canvas(); }); }
+function holofoteMuroArt(f) { return o9('ho' + (f % 2), () => { const P = new Pix(22, 22), Fe = ramp('#5a5a6e');
+  P.rect(8, 12, 6, 10, Fe[1]); P.ball(11, 9, 8, 7, Fe); P.ball(11, 11, 5, 4, ['#a87a20', '#e8a030', '#ffd070', '#fff0b0', '#ffffff']);
+  if (f % 2) P.p(9, 9, '#ffffff'); return P.outline().canvas(); }); }
+// a cidade lá embaixo, vista pelas frestas da beira (abismo da encosta): pontinhos de âmbar e névoa
+function cidadeAbismo9(ox, oy, t) {
+  const m = W2.map; if (!m || W2.id !== 'encosta9') return;
+  const x0 = Math.max(0, Math.floor(ox / TS)), y0 = Math.max(0, Math.floor(oy / TS)), x1 = Math.min(m.w - 1, x0 + Math.ceil(W / TS) + 2), y1 = Math.min(m.h - 1, y0 + Math.ceil(H / TS) + 2);
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) if (m.rows[y][x] === ' ') {
+    const sx = x * TS - ox, sy = y * TS - oy;
+    bx.fillStyle = 'rgba(30,40,64,0.55)'; bx.fillRect(sx, sy, TS, TS);
+    for (let k = 0; k < 3; k++) { const hh = hash(x * 3 + k, y * 7, 9) % 100; if (hh < 40) { bx.fillStyle = (hh + Math.floor(t / 30)) % 9 === 0 ? '#fff0b0' : hh % 3 ? '#e8a030' : '#ffd070'; bx.fillRect(sx + (hh * 7) % 15, sy + (hh * 3) % 15, 1, 1); } }
+    if (m.rows[y - 1] && m.rows[y - 1][x] !== ' ') { bx.fillStyle = '#2a2632'; bx.fillRect(sx, sy, TS, 2); bx.fillStyle = 'rgba(220,230,240,0.5)'; bx.fillRect(sx, sy + 2, TS, 1); }
+  }
+}
+// rajada: traços de neve correndo para baixo (o vento do morro empurra para a beira)
+function ventoFx(int, t) {
+  if (int <= 0) return;
+  for (let i = 0; i < 40 * int; i++) { const x = (i * 37 + t * 3) % W, y = (i * 53 + t * (9 + i % 5)) % H; bx.fillStyle = i % 3 ? 'rgba(240,246,250,0.75)' : 'rgba(200,220,240,0.6)'; bx.fillRect(x, y, 1, 4 + (i % 4) * 2); }
+}
+// ---------- a Crista ----------
+function lenteLuarArt(f) { return o9('ll' + (f % 4), () => { const P = new Pix(28, 46), Lt = ramp('#a8803a');
+  P.rect(12, 26, 4, 18, Lt[1]); P.rect(6, 42, 16, 4, Lt[0]); P.rect(6, 42, 16, 1, Lt[3]);
+  P.ball(14, 15, 12, 13, Lt, { amb: 0.3 });
+  const gl = ['#7a4a10', '#c87a20', '#ffb040', '#ffe090', '#ffffff'];
+  P.ball(14, 15, 9, 10, gl, { amb: 0.4 + (f % 4) * 0.05 });
+  for (let r = 3; r < 10; r += 3) for (let a = 0; a < 24; a++) { const an = a / 24 * Math.PI * 2; if (a % 2) P.p(Math.round(14 + Math.cos(an) * r), Math.round(15 + Math.sin(an) * r * 1.1), '#fff0c0'); }
+  return P.outline().canvas(); }); }
+function portaLentesArt(aberta, f) { return o9('pl' + (aberta ? 1 : 0) + (f % 3), () => { const P = new Pix(40, 66), Pd = ramp('#5e5a68'), Lt = ramp('#a8803a');
+  P.rect(0, 0, 6, 66, Pd[1]); P.rect(34, 0, 6, 66, Pd[1]); P.rect(0, 0, 40, 8, Pd[2]); P.rect(0, 0, 40, 2, '#f2f6fa');
+  if (!aberta) { for (let y = 8; y < 66; y++) for (let x = 6; x < 34; x++) P.p(x, y, (x - 6) % 7 === 0 ? Lt[0] : P.tone(Lt, 0.5 - (x - 6) / 60 + (y % 11 === 0 ? 0.2 : 0), x, y)); P.rect(19, 8, 2, 58, Lt[0]); }
+  else for (let y = 8; y < 66; y++) for (let x = 6; x < 34; x++) P.p(x, y, '#0e0c14');
+  const lit = aberta, c = lit ? ['#a87a20', '#e8a030', '#ffd070', '#fff0b0', '#ffffff'] : ['#1a3a5a', '#2a5a8a', '#4a8ac8', '#8ac8f0', '#d8f0ff'];
+  P.ball(20, 18, 7, 7, c, { amb: 0.35 + (f % 3) * 0.05 });
+  return P.outline().canvas(); }); }
+function atrilArt() { return o9('at', () => { const P = new Pix(18, 28), Wd = ramp('#6a4a2a');
+  P.rect(7, 12, 4, 14, Wd[1]); P.rect(3, 25, 12, 3, Wd[0]); P.poly([[1, 12], [17, 8], [17, 12], [1, 16]], Wd[2]);
+  P.poly([[3, 11], [9, 9], [9, 12], [3, 14]], '#e8dcc0'); P.poly([[9, 9], [15, 8], [15, 11], [9, 12]], '#f2ecdc'); P.p(5, 12, '#2a2a5a'); P.p(12, 10, '#2a2a5a');
+  return P.outline().canvas(); }); }
+// a base da torre do Farol (vista de baixo, no pátio): pedra, portão de latão, janelas de âmbar, neve
+function torreFarolBaseArt(f, aberta) { return o9('tf' + (f % 3) + (aberta ? 1 : 0), () => { const W_ = 200, H_ = 124, P = new Pix(W_, H_), Pd = ramp('#5e5a68'), Lt = ramp('#a8803a');
+  for (let y = 0; y < H_; y++) { const w = 70 + Math.round(y * 0.22); for (let x = 100 - w; x < 100 + w; x++) { const row = y >> 3, off = row % 2 ? 6 : 0; P.p(x, y, ((x + off) % 12 === 0 || y % 8 === 0) ? Pd[0] : P.tone(Pd, 0.75 - (x - 100 + w) / (w * 2.4) + (hash(x >> 2, y >> 2, 3) % 7 === 0 ? 0.1 : 0), x, y)); } }
+  // contrafortes
+  for (const s of [-1, 1]) for (let y = 30; y < H_; y++) { const x0 = 100 + s * (58 + Math.round((y - 30) * 0.25)); for (let i = 0; i < 10; i++) P.p(x0 + s * i, y, P.tone(Pd, s < 0 ? 0.7 : 0.35, x0 + i, y)); }
+  // janelas de âmbar
+  for (const [x, y] of [[70, 22], [130, 22], [100, 8]]) { P.rect(x - 5, y, 10, 16, '#1a1014'); P.rect(x - 4, y + 1, 8, 14, (f % 3) ? '#e8a030' : '#ffd070'); P.rect(x - 4, y + 7, 8, 1, '#7a4a10'); P.rect(x, y + 1, 1, 14, '#7a4a10'); }
+  // portão de latão (2 tiles = 32 px) com arco
+  P.ball(100, 74, 22, 14, Pd); P.rect(78, 74, 44, 50, Pd[1]);
+  if (!aberta) { for (let y = 74; y < H_; y++) for (let x = 82; x < 118; x++) P.p(x, y, (x - 82) % 9 === 0 ? Lt[0] : P.tone(Lt, 0.55 - (x - 82) / 70 + (y % 13 === 0 ? 0.25 : 0), x, y)); P.rect(99, 74, 2, 50, Lt[0]); P.ball(100, 98, 4, 4, ['#7a4a10', '#c87a20', '#ffb040', '#ffe090', '#fff']); }
+  else { P.rect(82, 74, 36, 50, '#0a0810'); for (let i = 0; i < 6; i++) P.rect(84 + i * 6, 118 - i * 7, 30 - i * 6, 2, '#ffd070'); }
+  P.ball(100, 74, 18, 10, Lt, { clip: (x, y) => y < 74 });
+  // neve nos beirais
+  for (let x = 30; x < 170; x++) { if (x % 4) P.p(x, H_ - 1 - (x % 3), '#f2f6fa'); }
+  for (let x = 78; x < 122; x++) P.p(x, 60 + Math.round(Math.abs(x - 100) * 0.35), '#f2f6fa');
+  return P.outline().canvas(); }); }
+// ---------- fundos de batalha ----------
+const BG9 = {};
+function bgEncosta9() { if (BG9.e) return BG9.e; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 40 ? '#0a0e1c' : y < 80 ? '#101628' : '#16203a');
+  for (let i = 0; i < 70; i++) P.p((i * 53) % 240, (i * 17) % 70, i % 7 ? '#c8d8f0' : '#ffffff');
+  P.poly([[150, 96], [196, 6], [204, 6], [240, 96]], '#1e2236'); P.rect(197, 0, 6, 8, '#2a2838'); P.rect(198, 1, 4, 4, '#3a3448');   // o morro e o Farol apagado
+  for (let i = 0; i < 90; i++) { const x = (i * 29) % 140, y = 84 + (i * 7) % 12; P.p(x, y, i % 4 ? '#e8a030' : '#ffd070'); }      // a cidade lá embaixo
+  for (let y = 96; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, ((x * 3 + y * 5) % 17) < 2 ? '#c8d4e2' : (y - 96) % 18 < 2 ? '#b8c4d4' : '#dbe4ee');
+  for (let k = 0; k < 6; k++) { const x = 20 + k * 40; P.ball(x, 104, 10, 6, ['#2a2632', '#3e3846', '#544c5c', '#6a6274', '#847c8e']); for (let i = -8; i < 8; i++) P.p(x + i, 99 + Math.abs(i) / 3, '#f2f6fa'); }
+  return BG9.e = P.canvas(); }
+function bgCrista9() { if (BG9.c) return BG9.c; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) { const d = Math.hypot(x - 60, y - 30); P.p(x, y, y >= 96 ? (((x >> 3) + (y >> 3)) % 2 ? '#5a5664' : '#625e6c') : d < 14 ? '#f2f6fa' : d < 18 ? '#c8d8f0' : d < 60 ? '#141a2e' : '#0c1020'); }
+  for (let i = 0; i < 60; i++) P.p((i * 71) % 240, (i * 13) % 90, '#c8d8f0');
+  for (const [x, h] of [[30, 50], [100, 70], [170, 44], [214, 60]]) { P.rect(x - 7, 96 - h, 14, h, '#3a3646'); P.rect(x - 9, 96 - h, 18, 4, '#4a4656'); P.rect(x - 9, 96 - h - 1, 18, 1, '#f2f6fa'); }
+  for (const x of [64, 138]) { P.rect(x - 2, 70, 4, 26, '#7a5a2a'); P.ball(x, 64, 10, 10, ['#7a4a10', '#c87a20', '#ffb040', '#ffe090', '#ffffff']); }
+  for (let x = 0; x < 240; x++) if (x % 3) P.p(x, 96, '#f2f6fa');
+  return BG9.c = P.canvas(); }
+function bgFarol9() { if (BG9.f) return BG9.f; const P = new Pix(240, 150), Pd = ramp('#2e2c3a');
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y >= 100 ? ((x >> 4) + (y >> 3)) % 2 ? '#5e5c6a' : '#686674' : '#0a0c18');
+  for (let i = 0; i < 50; i++) P.p((i * 61) % 240, (i * 19) % 40, '#c8d8f0');
+  for (let y = 0; y < 100; y++) { const w = 40 + Math.round(y * 0.25); for (let x = 70 - w; x < 70 + w; x++) P.p(x, y, ((x + (y >> 3) % 2 * 6) % 12 === 0 || y % 8 === 0) ? Pd[0] : P.tone(Pd, 0.7 - (x - 70 + w) / (w * 2.4), x, y)); }
+  for (const [x, y] of [[52, 20], [88, 20], [70, 46]]) { P.rect(x - 6, y, 12, 18, '#1a1014'); P.rect(x - 5, y + 1, 10, 16, '#e8a030'); P.rect(x, y + 1, 1, 16, '#7a4a10'); }
+  for (let x = 0; x < 240; x++) if (x % 4) P.p(x, 100, '#f2f6fa');
+  return BG9.f = P.canvas(); }
+// ---------- inimigos ----------
+const INI9 = {};
+// SENTINELA DE LATÃO: autômato do Farol, cabeça de lanterna, braço de gancho que estica
+function sentinelaArt(f, armando) { const k = 'se' + f + (armando ? 1 : 0); if (INI9[k]) return INI9[k];
+  const P = new Pix(44, 62), b = f % 2, Lt = ramp('#a8803a'), Fe = ramp('#5a5a6e'), cx = 20;
+  for (const x0 of [cx - 8, cx + 3]) { P.cyl(x0, 42, 6, 16, Fe); P.rect(x0 - 2, 57, 10, 5, Fe[0]); P.ball(x0 + 3, 44, 4, 3, Lt); }
+  P.ball(cx, 32 + b, 12, 13, Lt, { amb: 0.25 }); for (let i = 0; i < 6; i++) P.p(cx - 8 + i * 3, 26 + b, Lt[0]); P.rect(cx - 3, 30 + b, 6, 8, '#1a1014'); P.rect(cx - 2, 31 + b, 4, 6, '#ffd070');
+  P.cyl(cx - 3, 14 + b, 6, 6, Fe); P.rect(cx - 7, 4 + b, 14, 12, '#1a1418'); for (let x = cx - 6; x < cx + 7; x += 3) P.rect(x, 4 + b, 1, 12, Lt[2]);
+  P.ball(cx, 10 + b, 4, 4, armando ? ['#7a1a10', '#c83a18', '#f07a20', '#ffc040', '#fff0a0'] : ['#7a4a10', '#c87a20', '#ffb040', '#ffe090', '#ffffff']); P.rect(cx - 8, 3 + b, 16, 2, Lt[3]); P.rect(cx - 1, 0 + b, 2, 3, Lt[3]);
+  P.line(cx - 11, 26 + b, cx - 16, 44 + b, Fe[2], 3);
+  const ax = armando ? cx + 38 : cx + 22, ay = armando ? 30 : 38 + b; P.line(cx + 11, 26 + b, ax - 4, ay, Fe[2], 3); for (let i = 0; i < 3; i++) P.p(cx + 14 + i * ((ax - cx - 14) / 3), 27 + b + i * ((ay - 27) / 3), Lt[3]);
+  P.line(ax - 4, ay, ax, ay + 4, Fe[3], 2); P.line(ax, ay + 4, ax - 3, ay + 7, Fe[3], 2);
+  return INI9[k] = P.outline().canvas(); }
+// GRALHA DO MORRO: pássaro preto de bico laranja; bate as asas carregando neve
+function gralhaArt(f) { const k = 'gr' + (f % 4); if (INI9[k]) return INI9[k];
+  const P = new Pix(46, 34), Pr = ramp('#2a2638'), a = [0, -6, -10, -4][f % 4];
+  P.ball(22, 20, 10, 7, Pr); P.ball(32, 15, 6, 6, Pr); P.poly([[37, 14], [45, 16], [37, 18]], '#e87a20'); P.p(34, 13, '#ffffff'); P.p(34, 14, '#1a1014');
+  P.poly([[12, 20], [2, 24], [12, 24]], Pr[1]);
+  P.poly([[16, 17], [8 + a / 2, 4 + a], [28, 14]], (x, y) => P.tone(Pr, 0.5 + (y - a) / 40, x, y)); for (let i = 0; i < 4; i++) P.p(12 + i * 3 + a / 3, 9 + a + i * 2, '#f2f6fa');
+  P.rect(20, 26, 1, 4, '#e87a20'); P.rect(25, 26, 1, 4, '#e87a20');
+  return INI9[k] = P.outline().canvas(); }
+// MARIPOSA DE ÂMBAR: filha da Rainha; asas de vidro dourado
+function mariposaAArt(f) { const k = 'ma' + (f % 4); if (INI9[k]) return INI9[k];
+  const P = new Pix(34, 30), bt = [0, 3, 6, 3][f % 4], Am = ['#7a4a10', '#c87a20', '#ffb040', '#ffe090', '#fff8e0'];
+  for (const s of [-1, 1]) { P.poly([[17, 14], [17 + s * 16, 4 + bt], [17 + s * 14, 18 + bt / 2]], (x, y) => P.tone(Am, 0.55 + ((x * s) % 5 === 0 ? 0.2 : 0) - (y - 4) / 50, x, y)); P.ball(17 + s * 10, 10 + bt / 2, 2, 2, ['#2a1a0a', '#5a3a1a', '#8a5a2a', '#c8a060', '#fff']); }
+  P.ball(17, 16, 3, 8, ramp('#6a4a3a')); P.line(16, 8, 13, 3, '#6a4a3a'); P.line(18, 8, 21, 3, '#6a4a3a');
+  return INI9[k] = P.outline().canvas(); }
+// ---------- chefes ----------
+// O ESPANTALHO DO CERCO: o Espantalho do Pedágio (Cap. 1), refeito pela Guarda com os cartazes NOVOS do Acendedor
+// ("O FAROL ACENDE · NINGUÉM MORRE NO ESCURO"), quepe da Guarda, um POTE de Pavio no lugar da cabeça (dentro, uma
+// chama azul que não esquenta), os braços são duas CANCELAS listradas. Fase 2: o vento arranca os cartazes novos e
+// aparece o casaco velho remendado do Cap. 1 e a lanterna do pedágio acesa dentro do pote: ele lembra quem era.
+function espantalhoCercoArt(f, pose, fase) { const k = 'ec' + (f % 4) + pose + fase; if (INI9[k]) return INI9[k];
+  const W_ = 124, H_ = 150, P = new Pix(W_, H_), cx = 60, sw = Math.round(Math.sin(f * 0.8) * 2), Wd = ramp('#6a4a2a'), Pp = ramp('#d8c8a0'), Az = ramp('#2a3a6a'), Gl = ramp('#b8c8d8');
+  const atk = pose === 'atk', carga = pose === 'carga';
+  // o poste e a base de pedras com neve
+  P.cyl(cx - 3, 30, 7, 116, Wd, false, { grain: 7 }); P.ball(cx, 146, 20, 5, ['#2a2632', '#3e3846', '#544c5c', '#6a6274', '#847c8e']); for (let i = -18; i < 18; i++) P.p(cx + i, 141 + Math.abs(i) / 5, '#f2f6fa');
+  // o casaco
+  const coat = (x, y) => {
+    if (fase >= 2) { const r = hash(x >> 2, y >> 2, 5) % 9; return r < 2 ? '#5a3a2a' : r < 4 ? P.tone(ramp('#7a6a4a'), 0.5, x, y) : P.tone(ramp('#6a5a3a'), 0.65 - (x - cx + 30) / 90, x, y); }
+    const cell = ((x >> 3) + (y >> 3) * 3) % 4; return cell === 0 ? P.tone(Az, 0.6 - (x - cx) / 80, x, y) : P.tone(Pp, 0.7 - (x - cx + 30) / 100 + ((x + y) % 7 === 0 ? -0.2 : 0), x, y);
+  };
+  P.poly([[cx - 22, 40 + sw], [cx + 22, 40 + sw], [cx + 30, 104], [cx + 16, 98], [cx + 8, 108], [cx, 100], [cx - 8, 108], [cx - 18, 98], [cx - 30, 104]], coat);
+  if (fase < 2) { // letreiros dos cartazes novos
+    for (let j = 0; j < 4; j++) for (let i = 0; i < 6; i++) P.p(cx - 16 + i * 3 + (j % 2), 54 + j * 10 + sw, '#2a2228');
+    P.rect(cx - 9, 60 + sw, 18, 9, '#f2ecdc'); P.ball(cx, 64 + sw, 3, 3, ['#7a4a10', '#c87a20', '#ffb040', '#ffe090', '#fff']); // o desenho do Farol no cartaz
+    for (let i = 0; i < 5; i++) { const x = cx - 26 + i * 12, y = 100 + (i % 2) * 4; P.poly([[x, y], [x + 4, y + 10 + ((f + i) % 3)], [x + 8, y]], i % 2 ? Pp[2] : Az[2]); }
+  } else { // remendos e o laço de palha do Cap. 1
+    for (const [x, y] of [[cx - 14, 60], [cx + 8, 74], [cx - 4, 88]]) { P.rect(x, y + sw, 8, 7, '#8a2a2a'); for (let i = 0; i < 8; i += 2) P.p(x + i, y + sw - 1, '#f2ecdc'); }
+    for (let i = 0; i < 9; i++) { const x = cx - 28 + i * 7; P.line(x, 102, x + (i % 2 ? 2 : -2), 112 + (i % 3) * 2, RP.palha[(i % 3) + 1]); }
+  }
+  // os braços: duas cancelas listradas (na carga, ambas erguidas; no golpe, uma desce)
+  const braco = (s, ang) => { const x0 = cx + s * 20, y0 = 46 + sw; const L = 52; const x1 = x0 + Math.cos(ang) * L * s, y1 = y0 + Math.sin(ang) * L;
+    const n = Math.round(L); for (let i = 0; i <= n; i++) { const x = Math.round(x0 + (x1 - x0) * i / n), y = Math.round(y0 + (y1 - y0) * i / n); P.rect(x - 1, y - 2, 3, 5, ((i >> 3) % 2) ? '#c83a3a' : '#f2ecdc'); }
+    P.ball(x1, y1, 3, 3, ramp('#5a5a6e')); P.ball(x0, y0, 4, 4, ramp('#5a5a6e')); };
+  braco(-1, carga ? -1.1 : -0.15 + sw * 0.02); braco(1, carga ? -1.2 : atk ? 0.9 : -0.1 - sw * 0.02);
+  // a cabeça: um POTE de Pavio, de vidro grosso, com tampa; dentro uma chama (azul fria na fase 1; a lanterna do pedágio, quente, na 2)
+  const hy = 22 + sw;
+  P.ball(cx, hy, 15, 16, Gl, { amb: 0.35 }); P.ball(cx, hy + 2, 11, 12, fase >= 2 ? ['#5a2a10', '#a8501a', '#e8902a', '#ffd070', '#fff0b0'] : ['#0e1a2a', '#1a3050', '#2a5080', '#6aa0d0', '#c8e8ff'], { amb: 0.2 });
+  const fl = [0, 2, 1, 3][f % 4]; P.poly([[cx - 4, hy + 8], [cx, hy - 6 - fl], [cx + 4, hy + 8]], fase >= 2 ? '#ffb040' : '#8ac8f0'); P.p(cx, hy - 2 - fl, fase >= 2 ? '#fff0b0' : '#e8fbff');
+  // o rosto riscado no vidro
+  P.rect(cx - 8, hy - 3, 4, 2, '#1a1014'); P.rect(cx + 4, hy - 3, 4, 2, '#1a1014'); for (let i = -6; i < 7; i++) P.p(cx + i, hy + 9 + (i % 2), '#1a1014');
+  for (let i = 0; i < 4; i++) P.p(cx - 10 + i * 2, hy - 10 + i, '#ffffff');
+  // tampa e o quepe da Guarda por cima
+  P.rect(cx - 13, hy - 17, 26, 4, '#5a5a6e'); P.rect(cx - 11, hy - 25, 22, 8, Az[2]); P.rect(cx - 14, hy - 18, 28, 2, Az[0]); P.rect(cx - 2, hy - 24, 4, 4, '#c89a30');
+  // vento: tiras de cartaz voando (fase 2)
+  if (fase >= 2) for (let i = 0; i < 4; i++) { const x = 6 + ((f * 9 + i * 29) % 110), y = 20 + ((i * 41 + f * 5) % 90); P.rect(x, y, 6, 4, i % 2 ? Pp[3] : Az[3]); P.p(x + 1, y + 1, '#2a2228'); }
+  if (carga) for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; P.p(Math.round(cx + Math.cos(a) * 46), Math.round(30 + Math.sin(a) * 16), i % 2 ? '#c83a3a' : '#f2ecdc'); }
+  return INI9[k] = P.outline().canvas(); }
+// A RAINHA DO FAROL: a Mariposa-Rainha (Cap. 3) voltou, maior, atraída pela luz do Farol: quatro asas de âmbar com
+// "lentes" no lugar dos olhos das asas, coroa de vidro lapidado, gola de pelo branco de geada, antenas plumosas.
+// Fase 2: ela BEBE o feixe e fica incandescente (branca e dourada).
+function rainhaFarolArt(f, fase, pose) { const k = 'rf' + (f % 6) + fase + pose; if (INI9[k]) return INI9[k];
+  const W_ = 140, H_ = 120, P = new Pix(W_, H_), cx = 70, cy = 60, ph = [0, 4, 8, 10, 7, 3][f % 6], inc = fase >= 2;
+  const Am = inc ? ['#c88a30', '#f0c060', '#ffe8a0', '#fff6d8', '#ffffff'] : ['#5a3410', '#a8641c', '#e8a030', '#ffd070', '#fff0b8'];
+  const Am2 = inc ? ['#a87a40', '#e0b070', '#f8e0a8', '#fff4dc', '#ffffff'] : ['#4a2a10', '#8a5420', '#c8842a', '#f0b850', '#ffe0a0'];
+  // asas de baixo e de cima, dos dois lados (batem: ph)
+  for (const s of [-1, 1]) {
+    P.poly([[cx + s * 6, cy + 4], [cx + s * 54, cy + 30 + ph / 2], [cx + s * 40, cy + 48 + ph / 3], [cx + s * 10, cy + 20]], (x, y) => P.tone(Am2, 0.6 - (y - cy) / 90 + (((x * s) + y) % 9 === 0 ? 0.18 : 0), x, y));
+    P.poly([[cx + s * 6, cy - 6], [cx + s * 66, cy - 46 + ph], [cx + s * 62, cy - 6 + ph / 2], [cx + s * 34, cy + 14], [cx + s * 8, cy + 6]], (x, y) => P.tone(Am, 0.75 - Math.abs(x - cx) / 120 + (((x * s) * 3 + y) % 11 === 0 ? 0.15 : 0), x, y));
+    // nervuras
+    for (let t = 0; t < 4; t++) P.line(cx + s * 8, cy, cx + s * (30 + t * 10), cy - 36 + t * 12 + ph * (1 - t / 4), Am[0]);
+    // a "lente" de cada asa: olho de três anéis, lapidado
+    const ex = cx + s * 44, ey = cy - 22 + ph * 0.7; P.ball(ex, ey, 9, 8, ['#1a1014', '#3a2a5a', '#5a8ac8', '#a8e0ff', '#ffffff']); P.ball(ex, ey, 5, 5, inc ? ['#c87a20', '#ffd070', '#fff0b0', '#fff', '#fff'] : ['#1a1014', '#6a3a1a', '#e8a030', '#ffd070', '#fff']);
+    for (let a = 0; a < 12; a++) { const an = a / 12 * Math.PI * 2; P.p(Math.round(ex + Math.cos(an) * 10), Math.round(ey + Math.sin(an) * 9), a % 2 ? '#fff0c0' : Am[1]); }
+    // franja das asas
+    for (let i = 0; i < 9; i++) { const x = cx + s * (20 + i * 5), y = cy - 4 + ph / 2 + i * 0.5 - (i > 6 ? (i - 6) * 3 : 0); P.p(x, y + 2, '#f2f6fa'); }
+  }
+  // corpo: tórax peludo com gola de geada, abdômen listrado
+  P.ball(cx, cy + 18, 9, 20, ramp('#6a4a3a')); for (let i = 0; i < 5; i++) P.rect(cx - 7 + Math.abs(i - 2), cy + 8 + i * 6, 14 - Math.abs(i - 2) * 2, 2, '#3a2418');
+  P.ball(cx, cy - 2, 12, 10, ['#8a8a9a', '#b8c0d0', '#dbe4ee', '#f2f6fa', '#ffffff']);
+  for (let i = -11; i < 12; i += 2) P.line(cx + i, cy + 4, cx + i * 1.1, cy + 9 + (i % 3), '#f2f6fa');
+  // cabeça, olhos compostos e a coroa de vidro
+  P.ball(cx, cy - 14, 7, 6, ramp('#5a3a2a')); P.ball(cx - 4, cy - 15, 3, 3, ['#1a1014', '#5a1a1a', '#c83a3a', '#ff8a6a', '#fff']); P.ball(cx + 4, cy - 15, 3, 3, ['#1a1014', '#5a1a1a', '#c83a3a', '#ff8a6a', '#fff']);
+  for (let i = 0; i < 5; i++) { const x = cx - 8 + i * 4, hh = i === 2 ? 12 : 7 + (i % 2) * 2; P.poly([[x - 2, cy - 19], [x, cy - 19 - hh], [x + 2, cy - 19]], i % 2 ? '#c8e8ff' : '#f2f6fa'); P.p(x, cy - 17 - hh, '#ffffff'); }
+  // antenas plumosas
+  for (const s of [-1, 1]) { P.line(cx + s * 3, cy - 20, cx + s * 18, cy - 40, '#6a4a3a'); for (let i = 0; i < 7; i++) { const x = cx + s * (5 + i * 2), y = cy - 22 - i * 3; P.p(x - s, y - 1, '#c8a080'); P.p(x + s, y + 1, '#c8a080'); } }
+  if (inc) for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2 + f * 0.2; P.p(Math.round(cx + Math.cos(a) * (64 + (i % 3) * 3)), Math.round(cy + Math.sin(a) * (50 + (i % 2) * 4)), '#fff0c0'); }
+  if (pose === 'carga') for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; P.p(Math.round(cx + Math.cos(a) * 20), Math.round(cy - 2 + Math.sin(a) * 14), '#ffffff'); }
+  return INI9[k] = P.outline().canvas(); }
+// O FAROLEIRO: o guardião do Farol de Cem Invernos. Um autômato de latão do tamanho de uma casa, construído em volta
+// do último faroleiro de verdade (há cem anos). No peito, a LENTE de Fresnel (anéis), que LÊ quem olha. Quepe velho de
+// faroleiro, sobretudo de placas rebitadas, um braço é uma MANIVELA gigante, o outro um GANCHO de lanterna. Pés em
+// engrenagens. Fase 2: a lente gira e solta raios. Fase 3: a lente racha: por trás dela, a silhueta de um velho
+// sentado, de cachimbo, esperando alguém dizer que ele pode parar.
+function faroleiroArt(f, pose, fase) { const k = 'fa' + (f % 8) + pose + fase; if (INI9[k]) return INI9[k];
+  const W_ = 156, H_ = 156, P = new Pix(W_, H_), cx = 74, b = Math.round(Math.sin(f * 0.5) * 1.5), Lt = ramp('#a8803a'), Lt2 = ramp('#8a6a30'), Fe = ramp('#6a6a80'), Co = ramp('#4a5a7a');
+  const atk = pose === 'atk', carga = pose === 'carga';
+  // pés de engrenagem
+  for (const x0 of [cx - 30, cx + 18]) { P.ball(x0 + 6, 146, 14, 9, Fe); for (let a = 0; a < 12; a++) { const an = a / 12 * Math.PI * 2 + f * 0.1; P.rect(Math.round(x0 + 6 + Math.cos(an) * 15) - 1, Math.round(146 + Math.sin(an) * 9) - 1, 3, 3, Fe[1]); } P.ball(x0 + 6, 146, 4, 3, Lt); }
+  // pernas (pistões)
+  for (const x0 of [cx - 28, cx + 20]) { P.cyl(x0, 106, 10, 34, Fe); P.cyl(x0 + 2, 112, 6, 24, Lt2); }
+  // sobretudo de placas rebitadas, em sino
+  P.poly([[cx - 36, 40 + b], [cx + 36, 40 + b], [cx + 46, 116], [cx - 46, 116]], (x, y) => { const pl = ((x >> 3) + ((y >> 4) % 2) * 4) % 8; return (pl === 0 || (y - 40) % 16 === 0) ? Co[0] : P.tone(Co, 0.75 - (x - cx + 46) / 120 + ((x * 7 + y * 3) % 23 === 0 ? 0.2 : 0), x, y); });
+  for (let y = 48; y < 116; y += 16) for (let x = cx - 40; x < cx + 42; x += 8) if (x > cx - 36 - (y - 40) * 0.13 && x < cx + 36 + (y - 40) * 0.13) P.p(x, y + 1 + b, Lt[3]);
+  P.rect(cx - 46, 112, 92, 4, Lt[1]);
+  // a LENTE no peito (anéis de Fresnel)
+  const ly = 70 + b, lr = 22, lc = fase >= 3 ? ['#2a1a10', '#5a3a1a', '#8a6030', '#c89850', '#f0d090'] : ['#7a4a10', '#c87a20', '#ffb040', '#ffe090', '#ffffff'];
+  P.ball(cx, ly, lr + 4, lr + 4, Lt, { amb: 0.3 }); P.ball(cx, ly, lr, lr, lc, { amb: 0.35 + (carga ? 0.25 : 0) });
+  for (let r = 5; r < lr; r += 4) for (let a = 0; a < 48; a++) { const an = a / 48 * Math.PI * 2 + (fase >= 2 ? f * 0.15 : 0); if (a % 3) P.p(Math.round(cx + Math.cos(an) * r), Math.round(ly + Math.sin(an) * r), fase >= 3 ? '#3a2a1a' : '#fff0c0'); }
+  if (fase >= 2 && fase < 3) for (let i = 0; i < 8; i++) { const an = i / 8 * Math.PI * 2 + f * 0.15; P.line(cx + Math.cos(an) * (lr + 6), ly + Math.sin(an) * (lr + 6), cx + Math.cos(an) * (lr + 16), ly + Math.sin(an) * (lr + 16), '#ffe090'); }
+  if (fase >= 3) { // rachada: por trás, o velho sentado, de cachimbo
+    P.line(cx - 18, ly - 10, cx + 4, ly + 2, '#1a1014'); P.line(cx + 4, ly + 2, cx + 16, ly - 14, '#1a1014'); P.line(cx + 4, ly + 2, cx + 2, ly + 20, '#1a1014');
+    P.ball(cx - 2, ly - 4, 4, 4, ['#1a1014', '#2a1a14', '#3a2a1a', '#4a3a2a', '#5a4a3a']); P.rect(cx - 6, ly, 9, 10, '#2a1a14'); P.line(cx + 2, ly - 3, cx + 7, ly - 1, '#2a1a14'); P.p(cx + 8, ly - 3, '#ffb040'); P.p(cx + 8, ly - 5, '#c8c8c8');
+  }
+  // ombreiras e braços
+  for (const s of [-1, 1]) P.ball(cx + s * 34, 44 + b, 11, 9, Lt);
+  // braço esquerdo: o GANCHO de lanterna (com uma lanterninha pendurada)
+  const gx = atk ? cx - 66 : cx - 52, gy = atk ? 96 : 84 + b;
+  P.line(cx - 36, 48 + b, gx, gy - 14, Fe[2], 7); P.line(gx, gy - 14, gx - 4, gy, Fe[3], 3); P.line(gx - 4, gy, gx + 2, gy + 6, Fe[3], 3);
+  P.rect(gx - 6, gy + 6, 10, 12, '#1a1418'); P.rect(gx - 5, gy + 7, 8, 10, (f % 2) ? '#ffd070' : '#ffb040'); P.rect(gx - 7, gy + 5, 12, 2, Lt[2]);
+  // braço direito: a MANIVELA gigante (na carga, girando para trás)
+  const ang = carga ? -1.9 + (f % 4) * 0.25 : atk ? 0.7 : -0.4 + Math.sin(f * 0.4) * 0.15, mx = cx + 40 + Math.cos(ang) * 26, my = 48 + b + Math.sin(ang) * 26;
+  P.line(cx + 36, 48 + b, mx, my, Fe[2], 7); P.line(mx, my, mx + Math.cos(ang + 1.57) * 22, my + Math.sin(ang + 1.57) * 22, Lt[2], 5);
+  P.ball(mx + Math.cos(ang + 1.57) * 24, my + Math.sin(ang + 1.57) * 24, 5, 5, Lt);
+  // cabeça: elmo-farolete com o quepe do faroleiro
+  P.ball(cx, 26 + b, 15, 14, Fe, { amb: 0.25 }); P.rect(cx - 10, 22 + b, 20, 6, '#1a1014'); P.rect(cx - 8, 23 + b, 6, 4, carga ? '#ff6a3a' : '#ffd070'); P.rect(cx + 2, 23 + b, 6, 4, carga ? '#ff6a3a' : '#ffd070');
+  P.rect(cx - 16, 10 + b, 32, 4, '#1a1a2a'); P.rect(cx - 12, 2 + b, 24, 9, '#22223a'); P.rect(cx - 12, 2 + b, 24, 2, '#3a3a5a'); P.rect(cx - 3, 4 + b, 6, 5, Lt[3]); P.p(cx, 6 + b, '#2a2a4a');
+  // barba de geada (era a barba do faroleiro)
+  for (let i = -10; i < 11; i += 2) P.line(cx + i, 32 + b, cx + i * 0.8, 38 + b + (i % 4 === 0 ? 3 : 0), '#e6edf4');
+  if (carga) for (let i = 0; i < 14; i++) { const an = i / 14 * Math.PI * 2; P.p(Math.round(cx + Math.cos(an) * (lr + 10)), Math.round(ly + Math.sin(an) * (lr + 10)), '#fff0c0'); }
+  return INI9[k] = P.outline().canvas(); }
+// o Espantalho no mapa (tamanho de mapa: um poste de ~3,5 m)
+function espantalhoMapaArt(f) { return o9('em' + (f % 2), () => { const P = new Pix(40, 64), Wd = ramp('#6a4a2a'), Pp = ramp('#d8c8a0'), Az = ramp('#2a3a6a'), sw = f % 2;
+  P.cyl(18, 14, 4, 50, Wd); P.ball(20, 62, 8, 2, ['#2a2632', '#3e3846', '#544c5c', '#6a6274', '#847c8e']);
+  P.poly([[10, 20 + sw], [30, 20 + sw], [33, 46], [26, 43], [20, 48], [14, 43], [7, 46]], (x, y) => ((x >> 2) + (y >> 2)) % 3 === 0 ? Az[2] : P.tone(Pp, 0.7 - (x - 7) / 40, x, y));
+  for (let i = 0; i < 18; i++) { P.rect(1 + i, 22 + sw, 1, 2, (i >> 2) % 2 ? '#c83a3a' : '#f2ecdc'); P.rect(21 + i, 22 + sw, 1, 2, (i >> 2) % 2 ? '#c83a3a' : '#f2ecdc'); }
+  P.ball(20, 12 + sw, 7, 8, ramp('#b8c8d8'), { amb: 0.35 }); P.ball(20, 13 + sw, 5, 5, ['#0e1a2a', '#1a3050', '#2a5080', '#6aa0d0', '#c8e8ff']); P.p(20, 11 + sw, '#c8e8ff');
+  P.rect(15, 3 + sw, 10, 4, Az[2]); P.rect(13, 6 + sw, 14, 1, Az[0]); P.rect(19, 4 + sw, 2, 2, '#c89a30');
+  return P.outline().canvas(); }); }
+
+// ================= MECÂNICAS DO CAP. 9 — A SUBIDA DO MORRO =================
+// 1) O QUADRO DO CERCO (na base): os ALIADOS que cada um foi buscar pelos Marcos, e o trunfo que cada um dá na subida:
+//    DALVA (a tenda do sopé: cura e frascos), IOLANDA (o mapa e a página da Ofélia: a Porta das Lentes; obrigatória),
+//    TICO E DITO (a chaminé velha: atalho na Encosta), BRÁS (a Guilda distrai a cancela: sem luta na entrada),
+//    DONA BADALADA (o sino de Velhágua toca à meia-noite: metade das rondas da Encosta desce para ver o que é).
+//    Para subir: a Iolanda e mais DOIS.
+// 2) VENTANIA (Encosta): o vento do morro sopra para o SUL, para a beira, em rajadas com aviso. Quem estiver abrigado (pedra
+//    ou rocha logo ao NORTE, ou encostado numa mureta), ou na escada, não sai do lugar; o resto escorrega para baixo e, se
+//    cair da beira, cai no patamar de baixo. De DIA os holofotes da Guarda dormem; de NOITE varrem os dois patamares de cima.
+// 3) LEITURA (a moça de âmbar, depois dos três fios): o AVALIAR deixa o inimigo LIDO por 3 golpes: ela avisa na hora
+//    certa e o anel de defesa fica mais largo (perfeito e bom mais fáceis).
+const c9Ativo = () => !!(G.flags && G.flags.c9Init && !G.flags.c9Fim);
+// ---------- aliados ----------
+const ALIADOS9 = {
+  dalva: { nm: 'Irmã Dalva', trunfo: 'a tenda do sopé (cura e frascos)', onde: 'na base' },
+  iolanda: { nm: 'Dona Iolanda', trunfo: 'o mapa e a página da Ofélia (a Porta das Lentes)', onde: 'na Papelaria, em Auren (de dia)', obrig: true },
+  tico: { nm: 'Tico e Dito', trunfo: 'a chaminé velha (atalho na Encosta)', onde: 'no Bairro Baixo, em Auren (de dia)' },
+  bras: { nm: 'Sargento Brás', trunfo: 'a Guilda distrai a cancela (sem luta na entrada)', onde: 'na Vila dos Pavios (de noite, com a mãe)' },
+  badalada: { nm: 'Dona Badalada', trunfo: 'o sino toca à meia-noite (metade das rondas sai da Encosta)', onde: 'na Praça do Sino, em Velhágua' }
+};
+const aliado9 = (k) => !!G.flags['c9A_' + k];
+const nAliados9 = () => Object.keys(ALIADOS9).filter(aliado9).length;
+const prontoSubir9 = () => aliado9('iolanda') && nAliados9() >= 3;
+function ganharAliado9(k) { if (aliado9(k)) return; G.flags['c9A_' + k] = true; sfx('rune'); W2.toast = { s: ALIADOS9[k].nm + ' vem com vocês! (' + nAliados9() + '/5)', t: 0 }; }
+async function quadroCerco() {
+  if (G.flags.c9P2) { await say('* O quadro do cerco, cheio de alfinetes e barbante. Já foi. Agora é subir.'); return; }
+  await say('* O quadro do cerco, na parede da base: um mapa do morro desenhado pela Rita a carvão, cinco nomes com alfinete, um barbante até o Farol.');
+  const items = Object.entries(ALIADOS9).map(([k, a]) => ({ label: (aliado9(k) ? '[x] ' : '[ ] ') + a.nm + (a.obrig ? ' *' : ''), col: aliado9(k) ? '#9be58a' : '#c8c0d0' }));
+  await list({ x: 14, y: 26, w: 212, title: 'Aliados: ' + nAliados9() + '/5 (a Iolanda e mais dois)', items, desc: j => { const a = Object.values(ALIADOS9)[j]; return a ? (aliado9(Object.keys(ALIADOS9)[j]) ? 'Vem! Trunfo: ' + a.trunfo + '.' : 'Onde: ' + a.onde + '. Trunfo: ' + a.trunfo + '.') : ''; }, descY: 150 });
+  if (!prontoSubir9()) { await say(aliado9('iolanda') ? 'Mais gente. Um cerco não se fura com três pessoas e uma mala.' : 'Sem a Dona Iolanda a gente não passa da Porta das Lentes. Ela tem o mapa.', 'rita'); return; }
+  const c = await choose('* ' + nAliados9() + ' aliados. Subir o morro?', ['Hoje à noite', 'Ainda não'], 'me', 1);
+  if (c === 0) await noiteDoCerco();
+}
+// ---------- VENTANIA ----------
+const VENTO9 = { per: 300, aviso: 84, passo: 4 };
+function ventoAtivo9() { return W2.id === 'encosta9' && V.scene === 'world'; }
+function abrigado9(x, y) {
+  const T = tileOf(W2.map, x, y); if (T.t === 'degrau9') return true;
+  const N = tileOf(W2.map, x, y - 1); return !!N.solid || propSolid(W2.map, x, y - 1);
+}
+{ const _lm9 = loadMap2; loadMap2 = function () { const r = _lm9.apply(this, arguments); W2.vento9 = { t: 30, emp: 0 }; return r; }; }
+{ const _uwV9 = updateWorld2; updateWorld2 = function () {
+  _uwV9();
+  if (!ventoAtivo9() || !W2.vento9) return;
+  const V9 = W2.vento9;
+  if (worldBusy2() || W2.pego) return;
+  // empurrão em andamento
+  if (V9.emp > 0) {
+    if (W2.mv) return;
+    if (W2.t % VENTO9.passo) return;
+    V9.emp--;
+    const T = tileOf(W2.map, W2.x, W2.y + 1);
+    if (T.t === 'abismo') { V9.emp = 0; run2(() => caiuDaBeira9()); return; }
+    if (T.solid || propSolid(W2.map, W2.x, W2.y + 1) || W2.ents.some(e => !e.passa && e.x === W2.x && e.y === W2.y + 1)) { V9.emp = 0; return; }
+    W2.dir = 'down'; tryStep(W2.x, W2.y + 1); return;
+  }
+  V9.t++;
+  if (V9.t === VENTO9.per - VENTO9.aviso) { sfx('rumble'); if (!G.flags.tutVento9) { G.flags.tutVento9 = true; run2(tutVento9); } }
+  if (V9.t >= VENTO9.per) {
+    V9.t = 0; sfx('encounter'); V.shake = 3;
+    if (abrigado9(W2.x, W2.y)) { W2.toast = { s: 'Abrigado: o vento passa por cima.', t: 0 }; return; }
+    V9.emp = 8; W2.mv = null;
+  }
+}; }
+async function tutVento9() {
+  await say('* Um assobio sobe do vale. A neve do chão levanta, toda de uma vez, e corre para a beira.');
+  await say('{o}Segura no chão. Atrás da pedra. O vento daqui empurra para baixo.{/}', 'eco8');
+  await say('Quem falou isso?', 'rita');
+  await say('[VENTANIA: quando o assobio subir, fique ABRIGADO: com uma pedra ou rocha logo ACIMA de você (ao norte), encostado numa MURETA da beira, ou na escada. Fora disso o vento te leva para a beira, e da beira se cai no patamar de baixo.]', 'cat');
+}
+async function caiuDaBeira9() {
+  W2.mv = null; sfx('fall'); V.shake = 8;
+  // cai pela beira e pelo paredão até o chão do patamar de baixo
+  let x = W2.x, y = W2.y + 1; const m = W2.map;
+  while (y < m.h - 1 && ['abismo', 'rocha'].includes(tileOf(m, x, y).t)) y++;
+  const ok = y < m.h && !tileOf(m, x, y).solid && tileOf(m, x, y).t !== 'abismo';
+  await fadeOut(10);
+  if (ok) loadMap2('encosta9', x, y, 'down'); else loadMap2('encosta9', ...EN9.patamares[0].ent, 'up');
+  await fadeIn(10);
+  G.flags.c9Quedas = (G.flags.c9Quedas || 0) + 1;
+  const n = G.flags.c9Quedas;
+  if (n === 1) { await say('* Você escorrega, gira no ar, bate num monte de neve fofa no patamar de baixo. A Rita aterrissa em pé. A Lume aterrissa em cima de você.'); await say('Desculpa! Você é macio.', 'lume'); await say('Eu sou uma mala. Mala é feita pra cair.', 'me'); }
+  else if (n % 4 === 0) await say(pickOne(['Patamar de baixo de novo. Esse morro tem senso de humor.', 'A neve aqui já tem o meu formato.', 'Abrigo. Pedra. Norte. Eu sei. EU SEI.']), 'me');
+}
+// desenho: a cidade no abismo, os traços do vento e o aviso
+{ const _arV9 = HOOK_AR; HOOK_AR = function (m, ox, oy) {
+  const r = _arV9 ? _arV9(m, ox, oy) : undefined;
+  if (!m || V.scene !== 'world') return r;
+  if (m === MAPS2.encosta9) {
+    const V9 = W2.vento9 || { t: 0, emp: 0 }, av = V9.t >= VENTO9.per - VENTO9.aviso;
+    ventoFx(V9.emp > 0 ? 1 : av ? 0.35 : 0.06, W2.t);
+  }
+  if (c9Ativo() && ['sope9', 'encosta9', 'crista9', 'farol9'].includes(W2.id)) neveFx(ox, oy, W2.t, ehNoite());
+  return r;
+}; }
+{ const _chV9 = HOOK_CHAO; HOOK_CHAO = function (m, ox, oy) { const r = _chV9 ? _chV9(m, ox, oy) : undefined; if (m && m === MAPS2.encosta9) cidadeAbismo9(ox, oy, W2.t); return r; }; }
+{ const _hmV9 = hudMundo; hudMundo = function (m) {
+  _hmV9(m);
+  if (!ventoAtivo9() || !W2.vento9) return;
+  const V9 = W2.vento9, falta = VENTO9.per - V9.t, av = falta <= VENTO9.aviso;
+  const x = 4, y = H - 22; box(x, y, 96, 18, { edge: av ? '#ff8a8a' : '#8fe3d8' });
+  txt(V9.emp > 0 ? 'RAJADA!' : av ? 'VENTO!' : 'vento', x + 6, y + 5, { col: V9.emp > 0 || av ? '#ffb0b0' : '#c8d8e8' });
+  const p = Math.min(1, V9.t / (VENTO9.per - VENTO9.aviso)); bx.fillStyle = '#1a1a2a'; bx.fillRect(x + 52, y + 7, 38, 4); bx.fillStyle = av ? '#ff6a6a' : '#8fe3d8'; bx.fillRect(x + 52, y + 7, Math.round(38 * Math.min(1, av ? 1 : p)), 4);
+  if (abrigado9(W2.x, W2.y)) { bx.fillStyle = '#9be58a'; bx.fillRect(x + 92, y + 6, 3, 6); }
+}; }
+// ---------- LEITURA (a moça de âmbar no Avaliar) ----------
+Object.assign(ST_NAME, { lido: 'LIDO' });
+{ const _pkL = pickTarget; pickTarget = async function () { const t = await _pkL.apply(this, arguments); BT._ultimoAlvo9 = t; return t; }; }
+{ const _dcL = doCommand; doCommand = async function (m, k) {
+  const r = await _dcL(m, k);
+  if (k === 'avaliar' && G.flags.c9Leitura && BT._ultimoAlvo9 && BT._ultimoAlvo9.hp > 0) {
+    const t = BT._ultimoAlvo9; t.st.lido = 3; const [x, y] = unitCenter(t); popNum(x, y - 34, 'LIDO', '#ffd890');
+    if (!G.flags.tutLido9) { G.flags.tutLido9 = true; await say('{o}Esse eu leio pra você. Quando ele for bater, eu aviso. Escuta a minha voz, não o anel.{/}', 'eco8'); await say('[LEITURA: o inimigo avaliado fica LIDO por 3 golpes: o anel de defesa fica mais largo contra ele.]', 'cat'); }
+    else callout('"Deixa comigo."', '#ffd890', 40);
+  }
+  return r;
+}; }
+{ const _fsL9 = foeStrike; foeStrike = async function (e, t, pow, o = {}) {
+  if (e && e.st && e.st.lido > 0 && t && t.hp > 0) { e.st.lido--; BT._lido9 = true; callout('"' + (t.id === 'bau' ? 'Você' : t.name) + '! Agora!"', '#ffd890', 30); try { return await _fsL9(e, t, pow, o); } finally { BT._lido9 = false; } }
+  return _fsL9(e, t, pow, o);
+}; }
+// anel mais largo quando a moça está lendo (perfeito ±5, bom ±12)
+{ const _urL9 = updateRing; updateRing = function () {
+  if (!BT._lido9 || !BT.ring) return _urL9();
+  const R = BT.ring; R.t++;
+  const dt = R.t - R.n;
+  if (!R.res && btnp('a')) { const a = Math.abs(dt); R.res = a <= 5 ? 'perfeito' : a <= 12 ? 'bom' : 'falhou'; R.at = R.t; }
+  if ((R.res && R.t - R.at > 6) || dt > 14) { const res = R.res || 'falhou'; BT.ring = null; R.r(res); }
+}; }
+// o aro âmbar em volta do anel quando ela está lendo
+{ const _dwL9 = drawUnit; drawUnit = function (u) { const r = _dwL9(u); if (BT._lido9 && BT.ring && BT.ring.m === u) { const [x, y] = unitCenter(u); fxRing(x, y, 22 + Math.sin(BT.t * 0.3) * 2, '#ffd890', 0.6); } return r; }; }
+// ---------- o Tiago ajuda (luta do Faroleiro): "Troco" a cada 3 vezes do grupo ----------
+const TIAGO_ATK = { name: 'Tiago', id: 'tiago', side: 'x', atk: 78, mag: 0, st: {}, row: 'front' };
+{ const _actT9 = act; act = async function (m, fn) {
+  if (!BT.tiago9 || !m || m.side !== 'p') return _actT9(m, fn);
+  return _actT9(m, async () => {
+    await fn();
+    BT.tiago9.n = (BT.tiago9.n || 0) + 1;
+    if (BT.tiago9.n % (BT.tiago9.forte ? 2 : 3) !== 0) return;
+    const alvo = alive(BT.foes).find(f => f.boss) || alive(BT.foes)[0]; if (!alvo) return;
+    callout('TROCO DO TIAGO!', '#c8d8ff', 50); sfx('item'); const [tx, ty] = unitCenter(alvo);
+    await tw(16, p => { for (let i = 0; i < 3; i++) { bx.fillStyle = i % 2 ? '#fff0b0' : '#ffd070'; bx.fillRect(Math.round(16 + (tx - 16) * p + i * 3), Math.round(110 + (ty - 110) * p - Math.sin(p * Math.PI) * (30 + i * 6)), 3, 3); } });
+    burst(tx, ty, 10, ['#ffd070', '#fff0b0']); hitFoe(TIAGO_ATK, alvo, 0.9, { el: 'corte', brk: 1 });
+  });
+}; }
+
+// ================= INIMIGOS DO CAP. 9: A SUBIDA DO MORRO =================
+// SENTINELA DE LATÃO (autômato do Farol: Gancho, Lanterna nos Olhos deixa TONTO; gelo e mordida), GRALHA DO MORRO
+// (rápida; Bicada Dupla, Rajada de Asa em todos, rouba Tensão; fogo e corte), MARIPOSA DE ÂMBAR (filha da Rainha:
+// COME LUZ e se cura com ela; fogo e mordida). A Guarda Real e o Cão-Lanterna voltam no cerco.
+// Mini-chefes antigos com cara nova: O ESPANTALHO DO CERCO (o do Cap. 1, refeito com os cartazes do Farol: PEDÁGIO DO
+// MORRO preparado; Rajada atrasa a vez de todos; fase 2 o vento arranca os cartazes, a lanterna velha acende: fraquezas
+// mudam para gelo e mordida, Bafo de Lanterna queima, Cobrança rouba Tensão e cura) e A RAINHA DO FAROL (a Mariposa-
+// Rainha: na fase 1 a LUZ a CURA; chama filhas; SOPRO DO FAROL preparado; fase 2 ela bebe o feixe e fica incandescente:
+// gelo e corte, Come a Luz apaga os bônus). Chefe: O FAROLEIRO (Varredura faz esquecer a vez; Manivela; Gancho de
+// Lanterna queima; LEITURA TOTAL preparada tira Tensão; fase 2 a lente gira: Raios e Sentinelas; fase 3 a lente racha,
+// a moça de âmbar "lê de volta": o escudo quebra e a luz e o corte também pegam). O Tiago joga o TROCO.
+Object.assign(ENEMY2, {
+  sentinela: { name: 'Sentinela de Latão', kind: 'sentinela', mhp: 700, atk: 45, def: 19, mdef: 10, spd: 11, shield: 5, maxShield: 5, weak: ['gelo', 'mordida'], ai: 'sentinela', h: 62, cobres: 30,
+    frame: u => sentinelaArt(Math.floor(BT.t / 14 + u.x) % 2, !!u.armando || u._atk > 0), dieCols: ['#a8803a', '#5a5a6e', '#ffd070'] },
+  gralha: { name: 'Gralha do Morro', kind: 'gralha', fly: true, mhp: 560, atk: 44, def: 11, mdef: 12, spd: 18, shield: 3, maxShield: 3, weak: ['fogo', 'corte'], ai: 'gralha', h: 34, cobres: 22,
+    frame: u => gralhaArt(Math.floor(BT.t / 5 + u.x)), dieCols: ['#2a2638', '#e87a20', '#f2f6fa'] },
+  mariposaA: { name: 'Mariposa de Âmbar', kind: 'mariposaA', fly: true, mhp: 430, atk: 42, def: 9, mdef: 14, spd: 15, shield: 2, maxShield: 2, weak: ['fogo', 'mordida'], ai: 'mariposaA', h: 30, cobres: 14,
+    frame: u => mariposaAArt(Math.floor(BT.t / 5 + u.x)), dieCols: ['#ffb040', '#ffe090', '#fff8e0'] },
+  espantalhoC: { name: 'Espantalho do Cerco', kind: 'espantalhoC', boss: true, mhp: 5800, atk: 46, def: 18, mdef: 14, spd: 11, shield: 8, maxShield: 8, weak: ['fogo', 'corte'], ai: 'espantalhoC', h: 150, cobres: 260, ph: 1,
+    frame: u => espantalhoCercoArt(Math.floor(BT.t / 10), u.armando ? 'carga' : u._atk > 0 ? 'atk' : '', u.ph || 1), dieCols: ['#d8c8a0', '#2a3a6a', '#c83a3a', '#ffb040'], cancelTxt: 'A cancela travou! Pedágio cancelado!' },
+  rainhaF: { name: 'A Rainha do Farol', kind: 'rainhaF', boss: true, fly: true, mhp: 4500, atk: 46, def: 15, mdef: 17, spd: 12, shield: 8, maxShield: 8, weak: ['fogo', 'mordida'], ai: 'rainhaF', h: 120, cobres: 280, ph: 1,
+    frame: u => rainhaFarolArt(Math.floor(BT.t / 5), u.ph || 1, u.armando ? 'carga' : ''), dieCols: ['#ffb040', '#ffe090', '#ffffff', '#c8e8ff'], cancelTxt: 'O sopro engasgou! Ela tosse pó de âmbar.' },
+  faroleiro: { name: 'O Faroleiro', kind: 'faroleiro', boss: true, mhp: 8600, atk: 48, def: 20, mdef: 18, spd: 10, shield: 10, maxShield: 10, weak: ['gelo', 'mordida'], ai: 'faroleiro', h: 156, cobres: 450, ph: 1,
+    frame: u => faroleiroArt(Math.floor(BT.t / 8), u.armando ? 'carga' : u._atk > 0 ? 'atk' : '', u.ph || 1), dieCols: ['#a8803a', '#ffd070', '#3a3a50', '#ffffff'], cancelTxt: 'A lente desfocou! A leitura falhou!' }
+});
+Object.assign(FICHA, {
+  sentinela: 'Sentinela de Latão: autômato do Farol. Gancho que estica; a LANTERNA NOS OLHOS deixa tonto. Gelo e mordida.',
+  gralha: 'Gralha do Morro: rápida. Bicada dupla, rajada de asa em todos, e rouba Tensão. Fogo e corte.',
+  mariposaA: 'Mariposa de Âmbar: filha da Rainha. COME LUZ: golpes de luz a curam. Fogo e mordida.',
+  espantalhoC: 'Espantalho do Cerco: o do pedágio, refeito pela Guarda. PEDÁGIO DO MORRO (quebre o escudo!). A Rajada atrasa a vez de todos. Na metade, a lanterna velha acende e as fraquezas mudam. Fogo e corte.',
+  rainhaF: 'A Rainha do Farol: a Mariposa-Rainha voltou. Na fase 1 a LUZ A CURA! Chama filhas. SOPRO DO FAROL (quebre o escudo!). Depois ela bebe o feixe e fica incandescente: aí gelo e corte. Fogo e mordida.',
+  faroleiro: 'O Faroleiro: a lente LÊ quem ela varre (perde a vez). LEITURA TOTAL (quebre o escudo!) tira Tensão. Na fase 2 chama Sentinelas e solta raios. Gelo e mordida.'
+});
+function atrasarVez9(t, n) { if (!t || t.hp <= 0) return; t.ct = Math.max(0, (t.ct || 0) - n); const [x, y] = unitCenter(t); popNum(x, y - 30, 'ATRASOU', '#c8d8e8'); }
+Object.assign(AI2, {
+  async sentinela(e) {
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.4) { callout('Lanterna nos Olhos', '#ffd070', 36); const [ex, ey] = unitCenter(e), [tx, ty] = unitCenter(t); await tw(14, p => { bx.globalAlpha = 0.35 * (1 - p * 0.5); bx.fillStyle = '#fff0b0'; bx.beginPath(); bx.moveTo(ex, ey - 22); bx.lineTo(tx - 10, ty - 14 + p * 4); bx.lineTo(tx + 10, ty + 10); bx.fill(); bx.globalAlpha = 1; }); const r = await foeStrike(e, t, 0.7, { n: 22, longe: true }); if (r === 'falhou') { t.st.tonto = 1; } return; }
+    callout('Gancho', '#d0a8ff', 30); golpeAtk(e, 24); await foeLunge(e, t, 18, 14); await foeStrike(e, t, 1.1, { n: 24 }); await foeBack(e);
+  },
+  async gralha(e) {
+    const r0 = Math.random();
+    if (r0 < 0.3) { callout('Rajada de Asa', '#c8d8e8', 36); await tw(16, p => ventoLuta9(p)); for (const m of alive(BT.party)) await foeStrike(e, m, 0.5, { n: 20, fast: true, noCounter: true, longe: true }); return; }
+    const t = foeTarget(); if (!t) return;
+    if (r0 < 0.5) { callout('Rouba Brilho', '#ffd070', 30); await foeLunge(e, t, 12, 12); const r = await foeStrike(e, t, 0.75, { n: 20, fast: true }); await foeBack(e); if (r !== 'perfeito') { const k = Math.min(BT.tension, 12); BT.tension -= k; popNum(120, 60, '-' + k + ' TENSÃO', '#ffd070'); } return; }
+    callout('Bicada Dupla', '#d0a8ff', 30); await foeLunge(e, t, 10, 14); await foeStrike(e, t, 0.55, { n: 18, fast: true }); if (t.hp > 0) await foeStrike(e, t, 0.55, { n: 18, fast: true }); await foeBack(e);
+  },
+  async mariposaA(e) {
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.4) { callout('Pó de Âmbar', '#ffd070', 30); const [tx, ty] = unitCenter(t); await tw(16, p => { for (let i = 0; i < 8; i++) { bx.fillStyle = i % 2 ? '#ffd070' : '#fff0b0'; bx.fillRect(Math.round(tx - 12 + (i * 7) % 24), Math.round(ty - 30 + p * 26 + (i * 5) % 8), 2, 2); } }); const r = await foeStrike(e, t, 0.65, { n: 22, longe: true }); if (r === 'falhou' && Math.random() < 0.5) t.st.tonto = 1; return; }
+    callout('Asa de Vidro', '#d0a8ff', 30); await foeLunge(e, t, 12, 12); await foeStrike(e, t, 1.0, { n: 22, fast: true }); await foeBack(e);
+  },
+  async espantalhoC(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) {
+      e.charge = null; e.armando = false; callout('PEDÁGIO DO MORRO!', '#ffffff', 70); sfx('crit'); bshake(20, 3); golpeAtk(e, 30);
+      await tw(22, p => { for (let i = 0; i < 2; i++) { bx.fillStyle = i ? '#c83a3a' : '#f2ecdc'; bx.fillRect(0, Math.round(40 + p * 80 + i * 6), W, 4); } });
+      for (const m of alive(BT.party)) await foeStrike(e, m, e.ph >= 2 ? 1.45 : 1.35, { n: 30, noCounter: true, longe: true });
+      return;
+    }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('As duas cancelas sobem... ele vai cobrar de todo mundo (quebre o escudo!)', '#ff6b6b', 90); sfx('rumble'); await tw(20, p => luzMagia(ex, ey - 60, 20 + p * 20, 'rgba(200,58,58,0.5)', 1 - p)); return; }
+    const r0 = Math.random();
+    if (r0 < 0.25) { callout('Rajada', '#c8d8e8', 40); sfx('rumble'); await tw(22, p => ventoLuta9(p)); for (const m of alive(BT.party)) { const r = await foeStrike(e, m, 0.5, { n: 22, noCounter: true, longe: true }); if (r !== 'perfeito') atrasarVez9(m, 25); } return; }
+    const t = foeTarget(); if (!t) return;
+    if (e.ph >= 2 && r0 < 0.45) { callout('Bafo de Lanterna', '#ffb040', 40); golpeAtk(e, 24); const [tx, ty] = unitCenter(t); await tw(18, p => { for (let i = 0; i < 10; i++) { bx.fillStyle = i % 2 ? '#ffb040' : '#ff6a2a'; bx.fillRect(Math.round(ex + (tx - ex) * p + Math.sin(i + p * 9) * 5), Math.round(ey - 60 + (ty - ey + 60) * p + (i - 5) * 2), 3, 3); } }); const r = await foeStrike(e, t, 0.85, { n: 24, longe: true }); if (r === 'falhou') t.st.queimado = 2; return; }
+    if (e.ph >= 2 && r0 < 0.6) { callout('Cobrança', '#ffd070', 40); golpeAtk(e, 24); await foeLunge(e, t, 16, 14); const r = await foeStrike(e, t, 0.8, { n: 24 }); await foeBack(e); if (r !== 'perfeito') { const k = Math.min(BT.tension, 15); BT.tension -= k; e.hp = Math.min(e.mhp, e.hp + Math.round(e.mhp * 0.03)); popNum(ex, ey - 40, '+TAXA', '#ffd070'); } return; }
+    if (r0 < 0.6) { callout('Chuva de Cartazes', '#e8dcc0', 36); golpeAtk(e, 24); for (let i = 0; i < 3; i++) { const m = pickOne(alive(BT.party)); if (!m) break; const [mx, my] = unitCenter(m); await tw(8, p => { bx.fillStyle = '#e8dcc0'; bx.fillRect(Math.round(mx - 4 + Math.sin(p * 9) * 6), Math.round(my - 70 + p * 54), 8, 6); bx.fillStyle = '#2a2228'; bx.fillRect(Math.round(mx - 2 + Math.sin(p * 9) * 6), Math.round(my - 68 + p * 54), 4, 1); }); await foeStrike(e, m, 0.6, { n: 18, fast: true, noCounter: true, longe: true }); } return; }
+    callout('Golpe de Cancela', '#d0a8ff', 30); golpeAtk(e, 30); await foeLunge(e, t, 20, 16); await foeStrike(e, t, 1.3, { n: 26 }); await foeBack(e);
+  },
+  async rainhaF(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) {
+      e.charge = null; e.armando = false; callout('SOPRO DO FAROL!', '#ffffff', 70); sfx('crit'); flashW(3); bshake(18, 3);
+      await tw(26, p => { bx.globalAlpha = 0.5 * (1 - p * 0.4); bx.fillStyle = '#fff0c0'; bx.beginPath(); bx.moveTo(ex, ey - 10); bx.lineTo(0, 40 + p * 30); bx.lineTo(0, 200 - p * 20); bx.fill(); bx.globalAlpha = 1; });
+      for (const m of alive(BT.party)) await foeStrike(e, m, e.ph >= 2 ? 1.25 : 1.15, { n: 30, noCounter: true, longe: true, el: 'luz' });
+      return;
+    }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('As quatro asas se abrem e puxam toda a luz da crista... (quebre o escudo!)', '#ff6b6b', 90); sfx('rumble'); await tw(24, p => luzMagia(ex, ey, 40 - p * 30, 'rgba(255,240,180,0.6)', 1 - p)); return; }
+    const filhas = alive(BT.foes).filter(f => f.kind === 'mariposaA').length;
+    if (filhas < (e.ph >= 2 ? 1 : 2) && e.turns % 4 === 1) { callout('Ela chama as filhas', '#ffd070', 50); sfx('encounter'); const c = mkFoe(ENEMY2.mariposaA, 150 - BT.foes.length * 12, 100 + (BT.foes.length % 2) * 40); c.ct = 0; c.alpha = 0; BT.foes.push(c); await tw(18, p => { c.alpha = p; }); return; }
+    const t = foeTarget(); if (!t) return;
+    const r0 = Math.random();
+    if (e.ph >= 2 && r0 < 0.3) { callout('Come a Luz', '#ffffff', 40); const [tx, ty] = unitCenter(t); await tw(18, p => fxRing(tx, ty - 16, 26 * (1 - p) + 4, '#fff0c0', p)); const r = await foeStrike(e, t, 0.8, { n: 22, longe: true }); if (r !== 'perfeito') { apagarBuffs(t); const k = Math.min(BT.tension, 12); BT.tension -= k; } return; }
+    if (r0 < 0.5) { callout('Pó de Âmbar', '#ffd070', 36); await tw(18, p => { for (let i = 0; i < 24; i++) { bx.fillStyle = i % 2 ? '#ffd070' : '#fff0b0'; bx.fillRect(Math.round(ex - p * 160 + (i * 13) % 50), Math.round(ey - 30 + (i * 7) % 70), 2, 2); } }); for (const m of alive(BT.party)) { const r = await foeStrike(e, m, 0.5, { n: 22, noCounter: true, longe: true }); if (r === 'falhou' && Math.random() < 0.35) m.st.tonto = 1; } return; }
+    callout('Asa de Vidro', '#d0a8ff', 30); await foeLunge(e, t, 18, 16); await foeStrike(e, t, 1.05, { n: 26 }); await foeBack(e);
+  },
+  async faroleiro(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) {
+      e.charge = null; e.armando = false; callout('LEITURA TOTAL!', '#ffffff', 80); sfx('crit'); flashW(4); bshake(24, 4);
+      await tw(30, p => { const r = 20 + p * 160; bx.globalAlpha = 0.35 * (1 - p); bx.fillStyle = '#fff0c0'; bx.beginPath(); bx.arc(ex, ey - 10, r, 0, Math.PI * 2); bx.fill(); bx.globalAlpha = 1; for (let i = 0; i < 16; i++) { const an = i / 16 * Math.PI * 2 + p * 2; bx.fillStyle = '#ffe090'; bx.fillRect(Math.round(ex + Math.cos(an) * r), Math.round(ey - 10 + Math.sin(an) * r * 0.7), 3, 3); } });
+      BT.tension = Math.max(0, BT.tension - 30); popNum(120, 60, '-30 TENSÃO', '#ffe090');
+      for (const m of alive(BT.party)) await foeStrike(e, m, e.ph >= 2 ? 1.4 : 1.3, { n: 30, noCounter: true, longe: true, el: 'luz' });
+      return;
+    }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('A lente gira e foca... ele vai LER todo mundo (quebre o escudo!)', '#ff6b6b', 100); sfx('rumble'); await tw(26, p => luzMagia(ex, ey - 12, 50 - p * 40, 'rgba(255,224,144,0.6)', 1 - p)); return; }
+    const sen = alive(BT.foes).filter(f => f.kind === 'sentinela').length;
+    if (e.ph >= 2 && sen < 2 && e.turns % 4 === 1) { callout('"Sentinelas. Aos postos."', '#e8dcc0', 60); sfx('encounter'); const c = mkFoe(ENEMY2.sentinela, 140 - BT.foes.length * 12, 150); c.ct = 0; c.alpha = 0; BT.foes.push(c); await tw(18, p => { c.alpha = p; }); return; }
+    const r0 = Math.random();
+    if (r0 < 0.3) { callout('Varredura', '#ffe090', 40); golpeAtk(e, 26);
+      await tw(24, p => { const x = 240 - p * 260; bx.globalAlpha = 0.3; bx.fillStyle = '#fff0c0'; bx.beginPath(); bx.moveTo(ex, ey - 12); bx.lineTo(x - 18, 200); bx.lineTo(x + 18, 200); bx.fill(); bx.globalAlpha = 1; });
+      for (const m of alive(BT.party)) { const r = await foeStrike(e, m, 0.7, { n: 22, noCounter: true, longe: true, el: 'luz' }); if (r === 'falhou' && m.hp > 0 && Math.random() < 0.4) { m.st.esquecido = 1; const [x, y] = unitCenter(m); popNum(x, y - 34, 'LIDO: ESQUECEU', '#ffe090'); } }
+      return; }
+    if (e.ph >= 2 && r0 < 0.5) { callout('Raios da Lente', '#ffe090', 40); golpeAtk(e, 26); for (let i = 0; i < 4; i++) { const m = pickOne(alive(BT.party)); if (!m) break; const [mx, my] = unitCenter(m); await tw(8, p => { bx.strokeStyle = '#fff0c0'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(ex, ey - 12); bx.lineTo(ex + (mx - ex) * p, ey - 12 + (my - ey + 12) * p); bx.stroke(); }); await foeStrike(e, m, 0.5, { n: 16, fast: true, noCounter: true, longe: true, el: 'luz' }); } return; }
+    const t = foeTarget(); if (!t) return;
+    if (r0 < 0.65) { callout('Gancho de Lanterna', '#ffb040', 34); golpeAtk(e, 30); await foeLunge(e, t, 20, 16); const r = await foeStrike(e, t, 0.95, { n: 24 }); await foeBack(e); if (r === 'falhou') t.st.queimado = 2; return; }
+    callout('Manivela', '#d0a8ff', 30); golpeAtk(e, 30); await foeLunge(e, t, 22, 18); await foeStrike(e, t, e.ph >= 3 ? 1.1 : 1.25, { n: 26 }); await foeBack(e);
+  }
+});
+// vento na luta: traços de neve atravessando a tela
+function ventoLuta9(p) { for (let i = 0; i < 30; i++) { const x = (i * 41 + p * 300) % W, y = (i * 23) % H; bx.fillStyle = i % 3 ? 'rgba(240,246,250,0.8)' : 'rgba(200,220,240,0.6)'; bx.fillRect(Math.round(240 - x), y, 6 + (i % 4) * 2, 1); } }
+// luz na Rainha (fase 1) e nas filhas: elas COMEM a luz (curam em vez de levar dano)
+{ const _hfR9 = hitFoe; hitFoe = function (a, t, pow, o = {}) {
+  if (t && o.el === 'luz' && t.hp > 0 && (t.kind === 'mariposaA' || (t.kind === 'rainhaF' && (t.ph || 1) < 2))) {
+    const v = Math.round(calcDmg(a, t, pow, o) * 0.3); t.hp = Math.min(t.mhp, t.hp + v); const [x, y] = unitCenter(t); popNum(x, y - 10, '+' + v, '#ffe090'); popNum(x, y - 26, 'COMEU A LUZ', '#ffe090'); t.known.luz = 'ok';
+    if (!BT._comeuLuz9) { BT._comeuLuz9 = true; callout('Ela come a luz! Luz cura as mariposas!', '#ff6b6b', 80); }
+    return 0;
+  }
+  return _hfR9(a, t, pow, o);
+}; }
+function fasesEspantalho9() { return [{ at: 0.5, run: async (e) => {
+  sfx('rumble'); bshake(20, 3); flashW(3);
+  await say('* Uma rajada mais forte que todas arranca os cartazes novos do casaco do Espantalho. Eles voam morro abaixo, um por um, como corvos de papel.');
+  await say('* Por baixo, um casaco velho, remendado, de palha. E dentro do pote de vidro, onde havia uma chama azul e fria, uma lanterna velha de pedágio ACENDE, amarela.');
+  await say('...Esse é o MESMO. O da ponte. Do pedágio. A Guarda remendou ele.', 'rita');
+  await say('"PEDÁGIO." "PEDÁGIO." Ele não lembra de outra palavra.', 'lume');
+  await say('[Fase 2: a lanterna acendeu. Fraco a GELO e MORDIDA. Bafo de Lanterna queima; Cobrança rouba Tensão e cura.]', 'cat');
+  e.ph = 2; e.weak = ['gelo', 'mordida']; e.known = {}; e.maxShield = 8; e.shield = 8; e.spd = 12;
+} }]; }
+function fasesRainha9() { return [{ at: 0.5, run: async (e) => {
+  sfx('rumble'); flashW(5); bshake(22, 3);
+  await say('* A Rainha voa para dentro do feixe da Lente do Luar. Abre as quatro asas. E BEBE a luz, como quem bebe água depois de um deserto.');
+  await say('* Ela fica branca. Depois dourada. Depois uma cor que não tem nome, de tão clara. As asas viram vitral.');
+  await say('Ela tá cheia. Agora ela não come mais luz: ela É luz.', 'lume');
+  await say('[Fase 2: incandescente. Luz não cura mais (nem machuca muito). Fraca a GELO e CORTE. Come a Luz apaga os bônus.]', 'cat');
+  e.ph = 2; e.weak = ['gelo', 'corte']; e.known = {}; e.maxShield = 9; e.shield = 9; e.spd = 13;
+} }]; }
+function fasesFaroleiro9() { return [{ at: 0.66, run: async (e) => {
+  sfx('rumble'); bshake(22, 3); flashW(3);
+  await say('* A lente no peito do Faroleiro começa a GIRAR. Anéis de luz dentro de anéis de luz. O pátio inteiro fica claro como meio-dia.');
+  await say('NINGUÉM. SOBE. SEM. SER. LIDO.', 'faroleiro');
+  await say('[Fase 2: chama Sentinelas e solta Raios da Lente.]', 'cat');
+  e.ph = 2; e.maxShield = 11; e.shield = 11; e.spd = 11;
+} }, { at: 0.33, run: async (e) => {
+  sfx('crit'); bshake(26, 4); flashW(5);
+  await say('* A lente foca em você. Em VOCÊ, o baú. E começa a ler. Você sente as páginas virando por dentro: o ônibus, a curva, o pedestal, a Lume, a Rita...');
+  await say('{o}Não. Esse não.{/}', 'eco8');
+  await say('* Uma luz âmbar sai de dentro da sua tampa. Não é a do Farol: é morna, como uma janela de casa vista de longe. Ela bate na lente do Faroleiro e a lente RACHA.');
+  await say('{o}Eu também sei ler. E eu li você, Faroleiro. Você está cansado. Faz cem anos que você está cansado.{/}', 'eco8');
+  await say('* Por trás do vidro rachado, uma silhueta: um velho sentado, de cachimbo apagado. Esperando alguém dizer que ele pode parar.');
+  await say('[A lente rachou: o ESCUDO quebrou, e agora LUZ e CORTE também pegam. O Tiago está jogando o troco mais rápido.]', 'cat');
+  e.ph = 3; e.weak = ['gelo', 'mordida', 'luz', 'corte']; e.known = {}; e.shield = 0; breakFoe(e); e.spd = 12;
+  if (BT.tiago9) BT.tiago9.forte = true;
+} }]; }
+
+// ================= CAPÍTULO 9 — A SUBIDA DO MORRO (Parte 1: os aliados) =================
+// O Acendedor-Mor fechou o Morro: o Farol de Cem Invernos vai acender. Toda noite uma fila de Pavios sobe com potes. O
+// grupo monta o QUADRO DO CERCO na base e vai buscar ALIADOS pelos Marcos, cada um com um trunfo para a subida:
+// a Irmã Dalva (base), a Dona Iolanda (Papelaria, de dia; a página da Ofélia escreve sozinha no Grimório), Tico e Dito
+// (Bairro Baixo, de dia; a chaminé velha), o Sargento Brás (Vila dos Pavios, de noite, com a mãe) e a Dona Badalada
+// (Velhágua: a Lume canta para o sino). A Iolanda e mais dois bastam; os cinco deixam a subida bem mais fácil.
+// A MOÇA DE ÂMBAR começa a falar pelo Catálogo (em âmbar, sem colchetes). Opcionais com viagem: os RASTROS DE ÂMBAR
+// (Poço do Sino, Câmara do Despertar) e A PENSÃO SEM REMETENTE (Largo -> Candeia -> Cidade Alta).
+Object.assign(TRACKS, {
+  subida: { bpm: 92, bars: 4, chords: 'Am F C G', bass: 'root5', bassVol: 0.08,
+    lead: 'A4:2 C5:2 E5:4 D5:2 C5:2 | F5:4 E5:2 D5:2 C5:4 | E5:2 G5:2 C6:4 B5:2 G5:2 | D5:4 B4:2 G5:2 E5:4', leadWave: 'triangle', leadVol: 0.05, arp: { rate: 4, vol: 0.012, oct: 1 }, drums: 'k...s...k.k.s...', hatVol: 0.015 },
+  farol9: { bpm: 60, bars: 4, chords: 'Em C G D', bass: 'root5', bassVol: 0.06,
+    lead: 'E5:8 G5:4 B5:4 | C6:8 B5:4 G5:4 | B5:8 D6:4 B5:4 | A5:8 F#5:8', leadWave: 'sine', leadVol: 0.045, arp: { rate: 2, vol: 0.012, oct: 1 }, drums: '', hatVol: 0 }
+});
+Object.assign(HUMS, {
+  faroleiroH: { h: 50, skin: '#c8a088', hair: '#e8e4e0', top: '#22223a', coat: '#3a3a50', bottom: '#1a1a2a', hat: '#1a1a2a', acc: '#a8803a' }
+});
+Object.assign(WHO, {
+  faroleiro: { name: () => 'O Faroleiro', portrait: () => portHum('faroleiroH'), voice: voz(160, 'blipLow'), col: '#ffe090' }
+});
+// ---------- começo ----------
+function iniciarCap9() {
+  if (G.flags.c9Init) return false;
+  G.flags.c9Init = true; G.poder = Math.max(G.poder || 1, 8); curarTudo(); G.hora = 9 * 60 + 30; G.dia = (G.dia || 0) + 1;
+  G.items = Object.assign({}, G.items, { frasco: Math.max(3, G.items.frasco || 0) });
+  return true;
+}
+async function capitulo9() {
+  if (!MAPS2.encosta9) montarMapas2();
+  const novo = iniciarCap9();
+  if (!novo) { const p = G.pos && MAPS2[G.pos.map] ? G.pos : { map: 'interior', x: POS3.interior.entra[0], y: POS3.interior.entra[1], dir: 'up' }; loadMap2(p.map, p.x, p.y, p.dir); V.scene = 'world'; await fadeIn(20); return; }
+  await fadeOut(20);
+  await cartao(['CAPÍTULO 9', 'A Subida do Morro']);
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(30);
+  await say('* Dois dias depois do Inverno Escuro. Auren acesa de novo, com âmbar. E com velas na janela, que ninguém tirou.');
+  await say('* Pela janela alta da base, o morro. E subindo por ele, devagar, como formigas carregando migalha, uma fila de Pavios. Cada um com um pote nas costas.');
+  await say('"Por ordem do Acendedor-Mor: o Morro do Farol está fechado. O Farol de Cem Invernos acenderá quando estiver cheio. Para que nunca mais ninguém morra no escuro."', 'arauto');
+  await say('Quando estiver cheio. De quê? Daqueles potes.', 'rita');
+  await say('De gente. Os potes são de gente, Rita. Eu vi na Mina.', 'lume');
+  await say('* A Rita pega um carvão do fogão e desenha o morro na parede, do lado da fita, do bilhete e da página riscada. Um zigue-zague. Uma cancela. Um X no Farol.');
+  await say('A Guarda cercou o pé do morro. Tem cancela, cachorro, holofote, e lá em cima o vento derruba gente. Três pessoas e uma mala não furam um cerco.', 'rita');
+  await say('Então a gente chama mais gente. Todo mundo que a gente ajudou até aqui.', 'me');
+  sfx('catalog');
+  await say('[Registro: aliados possíveis... ]', 'cat');
+  await say('{o}a irmã do hospital. a moça da papelaria. os meninos da chaminé. o sargento que chorou na vila. o sino.{/}', 'eco8');
+  await say('* A letra no ar é redonda. Âmbar. Sem colchetes.');
+  await say('Catálogo... quem é ela?', 'me');
+  await say('[Não sei. Ela mora entre as minhas linhas. Ela corrige a minha ortografia. Ela é... educada. Bate antes de entrar.]', 'cat');
+  await say('{o}desculpa. eu não queria assustar. eu só sei a lista porque eu li você. todo dia. faz tempo.{/}', 'eco8');
+  await say('Isso devia me assustar mais do que assusta.', 'me');
+  await say('[O QUADRO DO CERCO, na parede da base: cinco aliados, pelos Marcos. Dona Iolanda é indispensável (ela tem o mapa); com ela e mais dois, dá para subir. Cada aliado a mais facilita a subida.]', 'cat');
+  save2();
+}
+{ const _c8 = capitulo8; capitulo8 = async function () { if (!MAPS2.encosta9) montarMapas2(); if (G.flags.c8Fim) return capitulo9(); return _c8(); }; }
+{ const _uw9c = updateWorld2; updateWorld2 = function () { _uw9c(); if (V.scene === 'world' && G.flags.c8Fim && !G.flags.c9Init && !worldBusy2() && !W2.mv) run2(capitulo9); }; }
+// ---------- os aliados: onde estão ----------
+{ const _mmA9 = montarMapas2; montarMapas2 = function () {
+  _mmA9.apply(this, arguments);
+  // o quadro do cerco, na base
+  const B = MAPS2.interior; if (B && !B._q9) { B._q9 = true; const p = chaoLivre8(B, 9, 4) || [9, 4]; B.ents.push({ t: 'sign', id: 'quadro9', x: p[0], y: p[1], h: 26, spr: () => quadroCercoArt(), gone: () => !c9Ativo(), talk: quadroCerco }); }
+  // Tico e Dito, no Bairro Baixo (de dia), varrendo chaminé
+  const A = MAPS2.auren; if (A && !A._td9) { A._td9 = true; const us = new Set(); const p = chaoLivre8(A, 30, 10, us) || [30, 10], q = chaoLivre8(A, 33, 10, us) || [33, 10];
+    A.ents.push(morador('tico', p[0], p[1], { id: 'tico9', dir: 'right', gone: () => !c9Ativo() || ehNoite(), rotina: rot([p[0], p[1], 'limpar', 400, 'up'], [p[0], p[1], 'olhar', 200, 'right']), talk: falaTicoDito9 }));
+    A.ents.push(morador('dito', q[0], q[1], { id: 'dito9', dir: 'left', gone: () => !c9Ativo() || ehNoite(), rotina: rot([q[0], q[1], 'olhar', 300, 'left'], [q[0], q[1], 'varrer', 300, 'down']), talk: falaTicoDito9 })); }
+  // o Brás e a mãe, na Vila (de noite)
+  const Vv = MAPS2.ruaPavios; if (Vv && !Vv._b9) { Vv._b9 = true; const us = new Set(); const p = chaoLivre8(Vv, 26, 15, us) || [26, 15], q = chaoLivre8(Vv, 28, 15, us) || [28, 15];
+    Vv.ents.push(morador('bras', p[0], p[1], { id: 'bras9', dir: 'right', gone: () => !c9Ativo() || !ehNoite(), talk: falaBras9 }));
+    Vv.ents.push(morador('cotinha', q[0], q[1], { id: 'cotinha9', dir: 'left', gone: () => !c9Ativo() || !ehNoite(), talk: async () => { await say(pickOne(['Ele vem toda noite. Traz pão. Diz que é da Guilda. É dele, eu sei.', 'O meu Brasinho. Sargento. Eu disse que ele ia ser.']), 'cotinha'); } })); }
+}; }
+function quadroCercoArt() { return o9('qc' + nAliados9(), () => { const P = new Pix(30, 26);
+  P.rect(0, 0, 30, 22, '#6a4a2a'); P.rect(1, 1, 28, 20, '#e8dcc0'); P.line(4, 18, 9, 10, '#2a2228'); P.line(9, 10, 14, 15, '#2a2228'); P.line(14, 15, 20, 6, '#2a2228'); P.line(20, 6, 25, 4, '#2a2228');
+  P.rect(24, 2, 3, 4, '#ffd070'); for (let i = 0; i < 5; i++) { const on = i < nAliados9(); P.p(4 + i * 5, 20, on ? '#c83a3a' : '#8a8a8a'); P.line(4 + i * 5, 20, 25, 4, on ? '#c86a6a' : '#c8c0b0'); }
+  P.rect(13, 22, 4, 4, '#6a4a2a'); return P.outline().canvas(); }); }
+// ---------- DALVA ----------
+{ const _fD9 = falaDalva; falaDalva = async function () {
+  if (c9Ativo() && !aliado9('dalva')) {
+    await say('Um cerco? No morro? Com o vento que faz lá em cima?', 'dalva');
+    await say('* A Irmã Dalva já está enrolando gaze antes de terminar a pergunta.');
+    await say('Eu fiz parto em carroça, menino. Costurei cabeça em barraca de feira. Eu monto uma tenda no pé do morro. Quem descer machucado, volta inteiro.', 'dalva');
+    await say('E se a Guarda vier?', 'lume');
+    await say('Guarda também quebra osso. Eu atendo todo mundo. É por isso que ninguém mexe com a minha tenda.', 'dalva');
+    ganharAliado9('dalva'); save2(); return;
+  }
+  return _fD9();
+}; }
+// ---------- IOLANDA (de dia) e a página da Ofélia ----------
+{ const _fI9 = falaIolanda; falaIolanda = async function () {
+  if (c9Ativo() && !aliado9('iolanda')) {
+    if (ehNoite()) { await say('* A Papelaria Pena & Fuligem, fechada. Um bilhete na porta: "De dia. Papel dorme de noite. Eu também."'); return; }
+    playMusic('cha');
+    await say('O Farol? Vocês vão subir no Farol?', 'iolanda');
+    await say('* A Dona Iolanda some atrás do balcão. Volta com um canudo de papel amarelado, amarrado com barbante vermelho.');
+    await say('O meu avô polia as lentes do Farol. Antes de ter Acendedor-Mor, quando o Farol era só um farol. Ele fez a fechadura da Porta das Lentes, lá na crista.', 'iolanda');
+    await say('Ela não tem chave. Ela abre com LUZ. Luar batendo numa lente, desviado por espelho até o cristal da porta. Ele achava isso poético. Eu acho isso um inferno.', 'iolanda');
+    await say('Quantos espelhos?', 'rita');
+    await say('Aí é que tá. O desenho dele parou no meio. Ele morreu antes de terminar o caderno.', 'iolanda');
+    await say('* Em cima do balcão, o Grimório se abre sozinho. As páginas viram como se alguém soprasse. Param na página seca, a que veio da Sala de Leitura Afogada.');
+    sfx('rune'); V.shake = 2;
+    await say('* E a página começa a se escrever. Letra inclinada, elegante, de bibliotecária. Tinta que vem de lugar nenhum.');
+    const her = (typeof lerHeranca === 'function' && lerHeranca()) || {}, lembra = her.esc && her.esc.ofelia;
+    await say(lembra ? '* "Meu baú. Você está subindo. Eu sinto pelo papel. Eu sempre senti quando alguém subia: era o único jeito de eu saber que o mundo lá em cima existia."' : '* "Para quem sobe: eu sinto pelo papel quando alguém sobe. Era o único jeito de eu saber que o mundo lá em cima existia."');
+    await say('* "Três espelhos. O primeiro antes da coluna, onde a luz nasce. O segundo no alto, na beira norte. O terceiro embaixo da porta, olhando para cima. Barra para a direita: /. Sempre /."');
+    await say('* "E outra coisa. Tem alguém morando no seu Catálogo. Ela é educada, bate antes de entrar. Seja gentil com ela. Ela já foi muito sozinha. Eu sei reconhecer. — ' + (lembra ? 'Ofélia, que lembra de você.' : 'O.') + '"');
+    await say('{o}...obrigada, bibliotecária.{/}', 'eco8');
+    await say('* A Dona Iolanda olha para o Grimório. Olha para você. Tira os óculos. Põe de novo.', 'iolanda');
+    await say('Eu vou fingir que eu não vi um livro se escrever sozinho no meu balcão. Eu vou com vocês. Alguém tem que ler esse mapa, e não vai ser a mala.', 'iolanda');
+    G.flags.c9Pagina = true; ganharAliado9('iolanda');
+    await say('[A página da Ofélia ficou no Grimório. Na Crista, o ATRIL mostra o desenho.]', 'cat');
+    save2(); playMusic('auren'); return;
+  }
+  return _fI9();
+}; }
+// ---------- TICO E DITO (de dia): a chaminé velha ----------
+async function falaTicoDito9() {
+  if (aliado9('tico')) { await say(pickOne(['A gente sobe pela chaminé quando vocês mandarem. Eu e o Dito. Igual antigamente.', 'O Dito lembra da chaminé melhor que de mim. Tudo bem. Eu lembro de mim por ele.']), 'tico'); return; }
+  if (!G.flags.c9Tico1) {
+    G.flags.c9Tico1 = true;
+    await say('* O Tico, de cartola torta, varrendo a chaminé de uma padaria. Do lado, o Dito, de casaco cinza ainda, segurando a escada. Ele olha as nuvens como quem tenta ler.');
+    await say('O Morro? Tem a CHAMINÉ VELHA. Da fundição antiga, de antes do Farol. Ela passa por DENTRO do morro e sai no meio da subida.', 'tico');
+    await say('Eu e o Dito limpava ela quando era pequeno. Era o nosso esconderijo. A gente se chamava batendo na calha: TRÊS batidas. Se batesse duas, era a mãe chamando pro almoço.', 'tico');
+    await say('Mas o caminho lá dentro é um labirinto de tijolo. Só o Dito sabia. E o Dito...', 'tico');
+    await say('* O Dito olha para vocês com educação. Ele lembra do Tico agora, um pouco. Da chaminé, não.', 'n');
+  }
+  await say('Dito. Lembra da chaminé velha? Do nosso sinal?', 'tico');
+  const c = await choose('* O Dito olha para o baú, esperando. Qual era o sinal dos meninos?', ['Duas batidas na calha', 'Três batidas na calha', 'Um assobio longo'], 'me', 0);
+  if (c !== 1) { sfx('cancel'); await say('* Você bate com a tampa na calha. O Dito sorri, educado, e não reconhece.'); await say('Não... não era assim. Era... era quase isso.', 'dito'); return; }
+  sfx('item'); await say('* Pom. Pom. Pom. Três batidas na calha de lata, com a tampa.');
+  await say('* O Dito pisca. Uma vez. Duas. E bate de volta. Pom, pom, pom. Do outro lado da calha. Com a mão.');
+  await say('...Esquerda, esquerda, sobe, direita onde tem o tijolo torto. Tico. TICO. A gente escondia o pão no tijolo torto!', 'dito');
+  await say('* O Tico larga a vassoura. Não fala nada. Abraça o irmão com a cartola caindo, e o Dito deixa.', 'n');
+  await say('A gente vai na frente, pela chaminé. Abre ela por dentro. Quando vocês chegarem no primeiro patamar da Encosta, a porta de ferro vai estar aberta.', 'tico');
+  ganharAliado9('tico'); save2();
+}
+// ---------- BRÁS (de noite, na Vila) ----------
+async function falaBras9() {
+  if (aliado9('bras')) { await say(pickOne(['Na noite da subida, a Guilda inteira vai estar "bêbada" na cancela. Ninguém atua melhor que Caçador sem salário.', 'Cuida da minha mãe. Não. Cuida de vocês. Eu cuido dela.']), 'bras'); return; }
+  playMusic('cha');
+  await say('* O Sargento Brás, de folga, sem farda, sentado no banco da Vila com a mãe. Ela descasca uma laranja para ele, como se ele tivesse seis anos.');
+  await say('Furar o cerco do Morro? Com a Guarda Real? Vocês sabem o que acontece com quem...', 'bras');
+  await say('* A Dona Cotinha estende um gomo de laranja para ele. Ele pega. Come.');
+  await say('...Tá. A Guilda tem vinte Caçadores sem salário desde que eu rasguei o cartaz de vocês. Vinte homens com raiva e tempo livre.', 'bras');
+  await say('Na noite da subida, a gente arma uma BRIGA na cancela. Briga feia, de taverna. A Guarda vai ter que separar. A cancela fica sozinha.', 'bras');
+  await say('Uma coisa. Os Pavios que sobem com os potes... a minha mãe subia. Antes de vocês. Se tiver alguém lá em cima que ainda é gente... trás de volta.', 'bras');
+  const c = await choose('* O que dizer ao Brás?', ['A gente traz.', 'A gente tenta.'], 'me', 1);
+  G.flags.c9PromessaBras = c === 0;
+  await say(c === 0 ? 'Eu sei que traz. Vocês trouxeram ela.' : 'Tentar é mais do que a Coroa fez.', 'bras');
+  ganharAliado9('bras'); save2(); playMusic('vila');
+}
+// ---------- DONA BADALADA (Velhágua): a Lume canta para o sino ----------
+{ const _fC9 = falaCeleste; falaCeleste = async function () {
+  if (c9Ativo() && !aliado9('badalada')) {
+    await say('* O sacristão Celeste, varrendo o pé da torre. Lá em cima, a Dona Badalada, de bronze velho e verde, olha a cidade que parou de afundar.');
+    await say('Vocês querem que ela toque? À meia-noite, na noite do morro? Pra fazer a Guarda olhar pra cá?', 'celeste');
+    await say('Ela é o sino mais alto do vale. Quando ela toca, ouve até Auren. A Guarda vai achar que é alarme e mandar metade da gente do morro descer pra ver.', 'celeste');
+    await say('Mas ela não toca por ordem. Nem por pedido. Ela toca por lembrança. Sempre foi assim. Ela precisa LEMBRAR de vocês.', 'celeste');
+    await say('Ela lembra de mim. Eu cantei pra ela no fundo do rio.', 'lume');
+    await say('Então canta de novo. Aqui em cima. Ela gosta de ouvir de perto.', 'celeste');
+    const r = await ritmoLume();
+    if (r.perf + r.bom < 3) { await say('* A Lume canta, desafina, ri. O sino escuta, quieto. Nada.'); await say('Ela ouviu. Mas ela é velha, ouve devagar. Tenta de novo, com calma.', 'celeste'); return; }
+    sfx('crit'); V.shake = 10;
+    await say('* DOOOONG.');
+    await say('* O sino toca sozinho. Uma vez só, comprida, que atravessa a praça, o rio e a serra. Os pombos sobem todos ao mesmo tempo.');
+    await say('DOOONG. (Lembro. A menina que cantou no fundo. A mala que me tirou do rio. Lembro.)', 'ancora');
+    await say('Ela vai. À meia-noite. Ela nunca tocou meia-noite. Vai ser a primeira vez em cem anos.', 'celeste');
+    ganharAliado9('badalada'); save2(); return;
+  }
+  return _fC9();
+}; }
+// ---------- a noite do cerco ----------
+async function noiteDoCerco() {
+  W2.mv = null; G.flags.c9P2 = true; G.hora = 21 * 60 + 30;
+  await fadeOut(24); playMusic('subida');
+  V.scene = 'world'; loadMap2('sope9', ...SO9.entra, 'right'); await fadeIn(24);
+  await say('* A noite do cerco. Uma noite sem lua, de vento cortante. O pé do morro, com a neve batida de bota.');
+  if (aliado9('dalva')) await say('* A tenda da Irmã Dalva, com uma cruz vermelha de pano costurada na lona. Já tem um guarda da Guarda Real lá dentro, com o tornozelo enfaixado, tomando sopa.');
+  if (aliado9('iolanda')) await say('* A Dona Iolanda, numa mesinha dobrável, com o mapa do avô aberto e preso com quatro pedras. Óculos na ponta do nariz. Xale. Vela.');
+  if (aliado9('tico')) await say('* Tico e Dito, encostados na boca da Chaminé Velha, de cara preta de fuligem e sorriso branco. Já entraram e voltaram duas vezes.');
+  if (aliado9('bras')) await say('* E ao lado das barracas da Guilda, vinte Caçadores de casaco velho, fingindo que estão bêbados. Alguns não estão fingindo.');
+  await say('[O SOPÉ: suba pela cancela. ' + (aliado9('bras') ? 'O Brás vai cuidar da Guarda.' : 'A Guarda está de olho: vai ter luta na cancela.') + (aliado9('dalva') ? ' A tenda da Dalva cura e enche os frascos.' : '') + ']', 'cat');
+  save2();
+}
+
+// ================= CAPÍTULO 9 — Parte 2: O MORRO =================
+// O SOPÉ (o acampamento dos aliados; a cancela: a briga da Guilda ou luta) -> A ENCOSTA (seis patamares: VENTANIA,
+// rondas da Guarda (metade some com o sino da Badalada), holofotes de noite, a CHAMINÉ VELHA do Tico e do Dito como
+// atalho; no meio, O ESPANTALHO DO CERCO) -> A CRISTA (o Jardim das Lentes: o feixe de luar e três espelhos abrem a
+// PORTA DAS LENTES; a luz atrai A RAINHA DO FAROL) -> O PÁTIO DO FAROL (o Tiago na porta, de herói da Coroa; O FAROLEIRO,
+// com o Tiago jogando o troco; na fase 3 a moça de âmbar racha a lente). Final: o velho faroleiro pode parar; a porta
+// abre; lá de cima, o Farol ACENDE.
+const SO9 = POS9.sope9, EN9 = POS9.encosta9, CR9 = POS9.crista9, FA9 = POS9.farol9;
+{ const _b2T9 = battle2; battle2 = function () { BT.tiago9 = null; return _b2T9.apply(this, arguments); }; }
+{ const _mm9b = montarMapas2; montarMapas2 = function () {
+  _mm9b.apply(this, arguments);
+  if (MAPS2.sope9) return;
+  const grade = (m) => { for (const p of m.props || []) { if (p._hld) continue; const f = p.img; p._hld = true; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } };
+  const vai = (map, xy, dir, onEnter) => async () => { W2.mv = null; sfx('door'); await fadeOut(10); loadMap2(map, ...xy, dir); await fadeIn(10); if (onEnter && MAPS2[map].onEnter) await MAPS2[map].onEnter(); };
+  // ---------- O SOPÉ ----------
+  MAPS2.sope9 = { rows: ROWS9.sope9, key: KEY9, name: 'O Morro · O Sopé', music: 'subida', batBg: bgEncosta9, bg: '#0a0e1c',
+    lights: [[SO9.fogueira[0] + 0.5, SO9.fogueira[1], 90], [SO9.tenda[0] + 1.5, SO9.tenda[1], 60], [SO9.mesa[0] + 1, SO9.mesa[1], 50], [23.5, 9, 70]],
+    props: [
+      ...SO9.pinheiros.map(([x, y], i) => ({ img: () => pinheiroNeveArt(i), x: x - 0.6, y: y + 1, solid: [[x, y, 1, 1]] })),
+      { img: () => tendaAliadaArt('#e8e0d0', 'cruz'), x: SO9.tenda[0] - 0.7, y: SO9.tenda[1] + 1, solid: [[SO9.tenda[0], SO9.tenda[1], 3, 1]], get by() { return aliado9('dalva') ? (SO9.tenda[1] + 1) * TS : -9999; } },
+      ...SO9.guilda.map(([x, y]) => ({ img: () => tendaAliadaArt('#5a5a6e', 'guilda'), x: x - 0.7, y: y + 1, solid: [[x, y, 3, 1]] })),
+      { img: () => mesaMapasArt(Math.floor(W2.t / 8)), x: SO9.mesa[0] - 0.3, y: SO9.mesa[1] + 1, solid: [[SO9.mesa[0], SO9.mesa[1], 2, 1]] },
+      { img: () => chamineVelhaArt(aliado9('tico')), x: SO9.chamine[0] - 0.4, y: SO9.chamine[1] + 1, solid: [[SO9.chamine[0], SO9.chamine[1], 2, 1]] },
+      { img: () => cancelaMorroArt(!!G.flags.c9Cancela), x: 21, y: 9.2, get solid() { return G.flags.c9Cancela ? [[21, 8, 1, 1]] : [[21, 8, 1, 1], [23, 8, 2, 1]]; } },
+      { img: () => fogueiraArt(Math.floor(W2.t / 6)), x: SO9.fogueira[0] - 0.2, y: SO9.fogueira[1] + 1, solid: [SO9.fogueira.concat([1, 1])] }
+    ],
+    ents: [
+      ...SO9.saida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: vai('cidadeAlta', mirante9(), 'left') })),
+      ...SO9.acima.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: vai('encosta9', EN9.entra, 'up', true) })),
+      ...SO9.cancela.map(([x, y]) => ({ t: 'trig', x, y: y + 1, w: 1, h: 1, passa: true, gone: () => !!G.flags.c9Cancela, run: cancela9 })),
+      morador('dalva', ...SO9.dalva, { id: 'dalva9', dir: 'down', gone: () => !aliado9('dalva'), talk: tendaDalva9 }),
+      morador('iolanda', ...SO9.iolanda, { id: 'iolanda9', dir: 'down', gone: () => !aliado9('iolanda'), talk: async () => { await say(pickOne(['A Porta das Lentes fica na crista, no fim da Encosta. Três espelhos. A página da sua amiga morta foi bem clara. Eu odeio que ela foi bem clara.', 'Eu fico aqui com o mapa. Se o vento levar vocês, eu vejo daqui e desenho onde caíram.', 'O meu avô subia essa trilha toda semana. De bengala. Vocês têm dente e lança. Sem desculpa.']), 'iolanda'); } }),
+      morador('tico', SO9.tico[0], SO9.tico[1], { id: 'tico9s', dir: 'down', gone: () => !aliado9('tico'), talk: async () => { await say('A porta de ferro da chaminé, no primeiro patamar da Encosta, tá aberta. Por dentro ela sai no meio do morro, depois dos dois patamares de vento mais feio.', 'tico'); } }),
+      morador('dito', SO9.dito[0], SO9.dito[1], { id: 'dito9s', dir: 'down', gone: () => !aliado9('tico'), talk: async () => { await say('Esquerda, esquerda, sobe. Eu lembro. Eu LEMBRO.', 'dito'); } }),
+      morador('bras', ...SO9.bras, { id: 'bras9s', dir: 'down', gone: () => !aliado9('bras'), talk: async () => { await say(G.flags.c9Cancela ? 'Vai, vai! A briga não dura pra sempre! O Juca já tá chorando de verdade!' : 'Quando vocês chegarem perto da cancela, a gente começa. Sobe sem olhar pra trás.', 'bras'); } }),
+      ...SO9.fila.map(([x, y], i) => morador('pavio', x, y, { id: 'fila9' + i, dir: 'up', talk: async () => { await say(pickOne(['Boa noite. Eu levo o pote lá pra cima. É quentinho. Eu não sei o que tem dentro.', 'Esperando a vez. A Guarda manda subir um por um.', 'Pesado? Não. É leve. Leve como... como uma coisa que eu esqueci.']), 'pavio'); } })),
+      marcoEnt(...SO9.marco),
+      bauEnt('sope9', 'b0', ...SO9.bau, async () => { await dar('frasco', 2); await dar('cobres', 80); })
+    ],
+    onEnter: async () => {}
+  };
+  // ---------- A ENCOSTA ----------
+  const PEDRAS = EN9.pedras, MUR = EN9.mureta;
+  MAPS2.encosta9 = { rows: ROWS9.encosta9, key: KEY9, name: 'O Morro · A Encosta', music: 'subida', batBg: bgEncosta9, bg: '#0a0e1c', stealth: true,
+    get holofotes() { return EN9.holofotes; }, grupoLuz: ['guardaR', 'caoLanterna'],
+    reinicio: () => patamarDe9(W2.y).ent, falaOlhou: () => pickOne(['Hm? Neve se mexendo?', 'Um baú. No morro. De noite. ...Não é da minha conta.', 'Quem deixou bagagem na trilha?']),
+    pegoTxt: (como) => como === 'holofote' ? '* O facho do holofote para em você. Um apito lá em cima. Botas descendo a trilha.' : '* "PARADO! Ninguém sobe!" Um guarda com cão-lanterna corta o caminho.',
+    lights: [...EN9.holofotes.map(([x, y]) => [x + 0.5, y + 0.5, 40])],
+    props: [
+      ...MUR.map(([x, y], i) => ({ img: () => muretaArt(x + y), x, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...PEDRAS.map(([x, y], i) => ({ img: () => pedraAbrigoArt(i), x: x - 0.2, y: y + 1, solid: [[x, y, 1, 1]] })),
+      ...EN9.holofotes.map(([x, y]) => ({ img: () => holofoteMuroArt(Math.floor(W2.t / 20)), x: x - 0.2, y: y + 1 })),
+      { img: () => chamineVelhaArt(aliado9('tico')), x: EN9.chamineA[0] - 0.4, y: EN9.chamineA[1] + 0.2 },
+      { img: () => chamineVelhaArt(true), x: EN9.chamineB[0] - 0.4, y: EN9.chamineB[1] + 0.2 }
+    ],
+    ents: [
+      ...EN9.volta.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: vai('sope9', [SO9.cancela[0][0], SO9.cancela[0][1] - 1], 'down') })),
+      ...EN9.saida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: vai('crista9', CR9.entra, 'up', true) })),
+      { t: 'sign', x: EN9.chamineA[0], y: EN9.chamineA[1], h: 30, talk: chamine9 },
+      ...EN9.rondas.map((p, i) => ({ t: 'ronda', id: 'guardaE' + i, x: p[0][0], y: p[0][1], path: p, h: 56, passo: 24, spr: guardaSpr6, dir: 'right', gone: () => aliado9('badalada') && i !== 1, talk: async () => { await say('* O guarda está de costas, batendo os pés para esquentar.'); } })),
+      ...EN9.fila.map(([x, y], i) => morador('pavio', x, y, { id: 'filaE' + i, dir: 'up', passa: true, talk: async () => { await say(pickOne(['O vento não derruba a gente. A gente é leve.', 'Lá em cima é quente. Dizem.']), 'pavio'); } })),
+      inimigo('e9a', 'gralha', ...EN9.foes[0], ['gralha', 'gralha'], { spr: (t) => gralhaArt(Math.floor(t / 6)), h: 26, bg: bgEncosta9, fly: true }),
+      inimigo('e9b', 'sentinela', ...EN9.foes[1], ['sentinela', 'gralha'], { spr: (t, d) => { const c = sentinelaArt(Math.floor(t / 14) % 2); return d === 'left' ? flipC(c) : c; }, h: 40, bg: bgEncosta9 }),
+      inimigo('e9c', 'sentinela', ...EN9.foes[2], ['sentinela', 'sentinela', 'gralha'], { spr: (t, d) => { const c = sentinelaArt(Math.floor(t / 14) % 2); return d === 'left' ? flipC(c) : c; }, h: 40, bg: bgEncosta9 }),
+      { t: 'sign', id: 'espantalho9', x: EN9.espantalho[0], y: EN9.espantalho[1], h: 60, gone: () => !!G.flags.c9Espantalho, spr: () => espantalhoMapaArt(Math.floor(W2.t / 20)), talk: lutaEspantalho9 },
+      ...EN9.espTrig.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, gone: () => !!G.flags.c9Espantalho, run: lutaEspantalho9 })),
+      marcoEnt(...EN9.marco),
+      bauEnt('encosta9', 'b0', ...EN9.bau[0], async () => { await dar('pluma', 1); await dar('cobres', 90); }),
+      bauEnt('encosta9', 'b1', ...EN9.bau[1], async () => { await dar('frasco', 1); await dar('tinta', 2); })
+    ],
+    onEnter: async () => {
+      if (!G.flags.c9Encosta) { G.flags.c9Encosta = true; await say('* A Encosta. Seis patamares cortados na rocha, em zigue-zague, com uma mureta baixa na beira e, lá embaixo, Auren inteira acesa, pequena, como um formigueiro de vaga-lume.');
+        if (aliado9('badalada')) { await wait(20); sfx('crit'); V.shake = 6; await say('* E então, lá de longe, do outro lado do vale: DOOOONG. DOOOONG. Doze vezes. A Dona Badalada, tocando meia-noite pela primeira vez em cem anos.'); await say('* Nos patamares, apitos. Lanternas descendo a trilha às pressas. Metade das rondas da Guarda vai ver o que é.'); await say('Obrigada, Dona Badalada.', 'lume'); }
+        await say('[Rondas da Guarda: fique fora do cone de visão. Holofotes varrem os patamares de cima DE NOITE (de dia eles dormem, se quiser esperar num Marco). E o vento...]', 'cat'); }
+    }
+  };
+  // ---------- A CRISTA ----------
+  MAPS2.crista9 = { rows: ROWS9.crista9, key: KEY9, name: 'O Morro · O Jardim das Lentes', music: 'subida', batBg: bgCrista9, bg: '#0a0e1c',
+    feixe: { emissor: CR9.emissor, alvo: CR9.alvo, alarme: CR9.alarme, flag: 'c9Porta' }, grupoLuz: ['sentinela', 'sentinela'], reinicio: CR9.entra,
+    moveis: CR9.espelhos.map(([x, y], i) => ({ id: 'esp9' + i, k: 'espelho', o: '\\', x, y })),
+    lights: [[CR9.emissor[0] + 0.5, CR9.emissor[1], 80], [CR9.alvo[0], CR9.alvo[1], 50]],
+    props: [
+      { img: () => lenteLuarArt(Math.floor(W2.t / 10)), x: CR9.emissor[0] - 0.4, y: CR9.emissor[1] + 1, solid: [[CR9.emissor[0], CR9.emissor[1], 1, 1]] },
+      { img: () => portaLentesArt(!!G.flags.c9Porta, Math.floor(W2.t / 10)), x: 22.75, y: 4.1, get solid() { return G.flags.c9Porta ? [] : [[23, 3, 2, 1]]; } },
+      { img: atrilArt, x: CR9.atril[0] - 0.05, y: CR9.atril[1] + 1, solid: [[CR9.atril[0], CR9.atril[1], 1, 1]] }
+    ],
+    ents: [
+      ...CR9.volta.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: vai('encosta9', [EN9.saida[0][0], EN9.saida[0][1] + 2], 'down') })),
+      ...CR9.saida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, gone: () => !G.flags.c9Rainha, run: vai('farol9', FA9.entra, 'up', true) })),
+      { t: 'sign', x: CR9.atril[0], y: CR9.atril[1], h: 20, talk: atril9 },
+      ...CR9.rainhaTrig.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, gone: () => !G.flags.c9Porta || !!G.flags.c9Rainha, run: lutaRainha9 })),
+      inimigo('c9a', 'gralha', ...CR9.foes[0], ['gralha', 'mariposaA'], { spr: (t) => gralhaArt(Math.floor(t / 6)), h: 26, bg: bgCrista9, fly: true }),
+      inimigo('c9b', 'mariposaA', ...CR9.foes[1], ['mariposaA', 'mariposaA', 'sentinela'], { spr: (t) => mariposaAArt(Math.floor(t / 5)), h: 24, bg: bgCrista9, fly: true }),
+      marcoEnt(...CR9.marco),
+      bauEnt('crista9', 'b0', ...CR9.bau[0], async () => { await dar('frasco', 1); await dar('cobres', 120); }),
+      bauEnt('crista9', 'b1', ...CR9.bau[1], async () => { await dar('pluma', 1); await dar('tinta', 2); })
+    ],
+    onEnter: async () => { if (!G.flags.c9Crista) { G.flags.c9Crista = true; await say('* A Crista. O vento para de repente, como uma porta que fecha. Ruínas de uma oficina de lentes, colunas quebradas, e no alto do paredão uma porta de latão com um cristal azul no meio.'); await say('* Na beira oeste, uma lente enorme num pé de latão pega o pouco de luz do céu e devolve um feixe reto, fininho, que corre pelo chão.'); await say('A Porta das Lentes. O avô da Dona Iolanda era um homem muito chato.', 'rita'); await say('[O FEIXE: espelhos desviam (/ ou \\). De frente para um espelho: girar, ou GUARDAR NO VÃO e pôr em outro lugar. O cristal VERMELHO na beira leste dá alarme. O ATRIL tem a página da Ofélia.]', 'cat'); } }
+  };
+  // ---------- O PÁTIO DO FAROL ----------
+  MAPS2.farol9 = { rows: ROWS9.farol9, key: KEY9, name: 'O Farol de Cem Invernos · O Pátio', music: 'farol9', batBg: bgFarol9, bg: '#0a0c18',
+    lights: [...FA9.postes.map(([x, y]) => [x + 0.5, y - 2, 70]), [15.5, 5, 80]],
+    props: [
+      { img: () => torreFarolBaseArt(Math.floor(W2.t / 12), !!G.flags.c9Faroleiro), x: 16 - 6.25, y: 7.05, by: 6 * TS },
+      ...FA9.postes.map(([x, y]) => ({ img: () => posteArt(true), x: x - 0.1, y: y + 1, solid: [[x, y, 1, 1]] }))
+    ],
+    ents: [
+      ...FA9.volta.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: vai('crista9', [CR9.saida[0][0], CR9.saida[0][1] + 1], 'down') })),
+      morador('tiago', ...FA9.tiago, { id: 'tiago9', dir: 'down', gone: () => !!G.flags.c9Fim, talk: falaTiago9 }),
+      ...FA9.trig.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, gone: () => !!G.flags.c9Faroleiro, run: lutaFaroleiro9 })),
+      ...FA9.porta.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, gone: () => !G.flags.c9Faroleiro, run: cenaFim9 }))
+    ],
+    onEnter: async () => { if (!G.flags.c9Patio) { G.flags.c9Patio = true; playMusic('farol9'); await say('* O pátio do Farol de Cem Invernos. A torre sobe até sumir no escuro. Lá em cima, apagada ainda, a lanterna do tamanho de uma casa.'); await say('* Na porta de latão, um homem de casaco azul e dourado, com uma pluma torta no quepe de cobrador. De costas. Contando moedas.'); } }
+  };
+  grade(MAPS2.sope9); grade(MAPS2.encosta9); grade(MAPS2.crista9);
+  // a trilha do mirante, na Cidade Alta (depois que a subida começa)
+  const CA = MAPS2.cidadeAlta; if (CA && !CA._m9) { CA._m9 = true; const p = mirante9(); CA.ents.push({ t: 'trig', x: p[0] + 1, y: p[1], w: 1, h: 1, passa: true, gone: () => !G.flags.c9P2, run: vai('sope9', SO9.entra, 'right') }); }
+}; }
+function mirante9() { const C = MAPS2.cidadeAlta; if (C && C._mir9) return C._mir9; const p = (C && chaoLivre8(C, 52, 36)) || [52, 36]; if (C) C._mir9 = p; return p; }
+function patamarDe9(y) { let best = EN9.patamares[0]; for (const pt of EN9.patamares) if (y <= pt.y0 + pt.h + 1) best = pt; return best; }
+// ---------- o Sopé ----------
+async function tendaDalva9() {
+  await say(pickOne(['Senta. Mostra. Isso não é nada. Isso é um arranhão de mala.', 'Toma sopa. Sopa cura metade das coisas. A outra metade é sono.', 'O guarda do tornozelo disse que não viu vocês. Eu disse que ele não viu nada.']), 'dalva');
+  curarTudo(); G.items.frasco = Math.max(G.items.frasco || 0, 4); sfx('heal'); W2.toast = { s: 'Todos curados. Frascos: ' + G.items.frasco, t: 0 };
+}
+async function cancela9() {
+  if (G.flags.c9Cancela) return; W2.mv = null;
+  if (aliado9('bras')) {
+    await say('* Vocês se aproximam da cancela. Atrás, nas barracas da Guilda, alguém derruba uma mesa. Alguém grita "ESSE PASTEL ERA MEU". Uma garrafa voa.');
+    await say('BRIGA! BRIGA NO ACAMPAMENTO! Os Caçadores estão se matando!', 'guardaRH');
+    await say('* Os três guardas da cancela correm para separar. O cão-lanterna corre atrás, latindo de alegria.');
+    await say('* O Brás, no meio da confusão, levanta o polegar para vocês e leva um murro de mentira (ou não) do Juca.');
+    G.flags.c9Cancela = true; sfx('door'); save2(); return;
+  }
+  await say('* Três guardas da Guarda Real, de capa de neve, e um cão-lanterna. A cancela listrada fechada.');
+  await say('Morro fechado. Ordem do Acendedor-Mor. Ninguém sobe, nem baú, nem... por que esse baú tem dente?', 'guardaRH');
+  const r = await lutaMapa(['guardaR', 'guardaR', 'caoLanterna'], { bg: bgEncosta9 });
+  if (r !== 'win') return;
+  G.flags.c9Cancela = true; sfx('door'); await say('* A cancela sobe, rangendo. A trilha da Encosta, branca, sobe no escuro.'); save2();
+}
+// ---------- a Encosta ----------
+async function chamine9() {
+  if (!aliado9('tico')) { await say('* Uma porta de ferro enferrujada na rocha, com uma chaminé de tijolo saindo por cima. Trancada por dentro.'); await say('[Alguém que conhecesse a Chaminé Velha podia abrir por dentro...]', 'cat'); return; }
+  await say('* A porta de ferro, aberta por dentro. Lá dentro, tijolo, fuligem e o eco de duas vozes de menino que já não são de menino.');
+  const c = await choose('* Entrar na Chaminé Velha? (sai no meio do morro)', ['Entrar', 'Agora não'], 'me', 1); if (c !== 0) return;
+  W2.mv = null; await fadeOut(12);
+  if (!G.flags.c9Chamine) { G.flags.c9Chamine = true; await say('* Esquerda, esquerda, sobe, direita onde tem o tijolo torto. No tijolo torto, um pão de milho de vinte anos, duro como pedra. A Rita guarda de lembrança.'); }
+  loadMap2('encosta9', EN9.chamineB[0] + 1, EN9.chamineB[1] + 1, 'right'); await fadeIn(12);
+}
+async function lutaEspantalho9() {
+  if (G.flags.c9Espantalho) return; W2.mv = null;
+  await say('* No meio do patamar, um poste. No poste, um espantalho enorme, de casaco feito de cartazes novos: O FAROL ACENDE · NINGUÉM MORRE NO ESCURO. No lugar da cabeça, um pote de Pavio. Dentro do pote, uma chama azul.');
+  await say('* Os braços são duas cancelas listradas. Elas descem. Devagar. Na sua frente.');
+  await say('Eu conheço esse jeito de ficar parado.', 'rita');
+  await say('PE... DÁ... GIO.', 'n');
+  await say('[O ESPANTALHO DO CERCO. Peças de um espantalho velho, remendadas pela Guarda.]', 'cat');
+  const r = await lutaMapa(['espantalhoC'], { bg: bgEncosta9, music: 'boss', pos: [[184, 168]], intro: async () => { const e = BT.foes[0]; e.phases = fasesEspantalho9(); e.ct = 12; callout('ESPANTALHO DO CERCO', '#e8dcc0', 90); } });
+  if (r !== 'win') return;
+  G.flags.c9Espantalho = true; playMusic('subida');
+  await say('* O Espantalho cai do poste. Na neve, o pote racha, e a lanterna velha do pedágio rola para fora, ainda acesa.');
+  await say('* Ela se apaga sozinha. Devagar. Como quem finalmente pode ir embora do trabalho.');
+  await say('Na ponte ele cobrava pedágio de quem passava. Aqui cobravam pedágio dele.', 'lume');
+  await say('Ninguém devia trabalhar depois de morto. Nem espantalho.', 'me');
+  save2();
+}
+// ---------- a Crista ----------
+async function atril9() {
+  if (!G.flags.c9Pagina) { await say('* Um atril de madeira, vazio, virado para a porta. Como se esperasse um livro.'); return; }
+  await say('* Você abre o Grimório no atril. A página da Ofélia, com a letra inclinada:');
+  await say('* "Três espelhos. O primeiro antes da coluna, onde a luz nasce. O segundo no alto, na beira norte. O terceiro embaixo da porta, olhando para cima. Barra para a direita: /. Sempre /."');
+  if (!G.flags.c9Porta) await say('[Os espelhos começam todos virados para o outro lado ( \\ ). Gire e mude de lugar pelo Vão.]', 'cat');
+}
+{ const _pp9 = passoPuzzle; passoPuzzle = function () { const antes = G.flags.c9Porta; _pp9(); if (!antes && G.flags.c9Porta && W2.id === 'crista9') run2(portaAbriu9); }; }
+async function portaAbriu9() {
+  sfx('crit'); V.shake = 8;
+  await say('* O feixe bate no cristal azul da porta. O cristal acende, e acende, e acende, até ficar dourado. A porta de latão se abre em duas, devagar, com um suspiro de cem anos.');
+  await say('Barra para a direita. Sempre barra para a direita. Obrigada, Ofélia.', 'lume');
+  await say('* Mas a luz não para na porta. Ela sobe. Faz um risco no céu. E lá do alto do morro, alguma coisa VÊ o risco.');
+  save2();
+}
+async function lutaRainha9() {
+  if (G.flags.c9Rainha) return; W2.mv = null;
+  await say('* Um barulho de mil papéis. Do alto da torre, descendo em espiral pelo feixe, uma mariposa do tamanho de uma carroça. Asas de âmbar. Coroa de vidro.');
+  await say('A RAINHA. A da Estrada dos Lampiões. Ela voltou.', 'rita');
+  await say('Ela vive em volta do Farol agora. Comendo a luz que vaza. Ela engordou.', 'lume');
+  await say('[A RAINHA DO FAROL. Cuidado: na primeira fase, LUZ cura ela.]', 'cat');
+  const r = await lutaMapa(['rainhaF'], { bg: bgCrista9, music: 'boss', pos: [[184, 172]], intro: async () => { const e = BT.foes[0]; e.phases = fasesRainha9(); e.ct = 12; callout('A RAINHA DO FAROL', '#ffe090', 90); } });
+  if (r !== 'win') return;
+  G.flags.c9Rainha = true; playMusic('subida');
+  await say('* A Rainha cai na neve, as asas apagando uma por uma. Ela olha para a Lume. Para a chama da Lume. E, por um momento, não come: só olha.');
+  await say('* Depois voa. Para longe do Farol. Para o vale, onde as janelas de Auren têm velas acesas.');
+  await say('Ela foi atrás das velas da cidade. Das velas de verdade.', 'lume');
+  save2();
+}
+// ---------- o Pátio do Farol ----------
+async function falaTiago9() {
+  if (G.flags.c9Faroleiro) { await say('Sobe. Eu fico aqui e seguro quem vier de baixo. Eu sou herói, lembra? Herói segura porta.', 'tiago'); return; }
+  await say('Não. Daqui não passa. Ordem da Coroa.', 'tiago');
+}
+async function lutaFaroleiro9() {
+  if (G.flags.c9Faroleiro) return; W2.mv = null; playMusic(null);
+  await say('* O homem da porta se vira. Quepe de cobrador, pluma torta, um sorriso cansado.');
+  await say('Eu disse que guardava o troco.', 'tiago');
+  await say('Tiago!', 'lume');
+  await say('A Coroa me pôs de guarda no Farol. O herói nº 30, na porta mais importante do reino. Eu ia abrir pra vocês e dizer que dormi.', 'tiago');
+  await say('Ia?', 'rita');
+  await say('* O chão do pátio treme. As lajes se levantam em volta da porta, e de baixo delas sobe uma coisa de latão do tamanho de uma casa, rangendo como um navio.');
+  await say('* No peito, uma LENTE. Anéis de luz dentro de anéis de luz. Ela gira e para em você.');
+  await say('O FAROLEIRO. Ele acorda quando alguém chega perto da porta. Eu achei que era lenda.', 'tiago');
+  await say('QUEM. SOBE. TEM. QUE. SER. LIDO.', 'faroleiro');
+  await say('Então lê isso aqui.', 'tiago');
+  await say('* O Tiago enche a mão de moedas de cobre. As de cobrador. Ele sempre teve troco no bolso.');
+  await say('[O Tiago luta junto: a cada três ações do grupo ele joga o TROCO (corte, quebra escudo).]', 'cat');
+  const r = await lutaMapa(['faroleiro'], { bg: bgFarol9, music: 'boss', pos: [[196, 178]], intro: async () => { const e = BT.foes[0]; e.phases = fasesFaroleiro9(); e.ct = 14; BT.tiago9 = { n: 0 }; callout('O FAROLEIRO', '#ffe090', 100); } });
+  if (r !== 'win') return;
+  G.flags.c9Faroleiro = true;
+  await faroleiroDescansa9();
+}
+async function faroleiroDescansa9() {
+  playMusic('perda');
+  await say('* O Faroleiro ajoelha. A lente rachada para de girar. Por trás do vidro, o velho de cachimbo apagado levanta a cabeça.');
+  await say('...Chegou o substituto? Faz cem anos que eu espero o substituto. Ninguém veio. Eu não podia largar a luz sozinha.', 'faroleiro');
+  await say('{o}Pode parar. Ninguém vai ficar no escuro. Tem gente lá embaixo com vela na janela.{/}', 'eco8');
+  await say('* O velho olha para baixo, para Auren. As velas nas janelas. Os braseiros que ninguém apagou.');
+  await say('Vela na janela. Igual no meu tempo. Então tá bom. Então eu posso.', 'faroleiro');
+  await say('* O latão se desmancha em ferrugem, a ferrugem em neve, a neve em nada. Sobra o cachimbo, no chão do pátio. A Lume guarda.');
+  await say('Ela falou de novo. A moça. Em voz alta, pra todo mundo ouvir.', 'rita');
+  await say('{o}...desculpa. ele estava muito cansado. eu sei como é ficar esperando alguém.{/}', 'eco8');
+  await say('* A porta de latão do Farol abre sozinha. Lá dentro, uma escada em caracol que sobe até sumir.');
+  save2();
+}
+async function cenaFim9() {
+  W2.mv = null; playMusic(null);
+  await say('* Vocês entram. A escada em caracol sobe e sobe. As paredes são de vidro grosso, e atrás do vidro, potes. Milhares de potes. Cada um com uma luzinha morna dentro.');
+  await say('São eles. Os Pavios. As lembranças.', 'lume');
+  await say('{o}...eu conheço essa escada.{/}', 'eco8');
+  await say('* Você para. Todos param.');
+  await say('{o}não essa. uma igual. eu subi uma escada assim uma vez. pra fugir de uma voz. no fim da escada tinha uma barca. eu era... eu tinha um nome. eu tinha uma irmã? não. eu tinha uma metade.{/}', 'eco8');
+  await say('[...Registro sem origem. Eu não consigo arquivar isso. Não tem gaveta para isso.]', 'cat');
+  await say('Lá em cima a gente descobre o seu nome. Prometo.', 'me');
+  await say('{o}lá em cima. tá bom. eu vou lembrar até lá em cima.{/}', 'eco8');
+  await wait(30);
+  sfx('crit'); V.shake = 16; flashW(6);
+  await say('* E então, de cima, um barulho de engrenagem do tamanho do mundo.');
+  await say('* A escada inteira acende. Os potes acendem. A luz sobe pelo vidro, de pote em pote, como fogo subindo um pavio.');
+  await fadeOut(30); G.hora = 23 * 60 + 50;
+  V.scene = 'world'; loadMap2('sope9', ...SO9.entra, 'right'); await fadeIn(30);
+  await say('* Lá embaixo, no sopé, a Irmã Dalva levanta da tenda. A Dona Iolanda deixa cair os óculos. O Brás para a briga de mentira no meio de um murro.');
+  await say('* No alto do morro, o Farol de Cem Invernos ACENDE.');
+  await say('* Um facho branco-dourado varre o vale. Passa por Auren, por Velhágua, por Candeia, pela serra. Onde ele passa, as velas nas janelas tremem.');
+  await say('* E no alto da torre, na sala da lanterna, um homem de luvas pretas olha a luz que fez. Fecha o caderno. Abre os braços.');
+  await say('Ninguém mais vai morrer no escuro.', 'vesper');
+  G.flags.c9Fim = true; G.dia = (G.dia || 0) + 1; save2();
+  await fadeOut(40);
+  await cartao(['FIM DO CAPÍTULO 9', 'A Subida do Morro', '', 'eu vou lembrar', 'até lá em cima.']);
+  V.scene = 'world'; loadMap2('sope9', ...SO9.entra, 'right'); await fadeIn(20);
+  await say('* (O Capítulo 10 está a caminho: O Farol de Cem Invernos. Os Marcos levam aonde vocês já foram.)');
+}
+
+// ================= CAP. 9 — OPCIONAIS COM VIAGEM RÁPIDA =================
+// RASTROS DE ÂMBAR (a moça de âmbar): três fios de âmbar morno em lugares por onde ela passou: as Cisternas (Cap. 8), o
+// Poço do Sino (VELHÁGUA) e a Câmara do Despertar (ANDAR 1 da masmorra, pela Mina de Origem). Cada fio, uma lembrança
+// dela. Com os três: a LEITURA (o Avaliar deixa o inimigo LIDO; ela avisa a hora certa da defesa).
+// A PENSÃO SEM REMETENTE: a Dona Cida (Largo, de dia) recebe um envelope todo mês desde o Inverno, sem remetente; a
+// Dona Ilda (CANDEIA) também, desde que o Zé sumiu; a Dona Hortênsia (CIDADE ALTA) reconhece o lacre. Recompensa:
+// o Lacre Partido.
+// SEGREDO (só bíblia): a moça é a metade de Ada que sente culpa; ela nunca diz esse nome.
+const fiosMoca9 = () => [G.flags.c8Fio, G.flags.c9FioPoco, G.flags.c9FioAndar].filter(Boolean).length;
+Object.assign(EQ2, { lacre9: { nm: 'Lacre Partido', slot: 'amuleto', who: ['lume', 'rita'], mod: { mhp: 12, mdef: 3 }, fx: [], preco: 0, d: 'O lacre de cera preta das cartas sem remetente, partido ao meio. +12 PV, +3 RES. Pesa mais do que devia.' } });
+{ const _mmM9 = montarMapas2; montarMapas2 = function () {
+  _mmM9.apply(this, arguments);
+  const fio = (mapId, x0, y0, id, flag, talk) => { const m = MAPS2[mapId]; if (!m || m['_' + id]) return; m['_' + id] = true; const p = chaoLivre8(m, x0, y0) || [x0, y0];
+    m.ents.push({ t: 'sign', id, x: p[0], y: p[1], h: 30, spr: () => fioAmbarArt(Math.floor(W2.t / 4)), gone: () => !G.flags.c9Init, get luz() { return G.flags[flag] ? 20 : 46; }, talk }); };
+  fio('poco', 12, 8, 'fio9p', 'c9FioPoco', fioPoco9);
+  fio('andar1', AN7.pedestal[0] + 2, AN7.pedestal[1] + 1, 'fio9a', 'c9FioAndar', fioAndar9);
+  // a Dona Cida no Largo (de dia), com o envelope
+  const L = MAPS2.largo; if (L && !L._cida9) { L._cida9 = true; const p = chaoLivre8(L, 31, 16) || [31, 16]; L.ents.push(morador('cida', p[0], p[1], { id: 'cida9', dir: 'down', gone: () => !c9Ativo() || ehNoite(), talk: falaCida9 })); }
+}; }
+async function fioDepois9() {
+  const n = fiosMoca9();
+  if (n < 3) { await say('[Fios de âmbar encontrados: ' + n + '/3. ' + (G.flags.c8Fio ? '' : 'Um ainda nas Cisternas de Auren. ') + (G.flags.c9FioPoco ? '' : 'Um em Velhágua, onde a água é funda. ') + (G.flags.c9FioAndar ? '' : 'Um onde você acordou. ') + ']', 'cat'); return; }
+  if (G.flags.c9Leitura) return;
+  G.flags.c9Leitura = true; sfx('rune');
+  await say('{o}três. você achou os três. são os lugares onde eu parei pra respirar, subindo. o âmbar fica morno onde eu paro.{/}', 'eco8');
+  await say('{o}eu li o seu Catálogo inteiro enquanto estava presa. todas as fichas. todos os golpes. eu sei ler as coisas um pouquinho antes delas acontecerem. deixa eu ajudar. na luta. eu aviso.{/}', 'eco8');
+  await say('[Isso é... irregular. Mas eficiente. Eu autorizo. (Eu não sei se eu preciso autorizar.)]', 'cat');
+  await say('* {y}LEITURA!{/} Quando o baú AVALIA um inimigo, ele fica LIDO por 3 golpes: a moça avisa a hora certa e o anel de defesa fica mais largo.');
+  save2();
+}
+async function fioPoco9() {
+  if (G.flags.c9FioPoco) { await say('* O fio de âmbar na pedra do poço, morno. A água escura em volta não congela.'); return; }
+  G.flags.c9FioPoco = true; playMusic(null);
+  await say('* No fundo do Poço do Sino, onde a Dona Badalada ficou cem anos, um fio de âmbar escorre pela pedra. Morno. A água em volta dele não tem lodo.');
+  await say('{o}eu desci este rio. antes de ter cidade. antes de ter sino.{/}', 'eco8');
+  await say('{o}tinha uma barca. sem remo. a água levava. eu deitei no fundo da barca e fiquei olhando as estrelas passarem pelo buraco da tampa da noite.{/}', 'eco8');
+  await say('Tampa da noite?', 'lume');
+  await say('{o}é como eu chamava o céu, quando era pequena. uma tampa. com furinhos.{/}', 'eco8');
+  await say('Ela fala do céu como você fala da sua tampa. Que fofo. Que estranho.', 'rita');
+  await say('{o}o sino... ela tocava pra mim também. depois. lá embaixo eu ouvia. era o único jeito de eu saber que tinha gente em cima.{/}', 'eco8');
+  await fioDepois9(); playMusic(W2.map.music);
+}
+async function fioAndar9() {
+  if (G.flags.c9FioAndar) { await say('* O fio de âmbar ao lado do pedestal. Morno. O pedestal onde você acordou continua vazio.'); return; }
+  G.flags.c9FioAndar = true; playMusic('despertar');
+  await say('* A Câmara do Despertar. O pedestal onde um caixote acordou com fome, muito tempo atrás. Do lado dele, no chão, um fio de âmbar novo. Morno.');
+  await say('{o}foi aqui. eu vi. eu estava lá em cima, no teto, presa no âmbar das paredes. eu via tudo daqui.{/}', 'eco8');
+  await say('{o}chegou mais um. eu pensei: mais um. trinta e um. a voz lá de baixo vai comer esse também.{/}', 'eco8');
+  await say('{o}aí você mordeu o Musgo. um caixote. mordeu um golem de pedra. e eu ri. eu não ria fazia trezentos anos.{/}', 'eco8');
+  await say('Trezentos...', 'lume');
+  await say('Qual é o seu nome?', 'me');
+  await say('{o}começa com... não. não vem. está do outro lado de uma porta. lá em cima eu abro.{/}', 'eco8');
+  await fioDepois9(); playMusic(W2.map.music);
+}
+// ---------- A PENSÃO SEM REMETENTE ----------
+async function falaCida9() {
+  if (G.flags.c9PensaoFim) { await say('Eu continuo recebendo. Eu continuo guardando. Agora eu sei de quem é. Não sei se é melhor.', 'cida'); return; }
+  if (G.flags.c9Pensao) { await say('A Dona Ilda, de Candeia? Ela perdeu o marido pros Pavios também. Pergunta pra ela.', 'cida'); return; }
+  G.flags.c9Pensao = 1; playMusic('cha');
+  await say('Vocês! Da noite da música! Senta. Olha isso.', 'cida');
+  await say('* A Dona Cida tira do avental um envelope pardo. Sem remetente. Lacre de cera preta, com uma chama pequena estampada.');
+  await say('Todo mês. Desde o Inverno, doze anos atrás, desde que o meu marido morreu no escuro. Sempre a mesma quantia. Sempre um raminho de alecrim seco dentro.', 'cida');
+  await say('Eu nunca soube de quem é. Eu nunca gastei. Tá tudo numa lata, debaixo da cama. Doze anos de lata.', 'cida');
+  await say('Quem manda dinheiro pra viúva do Inverno sem dizer o nome?', 'rita');
+  await say('* A Lume olha o lacre muito tempo. A chama pequena. Ela não diz nada.');
+  await say('[Alguém que perdeu gente no Inverno também, talvez. Em CANDEIA, a Dona Ilda perdeu o marido para os Pavios.]', 'cat');
+  playMusic(W2.map.music);
+}
+{ const _fI9p = falaIlda; falaIlda = async function () {
+  if (G.flags.c9Pensao === 1) {
+    G.flags.c9Pensao = 2; playMusic('cha');
+    await say('Envelope sem remetente? Com alecrim?', 'ilda');
+    await say('* A Dona Ilda levanta, abre uma gaveta, e tira uma pilha amarrada com barbante. Trinta envelopes pardos. Lacre de cera preta, chama pequena.');
+    await say('Desde que o Zé entrou pros Pavios. Todo mês. Eu achei que era a pensão da Coroa. Mas a pensão da Coroa vem com carimbo e atrasa. Essa nunca atrasou.', 'ilda');
+    await say('* No verso do último envelope, a lápis, uma letra pequena e apertada: "Lamento."');
+    await say('Essa letra.', 'rita');
+    await say('A letra do bilhete. Da parede da base.', 'me');
+    await say('[Um lacre assim só sairia da Cidade Alta. A Dona Hortênsia conhece todo lacre de família de lá.]', 'cat');
+    playMusic(W2.map.music); return;
+  }
+  return _fI9p();
+}; }
+{ const _fDa9 = falaDama; falaDama = async function () {
+  if (G.flags.c9Pensao === 2 && !G.flags.c9PensaoFim) {
+    G.flags.c9PensaoFim = true; playMusic('cha');
+    await say('* A Dona Hortênsia pega o envelope com a ponta dos dedos, como quem pega uma coisa quente. Olha o lacre contra a luz.');
+    await say('A chama pequena. É o lacre particular do Conde Ulrico. O Acendedor-Mor. Eu jantei com ele no aniversário da Coroa. Ele usou esse lacre no cartão do lugar à mesa.', 'dama');
+    await say('Ele paga pensão às famílias dos Pavios. Às viúvas do Inverno. Em segredo. Todo mês. Do bolso dele.', 'dama');
+    await say('...Por quê?', 'lume');
+    await say('Uma vez eu perguntei por que ele nunca sorria. Ele disse: "Contabilidade, senhora. Eu sei exatamente quanto cada luz custou."', 'dama');
+    await say('* Silêncio. Lá fora, no alto do morro, o Farol apagado.');
+    await say('Ele não é um monstro. Isso é pior. Monstro a gente sabe o que fazer.', 'rita');
+    await say('Ele anota o nome. E paga. E continua.', 'me');
+    await say('Leva isso. Eu não quero esse lacre na minha casa.', 'dama');
+    await say('* A Dona Hortênsia parte o lacre ao meio e te dá uma metade.');
+    ganharEquip('lacre9'); sfx('equip'); await say(`* {y}${EQ2.lacre9.nm}{/}. ${EQ2.lacre9.d}`);
+    save2(); playMusic(W2.map.music); return;
+  }
+  return _fDa9();
+}; }
+
+// ================= CAP. 9 NO MAPA, NO DIÁRIO E NA VIDA =================
+Object.assign(REGIAO_DE, { sope9: 'farol', encosta9: 'farol', crista9: 'farol', farol9: 'farol' });
+{ const RF = REGIOES.find(r => r.id === 'farol'); if (RF) Object.defineProperty(RF, 'longe', { get: () => !(G.flags && G.flags.c9P2), configurable: true }); }
+Object.assign(VIDA_CFG, {
+  sope9: { corvos: 3, vagalumes: 6, passaros: true },
+  encosta9: { corvos: 2, vagalumes: 3 },
+  crista9: { vagalumes: 8, borboletas: 1 },
+  farol9: { vagalumes: 6 }
+});
+ROTULOS_EXTRA.sope9 = () => [[...SO9.saida[0], 'Cidade Alta'], [SO9.cancela[0][0], SO9.cancela[0][1] + 2, 'Cancela'], [SO9.tenda[0] + 1, SO9.tenda[1] + 2, 'Tenda da Dalva'], [SO9.chamine[0], SO9.chamine[1] + 2, 'Chaminé Velha']];
+ROTULOS_EXTRA.encosta9 = () => [[EN9.saida[0][0], EN9.saida[0][1] + 2, 'A Crista'], [EN9.chamineA[0] + 1, EN9.chamineA[1] + 1, 'Chaminé']];
+ROTULOS_EXTRA.crista9 = () => [[CR9.atril[0], CR9.atril[1] + 1, 'Atril'], [23, 5, 'Porta das Lentes']];
+ROTULOS_EXTRA.farol9 = () => [[15, 8, 'O Farol']];
+Object.assign(LIGA_EXTRA_FIXA, { sope9: [[...SO9.saida[0], 'cidadeAlta'], [...SO9.acima[0], 'encosta9']], encosta9: [[...EN9.volta[0], 'sope9'], [...EN9.saida[0], 'crista9']], crista9: [[...CR9.volta[0], 'encosta9'], [...CR9.saida[0], 'farol9']], farol9: [[...FA9.volta[0], 'crista9']] });
+{ const _ms9 = missoes; missoes = function () {
+  const f = G.flags || {};
+  if (!f.c9Init) return _ms9();
+  const L = _ms9().filter(m => m.tipo !== 'main');
+  let M;
+  const n = nAliados9();
+  if (f.c9Fim) M = { tit: 'O Farol de Cem Invernos', desc: 'O Farol acendeu. O Capítulo 10 está a caminho.', map: 'sope9', at: SO9.entra };
+  else if (f.c9Faroleiro) M = { tit: 'A escada', desc: 'A porta do Farol está aberta.', map: 'farol9', at: FA9.porta[0] };
+  else if (f.c9Rainha) M = { tit: 'O Pátio do Farol', desc: 'Pela Porta das Lentes, até o pé da torre.', map: 'crista9', at: CR9.saida[0] };
+  else if (f.c9Porta) M = { tit: 'A Porta das Lentes', desc: 'A porta abriu. Alguma coisa viu a luz.', map: 'crista9', at: CR9.rainhaTrig[3] };
+  else if (f.c9Crista) M = { tit: 'O Jardim das Lentes', desc: 'Leve o feixe da Lente do Luar até o cristal da porta com três espelhos (o atril tem a página da Ofélia).', map: 'crista9', at: CR9.alvo };
+  else if (f.c9Cancela) M = { tit: 'A Encosta', desc: 'Suba os seis patamares. Fique abrigado quando o vento assobiar.' + (aliado9('tico') ? ' A Chaminé Velha (1º patamar) corta caminho.' : ''), map: 'encosta9', at: EN9.saida[0] };
+  else if (f.c9P2) M = { tit: 'A cancela', desc: 'O pé do Morro: passe pela cancela da Guarda.', map: 'sope9', at: SO9.cancela[0] };
+  else if (prontoSubir9()) M = { tit: 'Subir o Morro', desc: n + ' aliados. No quadro do cerco, na base: "Hoje à noite".' + (n < 5 ? ' (Mais aliados deixam a subida mais fácil.)' : ''), map: 'interior', at: [9, 4] };
+  else M = { tit: 'O Quadro do Cerco (' + n + '/5)', desc: 'Chame aliados pelos Marcos: a Dona Iolanda (Papelaria, de dia) e mais dois: a Irmã Dalva (base), Tico e Dito (Bairro Baixo, de dia), o Brás (Vila dos Pavios, de noite), a Dona Badalada (Velhágua).', map: !aliado9('iolanda') ? 'papelaria' : 'interior', at: [6, 4] };
+  M.tipo = 'main'; L.unshift(M);
+  const op = (o) => L.push(Object.assign({ tipo: 'side' }, o));
+  if (!f.c9Leitura) op({ tit: 'Rastros de âmbar (' + fiosMoca9() + '/3)', desc: 'Fios de âmbar morno onde a moça parou para respirar: nas Cisternas de Auren, no Poço do Sino de Velhágua e onde você acordou (Andar 1, pela Mina de Origem).', map: !f.c9FioPoco ? 'poco' : !f.c9FioAndar ? 'andar1' : 'cisternas', at: [8, 8] });
+  if (!f.c9PensaoFim) op({ tit: 'A pensão sem remetente', desc: f.c9Pensao === 2 ? 'Na Cidade Alta, a Dona Hortênsia conhece todo lacre de família.' : f.c9Pensao === 1 ? 'Em Candeia, a Dona Ilda perdeu o marido para os Pavios.' : 'No Largo, de dia, a Dona Cida (a da noite da música) tem um envelope.', map: f.c9Pensao === 2 ? 'cidadeAlta' : f.c9Pensao === 1 ? 'candeia' : 'largo', at: [10, 10], quando: !f.c9Pensao ? 'dia' : undefined });
+  return L;
+}; }
+DIARIO.splice(7, 0, { tipo: 'main', cap: 'Capítulo 9 · O Morro', tit: 'A Subida do Morro', vis: () => fl('c9Init'), feita: () => fl('c9Fim'),
+  desc: 'O Farol acende quando estiver cheio. Os Pavios sobem com potes toda noite. Três pessoas e uma mala não furam um cerco.',
+  passos: [['Dona Iolanda e mais dois aliados', () => prontoSubir9() || fl('c9P2')], ['A cancela', () => fl('c9Cancela')], ['O Espantalho do Cerco', () => fl('c9Espantalho')], ['A Porta das Lentes', () => fl('c9Porta')], ['A Rainha do Farol', () => fl('c9Rainha')], ['O Faroleiro', () => fl('c9Faroleiro')], ['O Farol', () => fl('c9Fim')]] });
+DIARIO.push(
+  { tipo: 'side', cap: 'A Subida do Morro', quem: 'a moça de âmbar', tit: 'Rastros de âmbar', vis: () => fl('c9Init'), feita: () => fl('c9Leitura'), recompensa: 'LEITURA (o Avaliar ajuda na defesa)', desc: 'Fios de âmbar morno onde ela parou para respirar.', passos: [['As Cisternas', () => fl('c8Fio')], ['O Poço do Sino, Velhágua', () => fl('c9FioPoco')], ['A Câmara do Despertar', () => fl('c9FioAndar')]] },
+  { tipo: 'side', cap: 'A Subida do Morro', quem: 'Dona Cida', tit: 'A pensão sem remetente', vis: () => fl('c9Init'), feita: () => fl('c9PensaoFim'), recompensa: 'Lacre Partido', desc: 'Um envelope todo mês, sem nome, com alecrim seco.', passos: [['A Dona Cida, no Largo', () => !!G.flags.c9Pensao], ['A Dona Ilda, em Candeia', () => G.flags.c9Pensao === 2 || fl('c9PensaoFim')], ['A Dona Hortênsia, na Cidade Alta', () => fl('c9PensaoFim')]] },
+  { tipo: 'side', cap: 'A Subida do Morro', quem: 'os aliados', tit: 'Os cinco do cerco', vis: () => fl('c9Init'), feita: () => nAliados9() >= 5, recompensa: 'a subida mais fácil', desc: 'Todo mundo que vocês ajudaram até aqui.', passos: Object.entries(ALIADOS9).map(([k, a]) => [a.nm, () => aliado9(k)]) }
 );
 
 boot2();

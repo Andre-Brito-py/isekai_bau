@@ -28,10 +28,10 @@
      de cima da MASMORRA DA T1 (volta nostálgica, inimigos e lugares conhecidos, agora pela lógica de quem extrai).
      ESCALADA 4: Vesper VENCE uma batalha de verdade: o Seu Jorge troca as próprias lembranças pela vida do grupo e
      vira Pavio (esquece o 31, esquece eles; dá para devolver só um pedaço no Cap. 10). 2ª EVOLUÇÃO no fundo do poço.
-  8. O INVERNO ESCURO — Vesper apaga Auren de propósito ("para lembrarem por que precisam do Farol"). Cidade no
+  8. O INVERNO ESCURO (feito) — Vesper apaga Auren de propósito ("para lembrarem por que precisam do Farol"). Cidade no
      escuro, medo, a Lume no limite. O grupo acende a cidade À MÃO, bairro por bairro, com velas, gente e música
      (a música da Lume ganha mais um verso). Mecânica: escuridão por bairro, rotas de luz, escolta.
-  9. A SUBIDA DO MORRO — o cerco ao Farol: todos os aliados voltam (Badalada toca, Tico e Dito, Dalva, Brás, Iolanda,
+  9. A SUBIDA DO MORRO (feito) — o cerco ao Farol: todos os aliados voltam (Badalada toca, Tico e Dito, Dalva, Brás, Iolanda,
      Velhágua); masmorra de subida longa, mini-chefes antigos com cara nova; a Ofélia "aparece" pelo Grimório.
  10. O FAROL DE CEM INVERNOS (2 partes) — ESCALADA 5: o Farol acende por uma noite; a IRONIA FINAL (Lívia); escolha
      na luta final; epílogo (o caderno preto vai para a parede da base; o Jorge lembra do 31 um pouquinho) e o GANCHO
@@ -672,6 +672,64 @@
  - ROBÔ (Desafio, 0,6): comuns 10-85% (o par de lobos é o mais duro; o Lobo ficou 0,55 x2 depois do ajuste); Capitão
    (5600 -> 4800, golpes menores) deixa ~20-40%; Friagem (10200 -> 8000, fase 3 mira a Lume 40%) deixa ~5-30% no Farol e
    25-85% no Escriba, os dois na 1ª tentativa. Antes do ajuste o Escriba perdia 7-24 vezes no Capitão.
+=====================================================================
+ CAPÍTULO 9 — A SUBIDA DO MORRO (implementado; mapas9.js, arte_cap9.js, mecanicas9.js, inimigos9.js, cap9.js, cap9b.js,
+ moca9.js, cap9_integra.js; mapas em maps/cap9maps.py: vento simulado e feixe resolvido por busca)
+ - ESCALADA (segredo; só jogo e bíblia): o Farol acende "quando estiver cheio": toda noite uma fila de Pavios sobe com
+   potes (as lembranças). No fim do capítulo, o grupo entra na escada do Farol (paredes de vidro, milhares de potes) e o
+   Farol ACENDE lá de cima; o Vesper, na sala da lanterna: "Ninguém mais vai morrer no escuro." (gancho do Cap. 10, a
+   IRONIA de Lívia acontece lá).
+ - PARTE 1, O QUADRO DO CERCO (base): ALIADOS pelos Marcos, cada um com um trunfo: DALVA (base; tenda no sopé: cura e
+   frascos), IOLANDA (Papelaria, de dia; o avô polia as lentes; o Grimório se escreve sozinho com a letra da Ofélia: a
+   dica dos três espelhos, e "tem alguém morando no seu Catálogo, seja gentil com ela"; OBRIGATÓRIA), TICO E DITO (Bairro
+   Baixo, de dia; o sinal de três batidas na calha faz o Dito lembrar da Chaminé Velha: atalho na Encosta), BRÁS (Vila
+   dos Pavios, de noite, com a mãe; a Guilda arma uma briga na cancela; pede para trazer de volta quem ainda for gente:
+   c9PromessaBras), DONA BADALADA (Velhágua; a Lume canta (ritmo); o sino toca meia-noite pela 1ª vez em cem anos:
+   metade das rondas da Encosta desce). Iolanda + 2 bastam; "Hoje à noite" no quadro.
+ - PARTE 2, O MORRO: SOPÉ (tendas, cancela: briga da Guilda ou luta guardaR x2 + cão) -> ENCOSTA (6 patamares em
+   zigue-zague; VENTANIA: rajada a cada ~5 s com aviso de ~1,4 s; o vento empurra para o SUL; abrigo = pedra/rocha logo
+   ao NORTE, encostar numa MURETA, ou estar na escada; cair da beira = cair no patamar de baixo; rondas com cone (stealth,
+   pego = luta e volta ao começo do patamar); holofotes nos 2 patamares de cima SÓ DE NOITE; a Chaminé Velha (1º -> 3º
+   patamar) se o Tico veio; o ESPANTALHO DO CERCO no 3º patamar) -> CRISTA (o Jardim das Lentes: feixe da Lente do
+   Luar, 3 espelhos móveis pelo Vão, alarme vermelho na beira leste; solução mínima de 3 espelhos, conferida por busca;
+   o ATRIL mostra a página da Ofélia; a porta abre e a luz atrai a RAINHA DO FAROL) -> PÁTIO DO FAROL (o TIAGO de guarda
+   na porta, "eu guardo o troco": luta junto contra O FAROLEIRO jogando o TROCO a cada 3 ações; na fase 3 a moça racha a
+   lente e o troco vem a cada 2). Final: o velho faroleiro (cem anos esperando o substituto) pode parar; a escada; a moça
+   lembra de "uma escada assim, para fugir de uma voz; no fim tinha uma barca; eu tinha uma metade"; o Farol acende.
+ - INIMIGOS: Sentinela de Latão 700/45 (Lanterna nos Olhos: tonto), Gralha do Morro 560/44 (rajada em todos, rouba
+   Tensão), Mariposa de Âmbar 430/42 (COME LUZ). MINI-CHEFES ANTIGOS COM CARA NOVA: ESPANTALHO DO CERCO 5800/46 (o do
+   Cap. 1 remendado pela Guarda com os cartazes do Farol e um pote de Pavio na cabeça; PEDÁGIO DO MORRO preparado;
+   Rajada atrasa a vez; fase 2 a lanterna velha acende: gelo/mordida, Bafo, Cobrança) e A RAINHA DO FAROL 4500/46 (a
+   Mariposa-Rainha do Cap. 3: na fase 1 a LUZ A CURA; filhas; SOPRO DO FAROL; fase 2 incandescente: gelo/corte, Come a
+   Luz). CHEFE: O FAROLEIRO 8600/48 (Varredura faz esquecer a vez; Manivela; Gancho queima; LEITURA TOTAL tira 30 de
+   Tensão; fase 2 Sentinelas e Raios; fase 3 a lente racha: escudo quebra, luz e corte pegam). Arte de chefe caprichada
+   (espantalhoCercoArt 124x150, rainhaFarolArt 140x120, faroleiroArt 156x156).
+ - A MOÇA DA BARCA (arco pedido pelo usuário, "como a Ciel do Rimuru"): no Cap. 9 ela fala ÀS VEZES pelo Catálogo (WHO
+   eco8, em âmbar, minúsculas, sem colchetes): lista os aliados, avisa do vento, agradece a Ofélia, racha a lente do
+   Faroleiro ("eu também sei ler"), consola o velho faroleiro. O Catálogo: "ela corrige a minha ortografia". RASTROS DE
+   ÂMBAR (opcional com viagem): fios mornos nas Cisternas (Cap. 8), no Poço do Sino (Velhágua: a barca sem remo, "a
+   tampa da noite com furinhos", o sino que ela ouvia lá de baixo) e na Câmara do Despertar (ela viu o 31 acordar,
+   presa no âmbar do teto; riu quando ele mordeu o Musgo, "eu não ria fazia trezentos anos"; o nome "está atrás de uma
+   porta, lá em cima eu abro"). Com os 3: LEITURA (Avaliar deixa o alvo LIDO por 3 golpes: ela avisa e o anel de defesa
+   fica mais largo: perfeito ±5, bom ±12). Cap. 10: o NOME (o jogador escolhe) e a fusão com o Catálogo.
+ - A PENSÃO SEM REMETENTE (opcional com viagem): Dona Cida (Largo) -> Dona Ilda (Candeia: 30 envelopes, "Lamento" na
+   letra pequena do bilhete) -> Dona Hortênsia (Cidade Alta: o lacre da chama pequena é o do Conde Ulrico; "Contabilidade,
+   senhora. Eu sei exatamente quanto cada luz custou."). Recompensa: Lacre Partido (+12 PV, +3 RES).
+ - DIA E NOITE: aliados por horário (Iolanda e Tico de dia, Brás de noite); na Encosta os holofotes só de noite (esperar
+   o dia num Marco é uma escolha); a noite do cerco começa às 21h30.
+ - A LUME EVOLUÍDA, ARTE REFEITA (pedido do usuário: "têm que ficar lindas", "cuidado para não ficarem grandes demais"):
+   lustreEvoArt em 32x48 (o lustre do jogo 1 é 24x48), com o ROSTO do lustre original (olhos grandes com brilho,
+   bochecha rosada, pisca). LAREIRA: lustre-fogão de cobre e ferro, chaminé com fumaça, velas grossas com cera escorrida,
+   cachecol tricotado com a ponta voando, fogo de lenha na barriga, berloques de brasa. ALVORADA: aro de sol nascendo
+   girando atrás, globo de pérola rosada, lua crescente de ouro, velas finas de chama clara, fios de contas de vidro com
+   gotas que trocam de cor. Adereços de dia: pente de latão com lanterninha de brasa e laço (Lareira); tiara de prata
+   com raios e pérola (Alvorada). O retrato do cartão de batalha de noite usa o rosto novo.
+ - FLAGS: c9Init, c9A_<aliado>, c9Pagina, c9Tico1, c9PromessaBras, c9P2, c9Cancela, c9Encosta, c9Quedas, c9Chamine,
+   c9Espantalho, c9Crista, c9Porta, c9Rainha, c9Patio, c9Faroleiro, c9Fim; c9FioPoco, c9FioAndar, c9Leitura; c9Pensao
+   (1-2), c9PensaoFim.
+ - ROBÔ (Desafio, 0,6): comuns 12-90%; Espantalho (5000 -> 5800, golpes maiores) deixa ~30-55%; Rainha (5400 -> 4500, filhas
+   limitadas, luz cura 30%) deixa ~15-30% (a mais dura dos mini-chefes: a luz da Alvorada a cura na fase 1); Faroleiro
+   (8600, com o Tiago) deixa ~10-30% no mais ferido, os dois caminhos na 1ª tentativa.
 =====================================================================
 -->
 <style>

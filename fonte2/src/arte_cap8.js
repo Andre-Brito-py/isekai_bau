@@ -161,26 +161,77 @@ function friagemBossArt(f, fase, pose) { const k = 'fb' + f + fase + pose; if (I
   return INI8[k] = P.outline().canvas(); }
 // ---------- a LUME evoluída ----------
 // de noite, o lustre novo (no lugar do lustre do jogo 1); de dia, um adereço sobre a moça
+function rostoLume(P, cx, cy, f) {      // o rostinho do lustre do jogo 1: olhos grandes com brilho, pálpebra, bochecha rosada
+  const pisca = f % 16 === 15;
+  for (const s of [-1, 1]) { const ex = cx + s * 3 + (s > 0 ? 0 : -1);
+    if (pisca) { P.rect(ex - 1, cy + 1, 3, 1, '#2a1418'); continue; }
+    P.rect(ex - 1, cy - 1, 3, 1, '#2a1418'); P.rect(ex - 1, cy, 3, 2, '#3a1a26'); P.p(ex, cy, '#ffffff'); }
+  P.rect(cx - 7, cy + 2, 2, 1, '#ff8a9a'); P.rect(cx + 5, cy + 2, 2, 1, '#ff8a9a');
+  P.p(cx - 1, cy + 3, '#7a2a2a'); P.p(cx, cy + 3, '#7a2a2a');
+}
+function chamaVela(P, x, y, f, cores) { const h = [4, 6, 4, 5][f % 4], sw = [0, 1, 0, -1][f % 4]; P.poly([[x - 1, y], [x + sw, y - h], [x + 2, y]], cores[0]); P.rect(x, y - 2, 1, 2, cores[1]); P.p(x, y - 1, cores[2]); }
+// tamanho do lustre do jogo 1 (24x48): as formas novas ficam em 32x48, quase o mesmo porte
 function lustreEvoArt(ev, f) { const k = 'le' + ev + (f % 4); return o8(k, () => {
-  const P = new Pix(36, 56), b = Math.round(Math.sin(f * 1.5) * 1.5);
+  const P = new Pix(32, 48), b = [0, 1, 1, 0][f % 4], cx = 16;
   if (ev === 'lareira') {
-    const Fe = ramp('#6a4a30'), Lt = ramp('#c89a30');
-    P.line(18, 0, 18, 10, '#4a4450'); P.ball(18, 22 + b, 14, 10, Fe); P.rect(4, 26 + b, 28, 4, Lt[2]);
-    P.poly([[6, 28 + b], [30, 28 + b], [24, 46 + b], [12, 46 + b]], (x, y) => P.tone(Fe, 0.6 - (y - 28) / 40, x, y));
-    P.ball(18, 38 + b, 7, 5, ['#8a2a0a', '#e86a20', '#ffb040', '#fff0a0', '#ffffff']);                                  // a lareira no ventre
-    for (const vx of [6, 18, 30]) { P.rect(vx - 2, 12 + b, 4, 10, '#f2ecdc'); P.poly([[vx - 3, 12 + b], [vx, 4 + b - (f + vx) % 3], [vx + 3, 12 + b]], '#ffb040'); P.p(vx, 7 + b, '#fff0a0'); }
-    P.rect(9, 48 + b, 18, 3, Lt[3]); for (let i = 0; i < 3; i++) P.rect(11 + i * 6, 51 + b, 2, 3, '#e86a20');
+    // LAREIRA: um lustre-fogão de ferro e latão, gordinho e quente: o rosto no globo de cobre, um fogo de verdade na
+    // barriga, velas grossas, um cachecol tricotado e berloques de brasa.
+    const Cu = ['#8a3a14', '#c8641e', '#f09a30', '#ffc860', '#fff0b8'], Fe = ['#1e1418', '#2e2228', '#40323a', '#56464e', '#6e5c64'], Lt = ramp('#c89a30');
+    P.line(cx, 0, cx, 3, '#4a4450');
+    P.rect(cx - 2, 4 + b, 5, 3, Fe[2]); P.rect(cx - 3, 6 + b, 7, 1, Lt[3]); P.p(cx + (f % 2), 2 + b, '#b8b0c0');
+    for (const s of [-1, 1]) {
+      for (let t = 0; t <= 9; t++) { const x = cx + s * (6 + t), y = 16 + b - Math.round(Math.sin(t / 9 * Math.PI) * 3) - (t > 7 ? (t - 7) * 2 : 0); P.p(x, y, Lt[t % 3 + 1]); P.p(x, y + 1, Lt[1]); }
+      const vx = cx + s * 14, vy = 7 + b; P.rect(vx - 2, vy + 5, 5, 1, Lt[2]); P.rect(vx - 1, vy, 3, 5, '#f4ecdc'); P.p(vx + 1, vy + 1, '#d8ccb8'); P.p(vx - 1, vy + 2, '#fffaf0');
+      chamaVela(P, vx, vy, f + vx, ['#ff8a30', '#ffd070', '#fff8c0']);
+    }
+    P.ball(cx, 13 + b, 8, 7, Cu, { amb: 0.35 }); P.rect(cx - 7, 7 + b, 15, 1, Lt[3]);
+    rostoLume(P, cx, 13 + b, f);
+    for (let x = cx - 7; x <= cx + 7; x++) { const y = 20 + b; P.rect(x, y, 1, 2, (x >> 1) % 2 ? '#d84a2a' : '#f08a3a'); }
+    const pt = [0, 1, 1, 0][f % 4]; P.poly([[cx + 4, 21 + b], [cx + 9 + pt, 26 + b], [cx + 7, 27 + b], [cx + 2, 22 + b]], (x, y) => (x + y) % 3 ? '#d84a2a' : '#f08a3a');
+    P.poly([[cx - 7, 22 + b], [cx + 7, 22 + b], [cx + 6, 33 + b], [cx - 6, 33 + b]], (x, y) => P.tone(Fe, 0.75 - (x - cx + 7) / 22, x, y));
+    P.rect(cx - 4, 26 + b, 8, 5, '#3a0e08'); P.rect(cx - 4, 25 + b, 8, 1, Fe[4]);
+    for (let i = 0; i < 3; i++) { const hh = [3, 4, 2, 4][(f + i) % 4]; P.poly([[cx - 4 + i * 3, 30 + b], [cx - 3 + i * 3, 30 + b - hh], [cx - 1 + i * 3, 30 + b]], i === 1 ? '#ffd070' : '#ff8a30'); }
+    P.rect(cx - 3, 30 + b, 6, 1, '#6a3a1a'); P.p(cx - 2, 29 + b, '#ffd070');
+    P.rect(cx - 7, 33 + b, 15, 2, Lt[2]); P.rect(cx - 7, 33 + b, 15, 1, Lt[4]);
+    for (const [dx, L] of [[-5, 2], [0, 5], [5, 2]]) { P.line(cx + dx, 35 + b, cx + dx, 35 + b + L, Lt[1]); P.ball(cx + dx, 37 + b + L, 1.6, 2, ['#7a2a0a', '#c8501a', '#ff8a30', '#ffc870', '#fff0c0']); }
   } else {
-    const Pr = ['#5a6a8a', '#8aa0c8', '#c8d8f0', '#e8f0ff', '#ffffff'];
-    P.line(18, 0, 18, 8, '#8a8aa8');
-    for (let a = 0; a < 8; a++) { const an = a / 8 * Math.PI * 2 + f * 0.1, r = a % 2 ? 16 : 11; P.line(18, 26 + b, 18 + Math.cos(an) * r, 26 + b + Math.sin(an) * r, a % 2 ? '#fff0b0' : '#bff0ff', a % 2 ? 1 : 2); }
-    P.ball(18, 26 + b, 9, 9, Pr); P.ball(18, 26 + b, 5, 5, ['#ffd070', '#fff0a0', '#ffffff', '#ffffff', '#ffffff']);
-    for (const vx of [5, 31]) { P.rect(vx - 1, 30 + b, 3, 8, '#e8f0ff'); P.p(vx, 28 + b, '#bff0ff'); }
-    P.poly([[12, 38 + b], [24, 38 + b], [18, 52 + b]], (x, y) => (x + y) % 3 ? '#c8d8f0' : '#ffffff');
+    // ALVORADA: um lustre de cristal ao amanhecer: um aro de sol nascendo atrás, o globo de pérola rosada com o rosto,
+    // a lua crescente de ouro no alto, velas finas de chama clara, fios de contas de vidro com gotas de todas as cores.
+    const Ag = ramp('#a8b0c8');
+    P.line(cx, 0, cx, 2, '#9aa0b8');
+    for (let y = -15; y <= 15; y++) for (let x = -15; x <= 15; x++) { const d = Math.hypot(x, y * 1.1); if (d > 11.5 && d < 12.8) P.p(cx + x, 14 + b + y, (x + y + f) % 4 ? '#ffe8b0' : '#ffffff'); }
+    for (let a = 0; a < 12; a++) { const an = a / 12 * Math.PI * 2 + f * 0.13, r1 = a % 2 ? 16 : 14.5; for (let t = 13.5; t <= r1; t++) P.p(Math.round(cx + Math.cos(an) * t), Math.round(14 + b + Math.sin(an) * t * 0.92), a % 3 === 0 ? '#ffffff' : a % 2 ? '#ffd8a8' : '#c8ecff'); }
+    for (const s of [-1, 1]) {
+      for (let t = 0; t <= 10; t++) { const x = cx + s * (5 + t), y = 18 + b - Math.round(Math.sin(t / 10 * Math.PI) * 5); P.p(x, y, Ag[3]); }
+      const vx = cx + s * 15, vy = 9 + b; P.rect(vx - 1, vy + 5, 3, 1, Ag[3]); P.rect(vx, vy, 1, 5, '#f4f6ff'); chamaVela(P, vx, vy, f + vx, ['#ffc060', '#fff4c8', '#ffffff']);
+    }
+    for (let y = -3; y <= 3; y++) for (let x = -3; x <= 3; x++) if (x * x + y * y <= 9 && (x - 2) * (x - 2) + (y + 1) * (y + 1) > 5) P.p(cx - 1 + x, 4 + b + y, x < -1 ? '#ffe090' : '#e8b040');
+    P.p(cx + 3, 2 + b, '#ffffff');
+    P.ball(cx, 14 + b, 8, 7, ['#c87a6a', '#f0a890', '#ffd8b8', '#fff2e0', '#ffffff'], { amb: 0.42 });
+    P.p(cx - 5, 9 + b, '#ffffff'); P.p(cx - 4, 9 + b, '#ffffff');
+    rostoLume(P, cx, 14 + b, f);
+    P.rect(cx - 7, 21 + b, 15, 1, Ag[3]); P.rect(cx - 7, 22 + b, 15, 1, Ag[1]);
+    const cores = [['#c8e0ff', '#8ab8e8'], ['#ffd0e0', '#e898b8'], ['#fff0b0', '#e8c060'], ['#bff0ff', '#6ac0e0']];
+    [[-6, 3], [-2, 7], [2, 7], [6, 3]].forEach(([dx, L], i) => { const x = cx + dx; for (let y = 0; y < L; y += 2) P.p(x, 23 + b + y, '#f4f8ff'); const c = cores[(i + f) % 4]; P.ball(x, 24 + b + L, 1.5, 2, [c[1], c[1], c[0], '#ffffff', '#ffffff']); P.p(x, 26 + b + L, c[1]); });
+    P.ball(cx, 37 + b, 1.6, 3, ['#a8b0c8', '#c8d0e8', '#e8f0ff', '#ffffff', '#ffffff']); P.line(cx, 23 + b, cx, 34 + b, '#e8eef8');
+    for (let i = 0; i < 2; i++) { const an = (f * 0.7 + i * 3.1), x = Math.round(cx + Math.cos(an) * 14), y = Math.round(20 + b + Math.sin(an) * 10); P.p(x, y, '#ffffff'); P.p(x - 1, y, '#bff0ff'); P.p(x + 1, y, '#bff0ff'); P.p(x, y - 1, '#bff0ff'); P.p(x, y + 1, '#bff0ff'); }
   }
   return P.outline().canvas(); }); }
-function aderecoLumeArt(ev) { return o8('al' + ev, () => {
+function aderecoLumeArt(ev) { return o8('al2' + ev, () => {
   const P = new Pix(22, 14);
-  if (ev === 'lareira') { P.rect(2, 9, 18, 3, '#a8503a'); P.rect(2, 9, 18, 1, '#e8a060'); for (let i = 0; i < 4; i++) P.poly([[3 + i * 5, 9], [5 + i * 5, 2 + (i % 2) * 2], [7 + i * 5, 9]], i % 2 ? '#ffb040' : '#e86a20'); P.p(11, 3, '#fff0a0'); }
-  else { for (let a = 0; a < 8; a++) { const an = a / 8 * Math.PI * 2; P.line(11, 7, 11 + Math.cos(an) * (a % 2 ? 9 : 6), 7 + Math.sin(an) * (a % 2 ? 6 : 4), a % 2 ? '#fff0b0' : '#bff0ff'); } P.ball(11, 7, 3, 3, ['#ffd070', '#fff0a0', '#ffffff', '#ffffff', '#ffffff']); }
+  if (ev === 'lareira') {
+    // um pente de latão no cabelo com uma lanterninha de brasa pendurada e um laço de fita laranja
+    const Lt = ramp('#c89a30');
+    P.rect(3, 8, 11, 2, Lt[3]); P.rect(3, 9, 11, 1, Lt[1]); for (let x = 4; x < 14; x += 2) P.p(x, 10, Lt[2]);
+    P.ball(16, 6, 3, 3, ['#7a2a0a', '#c8501a', '#ff8a30', '#ffc870', '#fff0c0']); P.rect(15, 2, 3, 1, Lt[2]); P.p(16, 1, Lt[3]); P.p(16, 5, '#fff0c0');
+    P.poly([[2, 4], [6, 7], [2, 9]], '#f08a3a'); P.poly([[11, 4], [7, 7], [11, 9]], '#f08a3a'); P.rect(6, 6, 2, 2, '#d84a2a'); P.p(3, 5, '#ffc890'); P.p(10, 5, '#ffc890');
+    P.line(6, 8, 4, 12, '#d84a2a'); P.line(7, 8, 9, 13, '#d84a2a');
+  } else {
+    // uma tiara de prata de amanhecer: aro fino, raios, uma pedra de pérola e gotinhas de cristal azul
+    const Ag = ramp('#a8b0c8');
+    for (let x = 2; x <= 19; x++) { const y = 10 - Math.round(Math.sin((x - 2) / 17 * Math.PI) * 3); P.p(x, y, Ag[3]); P.p(x, y + 1, Ag[1]); }
+    for (let a = 0; a < 7; a++) { const an = Math.PI + a / 6 * Math.PI, r = a % 2 ? 7 : 5; P.line(11, 6, Math.round(11 + Math.cos(an) * r), Math.round(6 + Math.sin(an) * r * 0.8), a % 2 ? '#fff0b0' : '#ffd0e0'); }
+    P.ball(11, 6, 2, 2, ['#f0b8d0', '#ffd0e0', '#fff0f4', '#ffffff', '#ffffff']); P.p(10, 5, '#ffffff');
+    for (const x of [5, 17]) { P.p(x, 9, '#bff0ff'); P.p(x, 10, '#8ac8f0'); P.p(x, 11, '#bff0ff'); }
+  }
   return P.outline().canvas(); }); }

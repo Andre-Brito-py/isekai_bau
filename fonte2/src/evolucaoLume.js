@@ -65,11 +65,11 @@ Object.assign(TECH2, {
   if (f.k !== 'lume' || !G.evoLume || !fr) return fr;
   if (typeof LUSTRE_ON === 'function' && LUSTRE_ON() && !G.flags.lumeCoberta) return lustreEvoArt(G.evoLume, Math.floor(W2.t / 8));
   const key = '_ad' + G.evoLume; if (fr[key]) return fr[key];
-  const c = mk(fr.width, fr.height + 6), x = c.getContext('2d'); x.drawImage(fr, 0, 6); x.drawImage(aderecoLumeArt(G.evoLume), Math.round(fr.width / 2 - 11), 0); return (fr[key] = c);
+  const c = mk(fr.width, fr.height + 3), x = c.getContext('2d'); x.drawImage(fr, 0, 3); x.drawImage(aderecoLumeArt(G.evoLume), Math.round(fr.width / 2 - 11), 0); return (fr[key] = c);
 }; }
 { const _duL = drawUnit; drawUnit = function (u) {
   const r = _duL(u);
-  if (u && u.id === 'lume' && u.evoLume && !u.lustre && u.hp > 0 && u._X != null) { const w = (u._fw || 24) * (u._sx || 1); bx.drawImage(aderecoLumeArt(u.evoLume), Math.round(u._X + w / 2 - 11), Math.round(u._Y - 6 + Math.sin(BT.t * 0.08) * 1)); }
+  if (u && u.id === 'lume' && u.evoLume && !u.lustre && u.hp > 0 && u._X != null) { const w = (u._fw || 24) * (u._sx || 1); bx.drawImage(aderecoLumeArt(u.evoLume), Math.round(u._X + w / 2 - 11), Math.round(u._Y - 1)); }
   return r;
 }; }
 async function cenaEvolucaoLume() {
@@ -88,3 +88,10 @@ async function cenaEvolucaoLume() {
   await say('[TÉCNICA NOVA: ' + TECH2[EVOL[ev].tec].nm + '. ' + TECH2[EVOL[ev].tec].d + ']', 'cat');
   save2();
 }
+// o retrato do cartão de batalha (de noite) também mostra o lustre novo: recorte do rosto
+const PT_LUME = {};
+{ const _ptL = PT; PT = function (k) {
+  if (k === 'lume' && G.evoLume && typeof LUSTRE_ON === 'function' && LUSTRE_ON()) { const ev = G.evoLume; if (PT_LUME[ev]) return PT_LUME[ev];
+    const c = mk(32, 32), x = c.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(lustreEvoArt(ev, 0), 0, -1, 32, 32, 0, 0, 32, 32); return (PT_LUME[ev] = c); }
+  return _ptL(k);
+}; }

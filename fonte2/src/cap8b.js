@@ -147,7 +147,7 @@ async function cenaFim8() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 8', 'O Inverno Escuro', '', 'que vela só fica sozinha', 'quando esquece o caminho.']);
   V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); await fadeIn(20);
-  await say('* (O Capítulo 9 está a caminho: a Subida do Morro. Os Marcos levam aonde vocês já foram.)');
+  // (o Capítulo 9 começa sozinho, no próximo passo do mapa)
 }
 // ---------- voltas ----------
 async function velasIgreja() {
