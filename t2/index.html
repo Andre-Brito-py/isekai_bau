@@ -594,6 +594,46 @@
    c6SeladoraAcordou, c6Seladora, c6Etiqueta, c6RelogioVolta, c6Fim, c6Devolucao; G.disfarces/G.disfarce, G.lemb, c6belts.
  - GANCHO DO CAP. 7: a Mina de Origem e o cano do Coração; o Seu Jorge conhece a estrada (e lembra pouco do caminho).
 =====================================================================
+ CAPÍTULO 7 — A MINA DE ORIGEM (implementado; mapas7.js, arte_cap7.js, evolucao7.js, mecanicas7.js, inimigos7.js, cap7.js,
+ cap7b.js, cap7_integra.js; mapas em maps/cap7maps.py com validação e SIMULAÇÃO das válvulas e das pontes de eco)
+ - ESCALADA 4 (segredo; só jogo e bíblia): o grupo vence o Extrator, mas o Vesper desce com a Guarda e cobra a "carga" para
+   religar a máquina (quer ler a Lume). O SEU JORGE desce pelo guincho do 31 e TROCA as lembranças dele (50 anos de
+   estrada, dois mundos) pela vida do grupo. O Vesper aceita, sinceramente ("eu cumpro o que eu anoto"). O Jorge vira
+   Pavio ("Boa noite. Eu acendo os postes da Coroa."), sobe com a Guarda. G.flags.c7Jorge: o Jorge some de todos os mapas;
+   a garagem fica sem motorista (o 31 só anda com os Marcos; Cap. 10 devolve só um pedaço, conforme o plano). Ninguém
+   prende o grupo. Gancho do Cap. 8: naquela noite um bairro de Auren APAGA de propósito ("Ele tá cobrando." — Dalva).
+ - FLUXO: base (o Jorge nervoso; a garagem tem o destino novo) > ESTRADA VELHA (minijogo estradaMinas: 3 faixas;
+   pedras, buracos, cabras, frascos caídos; DE DIA cancelas da Guarda (bater = luta), DE NOITE só o farol) > ACAMPAMENTO
+   (Guarda de Auren, Pavios mineiros, Dona Bina, o cão Sabugo, Tonho de Candeia; o 31 escondido; o Jorge oferece voltar
+   à base) > cancela da BOCA DA MINA (só PAVIO; "galeria?" -> "das bombas", na PLACA DOS TURNOS) > GALERIAS DE
+   BOMBEAMENTO (5 galerias, 4 respiros A-D, 4 válvulas que viram 2 respiros cada; solução V1, V2, V4) > A BROCA
+   (mini-chefe) -> elemento ÂMBAR > O CORAÇÃO (poço escuro, PEDRAS DE ECO: a Lume canta, as pontes acendem ~7s; cair
+   volta à pedra) > elevador > ANDAR 1 DO JOGO 1, visto de cima e drenado (Câmara do Despertar: o pedestal do baú;
+   o gancho do lustre da Lume; Sala de Leitura Afogada: a página da Ofélia; música "despertar" do jogo 1) > GUARDA-
+   MUSGO AMBARINO (mini-chefe 2; drenado por um cano: perde vida sozinho na fase 2; vira semente) > o buraco da broca >
+   O FUNDO: O EXTRATOR (chefe) > a cena > 2ª EVOLUÇÃO > a subida (a Rita dá "duas bombadas no pedal") > FIM.
+ - 2ª EVOLUÇÃO (evolucao7.js): cada caminho do Cap. 3 abre em dois, escolhidos como resposta à perda:
+   Farol: GUARDIÃO (Muralha de Luz: provoca 2 e Farol no grupo; grupo leva -10%) / TEMPESTADE (Raio em Cadeia; raios do
+   Farol em dobro). Vão: LABIRINTO (todos perdem a vez e ficam tontos; Guardar Dentro custa 15) / BOCA (Engolir comum
+   <25% inteiro e cura 25%; físico x1,35). Escriba: BIBLIOTECÁRIO (2 feitiços de graça +25%; +1 página) / PALIMPSESTO
+   (Reescrever: fraco a todos os elementos por 3 + marca; magia x1,25). Preços: voz da mãe; chuva no telhado; o quarto;
+   o gosto de tudo; o primeiro livro e quem leu; o nome da Terra. Adereço novo por cima do da 1ª (aderecoEvo7).
+ - ÂMBAR (mecanicas7.js): luz-pedra, quebra +1, RESINA (alvo perde 20 de vez); fusões Lava Dourada (brasa), Cristal
+   (geada), Resina (seiva), Fóssil (fuligem), Vitral (areia); véu "Bolha de Âmbar" (próximo golpe some).
+ - INIMIGOS: Cão-Lanterna 560/40 (uiva e chama outro), Válvula Viva 620/38 (Estouro preparado), Rato-de-Vela Ambarino
+   480/38, Cogumelo de Âmbar 600/37 (tonto), Morcego Carimbado 420/39 (SELADO). A BROCA 5200/41, GUARDA-MUSGO AMBARINO
+   6000/42, O EXTRATOR 8400/44 (Sucção/Leitura: PM, Tensão e esquecer; Bombeamento; núcleo aberto a 30%).
+ - VOLTAS COM A VIAGEM RÁPIDA (pedido do usuário: resolver coisas novas em lugares antigos): lanterna do Zé (Tonho ->
+   Dona Ilda, Candeia: Lanterna do Zé), Sabugo (pão de milho do Afonso, Vila dos Pavios, só com a lembrança dele
+   devolvida: Coleira do Sabugo), semente do Musgo (Seu Benedito, Cidade Alta, de dia; brota NO DIA SEGUINTE: Flor do
+   Musgo), página da Ofélia (Dona Iolanda, Auren: +1 página no Grimório; fala muda se a Ofélia lembra, herança T1).
+   REGRA DAQUI EM DIANTE: todo capítulo tem pelo menos 2 opcionais que pedem voltar a mapas antigos.
+ - FLAGS: c7Init, c7Chegou, c7Bombas, c7vent{A-D}, c7Broca, c7Coracao, c7Andar1, c7Pedestal, c7Gancho, c7Pagina(Feita),
+   c7Musgo, c7Semente, c7Plantou(dia), c7Flor, c7Fundo, c7Extrator, c7Jorge, c7Fim; c7Carta(Feita), c7SabugoPista, c7Pao,
+   c7Sabugo; G.evo7.
+ - ROBÔ (Desafio, 0,6, farol e escriba, depois do ajuste): comuns 10-80% (a dupla de cães com guarda é a mais dura);
+   Broca ~20-45%; Guarda-Musgo ~15-65%; Extrator ~0-40% (o Escriba no limite, sem frascos sobrando).
+=====================================================================
 -->
 <style>
 :root{
@@ -8704,7 +8744,7 @@ function evo3() { return G.evo3 && EVO3[G.evo3] ? G.evo3 : null; }
   const prot = t && t.st && t.st.farol > 0 && t.hp > 0;
   if (prot) t.def0 = true;
   const r = await _fs4(e, t, pow, o);
-  if (prot && e && e.hp > 0) { const b = BT.party.find(m => m.id === 'bau' && m.hp > 0); if (b) { const [x0, y0] = unitCenter(b), [x1, y1] = unitCenter(e); await tw(8, p => { bx.strokeStyle = '#fff0a0'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(x0, y0 - 10); bx.lineTo(x0 + (x1 - x0) * p, y0 - 10 + (y1 - y0 + 10) * p); bx.stroke(); bx.lineWidth = 1; luzMagia(x0, y0 - 10, 12, '#fff0a0', 0.6); }); hitFoe(b, e, 0.6, { el: 'luz', mag: true, ranged: true }); } }
+  if (prot && e && e.hp > 0) { const b = BT.party.find(m => m.id === 'bau' && m.hp > 0); if (b) { const [x0, y0] = unitCenter(b), [x1, y1] = unitCenter(e); await tw(8, p => { bx.strokeStyle = '#fff0a0'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(x0, y0 - 10); bx.lineTo(x0 + (x1 - x0) * p, y0 - 10 + (y1 - y0 + 10) * p); bx.stroke(); bx.lineWidth = 1; luzMagia(x0, y0 - 10, 12, '#fff0a0', 0.6); }); hitFoe(b, e, 0.6, { el: 'luz', mag: true, ranged: true, raioFarol: true }); } }
   return r;
 }; }
 Object.assign(ST_NAME, { farol: 'FAROL', marca: 'MARCA' });
@@ -13846,10 +13886,11 @@ function enfeiteBau(tipo, x, y, t) {
 // Lutar disfarçado dá SURPRESA: o grupo começa com +20 de Tensão.
 // Os Marcos de Auren estão VIGIADOS por um Pavio: só se usa um Marco vestido de Pavio (é o turno deles).
 const c6Ativo = () => !!(G.flags && G.flags.c6Init && !G.flags.c6Fim);
+const procuraAtiva = () => c6Ativo() || !!(G.flags && G.flags.c7Init && !G.flags.c7Coracao);
 const disf = () => G.disfarce && (G.disfarces || {})[G.disfarce] ? G.disfarce : null;
 const DISF_REGRA = {
   lavadeira: { hora: () => !ehNoite(), lugar: ['auren', 'largo', 'ruaPavios', 'festival'], foraHora: 'Lavadeira às ' + '{h}? Lavanderia fecha às sete.', foraLugar: 'Roupa pra lavar AQUI?' },
-  pavio: { hora: () => ehNoite() || ['selo1', 'selo2'].includes(W2.id), lugar: ['auren', 'largo', 'festival', 'ruaPavios', 'selo1', 'selo2'], foraHora: 'Pavio de dia? O turno de vocês é de noite.', foraLugar: 'Pavio aqui? Ronda é na rua, colega.' },
+  pavio: { hora: () => ehNoite() || ['selo1', 'selo2', 'bombas'].includes(W2.id), lugar: ['auren', 'largo', 'festival', 'ruaPavios', 'selo1', 'selo2', 'acampamento', 'bombas'], foraHora: 'Pavio de dia? O turno de vocês é de noite.', foraLugar: 'Pavio aqui? Ronda é na rua, colega.' },
   trupe: { hora: () => true, lugar: ['festival', 'largo'], foraHora: '', foraLugar: 'Artista fora do palco? Circulando, circulando.' }
 };
 function disfarceServe(id) {
@@ -13861,7 +13902,7 @@ function disfarceServe(id) {
 const fmtHora = () => { const h = Math.floor(hora() / 60) % 24; return h + 'h'; };
 // o gancho do passo dos holofotes/rondas (puzzle5): no Cap. 6, quem decide é o disfarce
 function pegaHook6(m, padrao) {
-  if (!m.procurado || !c6Ativo()) return padrao;
+  if (!m.procurado || !procuraAtiva()) return padrao;
   const s = disfarceServe(W2.id);
   if (!s.ok) return true;
   if (m.faixa) { const T = tileOf(m, W2.mv ? W2.mv.tx : W2.x, W2.mv ? W2.mv.ty : W2.y); if (T.t !== 'faixa' && T.t !== 'esteira') return true; }
@@ -13903,20 +13944,21 @@ MENU_EXTRA.push({ k: 'disfarce', nm: () => 'Disfarce', col: '#ffd060', vis: () =
 { const _dp6 = drawPlayer; drawPlayer = function (ox, oy) { _dp6(ox, oy); const d = disf(); if (d && !W2.float && !(typeof rostoSt === 'function' && rostoSt().on)) { const hop = W2.mv ? -Math.abs(Math.sin(W2.mv.k / 8 * Math.PI)) * 3 : 0; enfeiteBau(d, W2.px - ox, W2.py - oy + hop + 4, W2.t); } }; }
 
 // ---------- surpresa: lutar disfarçado ----------
-{ const _lm6 = lutaMapa; lutaMapa = function (g, o = {}) { if (c6Ativo() && disf() && disfarceServe(W2.id).ok && !o.semSurpresa) { o = Object.assign({}, o, { tension: (o.tension || 0) + 20 }); if (!G.flags.tutSurpresa6) { G.flags.tutSurpresa6 = true; W2.toast = { s: 'Ataque disfarçado: +20 de Tensão!', t: 0 }; } } return _lm6.call(this, g, o); }; }
+{ const _lm6 = lutaMapa; lutaMapa = function (g, o = {}) { if (procuraAtiva() && disf() && disfarceServe(W2.id).ok && !o.semSurpresa) { o = Object.assign({}, o, { tension: (o.tension || 0) + 20 }); if (!G.flags.tutSurpresa6) { G.flags.tutSurpresa6 = true; W2.toast = { s: 'Ataque disfarçado: +20 de Tensão!', t: 0 }; } } return _lm6.call(this, g, o); }; }
 
 // ---------- barreiras: cancela com guarda e pergunta de ofício ----------
 // BARREIRAS[id] = { map, cancela:[[x,y]...], guarda:[x,y], lado:'cima'|'baixo' (de onde se chega), perg: {disfarce: {q, ops, certa, flagPista}} }
 const BARREIRAS = {};
+const barAtiva = (b) => b.ativo ? b.ativo() : procuraAtiva();
 function barreiraAberta(b) { return !!(W2.barOpen && W2.barOpen[b.id]); }
 function cancelaSolida(b) { // fechada só para quem chega pelo lado de fora
-  if (!c6Ativo() || barreiraAberta(b)) return [];
+  if (!barAtiva(b) || barreiraAberta(b)) return [];
   const [x0, y0] = b.cancela[0];
   const fora = b.lado === 'cima' ? W2.y < y0 : W2.y > y0;
   return fora ? [[x0, y0, b.cancela.length, 1]] : [];
 }
 async function passarBarreira(b) {
-  if (!c6Ativo() || barreiraAberta(b)) return;
+  if (!barAtiva(b) || barreiraAberta(b)) return;
   W2.mv = null;
   const d = disf(), g = b.guardaEnt; let s = disfarceServe(b.map);
   if (s.ok && b.so && !b.so.includes(d)) s = { ok: false, porque: 'lugar', fala: b.foraSo || 'Isso aqui é só pro turno. Circulando.' };
@@ -13948,8 +13990,8 @@ function montaBarreira(b) {
   BARREIRAS[b.id] = b;
   const m = MAPS2[b.map]; if (!m || m['_bar_' + b.id]) return; m['_bar_' + b.id] = true;
   const [x0, y0] = b.cancela[0];
-  m.props.push({ img: () => cancelaArt(!c6Ativo() || barreiraAberta(b)), x: x0 - 0.6, y: y0 + 1, by: (y0 + 0.5) * TS, get solid() { return cancelaSolida(b); } });
-  const gd = morador('guardaRH', ...b.guarda, { dir: b.lado === 'cima' ? 'up' : 'down', gone: () => !c6Ativo(), talk: async () => { await say(c6Ativo() ? pickOne(['Cancela da Coroa. Cada um com seu ofício, cada ofício com sua hora.', 'Tem cartaz novo de procurado. Uma mala com dente. Pode isso?']) : 'Bom dia.', 'guardaRH'); } });
+  m.props.push({ img: () => cancelaArt(!barAtiva(b) || barreiraAberta(b)), x: x0 - 0.6, y: y0 + 1, by: (y0 + 0.5) * TS, get solid() { return cancelaSolida(b); } });
+  const gd = morador('guardaRH', ...b.guarda, { dir: b.lado === 'cima' ? 'up' : 'down', gone: () => !barAtiva(b), talk: async () => { await say(barAtiva(b) ? pickOne(['Cancela da Coroa. Cada um com seu ofício, cada ofício com sua hora.', 'Tem cartaz novo de procurado. Uma mala com dente. Pode isso?']) : 'Bom dia.', 'guardaRH'); } });
   b.guardaEnt = gd; m.ents.push(gd);
   const dy = b.lado === 'cima' ? -1 : 1;
   for (const [x, y] of b.cancela) m.ents.push({ t: 'trig', x, y: y + dy, w: 1, h: 1, passa: true, run: () => passarBarreira(b) });
@@ -14391,10 +14433,10 @@ const guardaSpr6 = (t, d) => { const f = guardaRealArt(Math.floor(t / 14) % 2); 
     ],
     onEnter: async () => { if (c6Ativo() && !G.flags.c6Vila) await chegaVila(); }
   };
-  montaBarreira({ id: 'vila', map: 'ruaPavios', cancela: VP.barreira, guarda: VP.guarda, lado: 'cima', volta: VP.chegada, bg: bgVila,
+  montaBarreira({ id: 'vila', ativo: c6Ativo, map: 'ruaPavios', cancela: VP.barreira, guarda: VP.guarda, lado: 'cima', volta: VP.chegada, bg: bgVila,
     perg: { lavadeira: { q: 'Roupa? Roupa de onde?', ops: ['Da Ala Sete do hospital. A ala dos Pavios.', 'Da Cidade Alta, moço.', 'Da minha tia.'], certa: 0, ok: 'Ala Sete. Tá. Põe no varal da lavanderia, a Zélia separa.', dica: 'A Irmã Dalva falou da ALA SETE. A roupa dos Pavios.' },
             pavio: { q: 'Turno? ...Que horas marca o relógio da vila?', ops: ['Meia-noite em ponto.', 'Três e dezessete. Ele está parado.', 'A hora que a Coroa mandar.'], certa: 1, ok: 'Três e dezessete. Desde sempre. Passa, colega.', dica: 'O relógio da vila. Eu devia ter OLHADO pra ele.' } } });
-  montaBarreira({ id: 'selo', map: 'ruaPavios', cancela: VP.seloBarreira, guarda: VP.seloGuarda, lado: 'cima', volta: [25, 27], bg: bgFabrica, grupo: ['guardaR', 'seloVivo'], so: ['pavio'], foraSo: 'Portão do turno da noite. Só Pavio de crachá. O resto, circulando.',
+  montaBarreira({ id: 'selo', ativo: c6Ativo, map: 'ruaPavios', cancela: VP.seloBarreira, guarda: VP.seloGuarda, lado: 'cima', volta: [25, 27], bg: bgFabrica, grupo: ['guardaR', 'seloVivo'], so: ['pavio'], foraSo: 'Portão do turno da noite. Só Pavio de crachá. O resto, circulando.',
     perg: { pavio: { q: 'Crachá. Número do crachá, Pavio.', ops: ['Trinta e um.', 'Doze, turno da manhã.', 'Quarenta e sete, turno da noite.'], certa: 2, ok: 'Quarenta e sete. Prensa três. Boa noite.', dica: 'O crachá do Osvaldo. Quarenta e sete. Ele disse.' } } });
   grade(MAPS2.ruaPavios);
   // no Largo: o portão da vila embaixo, à direita
@@ -14841,7 +14883,6 @@ async function fimCap6() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 6', 'A Cidade dos Pavios', '', 'Cinco lembranças voltaram para casa.', 'E muitas outras, sozinhas.']);
   V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); await fadeIn(20);
-  await say('* (O Capítulo 7 está a caminho. Auren, a Vila dos Pavios e a Casa do Selo continuam abertas: ainda dá para devolver as lembranças que faltam.)');
 }
 
 // ================= CAP. 6 NO MAPA, NO DIÁRIO, NAS PLACAS E NA VIDA =================
@@ -14897,6 +14938,1165 @@ DIARIO.push(
     desc: 'Um frasco sem lote, achado numa ilha das esteiras: uma porta azul e um 7 torto.', passos: [['Devolver ao Pavio da casa sem número', () => devolvida('juvenal')]] },
   { tipo: 'side', cap: 'Vila dos Pavios', quem: 'o baú', tit: 'Cinco lembranças', vis: () => nDevolvidas() > 0, feita: () => fl('c6Devolucao'), recompensa: 'técnica DEVOLUÇÃO',
     desc: 'Devolver as cinco lembranças: Cotinha, Osvaldo, o cozinheiro, a lavadeira e o Pavio sem número.', passos: Object.keys(LEMB6).map(k => [LEMB6[k].dono, () => devolvida(k)]) }
+);
+
+// gerado por maps/cap7maps.py (validado: válvulas e pontes de eco simuladas)
+const ROWS7 = {"acampamento": ["RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", ";;RRRRRRRRRRRR;;;;;;;;;;;RRrrRRRRRR;;;;;;;;;;;;;;;;;;RRR", ";;;;RRRRRRRR;;;;;;;;;;;;;RRrrRR;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;;;;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;;;;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;;;;;;tt;;;;;;;;;XXXXXXXXX;;;;;;;;;", ";;;;;;;;;;;;;XXXXXX;;;;;;;;tt;;;;;;;;;XXXXXXXXX;;;;;;;;;", ";;;;XXXXXXX;;XXXXXX;;;,,;;;tt;;;;;;;;;XXXXXXXXX;;;;;;;;;", ";;;;XXXXXXX;;XXXXXX;;;,,;;;tt;;;;;;;;;XXXXXXXXX;;;;;;;;;", ";;;;XXXXXXX;;XXXXXX;;;,,;;;tt;;;;;;;;;XXXXXXXXX;;;;;;;;;", ";;;;XXXXXXX;;;;;;;;;;;,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;ttttttttttttttttttt;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;XXXXXXXX;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;XXXXXXXX;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;,,;;;tt;;;;;;;;;;;XXXXXXXX;;;;;;;;", ",,,,,,,,,,,,,,,,,,,,,,,,;;;tt;;;;;;;;;;;XXXXXXXX;;;;;;;;", ",,,,,,,,,,,,,,,,,,,,,,,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ",,,,,,,,,,,,,,,,,,,,,,,,;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", ";;;;;;;;;;;;;;;;;;;;;;;;;;;tt;;;;;;;;;;;;;;;;;;;;;;;;;;;", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"], "bombas": ["RRRRRRRRRRRRRRRRRRRRRrrRRRRRRRRRRRRRRRRRRRRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrarrrrrrarrrrrrarrrrrrarrrrrrarrrrrrarrRR", "RRRRRRRRvvRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRvvRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrRRrrrrrrrrrrrrrrRRrrrrrrrrRR", "RRrrrrrrrrrrrrrrRRrrrrrrRRrrrrrrRRrrrrrrrrRR", "RRrrarrrrrrarrrrrrarrrrrRRrrrrrrarrrrrrarrRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRvvRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRvvRRRRRRRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrRRrrrrrrrrrrrrrrRRrrrrrrrrrrrrRR", "RRrrrrrrrrrrRRrrrrrrRRrrrrrrRRrrrrrrrrrrrrRR", "RRrrarrrrrrarrrrrrarRRrrrarrrrrrarrrrrrarrRR", "RRRRRRRRvvRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRvvRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrRRrrrrrrrrrrrrrrRRrrrrrrrrrrRR", "RRrrrrrrrrrrrrRRrrrrrrRRrrrrrrRRrrrrrrrrrrRR", "RRrrarrrrrrarrrrrrarrrRRrarrrrrrarrrrrrarrRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRvvRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRvvRRRRRRRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrRRrrrrrrRRrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrRRrrrrrrRRrrrrrrRRrrrrrrrrrrrrrrRR", "RRrrarrrrrrarrrrrrarrrrrraRRrrrrarrrrrrarrRR", "RRRRRRRRRRRRRRRRRRRRRrrRRRRRRRRRRRRRRRRRRRRR"], "coracao": ["R               rr               R", "R rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr R", "R rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr R", "R rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr R", "R rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr R", "R arrrrarrrrarrrrarrrrarrrrarrrr R", "R      b                         R", "R      b                         R", "R      b                         R", "R      b                         R", "R      b                         R", "R      b                         R", "R rrrrrrrrrrrr      rrrrrrrrrrrr R", "R rrrrrrrrrrrr      rrrrrrrrrrrr R", "R rrrrrrrrrrrrbbbbbbrrrrrrrrrrrr R", "R rrrrrrrrrrrr      rrrrrrrrrrrr R", "R arrrrarrrrar      arrrrarrrrar R", "R                         b      R", "R                         b      R", "R                         b      R", "R                         b      R", "R                         b      R", "R                         b      R", "R rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr R", "R rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr R", "R rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr R", "R rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr R", "R arrrrarrrrarrrrarrrrarrrrarrrr R", "R               b                R", "R               b                R", "R               b                R", "R               b                R", "R               b                R", "R               b                R", "R         rrrrrrrrrrrrrr         R", "R         rrrrrrrrrrrrrr         R", "R         rrrrrrrrrrrrrr         R", "R         rrrrrrrrrrrrrr         R", "R         rrrrrrrrrrrrrr         R", "R         rrrrrrrrrrrrrr         R", "R         rrrrrrrrrrrrrr         R", "R         arrrrarrrrarrr         R", "R                                R", "R                                R"], "andar1": ["RRRRRRRRRRRRRRRRRRRrrRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRmaaaaaaaamRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRmmmmmmmmmmRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRmmmmmmmmmmRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRmmmmmmmmmmRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRmmmmmmmmmmRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRmmmmmmmmmmRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRmmmmmmmmmmRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRrrRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRrrrrrrrrrrrrrrRRRRRRRRRRRRRRRR", "RRRmmmmmmmmmmmmmmmmRRRRRmmmmmmmmmmmmmRRR", "RRRmmmmmmmmmmm~~mmmRRRRRmmmmmmmmmmmmmRRR", "RRRmm~~mmmmmmmmmmmmrrrrrrmmmmmmmm~mmmRRR", "RRRmmmm~mmmmmmmmmmmRRRRRmm~~mmmmmmmmmRRR", "RRRmmmmmmmmmmmmmmmmRRRRRmmmm~mmmmmmmmRRR", "RRRmmmmmmmmmmmmmmmmRRRRRmmmmmmmmmmmmmRRR", "RRRRRRRRRRRRrrRRRRRRRRRRmmmmmmmmmmmmmRRR", "RRRRRRRRRRRRrrRRRRRRRRRRRRRRRRrRRRRRRRRR", "RRRRRRRRRRRRrrRRRRRRRRRRRRRRRRrRRRRRRRRR", "RRRRRRRRRRRRrrRRRRRRRRRRRRRrrrrRRRRRRRRR", "RRRRRRRRRRRRmmmmmmmmmmmmmmmmRRRRRRRRRRRR", "RRRRRRRRRRRRmmmmmmmmmmmmmmmmRRRRRRRRRRRR", "RRRRRRRRRRRRmmmmmmmmmmmmmmmmRRRRRRRRRRRR", "RRRRRRRRRRRRmmmmmmmmmmmmmmmmRRRRRRRRRRRR", "RRRRRRRRRRRRmmmmmmmmmmmmmmmmRRRRRRRRRRRR", "RRRRRRRRRRRRmmmmmmmmmmmmmmmmRRRRRRRRRRRR", "RRRRRRRRRRRRmmmmmmmmmmmmmmmmRRRRRRRRRRRR", "RRRRRRRRRRRRmmmmmmmmmmmmmmmmRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRaaRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"], "fundo7": ["RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRrarrrarrrarrrarrrarrrarrrrRR", "RRrrrrrrrrrrrrrrrrrrrrrrrrrrRR", "RRRRRRRRRRRRRRrrRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRrrRRRRRRRRRRRRRR"]};
+const POS7 = {"acampamento": {"chegada": [3, 30], "onibus": [1, 27], "jorge": [6, 28], "boca": [[27, 8], [28, 8]], "bocaOut": [27, 11], "guarda": [29, 10], "barreira": [[27, 10], [28, 10]], "marco": [10, 27], "fogueira": [20, 22], "cozinheiro": [44, 31], "cao": [33, 24], "pavios": [[30, 18], [35, 23]], "pipas": [[31, 10], [44, 11], [52, 18]], "vagonetes": [[28, 16], [36, 22], [42, 22]], "arvores": [[2, 11], [12, 10], [34, 10], [50, 11], [3, 20], [52, 24], [30, 29], [18, 27]], "postes": [[21, 14], [24, 20], [26, 12], [46, 21], [9, 24]], "barracas": [[4, 18, 7], [13, 17, 6]], "galpao": [38, 17, 9], "refeit": [40, 30, 8], "rondas": [[[12, 21], [21, 21]], [[30, 14], [37, 14]]], "bau": [54, 28], "placa": [25, 12]}, "bombas": {"entra": [21, 28], "saida": [[21, 0], [22, 0]], "entrada": [[21, 29], [22, 29]], "respiros": {"A": [[34, 24], [35, 24], [34, 23], [35, 23]], "B": [[8, 18], [9, 18], [8, 17], [9, 17]], "C": [[34, 12], [35, 12], [34, 11], [35, 11]], "D": [[8, 6], [9, 6], [8, 5], [9, 5]]}, "valvulas": {"V1": {"at": [4, 27], "tog": ["A", "B"]}, "V2": {"at": [38, 21], "tog": ["B", "C"]}, "V3": {"at": [4, 15], "tog": ["C", "D"]}, "V4": {"at": [38, 9], "tog": ["A", "D"]}}, "ini": {"A": 1, "B": 0, "C": 1, "D": 1}, "foes": [[30, 26], [12, 21], [26, 16], [30, 10]], "broca": [21, 3], "brocaTrig": [[14, 4], [15, 4], [16, 4], [17, 4], [18, 4], [19, 4], [20, 4], [21, 4], [22, 4], [23, 4], [24, 4], [25, 4], [26, 4], [27, 4], [28, 4], [29, 4]], "marco": [3, 26], "bau": [[40, 26], [3, 2]], "mineiro": [39, 27]}, "coracao": {"entra": [16, 1], "volta": [[16, 0], [17, 0]], "pontes": {"p1": [[7, 6], [7, 7], [7, 8], [7, 9], [7, 10], [7, 11]], "p2": [[14, 14], [15, 14], [16, 14], [17, 14], [18, 14], [19, 14]], "p3": [[26, 17], [26, 18], [26, 19], [26, 20], [26, 21], [26, 22]], "p4": [[16, 28], [16, 29], [16, 30], [16, 31], [16, 32], [16, 33]]}, "eco": {"p1": [8, 5], "p2": [13, 15], "p3": [25, 16], "p4": [17, 27]}, "elevador": [[16, 41], [17, 41]], "bau": [[30, 13], [3, 24]], "foes": [[25, 3], [5, 26]], "marco": [4, 2], "marca": [20, 38]}, "andar1": {"entra": [19, 1], "volta": [[19, 0], [20, 0]], "pedestal": [20, 4], "gancho": [17, 3], "ofelia": [33, 11], "estantes": [[25, 15], [35, 15]], "musgo": [20, 23], "musgoTrig": [[14, 22], [15, 22], [16, 22], [17, 22], [18, 22], [19, 22], [20, 22], [21, 22], [22, 22], [23, 22], [24, 22], [25, 22], [26, 22]], "descida": [[19, 28], [20, 28]], "foes": [[6, 14], [29, 15], [22, 9]], "bau": [[4, 11], [35, 16]], "marco": [16, 6]}, "fundo7": {"entra": [14, 19], "extrator": [9, 6], "frente": [[11, 9], [12, 9], [13, 9], [14, 9], [15, 9], [16, 9], [17, 9], [18, 9]], "jorge": [12, 14], "vesper": [17, 12], "veio": [14, 8]}};
+
+// ================= ARTE DO CAP. 7 — A MINA DE ORIGEM =================
+// Tiles (rocha, chão de rocha, musgo, veio de âmbar, trilho, respiro de vapor, ponte de cristal), o acampamento da serra
+// (boca da mina, canos de âmbar, barracas, galpão, vagonetes, fogueira), a galeria de bombas (bombas, válvulas, vapor),
+// o Coração (pedras de eco, pontes de cristal), o Andar 1 do jogo 1 (pedestal do despertar, gancho do lustre, estantes
+// afogadas), o EXTRATOR; inimigos (Cão-Lanterna, Válvula Viva, Rato-de-Vela Ambarino, Cogumelo de Âmbar, Morcego
+// Carimbado), mini-chefes (A BROCA, o GUARDA-MUSGO AMBARINO), o chefe (O EXTRATOR) e fundos de batalha.
+const KEY7 = Object.assign({}, KEY2, {
+  'R': { t: 'rocha', solid: true }, 'r': { t: 'chaoRocha' }, 'm': { t: 'musgo7' }, 'a': { t: 'veio' }, 't': { t: 'trilho7' },
+  'v': { t: 'respiro' }, 'b': { t: 'cristal7' }, ' ': { t: 'abismo', solid: true }, 'X': { t: 'chaoRocha', solid: true }
+});
+{ const _ta8 = tileArt; tileArt = function (k, v = 0, f = 0) {
+  if (!['rocha', 'chaoRocha', 'musgo7', 'veio', 'trilho7', 'respiro', 'cristal7'].includes(k)) return _ta8(k, v, f);
+  const key = k + '_' + v + '_' + f; if (TILE2[key]) return TILE2[key];
+  const P = new Pix(16, 16), h = (x, y, s = 5) => hash(x + v * 13, y + v * 29, s) % 100;
+  const chao = (x, y) => { const r = h(x, y, 3); return r < 10 ? '#4a3e3a' : r < 22 ? '#5a4c46' : r < 26 ? '#6a5a52' : '#52443e'; };
+  if (k === 'rocha') { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = h(x >> 1, y >> 1, 8); P.p(x, y, r < 15 ? '#1e1820' : r < 50 ? '#2a2228' : r < 80 ? '#342a30' : '#3e3238'); } if (v % 5 === 2) { P.p(6, 5, '#c8902a'); P.p(7, 5, '#ffd070'); } }
+  else if (k === 'chaoRocha') { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, chao(x, y)); if (v % 4 === 1) { P.rect(4, 9, 3, 2, '#3a302c'); } }
+  else if (k === 'musgo7') { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = h(x, y, 11); P.p(x, y, r < 30 ? '#2a4a2e' : r < 60 ? '#3a5a36' : r < 75 ? '#4a6a3e' : '#4a4038'); } if (v % 3 === 0) { P.p(4, 4, '#8ac860'); P.p(11, 10, '#8ac860'); } }
+  else if (k === 'veio') { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, chao(x, y)); for (let i = 0; i < 16; i++) { const y = 8 + Math.round(Math.sin((i + v * 3) / 3) * 3); P.p(i, y, f % 2 ? '#ffd070' : '#e8a030'); P.p(i, y + 1, '#a86a20'); } }
+  else if (k === 'trilho7') { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, h(x, y, 4) < 30 ? '#5a4a3a' : '#4a3e32'); for (let y = 1; y < 16; y += 4) P.rect(1, y, 14, 2, '#6a4a2a'); P.rect(3, 0, 1, 16, '#9a9aa8'); P.rect(12, 0, 1, 16, '#9a9aa8'); }
+  else if (k === 'respiro') { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, chao(x, y)); P.rect(2, 2, 12, 12, '#2a2228'); for (let i = 3; i < 14; i += 2) P.rect(i, 3, 1, 10, '#6a6470'); P.rect(2, 2, 12, 1, '#8a8490'); }
+  else { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x, y, (x + y) % 5 === 0 ? '#e8fbff' : (x * 3 + y) % 7 < 3 ? '#8ad8f0' : '#5ab0d8'); }
+  return TILE2[key] = P.canvas();
+}; }
+const OBJ7 = {};
+const o7 = (k, f) => OBJ7[k] || (OBJ7[k] = f());
+// ---------- o acampamento ----------
+function bocaMinaArt() { return o7('boca', () => {
+  const P = new Pix(96, 96), Md = ramp('#6a4430'), Rk = ['#1e1820', '#2a2228', '#342a30', '#3e3238', '#4a3e44'];
+  P.ball(48, 70, 48, 40, Rk, { amb: 0.2 });
+  P.rect(30, 46, 36, 50, '#0a0608');
+  for (let y = 48; y < 96; y++) for (let x = 32; x < 64; x++) if ((x + y) % 11 === 0) P.p(x, y, '#1a1014');
+  P.rect(26, 40, 6, 56, Md[1]); P.rect(64, 40, 6, 56, Md[1]); P.rect(22, 36, 52, 8, Md[2]); P.rect(22, 36, 52, 2, Md[4]);
+  for (let x = 28; x < 70; x += 8) P.p(x, 39, '#2a1a10');
+  P.rect(40, 26, 16, 10, '#2a1a10'); P.rect(41, 27, 14, 8, '#c8902a');                                     // placa
+  for (const x of [24, 70]) { P.rect(x, 46, 4, 6, '#3a3048'); P.rect(x + 1, 47, 2, 4, '#ffd070'); }        // lampiões
+  P.line(34, 96, 46, 50, '#9a9aa8'); P.line(62, 96, 50, 50, '#9a9aa8');                                    // trilhos entrando
+  return P.outline().canvas(); }); }
+function canoAmbarArt(w, vert) { return o7('cano' + w + (vert ? 'v' : 'h'), () => {
+  const L = w * 16, P = vert ? new Pix(14, L) : new Pix(L, 14), Fe = ramp('#7a6a5a');
+  for (let i = 0; i < L; i++) for (let j = 0; j < 12; j++) { const c = j < 2 || j > 9 ? Fe[1] : j < 4 ? Fe[3] : (i % 24 < 3) ? Fe[2] : j < 7 ? '#ffd070' : '#e8a030'; vert ? P.p(j + 1, i, c) : P.p(i, j + 1, c); }
+  for (let i = 0; i < L; i += 24) for (let j = 0; j < 14; j++) vert ? P.p(j, i, Fe[0]) : P.p(i, j, Fe[0]);
+  return P.outline().canvas(); }); }
+function barracaGuardaArt(w) { return o7('bg' + w, () => {
+  const W_ = w * 16, P = new Pix(W_, 70), Lo = ramp('#6a6a4a');
+  P.poly([[0, 66], [W_ / 2, 8], [W_, 66]], (x, y) => P.tone(Lo, 0.75 - Math.abs(x - W_ / 2) / W_ - (y % 10 === 0 ? 0.1 : 0), x, y));
+  P.poly([[W_ / 2 - 10, 66], [W_ / 2, 36], [W_ / 2 + 10, 66]], '#1a1418'); P.rect(W_ / 2 - 1, 2, 2, 8, '#5a3a24'); P.rect(W_ / 2 + 1, 2, 10, 6, '#2a3a7a'); P.rect(W_ / 2 + 3, 4, 4, 2, '#c89a30');
+  return P.outline().canvas(); }); }
+function galpaoBombasArt() { return o7('galp', () => {
+  const W_ = 9 * 16, P = new Pix(W_, 110), Fe = ramp('#5a5a66'), Tj = ramp('#6a3a30');
+  for (let y = 30; y < 106; y++) for (let x = 2; x < W_ - 2; x++) { const row = y >> 2, off = (row % 2) * 4, edge = (y % 4 === 3) || ((x + off) % 8 === 7); P.p(x, y, edge ? Tj[0] : P.tone(Tj, 0.5 - x / 400, x, y)); }
+  P.poly([[0, 32], [W_ / 2, 6], [W_, 32]], (x, y) => P.tone(Fe, 0.7 - x / 300, x, y));
+  for (const x of [20, 110]) { P.rect(x, 0, 12, 30, Fe[1]); P.rect(x - 2, 0, 16, 3, Fe[3]); }
+  for (let x = 14; x < W_ - 14; x += 26) { P.rect(x, 48, 14, 18, '#1a1418'); P.rect(x + 1, 49, 12, 16, '#ffb050'); P.rect(x + 7, 49, 1, 16, '#1a1418'); }
+  P.rect(W_ / 2 - 12, 74, 24, 32, '#2a2228'); P.rect(W_ / 2 - 10, 76, 20, 30, '#3a3240'); P.ball(W_ / 2, 92, 6, 6, ramp('#8a6a30'));
+  return P.outline().canvas(); }); }
+function fogueiraArt(f) { return o7('fog' + (f % 3), () => { const P = new Pix(22, 24); for (let i = 0; i < 5; i++) P.line(2 + i * 4, 22, 11, 16, '#5a3a20', 2); const hh = [10, 12, 9][f % 3]; P.poly([[5, 20], [11, 20 - hh - 4], [17, 20]], '#e86a20'); P.poly([[8, 20], [11, 20 - hh], [14, 20]], '#ffd070'); P.p(11, 20 - hh - 2, '#fff0c0'); return P.outline().canvas(); }); }
+function pinheiroArt(v) { return o7('pin' + v, () => { const P = new Pix(34, 64), Vd = ramp(v % 2 ? '#2a5a3e' : '#3a6a46'); P.rect(15, 50, 4, 14, '#4a3020'); for (let k = 0; k < 4; k++) { const y0 = 6 + k * 12, w = 6 + k * 5; P.poly([[17 - w, y0 + 14], [17, y0], [17 + w, y0 + 14]], (x, y) => P.tone(Vd, 0.7 - (x - 17 + w) / (w * 3) - (y - y0) / 40, x, y)); } P.p(17, 4, '#e8f0e0'); return P.outline().canvas(); }); }
+function caoMapaArt(f, amigo) { const k = 'cao' + f + (amigo ? 1 : 0); return o7(k, () => { const P = new Pix(26, 20), C = ramp(amigo ? '#a8784a' : '#7a6050'), b = f % 2; P.cyl(5, 6 + b, 15, 8, C, true); P.ball(21, 6 + b, 4, 4, C); P.rect(23, 7 + b, 3, 2, '#2a1a14'); P.p(21, 3 + b, '#2a1a14'); P.rect(6, 13, 2, 6 - b, C[1]); P.rect(17, 13, 2, 5 + b, C[1]); P.line(4, 8 + b, 1, 3 + b * 2, C[2], 2); if (!amigo) P.rect(18, 9 + b, 6, 1, '#c8c8d8'); else P.p(22, 9 + b, '#e86a8a'); return P.outline().canvas(); }); }
+// ---------- galerias de bombas ----------
+function bombaArt() { return o7('bomba', () => { const P = new Pix(32, 48), Fe = ramp('#5a5a66'); P.cyl(4, 14, 24, 32, Fe); for (let y = 18; y < 44; y += 6) P.rect(4, y, 24, 1, Fe[0]); P.ball(16, 12, 10, 8, Fe); P.rect(13, 0, 6, 8, Fe[2]); P.ball(16, 30, 5, 5, ['#3a1a0a', '#a86a20', '#ffd070', '#fff0c0', '#ffffff']); return P.outline().canvas(); }); }
+function valvulaArt(aberta) { return o7('val' + (aberta ? 1 : 0), () => { const P = new Pix(22, 30); P.rect(9, 14, 4, 16, '#5a5a66'); P.ball(11, 11, 9, 9, ramp(aberta ? '#3a8a4a' : '#a83a2a')); P.ball(11, 11, 6, 6, ['#1a1418', '#2a2228', '#2a2228', '#2a2228', '#2a2228']); for (let a = 0; a < 4; a++) { const an = a / 4 * Math.PI * 2 + (aberta ? 0.4 : 0); P.line(11, 11, 11 + Math.cos(an) * 8, 11 + Math.sin(an) * 8, aberta ? '#8af0a0' : '#ff9a8a', 2); } P.ball(11, 11, 2, 2, ramp('#c89a30')); return P.outline().canvas(); }); }
+function vaporFx(x, y, t, forte) { for (let i = 0; i < (forte ? 7 : 2); i++) { const k = ((t * 0.9 + i * 17) % 50) / 50, r = 3 + k * 9; bx.globalAlpha = (forte ? 0.55 : 0.2) * (1 - k); bx.fillStyle = '#e8e8f0'; bx.fillRect(Math.round(x + 8 + Math.sin(i * 2.1 + t * 0.05) * 5 - r / 2), Math.round(y + 8 - k * 26 - r / 2), Math.round(r), Math.round(r)); } bx.globalAlpha = 1; }
+// ---------- o Coração e o Andar 1 ----------
+function pedraEcoArt(ativa) { return o7('eco' + (ativa ? 1 : 0), () => { const P = new Pix(20, 22); P.ball(10, 14, 9, 8, ['#2a2430', '#4a4050', '#6a6070', '#8a8090', '#a8a0b0']); for (let i = 0; i < 5; i++) P.p(6 + i * 2, 12 + (i % 2), ativa ? '#fff0a0' : '#8fe3d8'); P.rect(9, 8, 2, 3, ativa ? '#ffd070' : '#8fe3d8'); return P.outline().canvas(); }); }
+function pedestalArt() { return o7('ped', () => { const P = new Pix(40, 34), Pd = ['#3a3440', '#5a5260', '#7a7280', '#9a92a0', '#bab2c0']; P.rect(4, 18, 32, 16, Pd[1]); P.rect(2, 14, 36, 6, Pd[3]); P.rect(2, 14, 36, 1, Pd[4]); for (let x = 6; x < 34; x += 7) P.rect(x, 22, 3, 10, Pd[2]); P.rect(10, 8, 20, 7, '#2a1a10'); P.rect(11, 9, 18, 5, '#4a3020'); P.rect(18, 9, 4, 5, '#c8902a'); return P.outline().canvas(); }); }
+function ganchoLustreArt() { return o7('gancho', () => { const P = new Pix(16, 40); P.rect(7, 0, 2, 26, '#5a5a66'); for (let i = 0; i < 6; i++) P.rect(6 + (i % 2), 4 + i * 4, 4, 2, '#7a7a86'); P.ball(8, 30, 5, 5, ramp('#8a8a96')); P.rect(7, 30, 2, 6, '#2a2228'); return P.outline().canvas(); }); }
+function estanteAfogadaArt() { return o7('estA', () => { const P = new Pix(48, 50), Md = ramp('#4a3a2a'); P.rect(0, 4, 48, 46, Md[1]); for (let s = 0; s < 3; s++) { const y = 8 + s * 14; P.rect(2, y, 44, 12, Md[0]); for (let x = 4; x < 44; x += 4) P.rect(x, y + 2 + (x % 3), 3, 10 - (x % 3), ['#3a5a7a', '#7a3a3a', '#5a6a3a', '#6a5a7a'][(x + s) % 4]); } P.rect(0, 38, 48, 12, '#2a5a6a'); for (let x = 0; x < 48; x += 3) P.p(x, 38, '#8ad8f0'); return P.outline().canvas(); }); }
+function extratorMapaArt(acordado) { return o7('extM' + (acordado ? 1 : 0), () => {
+  const W_ = 192, H_ = 120, P = new Pix(W_, H_), Fe = ramp('#4a4450'), Lt = ramp('#c89a30');
+  P.ball(96, 72, 90, 48, Fe, { amb: 0.3 });
+  for (const s of [-1, 1]) { P.cyl(96 + s * 70 - 10, 10, 20, 100, Fe); for (let y = 14; y < 106; y += 10) P.rect(96 + s * 70 - 10, y, 20, 2, Lt[2]); }
+  P.cyl(80, 0, 32, 60, ramp('#5a5060')); P.rect(84, 56, 24, 40, '#1a1418');
+  for (let y = 60; y < 96; y += 6) P.rect(86, y, 20, 3, acordado ? '#ffd070' : '#5a4a3a');
+  P.ball(96, 50, 14, 14, acordado ? ['#5a0a0a', '#c82a2a', '#ff6a5a', '#ffd0c0', '#ffffff'] : ['#1a1418', '#2a2430', '#3a3440', '#4a4450', '#5a5460'], { amb: 0.6 });
+  for (let i = 0; i < 8; i++) { const x = 20 + i * 22; P.rect(x, 96, 14, 20, '#e8e4f0'); P.rect(x + 2, 99, 10, 15, '#ffd070'); P.rect(x, 95, 14, 2, '#c83a3a'); }
+  return P.outline().canvas(); }); }
+// ---------- fundos de batalha ----------
+const BG7 = {};
+function bgMinaOrigem() { if (BG7.m) return BG7.m; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 60 ? (y < 24 ? '#101428' : '#1a2034') : y < 96 ? '#2a2228' : (hash(x >> 2, y >> 2, 3) % 7 === 0 ? '#3a3038' : '#4a3e3a'));
+  for (let i = 0; i < 40; i++) P.p((i * 59) % 240, (i * 13) % 24, '#d8d8ff');
+  for (let x = 0; x < 240; x++) { const hh = 34 + Math.round(10 * Math.sin(x / 19) + 6 * Math.sin(x / 7)); for (let y = 96 - hh; y < 96; y++) P.p(x, y, y < 96 - hh + 3 ? '#3a3238' : '#2a2228'); }
+  P.rect(96, 52, 48, 44, '#0a0608'); P.rect(92, 48, 56, 6, '#6a4430'); P.rect(92, 52, 4, 44, '#5a3a24'); P.rect(144, 52, 4, 44, '#5a3a24');
+  for (let x = 0; x < 240; x++) { P.p(x, 88, x % 24 < 3 ? '#7a6a5a' : '#ffd070'); P.p(x, 89, '#e8a030'); }
+  return BG7.m = P.canvas(); }
+function bgBombas() { if (BG7.b) return BG7.b; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 96 ? ((hash(x >> 3, y >> 3, 5) % 4 === 0) ? '#2e2630' : '#262028') : ((x + y) % 14 < 7 ? '#4a3e3a' : '#423630'));
+  for (const x of [30, 120, 210]) { P.rect(x - 12, 30, 24, 66, '#4a4a56'); for (let y = 34; y < 96; y += 8) P.rect(x - 12, y, 24, 1, '#2a2a34'); P.ball(x, 60, 6, 6, ['#3a1a0a', '#a86a20', '#ffd070', '#fff0c0', '#ffffff']); }
+  for (let x = 0; x < 240; x++) for (let j = 0; j < 8; j++) P.p(x, 14 + j, j < 2 || j > 5 ? '#6a5a4a' : x % 30 < 3 ? '#5a4a3a' : '#ffd070');
+  return BG7.b = P.canvas(); }
+function bgCoracao() { if (BG7.c) return BG7.c; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) { const d = Math.hypot(x - 120, (y - 60) * 1.6); P.p(x, y, y >= 96 ? ((x + y) % 12 < 6 ? '#4a3e3a' : '#42363a') : d < 40 ? '#04020a' : d < 70 ? '#14101a' : '#221a24'); }
+  for (let i = 0; i < 30; i++) { const a = i / 30 * Math.PI * 2, r = 50 + (i % 3) * 14; P.p(Math.round(120 + Math.cos(a) * r), Math.round(60 + Math.sin(a) * r / 1.6), '#ffd070'); }
+  for (let i = 0; i < 6; i++) P.rect(10 + i * 40, 0, 3, 96, '#8ad8f0');
+  return BG7.c = P.canvas(); }
+function bgAndar1() { if (BG7.a) return BG7.a; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 96 ? ((hash(x >> 4, y >> 4, 9) % 3 === 0) ? '#2a3a2e' : '#22302a') : ((x >> 3) + (y >> 3)) % 2 ? '#3a4a36' : '#34442e');
+  for (const x of [40, 200]) { P.rect(x - 20, 20, 40, 76, '#3a2a20'); for (let s = 0; s < 5; s++) for (let i = 0; i < 9; i++) P.rect(x - 18 + i * 4, 24 + s * 14, 3, 10, ['#3a5a7a', '#7a3a3a', '#5a6a3a'][(i + s) % 3]); }
+  P.rect(110, 0, 20, 96, '#5a5a66'); for (let y = 0; y < 96; y += 6) P.rect(110, y, 20, 2, '#ffd070');
+  return BG7.a = P.canvas(); }
+function bgFundo7() { if (BG7.f) return BG7.f; const P = new Pix(240, 150);
+  for (let y = 0; y < 150; y++) for (let x = 0; x < 240; x++) P.p(x, y, y < 96 ? ((x + y * 2) % 23 === 0 ? '#c8902a' : '#1a1418') : ((x + y) % 10 < 5 ? '#3a302c' : '#342a28'));
+  for (let i = 0; i < 12; i++) { const x = 8 + i * 20; P.rect(x, 70, 10, 26, '#e8e4f0'); P.rect(x + 2, 73, 6, 21, '#ffd070'); }
+  return BG7.f = P.canvas(); }
+// ---------- inimigos ----------
+const INI7 = {};
+function caoLanternaArt(f) { const k = 'cl' + f; if (INI7[k]) return INI7[k]; const P = new Pix(44, 34), C = ramp('#6a5040'), b = f % 2;
+  P.cyl(8, 12 + b, 26, 12, C, true); P.ball(36, 10 + b, 7, 7, C); P.rect(40, 12 + b, 4, 3, '#1a1418'); P.p(38, 8 + b, '#ff3a2a'); P.p(34, 4 + b, C[1]); P.rect(33, 2 + b, 3, 4, C[1]);
+  for (const x of [10, 16, 26, 32]) P.rect(x, 22, 3, 10 - (x % 2) * b, C[1]); P.line(8, 14 + b, 2, 6, C[2], 2);
+  P.rect(18, 8 + b, 8, 3, '#2a3a7a'); P.rect(20, 2 + b, 5, 7, '#3a3048'); P.rect(21, 3 + b, 3, 5, '#ffd070');                       // a lanterna na coleira
+  return INI7[k] = P.outline().canvas(); }
+function valvulaVivaArt(f, cheia) { const k = 'vv' + f + (cheia ? 1 : 0); if (INI7[k]) return INI7[k]; const P = new Pix(38, 50), Fe = ramp('#6a6470'), b = f % 2;
+  P.cyl(12, 26, 14, 22, Fe); P.ball(19, 18 + b, 16, 16, ramp(cheia ? '#c83a2a' : '#8a4a3a')); P.ball(19, 18 + b, 10, 10, ['#1a1418', '#2a2228', '#2a2228', '#3a3238', '#4a4450']);
+  for (let a = 0; a < 6; a++) { const an = a / 6 * Math.PI * 2 + f * 0.3; P.line(19, 18 + b, 19 + Math.cos(an) * 14, 18 + b + Math.sin(an) * 14, '#e8a090', 2); }
+  P.ball(19, 18 + b, 3, 3, ramp('#c89a30')); P.rect(14, 15 + b, 2, 2, '#ffd070'); P.rect(22, 15 + b, 2, 2, '#ffd070');
+  return INI7[k] = P.outline().canvas(); }
+function ratoVelaAArt(f) { const k = 'rva' + f; if (INI7[k]) return INI7[k]; const P = new Pix(34, 30), C = ramp('#8a7a6a'), b = f % 2;
+  P.cyl(6, 14 + b, 20, 10, C, true); P.ball(27, 15 + b, 5, 5, C); P.p(30, 14 + b, '#1a1418'); P.rect(31, 17 + b, 2, 1, '#e8a0a0'); P.line(6, 18, 0, 12 + b * 2, '#c8a0a0');
+  P.rect(12, 4 + b, 5, 10, '#f2ecdc'); P.p(14, 2 + b, '#ff9a30'); P.p(14, 1 + b, '#fff0c0'); P.rect(11, 12 + b, 7, 2, '#ffd070');   // a vela nas costas, agora com coleira de âmbar
+  P.rect(20, 13 + b, 6, 2, '#c8902a'); P.p(23, 15 + b, '#ffd070');
+  return INI7[k] = P.outline().canvas(); }
+function cogumeloAArt(f) { const k = 'coa' + f; if (INI7[k]) return INI7[k]; const P = new Pix(34, 40), b = f % 2;
+  P.cyl(12, 20, 10, 18, ramp('#d8c8a8')); P.ball(17, 16 + b, 15, 10, ramp('#c87a2a')); for (const [x, y] of [[10, 12], [20, 10], [25, 16], [13, 18]]) P.ball(x, y + b, 2, 2, ['#8a5a10', '#d8a030', '#ffd070', '#fff0b0', '#ffffff']);
+  P.rect(13, 26, 2, 2, '#1a1418'); P.rect(19, 26, 2, 2, '#1a1418'); P.rect(15, 31, 4, 1, '#5a3a20');
+  if (b) for (let i = 0; i < 4; i++) P.p(4 + i * 7, 4 + (i % 2) * 3, '#ffd070');
+  return INI7[k] = P.outline().canvas(); }
+function morcegoSeloArt(f) { const k = 'ms' + f; if (INI7[k]) return INI7[k]; const P = new Pix(40, 26), a = f % 2 ? 5 : 0;
+  for (const s of [-1, 1]) P.poly([[20, 12], [20 + s * 19, 2 + a], [20 + s * 15, 14], [20 + s * 7, 20 - a]], (x, y) => (Math.abs(x - 20) + y) % 6 < 1 ? '#c8c0b0' : '#f2ecdc');
+  P.ball(20, 13, 5, 5, ramp('#e8e0d0')); P.p(18, 12, '#1a1418'); P.p(22, 12, '#1a1418');
+  for (const s of [-1, 1]) { P.rect(20 + s * 11 - 3, 6 + a, 6, 5, '#c83a3a'); P.rect(20 + s * 11 - 2, 7 + a, 4, 3, '#ffe0a0'); }   // o selo da Coroa nas asas de papel
+  return INI7[k] = P.outline().canvas(); }
+// A BROCA: a máquina que perfura até o Coração; cabeça em espiral, esteira de lagarta, cabine com lampião
+function brocaArt(f, carga, fase) { const k = 'br' + f + (carga ? 1 : 0) + fase; if (INI7[k]) return INI7[k];
+  const W_ = 110, H_ = 96, P = new Pix(W_, H_), Fe = ramp('#6a5a4a'), Lt = ramp('#c89a30'), b = f % 2;
+  P.rect(10, 74, 70, 18, '#2a2228'); for (let x = 12; x < 80; x += 6) P.rect(x, 76 + ((x / 6 + f) % 2), 4, 14, '#4a4450'); P.ball(14, 83, 8, 8, ramp('#5a5a66')); P.ball(76, 83, 8, 8, ramp('#5a5a66'));
+  P.cyl(16, 40 + b, 58, 34, Fe); for (let y = 44; y < 72; y += 7) P.rect(16, y + b, 58, 1, Fe[0]);
+  P.rect(24, 22 + b, 26, 20, Fe[2]); P.rect(27, 25 + b, 20, 12, '#1a1418'); P.rect(28, 26 + b, 18, 10, fase >= 2 ? '#ff6a4a' : '#ffd070');   // cabine
+  // a broca em espiral
+  const g = carga ? 4 : 0;
+  for (let i = 0; i < 36; i++) { const x = 74 + i, r = Math.max(1, 16 - i * 0.45), y = 56 + b; P.line(x, y - r, x, y + r, (Math.floor((i + f * 3) / 3) % 2) ? '#c8c8d8' : '#8a8a9a'); }
+  if (carga) for (let i = 0; i < 6; i++) P.p(104 + (i % 3), 50 + i * 2, '#ffffff');
+  P.rect(60, 30 + b, 6, 12, Fe[1]); P.rect(58, 28 + b, 10, 3, Lt[3]);
+  if (fase >= 2) for (let i = 0; i < 5; i++) P.p(20 + i * 10, 42 + (i % 2) * 6, '#ffd070');
+  return INI7[k] = P.outline().canvas(); }
+// O GUARDA-MUSGO AMBARINO: o primeiro chefe do jogo 1, agora com um cano de âmbar enfiado nas costas, sendo drenado
+function musgoAArt(f, fase) { const k = 'mg' + f + fase; if (INI7[k]) return INI7[k];
+  const W_ = 96, H_ = 104, P = new Pix(W_, H_), Mg = ['#1a2a1a', '#2a4a2a', '#3a6a36', '#5a8a46', '#8ac860'], Pd = ['#2a2430', '#4a4050', '#6a6070', '#8a8090', '#a8a0b0'], b = f % 2;
+  for (const s of [-1, 1]) P.cyl(48 + s * 14 - 7, 74, 14, 26, Pd);
+  P.ball(48, 52 + b, 34, 30, Pd, { amb: 0.3 });
+  for (let y = 24; y < 82; y++) for (let x = 14; x < 82; x++) if (P.get(x, y) && hash(x >> 2, y >> 2, 5) % 3 !== 0) P.p(x, y, P.tone(Mg, 0.55 - (y - 24) / 120 + ((x + y) % 7 === 0 ? 0.25 : 0), x, y));
+  P.ball(48, 24 + b, 14, 12, Pd); for (let x = 36; x < 60; x++) if (hash(x, 1, 3) % 2) P.p(x, 14 + b + (x % 3), Mg[3]);
+  P.rect(40, 22 + b, 5, 4, fase >= 2 ? '#ffd070' : '#8ac860'); P.rect(51, 22 + b, 5, 4, fase >= 2 ? '#ffd070' : '#8ac860');
+  for (const s of [-1, 1]) { P.line(48 + s * 30, 40 + b, 48 + s * 42, 64 + b, Pd[2], 6); P.ball(48 + s * 42, 66 + b, 7, 7, Pd); }
+  // o cano nas costas, sugando
+  P.rect(70, 0, 10, 46 + b, '#7a6a5a'); P.rect(72, 0, 6, 46 + b, fase >= 2 ? '#ff9a30' : '#ffd070'); for (let y = 2; y < 46; y += 8) P.rect(70, y, 10, 2, '#5a4a3a');
+  if (fase >= 2) { P.line(30, 36, 44, 60, '#ffd070'); P.line(56, 40, 64, 64, '#ffd070'); }
+  return INI7[k] = P.outline().canvas(); }
+// O EXTRATOR: o coração mecânico do Coração. Uma bomba gigante que suga âmbar (lembranças) da masmorra lá de baixo.
+function extratorArt(f, fase, carga) { const k = 'ex' + f + fase + (carga ? 1 : 0); if (INI7[k]) return INI7[k];
+  const W_ = 124, H_ = 120, P = new Pix(W_, H_), cx = 62, Fe = ramp('#4a4450'), Lt = ramp('#c89a30'), b = f % 2;
+  for (const s of [-1, 1]) { P.cyl(cx + s * 44 - 9, 20, 18, 96, Fe); for (let y = 24; y < 112; y += 9) P.rect(cx + s * 44 - 9, y, 18, 2, Lt[2]); P.rect(cx + s * 44 - 4, 30 + ((f * 7) % 70), 8, 10, '#ffd070'); }
+  P.ball(cx, 66 + b, 38, 40, Fe, { amb: 0.3 });
+  // o pistão principal subindo e descendo
+  const pis = b * 4 + (carga ? -10 : 0);
+  P.cyl(cx - 10, 4 + pis, 20, 36, ramp('#8a8a96')); P.rect(cx - 14, 36 + pis, 28, 6, Lt[3]);
+  // o "coração": câmara de vidro com âmbar pulsando
+  P.ball(cx, 70 + b, 22, 22, ['#3a3a50', '#8a8aa8', '#c8c8e8', '#e8e8ff', '#ffffff'], { amb: 0.4 });
+  P.ball(cx, 72 + b, 17, 17, fase >= 3 ? ['#5a0a0a', '#c82a2a', '#ff6a5a', '#ffd0c0', '#ffffff'] : ['#8a5a10', '#d8a030', '#ffd070', '#fff0b0', '#ffffff'], { amb: 0.6 });
+  for (let i = 0; i < 6; i++) { const a = (i / 6 + f * 0.1) * Math.PI * 2; P.p(Math.round(cx + Math.cos(a) * 10), Math.round(72 + b + Math.sin(a) * 10), '#ffffff'); }
+  if (fase >= 2) { P.line(cx - 18, 54, cx - 4, 74, '#1a1418'); P.line(cx - 4, 74, cx - 12, 88, '#1a1418'); }
+  // mangueiras para o chão (a masmorra)
+  for (const s of [-1, 1]) P.line(cx + s * 20, 100 + b, cx + s * 30, 120, '#5a4a3a', 5);
+  if (carga) P.ball(cx, 72 + b, 26, 26, ['#ffffff', '#ffffff', '#fff0c0', '#ffd070', '#ffd070'], { amb: 0.2 });
+  return INI7[k] = P.outline().canvas(); }
+// ---------- adereço da 2ª evolução (por cima do da 1ª) ----------
+const ADER7 = {};
+function aderecoEvo7(ev) {
+  if (ADER7[ev]) return ADER7[ev]; const P = new Pix(24, 18);
+  if (ev === 'guardiao') { P.rect(2, 8, 20, 3, '#c89a30'); P.rect(4, 4, 16, 4, '#ffe080'); P.rect(11, 0, 2, 4, '#fff0c0'); P.rect(1, 11, 2, 6, '#c89a30'); P.rect(21, 11, 2, 6, '#c89a30'); }
+  else if (ev === 'tempestade') { P.line(6, 0, 2, 8, '#bff0ff', 1); P.line(2, 8, 8, 8, '#bff0ff'); P.line(8, 8, 4, 17, '#ffffff'); P.line(18, 0, 14, 8, '#fff0a0'); P.line(14, 8, 20, 8, '#fff0a0'); P.line(20, 8, 16, 17, '#ffffff'); }
+  else if (ev === 'labirinto') { for (let i = 0; i < 4; i++) { P.rect(2 + i * 2, 2 + i * 2, 20 - i * 4, 1, '#c8a0ff'); P.rect(2 + i * 2, 2 + i * 2, 1, 14 - i * 4, '#c8a0ff'); P.rect(21 - i * 2, 2 + i * 2, 1, 14 - i * 4, '#8a60d0'); } }
+  else if (ev === 'boca') { for (let i = 0; i < 5; i++) { P.poly([[2 + i * 4, 4], [6 + i * 4, 4], [4 + i * 4, 10]], '#ffffff'); P.poly([[2 + i * 4, 16], [6 + i * 4, 16], [4 + i * 4, 11]], '#e8e8f0'); } P.rect(1, 3, 22, 1, '#8a2a4a'); P.rect(1, 16, 22, 1, '#8a2a4a'); }
+  else if (ev === 'bibliotecario') { P.rect(2, 6, 9, 11, '#3a5a9a'); P.rect(12, 4, 9, 13, '#9a3a3a'); P.rect(11, 4, 1, 13, '#f2ecdc'); P.rect(4, 2, 5, 4, '#5a8a3a'); for (let i = 0; i < 3; i++) { P.rect(4, 9 + i * 2, 5, 1, '#f2ecdc'); P.rect(14, 7 + i * 2, 5, 1, '#f2ecdc'); } }
+  else { for (let y = 0; y < 18; y += 3) { P.rect(2, y, 20, 2, '#f2ecdc'); P.rect(4 + (y % 6), y, 8, 1, '#8fe3d8'); } P.line(2, 17, 22, 0, '#c83a3a'); }
+  return ADER7[ev] = P.outline().canvas();
+}
+
+// ================= A 2ª EVOLUÇÃO DA SUPERFÍCIE (Cap. 7, no fundo do Coração) =================
+// Cada caminho do Cap. 3 se abre em DOIS. A escolha é dita como uma decisão do baú depois da perda do capítulo (o que
+// ele vai fazer com a dor), e cobra outra lembrança da Terra. Cada forma: atributos, técnica nova, passivo, adereço
+// novo (por cima do da 1ª) no mapa e na luta. Regra da T2: o caminho mágico bate mais e aguenta menos.
+//  FAROL  -> GUARDIÃO (ninguém mais paga por mim): +30 PV, +4 DEF, +4 RES. MURALHA DE LUZ (45T): os inimigos miram o
+//            baú por 2 vezes e o grupo ganha Farol por 2. Passivo: o grupo leva 10% menos enquanto o baú está de pé.
+//         -> TEMPESTADE (fazer a conta voltar): +5 MAG, +12 PM, +10 PV. RAIO EM CADEIA (35T): luz em todos os inimigos,
+//            +40% em quem tem fraqueza a luz. Passivo: os raios do Farol batem em dobro.
+//  VÃO    -> LABIRINTO (esconder quem eu amo): +3 VEL, +14 PV, +2 DEF. LABIRINTO (35T): todos os inimigos perdem a vez
+//            (atraso grande) e ficam TONTOS. Passivo: Guardar Dentro custa 15.
+//         -> BOCA (engolir o que machuca): +5 ATQ, +16 PV. ENGOLIR (30T): inimigo comum com menos de 25% é engolido
+//            inteiro (o baú cura 25%); em chefe/forte, mordida 1,5 que quebra 2. Passivo: físico x1,35 (era x1,2).
+//  ESCRIBA-> BIBLIOTECÁRIO (guardar tudo, anotar tudo): +4 MAG, +20 PM, +12 PV. BIBLIOTECA VIVA (30T, leve): os
+//            próximos 2 feitiços do baú não gastam PM e batem +25%. Passivo: +1 página no Grimório.
+//         -> PALIMPSESTO (reescrever a conta): +6 MAG, +10 PM, +8 PV. REESCREVER (30T, leve): o alvo fica fraco a TODOS
+//            os elementos do Grimório por 3 vezes e ganha Marca. Passivo: magia x1,25 (era x1,15).
+const EVO7 = {
+  guardiao: { base: 'farol', nm: 'Farol-Guardião', cor: '#ffe080', escolha: '"Ninguém mais paga por mim."', papel: 'Escudo do grupo: puxa os golpes e protege',
+    d: 'A luz do farol vira muralha. Os golpes vêm em você, e a sua luz cobre os outros.', preco: 'A VOZ DA SUA MÃE. O rosto já tinha ido. Agora o "leva casaco, menino" também.',
+    mods: { mhp: 30, def: 4, mdef: 4 }, tec: 'muralhaLuz' },
+  tempestade: { base: 'farol', nm: 'Farol-Tempestade', cor: '#bff0ff', escolha: '"A conta vai voltar para quem fez."', papel: 'Luz que fere: raios em todos os inimigos',
+    d: 'O farol não ilumina mais o caminho. Ilumina o alvo.', preco: 'O BARULHO DA CHUVA NO TELHADO DO SEU QUARTO, nas noites em que você não dormia.',
+    mods: { mag: 5, mmp: 12, mhp: 10 }, tec: 'raioCadeia' },
+  labirinto: { base: 'vao', nm: 'Vão-Labirinto', cor: '#c8a0ff', escolha: '"Eu escondo quem eu amo. Ninguém acha."', papel: 'O espaço vira armadilha: os inimigos se perdem',
+    d: 'O Vão dobra tantas vezes que vira labirinto. Quem entra sem convite não acha a saída nem a vez.', preco: 'O SEU QUARTO. A porta, a cama, a janela, o cheiro. O lugar inteiro.',
+    mods: { spd: 3, mhp: 14, def: 2 }, tec: 'labirinto' },
+  boca: { base: 'vao', nm: 'Vão-Boca', cor: '#ff8aa8', escolha: '"Eu engulo o que machuca. Inteiro."', papel: 'Fome: engole inimigos fracos inteiros',
+    d: 'O Vão desce até o fundo da tampa. A mordida fica sem fim.', preco: 'O GOSTO DE TUDO QUE VOCÊ COMEU NA TERRA. De uma vez.',
+    mods: { atk: 5, mhp: 16 }, tec: 'engolir' },
+  bibliotecario: { base: 'escriba', nm: 'Escriba-Bibliotecário', cor: '#8fe3d8', escolha: '"Eu guardo tudo. Anoto tudo. Nada mais se perde."', papel: 'Memória: feitiços de graça e mais páginas',
+    d: 'A tampa vira estante. Cada feitiço lançado fica anotado e volta mais barato.', preco: 'O PRIMEIRO LIVRO QUE VOCÊ LEU. E quem leu ele pra você, antes de você saber ler.',
+    mods: { mag: 4, mmp: 20, mhp: 12 }, tec: 'bibliotecaViva' },
+  palimpsesto: { base: 'escriba', nm: 'Escriba-Palimpsesto', cor: '#f2ecdc', escolha: '"Se a conta está errada, eu reescrevo a conta."', papel: 'Reescreve a ficha do inimigo: fraqueza a tudo',
+    d: 'A tinta raspa o que estava escrito e escreve por cima. Inclusive nos inimigos.', preco: 'O SEU NOME DA TERRA. Você continua sendo @. Só @.',
+    mods: { mag: 6, mmp: 10, mhp: 8 }, tec: 'reescrever' }
+};
+function evo7() { return G.evo7 && EVO7[G.evo7] ? G.evo7 : null; }
+{ const _gc7 = grupoCap1; grupoCap1 = function () {
+  const g = _gc7(), ev = evo7();
+  if (ev) for (const m of g) if (m.id === 'bau') { for (const [a, v] of Object.entries(EVO7[ev].mods)) m[a] = (m[a] || 0) + v; m.techs = [...(m.techs || []), EVO7[ev].tec]; m.evo7 = ev; if (ev === 'boca') { m.atkNm = 'Mordida Sem Fim'; } }
+  return g;
+}; }
+{ const _cd7 = calcDmg; calcDmg = function (a, t, pow, o = {}) {
+  let d = _cd7(a, t, pow, o);
+  if (a && a.id === 'bau' && a.evo7 === 'boca' && !o.mag) d *= 1.35 / 1.2;
+  if (a && a.id === 'bau' && a.evo7 === 'palimpsesto' && o.mag) d *= 1.25 / 1.15;
+  if (a && a.id === 'bau' && a.st && a.st.biblio > 0 && o.mag) d *= 1.25;
+  if (t && t.side === 'p' && BT.party && BT.party.some(u => u.id === 'bau' && u.evo7 === 'guardiao' && u.hp > 0)) d *= 0.9;
+  if (t && t.st && t.st.reescrito > 0 && o.el && a && a.side === 'p' && !t.weak.includes(o.el)) d *= 1.3;
+  return d;
+}; }
+// Biblioteca Viva: o feitiço não gasta PM
+{ const _dc7 = doCommand; doCommand = async function (m, k) {
+  if (m && m.id === 'bau' && k === 'runas' && m.st && m.st.biblio > 0) { const mp0 = m.mp; const r = await _dc7(m, k); if (r && m.mp < mp0) { m.mp = mp0; m.st.biblio--; const [x, y] = unitCenter(m); popNum(x, y - 34, 'ANOTADO: 0 PM', '#8fe3d8'); } return r; }
+  return _dc7(m, k);
+}; }
+{ const _gm7 = grim; grim = function () { const G_ = _gm7(); if (evo7() === 'bibliotecario' && !G_._bib7) { G_._bib7 = true; G_.max = (G_.max || 4) + 1; } return G_; }; }
+// os raios do Farol em dobro na Tempestade: o Farol já devolve raio; aqui dobramos o dano do raio
+{ const _hfR = hitFoe; hitFoe = function (a, t, pow, o = {}) { if (a && a.id === 'bau' && a.evo7 === 'tempestade' && o.raioFarol) pow *= 2; return _hfR(a, t, pow, o); }; }
+Object.assign(ST_NAME, { biblio: 'ANOTANDO', reescrito: 'REESCRITO' });
+Object.assign(TECH2, {
+  muralhaLuz: { nm: 'Muralha de Luz', cost: 45, tgt: 'self', d: 'Os inimigos miram o baú nas próximas 2 vezes, e o grupo inteiro ganha Farol (metade do dano, raio de volta) por 2.', run: async (m) => {
+    sfx('rune'); flashW(2); const [x, y] = unitCenter(m);
+    await tw(30, p => { bx.globalAlpha = 0.5 * (1 - p); bx.fillStyle = '#fff0a0'; bx.fillRect(Math.round(x + 14), Math.round(y - 70), Math.round(6 + p * 10), 90); bx.globalAlpha = 1; luzMagia(x, y - 20, 20 + p * 60, '#ffe080', 0.7 - p * 0.4); });
+    BT.taunt = { m, n: 2 }; m.def0 = true;
+    for (const u of alive(BT.party)) { u.st.farol = Math.max(u.st.farol || 0, 2); const [ux, uy] = unitCenter(u); burst(ux, uy, 8, ['#fff0a0', '#ffffff']); }
+    callout('Muralha de Luz: venham em mim!', '#ffe080', 60);
+  } },
+  raioCadeia: { nm: 'Raio em Cadeia', cost: 35, tgt: 'all', d: 'Um raio de luz pula de inimigo em inimigo. Bate em todos; +40% em quem é fraco a luz.', run: async (m) => {
+    sfx('crit'); const [x0, y0] = unitCenter(m); const L = alive(BT.foes); let px = x0, py = y0 - 20;
+    for (const t of L) { const [tx, ty] = unitCenter(t); await tw(8, p => { bx.strokeStyle = '#bff0ff'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(px, py); for (let i = 1; i <= 4; i++) bx.lineTo(px + (tx - px) * i / 4 + (i < 4 ? (Math.random() - 0.5) * 10 : 0), py + (ty - py) * i / 4 + (i < 4 ? (Math.random() - 0.5) * 10 : 0)); bx.stroke(); }); burst(tx, ty, 10, ['#bff0ff', '#ffffff', '#fff0a0']); hitFoe(m, t, t.weak.includes('luz') ? 1.19 : 0.85, { el: 'luz', mag: true }); px = tx; py = ty; }
+  } },
+  labirinto: { nm: 'Labirinto', cost: 35, tgt: 'all', d: 'O Vão engole o campo de batalha e devolve torto: todos os inimigos perdem muito da vez e ficam TONTOS.', run: async (m) => {
+    sfx('rune'); const [x0, y0] = unitCenter(m);
+    await tw(30, p => { for (let i = 0; i < 5; i++) { const r = (p * 120 + i * 24) % 120; bx.strokeStyle = i % 2 ? '#c8a0ff' : '#8a60d0'; bx.lineWidth = 1; bx.strokeRect(Math.round(x0 + 60 - r), Math.round(y0 - 20 - r / 2), Math.round(r * 2), Math.round(r)); } });
+    for (const t of alive(BT.foes)) { t.ct = Math.max(0, t.ct - 55); t.st.tonto = 1; const [tx, ty] = unitCenter(t); popNum(tx, ty - 30, 'PERDIDO', '#c8a0ff'); }
+    callout('Ninguém acha a saída.', '#c8a0ff', 60);
+  } },
+  engolir: { nm: 'Engolir', cost: 30, tgt: 'enemy', d: 'Inimigo comum com menos de 25% de vida é engolido INTEIRO (o baú cura 25%). Nos fortes, uma mordida 1,5 que quebra 2.', run: async (m, t) => {
+    if (!t) return; const [tx, ty] = unitCenter(t), [x0, y0] = unitCenter(m);
+    await tw(12, p => { m.ox = (tx - x0 - 20) * ease.io(p); m.oy = -Math.sin(p * Math.PI) * 10; });
+    if (!t.boss && t.hp < t.mhp * 0.25) {
+      sfx('crit'); await tw(18, p => { t.sx = 1 - p; t.sy = 1 - p; t.alpha = 1 - p; t.ox = (x0 + (tx - x0) * 0.3 - tx) * p; });
+      t.hp = 0; t.alpha = 0; healUnit(m, Math.round(m.mhp * 0.25)); popNum(tx, ty - 20, 'NHAC!', '#ff8aa8', true); callout('Engolido inteiro.', '#ff8aa8', 50);
+    } else { sfx('hit'); burst(tx, ty, 14, ['#ff8aa8', '#ffffff']); hitFoe(m, t, 1.5, { el: 'mordida', brk: 2 }); }
+    await tw(10, p => { m.ox = (tx - x0 - 20) * (1 - p); m.oy = 0; }); m.ox = 0;
+  } },
+  bibliotecaViva: { nm: 'Biblioteca Viva', cost: 30, tgt: 'self', w: 'leve', d: 'Os próximos 2 feitiços do baú não gastam PM e batem 25% mais. Leve.', run: async (m) => {
+    sfx('rune'); const [x, y] = unitCenter(m);
+    await tw(24, p => { for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + p * 4; bx.fillStyle = i % 2 ? '#f2ecdc' : '#8fe3d8'; bx.fillRect(Math.round(x + Math.cos(a) * 24), Math.round(y - 20 + Math.sin(a) * 12), 4, 3); } });
+    m.st.biblio = 2; callout('Tudo anotado.', '#8fe3d8', 50);
+  } },
+  reescrever: { nm: 'Reescrever', cost: 30, tgt: 'enemy', w: 'leve', d: 'Raspa a ficha do inimigo e escreve por cima: por 3 vezes ele fica fraco a TODOS os elementos do Grimório, e marcado. Leve.', run: async (m, t) => {
+    if (!t) return; sfx('rune'); const [tx, ty] = unitCenter(t);
+    await tw(26, p => { for (let i = 0; i < 6; i++) { bx.fillStyle = '#f2ecdc'; bx.fillRect(Math.round(tx - 20 + p * 40), Math.round(ty - 40 + i * 6), 3, 2); bx.fillStyle = '#c83a3a'; bx.fillRect(Math.round(tx - 20 + p * 38), Math.round(ty - 39 + i * 6), 2, 1); } });
+    t.st.reescrito = 3; t.st.marca = Math.max(t.st.marca || 0, 3); popNum(tx, ty - 34, 'REESCRITO', '#f2ecdc'); callout('A ficha agora diz: fraco a tudo.', '#f2ecdc', 60);
+  } }
+});
+// reescrito e biblio vencem com as vezes
+{ const _etR = endTurn; endTurn = function (u, w) { const r = _etR.apply(this, arguments); if (u && u.side === 'e' && u.st && u.st.reescrito > 0) u.st.reescrito--; return r; }; }
+// Guardar Dentro mais barato no Labirinto
+{ const T0 = TECH2.guardarDentro; if (T0) Object.defineProperty(T0, 'cost', { get: () => evo7() === 'labirinto' ? 15 : 25, configurable: true }); }
+// desenho: o adereço da 2ª forma por cima
+{ const _du7 = drawUnit; drawUnit = function (u) {
+  const r = _du7(u);
+  if (u && u.id === 'bau' && u.evo7 && !u.humano && u.hp > 0 && u._X != null) { const A = aderecoEvo7(u.evo7), w = u._fw * u._sx; bx.drawImage(A, Math.round(u._X + w / 2 - 12), Math.round(u._Y - 22 + Math.sin(BT.t * 0.07 + 1) * 1.5)); }
+  return r;
+}; }
+{ const _dp7 = drawPlayer; drawPlayer = function (ox, oy) {
+  const r = _dp7(ox, oy), ev = evo7();
+  if (ev && !W2.float && !deRosto()) { const A = aderecoEvo7(ev); bx.drawImage(A, Math.round(W2.px - ox - 2), Math.round(W2.py - oy - 24 + Math.sin(W2.t * 0.07) * 1.5), 20, 15); }
+  return r;
+}; }
+// a cena da escolha (chamada no fim do Cap. 7)
+async function cenaEvolucao7() {
+  if (G.evo7) return;
+  const base = evo3() || 'farol', ks = Object.keys(EVO7).filter(k => EVO7[k].base === base);
+  await say('[O veio. O âmbar bruto da masmorra, o mesmo que fez o seu corpo lá embaixo, está pulsando de novo. Debaixo de você.]', 'cat');
+  await say('[O corpo pede forma nova. Duas respondem. Cada uma é uma resposta para a mesma pergunta: o que você vai FAZER com isso que aconteceu?]', 'cat');
+  let ev = null;
+  while (!ev) {
+    const i = await list({ x: 20, y: 20, w: 200, title: 'O que você vai fazer com isso?', items: ks.map(k => ({ label: EVO7[k].escolha, col: EVO7[k].cor })), desc: j => EVO7[ks[j]] && (EVO7[ks[j]].nm + '. ' + EVO7[ks[j]].papel + '. ' + EVO7[ks[j]].d), descY: 112 });
+    if (i < 0) continue;
+    const E = EVO7[ks[i]];
+    await say(`[${E.nm}. Preço: ${E.preco}]`, 'cat');
+    const c = await choose(`* ${E.escolha}`, ['É isso.', 'Pensar de novo']);
+    if (c === 0) ev = ks[i];
+  }
+  const E = EVO7[ev];
+  const preco = {
+    guardiao: ['* "Leva casaco, menino." Você escuta a frase de novo, como sempre escutou quando fazia frio.', '* E então a frase fica sem voz. As palavras continuam lá. Ninguém mais fala elas.'],
+    tempestade: ['* Chuva no telhado de zinco. Você deitado, sem sono, contando os pingos.', '* O som vai baixando, baixando, e a chuva continua caindo, muda.'],
+    labirinto: ['* Um quarto. Uma cama encostada na parede, uma janela que não fechava direito.', '* As paredes se dobram para dentro do Vão e não voltam. Você teve um quarto. Não sabe mais qual.'],
+    boca: ['* Café com leite. Pão na chapa. O arroz da sua avó. O pastel, que já tinha ido.', '* Um por um, os gostos entram na boca do Vão e descem. Você ainda sabe os nomes. Só os nomes.'],
+    bibliotecario: ['* Um livro de capa mole, com um bicho na capa. Uma voz lendo devagar, apontando com o dedo.', '* A estante nova da sua tampa guarda tudo. Menos isso. Isso foi o preço da estante.'],
+    palimpsesto: ['* O seu nome. O de antes. O que a sua mãe gritava da janela.', '* A tinta raspa devagar, como borracha em papel velho. Por cima, alguém escreve: @.']
+  }[ev];
+  for (const l of preco) await say(l);
+  await say('Eu guardo. Eu prometi. Eu guardo numa música.', 'lume');
+  sfx('rune'); V.shake = 18;
+  G.evo7 = ev; curarTudo();
+  await say(`* {y}${G.name} evoluiu para ${E.nm}!{/}`);
+  await say(`[TÉCNICA NOVA: ${TECH2[E.tec].nm}. ${TECH2[E.tec].d}]`, 'cat');
+  save2();
+}
+
+// ================= MECÂNICAS DO CAP. 7 =================
+// 1) A ESTRADA VELHA DAS MINAS (minijogo): o Seu Jorge dirige o 31 serra acima. Três faixas; desviar de pedras,
+//    buracos e cabras; pegar os frascos que caíram dos caminhões da Coroa. DE DIA tem cancela da Guarda na estrada (bater
+//    é briga); DE NOITE as pedras só aparecem perto, no farol do ônibus (a Lume ajuda: o farol alcança mais longe).
+// 2) VÁLVULAS E VAPOR (Galerias de Bombeamento): cada válvula liga/desliga DOIS respiros. Respiro ligado é parede de vapor.
+// 3) ECO (o Coração, no escuro): numa PEDRA DE ECO, a Lume canta; o eco acende as PONTES DE CRISTAL por alguns segundos.
+//    Ponte que apaga debaixo do pé: você cai de volta na pedra (com susto).
+// 4) ÂMBAR (elemento do Grimório, tirado da broca): luz-pedra; quebra 2 de escudo e deixa a "resina" (o alvo fica lento).
+const AC7 = POS7.acampamento, BO7 = POS7.bombas, CO7 = POS7.coracao, AN7 = POS7.andar1, FU7 = POS7.fundo7;
+// ---------- 1) a estrada ----------
+function estradaMinas(noite) {
+  return new Promise(res => {
+    const S = { k: 0, lane: 1, x: 1, hits: 0, fr: 0, obs: [], fim: 60 * 34, inv: 0, msg: null };
+    const tipos = noite ? ['pedra', 'pedra', 'buraco', 'cabra', 'frasco', 'frasco'] : ['pedra', 'buraco', 'cabra', 'cancela', 'frasco', 'frasco'];
+    const w = { type: 'estrada', update() {
+      S.k++;
+      if (navp('left')) S.lane = Math.max(0, S.lane - 1);
+      if (navp('right')) S.lane = Math.min(2, S.lane + 1);
+      S.x += (S.lane - S.x) * 0.25;
+      const vel = 1.6 + Math.min(1.6, S.k / 900);
+      if (S.k % Math.max(22, 46 - Math.floor(S.k / 120)) === 0 && S.k < S.fim - 120) { const t = pickOne(tipos); S.obs.push({ t, lane: Math.floor(Math.random() * 3), y: -20 }); if (Math.random() < 0.3 && S.k > 300) S.obs.push({ t: 'pedra', lane: Math.floor(Math.random() * 3), y: -60 }); }
+      for (const o of S.obs) { o.y += vel * (o.t === 'cabra' ? 0.8 : 1); if (o.t === 'cabra') o.lane += Math.sin(S.k / 20 + o.y) * 0.01; }
+      if (S.inv > 0) S.inv--;
+      for (const o of S.obs) if (!o.feito && o.y > 178 && o.y < 206 && Math.abs(Math.round(o.lane) - Math.round(S.x)) === 0) {
+        o.feito = true;
+        if (o.t === 'frasco') { S.fr++; sfx('item'); S.msg = { s: '+ frasco caído', t: 40, c: '#ffd070' }; }
+        else if (S.inv <= 0) { S.hits++; S.inv = 50; sfx('hit'); V.shake = 6; S.msg = { s: o.t === 'cancela' ? 'CANCELA! A Guarda viu!' : o.t === 'cabra' ? 'MÉÉÉ! (a cabra está bem)' : 'TUM! O 31 pula!', t: 50, c: '#ff8a6a' }; if (o.t === 'cancela') S.cancela = (S.cancela || 0) + 1; }
+      }
+      S.obs = S.obs.filter(o => o.y < 260);
+      if (S.msg && --S.msg.t <= 0) S.msg = null;
+      if (S.k > S.fim) { closeWin(this); res({ frascos: Math.floor(S.fr / 2), hits: S.hits, cancela: S.cancela || 0 }); }
+    }, draw() {
+      const X0 = 60, LW = 40;
+      bx.fillStyle = noite ? '#0a0c18' : '#3a5a3a'; bx.fillRect(-TXO.x, 0, W, H);
+      // serra dos lados (rolando)
+      for (let y = -16; y < H + 16; y += 16) { const yy = Math.round(y + (S.k * 1.6) % 16); bx.fillStyle = noite ? '#141a24' : '#4a6a42'; bx.fillRect(-TXO.x, yy, X0 - 4 + TXO.x, 14); bx.fillRect(X0 + LW * 3 + 4, yy, W, 14); if ((Math.floor((y - S.k * 1.6) / 16)) % 5 === 0) { bx.fillStyle = noite ? '#1e2a24' : '#2a5a3e'; bx.fillRect(14, yy, 10, 12); bx.fillRect(210, yy + 4, 10, 12); } }
+      bx.fillStyle = noite ? '#22202a' : '#5a5048'; bx.fillRect(X0, 0, LW * 3, H);
+      for (let y = -20; y < H; y += 20) { const yy = Math.round(y + (S.k * 1.6) % 20); bx.fillStyle = noite ? '#4a4450' : '#c8b890'; bx.fillRect(X0 + LW - 1, yy, 2, 10); bx.fillRect(X0 + LW * 2 - 1, yy, 2, 10); }
+      // obstáculos
+      for (const o of S.obs) {
+        const x = X0 + o.lane * LW + LW / 2, y = Math.round(o.y);
+        if (noite && o.t !== 'frasco' && y < 120) continue;                    // de noite, só aparecem no farol
+        if (o.t === 'pedra') { bx.fillStyle = '#6a6070'; bx.fillRect(x - 8, y - 6, 16, 12); bx.fillStyle = '#8a8090'; bx.fillRect(x - 6, y - 6, 8, 4); }
+        else if (o.t === 'buraco') { bx.fillStyle = '#1a1418'; bx.fillRect(x - 10, y - 4, 20, 8); }
+        else if (o.t === 'cabra') { bx.fillStyle = '#e8e4d8'; bx.fillRect(x - 7, y - 4, 14, 8); bx.fillRect(x + 5, y - 7, 4, 4); bx.fillStyle = '#5a4a3a'; bx.fillRect(x + 6, y - 9, 1, 2); bx.fillRect(x - 6, y + 4, 2, 3); bx.fillRect(x + 3, y + 4, 2, 3); }
+        else if (o.t === 'cancela') { for (let i = 0; i < 30; i++) { bx.fillStyle = (i >> 2) % 2 ? '#e83a3a' : '#f0f0f0'; bx.fillRect(x - 15 + i, y - 2, 1, 4); } bx.fillStyle = '#2a3a7a'; bx.fillRect(x + 16, y - 12, 6, 14); }
+        else { bx.fillStyle = '#e8e4f0'; bx.fillRect(x - 3, y - 5, 6, 10); bx.fillStyle = '#ffd070'; bx.fillRect(x - 2, y - 2, 4, 6); bx.fillStyle = '#c83a3a'; bx.fillRect(x - 3, y - 6, 6, 1); }
+      }
+      // o 31 visto de cima
+      const bxp = X0 + S.x * LW + LW / 2;
+      if (!(S.inv > 0 && S.k % 6 < 3)) { bx.fillStyle = '#e8b030'; bx.fillRect(Math.round(bxp - 9), 176, 18, 34); bx.fillStyle = '#2a3a5a'; for (let i = 0; i < 4; i++) bx.fillRect(Math.round(bxp - 7), 182 + i * 7, 14, 4); bx.fillStyle = '#1a1418'; bx.fillRect(Math.round(bxp - 10), 180, 2, 6); bx.fillRect(Math.round(bxp + 8), 180, 2, 6); bx.fillRect(Math.round(bxp - 10), 200, 2, 6); bx.fillRect(Math.round(bxp + 8), 200, 2, 6); bx.fillStyle = '#fff0a0'; bx.fillRect(Math.round(bxp - 7), 175, 3, 2); bx.fillRect(Math.round(bxp + 4), 175, 3, 2); }
+      if (noite) { const g = bx.createRadialGradient(bxp, 150, 10, bxp, 140, 90); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,10,0.75)'); bx.fillStyle = g; bx.fillRect(-TXO.x, 0, W, H); bx.fillStyle = 'rgba(255,240,160,0.10)'; bx.beginPath(); bx.moveTo(bxp - 6, 176); bx.lineTo(bxp - 34, 110); bx.lineTo(bxp + 34, 110); bx.lineTo(bxp + 6, 176); bx.fill(); }
+      box(4, 4, 92, 30, { edge: '#ffd060' }); txt('Estrada Velha', 10, 8, { col: '#ffd060' }); txt('frascos ' + Math.floor(S.fr / 2) + '  batidas ' + S.hits, 10, 20, { col: '#e8e4d8' });
+      const prog = Math.min(1, S.k / S.fim); bx.fillStyle = '#2a2430'; bx.fillRect(226, 10, 6, 200); bx.fillStyle = '#ffd060'; bx.fillRect(226, 10 + Math.round(200 * (1 - prog)), 6, Math.round(200 * prog));
+      if (S.k < 150) txt('< > muda de faixa', 120, 40, { align: 'center', col: '#ffffff' });
+      if (S.msg) txt(S.msg.s, 120, 60, { align: 'center', col: S.msg.c });
+    } };
+    openWin(w);
+  });
+}
+// ---------- 2) válvulas e vapor ----------
+function ventSt() { G.flags.c7vent = G.flags.c7vent || Object.assign({}, BO7.ini); return G.flags.c7vent; }
+const VENT7 = {}; for (const [k, cs] of Object.entries(BO7.respiros)) for (const [x, y] of cs) VENT7[x + ',' + y] = k;
+const ventOn = (x, y) => { const k = VENT7[x + ',' + y]; return k ? !!ventSt()[k] : false; };
+// ---------- 3) eco e pontes ----------
+const PONTE7 = {}; for (const [k, cs] of Object.entries(CO7.pontes)) for (const [x, y] of cs) PONTE7[x + ',' + y] = k;
+const ecoT = (k) => (W2.eco && W2.eco[k]) || 0;
+{ const _csV = canStand; canStand = function (x, y, who) {
+  if (W2.id === 'bombas' && ventOn(x, y)) return false;
+  if (W2.id === 'coracao') { const k = PONTE7[x + ',' + y]; if (k && ecoT(k) <= 0) return false; }
+  return _csV(x, y, who);
+}; }
+async function puxaValvula(id) {
+  const V_ = BO7.valvulas[id], st = ventSt();
+  for (const t of V_.tog) st[t] = st[t] ? 0 : 1;
+  sfx('door'); V.shake = 3;
+  const desc = V_.tog.map(t => 'respiro ' + t + (st[t] ? ' LIGADO' : ' desligado')).join(', ');
+  W2.toast = { s: 'Fssss... ' + desc + '.', t: 0 };
+  if (!G.flags.tutValv7) { G.flags.tutValv7 = true; await say('[Cada válvula liga e desliga DOIS respiros (as letras ficam escritas no cano). Vapor ligado é parede. Se travar, volte e gire outra.]', 'cat'); }
+}
+async function pedraEco(k) {
+  if (ecoT(k) > 60) return;
+  W2.mv = null;
+  if (!G.flags.tutEco7) { G.flags.tutEco7 = true; await say('A pedra... ela tem um buraco no meio, igual uma concha. Deixa eu tentar uma coisa.', 'lume'); }
+  sfx('rune'); jingle('E5:2 G5:2 B5:4 E6:6', 220);
+  (W2.eco = W2.eco || {})[k] = 420; W2.ecoPulso = { k, t: 0 };
+  W2.toast = { s: 'O eco acende a ponte de cristal! (alguns segundos)', t: 0 };
+  if (!G.flags.tutEco7b) { G.flags.tutEco7b = true; await say('[ECO: o canto da Lume acende as PONTES DE CRISTAL por alguns segundos. Corra. Ponte que apaga debaixo do pé... derruba.]', 'cat'); }
+}
+{ const _uwE = updateWorld2; updateWorld2 = function () {
+  _uwE();
+  if (V.scene !== 'world' || W2.id !== 'coracao') return;
+  if (W2.eco) for (const k in W2.eco) if (W2.eco[k] > 0) W2.eco[k]--;
+  if (W2.ecoPulso) W2.ecoPulso.t++;
+  // a ponte apagou com você em cima?
+  if (!worldBusy2() && !W2.pego) { const px = W2.mv ? W2.mv.tx : W2.x, py = W2.mv ? W2.mv.ty : W2.y, k = PONTE7[px + ',' + py]; if (k && ecoT(k) <= 0) { W2.pego = true; run2(async () => { sfx('cancel'); V.shake = 8; await say('* O cristal apaga debaixo de você. Um segundo de nada. E então o patamar de cima, de costas, com a Lume e a Rita caindo por cima.'); const [ex, ey] = CO7.eco[k]; await fadeOut(8); loadMap2('coracao', ex, ey + 1, 'down'); W2.pego = false; await fadeIn(8); }); } }
+}; }
+{ const _chE = HOOK_CHAO; HOOK_CHAO = function (m, ox, oy) {
+  const r = _chE ? _chE(m, ox, oy) : undefined;
+  if (!m) return r;
+  if (m === MAPS2.bombas) for (const key in VENT7) { const [x, y] = key.split(',').map(Number); const on = ventOn(x, y); bx.fillStyle = on ? 'rgba(255,120,80,0.25)' : 'rgba(120,200,255,0.10)'; bx.fillRect(x * TS - ox, y * TS - oy, TS, TS); }
+  if (m === MAPS2.coracao) for (const key in PONTE7) {
+    const [x, y] = key.split(',').map(Number), k = PONTE7[key], t = ecoT(k), sx = x * TS - ox, sy = y * TS - oy;
+    if (t > 0) { const a = t > 90 ? 0.85 : (Math.floor(t / 6) % 2 ? 0.7 : 0.25); bx.globalAlpha = a; bx.drawImage(tileArt('cristal7', (x + y) % 3), sx, sy); bx.globalAlpha = 1; }
+    else { bx.fillStyle = 'rgba(138,216,240,0.10)'; if ((x + y + Math.floor(W2.t / 20)) % 4 === 0) bx.fillRect(sx + 7, sy + 7, 2, 2); }
+  }
+  return r;
+}; }
+{ const _arE = HOOK_AR; HOOK_AR = function (m, ox, oy) {
+  const r = _arE ? _arE(m, ox, oy) : undefined;
+  if (!m || V.scene !== 'world') return r;
+  if (m === MAPS2.bombas) { for (const key in VENT7) { const [x, y] = key.split(',').map(Number); vaporFx(x * TS - ox, y * TS - oy, W2.t + x * 7, ventOn(x, y)); } for (const [k, cs] of Object.entries(BO7.respiros)) { const [x, y] = cs[0]; txt(k, x * TS - ox + 13, y * TS - oy - 22, { col: ventSt()[k] ? '#ff8a6a' : '#8fe3ff', shadow: true }); } }
+  if (m === MAPS2.coracao && W2.ecoPulso && W2.ecoPulso.t < 50) { const [ex, ey] = CO7.eco[W2.ecoPulso.k], p = W2.ecoPulso.t / 50; bx.strokeStyle = `rgba(255,240,160,${1 - p})`; bx.lineWidth = 2; bx.beginPath(); bx.ellipse(ex * TS - ox + 8, ey * TS - oy + 8, 10 + p * 120, 6 + p * 70, 0, 0, Math.PI * 2); bx.stroke(); }
+  return r;
+}; }
+// ---------- 4) o elemento ÂMBAR ----------
+Object.assign(EL3, { ambar: { nm: 'Âmbar', el: 'luz', col: '#ffd070', cols: ['#ffd070', '#fff0b0', '#c8902a'], d: 'luz-pedra; quebra +1 de escudo e deixa RESINA (o alvo fica lento)', brk: 1, resina: true } });
+ORD_EL.push('ambar');
+Object.assign(FUS3, {
+  'ambar+brasa': { nm: 'Lava Dourada', col: '#ff9a30', cols: ['#ff9a30', '#ffd070', '#c83a1a'], hits: [['fogo', 0.7], ['luz', 0.5]], brk: 2, st: 'queimado', d: 'âmbar derretido: fogo e luz, quebra +2, queima', veu: 'brasaviva', nota: '"Âmbar + Brasa = Lava Dourada. Não pise. Não tente pisar. — O."' },
+  'ambar+geada': { nm: 'Cristal', col: '#bff0ff', cols: ['#e8fbff', '#ffd070', '#8ad8f0'], hits: [['gelo', 0.6], ['luz', 0.6]], brk: 2, st: 'frio', d: 'cristal de âmbar gelado: gelo e luz, quebra +2', veu: 'granizo', nota: '"Âmbar + Geada = Cristal. Bonito. Frio. Como gente da Cidade Alta. — O."' },
+  'ambar+seiva': { nm: 'Resina', col: '#d8a030', cols: ['#d8a030', '#a8c870', '#fff0b0'], hits: [['luz', 0.8]], dreno: 0.3, d: 'resina que prende e devolve vida', veu: 'orvalho', nota: '"Âmbar + Seiva = Resina. A árvore chora e o choro cura. — O."' },
+  'ambar+fuligem': { nm: 'Fóssil', col: '#8a7a6a', cols: ['#8a7a6a', '#ffd070', '#4a4050'], hits: [['luz', 0.55]], tonto: 0.6, d: 'pedra de lembrança velha: quase todos ficam TONTOS', veu: 'fumaca', nota: '"Âmbar + Fuligem = Fóssil. Lembrança tão velha que virou pedra. — O."' },
+  'ambar+areia': { nm: 'Vitral', col: '#ffe8a0', cols: ['#ffe8a0', '#bff0ff', '#ff8a8a'], hits: [['corte', 0.6], ['luz', 0.6]], brk: 3, d: 'vidro colorido de âmbar: corte e luz, quebra +3', veu: 'vidro', nota: '"Âmbar + Areia = Vitral. Eu vi um desses lutar uma vez. — O."' }
+});
+Object.assign(VEU3, { ambar: { nm: 'Âmbar', d: 'o aliado fica dentro de uma bolha de âmbar: o próximo golpe nele é ZERO' } });
+// resina: o alvo de um feitiço de âmbar puro fica lento
+{ const _hfA = hitFoe; hitFoe = function (a, t, pow, o = {}) { const r = _hfA(a, t, pow, o); if (BT && BT._resina && t && t.hp > 0 && t.side === 'e') { t.ct = Math.max(0, t.ct - 20); const [x, y] = unitCenter(t); popNum(x, y - 30, 'RESINA', '#ffd070'); } return r; }; }
+{ const _g7 = golpe3; golpe3 = async function (m, alvos, P, F, s, k) { BT._resina = !P.fus && s.e && s.e[0] === 'ambar'; try { return await _g7(m, alvos, P, F, s, k); } finally { BT._resina = false; } }; }
+{ const _v7 = veu3; veu3 = async function (m, t, P, k) {
+  if (P.veuK !== 'ambar') return _v7(m, t, P, k);
+  const [x, y] = unitCenter(t);
+  await tw(24, p => { luzMagia(x, y - 10, 8 + p * 18, 'rgba(255,208,112,0.5)', 1 - p * 0.3); fxRing(x, y - 10, 6 + p * 14, '#ffd070', 1 - p); });
+  t.st.sumido = 1; t.def0 = true; popNum(x, y - 26, 'BOLHA DE ÂMBAR', '#ffd070');
+}; }
+
+// ================= INIMIGOS DO CAP. 7: A MINA DE ORIGEM =================
+// Acampamento/Bombas: CÃO-LANTERNA (rápido; uiva e chama outro), VÁLVULA VIVA (jato de vapor em todos; enche e ESTOURA,
+// preparado). Andar 1 do jogo 1, "pela lógica de quem extrai": RATO-DE-VELA AMBARINO (coleira de âmbar; mordida dupla;
+// vela que queima), COGUMELO DE ÂMBAR (esporos dourados: TONTO), MORCEGO CARIMBADO (asas de papel com o selo da Coroa:
+// SELADO). Mini-chefes: A BROCA (perfura; superaquece) e o GUARDA-MUSGO AMBARINO (o primeiro chefe do jogo 1, sendo
+// drenado por um cano). Chefe: O EXTRATOR (bomba-coração: suga PM e Tensão, Bombeamento preparado; fase 2 lê o grupo e
+// faz esquecer; fase 3 o núcleo aberto).
+Object.assign(ENEMY2, {
+  caoLanterna: { name: 'Cão-Lanterna', kind: 'caoLanterna', mhp: 560, atk: 40, def: 13, mdef: 10, spd: 16, shield: 3, maxShield: 3, weak: ['gelo', 'luz'], ai: 'caoLanterna', h: 34, cobres: 22,
+    frame: u => caoLanternaArt(Math.floor(BT.t / 8 + u.x) % 2), dieCols: ['#6a5040', '#ffd070', '#2a3a7a'] },
+  valvulaViva: { name: 'Válvula Viva', kind: 'valvulaViva', mhp: 620, atk: 38, def: 19, mdef: 12, spd: 9, shield: 5, maxShield: 5, weak: ['gelo', 'mordida'], ai: 'valvulaViva', h: 50, cobres: 26,
+    frame: u => valvulaVivaArt(Math.floor(BT.t / 10 + u.x) % 4, !!u.armando), dieCols: ['#c83a2a', '#e8e8f0', '#c89a30'], cancelTxt: 'A válvula desafogou! Nada de estouro!' },
+  ratoVelaA: { name: 'Rato-de-Vela Ambarino', kind: 'ratoVelaA', mhp: 480, atk: 38, def: 11, mdef: 11, spd: 15, shield: 3, maxShield: 3, weak: ['gelo', 'corte'], ai: 'ratoVelaA', h: 30, cobres: 18,
+    frame: u => ratoVelaAArt(Math.floor(BT.t / 8 + u.x) % 2), dieCols: ['#8a7a6a', '#ffd070', '#f2ecdc'] },
+  cogumeloA: { name: 'Cogumelo de Âmbar', kind: 'cogumeloA', mhp: 600, atk: 37, def: 14, mdef: 16, spd: 9, shield: 4, maxShield: 4, weak: ['fogo', 'corte'], ai: 'cogumeloA', h: 40, cobres: 20,
+    frame: u => cogumeloAArt(Math.floor(BT.t / 14 + u.x) % 2), dieCols: ['#c87a2a', '#ffd070', '#d8c8a8'] },
+  morcegoSelo: { name: 'Morcego Carimbado', kind: 'morcegoSelo', fly: true, mhp: 420, atk: 39, def: 9, mdef: 12, spd: 17, shield: 2, maxShield: 2, weak: ['fogo', 'luz'], ai: 'morcegoSelo', h: 26, cobres: 18,
+    frame: u => morcegoSeloArt(Math.floor(BT.t / 5 + u.x) % 2), dieCols: ['#f2ecdc', '#c83a3a', '#ffe0a0'] },
+  broca: { name: 'A Broca', kind: 'broca', boss: true, mhp: 5200, atk: 41, def: 18, mdef: 12, spd: 10, shield: 7, maxShield: 7, weak: ['gelo', 'mordida'], ai: 'broca', h: 96, cobres: 160, ph: 1,
+    frame: u => brocaArt(Math.floor(BT.t / 4) % 4, !!u.armando, u.ph || 1), dieCols: ['#6a5a4a', '#c8c8d8', '#ffd070', '#ffffff'], cancelTxt: 'A broca travou! Nada de broca total!' },
+  musgoA: { name: 'Guarda-Musgo Ambarino', kind: 'musgoA', boss: true, mhp: 6000, atk: 42, def: 16, mdef: 14, spd: 10, shield: 7, maxShield: 7, weak: ['fogo', 'corte'], ai: 'musgoA', h: 104, cobres: 180, ph: 1,
+    frame: u => musgoAArt(Math.floor(BT.t / 16) % 2, u.ph || 1), dieCols: ['#3a6a36', '#8ac860', '#ffd070', '#8a8090'], cancelTxt: 'O musgo se soltou! Nada de terremoto!' },
+  extrator: { name: 'O Extrator', kind: 'extrator', boss: true, mhp: 8400, atk: 44, def: 18, mdef: 15, spd: 10, shield: 8, maxShield: 8, weak: ['gelo', 'mordida'], ai: 'extrator', h: 120, cobres: 300, ph: 1,
+    frame: u => extratorArt(Math.floor(BT.t / 10) % 2, u.ph || 1, !!u.armando), dieCols: ['#4a4450', '#c89a30', '#ffd070', '#ffffff'], cancelTxt: 'O pistão engasgou! Bombeamento cancelado!' }
+});
+Object.assign(FICHA, {
+  caoLanterna: 'Cão-Lanterna: o cão da Guarda nas minas. Rápido; UIVA e chama outro. Gelo e luz.',
+  valvulaViva: 'Válvula Viva: jato de vapor em todos; quando enche, ESTOURA (quebre o escudo!). Gelo e mordida.',
+  ratoVelaA: 'Rato-de-Vela Ambarino: um velho conhecido do Andar 1, agora com coleira de âmbar. Mordida dupla; a vela queima. Gelo e corte.',
+  cogumeloA: 'Cogumelo de Âmbar: o Cogumelo Tossidor do Andar 1, cheio de âmbar. Esporos dourados deixam TONTO. Fogo e corte.',
+  morcegoSelo: 'Morcego Carimbado: o Morcego de Papel do Andar 1, agora com o selo da Coroa nas asas. Carimbo deixa SELADO. Fogo e luz.',
+  broca: 'A Broca: perfura até o Coração. Cascalho em todos, Broca Total (quebre o escudo!). A 50% superaquece: o gelo racha mais.',
+  musgoA: 'Guarda-Musgo Ambarino: o primeiro chefe que você venceu, lá no começo. Um cano de âmbar nas costas está drenando ele. Fogo e corte.',
+  extrator: 'O Extrator: a bomba-coração. Suga PM e Tensão, Bombeamento (quebre o escudo!). Depois LÊ vocês: faz esquecer. No fim, o núcleo aberto.'
+});
+function chamaFoe(k, txt_) { const c = mkFoe(ENEMY2[k], 150 - BT.foes.length * 8, 150 + (BT.foes.length % 2) * 14); c.ct = 0; c.alpha = 0; BT.foes.push(c); callout(txt_, '#ffd8a0', 60); sfx('encounter'); return tw(18, p => { c.alpha = p; }); }
+Object.assign(AI2, {
+  async caoLanterna(e) {
+    const t = foeTarget(); if (!t) return;
+    if (!e.uivou && alive(BT.foes).length < 3 && Math.random() < 0.3) { e.uivou = true; await tw(20, p => { const [x, y] = unitCenter(e); fxRing(x, y - 20, 6 + p * 30, '#ffd070', 1 - p); }); await chamaFoe('caoLanterna', '"AUUUUU!" Outro cão responde.'); return; }
+    callout(Math.random() < 0.5 ? 'Mordida' : 'Bote', '#d0a8ff', 30); await foeLunge(e, t, 10, 16); await foeStrike(e, t, 1.1, { n: 20, fast: true }); await foeBack(e);
+  },
+  async valvulaViva(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) { e.charge = null; e.armando = false; callout('ESTOURO!', '#ffffff', 60); sfx('crit'); flashW(3); bshake(14, 3); await tw(20, p => { bx.globalAlpha = 0.6 * (1 - p); bx.fillStyle = '#e8e8f0'; bx.beginPath(); bx.arc(ex, ey, 20 + p * 140, 0, Math.PI * 2); bx.fill(); bx.globalAlpha = 1; }); for (const m of alive(BT.party)) await foeStrike(e, m, 1.25, { n: 26, noCounter: true, longe: true }); return; }
+    if ((e.turns || 0) % 3 === 2) { e.charge = { t: null }; e.armando = true; callout('A pressão sobe... (quebre o escudo!)', '#ff6b6b', 80); sfx('rumble'); return; }
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.5) { callout('Jato de Vapor', '#e8e8f0', 40); for (const m of alive(BT.party)) { const r = await foeStrike(e, m, 0.65, { n: 20, noCounter: true, longe: true }); if (r === 'falhou' && Math.random() < 0.4) m.st.queimado = 2; } return; }
+    callout('Golpe de Roda', '#d0a8ff', 30); await foeLunge(e, t, 12, 12); await foeStrike(e, t, 1.1, { n: 24 }); await foeBack(e);
+  },
+  async ratoVelaA(e) {
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.5) { callout('Mordida Dupla', '#d0a8ff', 30); await foeLunge(e, t, 10, 14); await foeStrike(e, t, 0.6, { n: 18, fast: true }); await foeStrike(e, t, 0.6, { n: 18, fast: true }); await foeBack(e); return; }
+    callout('Vela Acesa', '#ffa94d', 30); const r = await foeStrike(e, t, 0.9, { n: 22, longe: true }); if (r !== 'perfeito' && t.hp > 0) { t.st.queimado = 2; const [x, y] = unitCenter(t); popNum(x, y - 26, 'QUEIMADO', '#ffa94d'); }
+  },
+  async cogumeloA(e) {
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.45) { callout('Esporos de Âmbar', '#ffd070', 40); const [ex, ey] = unitCenter(e); await tw(24, p => { for (let i = 0; i < 14; i++) { bx.fillStyle = i % 2 ? '#ffd070' : '#fff0b0'; bx.fillRect(Math.round(ex - p * 120 + Math.sin(i * 3 + p * 6) * 30), Math.round(ey - 20 + Math.cos(i * 2) * 20), 2, 2); } }); for (const m of alive(BT.party)) { const r = await foeStrike(e, m, 0.5, { n: 20, noCounter: true, longe: true }); if (r !== 'perfeito' && Math.random() < 0.35 && m.hp > 0) { m.st.tonto = 1; m.ct = Math.max(0, m.ct - 20); } } return; }
+    callout('Cabeçada', '#d0a8ff', 30); await foeLunge(e, t, 12, 14); await foeStrike(e, t, 1.05, { n: 24 }); await foeBack(e);
+  },
+  async morcegoSelo(e) {
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.4 && !(t.st.selado > 0)) { callout('Carimbo Voador', '#c83a3a', 40); await foeLunge(e, t, 14, 12); const r = await foeStrike(e, t, 0.8, { n: 20, fast: true }); await foeBack(e); if (r !== 'perfeito' && typeof selar === 'function') selar(t, 1); return; }
+    callout('Rasante de Papel', '#d0a8ff', 30); await foeLunge(e, t, 14, 12); await foeStrike(e, t, 1.0, { n: 20, fast: true }); await foeBack(e);
+  },
+  async broca(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) { e.charge = null; e.armando = false; callout('BROCA TOTAL!', '#ffffff', 70); sfx('crit'); flashW(4); bshake(22, 4); await tw(26, p => { for (let i = 0; i < 20; i++) { bx.fillStyle = i % 3 ? '#8a7a6a' : '#ffd070'; bx.fillRect(Math.round(ex - p * 200 + Math.sin(i * 7) * 20), Math.round(ey - 30 + (i % 8) * 8), 4, 3); } }); for (const m of alive(BT.party)) { const r = await foeStrike(e, m, e.ph >= 2 ? 1.5 : 1.4, { n: 30, noCounter: true, longe: true }); if (e.ph >= 2 && r === 'falhou') m.st.queimado = 2; } return; }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('A broca gira cada vez mais rápido... (quebre o escudo!)', '#ff6b6b', 90); sfx('rumble'); return; }
+    const t = foeTarget(); if (!t) return;
+    if (Math.random() < 0.45) { callout('Cascalho', '#8a7a6a', 40); sfx('rumble'); for (const m of alive(BT.party)) await foeStrike(e, m, 0.72, { n: 22, noCounter: true, longe: true }); return; }
+    callout('Perfurar', '#d0a8ff', 30); await foeLunge(e, t, 18, 16); const r = await foeStrike(e, t, 1.3, { n: 26 }); await foeBack(e); if (e.ph >= 2 && r !== 'perfeito') t.st.queimado = 2;
+  },
+  async musgoA(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.ph >= 2 && e.hp > e.mhp * 0.06) { const d = Math.round(e.mhp * 0.025); e.hp -= d; popNum(ex + 30, ey - 60, '-' + d + ' (o cano suga)', '#ffd070'); }
+    if (e.charge) { e.charge = null; e.armando = false; callout('TERREMOTO VERDE!', '#8ac860', 70); sfx('crit'); bshake(24, 4); flashW(3); for (const m of alive(BT.party)) { const r = await foeStrike(e, m, 1.4, { n: 30, noCounter: true }); if (r === 'falhou' && m.hp > 0) { m.st.tonto = 1; m.ct = Math.max(0, m.ct - 25); } } return; }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('O chão inteiro range... (quebre o escudo!)', '#ff6b6b', 90); sfx('rumble'); return; }
+    const t = foeTarget(); if (!t) return;
+    const r0 = Math.random();
+    if (r0 < 0.3) { callout('Abraço de Musgo', '#8ac860', 40); await foeLunge(e, t, 14, 16); const r = await foeStrike(e, t, 0.9, { n: 24 }); await foeBack(e); if (r !== 'perfeito' && t.hp > 0) { t.ct = 0; t.st.tonto = 1; const [x, y] = unitCenter(t); popNum(x, y - 26, 'PRESO NO MUSGO', '#8ac860'); } return; }
+    if (r0 < 0.6) { callout('Esporos Velhos', '#a8c870', 40); for (const m of alive(BT.party)) await foeStrike(e, m, 0.7, { n: 22, noCounter: true, longe: true }); return; }
+    callout('Raiz', '#d0a8ff', 30); await foeLunge(e, t, 16, 16); await foeStrike(e, t, 1.25, { n: 26 }); await foeBack(e);
+  },
+  async extrator(e) {
+    const [ex, ey] = unitCenter(e);
+    if (e.charge) { e.charge = null; e.armando = false; callout('BOMBEAMENTO!', '#ffffff', 70); sfx('crit'); flashW(6); bshake(26, 4); await tw(28, p => { bx.fillStyle = `rgba(255,208,112,${0.6 * (1 - p)})`; bx.fillRect(0, 0, W, H); for (let i = 0; i < 8; i++) { bx.fillStyle = '#ffd070'; bx.fillRect(Math.round(ex - p * 160 - i * 10), Math.round(ey - 10 + Math.sin(p * 10 + i) * 30), 6, 6); } }); for (const m of alive(BT.party)) await foeStrike(e, m, e.ph >= 3 ? 1.6 : 1.5, { n: 30, noCounter: true, longe: true }); return; }
+    if (e.turns % 4 === 3) { e.charge = { t: null }; e.armando = true; callout('O pistão desce até o fundo... (quebre o escudo!)', '#ff6b6b', 90); sfx('rumble'); await tw(22, p => luzMagia(ex, ey, 14 + p * 30, 'rgba(255,208,112,0.6)', p)); return; }
+    const t = foeTarget(); if (!t) return;
+    const r0 = Math.random();
+    if (r0 < 0.3) {
+      callout(e.ph >= 2 ? 'Leitura' : 'Sucção', '#ffd070', 40); const [tx, ty] = unitCenter(t);
+      await tw(22, p => { for (let i = 0; i < 6; i++) { const q = (p + i / 6) % 1; bx.fillStyle = '#ffd070'; bx.fillRect(Math.round(tx + (ex - tx) * q), Math.round(ty - 10 + (ey - ty) * q + Math.sin(q * 9 + i) * 6), 2, 2); } });
+      const r = await foeStrike(e, t, 0.75, { n: 22, longe: true });
+      if (r !== 'perfeito') { const n = Math.min(t.mp || 0, 10); if (n) { t.mp -= n; popNum(tx, ty - 30, '-' + n + ' PM', '#8ab8ff'); } const k = Math.min(BT.tension, 12); BT.tension -= k; if (e.ph >= 2 && Math.random() < 0.45 && t.hp > 0) { t.st.esquecido = 1; popNum(tx, ty - 20, 'LIDO', '#ffd070'); } }
+      return;
+    }
+    if (r0 < 0.6) { callout('Jato de Âmbar', '#ffd070', 40); for (const m of alive(BT.party)) await foeStrike(e, m, 0.75, { n: 22, noCounter: true, longe: true }); return; }
+    callout('Pistão', '#d0a8ff', 30); await foeLunge(e, t, 14, 18); await foeStrike(e, t, 1.3, { n: 26 }); await foeBack(e);
+  }
+});
+function fasesBroca() { return [{ at: 0.5, run: async (e) => { sfx('rumble'); bshake(20, 3); await say('* A broca range, vermelha de quente. O metal brilha. O cheiro é de ferro queimado e âmbar fervendo.'); await say('[Superaquecida: o GELO racha o metal. Os golpes dela agora queimam.]', 'cat'); e.ph = 2; e.weak = ['gelo', 'mordida', 'corte']; e.known = {}; e.maxShield = 8; e.shield = 8; } }]; }
+function fasesMusgo() { return [{ at: 0.5, run: async (e) => {
+  sfx('rumble'); bshake(16, 2);
+  await say('* O cano nas costas do Guarda-Musgo dá um tranco. O âmbar sobe mais rápido. O gigante de pedra e musgo geme. Um som velho. Conhecido.');
+  await say('[Registro: Guarda-Musgo. Andar 1. O primeiro chefe que você venceu, quando ainda era um caixote. Ele está sendo drenado. Cada vez dele custa vida a ele mesmo.]', 'cat');
+  await say('Ele não quer lutar. Ele quer que tirem o cano.', 'lume');
+  e.ph = 2; e.weak = ['fogo', 'corte', 'luz']; e.known = {}; e.spd = 11;
+} }]; }
+function fasesExtrator() { return [{ at: 0.6, run: async (e) => {
+  sfx('rumble'); bshake(22, 3); flashW(3);
+  await say('* As mangueiras do Extrator se viram. Para vocês. A máquina para de sugar a masmorra e começa a LER o grupo.');
+  await say('Ela... ela tá puxando! Eu sinto puxando! A minha mãe, o mercado, a...', 'rita');
+  await say('[Fase de leitura: os golpes dela fazem esquecer a vez. A Lume não esquece.]', 'cat');
+  e.ph = 2; e.maxShield = 9; e.shield = 9; e.spd = 11;
+} }, { at: 0.3, run: async (e) => {
+  sfx('crit'); bshake(24, 4); flashW(4);
+  await say('* A câmara de vidro do Extrator racha. O núcleo fica à mostra, vermelho, batendo como um coração com pressa.');
+  e.ph = 3; e.weak = ['gelo', 'mordida', 'fogo', 'luz']; e.known = {}; e.spd = 12;
+  callout('O núcleo aberto: fogo e luz também!', '#8fe3ff', 90);
+} }]; }
+
+// ================= CAPÍTULO 7 — A MINA DE ORIGEM (Parte 1: a estrada, o acampamento e as bombas) =================
+// A etiqueta do barril leva à MINA DE ORIGEM, na serra de trás. O Seu Jorge leva o grupo no 31 pela ESTRADA VELHA
+// (minijogo; de dia tem cancela, de noite só o farol). No ACAMPAMENTO da mina: a Guarda que saiu de Auren, os Pavios
+// mineiros, a cozinheira, o cão. Só se entra na mina DE NOITE e de PAVIO (turno das bombas; a placa diz a resposta).
+// GALERIAS DE BOMBEAMENTO: VÁLVULAS e vapor; no alto, A BROCA (mini-chefe) e o elemento ÂMBAR. Depois, o Coração (cap7b).
+// Opcionais que pedem VIAGEM (o Marco e o 31 levam de volta): a lanterna do Zé para Candeia (Dona Ilda), o cão Sabugo
+// e o pão do Afonso (Vila dos Pavios), a semente do Guarda-Musgo (Seu Benedito, Cidade Alta), a página da Ofélia
+// (Dona Iolanda, Auren).
+Object.assign(TRACKS, {
+  serra7: { bpm: 96, bars: 4, chords: 'Am F C G', bass: 'root5', bassVol: 0.08,
+    lead: 'A4:2 C5:2 E5:4 D5:2 C5:2 A4:4 | F4:2 A4:2 C5:4 E5:4 D5:4 | C5:2 E5:2 G5:4 E5:2 D5:2 C5:4 | B4:2 D5:2 G5:4 F5:4 E5:4',
+    leadWave: 'triangle', leadVol: 0.05, arp: { rate: 4, vol: 0.012, oct: 1 }, drums: 'k.......s.......', hatVol: 0.015 },
+  bombas7: { bpm: 104, bars: 4, chords: 'Dm Dm Bb C', bass: 'oct8', bassVol: 0.1,
+    lead: 'D5:2 .:2 F5:2 .:2 A5:4 G5:4 | F5:2 .:2 E5:2 .:2 D5:8 | Bb4:2 D5:2 F5:4 E5:2 D5:2 C5:4 | C5:2 E5:2 G5:4 A5:8',
+    leadWave: 'square', leadVol: 0.04, arp: { rate: 2, vol: 0.012, oct: 0 }, drums: 'k...h.k.s...h...', hatVol: 0.03 },
+  coracao7: { bpm: 60, bars: 4, chords: 'Em C Am B', bass: 'root5', bassVol: 0.06,
+    lead: 'B4:8 E5:8 | C5:8 G5:8 | A4:8 E5:8 | F#5:8 D#5:8', leadWave: 'sine', leadVol: 0.05, arp: { rate: 4, vol: 0.01, oct: 1 }, drums: '', hatVol: 0 },
+  andar1: { bpm: 84, bars: 4, chords: 'C Am F G', bass: 'root5', bassVol: 0.06,
+    lead: 'E5:4 G5:4 C6:8 | A5:4 E5:4 C5:8 | F5:4 A5:4 C6:4 A5:4 | G5:8 .:8', leadWave: 'triangle', leadVol: 0.045, arp: { rate: 4, vol: 0.012, oct: 1 }, drums: '', hatVol: 0 },
+  perda: { bpm: 56, bars: 4, chords: 'Am F C E', bass: 'root5', bassVol: 0.05,
+    lead: 'E5:8 C5:8 | A4:8 C5:4 D5:4 | E5:8 G5:8 | G#5:16', leadWave: 'sine', leadVol: 0.05, arp: { rate: 4, vol: 0.008, oct: 1 }, drums: '', hatVol: 0 }
+});
+Object.assign(HUMS, {
+  bina: { h: 46, skin: '#8a5a3a', hair: '#2a1a1a', hairStyle: 'coque', top: '#a8503a', bottom: '#4a3a2a', apron: '#f2ecdc' },
+  tonho: { h: 50, skin: '#c8a088', hair: '#3a2a1a', top: '#6a6a7a', coat: '#5a5a6a', bottom: '#3a3a44', hat: '#2a2a30', extra: HUMS.pavio.extra }
+});
+Object.assign(WHO, {
+  bina: { name: () => 'Dona Bina', portrait: () => portHum('bina'), voice: voz(460), col: '#ffe0d0' },
+  tonho: { name: () => 'Tonho', portrait: () => portHum('tonho'), voice: voz(300, 'blipLow'), col: '#e8e0d8' }
+});
+Object.assign(EQ2, {
+  lanternaZe: { nm: 'Lanterna do Zé', slot: 'amuleto', who: ['lume', 'bau', 'rita'], mod: { mag: 3, mdef: 2 }, fx: [], preco: 0, d: 'A lanterna de mina do Zé Candeeiro, devolvida pela família. +3 MAG, +2 RESIST.' },
+  florMusgo: { nm: 'Flor do Musgo', slot: 'amuleto', who: ['bau', 'lume', 'rita'], mod: { def: 3, mdef: 3, mhp: 12 }, fx: [], preco: 0, d: 'Nasceu da semente do Guarda-Musgo, na estufa da Cidade Alta. +3 DEF, +3 RESIST, +12 PV.' },
+  coleiraSabugo: { nm: 'Coleira do Sabugo', slot: 'amuleto', who: ['rita', 'bau'], mod: { atk: 3, spd: 2 }, fx: [], preco: 0, d: 'O Sabugo deu de presente (mordendo). +3 ATQ, +2 VEL.' }
+});
+const c7Ativo = () => !!(G.flags && G.flags.c7Init && !G.flags.c7Fim);
+const caoSpr = (t, d) => { const c = caoMapaArt(Math.floor(t / 10) % 2, !!G.flags.c7Sabugo); return d === 'left' ? flipC(c) : c; };
+{ const _mm7 = montarMapas2; montarMapas2 = function () {
+  _mm7.apply(this, arguments);
+  const grade = (m) => { for (const p of m.props || []) { if (p._hld) continue; const f = p.img; p._hld = true; p.casaO = p.casaO || f.casaO; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } };
+  // ===== ACAMPAMENTO DA MINA DE ORIGEM =====
+  MAPS2.acampamento = { rows: ROWS7.acampamento, key: KEY7, name: 'Serra · Acampamento da Mina de Origem', music: 'serra7', batBg: bgMinaOrigem, bg: '#141828', showMoney: true,
+    procurado: true, get stealth() { return c7Ativo() && !G.flags.c7Coracao; }, grupoLuz: ['guardaR', 'caoLanterna'], reinicio: () => AC7.chegada,
+    falaOlhou: falaOlhou6, pegoTxt: pegoTxt6, tutPego: async () => { if (!G.flags.tutAcamp7) { G.flags.tutAcamp7 = true; await say('[A Guarda que saiu de Auren está aqui. Mesmas regras: de PAVIO e DE NOITE, ninguém olha. De dia, longe dos cones.]', 'cat'); } },
+    props: [
+      { img: busArt, x: AC7.onibus[0] - 1, y: AC7.onibus[1] + 2, solid: [[AC7.onibus[0] - 1, AC7.onibus[1], 6, 2]] },
+      { img: bocaMinaArt, x: 25, y: 10 },
+      { img: () => canoAmbarArt(12, false), x: 29, y: 9.6, by: 9 * TS },
+      { img: () => canoAmbarArt(10, true), x: 52.2, y: 19, by: 9 * TS },
+      ...AC7.barracas.map(([x, y, w]) => ({ img: () => barracaGuardaArt(w), x, y })),
+      { img: galpaoBombasArt, x: AC7.galpao[0], y: AC7.galpao[1] },
+      { img: () => barracaGuardaArt(8), x: AC7.refeit[0], y: AC7.refeit[1] },
+      ...AC7.vagonetes.map(([x, y]) => ({ img: memo(vagonetaArt), x: x - 0.4, y: y + 1 })),
+      { img: () => fogueiraArt(Math.floor(W2.t / 8)), x: AC7.fogueira[0] - 0.2, y: AC7.fogueira[1] + 1, solid: [[...AC7.fogueira, 1, 1]] },
+      ...AC7.arvores.map(([x, y], i) => ({ img: () => pinheiroArt(i), x: x - 0.6, y: y + 1, solid: [[x, y, 1, 1]], arvore: true })),
+      ...AC7.postes.map(([x, y]) => ({ img: () => o7('lampM' + ehNoite(), () => lampiaoMinaArt(ehNoite())), x: x + 0.05, y: y + 1, solid: [[x, y, 1, 1]] }))
+    ],
+    ents: [
+      { t: 'trig', x: AC7.boca[0][0], y: AC7.boca[0][1], w: 2, h: 1, passa: true, run: entrarBombas },
+      marcoEnt(...AC7.marco),
+      morador('jorge', ...AC7.jorge, { dir: 'right', gone: () => !!G.flags.c7Jorge, rotina: rot([6, 28, 'limpar', 400, 'right'], [8, 29, 'olhar', 300, 'up']), talk: falaJorge7 }),
+      morador('bina', ...AC7.cozinheiro, { dir: 'up', gone: () => ehNoite(), rotina: rot([44, 31, 'limpar', 300, 'up'], [47, 31, 'carregar', 200, 'right']), talk: falaBina }),
+      { t: 'sign', id: 'sabugo', x: AC7.cao[0], y: AC7.cao[1], h: 20, spr: caoSpr, talk: falaSabugo },
+      morador('tonho', ...AC7.pavios[0], { dir: 'down', rotina: rot([30, 18, 'carregar', 260, 'down'], [30, 21, 'empilhar', 260, 'down']), talk: falaTonho }),
+      morador('pavio', ...AC7.pavios[1], { id: 'pavioMin', dir: 'left', gone: () => !ehNoite(), rotina: rot([35, 23, 'acender', 200, 'left'], [40, 23, 'acender', 200, 'right']), talk: async () => { await say(pickOne(['Boa noite. Eu bombeio o âmbar da Coroa.', 'Boa noite. Eu bombeio. Eu... de onde eu era?']), 'pavioG'); } }),
+      { t: 'sign', x: AC7.placa[0], y: AC7.placa[1], h: 30, talk: async () => { await say('* PLACA DOS TURNOS. "DIA: PERFURAÇÃO (equipe de fora). NOITE: GALERIA DAS BOMBAS (Pavios). CORAÇÃO: só com ordem do Acendedor-Mor."'); G.flags.c7Placa = true; } },
+      bauEnt('acampamento', 'b1', ...AC7.bau, async () => { await dar('frasco', 2); await dar('cobres', 60); }),
+      ...AC7.rondas.map((p, i) => ({ t: 'ronda', id: 'guardaA' + i, x: p[0][0], y: p[0][1], path: p, h: 56, passo: 24, spr: guardaSpr6, dir: 'right', gone: () => !c7Ativo() || !!G.flags.c7Coracao, talk: async () => { await say(pickOne(['Serra fria. Turno longo.', 'Mandaram a gente da capital pra cá. Diz que tem baú com dente rondando.']), 'guardaRH'); } }))
+    ],
+    onEnter: async () => { if (c7Ativo() && !G.flags.c7Chegou) await chegaAcampamento(); }
+  };
+  montaBarreira({ id: 'boca7', ativo: () => c7Ativo() && !G.flags.c7Coracao, map: 'acampamento', cancela: AC7.barreira, guarda: AC7.guarda, lado: 'baixo', volta: AC7.bocaOut, bg: bgMinaOrigem, grupo: ['guardaR', 'caoLanterna'], so: ['pavio'], foraSo: 'Boca da mina. Só Pavio de turno. O resto, pra trás da linha amarela.',
+    perg: { pavio: { q: 'Turno da noite? Galeria de quê, Pavio?', ops: ['Perfuração.', 'Das bombas.', 'Do Coração.'], certa: 1, ok: 'Bombas. Desce. E não encosta no vapor.', dica: 'A PLACA DOS TURNOS, perto dos trilhos. Eu passei do lado dela.' } } });
+  // ===== GALERIAS DE BOMBEAMENTO =====
+  MAPS2.bombas = { rows: ROWS7.bombas, key: KEY7, name: 'Mina de Origem · Galerias de Bombeamento', music: 'bombas7', batBg: bgBombas, bg: '#120e12', semCeu: true, tint: 'rgba(255,170,80,0.06)',
+    props: [
+      ...[[10, 26], [18, 26], [26, 27], [14, 20], [22, 21], [30, 20], [12, 14], [20, 15], [28, 14], [16, 8], [24, 9], [32, 8]].map(([x, y]) => ({ img: bombaArt, x, y: y + 2 })),
+      ...[1, 7, 13, 19, 25].map(y => ({ img: () => canoAmbarArt(20, false), x: 2.5, y: y + 0.3, by: (y - 1) * TS }))
+    ],
+    ents: [
+      ...BO7.entrada.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; sfx('door'); await fadeOut(10); loadMap2('acampamento', AC7.boca[0][0], AC7.boca[0][1] + 1, 'down'); W2.barOpen.boca7 = true; await fadeIn(10); } })),
+      ...BO7.saida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; if (!G.flags.c7Broca) { await say('* Uma porta de ferro, trancada por dentro da cabine da broca.'); return; } sfx('door'); await fadeOut(10); loadMap2('coracao', ...CO7.entra, 'down'); await fadeIn(10); if (MAPS2.coracao.onEnter) await MAPS2.coracao.onEnter(); } })),
+      ...Object.entries(BO7.valvulas).map(([id, V_]) => ({ t: 'sign', id: 'val' + id, x: V_.at[0], y: V_.at[1], h: 28, spr: () => valvulaArt(V_.tog.some(t => !ventSt()[t])), talk: () => puxaValvula(id) })),
+      marcoEnt(...BO7.marco),
+      morador('pavio', ...BO7.mineiro, { id: 'pavioBomba', dir: 'left', talk: async () => { await say(pickOne(['Boa noite. Válvula A com B. Válvula B com C. Eu repito pra não esquecer. O resto eu esqueci.', 'Vapor ligado é parede. Vapor desligado é caminho. É tudo que eu sei.']), 'pavioG'); } }),
+      ...BO7.bau.map(([x, y], i) => bauEnt('bombas', 'b' + i, x, y, async () => { if (i) { await dar('pluma', 1); await dar('tinta', 2); } else { await dar('frasco', 1); await dar('cobres', 50); } })),
+      inimigo('cl1', 'caoLanterna', ...BO7.foes[0], ['caoLanterna'], { spr: (t, d) => { const c = caoMapaArt(Math.floor(t / 8) % 2, false); return d === 'left' ? flipC(c) : c; }, h: 20, bg: bgBombas }),
+      inimigo('vv1', 'valvulaViva', ...BO7.foes[1], ['valvulaViva', 'caoLanterna'], { spr: () => valvulaArt(false), h: 30, bg: bgBombas }),
+      inimigo('vv2', 'valvulaViva', ...BO7.foes[2], ['valvulaViva', 'guardaR'], { spr: () => valvulaArt(false), h: 30, bg: bgBombas }),
+      inimigo('cl2', 'caoLanterna', ...BO7.foes[3], ['caoLanterna', 'caoLanterna', 'guardaR'], { spr: (t, d) => { const c = caoMapaArt(Math.floor(t / 8) % 2, false); return d === 'left' ? flipC(c) : c; }, h: 20, bg: bgBombas }),
+      ...BO7.brocaTrig.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, gone: () => !!G.flags.c7Broca, run: lutaBroca }))
+    ],
+    onEnter: async () => { if (!G.flags.c7Bombas) { G.flags.c7Bombas = true; await say('* As Galerias de Bombeamento. Cinco túneis, um em cima do outro, ligados por respiros de vapor que assobiam. Canos de âmbar correm pelas paredes, quentes, dourados, cheios.'); await say('Isso não é mina. Mina tira pedra. Isso aqui... bebe.', 'rita'); await say('[Os canos sobem. Vêm de baixo. De BEM embaixo.]', 'cat'); } }
+  };
+  grade(MAPS2.acampamento); grade(MAPS2.bombas);
+}; }
+// ---------- começo ----------
+function iniciarCap7() {
+  if (G.flags.c7Init) return false;
+  G.flags.c7Init = true; G.poder = Math.max(G.poder || 1, 6); curarTudo(); G.hora = 9 * 60; G.dia = (G.dia || 0) + 1; G.disfarce = null;
+  G.items = Object.assign({}, G.items, { frasco: Math.max(3, G.items.frasco || 0) });
+  return true;
+}
+async function capitulo7() {
+  if (!MAPS2.acampamento) montarMapas2();
+  const novo = iniciarCap7();
+  if (!novo) { const p = G.pos && MAPS2[G.pos.map] ? G.pos : { map: 'interior', x: POS3.interior.entra[0], y: POS3.interior.entra[1], dir: 'up' }; loadMap2(p.map, p.x, p.y, p.dir); V.scene = 'world'; await fadeIn(20); return; }
+  await fadeOut(20);
+  await cartao(['CAPÍTULO 7', 'A Mina de Origem']);
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(30);
+  await say('* Dois dias depois do Selo. A base cheira a graxa: o Seu Jorge passou a noite na garagem, de baixo do 31, trocando uma correia que não precisava trocar.');
+  await say('Ele tá nervoso. Ele só conserta o que não quebrou quando tá nervoso.', 'lume');
+  await say('* Na mesa, a etiqueta de lona: "ÂMBAR BRUTO · MINA DE ORIGEM · pelo cano do CORAÇÃO". Do lado, o bilhete com a letra pequena. A Rita não deixa ninguém jogar fora nenhum dos dois.');
+  await say('A Guarda saiu do Bairro Baixo "para as minas". Os barris do Selo vêm de uma mina. O cano chama "Coração". Tudo aponta pro mesmo morro.', 'rita');
+  await say('A Mina de Origem fica na serra de trás, depois de Candeia. Estrada velha, de cascalho, que ninguém usa desde que abriram a nova. O 31 sobe. Eu levo.', 'jorge');
+  await say('O senhor tem certeza? Pode ser perigoso.', 'lume');
+  await say('Menina, eu atravessei dois mundos com esse ônibus. Uma serrinha não me assusta. ...O que me assusta é ficar aqui sentado.', 'jorge');
+  await say('* A Irmã Dalva aparece na porta da garagem com uma marmita para cada um e uma cara de quem não aprova.');
+  await say('Sopa. Pra estrada. E juízo, que eu não mando pra serra.', 'dalva');
+  await say('[O 31 está na GARAGEM. Saindo de DIA, a estrada tem cancelas da Guarda. De NOITE, só o farol enxerga as pedras. E a mina só abre para Pavio no turno da noite.]', 'cat');
+  save2();
+}
+{ const _c6 = capitulo6; capitulo6 = async function () { if (!MAPS2.acampamento) montarMapas2(); if (G.flags.c6Fim) return capitulo7(); return _c6(); }; }
+{ const _uw7c = updateWorld2; updateWorld2 = function () { _uw7c(); if (V.scene === 'world' && G.flags.c6Fim && !G.flags.c7Init && !worldBusy2() && !W2.mv) run2(capitulo7); }; }
+// ---------- a garagem: a estrada velha ----------
+{ const _gar = garagem; garagem = async function () {
+  if (G.flags.c7Jorge) { await say('* O 31 na garagem. A chave no contato. O banco do motorista, vazio, com a marca de quem sentou ali cinquenta anos.'); if (!G.flags.c7GaragemVazia) { G.flags.c7GaragemVazia = true; await say('...Ninguém mais sabe dirigir ele.', 'rita'); await say('Eu sei. Eu sei o caminho de cor. Eu só não sei dirigir.', 'lume'); } await say('[Sem motorista, o 31 não anda. Os Marcos continuam levando vocês aonde já foram.]', 'cat'); return; }
+  if (c7Ativo() && !G.flags.c7Chegou) {
+    const c = await choose('O 31 está de tanque cheio. Pra estrada velha das minas?', ['Partir agora', 'Esperar a noite e partir', 'Outro destino', 'Ficar na base'], 'jorge');
+    if (c === 3 || c < 0) return;
+    if (c === 2) return _gar();
+    if (c === 1) { G.hora = 20 * 60; await say('* Vocês esperam a noite na garagem, ouvindo o Seu Jorge contar como era a estrada de terra da cidade dele. Ele erra o nome da cidade duas vezes.'); }
+    await viagemEstrada();
+    return;
+  }
+  if (c7Ativo() && G.flags.c7Chegou) { const c = await choose('O 31 sobe a serra de novo. Pra onde?', ['Acampamento da Mina de Origem', 'Outro destino', 'Ficar na base'], 'jorge'); if (c === 0) { await say('Segura a tampa!', 'jorge'); sfx('door'); await fadeOut(20); loadMap2('acampamento', AC7.chegada[0] + 1, AC7.chegada[1], 'right'); await fadeIn(20); return; } if (c === 1) return _gar(); return; }
+  return _gar();
+}; }
+async function viagemEstrada() {
+  const noite = ehNoite();
+  await say(noite ? 'De noite a serra é escura. Eu enxergo pouco, então quem enxerga é o farol. Avisa se vir pedra, Lume!' : 'De dia tem Guarda na estrada. Cancela, apito, papelada. Desvia de tudo que for vermelho e branco!', 'jorge');
+  await fadeOut(20); playMusic('serra7');
+  const r = await estradaMinas(noite);
+  V.scene = 'world';
+  if (r.frascos) { G.items.frasco = (G.items.frasco || 0) + r.frascos; }
+  await fadeIn(10);
+  await say(`* Fim da estrada velha. ${r.frascos ? r.frascos + ' frasco(s) de âmbar que caíram de algum caminhão da Coroa rolam no chão do 31. ' : ''}${r.hits ? 'O 31 tem ' + r.hits + ' amassado(s) novo(s).' : 'O 31 chega sem um arranhão.'}`);
+  if (r.hits === 0) await say('Nenhum! Nem um arranhão! Eu sou bom. Eu SEMPRE fui bom. Eu só não lembro desde quando.', 'jorge');
+  if (r.cancela) { await say('* No pé do morro, um guarda da cancela que vocês derrubaram vem correndo, de lanterna e apito.'); await lutaMapa(['guardaR', 'caoLanterna'], { bg: bgMinaOrigem, semSurpresa: true }); }
+  G.hora = Math.max(G.hora, (noite ? 22 : 15) * 60);
+  loadMap2('acampamento', ...AC7.chegada, 'right'); playMusic('serra7');
+  if (MAPS2.acampamento.onEnter) await MAPS2.acampamento.onEnter();
+}
+async function chegaAcampamento() {
+  G.flags.c7Chegou = true;
+  await say('* O 31 para atrás de uma fileira de pinheiros, faróis apagados. Lá embaixo, no vale: o acampamento da Mina de Origem.');
+  await say('* Barracas da Guarda Real. Trilhos. Vagonetes de âmbar bruto. Canos dourados saindo da boca da mina e descendo a serra, na direção da capital, brilhando como veia.');
+  await say('Os guardas de Auren. Todos aqui.', 'rita');
+  await say('Eu fico com o 31. Se precisarem correr, corram pra cá: eu deixo o motor quente. E se a Guarda perguntar, eu sou um motorista perdido. Isso eu sou mesmo.', 'jorge');
+  await say('[A boca da mina, lá em cima. O turno da noite é de Pavio. Os casacos cinza ainda estão no Vão.]', 'cat');
+  save2();
+}
+async function entrarBombas() {
+  W2.mv = null;
+  if (!(W2.barOpen && W2.barOpen.boca7) && c7Ativo() && !G.flags.c7Coracao) return;
+  sfx('door'); await fadeOut(10); loadMap2('bombas', ...BO7.entra, 'up'); await fadeIn(10); if (MAPS2.bombas.onEnter) await MAPS2.bombas.onEnter();
+}
+async function falaJorge7() {
+  if (G.flags.c7Broca) { await say(pickOne(['Vocês vão descer mais? Eu tenho um guincho no 31. Cento e vinte metros de cabo. Se precisar, eu desço atrás.', 'Eu sonhei com uma garagem cheia de ônibus parados. Todos eram o 31. Acordei com saudade de uma coisa que eu não sei o que é.']), 'jorge'); }
+  else await say(pickOne(['Motor quente. Pode ir sossegado.', 'Os pinheiros daqui cheiram igual os da estrada da minha cidade. Qual era mesmo...?', 'Se a Guarda vier, eu digo que tô perdido. É verdade há uns quarenta anos.']), 'jorge');
+  const c = await choose('* Voltar com o 31?', ['Voltar para a base', 'Ficar'], 'jorge', 1);
+  if (c === 0) { await say('Segura a tampa!', 'jorge'); sfx('door'); await fadeOut(20); loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(20); await say('* A garagem da base. O 31 estala, esfriando. (Para voltar à serra: a garagem.)'); }
+}
+async function falaBina() {
+  await say(pickOne(['Sopa de mandioca, seis da tarde, todo dia. Os Pavios comem, os guardas reclamam. É a única diferença entre eles.', 'Ninguém aqui sabe de onde vem o âmbar. Diz que é "do fundo". Fundo de quê, eu pergunto. Ninguém responde.']), 'bina');
+  if (!G.flags.c7SabugoPista) { G.flags.c7SabugoPista = true; await say('O cachorro? É o Sabugo. Ninguém dá comida pra ele porque ele late pra Guarda. Ele só come pão de milho. Pão de MILHO. Cachorro com gosto refinado.', 'bina'); await say('O único pão de milho que presta nesse mundo era de um padeiro do Cais de Auren. Sumiu faz anos. Dizem que virou Pavio.', 'bina'); }
+}
+async function falaSabugo() {
+  if (G.flags.c7Sabugo) { await say(pickOne(['* O Sabugo abana o rabo inteiro. Às vezes o corpo vai junto.', '* O Sabugo deita do lado do baú e suspira. Dois que ninguém leva para passear.'])); return; }
+  if (G.flags.c7Pao) {
+    G.flags.c7Sabugo = true; sfx('item');
+    await say('* Você oferece o pão de milho do Seu Afonso. O Sabugo cheira, olha para você desconfiado, cheira de novo. E come como quem reconhece um gosto de infância.');
+    await say('* Depois ele sai cavando atrás da barraca da Guarda, volta com uma coleira velha na boca e larga no seu pé.');
+    ganharEquip('coleiraSabugo'); sfx('equip'); await say(`* Você recebeu a {y}${EQ2.coleiraSabugo.nm}{/}. ${EQ2.coleiraSabugo.d}`);
+    await dar('frasco', 2);
+    await say('Ele adotou a gente. Ou a gente adotou ele. Não sei quem adotou quem.', 'lume');
+    save2(); return;
+  }
+  await say(ehNoite() ? '* Um cachorro magro, preso numa corrente, late para um guarda que passa. Para você, não late: só olha, com fome.' : '* Um cachorro magro dorme debaixo de um vagonete. Abre um olho. Fecha.');
+  if (G.flags.c7SabugoPista && !devolvida('afonso')) await say('Pão de milho... o Pavio cozinheiro da Vila! Se ele lembrasse quem é...', 'rita');
+  else if (G.flags.c7SabugoPista) await say('O Seu Afonso! O pão de milho do Afonso! A gente pega na Vila dos Pavios.', 'lume');
+}
+async function falaTonho() {
+  if (G.flags.c7CartaFeita) { await say('A Dona Ilda mandou dizer que a família recebeu. Que o Zé... que a lanterna dele tá na janela. Acesa. Obrigado. Eu não sei por que eu tô chorando.', 'tonho'); return; }
+  if (G.flags.c7Carta) { await say('Candeia. Pra Dona Ilda, a professora. Ela sabe de quem é cada casa.', 'tonho'); return; }
+  await say('Boa noite. Eu bombeio o âmbar. Eu sou de Candeia. Eu acho. Eu lembro da serra.', 'tonho');
+  await say('* Ele tira do casaco uma lanterna de mina pequena, amassada, com um nome riscado a canivete: "ZÉ CANDEEIRO".');
+  await say('O Zé trabalhava do meu lado. Ele... um dia ele entrou no Coração com a equipe do dia e não voltou. Me deram a lanterna dele. Eu não sei pra quem devolver. Eu não lembro onde era a casa dele.', 'tonho');
+  await say('Candeia. A Dona Ilda sabe de quem é cada casa de Candeia. A gente leva.', 'rita');
+  G.flags.c7Carta = true; sfx('item'); await say('* {y}A lanterna do Zé{/} vai para o Vão. (Leve até a Dona Ilda, em Candeia. Pelo Marco.)');
+}
+async function lutaBroca() {
+  if (G.flags.c7Broca) return;
+  W2.mv = null;
+  await say('* No alto da última galeria, uma máquina enorme de lagarta e espiral está parada de frente para a parede, como quem pensa. A cabine acende. Ninguém está dentro.');
+  await say('Ela tá sozinha. Ninguém dirige.', 'lume');
+  await say('* A broca vira. Devagar. Para vocês.');
+  const r = await lutaMapa(['broca'], { bg: bgBombas, music: 'boss', pos: [[180, 160]], intro: async () => { const e = BT.foes[0]; e.phases = fasesBroca(); e.ct = 12; callout('A BROCA', '#ffd070', 90); } });
+  if (r !== 'win') return;
+  G.flags.c7Broca = true; playMusic('bombas7');
+  await say('* A broca para, fumegando. Na ponta da espiral, presa nos dentes, uma pedra de âmbar bruto do tamanho de um punho. Ela PULSA, como as do veio das Galerias, há tanto tempo.');
+  await say('[Âmbar bruto VIVO. Da masmorra. Não é tinta de superfície: é o mesmo âmbar das runas antigas. Dá para escrever com ele.]', 'cat');
+  const Gm = grim(); if (!Gm.elems.includes('ambar')) Gm.elems.push('ambar');
+  sfx('rune'); await say('* {y}Elemento novo no Grimório: ÂMBAR!{/} (luz-pedra: quebra +1 de escudo e deixa RESINA, o alvo fica lento. Fusões com Brasa, Geada, Seiva, Fuligem e Areia.)');
+  await say('A porta. A broca tinha a chave da porta de cima. E a porta de cima vai pro... Coração.', 'rita');
+  save2();
+}
+
+// ================= CAPÍTULO 7 — Parte 2: O CORAÇÃO =================
+// O CORAÇÃO: um poço no escuro, patamares e PONTES DE CRISTAL que só existem enquanto o ECO do canto da Lume acende.
+// Lá embaixo, pelo elevador de caçamba, o ANDAR 1 DA MASMORRA do jogo 1, visto de cima e drenado: a Câmara do
+// Despertar (o pedestal onde o baú acordou), o gancho onde a Lume ficou pendurada, a Sala de Leitura Afogada (a
+// página da Ofélia), a Antessala do Musgo (o GUARDA-MUSGO AMBARINO, mini-chefe, preso num cano). O buraco da broca desce
+// ao FUNDO: O EXTRATOR (chefe). Depois: o que o capítulo cobra (está no jogo e na bíblia), a 2ª EVOLUÇÃO, a subida, a
+// garagem. (Detalhes da história: só no jogo e na bíblia.)
+{ const _mm7b = montarMapas2; montarMapas2 = function () {
+  _mm7b.apply(this, arguments);
+  const grade = (m) => { for (const p of m.props || []) { if (p._hld) continue; const f = p.img; p._hld = true; p.casaO = p.casaO || f.casaO; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } };
+  // ===== O CORAÇÃO =====
+  MAPS2.coracao = { rows: ROWS7.coracao, key: KEY7, name: 'Mina de Origem · O Coração', music: 'coracao7', batBg: bgCoracao, bg: '#04020a', semCeu: true, dark: 'rgba(4,2,10,0.80)', get lights() { return luzesVeio(this, 34); },
+    props: [],
+    ents: [
+      ...CO7.volta.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; sfx('door'); await fadeOut(10); loadMap2('bombas', BO7.saida[0][0], BO7.saida[0][1] + 1, 'down'); await fadeIn(10); } })),
+      ...CO7.elevador.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: descerElevador })),
+      ...Object.entries(CO7.eco).map(([k, [x, y]]) => ({ t: 'sign', id: 'eco' + k, x, y, h: 20, spr: () => pedraEcoArt(ecoT(k) > 0), get luz() { return ecoT(k) > 0 ? 90 : 18; }, talk: () => pedraEco(k) })),
+      marcoEnt(...CO7.marco),
+      ...CO7.bau.map(([x, y], i) => bauEnt('coracao', 'b' + i, x, y, async () => { if (i) { await dar('frasco', 1); await dar('pluma', 1); } else { await dar('tinta', 3); await dar('cobres', 80); } })),
+      inimigo('ms1', 'morcegoSelo', ...CO7.foes[0], ['morcegoSelo', 'morcegoSelo'], { spr: (t) => morcegoSeloArt(Math.floor(t / 6) % 2), h: 22, bg: bgCoracao }),
+      inimigo('rv1', 'ratoVelaA', ...CO7.foes[1], ['ratoVelaA', 'morcegoSelo', 'ratoVelaA'], { spr: (t, d) => { const c = ratoVelaAArt(Math.floor(t / 8) % 2); return d === 'left' ? flipC(c) : c; }, h: 22, bg: bgCoracao, get luz() { return 30; } }),
+      { t: 'sign', x: CO7.marca[0], y: CO7.marca[1], h: 20, talk: async () => { await say('* Riscado na pedra, com canivete: "Z.C. desceu aqui. Turno do dia." E embaixo, mais fundo, outra mão: "Ele não subiu."'); } }
+    ],
+    onEnter: async () => { if (!G.flags.c7Coracao) { G.flags.c7Coracao = true; await say('* O Coração. Um poço redondo, tão largo que a luz da Lume não acha a outra parede. Lá embaixo, muito embaixo, uma batida: TUM. TUM. Como um peito.'); await say('* Os canos de âmbar descem pela parede em espiral. Entre os patamares, nada. Só escuro e o cheiro de vela apagada.'); await say('[Profundidade... conhecida. Eu conheço este escuro. Eu NASCI neste escuro.]', 'cat'); await say('Aqui não tem ponte nenhuma.', 'rita'); await say('Tem pedra com buraco. Pedra que canta. Eu ouvi uma dessas antes de vocês me acharem, lá embaixo.', 'lume'); save2(); } }
+  };
+  // ===== ANDAR 1 DA MASMORRA =====
+  MAPS2.andar1 = { rows: ROWS7.andar1, key: KEY7, name: 'A Masmorra · Andar 1 (visto de cima)', music: 'despertar', batBg: bgAndar1, bg: '#0a120c', semCeu: true, dark: 'rgba(6,12,8,0.34)', get lights() { return [...luzesVeio(this, 40), [20, 4, 80], [9, 12, 70], [17, 13, 60], [30, 12, 70], [34, 15, 60], [16, 23, 70], [24, 25, 70], [20, 18, 50]]; },
+    props: [
+      { img: pedestalArt, x: AN7.pedestal[0] - 1.2, y: AN7.pedestal[1] + 1, solid: [[AN7.pedestal[0] - 1, AN7.pedestal[1], 3, 1]] },
+      { img: ganchoLustreArt, x: AN7.gancho[0] - 0.1, y: AN7.gancho[1] + 0.2, by: (AN7.gancho[1] - 1) * TS },
+      ...AN7.estantes.map(([x, y]) => ({ img: estanteAfogadaArt, x: x - 1.5, y: y + 1, solid: [[x - 1, y, 3, 1]] })),
+      { img: () => canoAmbarArt(19, true), x: 33.2, y: 20, by: 1 * TS },
+      { img: () => canoAmbarArt(8, false), x: 12, y: 21.2, by: 19 * TS }
+    ],
+    ents: [
+      ...AN7.volta.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; sfx('door'); await fadeOut(12); loadMap2('coracao', CO7.elevador[0][0], CO7.elevador[0][1] - 1, 'up'); await fadeIn(12); } })),
+      ...AN7.descida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: descerFundo7 })),
+      { t: 'sign', x: AN7.pedestal[0], y: AN7.pedestal[1] + 1, h: 20, talk: falaPedestal },
+      { t: 'sign', x: AN7.gancho[0], y: AN7.gancho[1] + 1, h: 20, talk: falaGancho },
+      { t: 'sign', x: AN7.ofelia[0], y: AN7.ofelia[1], h: 20, talk: falaPaginaOfelia },
+      marcoEnt(...AN7.marco),
+      ...AN7.bau.map(([x, y], i) => bauEnt('andar1', 'b' + i, x, y, async () => { if (i) { await dar('frasco', 1); await dar('tinta', 2); } else { await dar('pluma', 2); } })),
+      inimigo('co1', 'cogumeloA', ...AN7.foes[0], ['cogumeloA', 'ratoVelaA'], { spr: (t) => cogumeloAArt(Math.floor(t / 14) % 2), h: 26, bg: bgAndar1 }),
+      inimigo('co2', 'cogumeloA', ...AN7.foes[1], ['cogumeloA', 'cogumeloA', 'morcegoSelo'], { spr: (t) => cogumeloAArt(Math.floor(t / 14) % 2), h: 26, bg: bgAndar1 }),
+      inimigo('rv2', 'ratoVelaA', ...AN7.foes[2], ['ratoVelaA', 'ratoVelaA'], { spr: (t, d) => { const c = ratoVelaAArt(Math.floor(t / 8) % 2); return d === 'left' ? flipC(c) : c; }, h: 22, bg: bgAndar1 }),
+      ...AN7.musgoTrig.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, gone: () => !!G.flags.c7Musgo, run: lutaMusgo }))
+    ],
+    onEnter: async () => { if (!G.flags.c7Andar1) await chegaAndar1(); }
+  };
+  // ===== O FUNDO =====
+  MAPS2.fundo7 = { rows: ROWS7.fundo7, key: KEY7, name: 'O Coração · O Fundo', music: 'coracao7', batBg: bgFundo7, bg: '#0a0608', semCeu: true, tint: 'rgba(255,170,90,0.08)',
+    props: [{ img: () => extratorMapaArt(!G.flags.c7Extrator), x: FU7.extrator[0] - 0.5, y: FU7.extrator[1] + 1 }],
+    ents: [ ...FU7.frente.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, gone: () => !!G.flags.c7Extrator, run: lutaExtrator })) ],
+    onEnter: async () => { if (!G.flags.c7Fundo) { G.flags.c7Fundo = true; await say('* O fundo. Uma câmara redonda, quente, com as paredes cheias de veio dourado. No meio, cravada no chão como uma estaca, uma máquina do tamanho de uma igreja: o EXTRATOR.'); await say('* As mangueiras dele descem pelo chão. Para baixo. Para onde ficam os outros andares da masmorra. TUM. TUM. Cada batida, o veio das paredes apaga um pouquinho.'); await say('Ela tá bebendo a masmorra. A sua casa, @.', 'lume'); await say('[E, com a masmorra, tudo que estava guardado nela.]', 'cat'); } }
+  };
+  grade(MAPS2.andar1); grade(MAPS2.fundo7);
+}; }
+async function descerElevador() {
+  W2.mv = null;
+  await say('* Uma caçamba de ferro presa num cabo, no fim do último patamar. Uma alavanca. Uma placa: "NÍVEL DE EXTRAÇÃO 1".');
+  sfx('door'); await fadeOut(16); sfx('rumble'); await wait(30);
+  loadMap2('andar1', ...AN7.entra, 'down'); await fadeIn(16);
+  if (MAPS2.andar1.onEnter) await MAPS2.andar1.onEnter();
+}
+async function chegaAndar1() {
+  G.flags.c7Andar1 = true;
+  await say('* A caçamba para. O cabo estala. Vocês descem num chão de musgo, úmido, e o cheiro chega antes de tudo: livro molhado, vela, pedra.');
+  await say('[...Coordenadas confirmadas. Andar 1. CÂMARA DO DESPERTAR.]', 'cat');
+  await say('* Você conhece este lugar. Você conhece cada pedra deste lugar. Foi aqui. Foi exatamente aqui que você abriu a tampa pela primeira vez, sem saber que tinha tampa.');
+  await say('Esse é o lugar? O SEU lugar?', 'rita');
+  await say('* Mas está diferente. Canos de âmbar entram pelas paredes como raízes. O musgo está seco perto deles. As velas do corredor estão apagadas, e ninguém vem acender.');
+  await say('Eles... tão drenando. A masmorra inteira. Lá de cima.', 'lume');
+  save2();
+}
+async function falaPedestal() {
+  if (G.flags.c7Pedestal) { await say('* O pedestal. A marca do seu fundo ainda está na pedra.'); return; }
+  G.flags.c7Pedestal = true; playMusic('cha');
+  await say('* Um pedestal de pedra, baixinho. Em cima, a marca retangular de um baú que ficou ali tempo demais. A poeira desenha a sua forma.');
+  await say('* Você chega perto. Encaixa o fundo na marca. Serve. Ainda serve.');
+  await say('Eu acordei aqui. Eu não sabia o que eu era. Eu pensei que era um sonho ruim de quem dormiu no ônibus.', 'me');
+  await say('E aí?', 'lume');
+  await say('E aí eu comi um rato. Foi a primeira coisa que eu fiz na vida nova. Comi um rato.', 'me');
+  await say('* A Rita ri. Não queria rir, e ri, e a risada ecoa pela Câmara do Despertar inteira.');
+  playMusic('despertar');
+}
+async function falaGancho() {
+  if (G.flags.c7Gancho) { await say('* O gancho do lustre, no teto. Vazio.'); return; }
+  G.flags.c7Gancho = true; playMusic('cha');
+  await say('* No teto do corredor, um gancho de ferro. Enferrujado. Vazio.');
+  await say('* A Lume para embaixo dele e não fala nada por um tempo.');
+  await say('Eu ficava aqui. Pendurada. Um lustre que ninguém acendia. Vinte anos, trinta, eu não sei. Ninguém passava. Ninguém olhava pra cima.', 'lume');
+  await say('Aí passou um baú. Um baú que olhou pra cima.', 'lume');
+  await say('Eu olho pra cima. É mania. Na Terra eu andava olhando o céu e tropeçava.', 'me');
+  await say('* A Lume encosta a mão no gancho. Depois tira, devagar, como quem fecha uma porta sem fazer barulho.');
+  await say('Não precisa voltar. Já tá aceso.', 'lume');
+  playMusic('despertar');
+}
+async function falaPaginaOfelia() {
+  if (G.flags.c7Pagina) { await say(G.flags.c7PaginaFeita ? '* A estante afogada. A página agora está no seu Grimório.' : '* A estante afogada. A página da Ofélia está no Vão: a Dona Iolanda, em Auren, sabe costurar papel antigo.'); return; }
+  G.flags.c7Pagina = true; sfx('item');
+  const her = (typeof lerHeranca === 'function' && lerHeranca()) || {}, lembra = her.esc && her.esc.ofelia;
+  await say('* Na Sala de Leitura Afogada, uma estante caída na água rasa. Presa entre dois livros inchados, uma página seca. Seca, num lugar onde tudo está molhado.');
+  await say('* A letra é inclinada, elegante, de bibliotecária. Uma letra que você conhece.');
+  await say(lembra ? '* "Meu baú. Se você voltar aqui, é porque lá em cima não está bom. Eu deixei esta página seca de propósito. Escreve nela o que você precisar. — Ofélia, que lembra de você."' : '* "Para quem voltar: esta página aceita qualquer feitiço. Não deixe molhar. — O."');
+  await say('[Uma página de grimório ANTIGO. Não cabe no Grimório assim, solta. Precisa ser costurada. Quem costura papel antigo...]', 'cat');
+  await say('A Dona Iolanda! Na papelaria. Ela costura qualquer papel.', 'lume');
+}
+async function lutaMusgo() {
+  if (G.flags.c7Musgo) return; W2.mv = null;
+  await say('* A Antessala do Musgo. No meio, de joelhos, um gigante de pedra coberto de musgo seco. Um cano de âmbar entra nas costas dele. A cada batida lá de baixo, ele estremece.');
+  await say('[O GUARDA-MUSGO. O primeiro chefe. O primeiro que você venceu, quando era só um caixote com dente.]', 'cat');
+  await say('* Os olhos dele acendem. Verdes. Depois dourados. Ele levanta, porque um guarda levanta quando alguém entra na antessala. É a única coisa que sobrou nele.');
+  const r = await lutaMapa(['musgoA'], { bg: bgAndar1, music: 'boss', pos: [[184, 156]], intro: async () => { const e = BT.foes[0]; e.phases = fasesMusgo(); e.ct = 12; callout('GUARDA-MUSGO AMBARINO', '#8ac860', 90); } });
+  if (r !== 'win') return;
+  G.flags.c7Musgo = true; playMusic('despertar');
+  await say('* O gigante cai de joelhos de novo. A Rita puxa o cano das costas dele com as duas mãos. O âmbar espirra, dourado, e para.');
+  await say('* O Guarda-Musgo olha para você. Um olhar muito velho. Depois se desfaz em musgo, devagar, como quem deita para dormir. No meio do musgo, uma semente verde do tamanho de um punho.');
+  G.flags.c7Semente = true; sfx('item');
+  await say('* {y}Semente do Musgo{/} no Vão. (Ela quer terra boa. A estufa da Cidade Alta tem a melhor terra que vocês já viram.)');
+  await say('Ele guardava a porta. Agora não precisa mais.', 'lume');
+  save2();
+}
+async function descerFundo7() {
+  W2.mv = null;
+  if (!G.flags.c7Musgo) { await say('* O buraco da broca, que desce ainda mais. O Guarda-Musgo está na frente, de joelhos.'); return; }
+  await say('* O buraco que a broca abriu desce reto, liso, quente. Vocês descem segurando nos canos.');
+  await fadeOut(16); loadMap2('fundo7', ...FU7.entra, 'up'); await fadeIn(16);
+  if (MAPS2.fundo7.onEnter) await MAPS2.fundo7.onEnter();
+}
+async function lutaExtrator() {
+  if (G.flags.c7Extrator) return; W2.mv = null;
+  await say('* O Extrator percebe vocês. Não tem olho: tem uma câmara de vidro cheia de âmbar no peito, que vira para vocês como um girassol.');
+  await say('Desliga isso, @. Desliga ISSO!', 'rita');
+  const r = await lutaMapa(['extrator'], { bg: bgFundo7, music: 'boss', pos: [[186, 150]], intro: async () => { const e = BT.foes[0]; e.phases = fasesExtrator(); e.ct = 15; callout('O EXTRATOR', '#ffd070', 90); } });
+  if (r !== 'win') return;
+  G.flags.c7Extrator = true;
+  await cenaFundo7();
+}
+// o que o Cap. 7 cobra (segredo da história: só aqui no jogo e na bíblia)
+async function cenaFundo7() {
+  playMusic(null);
+  await say('* O Extrator para. A batida, TUM, TUM, falha uma vez. Duas. E silencia.');
+  await say('* Lá em cima, muito em cima, em Auren, alguma coisa pisca. Vocês não veem. Mas sentem: o veio das paredes inteiro, de uma vez, apaga e acende.');
+  await wait(40);
+  await say('* Passos. Na escada de ferro que desce pela parede do fundo, uma lanterna. Depois outra. Depois dez. A Guarda Real. E, na frente deles, sem lanterna nenhuma, de casaco escuro e luvas, um homem que desce como quem desce para o próprio porão.');
+  playMusic('perda');
+  await say('Senhor baú. Senhoras.', 'vesper');
+  await say('* O Conde Vesper. O Acendedor-Mor. Ele olha o Extrator parado, as mangueiras caídas, o vidro rachado. Não está zangado. Está fazendo conta.');
+  await say('Doze anos sem uma noite apagada, e em três minutos o hospital dos pobres ficou no escuro. Três minutos. Eu anotei.', 'vesper');
+  await say('Ele tá bebendo a MASMORRA. O lugar de onde ele veio! E o senhor sabe!', 'rita');
+  await say('Sei. Sei de onde o senhor baú veio, sei o que tem lá embaixo, sei quantas noites cada andar rende. A masmorra é uma mina, senhora Rita. A mais funda que existe. A Coroa só tirou a placa.', 'vesper');
+  await say('* Ele tira o caderno preto do bolso do casaco. Abre numa página em branco.');
+  await say('A máquina precisa religar. E para religar, precisa de uma carga. Grande. O senhor quebrou. É justo que o senhor pague.', 'vesper');
+  await say('* Os guardas seguram a Rita. Seguram a Lume. Duas mangueiras do Extrator levantam do chão, devagar, sem ninguém tocar nelas, e viram para a Lume.');
+  await say('Não. NÃO. Leva as minhas! Eu tenho mais! Eu tenho uma masmorra inteira dentro da tampa!', 'me');
+  await say('As do senhor eu não sei ler. Ninguém sabe ler um baú. É o senhor, aliás, que lê os outros.', 'vesper');
+  await say('* A ponta da mangueira chega a um palmo do rosto da Lume. A chama dela treme e encolhe.');
+  await wait(20);
+  await say('* E então, um barulho que não pertence a uma mina. Uma buzina. Velha, rouca, de ônibus. Ecoando pelo buraco da broca, lá de cima.');
+  await say('* Um cabo de aço desce pelo buraco. Pendurado nele, de macacão de mecânico e com a chave do 31 no bolso, o Seu Jorge.');
+  await say('Eu disse que tinha guincho. Cento e vinte metros. Sobrou cabo.', 'jorge');
+  await say('Senhor Jorge. O motorista.', 'vesper');
+  await say('O motorista. É isso. A vida inteira, é isso que eu sou.', 'jorge');
+  await say('* O Seu Jorge olha as mangueiras. Olha a Lume. Olha você. E entende mais rápido do que vocês, como quem já viu muito acidente na estrada.');
+  await say('Essa coisa come lembrança? Então leva as minhas. Eu tenho cinquenta anos de estrada aqui dentro. Dois mundos. Um ônibus que atravessou o chão. Isso deve render um bocado de noite.', 'jorge');
+  await say('Seu Jorge, não! NÃO!', 'lume');
+  await say('* O Vesper abre o caderno numa página nova. Escreve. Faz uma conta. Olha o Jorge por cima dos óculos como um avaliador de penhor olha um relógio de ouro.');
+  await say('...Cinquenta anos de estrada. Uma travessia entre mundos. Ninguém nunca me ofereceu algo assim. É generoso, senhor Jorge. É muito mais do que a máquina precisa.', 'vesper');
+  await say('Mais? Então solta as meninas e deixa eles irem embora. O troco é deles.', 'jorge');
+  await say('* O Vesper pensa. Um segundo, só. E faz um gesto com a luva. Os guardas soltam a Rita e a Lume.', 'n');
+  await say('Combinado. Eu cumpro o que eu anoto, senhor Jorge. Sempre.', 'vesper');
+  await say('* O Seu Jorge vem até você. Agacha. Bate duas vezes na sua tampa, como batia no painel do 31 quando ele pegava no tranco.');
+  await say('Cuida do 31. Ele é chato de pegar no frio. Tem que dar duas bombadas no pedal antes.', 'jorge');
+  await say('Seu Jorge. Por favor. A gente acha outro jeito. A gente SEMPRE acha outro jeito!', 'me');
+  await say('Acha sim. Vocês acham. É por isso que eu tô fazendo isso. Alguém tem que ficar pra achar.', 'jorge');
+  await say('* Ele se levanta, vai até a cadeira de ferro na frente do Extrator e senta. Ajeita o boné. As mangueiras descem até ele com uma delicadeza horrível.');
+  await say('Lume. Canta aquela. A da estrada. Pra eu ir ouvindo.', 'jorge');
+  sfx('rune'); playMusic('ending');
+  await say('* A Lume canta. A voz falha no segundo verso e ela continua assim mesmo, falhada, cada vez mais alto, enquanto a luz dourada sai do Seu Jorge e sobe pelas mangueiras.');
+  await say('* O Extrator dá uma batida. TUM. O veio das paredes acende inteiro, mais forte do que nunca.');
+  await wait(40); playMusic(null);
+  await say('* O Seu Jorge pisca. Olha as próprias mãos de mecânico como quem olha luvas emprestadas. Olha a Rita. Olha a Lume, que parou de cantar. Olha você.');
+  await say('* E diz, com a voz educada e vazia que vocês conhecem de tantas ruas:');
+  await say('Boa noite. Eu acendo os postes da Coroa.', 'pavioG');
+  G.flags.c7Jorge = true;
+  await wait(30);
+  await say('* O Vesper fecha o caderno. Um guarda tira o macacão do Jorge e põe um casaco cinza nos ombros dele. O Jorge agradece. Não sabe pelo quê.');
+  await say('Ele vai ter pensão. Casa na Vila. Sopa às sete. Eu cuido dos meus Pavios, senhor baú. Melhor do que o mundo cuidou deles antes.', 'vesper');
+  await say('* Ele sobe a escada de ferro. Os guardas sobem atrás. O Seu Jorge sobe no meio deles, de casaco cinza, devagar, segurando o corrimão como quem tem medo de altura. Ele nunca teve medo de altura.');
+  await say('* Ninguém prende vocês. Ninguém precisa.');
+  await wait(50);
+  await say('* A Rita está sentada no chão, com a lança atravessada no colo. A Lume está de pé, olhando a escada vazia. Você está no meio da câmara, perto do veio, e não consegue fechar a tampa.');
+  await say('* O veio debaixo de você pulsa. O âmbar bruto da masmorra, o mesmo que fez o seu corpo. Ele está quente. Ele está CHAMANDO.');
+  await cenaEvolucao7();
+  playMusic('perda');
+  await say('* O baú novo se levanta. Pesa diferente. Olha diferente. A Rita olha para você e não diz nada. A Lume encosta a mão na sua tampa nova.');
+  await say('Ele disse "alguém tem que ficar pra achar". A gente ficou. Então a gente acha.', 'lume');
+  await say('A gente devolve, Lume. Um por um. O Jorge por último, porque ele vai fazer questão de ser o último da fila.', 'rita');
+  await fimCap7();
+}
+async function fimCap7() {
+  await fadeOut(30);
+  G.flags.c7Fim = true; G.hora = 23 * 60; G.dia = (G.dia || 0) + 1; G.disfarce = null;
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('perda'); await fadeIn(30);
+  await say('* A subida durou a noite toda. A forma nova aguentou o peso das duas pelo poço inteiro. O 31 estava onde o Jorge deixou, de motor ainda morno.');
+  await say('* Ninguém sabia dirigir. A Lume sentou no banco do motorista e chorou. A Rita deu duas bombadas no pedal, porque ele disse que tinha que dar duas, e o 31 pegou.');
+  await say('* Eles voltaram devagar. Em primeira. A serra inteira em primeira.');
+  await say('* Agora, a garagem da base. O 31 estala, esfriando. A chave no contato. O boné do Jorge no painel.');
+  await say('[Registro: Seu Jorge. Motorista. Alma número zero do ônibus 31. ...Registro em aberto.]', 'cat');
+  await say('Em aberto. Não apaga. Não ousa apagar.', 'me');
+  await say('Não apago. Eu também tenho uma tampa, sabia? Eu também guardo coisa.', 'cat');
+  await wait(30);
+  await say('* Naquela noite, da janela alta da base, a Irmã Dalva viu uma coisa que não via fazia doze anos.');
+  await say('* Um bairro inteiro de Auren apagou. De propósito. Uma rua, depois a outra, como quem apaga as velas de um bolo.');
+  await say('Ele tá cobrando.', 'dalva');
+  save2();
+  await fadeOut(40);
+  await cartao(['FIM DO CAPÍTULO 7', 'A Mina de Origem', '', 'Alguém tem que ficar pra achar.']);
+  V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); playMusic('base'); await fadeIn(20);
+  await say('* (O Capítulo 8 está a caminho. Os Marcos levam aonde vocês já foram: ainda há o que devolver pelo caminho.)');
+}
+
+// o veio de âmbar ilumina o escuro (cada tile 'a' é uma luz pequena)
+function luzesVeio(m, r) { if (m._luzV) return m._luzV; const L = []; m.rows.forEach((row, y) => { for (let x = 0; x < row.length; x++) if (row[x] === 'a') L.push([x, y, r]); }); return (m._luzV = L); }
+
+// ================= CAP. 7 NO MAPA, NO DIÁRIO, NA VIDA, E AS VOLTAS (opcionais que pedem viagem) =================
+// Pedido do usuário: "temos fast travel, voltar a lugares antigos para resolver coisas novas". Os opcionais do Cap. 7
+// cruzam o mapa: a lanterna do Zé (acampamento -> Dona Ilda, CANDEIA), o Sabugo (acampamento -> pão do Afonso, VILA
+// DOS PAVIOS -> acampamento), a semente do Guarda-Musgo (Andar 1 -> Seu Benedito, CIDADE ALTA, DE DIA; brota no dia
+// seguinte), a página da Ofélia (Andar 1 -> Dona Iolanda, AUREN: +1 página no Grimório).
+REGIOES.push({ id: 'origem', nm: 'Mina de Origem', x: 226, y: 60, ic: 'serra', vis: f => f.c7Chegou, al: 'right', lx: 200, ly: 12 });
+ESTRADAS.push(['serra', 'origem']);
+Object.assign(REGIAO_DE, { acampamento: 'origem', bombas: 'origem', coracao: 'origem', andar1: 'origem', fundo7: 'origem' });
+Object.assign(VIDA_CFG, {
+  acampamento: { corvos: 2, vagalumes: 9, passaros: true, gatos: 1 },
+  bombas: { vagalumes: 3 }, coracao: { vagalumes: 10 }, andar1: { vagalumes: 6, borboletas: 2 }
+});
+ROTULOS_EXTRA.acampamento = () => [[...AC7.boca[0], 'Boca da Mina'], [AC7.jorge[0], AC7.jorge[1] - 1, 'O 31'], [AC7.placa[0], AC7.placa[1], 'Turnos']];
+ROTULOS_EXTRA.bombas = () => [[...BO7.saida[0], 'O Coração'], [...BO7.entrada[0], 'Acampamento']];
+ROTULOS_EXTRA.coracao = () => [[...CO7.elevador[0], 'Elevador: Nível 1']];
+ROTULOS_EXTRA.andar1 = () => [[AN7.pedestal[0], AN7.pedestal[1] + 1, 'Câmara do Despertar'], [AN7.ofelia[0], AN7.ofelia[1], 'Sala de Leitura Afogada'], [...AN7.descida[0], 'O Fundo']];
+Object.assign(LIGA_EXTRA_FIXA, { acampamento: [[...AC7.boca[0], 'bombas']], bombas: [[...BO7.entrada[0], 'acampamento'], [...BO7.saida[0], 'coracao']], coracao: [[...CO7.volta[0], 'bombas'], [...CO7.elevador[0], 'andar1']], andar1: [[...AN7.volta[0], 'coracao'], [...AN7.descida[0], 'fundo7']] });
+// o Seu Jorge some de todos os lugares depois do Cap. 7
+{ const _mmJ = montarMapas2; montarMapas2 = function () {
+  _mmJ.apply(this, arguments);
+  for (const m of Object.values(MAPS2)) for (const e of m.ents || []) if (e.id === 'jorge' && !e._j7) { e._j7 = true; const g0 = e.gone; Object.defineProperty(e, 'gone', { value: () => !!G.flags.c7Jorge || (typeof g0 === 'function' ? g0() : !!g0), writable: true, configurable: true }); }
+}; }
+// ---------- as voltas ----------
+{ const _fI = falaIlda; falaIlda = async function () {
+  if (G.flags.c7Carta && !G.flags.c7CartaFeita) {
+    G.flags.c7CartaFeita = true; playMusic('cha');
+    await say('* Você tira do Vão a lanterna amassada. "ZÉ CANDEEIRO", riscado a canivete. A Dona Ilda para de remendar.');
+    await say('O Zé. O Zé da casa da esquina, de janela verde. A mulher dele põe uma vela na janela toda noite faz dois anos. Pra ele achar o caminho.', 'ilda');
+    await say('Ele não volta, Dona Ilda. Ele entrou no Coração e não subiu.', 'rita');
+    await say('Eu sei. A gente sempre sabe. Mas uma lanterna é melhor que uma vela. Uma lanterna é DELE.', 'ilda');
+    await say('* Ela some pela rua. Volta depois de um tempo, de olho vermelho, com uma coisa embrulhada num pano.');
+    await say('A família mandou. Era do Zé, de reserva. Disseram que quem trouxe a lanterna de volta merece a de reserva.', 'ilda');
+    ganharEquip('lanternaZe'); sfx('equip'); await say(`* Você recebeu a {y}${EQ2.lanternaZe.nm}{/}. ${EQ2.lanternaZe.d}`);
+    playMusic('candeia'); save2(); return;
+  }
+  return _fI();
+}; }
+{ const _fB = falaBenedito; falaBenedito = async function () {
+  if (G.flags.c7Semente && !G.flags.c7Plantou) {
+    if (ehNoite()) { await say('* O Seu Benedito não está. De noite ele dorme. Jardineiro dorme cedo.'); return; }
+    G.flags.c7Plantou = G.dia || 1; sfx('item');
+    await say('* Você mostra a semente verde, do tamanho de um punho, que ainda tem cheiro de pedra molhada.');
+    await say('Que semente é essa? Nunca vi. Tem cara de coisa velha. Velha MESMO. Me dá aqui, que terra boa eu tenho.', 'benedito');
+    await say('* Ele enterra a semente no canteiro do meio da estufa, com cuidado de quem enterra um passarinho.');
+    await say('Volta amanhã. Ou depois. Semente velha tem pressa nenhuma.', 'benedito');
+    return;
+  }
+  if (G.flags.c7Plantou && !G.flags.c7Flor) {
+    if ((G.dia || 1) <= G.flags.c7Plantou) { await say('Ainda não. Amanhã. Paciência é a ferramenta mais cara do jardineiro.', 'benedito'); return; }
+    G.flags.c7Flor = true; sfx('rune');
+    await say('Vem ver. VEM VER! Eu nunca vi uma coisa dessas!', 'benedito');
+    await say('* No canteiro do meio, durante a noite, cresceu um tufo de musgo verde-escuro em forma de gente sentada. E no colo dele, uma flor branca.');
+    await say('Ele finalmente descansou. E sentou num lugar bonito.', 'lume');
+    ganharEquip('florMusgo'); sfx('equip'); await say(`* O Seu Benedito corta a flor e te dá. {y}${EQ2.florMusgo.nm}{/}. ${EQ2.florMusgo.d}`);
+    save2(); return;
+  }
+  return _fB();
+}; }
+{ const _fA = falaAfonso; falaAfonso = async function () {
+  if (devolvida('afonso') && G.flags.c7SabugoPista && !G.flags.c7Pao) {
+    G.flags.c7Pao = true; sfx('item');
+    await say('Pão de milho pra CACHORRO? ...O Sabugo? Lá da serra? Esse cachorro tem gosto! Toma, o do forno das quatro.', 'afonso');
+    await say('* {y}Pão de milho do Seu Afonso{/}, embrulhado num pano. (O Sabugo está no acampamento da Mina de Origem.)');
+    return;
+  }
+  return _fA();
+}; }
+{ const _fIo = falaIolanda; falaIolanda = async function () {
+  if (G.flags.c7Pagina && !G.flags.c7PaginaFeita) {
+    G.flags.c7PaginaFeita = true; playMusic('cha');
+    await say('* Você tira do Vão a página seca da Sala de Leitura Afogada. A Dona Iolanda põe os óculos. Tira. Põe de novo.');
+    await say('Papel-lírio de antes da Coroa. Antes do Inverno. Antes de tudo. Onde vocês acharam isso?', 'iolanda');
+    await say('Debaixo da terra. Numa biblioteca que afogou.', 'lume');
+    await say('Me dá o seu Grimório, menino. Isso aqui se costura com linha de seda e paciência.', 'iolanda');
+    await fadeOut(16); sfx('rune'); await wait(30); await fadeIn(16);
+    const Gm = grim(); Gm.max = (Gm.max || 4) + 1;
+    await say('* {y}O Grimório ganhou uma página!{/} (Agora cabe mais um feitiço preparado.)');
+    await say('A letra dessa moça... eu queria ter conhecido.', 'iolanda');
+    playMusic('auren'); save2(); return;
+  }
+  return _fIo();
+}; }
+// ---------- missões ----------
+{ const _ms7 = missoes; missoes = function () {
+  const f = G.flags || {};
+  if (!f.c7Init) return _ms7();
+  const L = _ms7().filter(m => m.tipo !== 'main');
+  let M;
+  if (f.c7Fim) M = { tit: 'Um bairro apagado', desc: 'Auren começou a apagar. O Capítulo 8 está a caminho. Enquanto isso, os Marcos levam aonde vocês já foram.', map: 'interior', at: [13, 6] };
+  else if (f.c7Musgo) M = { tit: 'O Fundo', desc: 'Desça pelo buraco da broca, no fim da Antessala do Musgo.', map: 'andar1', at: AN7.descida[0] };
+  else if (f.c7Andar1) M = { tit: 'A Antessala do Musgo', desc: 'Atravesse o Andar 1 até a Antessala do Musgo, embaixo.', map: 'andar1', at: AN7.musgo };
+  else if (f.c7Coracao) M = { tit: 'O Coração', desc: 'Desça o poço. Nas PEDRAS DE ECO a Lume canta e as pontes de cristal acendem por alguns segundos. O elevador fica no fundo.', map: 'coracao', at: CO7.elevador[0] };
+  else if (f.c7Broca) M = { tit: 'A porta de cima', desc: 'A porta no alto das Galerias leva ao Coração.', map: 'bombas', at: BO7.saida[0] };
+  else if (f.c7Bombas) M = { tit: 'Válvulas e vapor', desc: 'Cada válvula liga e desliga DOIS respiros. Suba as cinco galerias até o alto.', map: 'bombas', at: BO7.broca };
+  else if (f.c7Chegou) M = { tit: 'A boca da mina', desc: 'DE NOITE, de PAVIO, passe a cancela da boca da mina. A PLACA DOS TURNOS diz a galeria.', map: 'acampamento', at: AC7.boca[0], quando: 'noite' };
+  else M = { tit: 'A estrada velha', desc: 'O 31 está na garagem da base. De dia a estrada tem cancelas; de noite, só o farol.', map: 'interior', at: [13, 6] };
+  M.tipo = 'main'; L.unshift(M);
+  const op = (o) => L.push(Object.assign({ tipo: 'side' }, o));
+  if (f.c7Carta && !f.c7CartaFeita) op({ tit: 'A lanterna do Zé', desc: 'Leve a lanterna do Zé Candeeiro à Dona Ilda, em Candeia.', map: 'candeia', at: POS4B.candeia.ildaDoor[0] });
+  if (f.c7SabugoPista && !f.c7Sabugo) op({ tit: 'O Sabugo', desc: !devolvida('afonso') ? 'O cão só come pão de milho do padeiro do Cais... que virou Pavio na Vila dos Pavios. (Devolva a lembrança dele.)' : f.c7Pao ? 'Leve o pão de milho ao Sabugo, no acampamento.' : 'Peça pão de milho ao Seu Afonso, na Vila dos Pavios.', map: f.c7Pao ? 'acampamento' : 'ruaPavios', at: f.c7Pao ? AC7.cao : VP.afonso });
+  if (f.c7Semente && !f.c7Flor) op({ tit: 'A semente do Musgo', desc: f.c7Plantou ? 'Volte à estufa no dia seguinte: o Seu Benedito plantou a semente.' : 'Leve a semente ao Seu Benedito, na Cidade Alta (DE DIA). Terra boa.', map: 'cidadeAlta', at: CA5.jardineiro, quando: 'dia' });
+  if (f.c7Pagina && !f.c7PaginaFeita) op({ tit: 'A página da Ofélia', desc: 'A Dona Iolanda, na papelaria de Auren, costura papel antigo.', map: 'papelaria', at: POS3.papelaria.iolanda });
+  return L;
+}; }
+// ---------- diário ----------
+DIARIO.splice(5, 0, { tipo: 'main', cap: 'Capítulo 7 · Serra', tit: 'A Mina de Origem', vis: () => fl('c7Init'), feita: () => fl('c7Fim'),
+  desc: 'A etiqueta do barril: "Mina de Origem, pelo cano do Coração". O Seu Jorge conhece a estrada. Ele lembra pouco do caminho.',
+  passos: [['Subir a estrada velha no 31', () => fl('c7Chegou')], ['Entrar na mina (de noite, de Pavio)', () => fl('c7Bombas')], ['Vencer a Broca', () => fl('c7Broca')],
+    ['Descer o Coração', () => fl('c7Andar1')], ['O Guarda-Musgo', () => fl('c7Musgo')], ['O Extrator', () => fl('c7Extrator')], ['Voltar para casa', () => fl('c7Fim')]] });
+DIARIO.push(
+  { tipo: 'side', cap: 'Mina de Origem', quem: 'Tonho', tit: 'A lanterna do Zé', vis: () => fl('c7Carta'), feita: () => fl('c7CartaFeita'), recompensa: 'Lanterna do Zé',
+    desc: 'O Zé Candeeiro desceu no Coração e não subiu. A lanterna dele precisa voltar para Candeia.', passos: [['Levar à Dona Ilda, em Candeia', () => fl('c7CartaFeita')]] },
+  { tipo: 'side', cap: 'Mina de Origem', quem: 'o Sabugo', tit: 'O Sabugo', vis: () => fl('c7SabugoPista'), feita: () => fl('c7Sabugo'), recompensa: 'Coleira do Sabugo',
+    desc: 'O cão do acampamento só come pão de milho. O único que presta é de um padeiro que virou Pavio.', passos: [['Devolver a lembrança do Seu Afonso', () => devolvida('afonso')], ['Pegar o pão de milho', () => fl('c7Pao')], ['Dar ao Sabugo', () => fl('c7Sabugo')]] },
+  { tipo: 'side', cap: 'Mina de Origem', quem: 'o Guarda-Musgo', tit: 'A semente do Musgo', vis: () => fl('c7Semente'), feita: () => fl('c7Flor'), quando: 'dia', recompensa: 'Flor do Musgo',
+    desc: 'O primeiro chefe que você venceu deixou uma semente. Ela quer terra boa.', passos: [['Entregar ao Seu Benedito (Cidade Alta, de dia)', () => !!fl('c7Plantou')], ['Voltar no dia seguinte', () => fl('c7Flor')]] },
+  { tipo: 'side', cap: 'Mina de Origem', quem: 'a Ofélia', tit: 'A página seca', vis: () => fl('c7Pagina'), feita: () => fl('c7PaginaFeita'), recompensa: '+1 página no Grimório',
+    desc: 'Uma página seca numa biblioteca afogada, na letra de uma bibliotecária conhecida.', passos: [['Levar à Dona Iolanda, em Auren', () => fl('c7PaginaFeita')]] }
 );
 
 boot2();

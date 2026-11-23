@@ -10,10 +10,11 @@
 // Lutar disfarçado dá SURPRESA: o grupo começa com +20 de Tensão.
 // Os Marcos de Auren estão VIGIADOS por um Pavio: só se usa um Marco vestido de Pavio (é o turno deles).
 const c6Ativo = () => !!(G.flags && G.flags.c6Init && !G.flags.c6Fim);
+const procuraAtiva = () => c6Ativo() || !!(G.flags && G.flags.c7Init && !G.flags.c7Coracao);
 const disf = () => G.disfarce && (G.disfarces || {})[G.disfarce] ? G.disfarce : null;
 const DISF_REGRA = {
   lavadeira: { hora: () => !ehNoite(), lugar: ['auren', 'largo', 'ruaPavios', 'festival'], foraHora: 'Lavadeira às ' + '{h}? Lavanderia fecha às sete.', foraLugar: 'Roupa pra lavar AQUI?' },
-  pavio: { hora: () => ehNoite() || ['selo1', 'selo2'].includes(W2.id), lugar: ['auren', 'largo', 'festival', 'ruaPavios', 'selo1', 'selo2'], foraHora: 'Pavio de dia? O turno de vocês é de noite.', foraLugar: 'Pavio aqui? Ronda é na rua, colega.' },
+  pavio: { hora: () => ehNoite() || ['selo1', 'selo2', 'bombas'].includes(W2.id), lugar: ['auren', 'largo', 'festival', 'ruaPavios', 'selo1', 'selo2', 'acampamento', 'bombas'], foraHora: 'Pavio de dia? O turno de vocês é de noite.', foraLugar: 'Pavio aqui? Ronda é na rua, colega.' },
   trupe: { hora: () => true, lugar: ['festival', 'largo'], foraHora: '', foraLugar: 'Artista fora do palco? Circulando, circulando.' }
 };
 function disfarceServe(id) {
@@ -25,7 +26,7 @@ function disfarceServe(id) {
 const fmtHora = () => { const h = Math.floor(hora() / 60) % 24; return h + 'h'; };
 // o gancho do passo dos holofotes/rondas (puzzle5): no Cap. 6, quem decide é o disfarce
 function pegaHook6(m, padrao) {
-  if (!m.procurado || !c6Ativo()) return padrao;
+  if (!m.procurado || !procuraAtiva()) return padrao;
   const s = disfarceServe(W2.id);
   if (!s.ok) return true;
   if (m.faixa) { const T = tileOf(m, W2.mv ? W2.mv.tx : W2.x, W2.mv ? W2.mv.ty : W2.y); if (T.t !== 'faixa' && T.t !== 'esteira') return true; }
@@ -67,20 +68,21 @@ MENU_EXTRA.push({ k: 'disfarce', nm: () => 'Disfarce', col: '#ffd060', vis: () =
 { const _dp6 = drawPlayer; drawPlayer = function (ox, oy) { _dp6(ox, oy); const d = disf(); if (d && !W2.float && !(typeof rostoSt === 'function' && rostoSt().on)) { const hop = W2.mv ? -Math.abs(Math.sin(W2.mv.k / 8 * Math.PI)) * 3 : 0; enfeiteBau(d, W2.px - ox, W2.py - oy + hop + 4, W2.t); } }; }
 
 // ---------- surpresa: lutar disfarçado ----------
-{ const _lm6 = lutaMapa; lutaMapa = function (g, o = {}) { if (c6Ativo() && disf() && disfarceServe(W2.id).ok && !o.semSurpresa) { o = Object.assign({}, o, { tension: (o.tension || 0) + 20 }); if (!G.flags.tutSurpresa6) { G.flags.tutSurpresa6 = true; W2.toast = { s: 'Ataque disfarçado: +20 de Tensão!', t: 0 }; } } return _lm6.call(this, g, o); }; }
+{ const _lm6 = lutaMapa; lutaMapa = function (g, o = {}) { if (procuraAtiva() && disf() && disfarceServe(W2.id).ok && !o.semSurpresa) { o = Object.assign({}, o, { tension: (o.tension || 0) + 20 }); if (!G.flags.tutSurpresa6) { G.flags.tutSurpresa6 = true; W2.toast = { s: 'Ataque disfarçado: +20 de Tensão!', t: 0 }; } } return _lm6.call(this, g, o); }; }
 
 // ---------- barreiras: cancela com guarda e pergunta de ofício ----------
 // BARREIRAS[id] = { map, cancela:[[x,y]...], guarda:[x,y], lado:'cima'|'baixo' (de onde se chega), perg: {disfarce: {q, ops, certa, flagPista}} }
 const BARREIRAS = {};
+const barAtiva = (b) => b.ativo ? b.ativo() : procuraAtiva();
 function barreiraAberta(b) { return !!(W2.barOpen && W2.barOpen[b.id]); }
 function cancelaSolida(b) { // fechada só para quem chega pelo lado de fora
-  if (!c6Ativo() || barreiraAberta(b)) return [];
+  if (!barAtiva(b) || barreiraAberta(b)) return [];
   const [x0, y0] = b.cancela[0];
   const fora = b.lado === 'cima' ? W2.y < y0 : W2.y > y0;
   return fora ? [[x0, y0, b.cancela.length, 1]] : [];
 }
 async function passarBarreira(b) {
-  if (!c6Ativo() || barreiraAberta(b)) return;
+  if (!barAtiva(b) || barreiraAberta(b)) return;
   W2.mv = null;
   const d = disf(), g = b.guardaEnt; let s = disfarceServe(b.map);
   if (s.ok && b.so && !b.so.includes(d)) s = { ok: false, porque: 'lugar', fala: b.foraSo || 'Isso aqui é só pro turno. Circulando.' };
@@ -112,8 +114,8 @@ function montaBarreira(b) {
   BARREIRAS[b.id] = b;
   const m = MAPS2[b.map]; if (!m || m['_bar_' + b.id]) return; m['_bar_' + b.id] = true;
   const [x0, y0] = b.cancela[0];
-  m.props.push({ img: () => cancelaArt(!c6Ativo() || barreiraAberta(b)), x: x0 - 0.6, y: y0 + 1, by: (y0 + 0.5) * TS, get solid() { return cancelaSolida(b); } });
-  const gd = morador('guardaRH', ...b.guarda, { dir: b.lado === 'cima' ? 'up' : 'down', gone: () => !c6Ativo(), talk: async () => { await say(c6Ativo() ? pickOne(['Cancela da Coroa. Cada um com seu ofício, cada ofício com sua hora.', 'Tem cartaz novo de procurado. Uma mala com dente. Pode isso?']) : 'Bom dia.', 'guardaRH'); } });
+  m.props.push({ img: () => cancelaArt(!barAtiva(b) || barreiraAberta(b)), x: x0 - 0.6, y: y0 + 1, by: (y0 + 0.5) * TS, get solid() { return cancelaSolida(b); } });
+  const gd = morador('guardaRH', ...b.guarda, { dir: b.lado === 'cima' ? 'up' : 'down', gone: () => !barAtiva(b), talk: async () => { await say(barAtiva(b) ? pickOne(['Cancela da Coroa. Cada um com seu ofício, cada ofício com sua hora.', 'Tem cartaz novo de procurado. Uma mala com dente. Pode isso?']) : 'Bom dia.', 'guardaRH'); } });
   b.guardaEnt = gd; m.ents.push(gd);
   const dy = b.lado === 'cima' ? -1 : 1;
   for (const [x, y] of b.cancela) m.ents.push({ t: 'trig', x, y: y + dy, w: 1, h: 1, passa: true, run: () => passarBarreira(b) });

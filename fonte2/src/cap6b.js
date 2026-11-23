@@ -173,5 +173,4 @@ async function fimCap6() {
   await fadeOut(40);
   await cartao(['FIM DO CAPÍTULO 6', 'A Cidade dos Pavios', '', 'Cinco lembranças voltaram para casa.', 'E muitas outras, sozinhas.']);
   V.scene = 'world'; loadMap2('interior', ...POS3.interior.entra, 'up'); await fadeIn(20);
-  await say('* (O Capítulo 7 está a caminho. Auren, a Vila dos Pavios e a Casa do Selo continuam abertas: ainda dá para devolver as lembranças que faltam.)');
 }

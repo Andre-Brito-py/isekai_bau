@@ -97,10 +97,10 @@ const guardaSpr6 = (t, d) => { const f = guardaRealArt(Math.floor(t / 14) % 2); 
     ],
     onEnter: async () => { if (c6Ativo() && !G.flags.c6Vila) await chegaVila(); }
   };
-  montaBarreira({ id: 'vila', map: 'ruaPavios', cancela: VP.barreira, guarda: VP.guarda, lado: 'cima', volta: VP.chegada, bg: bgVila,
+  montaBarreira({ id: 'vila', ativo: c6Ativo, map: 'ruaPavios', cancela: VP.barreira, guarda: VP.guarda, lado: 'cima', volta: VP.chegada, bg: bgVila,
     perg: { lavadeira: { q: 'Roupa? Roupa de onde?', ops: ['Da Ala Sete do hospital. A ala dos Pavios.', 'Da Cidade Alta, moço.', 'Da minha tia.'], certa: 0, ok: 'Ala Sete. Tá. Põe no varal da lavanderia, a Zélia separa.', dica: 'A Irmã Dalva falou da ALA SETE. A roupa dos Pavios.' },
             pavio: { q: 'Turno? ...Que horas marca o relógio da vila?', ops: ['Meia-noite em ponto.', 'Três e dezessete. Ele está parado.', 'A hora que a Coroa mandar.'], certa: 1, ok: 'Três e dezessete. Desde sempre. Passa, colega.', dica: 'O relógio da vila. Eu devia ter OLHADO pra ele.' } } });
-  montaBarreira({ id: 'selo', map: 'ruaPavios', cancela: VP.seloBarreira, guarda: VP.seloGuarda, lado: 'cima', volta: [25, 27], bg: bgFabrica, grupo: ['guardaR', 'seloVivo'], so: ['pavio'], foraSo: 'Portão do turno da noite. Só Pavio de crachá. O resto, circulando.',
+  montaBarreira({ id: 'selo', ativo: c6Ativo, map: 'ruaPavios', cancela: VP.seloBarreira, guarda: VP.seloGuarda, lado: 'cima', volta: [25, 27], bg: bgFabrica, grupo: ['guardaR', 'seloVivo'], so: ['pavio'], foraSo: 'Portão do turno da noite. Só Pavio de crachá. O resto, circulando.',
     perg: { pavio: { q: 'Crachá. Número do crachá, Pavio.', ops: ['Trinta e um.', 'Doze, turno da manhã.', 'Quarenta e sete, turno da noite.'], certa: 2, ok: 'Quarenta e sete. Prensa três. Boa noite.', dica: 'O crachá do Osvaldo. Quarenta e sete. Ele disse.' } } });
   grade(MAPS2.ruaPavios);
   // no Largo: o portão da vila embaixo, à direita

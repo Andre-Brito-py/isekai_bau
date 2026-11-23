@@ -60,7 +60,7 @@ function evo3() { return G.evo3 && EVO3[G.evo3] ? G.evo3 : null; }
   const prot = t && t.st && t.st.farol > 0 && t.hp > 0;
   if (prot) t.def0 = true;
   const r = await _fs4(e, t, pow, o);
-  if (prot && e && e.hp > 0) { const b = BT.party.find(m => m.id === 'bau' && m.hp > 0); if (b) { const [x0, y0] = unitCenter(b), [x1, y1] = unitCenter(e); await tw(8, p => { bx.strokeStyle = '#fff0a0'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(x0, y0 - 10); bx.lineTo(x0 + (x1 - x0) * p, y0 - 10 + (y1 - y0 + 10) * p); bx.stroke(); bx.lineWidth = 1; luzMagia(x0, y0 - 10, 12, '#fff0a0', 0.6); }); hitFoe(b, e, 0.6, { el: 'luz', mag: true, ranged: true }); } }
+  if (prot && e && e.hp > 0) { const b = BT.party.find(m => m.id === 'bau' && m.hp > 0); if (b) { const [x0, y0] = unitCenter(b), [x1, y1] = unitCenter(e); await tw(8, p => { bx.strokeStyle = '#fff0a0'; bx.lineWidth = 2; bx.beginPath(); bx.moveTo(x0, y0 - 10); bx.lineTo(x0 + (x1 - x0) * p, y0 - 10 + (y1 - y0 + 10) * p); bx.stroke(); bx.lineWidth = 1; luzMagia(x0, y0 - 10, 12, '#fff0a0', 0.6); }); hitFoe(b, e, 0.6, { el: 'luz', mag: true, ranged: true, raioFarol: true }); } }
   return r;
 }; }
 Object.assign(ST_NAME, { farol: 'FAROL', marca: 'MARCA' });

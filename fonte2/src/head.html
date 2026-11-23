@@ -589,6 +589,46 @@
    c6SeladoraAcordou, c6Seladora, c6Etiqueta, c6RelogioVolta, c6Fim, c6Devolucao; G.disfarces/G.disfarce, G.lemb, c6belts.
  - GANCHO DO CAP. 7: a Mina de Origem e o cano do Coração; o Seu Jorge conhece a estrada (e lembra pouco do caminho).
 =====================================================================
+ CAPÍTULO 7 — A MINA DE ORIGEM (implementado; mapas7.js, arte_cap7.js, evolucao7.js, mecanicas7.js, inimigos7.js, cap7.js,
+ cap7b.js, cap7_integra.js; mapas em maps/cap7maps.py com validação e SIMULAÇÃO das válvulas e das pontes de eco)
+ - ESCALADA 4 (segredo; só jogo e bíblia): o grupo vence o Extrator, mas o Vesper desce com a Guarda e cobra a "carga" para
+   religar a máquina (quer ler a Lume). O SEU JORGE desce pelo guincho do 31 e TROCA as lembranças dele (50 anos de
+   estrada, dois mundos) pela vida do grupo. O Vesper aceita, sinceramente ("eu cumpro o que eu anoto"). O Jorge vira
+   Pavio ("Boa noite. Eu acendo os postes da Coroa."), sobe com a Guarda. G.flags.c7Jorge: o Jorge some de todos os mapas;
+   a garagem fica sem motorista (o 31 só anda com os Marcos; Cap. 10 devolve só um pedaço, conforme o plano). Ninguém
+   prende o grupo. Gancho do Cap. 8: naquela noite um bairro de Auren APAGA de propósito ("Ele tá cobrando." — Dalva).
+ - FLUXO: base (o Jorge nervoso; a garagem tem o destino novo) > ESTRADA VELHA (minijogo estradaMinas: 3 faixas;
+   pedras, buracos, cabras, frascos caídos; DE DIA cancelas da Guarda (bater = luta), DE NOITE só o farol) > ACAMPAMENTO
+   (Guarda de Auren, Pavios mineiros, Dona Bina, o cão Sabugo, Tonho de Candeia; o 31 escondido; o Jorge oferece voltar
+   à base) > cancela da BOCA DA MINA (só PAVIO; "galeria?" -> "das bombas", na PLACA DOS TURNOS) > GALERIAS DE
+   BOMBEAMENTO (5 galerias, 4 respiros A-D, 4 válvulas que viram 2 respiros cada; solução V1, V2, V4) > A BROCA
+   (mini-chefe) -> elemento ÂMBAR > O CORAÇÃO (poço escuro, PEDRAS DE ECO: a Lume canta, as pontes acendem ~7s; cair
+   volta à pedra) > elevador > ANDAR 1 DO JOGO 1, visto de cima e drenado (Câmara do Despertar: o pedestal do baú;
+   o gancho do lustre da Lume; Sala de Leitura Afogada: a página da Ofélia; música "despertar" do jogo 1) > GUARDA-
+   MUSGO AMBARINO (mini-chefe 2; drenado por um cano: perde vida sozinho na fase 2; vira semente) > o buraco da broca >
+   O FUNDO: O EXTRATOR (chefe) > a cena > 2ª EVOLUÇÃO > a subida (a Rita dá "duas bombadas no pedal") > FIM.
+ - 2ª EVOLUÇÃO (evolucao7.js): cada caminho do Cap. 3 abre em dois, escolhidos como resposta à perda:
+   Farol: GUARDIÃO (Muralha de Luz: provoca 2 e Farol no grupo; grupo leva -10%) / TEMPESTADE (Raio em Cadeia; raios do
+   Farol em dobro). Vão: LABIRINTO (todos perdem a vez e ficam tontos; Guardar Dentro custa 15) / BOCA (Engolir comum
+   <25% inteiro e cura 25%; físico x1,35). Escriba: BIBLIOTECÁRIO (2 feitiços de graça +25%; +1 página) / PALIMPSESTO
+   (Reescrever: fraco a todos os elementos por 3 + marca; magia x1,25). Preços: voz da mãe; chuva no telhado; o quarto;
+   o gosto de tudo; o primeiro livro e quem leu; o nome da Terra. Adereço novo por cima do da 1ª (aderecoEvo7).
+ - ÂMBAR (mecanicas7.js): luz-pedra, quebra +1, RESINA (alvo perde 20 de vez); fusões Lava Dourada (brasa), Cristal
+   (geada), Resina (seiva), Fóssil (fuligem), Vitral (areia); véu "Bolha de Âmbar" (próximo golpe some).
+ - INIMIGOS: Cão-Lanterna 560/40 (uiva e chama outro), Válvula Viva 620/38 (Estouro preparado), Rato-de-Vela Ambarino
+   480/38, Cogumelo de Âmbar 600/37 (tonto), Morcego Carimbado 420/39 (SELADO). A BROCA 5200/41, GUARDA-MUSGO AMBARINO
+   6000/42, O EXTRATOR 8400/44 (Sucção/Leitura: PM, Tensão e esquecer; Bombeamento; núcleo aberto a 30%).
+ - VOLTAS COM A VIAGEM RÁPIDA (pedido do usuário: resolver coisas novas em lugares antigos): lanterna do Zé (Tonho ->
+   Dona Ilda, Candeia: Lanterna do Zé), Sabugo (pão de milho do Afonso, Vila dos Pavios, só com a lembrança dele
+   devolvida: Coleira do Sabugo), semente do Musgo (Seu Benedito, Cidade Alta, de dia; brota NO DIA SEGUINTE: Flor do
+   Musgo), página da Ofélia (Dona Iolanda, Auren: +1 página no Grimório; fala muda se a Ofélia lembra, herança T1).
+   REGRA DAQUI EM DIANTE: todo capítulo tem pelo menos 2 opcionais que pedem voltar a mapas antigos.
+ - FLAGS: c7Init, c7Chegou, c7Bombas, c7vent{A-D}, c7Broca, c7Coracao, c7Andar1, c7Pedestal, c7Gancho, c7Pagina(Feita),
+   c7Musgo, c7Semente, c7Plantou(dia), c7Flor, c7Fundo, c7Extrator, c7Jorge, c7Fim; c7Carta(Feita), c7SabugoPista, c7Pao,
+   c7Sabugo; G.evo7.
+ - ROBÔ (Desafio, 0,6, farol e escriba, depois do ajuste): comuns 10-80% (a dupla de cães com guarda é a mais dura);
+   Broca ~20-45%; Guarda-Musgo ~15-65%; Extrator ~0-40% (o Escriba no limite, sem frascos sobrando).
+=====================================================================
 -->
 <style>
 :root{
