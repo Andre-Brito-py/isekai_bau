@@ -74,8 +74,8 @@ Object.assign(TECH2, {
   guardarDentro: { nm: 'Guardar Dentro', cost: 25, tgt: 'ally', w: 'leve', d: 'Guarda um aliado DENTRO do baú: o próximo golpe nele erra e a vez dele adianta. Leve.', run: async (m, t) => {
     if (t === m) { callout('Escolha outro aliado', '#ff6b6b', 40); BT.tension += 25; return; }
     sfx('rune'); const [x, y] = unitCenter(t), [bx0, by0] = unitCenter(m);
-    await tw(16, p => { t.sx = 1 - p * 0.7; t.sy = 1 - p * 0.7; t.alpha = 1 - p * 0.6; for (let i = 0; i < 6; i++) { const a = p * 8 + i; bx.fillStyle = '#c8a0ff'; bx.fillRect(Math.round(x + (bx0 - x) * p + Math.cos(a) * 8 * (1 - p)), Math.round(y + (by0 - y) * p + Math.sin(a) * 8 * (1 - p)), 2, 2); } });
-    await tw(12, p => { t.sx = 0.3 + p * 0.7; t.sy = 0.3 + p * 0.7; t.alpha = 0.4 + p * 0.6; fxRing(x, y, 14 * (1 - p), '#c8a0ff', 1 - p); });
+    await tw(16, p => { tpRasgo(x, y - 6, 2 + p * 10, 3 + p * 20, BT.t, 1); tpEspiral(x, y - 6, p, 24, 34, 1); t.sx = 1 - p * 0.7; t.sy = 1 - p * 0.7; t.alpha = 1 - p * 0.6; for (let i = 0; i < 6; i++) { const a = p * 8 + i; bx.fillStyle = '#c8a0ff'; bx.fillRect(Math.round(x + (bx0 - x) * p + Math.cos(a) * 8 * (1 - p)), Math.round(y + (by0 - y) * p + Math.sin(a) * 8 * (1 - p)), 2, 2); } });
+    await tw(12, p => { tpRasgo(x, y - 6, 12 * (1 - p), 23 * (1 - p), BT.t, 1 - p * 0.5); t.sx = 0.3 + p * 0.7; t.sy = 0.3 + p * 0.7; t.alpha = 0.4 + p * 0.6; fxRing(x, y, 14 * (1 - p), '#c8a0ff', 1 - p); });
     t.sx = 1; t.sy = 1; t.alpha = 1; t.st.sumido = 2; t.ct = Math.min(99, t.ct + 30);
     popNum(x, y - 26, 'GUARDADO', '#c8a0ff'); callout(t.name + ' está no Vão', '#c8a0ff', 50);
   } },

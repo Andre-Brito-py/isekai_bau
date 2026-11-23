@@ -357,7 +357,7 @@ async function cenaVao() {
 }
 async function sairDaBase() {
   const B = G.baseVolta || { map: 'auren', x: AUR.marco[0], y: AUR.marco[1] + 1, dir: 'down' };
-  sfx('rune'); await fadeOut(14); loadMap2(B.map, B.x, B.y, B.dir || 'down'); await fadeIn(14);
+  await teleporte(B.map, B.x, B.y, B.dir || 'down');
   if (B.map === 'papelaria' && !G.flags.c3SaiuPap) { G.flags.c3SaiuPap = true; await say('Eu não vi nada. Eu vendo papel. Papel não vê nada.', 'iolanda'); await say('* (O Festival começa à noite, daqui a três dias, na Avenida, a leste do Bairro Baixo.)'); }
 }
 // ----- coisas da base -----
@@ -383,7 +383,7 @@ async function falaParede() { await say(G.flags.c3Discurso ? '* O quadro vazio. 
 { const _um3 = usarMarco; usarMarco = async function (e) {
   if (G.flags.c3Base && W2.id !== 'interior') {
     const c = await choose('* O Marco brilha com a runa da sua tampa.', ['Descansar e salvar', 'Entrar no Baú (a base)', 'Sair'], 'n', 2);
-    if (c === 1) { sfx('rune'); save2(); G.baseVolta = { map: W2.id, x: W2.x, y: W2.y + 1, dir: 'down' }; await fadeOut(14); loadMap2('interior', ...IN.entra, 'up'); await fadeIn(14); return; }
+    if (c === 1) { save2(); G.baseVolta = { map: W2.id, x: W2.x, y: W2.y + 1, dir: 'down' }; await teleporte('interior', ...IN.entra, 'up'); return; }
     if (c !== 0) return;
   }
   return _um3(e);
