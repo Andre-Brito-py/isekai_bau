@@ -202,13 +202,14 @@ async function cafe10() {
     await say('Quando você voltar a ser baú, eu seguro a alça. Combinado?', 'lume');
     await say('Combinado.', 'me');
     await say('* Ela não solta a sua mão. Ela se inclina por cima da mesa, devagar, dando tempo de você fugir. Você não foge.');
-    playMusic('ending'); flashW(2);
+    playMusic('ending'); QUADRO = { t: 0 }; await wait(30);
     await say('* E a Lume te beija. Ali, na calçada do Largo, entre duas xícaras de café e um pão de queijo queimado do lado esquerdo.');
     await say('* O seu rosto, que sempre derrete quando o fôlego acaba, não derrete. Pela primeira vez, ele fica. Como se tivesse decidido ficar.');
     await say('* Em cima do adereço dela, a chama sobe alta, dourada, e as velas da padaria acendem sozinhas, uma por uma.');
     await say('Eu disse que ia dizer no café. Não falei que ia ser com palavras.', 'lume');
     await say('Eu... eu sou um baú. Eu não tenho preparo emocional pra isso.', 'me');
     await say('Tem sim. Tá tudo guardado aí dentro. Eu vi.', 'lume');
+    if (QUADRO) QUADRO.sai = 1; await wait(26);
     G.flags.c10Beijo = true;
   } else {
     await say('Eu terminei. Eu não sei pra quem ainda. ...Mentira. Eu sei. Eu só não sei dizer.', 'lume');
