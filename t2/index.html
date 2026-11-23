@@ -19138,7 +19138,7 @@ async function epilogo10() {
 // o café na superfície e a canção terminada (romance da Lume; a Rita com o próprio momento)
 async function cafe10() {
   const H = G.her || (typeof lerHeranca === 'function' && lerHeranca()) || {}, cor = coracaoTotal2(), ritaP = !!(H.esc && H.esc.rita) || !!G.flags.pastelRita;
-  await fadeOut(20); G.hora = 16 * 60 + 30; loadMap2('largo', 22, 14, 'down'); playMusic('cha'); await fadeIn(20);
+  await fadeOut(20); G.hora = 16 * 60 + 30; loadMap2('largo', 22, 14, 'down'); { const r = rostoSt(); r.f = FMAX; r.on = true; } playMusic('cha'); await fadeIn(20);
   await say('* No fim da tarde, a Rita some "para resolver uma coisa da Guilda". Ela pisca para a Lume ao sair. A Lume finge que não viu.');
   await say('* Uma mesinha na calçada do Largo, na frente da padaria que agora tem nome de novo: Padaria Flor do Largo. Dois cafés. Um baú na cadeira, de forma humana, segurando a xícara com as duas mãos.');
   await say('Lá embaixo, eu disse que o primeiro café na superfície não ia ser a Rita que ia tomar.', 'lume');
