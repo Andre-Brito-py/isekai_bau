@@ -33,7 +33,7 @@
      (a música da Lume ganha mais um verso). Mecânica: escuridão por bairro, rotas de luz, escolta.
   9. A SUBIDA DO MORRO (feito) — o cerco ao Farol: todos os aliados voltam (Badalada toca, Tico e Dito, Dalva, Brás, Iolanda,
      Velhágua); masmorra de subida longa, mini-chefes antigos com cara nova; a Ofélia "aparece" pelo Grimório.
- 10. O FAROL DE CEM INVERNOS (2 partes) — ESCALADA 5: o Farol acende por uma noite; a IRONIA FINAL (Lívia); escolha
+ 10. O FAROL DE CEM INVERNOS (feito; 2 partes) — ESCALADA 5: o Farol acende por uma noite; a IRONIA FINAL (Lívia); escolha
      na luta final; epílogo (o caderno preto vai para a parede da base; o Jorge lembra do 31 um pouquinho) e o GANCHO
      da trilogia (a carta original assinada com a lanterna de um olho).
  SAVE AUTOMÁTICO E GAME OVER (autosave.js, pedido do usuário): salva nos Marcos, nos marcos da história (save2 nas
@@ -730,6 +730,65 @@
  - ROBÔ (Desafio, 0,6): comuns 12-90%; Espantalho (5000 -> 5800, golpes maiores) deixa ~30-55%; Rainha (5400 -> 4500, filhas
    limitadas, luz cura 30%) deixa ~15-30% (a mais dura dos mini-chefes: a luz da Alvorada a cura na fase 1); Faroleiro
    (8600, com o Tiago) deixa ~10-30% no mais ferido, os dois caminhos na 1ª tentativa.
+=====================================================================
+ CAPÍTULO 10 — O FAROL DE CEM INVERNOS (implementado; mapas10.js, arte_cap10.js, inimigos10.js, cap10.js, cap10b.js,
+ romance2.js, cap10_integra.js; mapas em maps/cap10maps.py: balanças e grades verificadas). FIM DA TEMPORADA 2.
+ - FLUXO: o Farol aceso LÊ a cidade a cada volta do facho (Auren esquece nomes de rua, cantigas); o Tiago segura a porta
+   ("fecha a conta") -> A TORRE (4 andares; paredes de vidro com potes; BALANÇAS de latão só descem com POTES levados pelo
+   Vão (potes = móvel "vaso" var >= 100); todas as balanças do andar = a grade sobe (g0: 1, g1: 2, g2: 3); cada pote
+   guardado solta uma LEMBRANÇA de alguém; 4 POTES COM NOME: JORGE-31, ZÉ CANDEEIRO, ANTÔNIO (Inverno), DONA ROSA) ->
+   SALA DAS MÁQUINAS: O CONTRAPESO (mini) -> SALA DA LANTERNA: o Acendedor-Mor oferece de novo à Lume "nunca mais escuro";
+   ela recusa ("eu quero escuro com gente dentro"); luta; a 40% o Farol MOSTRA: a IRONIA (SEGREDO: Lívia, lote 1 do âmbar
+   de Auren por doze anos; ele queimou a filha); no caderno, a CARTA ORIGINAL sem nome, assinada com uma LANTERNA DE UM OLHO
+   ("gente acesa dura mais que gente morta"; chegou embaixo da porta na noite do enterro); a moça: "eu conheço essa
+   marca". O CORAÇÃO DO FAROL acorda sozinho ("ele nunca foi meu") -> luta final; a 40% a MOÇA GANHA NOME (textInput; o
+   jogador escolhe; padrão "Lira"; G.nomeMoca) e se FUNDE ao Catálogo (os colchetes viram âmbar): quebra o escudo, cura 30%
+   do grupo, todo golpe do Coração fica LIDO. ESCOLHA (G.flags.c10Escolha): 'apagar' (as lembranças saem agora; Lívia:
+   "Pai. Tá escuro. Mas não dá medo. Tem gente."; ele sentado no escuro sem medo) ou 'noite' (uma noite a mais; ao
+   amanhecer ele mesmo apaga). EPÍLOGO: a fila de gente desce o morro (Osvaldo, Cotinha e o Brás; o Tiago); o JORGE com o
+   pote 31 ("era o meu ônibus... duas bombadas"; sem o pote: só o nome); o caderno preto na parede da base ("fiquem vocês
+   com a conta") e a carta da lanterna de um olho no centro; o CAFÉ; quem não tem mais casa chega no bueiro: "então a gente
+   constrói lá fora" (G.flags.vilaSemente); cartões FIM DA TEMPORADA 2 / continua na TEMPORADA 3; mundo aberto.
+ - INIMIGOS: Eco de Lembrança 640/46 (Grito; Lembrança Solta: esquecer). O CONTRAPESO 6800/48 (Peso Morto; Gancho atrasa;
+   Vapor queima; fase 2 se cura com os potes). O ACENDEDOR-MOR 7200/49 (Anotação +40% no próximo golpe; Contabilidade;
+   LUZ DE CEM INVERNOS; fase 2 asas de luz; a 40% a luta para). O CORAÇÃO DO FAROL 10500/50 (CEM INVERNOS tira 25 de
+   Tensão; Abraço de Luz; Facho; fase 2 ecos e o rosto de Lívia na chama; fase 3 vidro rachado, chama azul, 2 ações).
+   Arte de chefe: contrapesoArt 130x140, vesperBossArt 96x124, coracaoFarolArt 170x150 (com a lanterna de um olho gravada).
+ - VOLTAS COM A VIAGEM RÁPIDA (potes com nome): o Zé para a Dona Ilda (Candeia: a vela da janela acende sozinha), o Antônio
+   para a Dona Cida (Largo, de dia: alecrim e café ruim), a Dona Rosa para o Seu Benedito (Cidade Alta: as rosas abrem).
+ - ROMANCE (pedido do usuário: "deixar a Lume como interesse principal" e "mais momentos ao longo do jogo"; "dependendo das
+   circunstâncias, o casal concluir com um beijo"): romance2.js, CONVERSAS COM A LUME (8) ao pé da vela da base, uma por
+   marco (c2Fim lustre/noite; c3Fim a lágrima; c4Fim "me lembra de mim"/noite; c5Fim o quase-sim; c6Fim aula de dança;
+   c7Fim duas bombadas/noite; c8Fim quem acende você (ela dá uma vela); a fogueira do Sopé na noite do cerco). Escolhas
+   somam G.flags.lumeHeart2 (+1 a +3). coracaoTotal2() = herança lume.coracao + lumeHeart2. No CAFÉ (Cap. 10, mesa de
+   calçada do Largo, Padaria Flor do Largo): a CANÇÃO DO 31 termina pela primeira vez ("E na curva tinha você, / com cara
+   de quem não ia ficar. / Quem cai junto não se perde: / só aprende a acender." G.flags.c10Cancao). Com total >= 10: ela
+   segura a mão ("quando você voltar a ser baú, eu seguro a alça") e o BEIJO (G.flags.c10Beijo; o rosto dele não derrete
+   pela primeira vez; as velas da padaria acendem). Abaixo: o pé encostado embaixo da mesa, "agora tem tempo". A RITA tem
+   o momento dela (ela foi a primeira a vê-lo, no 31; rouba um gole: "o próximo é meu. Como amiga."). T3: continuar o
+   casal a partir daqui.
+ - A MOÇA (fim do arco da T2): nomeada pelo jogador, fundida ao Catálogo; Leitura permanente; depois do nome, bosses às
+   vezes ficam LIDOS sozinhos. SEGREDO (só bíblia): ela é a metade de Ada que sente culpa; a lanterna de um olho é a
+   assinatura da outra metade; "alguém que já me chamou de metade. ela vai chamar de novo."
+ - FLAGS: c10Init, c10Torre, c10G_g0/g1/g2, c10Lembr, c10PoteJorge, G.potes10, c10Contrapeso, c10Sala, c10Vesper,
+   c10Nome, G.nomeMoca, c10Coracao, c10Escolha, c10Apagado, c10Fim, c10Cafe, c10Cancao, c10Beijo, vilaSemente, c10E_<pote>;
+   conv2.<id>, lumeHeart2.
+ - ROBÔ (Desafio, 0,6): comuns 25-90%; Contrapeso (6200 -> 6800) deixa ~25-60%; Acendedor-Mor (até 40%) ~15-65%; Coração
+   do Farol (9800 -> 10500; o nome da moça cura 30% no meio) deixa ~12-45%; os dois caminhos na 1ª tentativa.
+=====================================================================
+ IDEIA DO USUÁRIO PARA A TEMPORADA 3: O VILAREJO (registrada no fim da T2)
+ - "Uma mecânica de vilarejo, construindo um lugar para eles morarem, que pode ir evoluindo conforme o jogador avança,
+   construindo até uma cidade ou reino, enquanto avança pela história da última temporada."
+ - SEMENTE já plantada: o epílogo do Cap. 10 (G.flags.vilaSemente): ex-Pavios sem casa na porta do baú; "então a gente
+   constrói lá fora". A T3 começa com o primeiro barracão, fora do Vão.
+ - PLANO: um MAPA-SEDE que muda visivelmente por fases (acampamento -> vila -> cidade -> reino: casas, muros, praça,
+   torres, iluminação, vida). MORADORES vêm da história e trazem PRÉDIOS/SERVIÇOS (Dalva: hospital; Iolanda: biblioteca e
+   pesquisa de runas, com a Ofélia; Rita: forja e quartel; Badalada: torre do sino/alarme; Tico e Dito: chaminés e
+   telhados; Jorge: garagem/estrada; Tiago: guarda e diplomacia; Brás: Guilda). PRÉDIOS mudam o jogo (equipamento,
+   fusões novas, viagem, treino, loja). MATERIAIS vêm de exploração e lutas (sem relógio de espera). EVENTOS: ataques e
+   visitas viram capítulos de história (defesa com quem mora lá). POLÍTICA no fim: virar reino = tratar com a Coroa e
+   com quem caça dobradores de espaço (magia espacial é raríssima e cobiçada). REGRA: o RPG e a história continuam sendo
+   o prato principal; o vilarejo é o hub que cresce junto, nunca um jogo de gerenciamento à parte que trave o ritmo.
 =====================================================================
 -->
 <style>

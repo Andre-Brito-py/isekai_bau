@@ -15,7 +15,7 @@ Object.assign(EQ2, { lacre9: { nm: 'Lacre Partido', slot: 'amuleto', who: ['lume
   fio('poco', 12, 8, 'fio9p', 'c9FioPoco', fioPoco9);
   fio('andar1', AN7.pedestal[0] + 2, AN7.pedestal[1] + 1, 'fio9a', 'c9FioAndar', fioAndar9);
   // a Dona Cida no Largo (de dia), com o envelope
-  const L = MAPS2.largo; if (L && !L._cida9) { L._cida9 = true; const p = chaoLivre8(L, 31, 16) || [31, 16]; L.ents.push(morador('cida', p[0], p[1], { id: 'cida9', dir: 'down', gone: () => !c9Ativo() || ehNoite(), talk: falaCida9 })); }
+  const L = MAPS2.largo; if (L && !L._cida9) { L._cida9 = true; const p = chaoLivre8(L, 31, 16) || [31, 16]; L.ents.push(morador('cida', p[0], p[1], { id: 'cida9', dir: 'down', gone: () => !G.flags.c9Init || ehNoite(), talk: falaCida9 })); }
 }; }
 async function fioDepois9() {
   const n = fiosMoca9();
