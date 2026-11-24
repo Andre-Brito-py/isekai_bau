@@ -152,12 +152,11 @@ async function cenaEvolucao() {
   let ev = null;
   while (!ev) {
     const ks = Object.keys(EVO3);
-    const i = await list({ x: 24, y: 20, w: 192, title: 'Três caminhos', items: ks.map(k => ({ label: EVO3[k].nm, col: EVO3[k].cor, right: '' })), desc: j => EVO3[ks[j]] && (EVO3[ks[j]].papel + '. ' + EVO3[ks[j]].d), descY: 118 });
-    if (i < 0) continue;
-    const E = EVO3[ks[i]];
+    const k = await escolhaArca(ks, 'Três caminhos', q => EVO3[q]);
+    const E = EVO3[k];
     await say(`[${E.nm}. Preço: ${E.preco}]`, 'cat');
     const c = await choose(`* Evoluir para ${E.nm}?`, ['Evoluir', 'Ver os outros caminhos']);
-    if (c === 0) ev = ks[i];
+    if (c === 0) ev = k;
   }
   const E = EVO3[ev];
   // a lembrança indo embora
@@ -181,7 +180,8 @@ async function cenaEvolucao() {
   // a transformação
   sfx('rune'); V.shake = 18; flashW && 0;
   await say('* O veio apaga. A luz toda entra em você de uma vez.');
-  G.evo3 = ev; G.flags.c3Forma = true; curarTudo();
+  { const antes = arcaAtualImg(); garantirArca(ev); await transformaArca(antes, IMG_CHEST_T['evo_' + ev].three, E.cor, E.nm); }
+  G.evo3 = ev; G.flags.c3Forma = true; G.flags.arcaPerg = true; delete PTC.me; curarTudo();
   await say(`* {y}${G.name} evoluiu para ${E.nm}!{/}`);
   if (ev === 'farol') await say('Você virou um FAROL. Com lanterna e tudo. Agora sou eu que vou ficar com ciúme de quem brilha mais.', 'lume');
   if (ev === 'vao') await say('Tem mais espaço aí dentro? Mais do que antes? Daqui a pouco você guarda a capital inteira.', 'rita');

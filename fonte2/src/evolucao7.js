@@ -119,12 +119,11 @@ async function cenaEvolucao7() {
   await say('[O corpo pede forma nova. Duas respondem. Cada uma é uma resposta para a mesma pergunta: o que você vai FAZER com isso que aconteceu?]', 'cat');
   let ev = null;
   while (!ev) {
-    const i = await list({ x: 20, y: 20, w: 200, title: 'O que você vai fazer com isso?', items: ks.map(k => ({ label: EVO7[k].escolha, col: EVO7[k].cor })), desc: j => EVO7[ks[j]] && (EVO7[ks[j]].nm + '. ' + EVO7[ks[j]].papel + '. ' + EVO7[ks[j]].d), descY: 112 });
-    if (i < 0) continue;
-    const E = EVO7[ks[i]];
+    const k = await escolhaArca(ks, 'O que você vai fazer com isso?', q => ({ papel: EVO7[q].escolha + ' ' + EVO7[q].papel, d: EVO7[q].d, preco: EVO7[q].preco }));
+    const E = EVO7[k];
     await say(`[${E.nm}. Preço: ${E.preco}]`, 'cat');
     const c = await choose(`* ${E.escolha}`, ['É isso.', 'Pensar de novo']);
-    if (c === 0) ev = ks[i];
+    if (c === 0) ev = k;
   }
   const E = EVO7[ev];
   const preco = {
@@ -137,8 +136,9 @@ async function cenaEvolucao7() {
   }[ev];
   for (const l of preco) await say(l);
   await say('Eu guardo. Eu prometi. Eu guardo numa música.', 'lume');
+  { const antes = arcaAtualImg(); garantirArca(ev); await transformaArca(antes, IMG_CHEST_T['evo_' + ev].three, E.cor, E.nm); }
   sfx('rune'); V.shake = 18;
-  G.evo7 = ev; curarTudo();
+  G.evo7 = ev; delete PTC.me; curarTudo();
   await say(`* {y}${G.name} evoluiu para ${E.nm}!{/}`);
   await say(`[TÉCNICA NOVA: ${TECH2[E.tec].nm}. ${TECH2[E.tec].d}]`, 'cat');
   save2();
