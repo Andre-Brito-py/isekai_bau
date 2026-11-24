@@ -66,7 +66,7 @@ function telaStatus() {
       bx.fillStyle = 'rgba(143,227,216,0.25)'; bx.fillRect(X + 8, Y + 162, Wd - 16, 1);
       let ey = Y + 168; txt('EQUIPAMENTO', X + 10, ey, { col: UIC.accent }); ey += 12;
       const eq = eqOf(m.id);
-      for (const sl of ['arma', 'roupa', 'amuleto']) { const it = eq[sl] && EQ2[eq[sl]]; txt(ST3_SLOT[sl].slice(0, 4), X + 10, ey, { col: '#8a8099' }); txt(it ? corta(it.nm, 13) : '—', X + 38, ey, { col: it ? '#ffe8b0' : '#5a5068' }); ey += 11; }
+      for (const sl of (typeof SLOTS_DE !== 'undefined' ? SLOTS_DE[m.id] : ['arma', 'roupa', 'amuleto'])) { const it = eq[sl] && EQ2[eq[sl]]; if (it && typeof iconeEq === 'function') bx.drawImage(iconeEq(eq[sl]), X + 10, ey - 1, 10, 10); txt(it ? corta(it.nm, 15) : '—', X + 24, ey, { col: it ? '#ffe8b0' : '#5a5068' }); ey += 10; }
       const hab = habilidadesDe(m); let hy = Y + 168; txt('HABILIDADES', X + 120, hy, { col: UIC.accent }); hy += 12;
       for (const h of hab.slice(0, 4)) { txt(corta(h, 17), X + 120, hy, { col: '#e8e0f0' }); hy += 11; }
       // rodapé

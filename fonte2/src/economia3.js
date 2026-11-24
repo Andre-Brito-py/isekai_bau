@@ -19,7 +19,7 @@ const CAP_INIMIGO = {
   8: ['friagem', 'apagador', 'loboFuligem', 'geadaViva', 'capitao', 'friagemB'], 9: ['sentinela', 'gralha', 'mariposaA', 'espantalhoC', 'rainhaF', 'faroleiro'],
   10: ['ecoL', 'contrapeso', 'vesperB', 'coracaoF']
 };
-const ESC3 = { 3: 0.08, 4: 0.14, 5: 0.2, 6: 0.23, 7: 0.26, 8: 0.28, 9: 0.3, 10: 0.3 };
+const ESC3 = { 3: 0.14, 4: 0.3, 5: 0.32, 6: 0.34, 7: 0.38, 8: 0.42, 9: 0.52, 10: 0.55 };
 for (const [c, ids] of Object.entries(CAP_INIMIGO)) for (const id of ids) { const E = ENEMY2[id]; if (!E || E._esc3) continue; E._esc3 = true; const x = ESC3[c]; E.mhp = Math.round(E.mhp * (1 + 0.7 * x)); E.atk = Math.round(E.atk * (1 + x)); if (E.cobres) E.cobres = Math.round(E.cobres * (1 + x)); }
 
 // ---------- materiais ----------
