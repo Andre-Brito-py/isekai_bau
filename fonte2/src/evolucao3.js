@@ -183,6 +183,7 @@ async function cenaEvolucao() {
   { const antes = arcaAtualImg(); garantirArca(ev); await transformaArca(antes, IMG_CHEST_T['evo_' + ev].three, E.cor, E.nm); }
   G.evo3 = ev; G.flags.c3Forma = true; G.flags.arcaPerg = true; delete PTC.me; curarTudo();
   await say(`* {y}${G.name} evoluiu para ${E.nm}!{/}`);
+  await say(`* {g}${resumoMods(E.mods)}{/}`);
   if (ev === 'farol') await say('Você virou um FAROL. Com lanterna e tudo. Agora sou eu que vou ficar com ciúme de quem brilha mais.', 'lume');
   if (ev === 'vao') await say('Tem mais espaço aí dentro? Mais do que antes? Daqui a pouco você guarda a capital inteira.', 'rita');
   if (ev === 'escriba') await say('[Registro: o Grimório agora tem seis páginas. E uma pena. Você tem uma pena na tampa. Isso não estava previsto.]', 'cat');

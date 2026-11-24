@@ -140,6 +140,7 @@ async function cenaEvolucao7() {
   sfx('rune'); V.shake = 18;
   G.evo7 = ev; delete PTC.me; curarTudo();
   await say(`* {y}${G.name} evoluiu para ${E.nm}!{/}`);
+  await say(`* {g}${resumoMods(E.mods)}{/}`);
   await say(`[TÉCNICA NOVA: ${TECH2[E.tec].nm}. ${TECH2[E.tec].d}]`, 'cat');
   save2();
 }

@@ -332,3 +332,11 @@ function arcaAtualImg() { const f = formaArca(); if (f) { garantirArca(f); retur
     });
   }
 }; }
+
+// resumo dos números que a evolução muda (aparece logo depois de evoluir)
+function resumoMods(mods) {
+  const N = { mhp: 'PV', mmp: 'PM', atk: 'ATQ', mag: 'MAG', def: 'DEF', mdef: 'RESIST', spd: 'VEL' };
+  const b = grupoAtual().find(m => m.id === 'bau');
+  const L = Object.entries(mods || {}).filter(([k, v]) => N[k] && v).map(([k, v]) => `${N[k]} ${v > 0 ? '+' : ''}${v}`);
+  return 'Corpo novo: ' + L.join(' · ') + (b ? `  (agora ${b.mhp} PV, ${b.mmp} PM)` : '');
+}

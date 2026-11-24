@@ -9151,6 +9151,7 @@ async function cenaEvolucao() {
   { const antes = arcaAtualImg(); garantirArca(ev); await transformaArca(antes, IMG_CHEST_T['evo_' + ev].three, E.cor, E.nm); }
   G.evo3 = ev; G.flags.c3Forma = true; G.flags.arcaPerg = true; delete PTC.me; curarTudo();
   await say(`* {y}${G.name} evoluiu para ${E.nm}!{/}`);
+  await say(`* {g}${resumoMods(E.mods)}{/}`);
   if (ev === 'farol') await say('Você virou um FAROL. Com lanterna e tudo. Agora sou eu que vou ficar com ciúme de quem brilha mais.', 'lume');
   if (ev === 'vao') await say('Tem mais espaço aí dentro? Mais do que antes? Daqui a pouco você guarda a capital inteira.', 'rita');
   if (ev === 'escriba') await say('[Registro: o Grimório agora tem seis páginas. E uma pena. Você tem uma pena na tampa. Isso não estava previsto.]', 'cat');
@@ -15568,6 +15569,7 @@ async function cenaEvolucao7() {
   sfx('rune'); V.shake = 18;
   G.evo7 = ev; delete PTC.me; curarTudo();
   await say(`* {y}${G.name} evoluiu para ${E.nm}!{/}`);
+  await say(`* {g}${resumoMods(E.mods)}{/}`);
   await say(`[TÉCNICA NOVA: ${TECH2[E.tec].nm}. ${TECH2[E.tec].d}]`, 'cat');
   save2();
 }
@@ -21592,6 +21594,14 @@ function arcaAtualImg() { const f = formaArca(); if (f) { garantirArca(f); retur
     });
   }
 }; }
+
+// resumo dos números que a evolução muda (aparece logo depois de evoluir)
+function resumoMods(mods) {
+  const N = { mhp: 'PV', mmp: 'PM', atk: 'ATQ', mag: 'MAG', def: 'DEF', mdef: 'RESIST', spd: 'VEL' };
+  const b = grupoAtual().find(m => m.id === 'bau');
+  const L = Object.entries(mods || {}).filter(([k, v]) => N[k] && v).map(([k, v]) => `${N[k]} ${v > 0 ? '+' : ''}${v}`);
+  return 'Corpo novo: ' + L.join(' · ') + (b ? `  (agora ${b.mhp} PV, ${b.mmp} PM)` : '');
+}
 
 boot2();
 </script>
