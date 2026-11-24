@@ -91,7 +91,7 @@ Object.assign(TECH2, {
   mordidaGulosa: { nm: 'Mordida Gulosa', cost: 20, tgt: 'enemy', d: 'Uma mordida que quebra 1 de escudo e devolve ao baú um terço do dano como vida.', run: async (m, t) => {
     await dash(m, ...pertoDe(m, t)); m.pose = 'front'; const ok = await timedPrompt(t, 20); const [x, y] = unitCenter(t);
     m.pose = 'closed'; sfx('bite'); hitstop(6); bshake(6, 2); burst(x, y, 14, ['#ffffff', '#f0c040', '#9be58a']);
-    const d = hitFoe(m, t, 1.15, { el: 'mordida', crit: ok, brk: 1 }); if (ok) BT.stats.crit++;
+    const d = hitFoe(m, t, 1.45, { el: 'mordida', crit: ok, brk: 1 }); if (ok) BT.stats.crit++;
     const [bx0, by0] = unitCenter(m);
     await tw(16, p => { for (let i = 0; i < 2; i++) part({ x: x + (bx0 - x) * p, y: y + (by0 - y) * p - Math.sin(p * Math.PI) * 14, vy: -0.2, life: 10, col: '#9be58a' }); });
     if (d > 0) healUnit(m, Math.round(d / 3)); m.pose = null; await dashBack(m, 12);
@@ -104,7 +104,7 @@ Object.assign(TECH2, {
       const [tx, ty] = unitCenter(t), it = pickOne(TRALHA);
       sfx('move');
       await tw(12, p => { const q = ease.io(p); bx.fillStyle = it[0]; bx.save(); bx.translate(x0 + (tx - x0) * q, y0 - 6 + (ty - y0 + 6) * q - Math.sin(q * Math.PI) * 26); bx.rotate(p * 9); bx.fillRect(-it[1] / 2, -it[2] / 2, it[1], it[2]); bx.restore(); });
-      burst(tx, ty, 8, [it[0], '#ffffff']); hitFoe(m, t, 0.55, { el: 'mordida' }); if (Math.random() < 0.35 && t.hp > 0) { t.st.tonto = 1; t.ct = Math.max(0, t.ct - 25); popNum(tx, ty - 20, 'TONTO', '#d0a8ff'); }
+      burst(tx, ty, 8, [it[0], '#ffffff']); hitFoe(m, t, 0.8, { el: 'mordida' }); if (Math.random() < 0.35 && t.hp > 0) { t.st.tonto = 1; t.ct = Math.max(0, t.ct - 25); popNum(tx, ty - 20, 'TONTO', '#d0a8ff'); }
     }
     m.sx = 1; m.sy = 1; m.pose = null;
   } },
@@ -118,7 +118,7 @@ Object.assign(TECH2, {
     for (let i = 0; i < 3; i++) {
       m.pose = 'front'; await tw(5, p => { m.oy -= 1; }); m.pose = 'closed'; sfx('bite'); hitstop(3); bshake(5, 2);
       popNum(x + (i - 1) * 10, y - 26 - i * 4, ['NHAC', 'CROC', 'NHAC'][i], '#ffe080'); burst(x, y, 8, ['#ffffff', '#8fe3ff']);
-      hitFoe(m, t, 0.55, { el: 'mordida', brk: 1 }); await tw(5, p => { m.oy += 1; }); if (t.hp <= 0) break;
+      hitFoe(m, t, 0.7, { el: 'mordida', brk: 1 }); await tw(5, p => { m.oy += 1; }); if (t.hp <= 0) break;
     }
     m.pose = null; await dashBack(m, 12);
   } },

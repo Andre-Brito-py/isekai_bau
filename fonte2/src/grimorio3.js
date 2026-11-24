@@ -14,8 +14,8 @@ const EL3 = {
   fuligem: { nm: 'Fuligem', el: null, col: '#c0b0e0', cols: ['#3a3048', '#6a5a7a', '#a898b8'], d: 'fumaça: deixa TONTO' }
 };
 const FORMA3 = {
-  dardo: { nm: 'Dardo', tgt: 'one', mp: 5, pow: 1.15, w: 'normal', d: 'um inimigo' },
-  onda: { nm: 'Onda', tgt: 'all', mp: 9, pow: 0.65, w: 'pesada', d: 'todos os inimigos (ação pesada)' },
+  dardo: { nm: 'Dardo', tgt: 'one', mp: 5, pow: 1.5, w: 'normal', d: 'um inimigo' },
+  onda: { nm: 'Onda', tgt: 'all', mp: 9, pow: 0.85, w: 'pesada', d: 'todos os inimigos (ação pesada)' },
   veu: { nm: 'Véu', tgt: 'ally', mp: 6, pow: 0, w: 'leve', d: 'um aliado (ação leve)' }
 };
 // fusões: chave em ordem alfabética

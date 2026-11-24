@@ -852,6 +852,12 @@
    LATA DO FESTIVAL, amuleto +2 ATQ +2 MAG +1 VEL por 12 fichas). Jogo custa 3 cobres; fichas em G.fichas.
  - Missão do diário "Noite de festa" (todas as barracas). Item novo: Maçã do Amor (cura 35% e tira maus estados).
 =====================================================================
+ AJUSTE DE DANO DO BAÚ (pedido do usuário: "a magia dá pouco dano e só a mordida vale a pena")
+ - A mordida tem crítico x1,5 pelo anel, então o Dardo (1.15) empatava com ela e ainda custava PM. Agora o Dardo bate
+   1.5 e a Onda 0.85 (todas as fusões sobem junto). Mordida Gulosa 1.45, Cuspe de Tralha 0.8, Mastigar 0.7 x3,
+   Marca de Runa +40%. Testado: chefes com equipamento continuam apertados (10–25% de vida), as lutas ficaram mais curtas.
+ - Regra: feitiço de página tem que bater mais que a mordida crítica do mesmo nível, porque custa PM e tinta.
+=====================================================================
 -->
 <style>
 :root{
@@ -7720,8 +7726,8 @@ const EL3 = {
   fuligem: { nm: 'Fuligem', el: null, col: '#c0b0e0', cols: ['#3a3048', '#6a5a7a', '#a898b8'], d: 'fumaça: deixa TONTO' }
 };
 const FORMA3 = {
-  dardo: { nm: 'Dardo', tgt: 'one', mp: 5, pow: 1.15, w: 'normal', d: 'um inimigo' },
-  onda: { nm: 'Onda', tgt: 'all', mp: 9, pow: 0.65, w: 'pesada', d: 'todos os inimigos (ação pesada)' },
+  dardo: { nm: 'Dardo', tgt: 'one', mp: 5, pow: 1.5, w: 'normal', d: 'um inimigo' },
+  onda: { nm: 'Onda', tgt: 'all', mp: 9, pow: 0.85, w: 'pesada', d: 'todos os inimigos (ação pesada)' },
   veu: { nm: 'Véu', tgt: 'ally', mp: 6, pow: 0, w: 'leve', d: 'um aliado (ação leve)' }
 };
 // fusões: chave em ordem alfabética
@@ -8932,7 +8938,7 @@ function fasesMae() {
 //   ARCA DO VÃO : ágil. +4 ATQ, +3 VEL, +14 PV. Técnica GUARDAR DENTRO (25T, leve): guarda um aliado dentro do baú; o
 //                 próximo golpe nele erra e a vez dele adianta. Passivo: a mordida "atravessa" (+20% de dano físico).
 //   ARCA-ESCRIBA: mágico. +7 MAG, +18 PM, +10 PV. Técnica MARCA DE RUNA (25T, leve): marca um inimigo por 3 vezes;
-//                 magia nele bate +30% e quebra 1 escudo a mais. Passivo: Grimório com 6 páginas, feitiços -1 PM e
+//                 magia nele bate +40% e quebra 1 escudo a mais. Passivo: Grimório com 6 páginas, feitiços -1 PM e
 //                 +15% de dano mágico.
 const EVO3 = {
   farol: { nm: 'Arca-Farol', cor: '#ffd060', papel: 'Protetor: aguenta e devolve em luz',
@@ -8966,7 +8972,7 @@ function evo3() { return G.evo3 && EVO3[G.evo3] ? G.evo3 : null; }
   let d = _cd4(a, t, pow, o);
   if (a && a.id === 'bau' && a.evo === 'vao' && !o.mag) d *= 1.2;
   if (a && a.id === 'bau' && a.evo === 'escriba' && o.mag) d *= 1.15;
-  if (t && t.st && t.st.marca > 0 && o.mag && a && a.side === 'p') d *= 1.3;
+  if (t && t.st && t.st.marca > 0 && o.mag && a && a.side === 'p') d *= 1.4;
   return d;
 }; }
 { const _hf6 = hitFoe; hitFoe = function (a, t, pow, o = {}) {
@@ -10677,7 +10683,7 @@ Object.assign(TECH2, {
   mordidaGulosa: { nm: 'Mordida Gulosa', cost: 20, tgt: 'enemy', d: 'Uma mordida que quebra 1 de escudo e devolve ao baú um terço do dano como vida.', run: async (m, t) => {
     await dash(m, ...pertoDe(m, t)); m.pose = 'front'; const ok = await timedPrompt(t, 20); const [x, y] = unitCenter(t);
     m.pose = 'closed'; sfx('bite'); hitstop(6); bshake(6, 2); burst(x, y, 14, ['#ffffff', '#f0c040', '#9be58a']);
-    const d = hitFoe(m, t, 1.15, { el: 'mordida', crit: ok, brk: 1 }); if (ok) BT.stats.crit++;
+    const d = hitFoe(m, t, 1.45, { el: 'mordida', crit: ok, brk: 1 }); if (ok) BT.stats.crit++;
     const [bx0, by0] = unitCenter(m);
     await tw(16, p => { for (let i = 0; i < 2; i++) part({ x: x + (bx0 - x) * p, y: y + (by0 - y) * p - Math.sin(p * Math.PI) * 14, vy: -0.2, life: 10, col: '#9be58a' }); });
     if (d > 0) healUnit(m, Math.round(d / 3)); m.pose = null; await dashBack(m, 12);
@@ -10690,7 +10696,7 @@ Object.assign(TECH2, {
       const [tx, ty] = unitCenter(t), it = pickOne(TRALHA);
       sfx('move');
       await tw(12, p => { const q = ease.io(p); bx.fillStyle = it[0]; bx.save(); bx.translate(x0 + (tx - x0) * q, y0 - 6 + (ty - y0 + 6) * q - Math.sin(q * Math.PI) * 26); bx.rotate(p * 9); bx.fillRect(-it[1] / 2, -it[2] / 2, it[1], it[2]); bx.restore(); });
-      burst(tx, ty, 8, [it[0], '#ffffff']); hitFoe(m, t, 0.55, { el: 'mordida' }); if (Math.random() < 0.35 && t.hp > 0) { t.st.tonto = 1; t.ct = Math.max(0, t.ct - 25); popNum(tx, ty - 20, 'TONTO', '#d0a8ff'); }
+      burst(tx, ty, 8, [it[0], '#ffffff']); hitFoe(m, t, 0.8, { el: 'mordida' }); if (Math.random() < 0.35 && t.hp > 0) { t.st.tonto = 1; t.ct = Math.max(0, t.ct - 25); popNum(tx, ty - 20, 'TONTO', '#d0a8ff'); }
     }
     m.sx = 1; m.sy = 1; m.pose = null;
   } },
@@ -10704,7 +10710,7 @@ Object.assign(TECH2, {
     for (let i = 0; i < 3; i++) {
       m.pose = 'front'; await tw(5, p => { m.oy -= 1; }); m.pose = 'closed'; sfx('bite'); hitstop(3); bshake(5, 2);
       popNum(x + (i - 1) * 10, y - 26 - i * 4, ['NHAC', 'CROC', 'NHAC'][i], '#ffe080'); burst(x, y, 8, ['#ffffff', '#8fe3ff']);
-      hitFoe(m, t, 0.55, { el: 'mordida', brk: 1 }); await tw(5, p => { m.oy += 1; }); if (t.hp <= 0) break;
+      hitFoe(m, t, 0.7, { el: 'mordida', brk: 1 }); await tw(5, p => { m.oy += 1; }); if (t.hp <= 0) break;
     }
     m.pose = null; await dashBack(m, 12);
   } },

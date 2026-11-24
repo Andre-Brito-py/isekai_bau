@@ -10,7 +10,7 @@
 //   ARCA DO VÃO : ágil. +4 ATQ, +3 VEL, +14 PV. Técnica GUARDAR DENTRO (25T, leve): guarda um aliado dentro do baú; o
 //                 próximo golpe nele erra e a vez dele adianta. Passivo: a mordida "atravessa" (+20% de dano físico).
 //   ARCA-ESCRIBA: mágico. +7 MAG, +18 PM, +10 PV. Técnica MARCA DE RUNA (25T, leve): marca um inimigo por 3 vezes;
-//                 magia nele bate +30% e quebra 1 escudo a mais. Passivo: Grimório com 6 páginas, feitiços -1 PM e
+//                 magia nele bate +40% e quebra 1 escudo a mais. Passivo: Grimório com 6 páginas, feitiços -1 PM e
 //                 +15% de dano mágico.
 const EVO3 = {
   farol: { nm: 'Arca-Farol', cor: '#ffd060', papel: 'Protetor: aguenta e devolve em luz',
@@ -44,7 +44,7 @@ function evo3() { return G.evo3 && EVO3[G.evo3] ? G.evo3 : null; }
   let d = _cd4(a, t, pow, o);
   if (a && a.id === 'bau' && a.evo === 'vao' && !o.mag) d *= 1.2;
   if (a && a.id === 'bau' && a.evo === 'escriba' && o.mag) d *= 1.15;
-  if (t && t.st && t.st.marca > 0 && o.mag && a && a.side === 'p') d *= 1.3;
+  if (t && t.st && t.st.marca > 0 && o.mag && a && a.side === 'p') d *= 1.4;
   return d;
 }; }
 { const _hf6 = hitFoe; hitFoe = function (a, t, pow, o = {}) {
