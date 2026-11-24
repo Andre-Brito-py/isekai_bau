@@ -93,6 +93,7 @@ vender = async function () {
 
 // ---------- itens ----------
 Object.assign(ITEM2, {
+  maca: { nm: 'Maçã do Amor', preco: 15, luta: true, d: 'Do festival. Cura 35% da vida de um aliado e tira os maus estados. Gruda nos dentes.' },
   frascoG: { nm: 'Frasco Grande', preco: 70, luta: true, d: 'Âmbar de farmácia, dose dupla. Cura 80% da vida de um aliado e tira queimadura e frio.' },
   tintaF: { nm: 'Tinta Azul Forte', preco: 55, luta: true, d: 'Devolve 40 PM.' },
   pastel: { nm: 'Pastel de Feira', preco: 35, luta: true, d: 'Pastel de queijo dividido em três. Cura 20% da vida do grupo todo.' },
@@ -102,6 +103,7 @@ Object.assign(ITEM2, {
 });
 const BITEM = {
   frasco: { alvo: 'vivo', run: t => { healUnit(t, Math.round(t.mhp * 0.45)); t.st.queimado = 0; t.st.frio = 0; } },
+  maca: { alvo: 'vivo', run: t => { healUnit(t, Math.round(t.mhp * 0.35)); for (const q of ['queimado', 'frio', 'tonto', 'esquecido', 'molhado']) t.st[q] = 0; } },
   frascoG: { alvo: 'vivo', run: t => { healUnit(t, Math.round(t.mhp * 0.8)); t.st.queimado = 0; t.st.frio = 0; } },
   tinta: { alvo: 'vivo', run: t => { t.mp = Math.min(t.mmp, t.mp + 15); const [x, y] = unitCenter(t); popNum(x, y - 10, '+15 PM', '#8fe3ff'); } },
   tintaF: { alvo: 'vivo', run: t => { t.mp = Math.min(t.mmp, t.mp + 40); const [x, y] = unitCenter(t); popNum(x, y - 10, '+40 PM', '#8fe3ff'); } },
@@ -111,7 +113,7 @@ const BITEM = {
   bomba: { alvo: 'inimigos', run: (t, m) => { for (const f of alive(BT.foes)) { const [x, y] = unitCenter(f); burst(x, y, 14, ['#3a3048', '#6a5a7a', '#a898b8']); hitFoe(m, f, 0.55, { mag: true, ranged: true }); if (f.hp > 0 && Math.random() < 0.75) { f.ct = Math.max(0, f.ct - 40); popNum(x, y - 30, 'TONTO', '#d0a8ff'); } } } },
   salG: { alvo: 'inimigo', run: (t, m) => { const [x, y] = unitCenter(t); burst(x, y, 16, ['#ffffff', '#d8dce8']); hitFoe(m, t, 0.2, { brk: 3, ranged: true }); } }
 };
-const ORD_ITEM = ['frasco', 'frascoG', 'tinta', 'tintaF', 'pluma', 'pastel', 'cafe', 'bomba', 'salG'];
+const ORD_ITEM = ['frasco', 'frascoG', 'maca', 'tinta', 'tintaF', 'pluma', 'pastel', 'cafe', 'bomba', 'salG'];
 { const _dcI = doCommand; doCommand = async function (m, k) {
   if (k !== 'item') return _dcI(m, k);
   const its = ORD_ITEM.filter(q => ['frasco', 'tinta', 'pluma'].includes(q) || (G.items[q] || 0) > 0).map(q => ({ k: q, label: ITEM2[q].nm, right: 'x' + (G.items[q] || 0), disabled: !G.items[q], d: ITEM2[q].d }));
@@ -147,6 +149,7 @@ usarItemFora = async function () {
   if (j < 0) return;
   const m = g[j]; G.pt = G.pt || {}; const s = G.pt[m.id] || { hp: m.hp, mp: m.mp };
   if (k === 'frasco') s.hp = Math.min(m.mhp, s.hp + Math.round(m.mhp * 0.45));
+  if (k === 'maca') s.hp = Math.min(m.mhp, s.hp + Math.round(m.mhp * 0.35));
   if (k === 'frascoG') s.hp = Math.min(m.mhp, s.hp + Math.round(m.mhp * 0.8));
   if (k === 'tinta') s.mp = Math.min(m.mmp, s.mp + 15);
   if (k === 'tintaF') s.mp = Math.min(m.mmp, s.mp + 40);

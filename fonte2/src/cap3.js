@@ -131,7 +131,7 @@ const arvC = v => memo(() => arvoreArt(v));
       { t: 'sign', x: PA.mesa[0], y: PA.mesa[1], h: 26, talk: mesaEscrita }]
   };
   // ===== AVENIDA DO FESTIVAL =====
-  const tiposB = ['lanterna', 'pastel', 'fruta', 'livro', 'lanterna', 'fruta', 'livro', 'lanterna'], coresB = ['#c84a7a', '#e8a040', '#5a8ab8', '#8a6ab8', '#4a9a7a', '#c84a7a', '#e8a040', '#5a8ab8'];
+  const tiposB = ['argolas', 'pastel', 'patos', 'latas', 'correio', 'doces', 'desejo', 'premio'], coresB = ['#c84a7a', '#e8a040', '#5a8ab8', '#8a6ab8', '#4a9a7a', '#c84a7a', '#e8a040', '#5a8ab8'];
   MAPS2.festival = { rows: ROWS3.festival, name: 'Auren · Avenida do Festival', music: 'festival', batBg: bgAuren, showMoney: true, bg: '#1c2a4a',
     props: [
       // palacetes simétricos dos dois lados da praça do palco
