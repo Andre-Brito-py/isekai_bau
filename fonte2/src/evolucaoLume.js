@@ -10,8 +10,8 @@
 // VERSO NOVO (ganho no show do Cap. 8, antes da evolução): técnica da Lume (30 PM): o grupo bate 25% mais por 3 vezes
 // e ganha 20 de Tensão. A música da Lume ganhou mais um verso.
 const EVOL = {
-  lareira: { nm: 'Lume-Lareira', cor: '#ffb040', d: 'O lustre vira lareira: aquece, cura, segura o grupo de pé.', mods: { mhp: 24, mdef: 4, mag: 2 }, tec: 'lareiraViva' },
-  alvorada: { nm: 'Lume-Alvorada', cor: '#bff0ff', d: 'O lustre vira estrela da manhã: a luz que machuca o escuro.', mods: { mag: 6, mhp: 8 }, tec: 'raioAurora' }
+  lareira: { nm: 'Lume-Lareira', cor: '#ffb040', d: 'O lustre vira lareira: aquece, cura, segura o grupo de pé.', mods: { mhp: 44, mdef: 8, mag: 4, def: 3 }, tec: 'lareiraViva' },
+  alvorada: { nm: 'Lume-Alvorada', cor: '#bff0ff', d: 'O lustre vira estrela da manhã: a luz que machuca o escuro.', mods: { mag: 12, mhp: 16, mmp: 10 }, tec: 'raioAurora' }
 };
 const ESCURO_K = ['friagem', 'friagemB', 'loboFuligem', 'apagador', 'capitao', 'geadaViva', 'sombra', 'fuligem'];
 { const _gcL = grupoCap1; grupoCap1 = function () {
@@ -85,6 +85,7 @@ async function cenaEvolucaoLume() {
   G.evoLume = ev; sfx('rune'); V.shake = 14; curarTudo();
   await say(ev === 'lareira' ? '* As velas em volta da Lume se inclinam todas para ela, como gente se inclinando para um fogão. A chama dela desce do alto da cabeça e se acomoda no peito, larga, baixa, quente. Uma lareira.' : '* As velas em volta da Lume apagam ao mesmo tempo. Por um segundo, escuro. E então ela acende de uma vez, branca, azul nas bordas, como o céu cinco minutos antes do sol. Uma alvorada.');
   await say('* {y}A Lume evoluiu para ' + EVOL[ev].nm + '!{/} (Nenhum preço foi cobrado. Isso foi dado.)');
+  { const N = { mhp: 'PV', mmp: 'PM', atk: 'ATQ', mag: 'MAG', def: 'DEF', mdef: 'RESIST', spd: 'VEL' }; await say('* {g}Lume: ' + Object.entries(EVOL[ev].mods).map(([k, v]) => N[k] + ' +' + v).join(' · ') + '{/}'); }
   await say('[TÉCNICA NOVA: ' + TECH2[EVOL[ev].tec].nm + '. ' + TECH2[EVOL[ev].tec].d + ']', 'cat');
   save2();
 }

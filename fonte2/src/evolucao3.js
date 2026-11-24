@@ -16,15 +16,15 @@ const EVO3 = {
   farol: { nm: 'Arca-Farol', cor: '#ffd060', papel: 'Protetor: aguenta e devolve em luz',
     d: 'O âmbar vira luz dentro da tampa. Vira um farol que protege o grupo e devolve cada golpe em raio de luz.',
     preco: 'O ROSTO DA SUA MÃE. A voz fica. O rosto vai.',
-    mods: { mhp: 34, def: 4, mdef: 4, mag: 2, atk: 2 }, tec: 'farol' },
+    mods: { mhp: 60, def: 8, mdef: 8, mag: 3, atk: 3 }, tec: 'farol' },
   vao: { nm: 'Arca do Vão', cor: '#c8a0ff', papel: 'Ágil: guarda aliados dentro, morde atravessando',
     d: 'O espaço dobrado da tampa fica maior. Dá para guardar alguém dentro no meio da luta, e a mordida atravessa.',
     preco: 'O CAMINHO DE CASA. O endereço, o nome da rua, o ponto onde você descia do 31.',
-    mods: { atk: 4, spd: 3, mhp: 14 }, tec: 'guardarDentro' },
+    mods: { atk: 9, spd: 5, mhp: 24, def: 2 }, tec: 'guardarDentro' },
   escriba: { nm: 'Arca-Escriba', cor: '#8fe3d8', papel: 'Mágico: marca inimigos e escreve feitiços mais fortes',
     d: 'A tinta de superfície entra na madeira. O Grimório cresce, os feitiços ficam mais baratos e mais fortes, e dá para escrever runas NOS inimigos.',
     preco: 'A SUA LETRA. Como você escrevia o próprio nome à mão. A assinatura.',
-    mods: { mag: 7, mmp: 18, mhp: 10 }, tec: 'marcaRuna' }
+    mods: { mag: 12, mmp: 30, mhp: 14, mdef: 3 }, tec: 'marcaRuna' }
 };
 function evo3() { return G.evo3 && EVO3[G.evo3] ? G.evo3 : null; }
 

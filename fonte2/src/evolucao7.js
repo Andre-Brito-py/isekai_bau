@@ -17,22 +17,22 @@
 const EVO7 = {
   guardiao: { base: 'farol', nm: 'Farol-Guardião', cor: '#ffe080', escolha: '"Ninguém mais paga por mim."', papel: 'Escudo do grupo: puxa os golpes e protege',
     d: 'A luz do farol vira muralha. Os golpes vêm em você, e a sua luz cobre os outros.', preco: 'A VOZ DA SUA MÃE. O rosto já tinha ido. Agora o "leva casaco, menino" também.',
-    mods: { mhp: 30, def: 4, mdef: 4 }, tec: 'muralhaLuz' },
+    mods: { mhp: 70, def: 10, mdef: 10 }, tec: 'muralhaLuz' },
   tempestade: { base: 'farol', nm: 'Farol-Tempestade', cor: '#bff0ff', escolha: '"A conta vai voltar para quem fez."', papel: 'Luz que fere: raios em todos os inimigos',
     d: 'O farol não ilumina mais o caminho. Ilumina o alvo.', preco: 'O BARULHO DA CHUVA NO TELHADO DO SEU QUARTO, nas noites em que você não dormia.',
-    mods: { mag: 5, mmp: 12, mhp: 10 }, tec: 'raioCadeia' },
+    mods: { mag: 11, mmp: 24, mhp: 20, spd: 2 }, tec: 'raioCadeia' },
   labirinto: { base: 'vao', nm: 'Vão-Labirinto', cor: '#c8a0ff', escolha: '"Eu escondo quem eu amo. Ninguém acha."', papel: 'O espaço vira armadilha: os inimigos se perdem',
     d: 'O Vão dobra tantas vezes que vira labirinto. Quem entra sem convite não acha a saída nem a vez.', preco: 'O SEU QUARTO. A porta, a cama, a janela, o cheiro. O lugar inteiro.',
-    mods: { spd: 3, mhp: 14, def: 2 }, tec: 'labirinto' },
+    mods: { spd: 6, mhp: 28, def: 5, atk: 4 }, tec: 'labirinto' },
   boca: { base: 'vao', nm: 'Vão-Boca', cor: '#ff8aa8', escolha: '"Eu engulo o que machuca. Inteiro."', papel: 'Fome: engole inimigos fracos inteiros',
     d: 'O Vão desce até o fundo da tampa. A mordida fica sem fim.', preco: 'O GOSTO DE TUDO QUE VOCÊ COMEU NA TERRA. De uma vez.',
-    mods: { atk: 5, mhp: 16 }, tec: 'engolir' },
+    mods: { atk: 12, mhp: 36, def: 3 }, tec: 'engolir' },
   bibliotecario: { base: 'escriba', nm: 'Escriba-Bibliotecário', cor: '#8fe3d8', escolha: '"Eu guardo tudo. Anoto tudo. Nada mais se perde."', papel: 'Memória: feitiços de graça e mais páginas',
     d: 'A tampa vira estante. Cada feitiço lançado fica anotado e volta mais barato.', preco: 'O PRIMEIRO LIVRO QUE VOCÊ LEU. E quem leu ele pra você, antes de você saber ler.',
-    mods: { mag: 4, mmp: 20, mhp: 12 }, tec: 'bibliotecaViva' },
+    mods: { mag: 9, mmp: 36, mhp: 20, mdef: 4 }, tec: 'bibliotecaViva' },
   palimpsesto: { base: 'escriba', nm: 'Escriba-Palimpsesto', cor: '#f2ecdc', escolha: '"Se a conta está errada, eu reescrevo a conta."', papel: 'Reescreve a ficha do inimigo: fraqueza a tudo',
     d: 'A tinta raspa o que estava escrito e escreve por cima. Inclusive nos inimigos.', preco: 'O SEU NOME DA TERRA. Você continua sendo @. Só @.',
-    mods: { mag: 6, mmp: 10, mhp: 8 }, tec: 'reescrever' }
+    mods: { mag: 13, mmp: 22, mhp: 16, spd: 2 }, tec: 'reescrever' }
 };
 function evo7() { return G.evo7 && EVO7[G.evo7] ? G.evo7 : null; }
 { const _gc7 = grupoCap1; grupoCap1 = function () {

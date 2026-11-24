@@ -897,6 +897,8 @@
  - Saves que evoluíram com a arte antiga e não fecharam o Cap. 3 ganham UMA pergunta: voltar para o veio e escolher
    de novo (desfaz G.evo3, devolve a página do Escriba).
  - Regra: evolução nova = corpo novo desenhado (nunca só enfeite em cima).
+v85 — EVOLUÇÕES MAIS FORTES NO FOCO: cada forma ganha bônus maiores no que ela é (Escriba MAG+12 PM+30; Farol PV+60 DEF/RES+8; Vão ATQ+9 VEL+5; Cap7: Guardião PV+70, Tempestade MAG+11, Labirinto VEL+6, Boca ATQ+12, Bibliotecário PM+36, Palimpsesto MAG+13; Lume: Lareira PV+44 RES+8, Alvorada MAG+12). A tela de evolução mostra o resumo. ESC3 dos inimigos subiu um pouco para manter o desafio (bots c/ equipamento: vitórias com 15–30% de vida; Farol no Cap10 mais folgado).
+
 =====================================================================
 -->
 <style>
@@ -8984,15 +8986,15 @@ const EVO3 = {
   farol: { nm: 'Arca-Farol', cor: '#ffd060', papel: 'Protetor: aguenta e devolve em luz',
     d: 'O âmbar vira luz dentro da tampa. Vira um farol que protege o grupo e devolve cada golpe em raio de luz.',
     preco: 'O ROSTO DA SUA MÃE. A voz fica. O rosto vai.',
-    mods: { mhp: 34, def: 4, mdef: 4, mag: 2, atk: 2 }, tec: 'farol' },
+    mods: { mhp: 60, def: 8, mdef: 8, mag: 3, atk: 3 }, tec: 'farol' },
   vao: { nm: 'Arca do Vão', cor: '#c8a0ff', papel: 'Ágil: guarda aliados dentro, morde atravessando',
     d: 'O espaço dobrado da tampa fica maior. Dá para guardar alguém dentro no meio da luta, e a mordida atravessa.',
     preco: 'O CAMINHO DE CASA. O endereço, o nome da rua, o ponto onde você descia do 31.',
-    mods: { atk: 4, spd: 3, mhp: 14 }, tec: 'guardarDentro' },
+    mods: { atk: 9, spd: 5, mhp: 24, def: 2 }, tec: 'guardarDentro' },
   escriba: { nm: 'Arca-Escriba', cor: '#8fe3d8', papel: 'Mágico: marca inimigos e escreve feitiços mais fortes',
     d: 'A tinta de superfície entra na madeira. O Grimório cresce, os feitiços ficam mais baratos e mais fortes, e dá para escrever runas NOS inimigos.',
     preco: 'A SUA LETRA. Como você escrevia o próprio nome à mão. A assinatura.',
-    mods: { mag: 7, mmp: 18, mhp: 10 }, tec: 'marcaRuna' }
+    mods: { mag: 12, mmp: 30, mhp: 14, mdef: 3 }, tec: 'marcaRuna' }
 };
 function evo3() { return G.evo3 && EVO3[G.evo3] ? G.evo3 : null; }
 
@@ -15446,22 +15448,22 @@ function aderecoEvo7(ev) {
 const EVO7 = {
   guardiao: { base: 'farol', nm: 'Farol-Guardião', cor: '#ffe080', escolha: '"Ninguém mais paga por mim."', papel: 'Escudo do grupo: puxa os golpes e protege',
     d: 'A luz do farol vira muralha. Os golpes vêm em você, e a sua luz cobre os outros.', preco: 'A VOZ DA SUA MÃE. O rosto já tinha ido. Agora o "leva casaco, menino" também.',
-    mods: { mhp: 30, def: 4, mdef: 4 }, tec: 'muralhaLuz' },
+    mods: { mhp: 70, def: 10, mdef: 10 }, tec: 'muralhaLuz' },
   tempestade: { base: 'farol', nm: 'Farol-Tempestade', cor: '#bff0ff', escolha: '"A conta vai voltar para quem fez."', papel: 'Luz que fere: raios em todos os inimigos',
     d: 'O farol não ilumina mais o caminho. Ilumina o alvo.', preco: 'O BARULHO DA CHUVA NO TELHADO DO SEU QUARTO, nas noites em que você não dormia.',
-    mods: { mag: 5, mmp: 12, mhp: 10 }, tec: 'raioCadeia' },
+    mods: { mag: 11, mmp: 24, mhp: 20, spd: 2 }, tec: 'raioCadeia' },
   labirinto: { base: 'vao', nm: 'Vão-Labirinto', cor: '#c8a0ff', escolha: '"Eu escondo quem eu amo. Ninguém acha."', papel: 'O espaço vira armadilha: os inimigos se perdem',
     d: 'O Vão dobra tantas vezes que vira labirinto. Quem entra sem convite não acha a saída nem a vez.', preco: 'O SEU QUARTO. A porta, a cama, a janela, o cheiro. O lugar inteiro.',
-    mods: { spd: 3, mhp: 14, def: 2 }, tec: 'labirinto' },
+    mods: { spd: 6, mhp: 28, def: 5, atk: 4 }, tec: 'labirinto' },
   boca: { base: 'vao', nm: 'Vão-Boca', cor: '#ff8aa8', escolha: '"Eu engulo o que machuca. Inteiro."', papel: 'Fome: engole inimigos fracos inteiros',
     d: 'O Vão desce até o fundo da tampa. A mordida fica sem fim.', preco: 'O GOSTO DE TUDO QUE VOCÊ COMEU NA TERRA. De uma vez.',
-    mods: { atk: 5, mhp: 16 }, tec: 'engolir' },
+    mods: { atk: 12, mhp: 36, def: 3 }, tec: 'engolir' },
   bibliotecario: { base: 'escriba', nm: 'Escriba-Bibliotecário', cor: '#8fe3d8', escolha: '"Eu guardo tudo. Anoto tudo. Nada mais se perde."', papel: 'Memória: feitiços de graça e mais páginas',
     d: 'A tampa vira estante. Cada feitiço lançado fica anotado e volta mais barato.', preco: 'O PRIMEIRO LIVRO QUE VOCÊ LEU. E quem leu ele pra você, antes de você saber ler.',
-    mods: { mag: 4, mmp: 20, mhp: 12 }, tec: 'bibliotecaViva' },
+    mods: { mag: 9, mmp: 36, mhp: 20, mdef: 4 }, tec: 'bibliotecaViva' },
   palimpsesto: { base: 'escriba', nm: 'Escriba-Palimpsesto', cor: '#f2ecdc', escolha: '"Se a conta está errada, eu reescrevo a conta."', papel: 'Reescreve a ficha do inimigo: fraqueza a tudo',
     d: 'A tinta raspa o que estava escrito e escreve por cima. Inclusive nos inimigos.', preco: 'O SEU NOME DA TERRA. Você continua sendo @. Só @.',
-    mods: { mag: 6, mmp: 10, mhp: 8 }, tec: 'reescrever' }
+    mods: { mag: 13, mmp: 22, mhp: 16, spd: 2 }, tec: 'reescrever' }
 };
 function evo7() { return G.evo7 && EVO7[G.evo7] ? G.evo7 : null; }
 { const _gc7 = grupoCap1; grupoCap1 = function () {
@@ -16931,8 +16933,8 @@ function fasesFriagem() { return [{ at: 0.66, run: async (e) => {
 // VERSO NOVO (ganho no show do Cap. 8, antes da evolução): técnica da Lume (30 PM): o grupo bate 25% mais por 3 vezes
 // e ganha 20 de Tensão. A música da Lume ganhou mais um verso.
 const EVOL = {
-  lareira: { nm: 'Lume-Lareira', cor: '#ffb040', d: 'O lustre vira lareira: aquece, cura, segura o grupo de pé.', mods: { mhp: 24, mdef: 4, mag: 2 }, tec: 'lareiraViva' },
-  alvorada: { nm: 'Lume-Alvorada', cor: '#bff0ff', d: 'O lustre vira estrela da manhã: a luz que machuca o escuro.', mods: { mag: 6, mhp: 8 }, tec: 'raioAurora' }
+  lareira: { nm: 'Lume-Lareira', cor: '#ffb040', d: 'O lustre vira lareira: aquece, cura, segura o grupo de pé.', mods: { mhp: 44, mdef: 8, mag: 4, def: 3 }, tec: 'lareiraViva' },
+  alvorada: { nm: 'Lume-Alvorada', cor: '#bff0ff', d: 'O lustre vira estrela da manhã: a luz que machuca o escuro.', mods: { mag: 12, mhp: 16, mmp: 10 }, tec: 'raioAurora' }
 };
 const ESCURO_K = ['friagem', 'friagemB', 'loboFuligem', 'apagador', 'capitao', 'geadaViva', 'sombra', 'fuligem'];
 { const _gcL = grupoCap1; grupoCap1 = function () {
@@ -17006,6 +17008,7 @@ async function cenaEvolucaoLume() {
   G.evoLume = ev; sfx('rune'); V.shake = 14; curarTudo();
   await say(ev === 'lareira' ? '* As velas em volta da Lume se inclinam todas para ela, como gente se inclinando para um fogão. A chama dela desce do alto da cabeça e se acomoda no peito, larga, baixa, quente. Uma lareira.' : '* As velas em volta da Lume apagam ao mesmo tempo. Por um segundo, escuro. E então ela acende de uma vez, branca, azul nas bordas, como o céu cinco minutos antes do sol. Uma alvorada.');
   await say('* {y}A Lume evoluiu para ' + EVOL[ev].nm + '!{/} (Nenhum preço foi cobrado. Isso foi dado.)');
+  { const N = { mhp: 'PV', mmp: 'PM', atk: 'ATQ', mag: 'MAG', def: 'DEF', mdef: 'RESIST', spd: 'VEL' }; await say('* {g}Lume: ' + Object.entries(EVOL[ev].mods).map(([k, v]) => N[k] + ' +' + v).join(' · ') + '{/}'); }
   await say('[TÉCNICA NOVA: ' + TECH2[EVOL[ev].tec].nm + '. ' + TECH2[EVOL[ev].tec].d + ']', 'cat');
   save2();
 }
@@ -20059,7 +20062,7 @@ const CAP_INIMIGO = {
   8: ['friagem', 'apagador', 'loboFuligem', 'geadaViva', 'capitao', 'friagemB'], 9: ['sentinela', 'gralha', 'mariposaA', 'espantalhoC', 'rainhaF', 'faroleiro'],
   10: ['ecoL', 'contrapeso', 'vesperB', 'coracaoF']
 };
-const ESC3 = { 3: 0.14, 4: 0.3, 5: 0.32, 6: 0.34, 7: 0.38, 8: 0.42, 9: 0.52, 10: 0.55 };
+const ESC3 = { 3: 0.14, 4: 0.34, 5: 0.37, 6: 0.39, 7: 0.43, 8: 0.48, 9: 0.58, 10: 0.62 };
 for (const [c, ids] of Object.entries(CAP_INIMIGO)) for (const id of ids) { const E = ENEMY2[id]; if (!E || E._esc3) continue; E._esc3 = true; const x = ESC3[c]; E.mhp = Math.round(E.mhp * (1 + 0.7 * x)); E.atk = Math.round(E.atk * (1 + x)); if (E.cobres) E.cobres = Math.round(E.cobres * (1 + x)); }
 
 // ---------- materiais ----------
