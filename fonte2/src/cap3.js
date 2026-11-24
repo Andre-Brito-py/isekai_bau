@@ -507,7 +507,8 @@ async function discursoVesper() {
   await fadeOut(40);
   await cartao(['FIM DA PARTE 1', 'O Festival da Luz', '', 'Continua na Parte 2:', 'As Galerias de Fuligem']);
   V.scene = 'world'; loadMap2('festival', 20, 10, 'down'); playMusic('festival'); await fadeIn(20);
-  await say('* (A Parte 2 do capítulo está a caminho. Enquanto isso, a capital, o festival e a base continuam abertos.)');
+  await say('Eu vou na frente. A grade do bueiro grande fica no Bairro Baixo, aqui em Auren. Encontro vocês lá. Desçam quando estiverem prontos.', 'tico');
+  await say('* (Próximo passo: a grade do bueiro no Bairro Baixo de Auren, onde o Tico espera. O festival e a base continuam abertos.)');
 }
 
 // ---------- entrada no capítulo 3 ----------

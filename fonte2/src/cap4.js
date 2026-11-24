@@ -129,7 +129,7 @@ const gradeProps = (m) => { for (const p of m.props || []) { if (p._hld) continu
   };
   for (const id of ['largo', 'hosp1', 'hosp2', 'sala']) gradeProps(MAPS2[id]);
   // a Avenida do Festival ganha a saída leste para o Largo (só depois do Cap. 3)
-  const fe = MAPS2.festival; if (fe && !fe._largo) { fe._largo = true; for (const [x, y] of POS3.festival.largoDoor) fe.ents.push({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c3Fim) { await say('* O Largo do Hospital fica para lá. Hoje não é dia.'); W2.mv = null; return; } sfx('door'); await fadeOut(10); loadMap2('largo', ...LG.chegada, 'right'); await fadeIn(10); if (MAPS2.largo.onEnter) await MAPS2.largo.onEnter(); } }); }
+  const fe = MAPS2.festival; if (fe && !fe._largo) { fe._largo = true; for (const [x, y] of POS3.festival.largoDoor) fe.ents.push({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c3Fim) { await say(G.flags.c3P1Fim ? '* O Largo do Hospital fica para lá, mas ainda não é hora. Antes: o Tico espera vocês na grade do bueiro, no Bairro Baixo de Auren. Tem alguma coisa respirando lá embaixo.' : '* O Largo do Hospital fica para lá. Hoje não é dia.'); W2.mv = null; return; } sfx('door'); await fadeOut(10); loadMap2('largo', ...LG.chegada, 'right'); await fadeIn(10); if (MAPS2.largo.onEnter) await MAPS2.largo.onEnter(); } }); }
 }; }
 // nos mapas "só baú" a Lume e a Rita vão DENTRO do baú (ninguém segue a pé)
 { const _lm4 = loadMap2; loadMap2 = function (id) { const r = _lm4.apply(this, arguments); if (MAPS2[id] && MAPS2[id].soBau) W2.fol = []; return r; }; }
