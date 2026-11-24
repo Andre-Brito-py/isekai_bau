@@ -804,6 +804,40 @@
    #160c2a, luz #f4ecff, ciano #8fe3ff, ouro #ffd070. O Vão de bolso (objetos) e o Guardar Dentro (batalha) usam o mesmo
    rasgo e espiral. Regra: magia espacial nova reusa tpRasgo/tpEspiral/tpCirculo/tpDobras.
 =====================================================================
+ O CÍRCULO MÁGICO E A TINTA (circulo.js; pedido do usuário: magia com custo, mais visual, inspirada no jeito de
+ "desenhar" feitiço de obras de bruxas-escribas; inspiração de MECÂNICA, nada copiado de arte, nome ou símbolo)
+ - Toda página do Grimório é um CÍRCULO: SIGILO no meio (elemento; dois entrelaçados = FUSÃO; anel de repetição =
+   DOBRADO), SINAIS em volta (Dardo: seta; Onda: ondas nos 4 lados; Véu: escudos em cruz), TAMANHO (P: -20% força,
+   -30% PM, ação mais leve; G: +25% força, +40% PM, mais pesada) e ANEL. Anel com BRECHA = Runa de Gatilho.
+ - A mesa de escrever (mesaDeEscrever): página de papel à esquerda com o círculo ao vivo, opções à direita (cima/baixo
+   escolhe, esquerda/direita muda), descrição embaixo. TRAÇAR abre o minijogo do anel (tracarAnel): gire o direcional
+   em volta, sem voltar (borra e recomeça) e sem parar; traço firme = página com +8% de força (s.q). A = traçar devagar.
+ - CUSTO: TINTA DE SUPERFÍCIE (G.items.tintaS): 1 por círculo, +1 fusão/dobro, +1 círculo grande. Manter a página
+   igual não gasta. Fontes: Papelaria (balcão, 25c), Bazar (36c), Mascate (35c), baús, bichos de fuligem (Cinzinha,
+   Rato-Pavio, Lobo de Fuligem, Mãe-Fuligem) e a forja (2 Fuligem Grossa + 1 Pavio Queimado = 3).
+ - FUSÕES só com SELO (G.grim.fus = selos conhecidos). História dá 3: Vapor (Iolanda, Cap. 3), Vidro (mesa de areia,
+   Cap. 5), Lava Dourada (a Broca, Cap. 7). O resto: baús opcionais (BAU_EXTRA em economia3.js) ou o balcão da Papelaria
+   (SELO_LOJA, por capítulo). Os do SAL só explorando. Save antigo: fusões já anotadas viram selos, +8 tintas e um aviso.
+ - SAL (elemento opcional): o Zé do cais de Velhágua troca a pedra da salina por 3 Lodos de Rua (depois do Cap. 5).
+   Quebra +2 de escudo, barato. Fusões: Salitre (Brasa), Salmoura (Geada), Lágrima (Seiva). Não fecha com Fuligem,
+   Areia nem Âmbar.
+ - Na luta, o círculo da página aparece na frente do baú antes do feitiço sair.
+=====================================================================
+ ECONOMIA DE VERDADE (economia3.js; pedido do usuário: "o cobre deve ser essencial")
+ - Inimigos do Cap. 3 em diante mais fortes (ESC3: x por capítulo; vida *(1+0.7x), ataque *(1+x), cobres *(1+x); x de 0.08 a 0.30).
+   O grupo compensa com EQUIPAMENTO, FORJA e ITENS. Sem gastar, aperta de verdade (testado com o piloto automático).
+ - Equipamento: T1 no Bazar (Colete de Lona + os antigos), T2 com o Mascate a partir do Cap. 4 (Lança de Aço da Serra,
+   Gibão, Diapasão, Capa de Feltro), T3 a partir do Cap. 7 (Lança de Bronze Antigo, Brigantina, Lira de Vidro, Manto de
+   Fuligem), T4 só na forja, com material RARO de chefe (Lança do Farol, Couraça do Cerco, Batuta de Luz, Xale do Morro).
+ - O BAÚ não veste: a FORJA da Rita (base) faz Tampa Reforçada, Dentes de Ferro e Forro de Tinta, graus I a III, com
+   materiais + cobres. Todo bicho comum deixa material (DROP2); todo chefe deixa um RARO (não entra no "vender tudo").
+ - Itens de luta novos: Frasco Grande (80%), Tinta Azul Forte (40 PM), Pastel de Feira (20% no grupo), Café Coado
+   (+25 Tensão), Bomba de Fuligem (todos, TONTO), Sal Grosso (quebra 3). Menu de itens da luta mostra só o que tem.
+ - SEU QUIRINO, O MASCATE: no Largo do Hospital a partir do Cap. 4 e seguindo o grupo (Candeia, Acampamento, Vila dos
+   Pavios, Sopé, Torre) enquanto o capítulo daquele lugar está aberto. Ele vende e compra material.
+ - Regra para capítulos novos: cada capítulo novo põe 1 selo e 1 punhado de tinta em baús opcionais, define os drops dos
+   bichos novos e um material raro do chefe, e entra em CAP_INIMIGO/ESC3. Faixa nova de equipamento a cada ~3 capítulos.
+=====================================================================
 -->
 <style>
 :root{

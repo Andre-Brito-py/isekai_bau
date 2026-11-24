@@ -151,7 +151,7 @@ class TW {
 }
 
 // ---------- input ----------
-const KEYS = {}, JPQ = {}; let JP = {}; const HELD = {}; let JOYMAG = 1;
+const KEYS = {}, JPQ = {}; let JP = {}; const HELD = {}; let JOYMAG = 1, JOYANG = null;
 const KEYMAP = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', KeyW: 'up', KeyS: 'down', KeyA: 'left', KeyD: 'right', KeyZ: 'a', Enter: 'a', Space: 'a', KeyJ: 'a', KeyX: 'b', Escape: 'b', Backspace: 'b', KeyK: 'b', KeyC: 'menu', KeyQ: 'menu' };
 function press(k) { if (!KEYS[k]) JPQ[k] = true; KEYS[k] = true; }
 function release(k) { KEYS[k] = false; }
@@ -196,6 +196,7 @@ function setupTouch() {
     const r = dp.getBoundingClientRect(); let dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2); const dist = Math.hypot(dx, dy);
     const k = dist > R ? R / dist : 1; moveKnob(dx * k, dy * k);
     JOYMAG = Math.min(1, dist / R);
+    JOYANG = dist >= DEAD ? Math.atan2(dy, dx) * 180 / Math.PI : null;   // ângulo fino (traçar o anel do círculo mágico)
     if (dist < (cur ? DEAD - 4 : DEAD)) return null;
     const a = Math.atan2(dy, dx) * 180 / Math.PI;
     const T = V.scene === 'world' ? ANG8 : ANG, half = V.scene === 'world' ? 22.5 : 45;
@@ -211,7 +212,7 @@ function setupTouch() {
   };
   dz.addEventListener('pointerdown', e => { e.preventDefault(); unlockAudio(); pid = e.pointerId; try { dz.setPointerCapture(pid); } catch (_) { } cur = null; dp.classList.add('ativo'); setDir(dirOf(e)); });
   dz.addEventListener('pointermove', e => { if (e.pointerId === pid) setDir(dirOf(e)); });
-  const end = e => { if (e.pointerId === pid) { pid = null; JOYMAG = 1; moveKnob(0, 0); setDir(null); dp.classList.remove('ativo'); } };
+  const end = e => { if (e.pointerId === pid) { pid = null; JOYMAG = 1; JOYANG = null; moveKnob(0, 0); setDir(null); dp.classList.remove('ativo'); } };
   dz.addEventListener('pointerup', end); dz.addEventListener('pointercancel', end); dz.addEventListener('lostpointercapture', end);
   document.querySelectorAll('[data-k]').forEach(el => {
     const k = el.dataset.k;

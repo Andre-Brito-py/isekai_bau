@@ -212,6 +212,7 @@ async function lutaBroca() {
   await say('[Âmbar bruto VIVO. Da masmorra. Não é tinta de superfície: é o mesmo âmbar das runas antigas. Dá para escrever com ele.]', 'cat');
   const Gm = grim(); if (!Gm.elems.includes('ambar')) Gm.elems.push('ambar');
   sfx('rune'); await say('* {y}Elemento novo no Grimório: ÂMBAR!{/} (luz-pedra: quebra +1 de escudo e deixa RESINA, o alvo fica lento. Fusões com Brasa, Geada, Seiva, Fuligem e Areia.)');
+  ganharSelo('ambar+brasa'); await mostrarSelo('ambar+brasa');
   await say('A porta. A broca tinha a chave da porta de cima. E a porta de cima vai pro... Coração.', 'rita');
   save2();
 }

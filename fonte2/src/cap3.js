@@ -127,7 +127,7 @@ const arvC = v => memo(() => arvoreArt(v));
     props: [{ img: memo(() => estanteArt(2)), x: 1, y: 4, solid: [[1, 3, 2, 1]] }, { img: memo(() => estanteArt(2)), x: 9, y: 4, solid: [[9, 3, 2, 1]] }, { img: memo(() => balcaoArt(6)), x: 3, y: 5, solid: [[3, 4, 6, 1]] }, { img: memo(mesaArt), x: 1.8, y: 6, solid: [[2, 5, 2, 1]] }],
     ents: [...portas(PA.door, 'auren', ...AUR.papOut, 'down'),
       morador('iolanda', ...PA.iolanda, { rotina: rot([6, 3, 'limpar', 400, 'down'], [4, 3, 'olhar', 300, 'up']), talk: falaIolanda }),
-      { t: 'sign', x: PA.balcao[0], y: PA.balcao[1], h: 30, talk: falaIolanda },
+      { t: 'sign', x: PA.balcao[0], y: PA.balcao[1], h: 30, talk: () => G.flags.c3Grim ? lojaPapelaria() : falaIolanda() },
       { t: 'sign', x: PA.mesa[0], y: PA.mesa[1], h: 26, talk: mesaEscrita }]
   };
   // ===== AVENIDA DO FESTIVAL =====
@@ -275,7 +275,7 @@ async function falaIolanda() {
     await say('* (Pegue a FULIGEM com o Tico, perto da chaminé do cortiço, e o ÓLEO com um Pavio. Depois volte aqui.)');
     save2(); return;
   }
-  if (G.flags.c3Grim) { await say(pickOne(['Eu não vi um baú engolir três pessoas na minha loja. Eu vendo papel. Papel não vê nada.', 'Se faltar tinta, a receita é a mesma. Mas a lágrima... essa eu não vendo.']), 'iolanda'); return; }
+  if (G.flags.c3Grim) { await say(pickOne(['Eu não vi um baú engolir três pessoas na minha loja. Eu vendo papel. Papel não vê nada.', 'Tinta e folha de selo, ali no balcão. A lágrima eu não vendo: essa é por conta de vocês.']), 'iolanda'); return; }
   if (!G.flags.c3Fuligem || !G.flags.c3Oleo) { await say(`Falta ${[!G.flags.c3Fuligem && 'a fuligem (o Tico)', !G.flags.c3Oleo && 'o óleo (um Pavio)'].filter(Boolean).join(' e ')}. A lágrima vem por último. Sempre vem.`, 'iolanda'); return; }
   await say('Fuligem e óleo. Agora sente ali na mesa de escrever. Quem escreve aqui?', 'iolanda');
   await say('* (Vá até a mesa de escrever, no canto da loja.)');
@@ -315,14 +315,23 @@ async function cenaGrimorio() {
   await say('* A tinta escorre sozinha. Desenha as runas que você conhece, uma de cada vez, como quem lembra uma receita: Brasa. Geada. Seiva.');
   await say('* E uma quarta, que você nunca viu: uma runa feita da própria tinta, preta e macia. FULIGEM.');
   await say('[As runas acordaram. E com a tinta veio a Fuligem: fumaça que deixa os inimigos TONTOS.]', 'cat');
-  await say('[O Grimório agora aceita PÁGINAS: cada página é um feitiço que você monta. ELEMENTO + FORMA. Dois elementos = FUSÃO.]', 'cat');
+  await say('Agora prestem atenção, que isso eu só explico uma vez. Feitiço de escriba é um CÍRCULO.', 'iolanda');
+  await say('No meio, o SIGILO: é o que o feitiço É. Fogo, gelo, seiva. Em volta, os SINAIS: é o que ele FAZ. Uma seta vai num só. Ondas vão para todo lado. Escudos guardam alguém.', 'iolanda');
+  await say('E por último o ANEL. Sem o anel fechado, é só um desenho bonito. Traço firme, de uma vez só, que tinta tremida dá feitiço tremido.', 'iolanda');
+  await say('[O Grimório agora aceita PÁGINAS: cada página é um círculo traçado com TINTA DE SUPERFÍCIE. Traçar gasta tinta. Círculo maior: mais forte, mais caro.]', 'cat');
+  await say('Dois sigilos no mesmo círculo também dá. Mas só se você souber o SELO que amarra um no outro. Isso se aprende. Ou se compra, aqui, com desconto pra quem chora no meu tinteiro.', 'iolanda');
   await say('* Nas margens, a tinta faz mais letras. Redondas, apertadas, rápidas. Não são do Catálogo.');
-  await say('[Esta caligrafia não é minha. É da Ofélia. Ela deixou anotações nas margens: a cada fusão que você descobrir, a anotação dela aparece.]', 'cat');
+  await say('[Esta caligrafia não é minha. É da Ofélia. Ela deixou anotações nas margens: a cada SELO de fusão que você aprender, a anotação dela aparece.]', 'cat');
   await say('A Ofélia anotava até receita de bolo. Ela ia AMAR isso.', 'lume');
+  G.flags.c3GrimNovo = true;
   const Gm = grim(); Gm.ativo = true; Gm.elems = ['brasa', 'geada', 'seiva', 'fuligem'];
+  G.items.tintaS = (G.items.tintaS || 0) + 6;
   Gm.slots = [{ e: ['brasa'], f: 'dardo' }, { e: ['geada'], f: 'onda' }, { e: ['seiva'], f: 'veu' }];
   G.flags.c3Grim = true;
-  await say('* (GRIMÓRIO: as 3 runas antigas já estão escritas. A 4ª página está em branco: monte um feitiço. Escolha 2 elementos diferentes para tentar uma FUSÃO.)');
+  await say('* A Dona Iolanda arranca uma folha do caderno dela e põe dentro do Grimório. Um sigilo de fogo e um de gelo, entrelaçados.', 'n');
+  await say('Esse é por conta da casa. E seis vidrinhos de tinta. O resto, vocês compram no balcão.', 'iolanda');
+  ganharSelo('brasa+geada'); await mostrarSelo('brasa+geada');
+  await say('* (GRIMÓRIO: as 3 runas antigas já estão escritas. A 4ª página está em branco: trace um círculo. Experimente o selo novo, Brasa + Geada = Vapor. Gire o direcional para fechar o anel.)');
   await abrirGrimorio(true);
   await say('* (Dá para reescrever as páginas quando quiser: MENU > Grimório.)');
   save2();

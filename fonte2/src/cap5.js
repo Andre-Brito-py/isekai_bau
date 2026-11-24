@@ -323,7 +323,8 @@ async function mesaAreia() {
   await say('* {y}Elemento AREIA aprendido!{/} Corte; quebra +1 de escudo. Fusões novas esperando nas margens do Grimório.');
   await say('Você COMEU a mesa?', 'rita');
   await say('Só a runa. A mesa tá aí. ...Mais ou menos aí.', 'me');
-  await say('[Registro: Areia + Brasa deve dar vidro. Os Vigias desta torre são de vidro. Recomendação: experimentar.]', 'cat');
+  await say('[Registro: a areia deixou um desenho na tampa. Areia + Brasa: o selo do VIDRO. Os Vigias desta torre são de vidro. Recomendação: usar.]', 'cat');
+  ganharSelo('areia+brasa'); await mostrarSelo('areia+brasa');
   save2();
 }
 async function placasEstufa() {
