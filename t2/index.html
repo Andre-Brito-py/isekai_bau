@@ -871,6 +871,15 @@
  - ESC3 agora: 3: .14, 4: .30, 5: .32, 6: .34, 7: .38, 8: .42, 9: .52, 10: .55. Testado com o grupo "todo equipado"
    (o máximo comprável): vence os chefes com 0–45% de vida. Sem equipamento, perde.
 =====================================================================
+ ARO DE DENTES (pedido do usuário: explicar como o baú corta de forma humana)
+ - Na forma humana a mordida não some: o ARO da tampa (a borda de metal com a fileira de dentes) desce para a mão
+   como uma lâmina curva, "corta como quem morde". Aparece na luta (o aro brilha na mão antes do golpe), no nome do
+   ataque (Aro de Dentes) e na cena da evolução (fala da Rita + registro do Catálogo). Saves já evoluídos veem a
+   explicação curta no primeiro golpe.
+ - FORMA HUMANA COM JEITO PRÓPRIO (forma3.js): ao virar gente somem as técnicas de boca/tampa (SO_BAU) e entram
+   PASSO LIGEIRO (esquiva o próximo golpe), GOLPE A DOIS (ataque junto com a Rita, ou com a Lume se a Rita caiu;
+   quebra 2) e MÃO FIRME (segura a mão: cura 15%, tira estados, +10 PM). Fôlego 3/4 (Cap. 6)/5 (Cap. 9).
+=====================================================================
 -->
 <style>
 :root{
@@ -9027,24 +9036,29 @@ Object.assign(TECH2, {
     t.st.marca = 3; popNum(x, y - 26, 'MARCADO', '#8fe3d8'); callout('Runa escrita em ' + t.name, '#8fe3d8', 50);
   } },
   // ---------- TROCA DE FORMA EM BATALHA ----------
-  trocaForma: { nm: 'Trocar de Forma', cost: 0, tgt: 'self', w: 'leve', d: 'Baú <-> humano (ação leve). Humano: +4 VEL, +3 MAG, -4 DEF, golpe de corte, feitiços -2 PM. Dura 3 vezes (fôlego).', run: async (m) => { await trocarForma(m); } }
+  trocaForma: { nm: 'Trocar de Forma', cost: 0, tgt: 'self', w: 'leve', d: 'Baú <-> humano (ação leve). Humano: +4 VEL, +3 MAG, -4 DEF, golpe de corte (o Aro de Dentes: a borda da tampa vira lâmina na mão, com os dentes no fio), feitiços -2 PM. Dura 3 vezes (fôlego).', run: async (m) => { await trocarForma(m); } }
 });
 // ---------- troca de forma ----------
 async function trocarForma(m, volta) {
   const [x, y] = unitCenter(m); sfx('rune');
   await tw(14, p => { m.sx = 1 + Math.sin(p * Math.PI) * 0.3; m.sy = 1 - Math.sin(p * Math.PI) * 0.3; luzMagia(x, y, 20, '#ffe8c0', Math.sin(p * Math.PI)); });
   m.humano = !m.humano && !volta;
-  if (m.humano) { m.spd += 4; m.mag += 3; m.def -= 4; m.humTurnos = 3; m.h = 48; m.atkNm0 = m.atkNm; m.atkNm = 'Golpe de Mão'; m.attack0 = m.attack; m.attack = golpeHumano; }
-  else { m.spd -= 4; m.mag -= 3; m.def += 4; m.h = 26; if (m.atkNm0) m.atkNm = m.atkNm0; if (m.attack0) m.attack = m.attack0; }
+  if (m.humano) { m.spd += 4; m.mag += 3; m.def -= 4; m.humTurnos = 3; m.h = 48; m.atkNm0 = m.atkNm; m.atkNm = 'Aro de Dentes'; m.atkDesc0 = m.atkDesc; m.atkDesc = 'A borda da tampa vira um aro de metal na mão, com os dentes do baú no fio. Corta como quem morde. A quando o anel fechar = corte certeiro.'; m.attack0 = m.attack; m.attack = golpeHumano; }
+  else { m.spd -= 4; m.mag -= 3; m.def += 4; m.h = 26; if (m.atkNm0) m.atkNm = m.atkNm0; if (m.atkDesc0) m.atkDesc = m.atkDesc0; if (m.attack0) m.attack = m.attack0; }
   m.sx = 1; m.sy = 1; for (let i = 0; i < 14; i++) part({ forma: 'estrela', x: x + rand(-10, 10), y: y + rand(-20, 10), vy: -0.5, life: 24, col: '#ffe8c0' });
   callout(m.humano ? m.name + ' toma forma humana' : m.name + ' volta a ser baú', '#ffe8c0', 50);
 }
 async function golpeHumano(m, t) {
   const [tx, ty] = unitCenter(t), x0 = m.x, dx = tx - 22 - m.x;
-  await tw(10, p => { m.ox = dx * ease.io(p); m.oy = -Math.sin(p * Math.PI) * 6; });
+  // o aro: a borda da tampa vira uma lâmina curva na mão, com os dentes do baú no fio
+  const aro = (gx, gy, a) => { bx.globalAlpha = a; for (let i = 0; i <= 12; i++) { const ang = -Math.PI * 0.9 + i / 12 * Math.PI * 0.8, X = Math.round(gx + Math.cos(ang) * 9), Y = Math.round(gy + Math.sin(ang) * 9); bx.fillStyle = '#c8a040'; bx.fillRect(X, Y, 2, 2); bx.fillStyle = '#fff0b0'; bx.fillRect(X, Y, 1, 1); if (i % 2 === 0) { bx.fillStyle = '#f2ecdc'; bx.fillRect(Math.round(gx + Math.cos(ang) * 11), Math.round(gy + Math.sin(ang) * 11), 1, 2); } } bx.fillStyle = '#5a3a24'; bx.fillRect(Math.round(gx) - 1, Math.round(gy) - 1, 3, 3); bx.globalAlpha = 1; };
+  const [hx, hy] = unitCenter(m);
+  await tw(8, p => { aro(hx + 8, hy - 2, p); luzMagia(hx + 8, hy - 6, 10, '#ffe8c0', (1 - p) * 0.6); });
+  await tw(10, p => { m.ox = dx * ease.io(p); m.oy = -Math.sin(p * Math.PI) * 6; aro(hx + 8 + m.ox, hy - 2 + m.oy, 1); });
   const ok = await timedPrompt(t, 18); slashFx(tx, ty, '#ffe8c0', ok ? 1.4 : 1); sfx('hit');
   hitFoe(m, t, ok ? 1.25 : 0.95, { el: 'corte', crit: ok });
-  await tw(10, p => { m.ox = dx * (1 - p); m.oy = 0; }); m.ox = 0;
+  if (!G.flags.aroDentes) { G.flags.aroDentes = true; callout('Aro de Dentes: a borda da tampa, com os dentes no fio', '#ffe8c0', 110); }
+  await tw(10, p => { m.ox = dx * (1 - p); m.oy = 0; aro(hx + 8 + m.ox, hy - 2, 1 - p); }); m.ox = 0;
 }
 // fôlego da forma humana: 3 vezes, depois volta sozinho; feitiços mais baratos enquanto humano
 { const _et3 = endTurn; endTurn = function (u, w) { const r = _et3.apply(this, arguments); if (u && u.humano) { u.humTurnos--; if (u.humTurnos <= 0) { callout('O rosto derrete: volta a ser baú', '#ffe8c0', 50); trocarForma(u, true); } } return r; }; }
@@ -9126,6 +9140,10 @@ async function cenaEvolucao() {
   await say('E o rosto? Ele ficou... mais firme. Dá pra ver daqui. Menos borrado.', 'rita');
   await say('Eu tô me sentindo... eu. Um pouco mais eu do que ontem.', 'me');
   await say(`[TÉCNICA NOVA: ${TECH2[E.tec].nm}. E com o corpo novo, a Runa do Rosto aguenta a luta: TROCAR DE FORMA virou técnica (ação leve, sem custo). Humano é rápido e conjura mais barato; baú aguenta mais. Dura 3 vezes.]`, 'cat');
+  await say('Espera. De gente, você morde como? Com... a boca de gente? Que nojo.', 'rita');
+  await say('* Você olha para a sua mão. A borda da tampa (o aro de metal, com a fileira de dentes) está ali, curva, na palma. Não pesa nada. É você.');
+  await say('[Registro: a mordida não some na forma humana. O aro da tampa desce para a mão, com os dentes no fio. Nome sugerido: ARO DE DENTES. Corta como quem morde. É o mesmo golpe, de outro ângulo.]', 'cat');
+  await say('Uma foice de dentes. Tá. Isso é muito pior do que morder.', 'rita');
   save2();
 }
 
@@ -20900,6 +20918,59 @@ function telaEquip() {
   });
 }
 menuEquipar = telaEquip;
+
+// ================= A FORMA HUMANA TEM JEITO PRÓPRIO DE LUTAR (pedido do usuário) =================
+// Baú = aguenta, morde, protege. Gente = mãos, pés e o outro do lado. Ao virar gente, as técnicas de BOCA e de TAMPA
+// (Guardar, Baluarte, Farol, Guardar Dentro, Mordida Gulosa, Mastigar, Cuspe, Tampa Refletora, Boca do Vão) somem e
+// entram três técnicas que só gente tem:
+//  PASSO LIGEIRO (15 Tensão, leve): esquiva o próximo golpe nele.
+//  GOLPE A DOIS (30 Tensão): ele e a Rita (ou a Lume, se a Rita caiu) batem juntos. Quebra 2 de escudo.
+//  MÃO FIRME (20 Tensão, leve, aliado): segura a mão de alguém: cura 15%, tira os maus estados e devolve PM.
+// O fôlego da forma cresce com a história: 3 vezes; 4 a partir do Cap. 6; 5 a partir do Cap. 9.
+const SO_BAU = ['guardar', 'baluarte', 'farol', 'guardarDentro', 'mordidaGulosa', 'mastigar', 'cuspeTralha', 'tampaRefletora', 'bocaVao'];
+const SO_GENTE = ['passoLigeiro', 'golpeADois', 'maoFirme'];
+function folegoForma() { const c = typeof capAtual === 'function' ? capAtual() : 3; return 3 + (c >= 6 ? 1 : 0) + (c >= 9 ? 1 : 0); }
+Object.assign(TECH2, {
+  passoLigeiro: { nm: 'Passo Ligeiro', cost: 15, tgt: 'self', w: 'leve', d: 'Só de gente. Pé leve: o próximo golpe nele erra. Leve.', run: async (m) => {
+    sfx('select'); m.st.esquiva = 2; const [x, y] = unitCenter(m);
+    await tw(16, p => { for (let i = 0; i < 3; i++) { bx.globalAlpha = (1 - p) * 0.4; bx.fillStyle = '#ffe8c0'; bx.fillRect(Math.round(x - 10 - i * 6 - p * 10), Math.round(y - 14 + i * 8), 8, 2); } bx.globalAlpha = 1; });
+    callout('Passo ligeiro: o próximo golpe erra', '#ffe8c0', 50);
+  } },
+  golpeADois: { nm: 'Golpe a Dois', cost: 30, tgt: 'enemy', d: 'Só de gente. Ele e a Rita (ou a Lume) atacam juntos, lado a lado. Quebra 2 de escudo.', run: async (m, t) => {
+    const par = alive(BT.party).find(u => u.id === 'rita') || alive(BT.party).find(u => u.id === 'lume');
+    const [tx, ty] = unitCenter(t), dx = tx - 24 - m.x;
+    if (!par) { await golpeHumano(m, t); return; }
+    const dp = tx - 34 - par.x; sfx('select');
+    callout(par.id === 'rita' ? 'Golpe a Dois: tampa e lança!' : 'Golpe a Dois: dentes e luz!', '#ffe8c0', 50);
+    await tw(12, p => { m.ox = dx * ease.io(p); par.ox = dp * ease.io(p); m.oy = par.oy = -Math.sin(p * Math.PI) * 6; });
+    const ok = await timedPrompt(t, 18);
+    slashFx(tx, ty, '#ffe8c0', 1.3); hitstop(6); bshake(8, 2); sfx('hit');
+    hitFoe(m, t, ok ? 1.1 : 0.85, { el: 'corte', crit: ok, brk: 1 });
+    await wait(6);
+    if (t.hp > 0) { if (par.id === 'rita') { slashFx(tx, ty, '#ff9a50', -1.4); hitFoe(par, t, ok ? 1.15 : 0.9, { el: 'corte', crit: ok, brk: 1 }); } else { luzMagia(tx, ty, 26, '#ffe066', 1); hitFoe(par, t, ok ? 1.2 : 0.95, { el: 'luz', mag: true, brk: 1 }); } }
+    burst(tx, ty, 18, ['#ffffff', '#ffe8c0', '#ffd060']);
+    await tw(12, p => { m.ox = dx * (1 - p); par.ox = dp * (1 - p); m.oy = par.oy = 0; }); m.ox = par.ox = 0;
+  } },
+  maoFirme: { nm: 'Mão Firme', cost: 20, tgt: 'ally', w: 'leve', d: 'Só de gente. Segura a mão de um aliado: cura 15% da vida, tira os maus estados e devolve 10 PM. Leve.', run: async (m, t) => {
+    if (t === m) { callout('Segure a mão de outra pessoa', '#ff6b6b', 40); BT.tension += 20; return; }
+    sfx('heal'); const [x, y] = unitCenter(t);
+    await tw(20, p => { fxRing(x, y, 6 + p * 12, '#ffd0a8', 1 - p); bx.fillStyle = '#ffd0a8'; bx.fillRect(Math.round(x - 1), Math.round(y - 18 - p * 8), 3, 3); });
+    healUnit(t, Math.round(t.mhp * 0.15)); for (const q of ['queimado', 'frio', 'tonto', 'esquecido', 'molhado']) t.st[q] = 0; if (t.mmp) t.mp = Math.min(t.mmp, t.mp + 10);
+    callout(t.id === 'lume' ? 'A luz dela fica mais quente' : t.id === 'rita' ? 'A Rita aperta de volta. Forte demais.' : 'Mão firme', '#ffd0a8', 60);
+  } }
+});
+// troca as técnicas ao mudar de forma, e o fôlego cresce
+{ const _tf3 = trocarForma; trocarForma = async function (m, volta) {
+  await _tf3(m, volta);
+  if (m.humano) { m.techs0 = m.techs; m.techs = [...(m.techs || []).filter(k => !SO_BAU.includes(k)), ...SO_GENTE]; m.humTurnos = folegoForma(); }
+  else if (m.techs0) { m.techs = m.techs0; m.techs0 = null; }
+}; }
+// esquiva do Passo Ligeiro
+{ const _hM3 = hurtMember; hurtMember = function (m, d0, o = {}) {
+  if (m.hp > 0 && m.st && m.st.esquiva > 0 && BT._foe) { m.st.esquiva = 0; const [x, y] = unitCenter(m); popNum(x, y - 10, 'ESQUIVOU', '#ffe8c0'); sfx('select'); m.ox = -8; setTimeout(() => { m.ox = 0; }, 160); return 0; }
+  return _hM3(m, d0, o);
+}; }
+TECH2.trocaForma.d = 'Baú <-> humano (ação leve). Humano: +4 VEL, +3 MAG, -4 DEF, ataca com o Aro de Dentes (corte), feitiços -2 PM, e troca as técnicas de tampa por técnicas de gente (Passo Ligeiro, Golpe a Dois, Mão Firme). Dura 3 vezes (4 a partir do Cap. 6, 5 a partir do Cap. 9).';
 
 boot2();
 </script>
