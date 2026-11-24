@@ -183,14 +183,16 @@ async function velasIgreja() {
 // Primeira aparição na T2 da MOÇA DA BARCA (a moça de âmbar que fugiu no fim da T1). Ideia do usuário: ela vira, aos
 // poucos, a voz-companheira do baú, morando dentro do Catálogo (arco planejado na bíblia, Caps. 8-10 e T3).
 Object.assign(WHO, { eco8: { name: () => '???', voice: voz(640), col: '#ffd890', edge: '#c8902a' } });
+const FIO_C = {};
 function fioAmbarArt(f) {
+  f = ((f % 100) + 100) % 100; if (FIO_C[f]) return FIO_C[f];
   const c = mk(14, 30), x = c.getContext('2d'), p = (Math.sin(f * 0.25) + 1) / 2;
   x.fillStyle = '#3a2a1a'; x.fillRect(5, 0, 4, 4); x.fillStyle = '#1a1208'; x.fillRect(6, 1, 2, 3);
   x.fillStyle = '#c8802a'; x.fillRect(6, 3, 2, 20); x.fillStyle = '#ffc860'; x.fillRect(6, 3 + (f % 20), 2, 3);
   x.fillStyle = `rgba(255,216,120,${0.5 + p * 0.5})`; x.fillRect(7, 4, 1, 18);
   x.fillStyle = '#a8681c'; x.fillRect(3, 24, 8, 3); x.fillStyle = '#ffb848'; x.fillRect(4, 24, 6, 2); x.fillStyle = '#fff0b0'; x.fillRect(5, 24, 2, 1);
   x.fillStyle = `rgba(255,200,100,${0.15 + p * 0.2})`; x.fillRect(1, 22, 12, 7);
-  return c;
+  return FIO_C[f] = c;
 }
 { const _mmF8 = montarMapas2; montarMapas2 = function () {
   _mmF8.apply(this, arguments);

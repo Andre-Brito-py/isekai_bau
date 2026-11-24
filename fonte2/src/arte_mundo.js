@@ -119,7 +119,9 @@ function humanoSprite(h, dir, t) {
 
 // ---------- construções (props grandes) ----------
 // casa de madeira sobre palafitas. o: { w (tiles), wallH (px), wall, roof, trim, door: dx (tile), win: [dx..], sign, awning, stone }
+const CASA_C = new Map();
 function casaArt(o) {
+  let k = null; try { k = JSON.stringify(o); } catch (e) {} if (k && CASA_C.has(k)) return CASA_C.get(k);
   const W = o.w * TS, roofH = o.roofH || 34, wallH = o.wallH || 88, stH = o.stilts ? 12 : 0, H = roofH + wallH + stH + 4;
   const P = new Pix(W, H), WL = ramp(o.wall || '#a8704a'), RF = ramp(o.roof || '#8a3a2a'), TR = ramp(o.trim || '#5a3a24');
   const wy0 = roofH, wy1 = roofH + wallH;
@@ -168,7 +170,7 @@ function casaArt(o) {
   // palafitas
   if (o.stilts) for (let x = 6; x < W - 6; x += 22) { P.cyl(x, wy1, 5, stH + 4, ramp('#5a3a24')); P.rect(x, wy1 + stH, 5, 4, ramp('#3a5a4a')[1]); }
   P.outline();
-  return { img: P.canvas(), w: W, h: H, foot: stH + 4 };
+  const R_ = { img: P.canvas(), w: W, h: H, foot: stH + 4 }; if (k) CASA_C.set(k, R_); return R_;
 }
 // a torre do sino, torta e sem sino (o sino caiu há cem anos; agora tem um de lata)
 function torreArt(comSino) {
@@ -192,16 +194,19 @@ function torreArt(comSino) {
   return { img: P.canvas(), w: W, h: H };
 }
 // poste de luz (~120 px; 4 m), apagado ou aceso
+const POSTE_C = {};
 function posteArt(aceso) {
+  if (POSTE_C[!!aceso]) return POSTE_C[!!aceso];
   const P = new Pix(18, 124), F = ramp('#3a3a4a');
   P.cyl(7, 20, 4, 102, F); P.rect(5, 118, 8, 6, F[1]);
   P.poly([[3, 6], [15, 6], [13, 20], [5, 20]], (x, y) => aceso ? P.tone(RP.fogo, 0.85 - (y - 6) * 0.02, x, y) : P.tone(['#2a2430', '#3a3440', '#4a4450', '#6a6070', '#8a8090'], 0.5, x, y));
   P.rect(2, 4, 14, 3, F[2]); P.rect(6, 0, 6, 4, F[1]); P.rect(4, 20, 10, 2, F[2]);
-  P.outline(); return P.canvas();
+  P.outline(); return POSTE_C[!!aceso] = P.canvas();
 }
 // barquinho a remo, caixotes, barril, varal
 function barcoArt() { const P = new Pix(52, 20), B = ramp('#7a5a3a'); P.poly([[0, 6], [52, 6], [44, 18], [8, 18]], (x, y) => P.tone(B, 0.65 - (y - 6) / 18 - x / 120, x, y)); P.rect(2, 6, 48, 2, B[3]); P.rect(16, 6, 3, 10, B[1]); P.rect(32, 6, 3, 10, B[1]); P.line(20, 4, 46, 0, ramp('#8a6a4a')[2], 2); P.outline(); return P.canvas(); }
-function caixoteArt(v = 0) { const P = new Pix(18, 18), B = ramp(v ? '#9a7a4a' : '#8a6a3a'); for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x + 1, y + 2, P.tone(B, 0.6 - y / 30 - x / 50 + ((x === 0 || x === 15 || y === 0 || y === 15) ? 0.15 : 0), x, y)); P.line(2, 3, 15, 16, B[1]); P.line(15, 3, 2, 16, B[1]); P.outline(); return P.canvas(); }
+const CAIXOTE_C = {};
+function caixoteArt(v = 0) { if (CAIXOTE_C[v]) return CAIXOTE_C[v]; const P = new Pix(18, 18), B = ramp(v ? '#9a7a4a' : '#8a6a3a'); for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) P.p(x + 1, y + 2, P.tone(B, 0.6 - y / 30 - x / 50 + ((x === 0 || x === 15 || y === 0 || y === 15) ? 0.15 : 0), x, y)); P.line(2, 3, 15, 16, B[1]); P.line(15, 3, 2, 16, B[1]); P.outline(); return CAIXOTE_C[v] = P.canvas(); }
 function barrilArt() { const P = new Pix(16, 20), B = ramp('#7a4a2a'); P.cyl(1, 1, 14, 18, B); for (const y of [3, 9, 15]) P.rect(1, y, 14, 1, '#4a4a5a'); P.outline(); return P.canvas(); }
 
 // ---------- inimigos novos do Cap. 2 (pixel art detalhada) ----------

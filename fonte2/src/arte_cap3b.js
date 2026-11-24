@@ -49,7 +49,8 @@ function veioArt(f, apagado) {
 let BIG_C = null;
 function bigornaArt() { if (BIG_C) return BIG_C; const P = new Pix(28, 22); P.rect(2, 4, 24, 5, '#5a5a6a'); P.rect(0, 4, 6, 3, '#5a5a6a'); P.rect(2, 4, 24, 1, '#9a9aaa'); P.rect(8, 9, 12, 6, '#4a4a5a'); P.rect(4, 15, 20, 5, '#3a3a48'); P.rect(4, 20, 20, 2, '#2a2a34'); P.p(10, 6, '#c8c8d8'); return BIG_C = P.outline().canvas(); }
 // ---------- canos de cobre que sobem para a cidade ----------
-function canoArt(h) { const P = new Pix(8, h); for (let y = 0; y < h; y++) { P.p(2, y, '#e8a070'); P.p(3, y, '#c87848'); P.p(4, y, '#a85a38'); P.p(5, y, '#7a4028'); if (y % 20 === 6) P.rect(1, y, 6, 2, '#5a4a4a'); } return P.outline().canvas(); }
+const CANO_C = {};
+function canoArt(h) { if (CANO_C[h]) return CANO_C[h]; const P = new Pix(8, h); for (let y = 0; y < h; y++) { P.p(2, y, '#e8a070'); P.p(3, y, '#c87848'); P.p(4, y, '#a85a38'); P.p(5, y, '#7a4028'); if (y % 20 === 6) P.rect(1, y, 6, 2, '#5a4a4a'); } return CANO_C[h] = P.outline().canvas(); }
 
 // ---------- fundo de batalha: túnel de fuligem ----------
 let BG_GAL = null;
