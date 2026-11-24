@@ -688,8 +688,9 @@ function tick() {
     // mapa e batalha usam a tela larga inteira; janelas e diálogos ficam no meio
     MUNDO_BIG = false;
     // zoom do mapa: o mais longe possível (até ZOOM_MUNDO) SEM passar do tamanho do mapa, para a tela ficar sempre cheia
-    // (sem faixa preta nas laterais). Sala pequena (taverna) chega mais perto e a câmera rola por ela.
-    const Zm = V.scene === 'world' && W2.map && W2.map.w ? Math.max(0.5, Math.min(ZOOM_MUNDO, W2.map.w * TS / W, W2.map.h * TS / H)) : 1;
+    // (sem faixa preta nas laterais). Sala pequena: no máximo ZOOM_INT de perto (pedido do usuário: interiores estavam
+    // com zoom demais); o que sobra em volta vira o vazio escuro (vazioHLD) e a sala fica centralizada.
+    const Zm = V.scene === 'world' && W2.map && W2.map.w ? Math.max(ZOOM_INT, Math.min(ZOOM_MUNDO, W2.map.w * TS / W, W2.map.h * TS / H)) : 1;
     if (V.scene === 'world' && Math.abs(Zm - 1) > 0.01) {
       // o mapa vai para um quadro do tamanho da vista; o painel (HUD) e as janelas ficam no quadro normal, por cima
       const Wb = W, Hb = H, ZZ = Zm; W = Math.floor(Wb * ZZ); H = Math.floor(Hb * ZZ);

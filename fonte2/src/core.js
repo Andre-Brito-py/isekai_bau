@@ -83,7 +83,7 @@ function wrapRich(arr, max) {
 const TQ = []; const TXO = { x: 0, y: 0 };
 // câmera de longe no mapa: o mundo é desenhado num quadro maior (ZOOM_MUNDO x) e esticado na tela; o texto do mundo
 // entra na fila já dividido por TXZ (fica do tamanho certo) e o painel do mapa é desenhado depois, em tamanho normal
-let TXZ = 1, HUD_ADIA = false, HUD_PEND = null, ZOOM_MUNDO = 1.5, MUNDO_BIG = false;
+let TXZ = 1, HUD_ADIA = false, HUD_PEND = null, ZOOM_MUNDO = 1.5, ZOOM_INT = 0.9, MUNDO_BIG = false;
 function glyph(c, col, lx_, ly, sz) {
   const g = FG[c] || FG['?']; const gs = TSD * sz; const cellW = 6 * sz * (g.w > 8 ? 2 : 1);
   const dx = Math.round(lx_ * S + (cellW * S - g.w * gs) / 2), dy = Math.round(ly * S + (12 * sz * S - 16 * gs) / 2);
