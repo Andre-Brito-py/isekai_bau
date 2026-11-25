@@ -1068,12 +1068,22 @@
  - Regra: evolução nova = corpo novo desenhado (nunca só enfeite em cima).
 v85 — EVOLUÇÕES MAIS FORTES NO FOCO: cada forma ganha bônus maiores no que ela é (Escriba MAG+12 PM+30; Farol PV+60 DEF/RES+8; Vão ATQ+9 VEL+5; Cap7: Guardião PV+70, Tempestade MAG+11, Labirinto VEL+6, Boca ATQ+12, Bibliotecário PM+36, Palimpsesto MAG+13; Lume: Lareira PV+44 RES+8, Alvorada MAG+12). A tela de evolução mostra o resumo. ESC3 dos inimigos subiu um pouco para manter o desafio (bots c/ equipamento: vitórias com 15–30% de vida; Farol no Cap10 mais folgado).
 
-v91 — FORMAS NOVAS DE MAGIA (pedido do usuário: "além de dardo, onda e véu... eco, maré, etc."; formas_novas.js): os
- sinais do círculo ganham ECO (Cap. 4: um alvo, ressoa e bate de novo com 55%), MARÉ (Cap. 5: todos, mais fraca que a
- Onda mas não é pesada; MOLHA = a vez atrasa 25; com Geada, gela), LANÇA (Cap. 7: um alvo, força 2.3, +2 de quebra,
- pesada) e CORO (Cap. 8: o véu em todo o grupo com 60%, pesada). Liberadas ao abrir a mesa/Grimório (novasFormas, o
- Catálogo anuncia cada uma). Cada forma nova tem forma-base (fb: dardo/onda/véu) e o resto do código (gatilho, fx,
- véus) usa fb(s). Sinais próprios em SINAL3.
+v92 — A MAGIA DO JOGO 1 VOLTA (pedido do usuário: "era bem rico... elemento, forma e outra coisa"; o usuário escolheu
+ igual ao jogo 1 e elementos voltando aos poucos pela história; formas_novas.js + circulo.js):
+ - FORMAS (8, como no jogo 1): Dardo/Onda/Véu (Cap. 3), CORRENTE (Cap. 4: salta 65%/40%), ÂNCORA (Cap. 5: 2.1, pesada,
+   +2 de quebra, 50% de afundar o preparado), MINA (Cap. 6: leve; explode 130% quando o alvo for agir), CORO (Cap. 8:
+   todos, +25% por aliado de pé, não é pesada), CHAVE (Cap. 9: -2 de escudo sem fraqueza, desfaz reforços). Forma-base fb.
+ - MARCAS (o 3º traço do círculo = os modificadores do jogo 1; nas 4 diagonais; +1 tinta; linha "Marca" na mesa):
+   Foco (Cap. 3, +60% e 60% mais caro), Eco e Selo (Cap. 4), Dreno (Cap. 5), Maré (Cap. 6: volta 60% quando o próximo
+   inimigo for agir), Bandeira (Cap. 7: +20% nos 3 próximos golpes), Bilhete (Cap. 8: próximo golpe contra quem lançou /
+   o aliado do véu sai pela metade), Nome (Cap. 10: +30% contra chefes). Selo/Dreno/Maré/Nome só em ataque.
+ - ELEMENTOS que voltam no FIM de cada capítulo (anunciados pelo Catálogo ao abrir a mesa): Faísca (fim do 3: atordoa
+   35%), Sombra (fim do 4: próximo golpe -40%), Vento (fim do 5: corte; 40% de dispersar o preparado), Pólvora (fim do 6:
+   fogo + explosão 30% em todos), Canto (fim do 7: distrai e cura 4% o grupo), Céu (fim do 9: luz; limpa quem lança).
+   Somados a Brasa, Geada, Seiva, Fuligem, Areia, Sal, Âmbar = 13. Véus próprios para cada um.
+ - FUSÕES NOVAS (selos na Papelaria): Estouro (brasa+pólvora), Tempestade (faísca+geada), Breu (sombra+vento), Aurora
+   (canto+céu), Cantiga (canto+seiva).
+ - Migração da v91 (que tinha Eco/Maré/Lança/Coro como formas): Gm.v92.
 
 =====================================================================
 -->

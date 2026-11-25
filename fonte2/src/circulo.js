@@ -84,7 +84,7 @@ const GAP3 = [328, 358];   // a brecha do gatilho (em graus, a partir do topo)
 // o desenho de uma página. o: { ink, cor (sigilos coloridos), prog (0..1 do anel), guia (anel pontilhado por baixo), brilho }
 const GLIFO_C = {};
 function glifo(s, o = {}) {
-  const prog = o.prog == null ? 1 : o.prog, key = JSON.stringify([s.e, s.f, s.tam || 'm', !!s.g, o.ink, !!o.cor, Math.round(prog * 60), !!o.guia]);
+  const prog = o.prog == null ? 1 : o.prog, key = JSON.stringify([s.e, s.f, s.tam || 'm', !!s.g, s.m || '', o.ink, !!o.cor, Math.round(prog * 60), !!o.guia]);
   if (GLIFO_C[key]) return GLIFO_C[key];
   const T = TAM3[s.tam || 'm'] || TAM3.m, R = T.R, N = 2 * R + 7, cc = mk(N, N), c = cc.getContext('2d'), C = R + 3, ink = o.ink || '#1a1430';
   const e1 = s.e[0], e2 = s.e[1], fus = e2 && e2 !== e1, dob = e2 && e2 === e1;
@@ -104,6 +104,8 @@ function glifo(s, o = {}) {
   const rs = R - 8, S = SINAL3[s.f] || SINAL3.dardo;
   if (s.f === 'dardo') { patAt(c, S, C, C - rs, ink); for (const sx of [-1, 1]) { c.fillStyle = ink; c.fillRect(Math.round(C + sx * rs * 0.7), Math.round(C - rs * 0.7), 1, 1); c.fillRect(Math.round(C + sx * rs * 0.75), Math.round(C + rs * 0.6), 1, 1); } }
   else { [[0, -1], [1, 0], [0, 1], [-1, 0]].forEach(([dx, dy], k) => patAt(c, rotPat(S, k), C + dx * rs, C + dy * rs, ink)); for (const [dx, dy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) { c.fillStyle = ink; c.fillRect(Math.round(C + dx * rs * 0.72), Math.round(C + dy * rs * 0.72), 1, 1); } }
+  // marca (modificador) nas quatro diagonais
+  if (s.m && typeof MODSIG !== 'undefined' && MODSIG[s.m]) for (const [dx, dy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) { c.fillStyle = o.cor ? '#c8902a' : ink; patAt(c, MODSIG[s.m], C + dx * rs * 0.72, C + dy * rs * 0.72, o.cor ? '#b07818' : ink); }
   // sigilos
   if (fus) { patAt(c, SIG3[e1] || SIG3.brasa, C - 2, C - 1, corDe(e1)); patAt(c, SIG3[e2] || SIG3.brasa, C + 2, C + 1, corDe(e2)); }
   else { patAt(c, SIG3[e1] || SIG3.brasa, C, C, corDe(e1)); if (dob) for (const [a, b] of circPts(6)) { c.fillStyle = corDe(e1); c.fillRect(C + a, C + b, 1, 1); } }
@@ -201,11 +203,13 @@ function mesaDeEscrever(i, guiado) {
   return new Promise(res => {
     const Gm = grim(), atual = Gm.slots[i];
     const els = Gm.elems.slice().sort((a, b) => ORD_EL.indexOf(a) - ORD_EL.indexOf(b));
-    const st = { e1: Math.max(0, els.indexOf(atual ? atual.e[0] : els[0])), e2: 0, f: Math.max(0, Gm.forms.indexOf(atual ? atual.f : 'dardo')), tam: ['p', 'm', 'g'].indexOf(atual && atual.tam || 'm'), anel: atual && atual.g ? 1 : 0, row: 0 };
+    const st = { e1: Math.max(0, els.indexOf(atual ? atual.e[0] : els[0])), e2: 0, f: Math.max(0, Gm.forms.indexOf(atual ? atual.f : 'dardo')), tam: ['p', 'm', 'g'].indexOf(atual && atual.tam || 'm'), anel: atual && atual.g ? 1 : 0, row: 0, mod: 0 };
+    const modsL = () => [null, ...(typeof modsOk === 'function' ? modsOk(Gm.forms[st.f]) : [])];
+    if (atual && atual.m) st.mod = Math.max(0, modsL().indexOf(atual.m));
     if (atual && atual.e[1]) { const o = opcoesE2(els[st.e1]); st.e2 = Math.max(0, o.findIndex(x => x.k === atual.e[1])); }
-    const rows = () => ['e1', 'e2', 'f', 'tam', ...(gatOk() ? ['anel'] : []), 'tracar'];
-    const spec = () => { const e1 = els[st.e1], o2 = opcoesE2(e1)[st.e2] || { k: null }; const s = { e: o2.k ? [e1, o2.k] : [e1], f: Gm.forms[st.f], tam: ['p', 'm', 'g'][st.tam] }; if (gatOk() && st.anel) s.g = true; return s; };
-    const igual = () => { if (!atual) return false; const s = spec(); return JSON.stringify([s.e, s.f, s.tam || 'm', !!s.g]) === JSON.stringify([atual.e, atual.f, atual.tam || 'm', !!atual.g]); };
+    const rows = () => ['e1', 'e2', 'f', ...(modsL().length > 1 ? ['mod'] : []), 'tam', ...(gatOk() ? ['anel'] : []), 'tracar'];
+    const spec = () => { const e1 = els[st.e1], o2 = opcoesE2(e1)[st.e2] || { k: null }; const s = { e: o2.k ? [e1, o2.k] : [e1], f: Gm.forms[st.f], tam: ['p', 'm', 'g'][st.tam] }; if (gatOk() && st.anel) s.g = true; const mk2 = modsL()[st.mod]; if (mk2) s.m = mk2; return s; };
+    const igual = () => { if (!atual) return false; const s = spec(); return JSON.stringify([s.e, s.f, s.tam || 'm', !!s.g, s.m || '']) === JSON.stringify([atual.e, atual.f, atual.tam || 'm', !!atual.g, atual.m || '']); };
     const problema = () => { const o2 = opcoesE2(els[st.e1])[st.e2]; if (o2 && !o2.ok) return o2.d; if (igual()) return null; if (tintaS() < custoTinta(spec())) return `Falta tinta: precisa de ${custoTinta(spec())}, você tem ${tintaS()}. Compre na Papelaria (balcão), no Bazar da Dona Graça ou com o Mascate; também aparece em baús e nos bichos de fuligem.`; return null; };
     const w = { type: 'mesa', t: 0,
       update() {
@@ -216,7 +220,8 @@ function mesaDeEscrever(i, guiado) {
         const muda = d => {
           if (r === 'e1') { st.e1 = (st.e1 + els.length + d) % els.length; st.e2 = 0; }
           if (r === 'e2') { const n = opcoesE2(els[st.e1]).length; st.e2 = (st.e2 + n + d) % n; }
-          if (r === 'f') st.f = (st.f + Gm.forms.length + d) % Gm.forms.length;
+          if (r === 'f') { st.f = (st.f + Gm.forms.length + d) % Gm.forms.length; if (st.mod >= modsL().length) st.mod = 0; }
+          if (r === 'mod') { const n = modsL().length; st.mod = (st.mod + n + d) % n; }
           if (r === 'tam') st.tam = (st.tam + 3 + d) % 3;
           if (r === 'anel') st.anel = 1 - st.anel;
           sfx('move');
@@ -243,16 +248,16 @@ function mesaDeEscrever(i, guiado) {
         // opções
         box(128, 26, 108, 150); txt(`Tinta x${tintaS()}`, 232, 30, { align: 'right', col: '#c8b8e8' });
         const o2 = opcoesE2(els[st.e1])[st.e2];
-        const lab = { e1: ['Sigilo', EL3[els[st.e1]].nm, EL3[els[st.e1]].col], e2: ['2º sigilo', o2 ? o2.nm : '-', o2 && !o2.ok ? '#ff8a8a' : o2 && o2.k ? (EL3[o2.k] || {}).col : '#c8d4dc'], f: ['Sinais', FORMA3[Gm.forms[st.f]].nm, '#c8d4dc'], tam: ['Tamanho', TAM3[['p', 'm', 'g'][st.tam]].nm, '#c8d4dc'], anel: ['Anel', st.anel ? 'Com brecha' : 'Fechado', st.anel ? '#ffd060' : '#c8d4dc'], tracar: [igual() ? 'MANTER' : 'TRAÇAR', igual() ? 'sem gastar' : custoTinta(s) + ' tinta', pb ? '#ff8a8a' : '#ffd060'] };
+        const lab = { e1: ['Sigilo', EL3[els[st.e1]].nm, EL3[els[st.e1]].col], e2: ['2º sigilo', o2 ? o2.nm : '-', o2 && !o2.ok ? '#ff8a8a' : o2 && o2.k ? (EL3[o2.k] || {}).col : '#c8d4dc'], f: ['Sinais', FORMA3[Gm.forms[st.f]].nm, '#c8d4dc'], tam: ['Tamanho', TAM3[['p', 'm', 'g'][st.tam]].nm, '#c8d4dc'], mod: ['Marca', modsL()[st.mod] ? MOD3[modsL()[st.mod]].nm : '(nenhuma)', modsL()[st.mod] ? '#ffd060' : '#c8d4dc'], anel: ['Anel', st.anel ? 'Com brecha' : 'Fechado', st.anel ? '#ffd060' : '#c8d4dc'], tracar: [igual() ? 'MANTER' : 'TRAÇAR', igual() ? 'sem gastar' : custoTinta(s) + ' tinta', pb ? '#ff8a8a' : '#ffd060'] };
         R.forEach((k, j) => {
-          const y = 44 + j * 21, sel = j === st.row, [a, b, c] = lab[k];
-          if (sel) { bx.fillStyle = UIC.sel; bx.fillRect(131, y - 2, 102, 21); }
+          const dy = R.length > 6 ? 19 : 21, y = 44 + j * dy, sel = j === st.row, [a, b, c] = lab[k];
+          if (sel) { bx.fillStyle = UIC.sel; bx.fillRect(131, y - 2, 102, dy); }
           txt(a, 134, y, { col: sel ? '#ffffff' : '#9aa8b4' });
           if (k === 'tracar') txt(b, 232, y, { align: 'right', col: c });
           else { const lw = lineW(rich(String(b))); const bxx = Math.max(140, 230 - lw); txt(b, bxx, y + 9, { col: c }); if (sel) { txt('<', bxx - 8, y + 9, { col: UIC.line }); } }
         });
         // descrição
-        const linha = r => ({ e1: EL3[els[st.e1]].nm + ': ' + EL3[els[st.e1]].d + '.', e2: o2 ? o2.d : '', f: 'Sinais de ' + FORMA3[Gm.forms[st.f]].nm + ': ' + FORMA3[Gm.forms[st.f]].d + '.', tam: 'Círculo ' + TAM3[['p', 'm', 'g'][st.tam]].nm.toLowerCase() + ': ' + TAM3[['p', 'm', 'g'][st.tam]].d + '.' + (st.tam === 2 ? ' (+1 tinta)' : ''), anel: st.anel ? 'BRECHA no anel = Runa de Gatilho: o feitiço fica armado e dispara sozinho.' : 'Anel fechado: o feitiço sai na hora.', tracar: pb || (igual() ? 'A página já é essa. Nada a gastar.' : 'Traçar o anel e gastar a tinta.') })[r];
+        const linha = r => ({ e1: EL3[els[st.e1]].nm + ': ' + EL3[els[st.e1]].d + '.', e2: o2 ? o2.d : '', f: 'Sinais de ' + FORMA3[Gm.forms[st.f]].nm + ': ' + FORMA3[Gm.forms[st.f]].d + '.', mod: modsL()[st.mod] ? 'Marca ' + MOD3[modsL()[st.mod]].nm + ': ' + MOD3[modsL()[st.mod]].d + '. (+1 tinta)' : 'Sem marca: o feitiço puro.', tam: 'Círculo ' + TAM3[['p', 'm', 'g'][st.tam]].nm.toLowerCase() + ': ' + TAM3[['p', 'm', 'g'][st.tam]].d + '.' + (st.tam === 2 ? ' (+1 tinta)' : ''), anel: st.anel ? 'BRECHA no anel = Runa de Gatilho: o feitiço fica armado e dispara sozinho.' : 'Anel fechado: o feitiço sai na hora.', tracar: pb || (igual() ? 'A página já é essa. Nada a gastar.' : 'Traçar o anel e gastar a tinta.') })[r];
         const rr = R[st.row];
         box(4, 180, 232, 56, { bw: 1, edge: pb && (rr === 'tracar' || this.aviso > 0) ? '#ff8a8a' : undefined });
         const nomeP = o2 && !o2.ok ? '??? (falta o selo)' : P.nm;
