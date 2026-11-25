@@ -27,7 +27,7 @@ def enc(a):
 front=recorta_alpha(recorte(10,3,388,692)); side=recorta_alpha(recorte(418,3,753,692)); back=recorta_alpha(recorte(753,3,1068,693))
 peek=recorta_alpha(recorte(1084,401,1305,557))
 S={'frente':limpa(reduz(front,H=56)),'lado':limpa(reduz(side,H=56)),'costas':limpa(reduz(back,H=56)),
-   'espia':limpa(reduz(peek,W=20)),'grande':limpa(reduz(front,H=120,cores=48))}
+   'espia':limpa(reduz(peek,W=20)),'grande':limpa(reduz(front,H=84,cores=48))}
 R=[retrato(x0) for x0 in (10,274,530,776,1049)]
 out={'sp':{k:enc(v) for k,v in S.items()},'port':[enc(r) for r in R]}
 js='// gerado por build/arteia_moca/gerar_moca.py a partir da folha enviada pelo usuário (não editar à mão)\nconst ARTE_MOCA = '+json.dumps(out,separators=(',',':'))+';\n'

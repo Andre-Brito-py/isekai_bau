@@ -48,7 +48,7 @@ async function mocaAparece(nome) {
   const gotas = [];
   const desenha = (alpha, sobe) => {
     const x = Math.round(cx - big.width / 2 + 10), y = Math.round(cy - big.height + 18 - sobe + Math.sin(FRAME / 16) * 2);
-    bx.globalAlpha = alpha * 0.35; bx.fillStyle = '#ffd070'; bx.beginPath(); bx.arc(x + big.width / 2, y + big.height * 0.45, 46, 0, 6.29); bx.fill();
+    bx.globalAlpha = alpha * 0.35; bx.fillStyle = '#ffd070'; bx.beginPath(); bx.arc(x + big.width / 2, y + big.height * 0.45, 34, 0, 6.29); bx.fill();
     bx.globalAlpha = alpha; bx.drawImage(big, x, y);
     if (FRAME % 3 === 0) gotas.push({ x: x + 14 + Math.random() * (big.width - 28), y: y + big.height - 18, v: 0.3 + Math.random() * 0.6, a: 1 });
     for (const g of gotas) { g.y += g.v; g.a -= 0.02; if (g.a > 0) { bx.globalAlpha = alpha * g.a; bx.fillStyle = '#ffc860'; bx.fillRect(Math.round(g.x), Math.round(g.y), 1, 2); } }
