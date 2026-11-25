@@ -47,8 +47,9 @@ async function mocaAparece(nome) {
   const [cx, cy] = bau ? unitCenter(bau) : [70, 150];
   if (!MOCA.c.brilho) { const c = mk(sp.width + 2, sp.height + 2), x = c.getContext('2d'); for (const [dx, dy] of [[0, 1], [2, 1], [1, 0], [1, 2]]) x.drawImage(sp, dx, dy); x.globalCompositeOperation = 'source-in'; x.fillStyle = '#ffe9a0'; x.fillRect(0, 0, c.width, c.height); MOCA.c.brilho = c; }
   const gotas = [];
+  // sobe da tampa e para no alto, entre a Lume e a Rita (sem cobrir ninguém)
   const desenha = (alpha, sobe) => {
-    const x = Math.round(cx - sp.width / 2 + 14), y = Math.round(cy - sp.height + 4 - sobe + Math.sin(FRAME / 16) * 1.5);
+    const x = Math.round(cx - sp.width / 2 - 13 * Math.min(1, sobe / 44)), y = Math.round(cy - sp.height + 4 - sobe + Math.sin(FRAME / 16) * 1.5);
     const pul = 0.55 + Math.sin(FRAME / 7) * 0.25;
     bx.globalAlpha = alpha * 0.22; bx.fillStyle = '#ffd070'; bx.beginPath(); bx.arc(x + sp.width / 2, y + sp.height * 0.45, 26, 0, 6.29); bx.fill();
     bx.globalAlpha = alpha * 0.18; bx.beginPath(); bx.arc(x + sp.width / 2, y + sp.height * 0.45, 18, 0, 6.29); bx.fill();
@@ -60,8 +61,8 @@ async function mocaAparece(nome) {
     bx.globalAlpha = 1;
   };
   sfx('rune');
-  await tw(45, p => desenha(ease.out(p), p * 14));
+  await tw(45, p => desenha(ease.out(p), ease.out(p) * 44));
   callout((nome || 'Ela').toUpperCase(), '#ffd890', 90);
-  await tw(110, () => desenha(1, 14));
-  await tw(30, p => desenha(1 - p, 14 - p * 12));
+  await tw(110, () => desenha(1, 44));
+  await tw(30, p => desenha(1 - p, 44 - p * 40));
 }
