@@ -1140,6 +1140,16 @@ v96 — LEITURA MAIS FUNDA (leitura2.js; pedido do usuário para a moça dar van
  qualquer inimigo que começa a PREPARAR golpe fica LIDO sozinho e ela avisa ("!" piscando sobre o olho). Na T2 todas as
  defesas são variações do anel, então a leitura vale para todas. T3: ícone do TIPO de golpe quando houver defesas diferentes.
 
+v98 — ESPAÇOS DE JOGO + HERANÇA PARA A T3 (saves.js; pedido do usuário): 3 espaços de save (espaço 1 = a chave antiga
+ 'renasci_t2_v1', nada se perde; 2 e 3 = 'renasci_t2_s2/s3'; o espaço em uso fica em 'renasci_t2_slot'). Tela inicial:
+ lista "Espaços de jogo" (nome, capítulo, tempo) -> continuar / começar de novo (com confirmação). Menu: "Espaços de jogo"
+ copia o ÚLTIMO SAVE do espaço em uso para outro (não é salvar em qualquer lugar) ou apaga um espaço.
+ HERANÇA T2->T3: com c10Fim, todo save2 grava 'renasci_heranca2' = { v:2, name, t1 (a herança da T1 inteira), species,
+ evo3, evo7, evoLume, nomeMoca, poder, lv, tempo, dia, escolhas {apagar, beijo, cancao, lumeHeart, ritaViuRosto, vila},
+ magia {elems, forms, mods, fus}, pilares (boatos ouvidos), lembrancas (devolvidas), cobres, flags (todas) }. Menu
+ "Herança (T3)" mostra/copia o código RCB-H2.<base64 json> para outro aparelho. A T3 deve aceitar RCB-H2 (e RCB-H1/RCB1
+ de quem pulou a T2), como a T2 faz com a T1.
+
 =====================================================================
 -->
 <style>
@@ -3807,9 +3817,13 @@ function hintOnce() { }
 }; }
 
 // ---------- save da T2 ----------
+// ESPAÇOS DE JOGO (3): o espaço 1 é o save antigo ('renasci_t2_v1'), então nada se perde.
 const SAVE2 = 'renasci_t2_v1';
-function save2() { try { localStorage.setItem(SAVE2, JSON.stringify(G)); } catch (e) { } }
-function load2() { try { const s = localStorage.getItem(SAVE2); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+const chaveSlot = n => n === 1 ? SAVE2 : 'renasci_t2_s' + n;
+let SLOT2 = 1; try { SLOT2 = +localStorage.getItem('renasci_t2_slot') || 1; } catch (e) { }
+function usarSlot(n) { SLOT2 = n; try { localStorage.setItem('renasci_t2_slot', String(n)); } catch (e) { } }
+function save2() { try { localStorage.setItem(chaveSlot(SLOT2), JSON.stringify(G)); } catch (e) { } }
+function load2(n) { try { const s = localStorage.getItem(chaveSlot(n || SLOT2)); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
 
 // ---------- instalar como app (atalho na tela do celular) ----------
 let INSTALL_EV = null;
@@ -3874,12 +3888,8 @@ async function titleFlow2() {
     if (c === 1) await colarHeranca();
     if (c === 2) { await fadeOut(24); playMusic(null); location.href = '../'; return; }
   }
-  const sv = load2();
   let novo = true;
-  if (sv && sv.flags && (sv.flags.cap1Corvos || sv.flags.cap1Boss)) {
-    const c = await choose('* Há um jogo da Temporada 2 salvo.', ['Continuar', 'Começar de novo']);
-    if (c === 0) { Object.assign(G, sv); novo = false; }
-  }
+  { const r = await escolherEspaco(); if (r === 'continuar') { Object.assign(G, load2()); novo = false; } }
   if (novo) {
     const H = G.her;
     G.flags = {};
@@ -22393,6 +22403,81 @@ MENU_EXTRA.push({ k: 'pilares', nm: () => 'Os Oito Pilares', col: '#ffd890', vis
     const DEG = { topo: 'topo', meio: 'meio', base: 'base', '?': '' };
     const its = PILARES.map(P => sabe(P) ? { label: P.tit, right: DEG[P.deg], col: P.k === 'oitava' ? '#c8b8e8' : '#ffd890', d: `${P.nm} · ${P.raca}. ${P.d}` } : { label: '???', col: '#6a6078', d: 'Ainda não ouviu falar. Converse com o povo.' });
     await list({ x: 14, y: 24, w: 212, maxVis: 8, title: 'Os Oito Pilares', items: its, desc: j => its[j] && its[j].d, descY: 140 });
+  } });
+
+// ================= ESPAÇOS DE JOGO E HERANÇA PARA A TEMPORADA 3 (pedido do usuário) =================
+// 3 espaços de save. O espaço 1 é o save antigo (nada se perde). Na tela inicial você escolhe o espaço; o Marco e o
+// salvamento automático gravam no espaço em uso. No menu, "Espaços de jogo" copia o último save deste espaço para outro
+// (sem "salvar em qualquer lugar": copia o que já está gravado) ou apaga um espaço.
+// HERANÇA T2 -> T3: ao terminar a temporada, todo save grava 'renasci_heranca2' (localStorage) e o menu ganha
+// "Herança (T3)" com o código RCB-H2... para levar a outro aparelho. A T3 lê os dois (H2 carrega a H1 dentro).
+function infoSlot(n) {
+  const sv = load2(n);
+  if (!sv || !sv.flags || !(sv.flags.cap1Corvos || sv.flags.cap1Boss)) return null;
+  let c = 2; for (let i = 3; i <= 10; i++) if (sv.flags['c' + i + 'Init']) c = i;
+  const t = Math.floor((sv.time || 0) / 60), h = Math.floor(t / 60), m = t % 60;
+  return { nome: sv.name || '?', cap: sv.flags.c10Fim ? 'FIM' : sv.flags.cap1Boss ? 'Cap. ' + c : 'Cap. 1', tempo: h + 'h' + String(m).padStart(2, '0') };
+}
+function itensSlots() { return [1, 2, 3].map(n => { const I = infoSlot(n); return I ? { label: `Espaço ${n}: ${I.nome}`, right: `${I.cap} ${I.tempo}`, col: n === SLOT2 ? '#ffd060' : undefined, d: `${I.nome} · ${I.cap} · tempo de jogo ${I.tempo}${n === SLOT2 ? ' · (o último usado)' : ''}` } : { label: `Espaço ${n}: (vazio)`, col: '#8a8099', d: 'Um espaço livre para um jogo novo.' }; }); }
+async function escolherEspaco() {
+  while (true) {
+    const its = itensSlots();
+    const i = await list({ x: 20, y: 40, w: 200, title: 'Espaços de jogo', items: its, desc: j => its[j].d, descY: 120, cancel: false, idx: SLOT2 - 1 });
+    const n = i + 1, I = infoSlot(n);
+    if (!I) { usarSlot(n); return 'novo'; }
+    const c = await choose(`* Espaço ${n}: ${I.nome}, ${I.cap}.`, ['Continuar', 'Começar um jogo novo aqui', 'Voltar']);
+    if (c === 0) { usarSlot(n); return 'continuar'; }
+    if (c === 1) { const ok = await choose('* O jogo deste espaço será APAGADO quando você salvar. Tem certeza?', ['Não', 'Sim, começar de novo']); if (ok === 1) { usarSlot(n); return 'novo'; } }
+  }
+}
+MENU_EXTRA.push({ k: 'espacos', nm: () => 'Espaços de jogo', col: '#c8d4dc', vis: () => true, right: () => 'nº ' + SLOT2,
+  desc: () => 'Três espaços de save. Copie o último save deste espaço para outro (um "backup"), ou apague um espaço.',
+  run: async () => {
+    while (true) {
+      const its = itensSlots();
+      const i = await list({ x: 20, y: 40, w: 200, title: 'Espaços de jogo (em uso: ' + SLOT2 + ')', items: its, desc: j => its[j].d, descY: 120 });
+      if (i < 0) return;
+      const n = i + 1;
+      if (n === SLOT2) { await say('* Este é o espaço em uso. Ele salva sozinho no Marco e no salvamento automático.'); continue; }
+      const I = infoSlot(n);
+      const c = await choose(`* Espaço ${n}${I ? ': ' + I.nome + ', ' + I.cap : ' (vazio)'}.`, ['Copiar o último save daqui para lá', ...(I ? ['Apagar esse espaço'] : []), 'Voltar']);
+      if (c === 0) {
+        if (I && (await choose('* Isso substitui o jogo do espaço ' + n + '. Tem certeza?', ['Não', 'Sim'])) !== 1) continue;
+        try { const s = localStorage.getItem(chaveSlot(SLOT2)); if (s) localStorage.setItem(chaveSlot(n), s); } catch (e) { }
+        sfx('save'); await say('* Copiado para o espaço ' + n + '. Você continua jogando no espaço ' + SLOT2 + '.');
+      } else if (I && c === 1) {
+        if ((await choose('* Apagar o espaço ' + n + ' de vez?', ['Não', 'Sim, apagar'])) !== 1) continue;
+        try { localStorage.removeItem(chaveSlot(n)); } catch (e) { } sfx('cancel'); await say('* Espaço ' + n + ' apagado.');
+      }
+    }
+  } });
+// ---------- herança da Temporada 2 ----------
+function heranca2() {
+  const Gm = typeof grim === 'function' ? grim() : {}, bau = (typeof grupoAtual === 'function' ? grupoAtual() : []).find(m => m.id === 'bau');
+  const lemb = typeof lembSt === 'function' ? Object.keys(lembSt()).filter(k => lembSt()[k] === 'dev').length : 0;
+  return { v: 2, name: G.name, t1: G.her || null, species: G.species, evo3: G.evo3 || null, evo7: G.evo7 || null, evoLume: G.evoLume || null,
+    nomeMoca: G.nomeMoca || null, poder: G.poder || 1, lv: bau ? bau.lv : null, tempo: G.time || 0, dia: G.dia || 0,
+    escolhas: { apagar: G.flags.c10Escolha || null, beijo: !!G.flags.c10Beijo, cancao: !!G.flags.c10Cancao, lumeHeart: G.flags.lumeHeart2 || 0, ritaViuRosto: !!G.flags.ritaViuRosto, vila: !!G.flags.vilaSemente },
+    magia: { elems: Gm.elems || [], forms: Gm.forms || [], mods: Gm.mods || [], fus: Object.keys(Gm.fus || {}).filter(k => Gm.fus[k]) },
+    pilares: Object.keys((G.flags && G.flags.pil) || {}), lembrancas: lemb, cobres: G.cobres || 0,
+    flags: G.flags };
+}
+function codigoHeranca2() { return 'RCB-H2.' + btoa(unescape(encodeURIComponent(JSON.stringify(heranca2())))); }
+{ const _svH = save2; save2 = function () { _svH(); if (G.flags && G.flags.c10Fim) { try { localStorage.setItem('renasci_heranca2', JSON.stringify(heranca2())); } catch (e) { } } }; }
+function mostrarCodigo(titulo, txt0, code) {
+  return new Promise(res => {
+    OVB.innerHTML = `<h2>${titulo}</h2><p>${txt0}</p><textarea id="ci" readonly></textarea><div class="row"><button class="ok" id="cok">Copiar</button><button id="cx">Fechar</button></div>`;
+    OV.hidden = false; const ta = OVB.querySelector('#ci'); ta.value = code;
+    const done = () => { OV.hidden = true; for (const k in KEYS) KEYS[k] = false; res(); };
+    OVB.querySelector('#cok').onclick = async () => { ta.select(); let ok = false; try { await navigator.clipboard.writeText(code); ok = true; } catch (e) { try { ok = document.execCommand('copy'); } catch (e2) { } } OVB.querySelector('#cok').textContent = ok ? 'Copiado!' : 'Selecione e copie'; };
+    OVB.querySelector('#cx').onclick = done;
+  });
+}
+MENU_EXTRA.push({ k: 'heranca3', nm: () => 'Herança (T3)', col: '#ffd890', vis: () => !!(G.flags && G.flags.c10Fim),
+  desc: () => 'Tudo o que este jogo leva para a Temporada 3. Neste aparelho ela já fica guardada sozinha; o código serve para outro aparelho.',
+  run: async () => {
+    save2();
+    await mostrarCodigo('Herança da Temporada 2', 'A Temporada 3 lê sozinha neste aparelho. Em outro aparelho, cole este código na tela inicial da Temporada 3.', codigoHeranca2());
   } });
 
 boot2();

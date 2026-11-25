@@ -1135,6 +1135,16 @@ v96 — LEITURA MAIS FUNDA (leitura2.js; pedido do usuário para a moça dar van
  qualquer inimigo que começa a PREPARAR golpe fica LIDO sozinho e ela avisa ("!" piscando sobre o olho). Na T2 todas as
  defesas são variações do anel, então a leitura vale para todas. T3: ícone do TIPO de golpe quando houver defesas diferentes.
 
+v98 — ESPAÇOS DE JOGO + HERANÇA PARA A T3 (saves.js; pedido do usuário): 3 espaços de save (espaço 1 = a chave antiga
+ 'renasci_t2_v1', nada se perde; 2 e 3 = 'renasci_t2_s2/s3'; o espaço em uso fica em 'renasci_t2_slot'). Tela inicial:
+ lista "Espaços de jogo" (nome, capítulo, tempo) -> continuar / começar de novo (com confirmação). Menu: "Espaços de jogo"
+ copia o ÚLTIMO SAVE do espaço em uso para outro (não é salvar em qualquer lugar) ou apaga um espaço.
+ HERANÇA T2->T3: com c10Fim, todo save2 grava 'renasci_heranca2' = { v:2, name, t1 (a herança da T1 inteira), species,
+ evo3, evo7, evoLume, nomeMoca, poder, lv, tempo, dia, escolhas {apagar, beijo, cancao, lumeHeart, ritaViuRosto, vila},
+ magia {elems, forms, mods, fus}, pilares (boatos ouvidos), lembrancas (devolvidas), cobres, flags (todas) }. Menu
+ "Herança (T3)" mostra/copia o código RCB-H2.<base64 json> para outro aparelho. A T3 deve aceitar RCB-H2 (e RCB-H1/RCB1
+ de quem pulou a T2), como a T2 faz com a T1.
+
 =====================================================================
 -->
 <style>

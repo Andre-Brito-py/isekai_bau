@@ -583,9 +583,13 @@ function hintOnce() { }
 }; }
 
 // ---------- save da T2 ----------
+// ESPAÇOS DE JOGO (3): o espaço 1 é o save antigo ('renasci_t2_v1'), então nada se perde.
 const SAVE2 = 'renasci_t2_v1';
-function save2() { try { localStorage.setItem(SAVE2, JSON.stringify(G)); } catch (e) { } }
-function load2() { try { const s = localStorage.getItem(SAVE2); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+const chaveSlot = n => n === 1 ? SAVE2 : 'renasci_t2_s' + n;
+let SLOT2 = 1; try { SLOT2 = +localStorage.getItem('renasci_t2_slot') || 1; } catch (e) { }
+function usarSlot(n) { SLOT2 = n; try { localStorage.setItem('renasci_t2_slot', String(n)); } catch (e) { } }
+function save2() { try { localStorage.setItem(chaveSlot(SLOT2), JSON.stringify(G)); } catch (e) { } }
+function load2(n) { try { const s = localStorage.getItem(chaveSlot(n || SLOT2)); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
 
 // ---------- instalar como app (atalho na tela do celular) ----------
 let INSTALL_EV = null;
@@ -650,12 +654,8 @@ async function titleFlow2() {
     if (c === 1) await colarHeranca();
     if (c === 2) { await fadeOut(24); playMusic(null); location.href = '../'; return; }
   }
-  const sv = load2();
   let novo = true;
-  if (sv && sv.flags && (sv.flags.cap1Corvos || sv.flags.cap1Boss)) {
-    const c = await choose('* Há um jogo da Temporada 2 salvo.', ['Continuar', 'Começar de novo']);
-    if (c === 0) { Object.assign(G, sv); novo = false; }
-  }
+  { const r = await escolherEspaco(); if (r === 'continuar') { Object.assign(G, load2()); novo = false; } }
   if (novo) {
     const H = G.her;
     G.flags = {};
