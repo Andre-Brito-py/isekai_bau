@@ -148,11 +148,13 @@ function tracarAnel(s) {
           if (a == null) { if (this.prog > 0) this.parado++; this.ultimo = null; }
           else {
             const angTopo = (a + 90 + 360) % 360;   // 0 = em cima, horário
-            if (this.ultimo == null) { if (this.prog === 0 && Math.min(angTopo, 360 - angTopo) > 50) { this.ultimo = null; } else this.ultimo = angTopo; }
+            if (this.ultimo == null) this.ultimo = angTopo;   // começa de qualquer ponto
             else {
               let d = angTopo - this.ultimo; if (d > 180) d -= 360; if (d < -180) d += 360;
+              if (this.sent == null) { this.acc = (this.acc || 0) + d; if (Math.abs(this.acc) > 6) { this.sent = this.acc > 0 ? 1 : -1; d = Math.abs(this.acc); this.acc = 0; } else { this.ultimo = angTopo; return; } }   // qualquer sentido: o primeiro giro decide
+              else d *= this.sent;
               if (d > 0.5) { this.prog = Math.min(alvo, this.prog + Math.min(d, 60)); this.parado = 0; if (this.t % 4 === 0) sfx('move'); }
-              else if (d < -25) { this.prog = 0; this.tremido = true; this.borrao = 30; sfx('cancel'); }
+              else if (d < -40) { this.prog = 0; this.sent = null; this.acc = 0; this.tremido = true; this.borrao = 30; sfx('cancel'); }
               else this.parado++;
               this.ultimo = angTopo;
             }
@@ -177,7 +179,7 @@ function tracarAnel(s) {
         if (this.borrao > 0) { bx.globalAlpha = this.borrao / 30; bx.fillStyle = '#2a1f48'; for (let i = 0; i < 9; i++) bx.fillRect(Math.round(px + Math.sin(i * 2.3) * 6), Math.round(py + Math.cos(i * 1.7) * 6), 3, 2); bx.globalAlpha = 1; txt('Borrou! Recomece.', 120, 166, { align: 'center', col: '#ff6b6b' }); }
         if (this.fim) { bx.globalAlpha = Math.max(0, 1 - this.fim / 46) * 0.6; for (let i = 0; i < 3; i++) fxRing(cx, cy, R * sc + this.fim * 0.8 + i * 4, col, 1); bx.globalAlpha = 1; }
         if (!this.fim) {
-          txt('Gire o direcional em volta,', 120, 184, { align: 'center' });
+          txt('Gire o direcional em círculos,', 120, 184, { align: 'center' });
           txt('sem voltar e sem parar.', 120, 196, { align: 'center' });
           txt('{c}A{/}: traçar devagar   {c}B{/}: desistir', 120, 214, { align: 'center', col: '#9aa8b4' });
         }
@@ -299,7 +301,7 @@ abrirGrimorio = async function (guiado) {
     const ks = Object.keys(FUS3), nf = ks.filter(k => Gm.fus[k]).length;
     its.push({ label: `Selos de fusão (${nf}/${ks.length})`, d: 'Os sigilos duplos que você já sabe traçar. Os que faltam: baús escondidos e a Papelaria.' });
     if (!guiado) its.push({ label: 'Fechar' });
-    const i = await list({ x: 26, y: 62, w: 194, title: `Grimório        Tinta x${tintaS()}`, items: its, desc: j => its[j] && its[j].d, descY: 186, cancel: !guiado,
+    const i = await list({ x: 26, y: 62, w: 194, maxVis: 6, title: `Grimório        Tinta x${tintaS()}`, items: its, desc: j => its[j] && its[j].d, descY: 186, cancel: !guiado,
       extra: j => { const s = its[j] && its[j].s; if (!s) return; const g = glifo(s, { ink: '#2a1f48', cor: true }); bx.fillStyle = '#b8a07a'; bx.fillRect(89, 3, 62, 58); bx.fillStyle = '#e8dcc0'; bx.fillRect(90, 4, 60, 56); bx.drawImage(g, Math.round(120 - g.width / 2), Math.round(32 - g.height / 2)); } });
     if (i < 0 || (!guiado && i === its.length - 1)) return;
     if (i === Gm.max) { await verSelos(); continue; }

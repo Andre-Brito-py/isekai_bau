@@ -386,7 +386,7 @@ function list(o) {
         const col = item.disabled ? '#6a6078' : sel ? '#ffffff' : (item.col || '#c8d4dc');
         const yy = o.y + hh + i * 12;
         if (sel) { bx.fillStyle = UIC.sel; bx.fillRect(o.x + 3, yy - 1, o.w - 6, 12); setaSel(o.x + 6, yy); }
-        txt(item.label, o.x + 16, yy, { col });
+        { let lb = item.label; const cab = Math.floor((o.w - 22 - (item.right ? String(item.right).length * 6 + 6 : 0)) / 6); if (typeof lb === 'string' && !lb.includes('{') && lb.length > cab && cab > 4) lb = lb.slice(0, cab - 2).trimEnd() + '..'; txt(lb, o.x + 16, yy, { col }); }
         if (item.right) txt(item.right, o.x + o.w - 8, yy, { align: 'right', col: item.disabled ? '#6a6078' : '#b8aecb' });
       }
       // setas de rolagem na linha do título (não cobrem nenhum item) e um contador
@@ -396,7 +396,20 @@ function list(o) {
         if (this.scroll + mv < it.length) setaMais(o.x + o.w - 13, ay + 4);
         if (o.title) txt(`${this.idx + 1}/${it.length}`, o.x + o.w - 28, ay, { align: 'right', col: '#8a8099' });
       }
-      if (o.desc && it.length) { const d = o.desc(this.idx); if (d) { const cols = Math.floor((o.w - 16) / 6), nl = wrapRich(rich(d), cols).length, dh = Math.max(52, nl * 12 + 10), dy = Math.max(2, Math.min(o.descY ?? 182, 238 - dh)); box(o.x, dy, o.w, dh, { bw: 1 }); txt(d, o.x + 8, dy + 5, { w: cols }); } }
+      if (o.desc && it.length) { const d = o.desc(this.idx); if (d) {
+        // a descrição nunca cobre a lista: se não cabe embaixo, vira páginas (troca sozinha ou com esquerda/direita)
+        const cols = Math.floor((o.w - 16) / 6), L = wrapRich(rich(d), cols), nl = L.length, fundo = o.y + h + 2;
+        let dh = Math.max(52, nl * 12 + 10), dy = Math.max(2, Math.min(o.descY ?? 182, 238 - dh));
+        if (dy < fundo && 238 - fundo >= 34) {
+          dy = fundo; dh = 238 - fundo; const cab = Math.max(1, Math.floor((dh - 10) / 12)), pags = Math.ceil(nl / cab);
+          if (this._dIdx !== this.idx) { this._dIdx = this.idx; this._dPg = 0; this._dT = 0; }
+          if (pags > 1) { if (++this._dT > 200) { this._dT = 0; this._dPg = (this._dPg + 1) % pags; } if (navp('right')) { this._dPg = (this._dPg + 1) % pags; this._dT = 0; sfx('move'); } if (navp('left')) { this._dPg = (this._dPg + pags - 1) % pags; this._dT = 0; sfx('move'); } }
+          const pg = Math.min(this._dPg || 0, pags - 1);
+          box(o.x, dy, o.w, dh, { bw: 1 });
+          L.slice(pg * cab, pg * cab + cab).forEach((ln, i) => TQ.push({ chars: ln, x: (o.x + 8 + TXO.x) / TXZ, y: (dy + 5 + i * 12 + TXO.y) / TXZ, n: 1e9, sz: 1 / TXZ }));
+          if (pags > 1) txt(`< ${pg + 1}/${pags} >`, o.x + o.w - 8, dy + dh - 12, { align: 'right', col: '#8a8099' });
+        } else { box(o.x, dy, o.w, dh, { bw: 1 }); txt(d, o.x + 8, dy + 5, { w: cols }); }
+      } }
       if (o.extra) o.extra(this.idx);
     }
   };

@@ -1096,6 +1096,12 @@ v93 — SUPER DA FORMA HUMANA: VÃO DE DENTES (super_humano.js, pedido do usuár
  tampa sobre a fileira toda (1.2, quebra +2, crítico). Volta pela fenda. Mais fraco que o Engolir o Mundo (4.2) num alvo
  só, melhor contra grupos. trocarForma troca super/superNm/superDesc/superTgt e devolve ao voltar a ser baú.
 
+v94b — CONSERTOS DO GRIMÓRIO (relato do usuário): (1) o traçado do anel não andava no celular: o sentido só era decidido
+ com um salto de >4° num único quadro, e o toque gira 1-3° por quadro; agora o giro ACUMULA até 6° para decidir o sentido,
+ começa de QUALQUER ponto e vale nos DOIS sentidos. (2) a descrição de páginas longas cobria a lista (o texto é outra
+ camada e vazava por cima): core.list agora põe a descrição embaixo da lista e, se não couber, vira páginas
+ (troca sozinha ou com esquerda/direita, "< 1/2 >"); rótulos longos da lista são cortados com ".." antes do valor da direita.
+
 =====================================================================
 -->
 <style>
@@ -1586,7 +1592,7 @@ function list(o) {
         const col = item.disabled ? '#6a6078' : sel ? '#ffffff' : (item.col || '#c8d4dc');
         const yy = o.y + hh + i * 12;
         if (sel) { bx.fillStyle = UIC.sel; bx.fillRect(o.x + 3, yy - 1, o.w - 6, 12); setaSel(o.x + 6, yy); }
-        txt(item.label, o.x + 16, yy, { col });
+        { let lb = item.label; const cab = Math.floor((o.w - 22 - (item.right ? String(item.right).length * 6 + 6 : 0)) / 6); if (typeof lb === 'string' && !lb.includes('{') && lb.length > cab && cab > 4) lb = lb.slice(0, cab - 2).trimEnd() + '..'; txt(lb, o.x + 16, yy, { col }); }
         if (item.right) txt(item.right, o.x + o.w - 8, yy, { align: 'right', col: item.disabled ? '#6a6078' : '#b8aecb' });
       }
       // setas de rolagem na linha do título (não cobrem nenhum item) e um contador
@@ -1596,7 +1602,20 @@ function list(o) {
         if (this.scroll + mv < it.length) setaMais(o.x + o.w - 13, ay + 4);
         if (o.title) txt(`${this.idx + 1}/${it.length}`, o.x + o.w - 28, ay, { align: 'right', col: '#8a8099' });
       }
-      if (o.desc && it.length) { const d = o.desc(this.idx); if (d) { const cols = Math.floor((o.w - 16) / 6), nl = wrapRich(rich(d), cols).length, dh = Math.max(52, nl * 12 + 10), dy = Math.max(2, Math.min(o.descY ?? 182, 238 - dh)); box(o.x, dy, o.w, dh, { bw: 1 }); txt(d, o.x + 8, dy + 5, { w: cols }); } }
+      if (o.desc && it.length) { const d = o.desc(this.idx); if (d) {
+        // a descrição nunca cobre a lista: se não cabe embaixo, vira páginas (troca sozinha ou com esquerda/direita)
+        const cols = Math.floor((o.w - 16) / 6), L = wrapRich(rich(d), cols), nl = L.length, fundo = o.y + h + 2;
+        let dh = Math.max(52, nl * 12 + 10), dy = Math.max(2, Math.min(o.descY ?? 182, 238 - dh));
+        if (dy < fundo && 238 - fundo >= 34) {
+          dy = fundo; dh = 238 - fundo; const cab = Math.max(1, Math.floor((dh - 10) / 12)), pags = Math.ceil(nl / cab);
+          if (this._dIdx !== this.idx) { this._dIdx = this.idx; this._dPg = 0; this._dT = 0; }
+          if (pags > 1) { if (++this._dT > 200) { this._dT = 0; this._dPg = (this._dPg + 1) % pags; } if (navp('right')) { this._dPg = (this._dPg + 1) % pags; this._dT = 0; sfx('move'); } if (navp('left')) { this._dPg = (this._dPg + pags - 1) % pags; this._dT = 0; sfx('move'); } }
+          const pg = Math.min(this._dPg || 0, pags - 1);
+          box(o.x, dy, o.w, dh, { bw: 1 });
+          L.slice(pg * cab, pg * cab + cab).forEach((ln, i) => TQ.push({ chars: ln, x: (o.x + 8 + TXO.x) / TXZ, y: (dy + 5 + i * 12 + TXO.y) / TXZ, n: 1e9, sz: 1 / TXZ }));
+          if (pags > 1) txt(`< ${pg + 1}/${pags} >`, o.x + o.w - 8, dy + dh - 12, { align: 'right', col: '#8a8099' });
+        } else { box(o.x, dy, o.w, dh, { bw: 1 }); txt(d, o.x + 8, dy + 5, { w: cols }); }
+      } }
       if (o.extra) o.extra(this.idx);
     }
   };
@@ -20084,11 +20103,13 @@ function tracarAnel(s) {
           if (a == null) { if (this.prog > 0) this.parado++; this.ultimo = null; }
           else {
             const angTopo = (a + 90 + 360) % 360;   // 0 = em cima, horário
-            if (this.ultimo == null) { if (this.prog === 0 && Math.min(angTopo, 360 - angTopo) > 50) { this.ultimo = null; } else this.ultimo = angTopo; }
+            if (this.ultimo == null) this.ultimo = angTopo;   // começa de qualquer ponto
             else {
               let d = angTopo - this.ultimo; if (d > 180) d -= 360; if (d < -180) d += 360;
+              if (this.sent == null) { this.acc = (this.acc || 0) + d; if (Math.abs(this.acc) > 6) { this.sent = this.acc > 0 ? 1 : -1; d = Math.abs(this.acc); this.acc = 0; } else { this.ultimo = angTopo; return; } }   // qualquer sentido: o primeiro giro decide
+              else d *= this.sent;
               if (d > 0.5) { this.prog = Math.min(alvo, this.prog + Math.min(d, 60)); this.parado = 0; if (this.t % 4 === 0) sfx('move'); }
-              else if (d < -25) { this.prog = 0; this.tremido = true; this.borrao = 30; sfx('cancel'); }
+              else if (d < -40) { this.prog = 0; this.sent = null; this.acc = 0; this.tremido = true; this.borrao = 30; sfx('cancel'); }
               else this.parado++;
               this.ultimo = angTopo;
             }
@@ -20113,7 +20134,7 @@ function tracarAnel(s) {
         if (this.borrao > 0) { bx.globalAlpha = this.borrao / 30; bx.fillStyle = '#2a1f48'; for (let i = 0; i < 9; i++) bx.fillRect(Math.round(px + Math.sin(i * 2.3) * 6), Math.round(py + Math.cos(i * 1.7) * 6), 3, 2); bx.globalAlpha = 1; txt('Borrou! Recomece.', 120, 166, { align: 'center', col: '#ff6b6b' }); }
         if (this.fim) { bx.globalAlpha = Math.max(0, 1 - this.fim / 46) * 0.6; for (let i = 0; i < 3; i++) fxRing(cx, cy, R * sc + this.fim * 0.8 + i * 4, col, 1); bx.globalAlpha = 1; }
         if (!this.fim) {
-          txt('Gire o direcional em volta,', 120, 184, { align: 'center' });
+          txt('Gire o direcional em círculos,', 120, 184, { align: 'center' });
           txt('sem voltar e sem parar.', 120, 196, { align: 'center' });
           txt('{c}A{/}: traçar devagar   {c}B{/}: desistir', 120, 214, { align: 'center', col: '#9aa8b4' });
         }
@@ -20235,7 +20256,7 @@ abrirGrimorio = async function (guiado) {
     const ks = Object.keys(FUS3), nf = ks.filter(k => Gm.fus[k]).length;
     its.push({ label: `Selos de fusão (${nf}/${ks.length})`, d: 'Os sigilos duplos que você já sabe traçar. Os que faltam: baús escondidos e a Papelaria.' });
     if (!guiado) its.push({ label: 'Fechar' });
-    const i = await list({ x: 26, y: 62, w: 194, title: `Grimório        Tinta x${tintaS()}`, items: its, desc: j => its[j] && its[j].d, descY: 186, cancel: !guiado,
+    const i = await list({ x: 26, y: 62, w: 194, maxVis: 6, title: `Grimório        Tinta x${tintaS()}`, items: its, desc: j => its[j] && its[j].d, descY: 186, cancel: !guiado,
       extra: j => { const s = its[j] && its[j].s; if (!s) return; const g = glifo(s, { ink: '#2a1f48', cor: true }); bx.fillStyle = '#b8a07a'; bx.fillRect(89, 3, 62, 58); bx.fillStyle = '#e8dcc0'; bx.fillRect(90, 4, 60, 56); bx.drawImage(g, Math.round(120 - g.width / 2), Math.round(32 - g.height / 2)); } });
     if (i < 0 || (!guiado && i === its.length - 1)) return;
     if (i === Gm.max) { await verSelos(); continue; }
