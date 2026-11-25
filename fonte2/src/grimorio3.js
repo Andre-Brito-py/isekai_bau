@@ -18,6 +18,8 @@ const FORMA3 = {
   onda: { nm: 'Onda', tgt: 'all', mp: 9, pow: 0.85, w: 'pesada', d: 'todos os inimigos (ação pesada)' },
   veu: { nm: 'Véu', tgt: 'ally', mp: 6, pow: 0, w: 'leve', d: 'um aliado (ação leve)' }
 };
+// forma-base: as formas novas (Eco, Maré, Lança, Coro) se comportam como Dardo, Onda ou Véu + um extra (formas_novas.js)
+function fb(s) { const F = FORMA3[s.f]; return (F && F.base) || s.f; }
 // fusões: chave em ordem alfabética
 const FUS3 = {
   'brasa+geada': { nm: 'Vapor', col: '#e8e8f0', cols: ['#ffffff', '#c8d8e8', '#f0a070'], hits: [['fogo', 0.6], ['gelo', 0.6]], d: 'escalda: um golpe de fogo E um de gelo (pega duas fraquezas)', veu: 'vapor', nota: '"Brasa + Geada = Vapor. Escalda. Bate duas vezes. Não tente em casa."' },
@@ -49,9 +51,9 @@ function pagina3(s) {
   const base = fus ? fus : EL3[e1];
   const nmEl = fus ? fus.nm : EL3[e1].nm + (dob ? ' Dobrada' : '');
   let mp = F.mp + (e1 === 'fuligem' || e2 === 'fuligem' ? 1 : 0) + (fus ? 4 : 0); if (dob) mp = Math.round(mp * 1.6); if (fus && fus.mpX) mp = Math.round(mp * fus.mpX);
-  const veuK = s.f === 'veu' ? (fus ? fus.veu : e1) : null;
-  const d = s.f === 'veu' ? (VEU3[veuK].nm + ': ' + VEU3[veuK].d + (dob ? ' (dobrado: mais forte)' : '')) : (fus ? fus.d : EL3[e1].d) + ' · ' + F.d + (dob ? ' · dobrado: 50% mais forte' : '');
-  return { nm: nmEl + ' · ' + (s.f === 'veu' ? VEU3[veuK].nm : F.nm), mp, d, tgt: F.tgt, w: F.w, fus, dob, base, col: (fus || EL3[e1]).col, cols: (fus || EL3[e1]).cols, veuK };
+  const veuK = fb(s) === 'veu' ? (fus ? fus.veu : e1) : null;
+  const d = fb(s) === 'veu' ? (VEU3[veuK].nm + ': ' + VEU3[veuK].d + (dob ? ' (dobrado: mais forte)' : '')) : (fus ? fus.d : EL3[e1].d) + ' · ' + F.d + (dob ? ' · dobrado: 50% mais forte' : '');
+  return { nm: nmEl + ' · ' + (fb(s) === 'veu' ? VEU3[veuK].nm : F.nm), mp, d, tgt: F.tgt, w: F.w, fus, dob, base, col: (fus || EL3[e1]).col, cols: (fus || EL3[e1]).cols, veuK };
 }
 // monta o feitiço de batalha de uma página
 function feitico3(s) {
@@ -59,9 +61,9 @@ function feitico3(s) {
   return { nm: P.nm, mp: P.mp, w: P.w, tgt: P.tgt, d: P.d, run: async (m, t) => {
     const ehBau = m.id === 'bau';
     if (ehBau) await bauConjura(m, P.col, 14); else sfx('rune');
-    if (s.f === 'veu') { await veu3(m, t, P, k); m.pose = null; return; }
-    const alvos = s.f === 'onda' ? alive(BT.foes) : [t];
-    if (s.f === 'dardo') await projectile(ehBau ? { _pt: [m.x, m.y - m.h + 6] } : m, t, P.col, 16, { r: 4, trail: P.cols });
+    if (fb(s) === 'veu') { await veu3(m, t, P, k); m.pose = null; return; }
+    const alvos = fb(s) === 'onda' ? alive(BT.foes) : [t];
+    if (fb(s) === 'dardo') await projectile(ehBau ? { _pt: [m.x, m.y - m.h + 6] } : m, t, P.col, 16, { r: 4, trail: P.cols });
     else { sfx('geada'); const [x0, y0] = unitCenter(m); await tw(20, p => { for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, r = p * 150; bx.fillStyle = P.cols[i % P.cols.length]; bx.fillRect(Math.round(x0 + r + Math.cos(a) * 10), Math.round(y0 + Math.sin(a) * 20 * (1 - p * 0.5)), 2, 2); } }); }
     await golpe3(m, alvos, P, F, s, k);
     if (BT.eco) { BT.eco = false; await wait(10); callout('Eco!', '#d0a8ff', 30); await golpe3(m, alvos.filter(a => a.hp > 0), P, F, s, k * 0.5); }
@@ -80,7 +82,7 @@ async function golpe3(m, alvos, P, F, s, k) {
     const st = fus ? fus.st : e1 === 'geada' ? 'frio' : e1 === 'brasa' ? (Math.random() < 0.35 ? 'queimado' : null) : null;
     if (st === 'frio') { t.st.frio = 2; popNum(x, y - 22, 'GELADO', '#bff0ff'); }
     if (st === 'queimado') { t.st.queimado = 3; popNum(x, y - 22, 'QUEIMADO', '#ffa94d'); }
-    const ton = fus ? fus.tonto : e1 === 'fuligem' ? (s.f === 'onda' ? 0.5 : 1) : 0;
+    const ton = fus ? fus.tonto : e1 === 'fuligem' ? (fb(s) === 'onda' ? 0.5 : 1) : 0;
     if (ton && Math.random() < ton) { t.ct = Math.max(0, t.ct - 40); popNum(x, y - 30, 'TONTO', '#d0a8ff'); }
   }
   if ((fus && fus.dreno) || e1 === 'seiva' && !fus) healUnit(m, Math.max(1, Math.round(drenado * ((fus && fus.dreno) || 0.5))));

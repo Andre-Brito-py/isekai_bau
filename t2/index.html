@@ -1073,6 +1073,13 @@
  - Regra: evolução nova = corpo novo desenhado (nunca só enfeite em cima).
 v85 — EVOLUÇÕES MAIS FORTES NO FOCO: cada forma ganha bônus maiores no que ela é (Escriba MAG+12 PM+30; Farol PV+60 DEF/RES+8; Vão ATQ+9 VEL+5; Cap7: Guardião PV+70, Tempestade MAG+11, Labirinto VEL+6, Boca ATQ+12, Bibliotecário PM+36, Palimpsesto MAG+13; Lume: Lareira PV+44 RES+8, Alvorada MAG+12). A tela de evolução mostra o resumo. ESC3 dos inimigos subiu um pouco para manter o desafio (bots c/ equipamento: vitórias com 15–30% de vida; Farol no Cap10 mais folgado).
 
+v91 — FORMAS NOVAS DE MAGIA (pedido do usuário: "além de dardo, onda e véu... eco, maré, etc."; formas_novas.js): os
+ sinais do círculo ganham ECO (Cap. 4: um alvo, ressoa e bate de novo com 55%), MARÉ (Cap. 5: todos, mais fraca que a
+ Onda mas não é pesada; MOLHA = a vez atrasa 25; com Geada, gela), LANÇA (Cap. 7: um alvo, força 2.3, +2 de quebra,
+ pesada) e CORO (Cap. 8: o véu em todo o grupo com 60%, pesada). Liberadas ao abrir a mesa/Grimório (novasFormas, o
+ Catálogo anuncia cada uma). Cada forma nova tem forma-base (fb: dardo/onda/véu) e o resto do código (gatilho, fx,
+ véus) usa fb(s). Sinais próprios em SINAL3.
+
 =====================================================================
 -->
 <style>
@@ -7947,6 +7954,8 @@ const FORMA3 = {
   onda: { nm: 'Onda', tgt: 'all', mp: 9, pow: 0.85, w: 'pesada', d: 'todos os inimigos (ação pesada)' },
   veu: { nm: 'Véu', tgt: 'ally', mp: 6, pow: 0, w: 'leve', d: 'um aliado (ação leve)' }
 };
+// forma-base: as formas novas (Eco, Maré, Lança, Coro) se comportam como Dardo, Onda ou Véu + um extra (formas_novas.js)
+function fb(s) { const F = FORMA3[s.f]; return (F && F.base) || s.f; }
 // fusões: chave em ordem alfabética
 const FUS3 = {
   'brasa+geada': { nm: 'Vapor', col: '#e8e8f0', cols: ['#ffffff', '#c8d8e8', '#f0a070'], hits: [['fogo', 0.6], ['gelo', 0.6]], d: 'escalda: um golpe de fogo E um de gelo (pega duas fraquezas)', veu: 'vapor', nota: '"Brasa + Geada = Vapor. Escalda. Bate duas vezes. Não tente em casa."' },
@@ -7978,9 +7987,9 @@ function pagina3(s) {
   const base = fus ? fus : EL3[e1];
   const nmEl = fus ? fus.nm : EL3[e1].nm + (dob ? ' Dobrada' : '');
   let mp = F.mp + (e1 === 'fuligem' || e2 === 'fuligem' ? 1 : 0) + (fus ? 4 : 0); if (dob) mp = Math.round(mp * 1.6); if (fus && fus.mpX) mp = Math.round(mp * fus.mpX);
-  const veuK = s.f === 'veu' ? (fus ? fus.veu : e1) : null;
-  const d = s.f === 'veu' ? (VEU3[veuK].nm + ': ' + VEU3[veuK].d + (dob ? ' (dobrado: mais forte)' : '')) : (fus ? fus.d : EL3[e1].d) + ' · ' + F.d + (dob ? ' · dobrado: 50% mais forte' : '');
-  return { nm: nmEl + ' · ' + (s.f === 'veu' ? VEU3[veuK].nm : F.nm), mp, d, tgt: F.tgt, w: F.w, fus, dob, base, col: (fus || EL3[e1]).col, cols: (fus || EL3[e1]).cols, veuK };
+  const veuK = fb(s) === 'veu' ? (fus ? fus.veu : e1) : null;
+  const d = fb(s) === 'veu' ? (VEU3[veuK].nm + ': ' + VEU3[veuK].d + (dob ? ' (dobrado: mais forte)' : '')) : (fus ? fus.d : EL3[e1].d) + ' · ' + F.d + (dob ? ' · dobrado: 50% mais forte' : '');
+  return { nm: nmEl + ' · ' + (fb(s) === 'veu' ? VEU3[veuK].nm : F.nm), mp, d, tgt: F.tgt, w: F.w, fus, dob, base, col: (fus || EL3[e1]).col, cols: (fus || EL3[e1]).cols, veuK };
 }
 // monta o feitiço de batalha de uma página
 function feitico3(s) {
@@ -7988,9 +7997,9 @@ function feitico3(s) {
   return { nm: P.nm, mp: P.mp, w: P.w, tgt: P.tgt, d: P.d, run: async (m, t) => {
     const ehBau = m.id === 'bau';
     if (ehBau) await bauConjura(m, P.col, 14); else sfx('rune');
-    if (s.f === 'veu') { await veu3(m, t, P, k); m.pose = null; return; }
-    const alvos = s.f === 'onda' ? alive(BT.foes) : [t];
-    if (s.f === 'dardo') await projectile(ehBau ? { _pt: [m.x, m.y - m.h + 6] } : m, t, P.col, 16, { r: 4, trail: P.cols });
+    if (fb(s) === 'veu') { await veu3(m, t, P, k); m.pose = null; return; }
+    const alvos = fb(s) === 'onda' ? alive(BT.foes) : [t];
+    if (fb(s) === 'dardo') await projectile(ehBau ? { _pt: [m.x, m.y - m.h + 6] } : m, t, P.col, 16, { r: 4, trail: P.cols });
     else { sfx('geada'); const [x0, y0] = unitCenter(m); await tw(20, p => { for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, r = p * 150; bx.fillStyle = P.cols[i % P.cols.length]; bx.fillRect(Math.round(x0 + r + Math.cos(a) * 10), Math.round(y0 + Math.sin(a) * 20 * (1 - p * 0.5)), 2, 2); } }); }
     await golpe3(m, alvos, P, F, s, k);
     if (BT.eco) { BT.eco = false; await wait(10); callout('Eco!', '#d0a8ff', 30); await golpe3(m, alvos.filter(a => a.hp > 0), P, F, s, k * 0.5); }
@@ -8009,7 +8018,7 @@ async function golpe3(m, alvos, P, F, s, k) {
     const st = fus ? fus.st : e1 === 'geada' ? 'frio' : e1 === 'brasa' ? (Math.random() < 0.35 ? 'queimado' : null) : null;
     if (st === 'frio') { t.st.frio = 2; popNum(x, y - 22, 'GELADO', '#bff0ff'); }
     if (st === 'queimado') { t.st.queimado = 3; popNum(x, y - 22, 'QUEIMADO', '#ffa94d'); }
-    const ton = fus ? fus.tonto : e1 === 'fuligem' ? (s.f === 'onda' ? 0.5 : 1) : 0;
+    const ton = fus ? fus.tonto : e1 === 'fuligem' ? (fb(s) === 'onda' ? 0.5 : 1) : 0;
     if (ton && Math.random() < ton) { t.ct = Math.max(0, t.ct - 40); popNum(x, y - 30, 'TONTO', '#d0a8ff'); }
   }
   if ((fus && fus.dreno) || e1 === 'seiva' && !fus) healUnit(m, Math.max(1, Math.round(drenado * ((fus && fus.dreno) || 0.5))));
@@ -8764,12 +8773,12 @@ feitico3 = (function (_f3) { return function (s) {
   R.run = async (m, t) => {
     const ehBau = m.id === 'bau';
     if (ehBau) await bauConjura(m, P.col, 14); else sfx('rune');
-    if (s.f === 'veu') { await veuMagia(t, P.veuK, P.cols); await veu3(m, t, P, k); m.pose = null; return; }
-    const alvos = s.f === 'onda' ? alive(BT.foes) : [t], de = ehBau ? { _pt: [m.x, m.y - m.h + 6] } : m;
-    if (s.f === 'dardo') { await projetilMagia(de, t, tipo, 18); await impactoMagia(t, tipo, P.dob || !!P.fus); }
+    if (fb(s) === 'veu') { await veuMagia(t, P.veuK, P.cols); await veu3(m, t, P, k); m.pose = null; return; }
+    const alvos = fb(s) === 'onda' ? alive(BT.foes) : [t], de = ehBau ? { _pt: [m.x, m.y - m.h + 6] } : m;
+    if (fb(s) === 'dardo') { await projetilMagia(de, t, tipo, 18); await impactoMagia(t, tipo, P.dob || !!P.fus); }
     else { await ondaMagia(m, tipo); for (const a of alvos) impactoMagia(a, tipo, false); await wait(10); }
     await golpe3(m, alvos, P, F, s, k);
-    if (BT.eco) { BT.eco = false; await wait(10); callout('Eco!', '#d0a8ff', 30); const vivos = alvos.filter(a => a.hp > 0); if (vivos.length) { if (s.f === 'dardo') await impactoMagia(vivos[0], tipo, false); await golpe3(m, vivos, P, F, s, k * 0.5); } }
+    if (BT.eco) { BT.eco = false; await wait(10); callout('Eco!', '#d0a8ff', 30); const vivos = alvos.filter(a => a.hp > 0); if (vivos.length) { if (fb(s) === 'dardo') await impactoMagia(vivos[0], tipo, false); await golpe3(m, vivos, P, F, s, k * 0.5); } }
     m.pose = null;
   };
   return R;
@@ -11434,7 +11443,7 @@ function gatOk() { return !!(G.grim && G.grim.gatilho); }
 // descrição e custo
 { const _pg = pagina3; pagina3 = function (s) {
   const P = _pg(s);
-  if (s.g) { P.nm = 'Gatilho: ' + P.nm; P.mp += 2; P.w = 'leve'; P.d += s.f === 'veu' ? ' · GATILHO: sai sozinho quando o aliado cair abaixo de 35% (30% mais forte). Armar é leve.' : ' · GATILHO: dispara quando o inimigo agir, antes do golpe dele (30% mais forte, +1 quebra; +2 se ele estiver preparando golpe). Armar é leve.'; }
+  if (s.g) { P.nm = 'Gatilho: ' + P.nm; P.mp += 2; P.w = 'leve'; P.d += fb(s) === 'veu' ? ' · GATILHO: sai sozinho quando o aliado cair abaixo de 35% (30% mais forte). Armar é leve.' : ' · GATILHO: dispara quando o inimigo agir, antes do golpe dele (30% mais forte, +1 quebra; +2 se ele estiver preparando golpe). Armar é leve.'; }
   return P;
 }; }
 // armar em vez de lançar
@@ -11448,7 +11457,7 @@ function gatOk() { return !!(G.grim && G.grim.gatilho); }
     if (m.id === 'bau') await bauConjura(m, P.col, 10); else sfx('rune');
     await tw(22, p => { for (let i = 0; i < 3; i++) { const a = p * 6 + i * 2.1; bx.strokeStyle = P.col; bx.globalAlpha = 1 - p * 0.4; bx.beginPath(); bx.moveTo(x + Math.cos(a) * 14, y - 30 + Math.sin(a) * 5); bx.lineTo(x + Math.cos(a + 2.1) * 14, y - 30 + Math.sin(a + 2.1) * 5); bx.stroke(); bx.globalAlpha = 1; } fxRing(x, y - 30, 16 * (1 - p) + 4, P.col, p); });
     BT.gatilhos.push({ m, s, t: alvo, col: P.col, k: P.dob ? 1.5 : 1 }); m.pose = null;
-    callout('Runa armada: ' + (s.f === 'veu' ? 'espera o aliado precisar' : 'espera o inimigo se mexer'), P.col, 60);
+    callout('Runa armada: ' + (fb(s) === 'veu' ? 'espera o aliado precisar' : 'espera o inimigo se mexer'), P.col, 60);
   } };
 }; }
 // dispara: inimigo vai agir
@@ -11459,20 +11468,20 @@ async function dispararGatilho(G0, alvoAgora) {
   const [x, y] = unitCenter(alvoAgora);
   callout('GATILHO!', G0.col, 50); sfx('crit'); flashW(2);
   await tw(10, p => { fxRing(x, y - 30, 4 + p * 26, G0.col, 1 - p); fxRing(x, y, 4 + p * 18, '#ffffff', 1 - p); });
-  if (G0.s.f === 'veu') { await veu3(m, alvoAgora, P, G0.k * 1.3); return; }
+  if (fb(G0.s) === 'veu') { await veu3(m, alvoAgora, P, G0.k * 1.3); return; }
   BT._gatBrk = alvoAgora.charge ? 2 : 1;
-  try { await golpe3(m, G0.s.f === 'onda' ? alive(BT.foes) : [alvoAgora], P, F, G0.s, G0.k * 1.3); } finally { BT._gatBrk = 0; }
+  try { await golpe3(m, fb(G0.s) === 'onda' ? alive(BT.foes) : [alvoAgora], P, F, G0.s, G0.k * 1.3); } finally { BT._gatBrk = 0; }
 }
 { const _hfG = hitFoe; hitFoe = function (a, t, pow, o = {}) { if (BT._gatBrk) o = { ...o, brk: (o.brk || 1) + BT._gatBrk }; return _hfG(a, t, pow, o); }; }
 { const _ftG = foeTurn; foeTurn = async function (e) {
-  const gs = (BT.gatilhos || []).filter(g => g.s.f !== 'veu' && (g.t === e || g.t === 'all'));
+  const gs = (BT.gatilhos || []).filter(g => fb(g.s) !== 'veu' && (g.t === e || g.t === 'all'));
   for (const g of gs) { if (e.hp <= 0) break; await dispararGatilho(g, e); }
   if (e.hp <= 0) return;
   return _ftG(e);
 }; }
 { const _fsG = foeStrike; foeStrike = async function (e, t, pow, o = {}) {
   const r = await _fsG(e, t, pow, o);
-  if (t && t.hp > 0 && t.hp < t.mhp * 0.35) { const g = (BT.gatilhos || []).find(g => g.s.f === 'veu' && g.t === t); if (g) await dispararGatilho(g, t); }
+  if (t && t.hp > 0 && t.hp < t.mhp * 0.35) { const g = (BT.gatilhos || []).find(g => fb(g.s) === 'veu' && g.t === t); if (g) await dispararGatilho(g, t); }
   return r;
 }; }
 // a runa armada girando em cima do alvo
@@ -11491,7 +11500,7 @@ async function dispararGatilho(G0, alvoAgora) {
   if (!ok || !gatOk()) return ok;
   const Gm = grim(), s = Gm.slots[i];
   const c = await list({ x: 40, y: 30, w: 170, title: 'Runa de Gatilho', items: [{ label: 'Sem gatilho (lança na hora)' }, { label: 'Com GATILHO (fica armado)', col: '#ffd060' }],
-    desc: j => j ? (s.f === 'veu' ? 'Sai sozinho quando o aliado cair abaixo de 35%. Armar é leve, +2 PM, 30% mais forte.' : 'Dispara quando o inimigo agir, antes do golpe dele: 30% mais forte, +1 quebra (+2 se ele estiver preparando golpe). Armar é leve, +2 PM.') : 'O feitiço sai na hora, como sempre.', descY: 150 });
+    desc: j => j ? (fb(s) === 'veu' ? 'Sai sozinho quando o aliado cair abaixo de 35%. Armar é leve, +2 PM, 30% mais forte.' : 'Dispara quando o inimigo agir, antes do golpe dele: 30% mais forte, +1 quebra (+2 se ele estiver preparando golpe). Armar é leve, +2 PM.') : 'O feitiço sai na hora, como sempre.', descY: 150 });
   if (c === 1) { s.g = true; sfx('rune'); await say(`* Você desenha a Runa de Gatilho no canto da página: {y}${pagina3(s).nm}{/}. Agora ela espera.`); }
   else delete s.g;
   save2(); return ok;
@@ -13239,7 +13248,7 @@ const RESSON = {
   return r;
 }; }
 // a descrição do véu avisa da ressonância
-{ const _pg5 = pagina3; pagina3 = function (s) { const P = _pg5(s); if (G.flags && G.flags.resson && s.f === 'veu' && !s.g) P.d += ' · na Rita ou na Lume: RESSONÂNCIA (o próximo golpe dela ganha o elemento, +30%)'; return P; }; }
+{ const _pg5 = pagina3; pagina3 = function (s) { const P = _pg5(s); if (G.flags && G.flags.resson && fb(s) === 'veu' && !s.g) P.d += ' · na Rita ou na Lume: RESSONÂNCIA (o próximo golpe dela ganha o elemento, +30%)'; return P; }; }
 
 // ---------- a VELA INTERIOR (Lume) ----------
 TECH2.velaInterior = { nm: 'Vela Interior', cost: 40, tgt: 'self', w: 'normal', d: 'A luz que ninguém acende por ela: cura 20% do grupo, tira os maus estados e deixa o grupo TEIMOSO (não esquece nem treme) por 3 vezes. +10 Tensão.', run: async (m) => {
@@ -21855,6 +21864,75 @@ async function mocaAparece(nome) {
   await tw(110, () => desenha(1, 44));
   await tw(30, p => desenha(1 - p, 44 - p * 40));
 }
+
+// ================= FORMAS NOVAS DE MAGIA (pedido do usuário: "além de dardo, onda e véu... eco, maré, etc.") =================
+// Os SINAIS do círculo ganham quatro formas novas, liberadas com a história (o Catálogo avisa na mesa de escrever):
+//  ECO (Cap. 4): um inimigo; o feitiço RESSOA e bate de novo no mesmo alvo com 55% da força.
+//  MARÉ (Cap. 5): todos os inimigos, mais fraco que a Onda, mas NÃO é pesada; MOLHA (a vez deles atrasa; com Geada, gela).
+//  LANÇA (Cap. 7): um inimigo; perfura: muito forte e quebra +2 de escudo. Ação pesada.
+//  CORO (Cap. 8): o véu em TODO o grupo, com 60% da força. Ação pesada.
+// Cada forma nova tem uma forma-base (fb): o resto do código (gatilho, fx, véus) trata como Dardo/Onda/Véu.
+Object.assign(FORMA3, {
+  eco: { nm: 'Eco', base: 'dardo', tgt: 'one', mp: 8, pow: 1.15, w: 'normal', d: 'um inimigo; o feitiço ressoa e bate de novo (55%)' },
+  mare: { nm: 'Maré', base: 'onda', tgt: 'all', mp: 8, pow: 0.6, w: 'normal', d: 'todos os inimigos, mais fraco, mas não é pesada; MOLHA (a vez deles atrasa; com Geada, gela)' },
+  lanca: { nm: 'Lança', base: 'dardo', tgt: 'one', mp: 11, pow: 2.3, w: 'pesada', d: 'um inimigo; perfura: muito forte e quebra +2 de escudo (ação pesada)' },
+  coro: { nm: 'Coro', base: 'veu', tgt: 'self', mp: 13, pow: 0, w: 'pesada', d: 'o véu em TODO o grupo, com 60% da força (ação pesada)' }
+});
+Object.assign(SINAL3, {
+  eco: ['..#..', '.#.#.', '#.#.#', '.#.#.', '..#..'],
+  mare: ['.#...', '#.#.#', '...#.', '.#...', '#.#.#'],
+  lanca: ['..#..', '.###.', '..#..', '..#..', '.#.#.'],
+  coro: ['#.#.#', '#.#.#', '.#.#.', '.....', '.....']
+});
+const FORMA_CAP = { eco: 4, mare: 5, lanca: 7, coro: 8 };
+const FORMA_NOTA = {
+  eco: '[Sinal novo aceito pelo círculo: ECO. O feitiço bate e volta, como grito em poço. A Ofélia anotou: "parece a minha biblioteca vazia."]',
+  mare: '[Sinal novo: MARÉ. Pega todo mundo, mais fraco que a Onda, mas não cansa. E molha: quem está molhado demora a agir.]',
+  lanca: '[Sinal novo: LANÇA. Um só alvo, atravessado. Quebra escudo. A Rita perguntou se pode cobrar direitos autorais.]',
+  coro: '[Sinal novo: CORO. O véu cobre o grupo inteiro, um pouco mais fraco em cada um. Feitiço de gente que se cuida.]'
+};
+async function novasFormas() {
+  const Gm = grim(), c = capAtual(), novas = [];
+  for (const [k, n] of Object.entries(FORMA_CAP)) if (c >= n && !Gm.forms.includes(k)) { Gm.forms.push(k); novas.push(k); }
+  for (const k of novas) { sfx('rune'); await say(FORMA_NOTA[k], 'cat'); }
+}
+{ const _mdF = mesaDeEscrever; mesaDeEscrever = async function () { try { await novasFormas(); } catch (e) {} return _mdF.apply(this, arguments); }; }
+{ const _agF = abrirGrimorio; abrirGrimorio = async function () { try { await novasFormas(); } catch (e) {} return _agF.apply(this, arguments); }; }
+// descrição da página
+{ const _pgF = pagina3; pagina3 = function (s) { const P = _pgF(s); if (s.f === 'coro') { P.nm = P.nm.replace(/ · /, ' · Coro de '); P.d += ' · em TODO o grupo, 60% da força (ação pesada)'; } return P; }; }
+// Lança: +2 de quebra
+{ const _hfF = hitFoe; hitFoe = function (a, t, pow, o = {}) { if (BT && BT._lancaBrk) o = { ...o, brk: (o.brk || 1) + BT._lancaBrk }; return _hfF(a, t, pow, o); }; }
+// Eco (ressoa), Maré (molha), Lança (quebra)
+{ const _g3F = golpe3; golpe3 = async function (m, alvos, P, F, s, k) {
+  if (s.f === 'lanca') BT._lancaBrk = 2;
+  try { await _g3F(m, alvos, P, F, s, k); } finally { BT._lancaBrk = 0; }
+  if (s.f === 'eco' && !BT._ecoForma) {
+    const v = alvos.filter(a => a.hp > 0);
+    if (v.length) {
+      await wait(12); sfx('rune'); callout('...ressoa', '#d0a8ff', 30);
+      for (const a of v) { const [x, y] = unitCenter(a); await tw(12, p => { fxRing(x, y, 4 + p * 18, P.col, 1 - p); fxRing(x, y, 2 + p * 10, '#ffffff', 1 - p); }); }
+      BT._ecoForma = true; try { await _g3F(m, v, P, F, s, k * 0.55); } finally { BT._ecoForma = false; }
+    }
+  }
+  if (s.f === 'mare') for (const a of alvos) {
+    if (a.hp <= 0) continue; const [x, y] = unitCenter(a);
+    a.ct = Math.max(0, (a.ct || 0) - 25); popNum(x, y - 34, 'MOLHADO', '#7ab8f0');
+    for (let i = 0; i < 6; i++) part({ x: x - 10 + Math.random() * 20, y: y - 6, vy: 0.6 + Math.random() * 0.6, life: 24, col: '#7ab8f0' });
+    if (s.e.includes('geada') && a.st) { a.st.frio = 2; popNum(x, y - 42, 'GELADO', '#bff0ff'); }
+  }
+}; }
+// Coro: o véu em todo o grupo (o gatilho continua tratando como véu num aliado)
+feitico3 = (function (_f) { return function (s) {
+  const R = _f(s); if (s.f !== 'coro' || s.g) return R;
+  const P = pagina3(s), k = P.dob ? 1.5 : 1; R.tgt = 'self';
+  R.run = async (m) => {
+    if (m.id === 'bau') await bauConjura(m, P.col, 14); else sfx('rune');
+    callout('Coro!', P.col, 40);
+    for (const u of alive(BT.party)) { if (typeof veuMagia === 'function') await veuMagia(u, P.veuK, P.cols); await veu3(m, u, P, k * 0.6); }
+    m.pose = null;
+  };
+  return R;
+}; })(feitico3);
 
 boot2();
 </script>

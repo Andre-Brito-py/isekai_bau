@@ -82,7 +82,7 @@ const RESSON = {
   return r;
 }; }
 // a descrição do véu avisa da ressonância
-{ const _pg5 = pagina3; pagina3 = function (s) { const P = _pg5(s); if (G.flags && G.flags.resson && s.f === 'veu' && !s.g) P.d += ' · na Rita ou na Lume: RESSONÂNCIA (o próximo golpe dela ganha o elemento, +30%)'; return P; }; }
+{ const _pg5 = pagina3; pagina3 = function (s) { const P = _pg5(s); if (G.flags && G.flags.resson && fb(s) === 'veu' && !s.g) P.d += ' · na Rita ou na Lume: RESSONÂNCIA (o próximo golpe dela ganha o elemento, +30%)'; return P; }; }
 
 // ---------- a VELA INTERIOR (Lume) ----------
 TECH2.velaInterior = { nm: 'Vela Interior', cost: 40, tgt: 'self', w: 'normal', d: 'A luz que ninguém acende por ela: cura 20% do grupo, tira os maus estados e deixa o grupo TEIMOSO (não esquece nem treme) por 3 vezes. +10 Tensão.', run: async (m) => {

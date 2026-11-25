@@ -114,12 +114,12 @@ feitico3 = (function (_f3) { return function (s) {
   R.run = async (m, t) => {
     const ehBau = m.id === 'bau';
     if (ehBau) await bauConjura(m, P.col, 14); else sfx('rune');
-    if (s.f === 'veu') { await veuMagia(t, P.veuK, P.cols); await veu3(m, t, P, k); m.pose = null; return; }
-    const alvos = s.f === 'onda' ? alive(BT.foes) : [t], de = ehBau ? { _pt: [m.x, m.y - m.h + 6] } : m;
-    if (s.f === 'dardo') { await projetilMagia(de, t, tipo, 18); await impactoMagia(t, tipo, P.dob || !!P.fus); }
+    if (fb(s) === 'veu') { await veuMagia(t, P.veuK, P.cols); await veu3(m, t, P, k); m.pose = null; return; }
+    const alvos = fb(s) === 'onda' ? alive(BT.foes) : [t], de = ehBau ? { _pt: [m.x, m.y - m.h + 6] } : m;
+    if (fb(s) === 'dardo') { await projetilMagia(de, t, tipo, 18); await impactoMagia(t, tipo, P.dob || !!P.fus); }
     else { await ondaMagia(m, tipo); for (const a of alvos) impactoMagia(a, tipo, false); await wait(10); }
     await golpe3(m, alvos, P, F, s, k);
-    if (BT.eco) { BT.eco = false; await wait(10); callout('Eco!', '#d0a8ff', 30); const vivos = alvos.filter(a => a.hp > 0); if (vivos.length) { if (s.f === 'dardo') await impactoMagia(vivos[0], tipo, false); await golpe3(m, vivos, P, F, s, k * 0.5); } }
+    if (BT.eco) { BT.eco = false; await wait(10); callout('Eco!', '#d0a8ff', 30); const vivos = alvos.filter(a => a.hp > 0); if (vivos.length) { if (fb(s) === 'dardo') await impactoMagia(vivos[0], tipo, false); await golpe3(m, vivos, P, F, s, k * 0.5); } }
     m.pose = null;
   };
   return R;
