@@ -726,6 +726,12 @@
    T3: ela pode ganhar um CORPO próprio (a figura de âmbar) SEM perder a ligação: continua falando de dentro e analisando.
    Relação: chama o baú de forma própria, se preocupa, tem ciúme cômico (Lume é o romance principal e Rita o triângulo:
    ela comenta, nunca rouba o arco). O baú continua decidindo e lutando; ela é parceira, não muleta.
+   LENDÁRIA COMO A MAGIA ESPACIAL (pedido do usuário): uma habilidade com ALMA, NOME e vontade, que pensa junto com o
+   dono, é coisa de lenda neste mundo: nenhum livro da Coroa registra; só aparece em canção velha de taberna, no mesmo
+   verso dos dobradores de espaço. Implementado em cap10b (nomeDaMoca10): o Catálogo registra "você agora carrega duas
+   lendas, @. Esconda as duas." Usar como a magia espacial: quem percebe reage com espanto ou cobiça (estudiosos, a
+   Iolanda, a Coroa; na T3 quem caça dobradores também cobiça "a voz que mora no baú"); o grupo esconde; cada nova
+   função dela é tratada como proeza.
  - A PENSÃO SEM REMETENTE (opcional com viagem): Dona Cida (Largo) -> Dona Ilda (Candeia: 30 envelopes, "Lamento" na
    letra pequena do bilhete) -> Dona Hortênsia (Cidade Alta: o lacre da chama pequena é o do Conde Ulrico; "Contabilidade,
    senhora. Eu sei exatamente quanto cada luz custou."). Recompensa: Lacre Partido (+12 PV, +3 RES).
@@ -19239,6 +19245,8 @@ async function nomeDaMoca10(e) {
   await say('* Uma luz âmbar sai da sua tampa. Morna, de janela de casa vista de longe. Os colchetes do Catálogo derretem e viram âmbar. As duas vozes viram uma.');
   await say('[' + nome + ' e o Catálogo: fusão completa. Primeira leitura: O Coração do Farol. Ele está com medo. Ele foi feito para ter fome e nunca teve nada que fosse dele.]', 'cat');
   await say('{o}eu li ele, @. agora é a gente que sabe onde bate.{/}', 'eco8');
+  await say('[Nota para o registro, depois da luta: uma alma com nome morando DENTRO de uma habilidade, pensando junto. Não existe isso em nenhum livro da Coroa. Só em canção velha de taberna, no mesmo verso de quem dobra o espaço.]', 'cat');
+  await say('[Você agora carrega duas lendas, @. Esconda as duas.]', 'cat');
   e.shield = 0; breakFoe(e); e.weak = ['gelo', 'mordida', 'corte']; e.known = {};
   for (const m of alive(BT.party)) healUnit(m, Math.round(m.mhp * 0.3));
   BT.leituraTotal = true;

@@ -99,6 +99,8 @@ async function nomeDaMoca10(e) {
   await say('* Uma luz âmbar sai da sua tampa. Morna, de janela de casa vista de longe. Os colchetes do Catálogo derretem e viram âmbar. As duas vozes viram uma.');
   await say('[' + nome + ' e o Catálogo: fusão completa. Primeira leitura: O Coração do Farol. Ele está com medo. Ele foi feito para ter fome e nunca teve nada que fosse dele.]', 'cat');
   await say('{o}eu li ele, @. agora é a gente que sabe onde bate.{/}', 'eco8');
+  await say('[Nota para o registro, depois da luta: uma alma com nome morando DENTRO de uma habilidade, pensando junto. Não existe isso em nenhum livro da Coroa. Só em canção velha de taberna, no mesmo verso de quem dobra o espaço.]', 'cat');
+  await say('[Você agora carrega duas lendas, @. Esconda as duas.]', 'cat');
   e.shield = 0; breakFoe(e); e.weak = ['gelo', 'mordida', 'corte']; e.known = {};
   for (const m of alive(BT.party)) healUnit(m, Math.round(m.mhp * 0.3));
   BT.leituraTotal = true;
