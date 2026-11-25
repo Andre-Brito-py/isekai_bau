@@ -68,7 +68,7 @@ LUZ_GAL.mina = MI.lampioes;
       ...CA.minaDoor.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: entrarMina })),
       ...CA.pensaoDoor.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: pensao })),
       marcoEnt(...CA.marco),
-      ...CA.parados.map(([x, y], i) => morador(i % 2 ? 'mineira' : 'mineiro', x, y, Object.assign(sonambulo(x, y, i), { talk: () => falaParado(i) }))),
+      ...CA.parados.map(([x, y], i) => morador('parado' + (i % 7), x, y, Object.assign(sonambulo(x, y, i), { talk: () => falaParado(i) }))),
       morador('menina', ...CA.crianca, { rotina: rot([28, 13, 'brincar', 400, 'down'], [26, 14, 'olhar', 300, 'left']), talk: falaZezinha }),
       { t: 'sign', x: CA.placa[0], y: CA.placa[1], h: 30, talk: async () => { await say('* "MINA DE CANDEIA — FECHADA POR ORDEM DA COROA. TRANSFERIDOS: ENTRADA PELA CAPELA. TURNO DA NOITE: o Capataz responde."'); } },
       { t: 'sign', x: CA.poco[0], y: CA.poco[1] - 1, h: 30, talk: pocoSeco }, { t: 'sign', x: CA.poco[0] + 1, y: CA.poco[1] - 1, h: 30, talk: pocoSeco },
@@ -173,6 +173,7 @@ const PARADO_FALA = [
   ['Moço, o senhor viu meu marido? Ele tá do meu lado? Ah. Tá. Obrigada.', '(sonâmbulo) ...o vidro do poço... tem coisa brilhando lá no fundo... de noite...']
 ];
 async function falaParado(i) {
+  PARADO_I = i % 7;
   const F = PARADO_FALA[i % PARADO_FALA.length];
   if (ehNoite()) { await say('* De noite, os moradores andam devagar, de olhos meio abertos, e cochicham.'); await say(F[1], 'parado'); }
   else await say(F[0], 'parado');

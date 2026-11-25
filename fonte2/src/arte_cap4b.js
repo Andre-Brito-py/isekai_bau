@@ -54,7 +54,7 @@ Object.assign(HUMS, {
 Object.assign(WHO, {
   ilda: { name: () => 'Dona Ilda', portrait: () => portHum('ilda'), voice: voz(330, 'blipTri'), col: '#e8e0ff' },
   menina: { name: () => 'Zezinha', portrait: () => portHum('menina'), voice: voz(620) },
-  parado: { name: () => 'Morador', portrait: () => portHum('mineiro'), voice: voz(220, 'blipLow'), col: '#c8c8d8' },
+  parado: { name: () => PARADO_FEM[PARADO_I] ? 'Moradora' : 'Morador', portrait: () => portHum('parado' + PARADO_I), voice: () => sfx(PARADO_FEM[PARADO_I] ? 'blip' : 'blipLow', PARADO_FEM[PARADO_I] ? 330 : 220), col: '#c8c8d8' },
   capataz: { name: () => 'Capataz', voice: voz(110, 'blipLow'), fx: 'shake', col: '#ffd8a0', edge: '#c88040' }
 });
 
@@ -139,3 +139,18 @@ function capatazArt(f, fase, armando) {
   P.line(cx - 22, 46 + resp, cx - 34, 66 + resp, Fe[2], 4); for (let i = 0; i < 5; i++) { P.rect(cx - 36 + (i % 2), 68 + i * 5 + resp, 3, 3, Fe[3]); if (i % 2) P.rect(cx - 40, 69 + i * 5 + resp, 4, 3, '#e8dcc0'); }
   return CAP_C[key] = P.outline().canvas();
 }
+
+// ---------- os moradores parados de Candeia: cada um com a própria cara (pedido do usuário: "todos com a mesma foto") ----------
+// 0 o da chave · 1 a do balde · 2 o velho do sino da mina · 3 a "importante" da chave grande · 4 o velho do chapéu ·
+// 5 a que esquece o dia · 6 a que procura o marido. Mesmo jeito de serra, roupas e cabelos diferentes.
+let PARADO_I = 0;
+const PARADO_FEM = [false, true, false, true, false, true, true];
+Object.assign(HUMS, {
+  parado0: { h: 50, skin: '#a8704a', hair: '#2a2420', top: '#6a5a40', bottom: '#3a3428', hat: '#c8a040', beard: true },
+  parado1: { h: 46, skin: '#c8906a', hair: '#6a3a1a', hairStyle: 'longo', top: '#5a6a5a', bottom: '#3a3428', apron: '#8a7a60' },
+  parado2: { h: 48, skin: '#b88060', hair: '#c8c8c8', top: '#4a5a7a', bottom: '#2a2a3a', beard: true, coat: '#3a4a6a' },
+  parado3: { h: 47, skin: '#e0b090', hair: '#1a1418', hairStyle: 'rabo', top: '#6a3a7a', bottom: '#3a2440', acc: '#e0c060' },
+  parado4: { h: 49, skin: '#9a6040', hair: '#e8e8e0', top: '#7a4a2a', bottom: '#3a3020', hat: '#6a4a2a' },
+  parado5: { h: 45, skin: '#d8a078', hair: '#b8482a', hairStyle: 'longo', top: '#b8902a', bottom: '#4a3a28', apron: '#d8d0b8' },
+  parado6: { h: 46, skin: '#8a5a3a', hair: '#3a2a3a', hairStyle: 'curto', top: '#2a6a6a', bottom: '#2a3a3a', acc: '#c8c8d8' }
+});

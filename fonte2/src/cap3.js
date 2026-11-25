@@ -33,7 +33,7 @@ Object.assign(WHO, {
   poeta: { name: () => 'Poeta da Ponte', portrait: () => portHum('poeta'), voice: voz(420, 'blipTri') },
   guardaA: { name: () => 'Guarda de Auren', portrait: () => portHum('guardaA'), voice: voz(220, 'blipLow') },
   fatima: { name: () => 'Dona Fátima', portrait: () => portHum('fatima'), voice: voz(520) },
-  feira: { name: () => 'Feirante', portrait: () => portHum('feiraA'), voice: voz(480) },
+  feira: { name: () => 'Feirante', portrait: () => portHum(['feiraA', 'feiraB', 'feiraC'][FEIRA_I] || 'feiraA'), voice: voz(480) },
   povo: { name: () => 'Gente da festa', portrait: () => portHum('povo1'), voice: voz(500) },
   dito: { name: () => 'Pavio', portrait: () => portHum('dito'), voice: voz(380), col: '#e8e0d8' }
 });
@@ -235,7 +235,8 @@ async function chegaAuren() {
 // ----- Auren -----
 async function falaGuarda() { await say(G.flags.c3Base ? 'Três dias pro Festival. Depois disso, a cidade não apaga mais. Palavra do Acendedor-Mor.' : pickOne(['A Avenida do Festival só abre na noite da festa. Ordem de cima.', 'Bagagem não passa sem dono. Você tem dono, bagagem?', 'Nunca vi a cidade tão acesa. Dá até saudade de estrela.']), 'guardaA'); }
 async function falaPoeta() { await say(pickOne(['Escrevi um soneto pro escuro. Ninguém quis ouvir. Disseram que dá azar falar dele em semana de festa.', 'Antes dos postes novos, a gente via a Via Láctea daqui da ponte. Agora a gente vê poste.', 'A tinta da Dona Iolanda é a melhor da capital. Ela diz que tinta boa leva um pouco de quem escreve.']), 'poeta'); }
-const falaFeira = i => async () => { await say([pickOne(['Fruta da serra! Fresquinha! ...Bom, fresca. ...Bom, fruta.', 'Na festa eu vendo maçã do amor acesa. Tem uma vela dentro. Não come a vela.']), pickOne(['Livro usado, dois cobres! Esse aqui é de receita de tinta. Ah, a Dona Iolanda tem um igual, na papelaria.', 'Vendo almanaque. O deste ano diz que o inverno vai ser escuro. Mandaram recolher.']), pickOne(['Lanterna de papel, pra festa! Todo mundo tem que andar aceso. É bonito. É obrigatório. Mas é bonito.', 'Cinco lanternas, um cobre cada. Pra moça que brilha, eu faço três.'])][i], 'feira'); };
+let FEIRA_I = 0;
+const falaFeira = i => async () => { FEIRA_I = i; await say([pickOne(['Fruta da serra! Fresquinha! ...Bom, fresca. ...Bom, fruta.', 'Na festa eu vendo maçã do amor acesa. Tem uma vela dentro. Não come a vela.']), pickOne(['Livro usado, dois cobres! Esse aqui é de receita de tinta. Ah, a Dona Iolanda tem um igual, na papelaria.', 'Vendo almanaque. O deste ano diz que o inverno vai ser escuro. Mandaram recolher.']), pickOne(['Lanterna de papel, pra festa! Todo mundo tem que andar aceso. É bonito. É obrigatório. Mas é bonito.', 'Cinco lanternas, um cobre cada. Pra moça que brilha, eu faço três.'])][i], 'feira'); };
 async function falaCrianca3() { await say(pickOne(['Minha mãe diz que se apagar a luz o Bicho do Escuro pega. Eu acho que o Bicho do Escuro tem medo da festa.', 'Moço baú, você brinca de esconde-esconde? Você é muito bom de esconder. Parece mala.']), 'povo'); }
 async function falaVelha3() { await say(pickOne(['Doze anos atrás a cidade ficou quarenta noites no escuro. Quarenta. Eu rezo toda tarde pra não voltar.', 'Morreu gente naquele inverno. No hospital dos pobres. Sem vela, sem âmbar. A filhinha de um homem importante também, dizem.']), 'povo'); }
 async function falaLavadeira() { await say(pickOne(['Roupa no varal de noite seca com a luz do poste. Coisa de capital.', 'Os Pavios passam aqui de madrugada. Educados. Só que um deles me chamou de "mãe" ontem. Eu nunca vi aquele rapaz.']), 'povo'); }
