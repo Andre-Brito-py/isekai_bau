@@ -95,6 +95,7 @@ async function nomeDaMoca10(e) {
   G.nomeMoca = nome; G.flags.c10Nome = true; G.flags.c9Leitura = true; sfx('rune');
   await say('{o}' + nome + '.{/}', 'eco8');
   await say('{o}...' + nome + '. é bonito. é meu.{/}', 'eco8');
+  if (typeof mocaAparece === 'function') await mocaAparece(nome);
   flashW(6); bshake(14, 2);
   await say('* Uma luz âmbar sai da sua tampa. Morna, de janela de casa vista de longe. Os colchetes do Catálogo derretem e viram âmbar. As duas vozes viram uma.');
   await say('[' + nome + ' e o Catálogo: fusão completa. Primeira leitura: O Coração do Farol. Ele está com medo. Ele foi feito para ter fome e nunca teve nada que fosse dele.]', 'cat');

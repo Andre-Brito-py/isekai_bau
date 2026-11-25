@@ -300,7 +300,7 @@ function say(text, who = 'n', opt = {}) {
   const isVoid = who === 'void';
   // no mapa largo (celular deitado) a caixa de diálogo cresce, sem chegar nos controles dos cantos
   const DW = V.scene === 'world' && W > 240 ? Math.max(228, Math.min(310, W - 224)) : 228, DX = 120 - DW / 2;
-  tw.set(text, isVoid ? 34 : Math.floor((DW - (hasP ? 52 : 16) - 12) / 6), { voice: wd.voice, col: wd.col, fx: wd.fx, speed: isVoid ? 0.4 : 0.55 });
+  tw.set(text, isVoid ? 34 : Math.floor((DW - (hasP ? (wd.bigP ? 62 : 52) : 16) - 12) / 6), { voice: wd.voice, col: wd.col, fx: wd.fx, speed: isVoid ? 0.4 : 0.55 });
   // paginação: a caixa comporta 5 linhas; na última página, as opções também ocupam linhas
   const MAXL = isVoid ? 7 : 5, nOpt = opt.choices ? opt.choices.length : 0, lastCap = Math.max(1, MAXL - nOpt);
   const pages = [];
@@ -339,9 +339,10 @@ function say(text, who = 'n', opt = {}) {
       let tx = DX + 16;
       if (hasP) {
         const p = wd.portrait(!this.tw.done);
-        if (p.width >= 32) { box(DX + 10, y + 9, 36, 36, { bw: 1, edge: wd.edge, fill: 'rgba(30,24,44,0.9)' }); bx.drawImage(p, DX + 12, y + 11); }
+        if (wd.bigP) { box(DX + 9, y + 5, 48, 68, { bw: 1, edge: wd.edge, fill: 'rgba(30,24,44,0.9)' }); bx.drawImage(p, DX + 11, y + 7 + (wd.bob ? wd.bob(!this.tw.done) : 0)); tx = DX + 62; }
+        else if (p.width >= 32) { box(DX + 10, y + 9, 36, 36, { bw: 1, edge: wd.edge, fill: 'rgba(30,24,44,0.9)' }); bx.drawImage(p, DX + 12, y + 11); }
         else { const sc = 32 / Math.max(p.width, p.height); bx.drawImage(p, DX + 12, y + 14, p.width * sc, p.height * sc); }
-        tx = DX + 52;
+        if (!wd.bigP) tx = DX + 52;
       }
       if (wd.name) tagNome(DX + 12, y - 8, wd.name(), wd.edge);
       this.tw.draw(tx, y + 8, 12);
