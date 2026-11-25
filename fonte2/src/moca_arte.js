@@ -41,22 +41,27 @@ if (WHO.eco8) Object.assign(WHO.eco8, {
   bx.drawImage(im, x, y);
   if (FRAME % 20 < 2) { bx.fillStyle = '#ffd890'; bx.fillRect(x + (FRAME % 7) * 3, y - 2, 1, 1); }
 }; }
-// a cena do nome: ela sai do baú em corpo inteiro, flutua, e volta para dentro
+// a cena do nome: ela sai do baú no tamanho de gente (como os outros), em destaque: halo, contorno de luz e gotas
 async function mocaAparece(nome) {
-  const big = mocaSp('grande'), bau = BT && BT.party ? BT.party.find(u => u.id === 'bau') : null;
+  const sp = mocaSp('frente'), bau = BT && BT.party ? BT.party.find(u => u.id === 'bau') : null;
   const [cx, cy] = bau ? unitCenter(bau) : [70, 150];
+  if (!MOCA.c.brilho) { const c = mk(sp.width + 2, sp.height + 2), x = c.getContext('2d'); for (const [dx, dy] of [[0, 1], [2, 1], [1, 0], [1, 2]]) x.drawImage(sp, dx, dy); x.globalCompositeOperation = 'source-in'; x.fillStyle = '#ffe9a0'; x.fillRect(0, 0, c.width, c.height); MOCA.c.brilho = c; }
   const gotas = [];
   const desenha = (alpha, sobe) => {
-    const x = Math.round(cx - big.width / 2 + 10), y = Math.round(cy - big.height + 18 - sobe + Math.sin(FRAME / 16) * 2);
-    bx.globalAlpha = alpha * 0.35; bx.fillStyle = '#ffd070'; bx.beginPath(); bx.arc(x + big.width / 2, y + big.height * 0.45, 34, 0, 6.29); bx.fill();
-    bx.globalAlpha = alpha; bx.drawImage(big, x, y);
-    if (FRAME % 3 === 0) gotas.push({ x: x + 14 + Math.random() * (big.width - 28), y: y + big.height - 18, v: 0.3 + Math.random() * 0.6, a: 1 });
-    for (const g of gotas) { g.y += g.v; g.a -= 0.02; if (g.a > 0) { bx.globalAlpha = alpha * g.a; bx.fillStyle = '#ffc860'; bx.fillRect(Math.round(g.x), Math.round(g.y), 1, 2); } }
+    const x = Math.round(cx - sp.width / 2 + 14), y = Math.round(cy - sp.height + 4 - sobe + Math.sin(FRAME / 16) * 1.5);
+    const pul = 0.55 + Math.sin(FRAME / 7) * 0.25;
+    bx.globalAlpha = alpha * 0.22; bx.fillStyle = '#ffd070'; bx.beginPath(); bx.arc(x + sp.width / 2, y + sp.height * 0.45, 26, 0, 6.29); bx.fill();
+    bx.globalAlpha = alpha * 0.18; bx.beginPath(); bx.arc(x + sp.width / 2, y + sp.height * 0.45, 18, 0, 6.29); bx.fill();
+    bx.globalAlpha = alpha * pul; bx.drawImage(MOCA.c.brilho, x - 1, y - 1);
+    bx.globalAlpha = alpha; bx.drawImage(sp, x, y);
+    if (FRAME % 3 === 0) gotas.push({ x: x + 6 + Math.random() * (sp.width - 12), y: y + sp.height - 10, v: 0.25 + Math.random() * 0.5, a: 1 });
+    if (FRAME % 9 === 0) gotas.push({ x: x + Math.random() * sp.width, y: y + sp.height * 0.6, v: -0.4, a: 1, sobe: true });
+    for (const g of gotas) { g.y += g.v; g.a -= 0.02; if (g.a > 0) { bx.globalAlpha = alpha * g.a; bx.fillStyle = g.sobe ? '#fff4c0' : '#ffc860'; bx.fillRect(Math.round(g.x), Math.round(g.y), 1, g.sobe ? 1 : 2); } }
     bx.globalAlpha = 1;
   };
   sfx('rune');
-  await tw(50, p => desenha(ease.out(p), p * 30));
+  await tw(45, p => desenha(ease.out(p), p * 14));
   callout((nome || 'Ela').toUpperCase(), '#ffd890', 90);
-  await tw(110, () => desenha(1, 30));
-  await tw(30, p => desenha(1 - p, 30 - p * 20));
+  await tw(110, () => desenha(1, 14));
+  await tw(30, p => desenha(1 - p, 14 - p * 12));
 }
