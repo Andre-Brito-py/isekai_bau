@@ -20,12 +20,17 @@ function ritaNovaPronta() {
   RITA2.ok = true; return true;
 }
 // retrato que fala e pisca
-if (WHO.rita) WHO.rita.portrait = (fala) => {
-  if (!ritaNovaPronta()) return PT('rita');
-  if (fala && Math.floor(FRAME / 7) % 2) return RITA2.port[1];
-  if (FRAME % 200 < 8) return RITA2.port[2];
-  return RITA2.port[0];
-};
+// retrato GRANDE (48 px; 32 perdia detalhe), no mesmo espaço do retrato da moça de âmbar
+function ritaGrande(i) { RITA2.g = RITA2.g || []; if (!RITA2.g[i]) { const src = RITA2.portG[i], c = mk(44, 62), x = c.getContext('2d'); x.drawImage(src, 2, 0, 44, 48, 0, 10, 44, 48); RITA2.g[i] = c; } return RITA2.g[i]; }
+if (WHO.rita) Object.assign(WHO.rita, {
+  get bigP() { return ritaNovaPronta(); },
+  portrait: (fala) => {
+    if (!ritaNovaPronta()) return PT('rita');
+    if (fala && Math.floor(FRAME / 7) % 2) return ritaGrande(1);
+    if (FRAME % 200 < 8) return ritaGrande(2);
+    return ritaGrande(0);
+  }
+});
 // mapa: anda de verdade (parada = 1º quadro)
 { const _fsR = folSprite; folSprite = function (f) {
   if (f.k !== 'rita' || !ritaNovaPronta()) return _fsR(f);

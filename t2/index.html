@@ -12,6 +12,36 @@
   seções "SAVE HERDADO", "INTERFACE DA TEMPORADA 2", "SISTEMA DE BATALHA DA TEMPORADA 2", "MUNDO DA TEMPORADA 2",
   "O VILÃO DA TEMPORADA 2", "RUNAS NA T2". Aqui fica o que já foi implementado e o roteiro por capítulo.)
 =====================================================================
+ >>> DECISÕES DE OUTRA CONVERSA (trazidas pelo usuário em 2026-11-26) <<<
+ - GODOT DESCARTADO: testado (Godot 4.7 + MCP), sem diferença visual que justificasse. A T3 é feita na VERSÃO WEB
+   (HTML/JS, como T1 e T2), no repositório isekai_bau, pasta fonte3/. No PC do usuário (Documentos\renasci-como-um-baú,
+   -e-dai-!\para_repositorio\fonte3\) há material para subir: docs/biblia_T3.txt (com spoilers), docs/prompts_*.md,
+   referencia_godot/ (protótipo do combate em grade, leitura da herança RCB-H2/H1 com testes, esqueleto 2D, shaders de
+   vento/névoa/água/vinheta, robô de balanço) -> só REFERÊNCIA para portar ao JS. Outra ferramenta só se der diferença
+   perceptível (em avaliação: PixelLab, IA de pixel art com MCP).
+ - QUALIDADE GRÁFICA DA T3 (checklist de TODA tela nova; prioridade: 1 iluminação 2D, 2 partículas + clima, 3 impacto):
+   luz e cor (camada de luz com dia/noite, tochas, janelas acesas, cavernas escuras; color cycling em água/lava/magia;
+   paleta e tom por região; sombras sob personagens; luz de contorno nos chefes) · profundidade (parallax, poeira,
+   folhas, vaga-lumes, faíscas, chuva com poças, neve, vento, neblina, tiles animados) · animação (esticar/amassar,
+   antecipação, smear frames, cabelo e capa, idle com respiração e piscadas; esqueleto 2D com cuidado porque rotação
+   livre serrilha pixel art; movimentos grandes com quadros desenhados) · lutas (hit-stop, tremor, flash, números
+   saltando; shaders WebGL de calor, água, brilho, dissolver) · interface (transições, menus suaves, retratos animados).
+ - CENÁRIOS PELA IA DE IMAGEM DO USUÁRIO (aprovado): Claude escreve o prompt, o usuário gera, Claude trata e põe no
+   jogo. O prompt pede vista de cima com prédios de frente (sem diagonal nem isométrico), rios e pontes alinhados à grade,
+   pixel art limpa, ~64 cores, sem personagens nem texto, ZOOM MAIOR (área de ~20x15 tiles; um galpão ocupa 1/3 da
+   largura) para casar com personagens de ~48-53 px. Tratamento: converter para pixel art real (grade e paleta), conferir
+   a escala com a Rita e o baú, separar camadas (copas na frente; pedir as copas em fundo magenta #FF00FF), desenhar a
+   colisão por cima, animar a vida em código (água, pássaros, fumaça, luz) e comprimir. Teste da "clareira da vila"
+   funcionou com o ângulo corrigido; falta o zoom maior.
+ - ATRIBUTOS DA T3: DECIDIDOS: ataque físico, ataque mágico, defesa física, defesa mágica, TENACIDADE (resistência a
+   controle: atordoar, prender, empurrar, travar, silêncio), VELOCIDADE (ordem na linha do tempo), DESTREZA (precisão,
+   crítico, bônus pelas costas, escapar do travamento). A CONFIRMAR: dano crítico, esquiva (nunca substituindo as
+   defesas com timing), resistências por elemento em %, DOMÍNIO (força das invocações e chance de captura do Baú
+   Domador). Regras: o timing das defesas continua decisivo; tela de status com barras e explicação; a herança da T2
+   converte ATQ, MAG, DEF, RES e VEL nos novos atributos.
+ - RITA DO JOGO 2 (feito na v104 com as folhas mandadas aqui): rabo de cavalo ruivo longo, armadura prateada, capa e
+   cachecol vermelhos, LANÇA (sem escudo). Retrato GRANDE nas falas (32 px perdia detalhe; v105).
+=====================================================================
  !!! PRIORIDADE MÁXIMA PARA A TEMPORADA 3 (pedido do usuário: "deixe isso bem prioridade, para não ser esquecido") !!!
  Antes de escrever QUALQUER coisa da T3, ler estas seções (mais abaixo nesta bíblia) e pagar cada uma na história:
   1. SEGREDO: POR QUE O BAÚ EVOLUI + POR QUE O CATÁLOGO SE LIGOU A ELE (a ficha que nunca fechou; quem fez dele um baú;
@@ -1188,6 +1218,9 @@ v104 — A RITA NOVA (folhas do usuário: build/arteia_rita/rita_mapa.jpg, rita_
  caída x2, vitória x2) escolhidos pela pose da coreografia (ritaQuadro lê u.P: wPull/wAng/lean/crouch) e pelo estado; a
  lança vem desenhada (desenhaLanca não desenha mais para ela; rigPt corrige o deslocamento para os efeitos na ponta);
  retrato com 3 expressões (sorriso de canto; boca aberta alternando quando fala; olhos fechados piscando).
+
+v105 — RETRATO GRANDE DA RITA (o usuário decidiu que 32 px perde detalhe): WHO.rita.bigP com o retrato de 48 px
+ (fala alternando boca, pisca), no mesmo espaço do retrato da moça de âmbar.
 
 =====================================================================
 -->
@@ -23040,12 +23073,17 @@ function ritaNovaPronta() {
   RITA2.ok = true; return true;
 }
 // retrato que fala e pisca
-if (WHO.rita) WHO.rita.portrait = (fala) => {
-  if (!ritaNovaPronta()) return PT('rita');
-  if (fala && Math.floor(FRAME / 7) % 2) return RITA2.port[1];
-  if (FRAME % 200 < 8) return RITA2.port[2];
-  return RITA2.port[0];
-};
+// retrato GRANDE (48 px; 32 perdia detalhe), no mesmo espaço do retrato da moça de âmbar
+function ritaGrande(i) { RITA2.g = RITA2.g || []; if (!RITA2.g[i]) { const src = RITA2.portG[i], c = mk(44, 62), x = c.getContext('2d'); x.drawImage(src, 2, 0, 44, 48, 0, 10, 44, 48); RITA2.g[i] = c; } return RITA2.g[i]; }
+if (WHO.rita) Object.assign(WHO.rita, {
+  get bigP() { return ritaNovaPronta(); },
+  portrait: (fala) => {
+    if (!ritaNovaPronta()) return PT('rita');
+    if (fala && Math.floor(FRAME / 7) % 2) return ritaGrande(1);
+    if (FRAME % 200 < 8) return ritaGrande(2);
+    return ritaGrande(0);
+  }
+});
 // mapa: anda de verdade (parada = 1º quadro)
 { const _fsR = folSprite; folSprite = function (f) {
   if (f.k !== 'rita' || !ritaNovaPronta()) return _fsR(f);
