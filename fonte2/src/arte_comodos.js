@@ -316,19 +316,22 @@ function bgTreino() {
 // O jabuti dormindo com o coreto da praça de Velhágua nas costas: casco de placas, cabeça para fora que respira,
 // e em cima o coreto de oito lados (piso, grade, colunas brancas, telhado vermelho, varal de luzinhas).
 function jabutiCoretoArt() {
-  const f = Math.floor(W2.t / 40) % 2, luz = Math.floor(W2.t / 12) % 3, k = 'jabuti' + f + luz; if (CMD_C[k]) return CMD_C[k];
+  const sem = !!(G.flags && G.flags.valdirHumano), f = Math.floor(W2.t / 40) % 2, luz = Math.floor(W2.t / 12) % 3, k = 'jabuti' + f + luz + (sem ? 's' : ''); if (CMD_C[k]) return CMD_C[k];
   const P = new Pix(104, 92), Cs = ramp('#6a7a3a'), Cp = ramp('#8a9a4a'), Pe = ramp('#8a8a5a'), Br = ramp('#e8e0d0'), Tl = ramp('#b84a3a');
   // patas
-  for (const [x, y] of [[14, 80], [32, 84], [66, 84], [84, 80]]) { P.ball(x, y, 7, 5, Pe); P.rect(x - 5, y + 2, 10, 3, Pe[1]); }
+  if (!sem) for (const [x, y] of [[14, 80], [32, 84], [66, 84], [84, 80]]) { P.ball(x, y, 7, 5, Pe); P.rect(x - 5, y + 2, 10, 3, Pe[1]); }
+  else for (const x of [16, 40, 60, 84]) P.rect(x - 4, 84, 8, 5, '#7a6a5a');   // pedras de calço
   // casco (domo largo)
   P.ball(50, 72, 44, 18, Cs, { amb: 0.3 });
   for (let i = 0; i < 7; i++) { const cx = 14 + i * 12, cy = 70 + (i % 2) * 6; for (let a = 0; a < 6; a++) { const an = a / 6 * Math.PI * 2; P.p(cx + Math.cos(an) * 5, cy + Math.sin(an) * 3, Cs[0]); } P.p(cx, cy, Cp[3]); }
   P.rect(8, 86, 84, 2, Cs[0]);
   // cabeça (para fora, à direita), respira e dorme
   const hy = 74 + f;
-  P.ball(98, hy, 6, 6, Pe); P.ball(92, hy + 2, 5, 4, Pe);
-  P.rect(98, hy - 2, 3, 1, '#2a2418'); P.p(102, hy + 2, '#2a2418');
-  if (f) { P.p(103, hy - 6, '#f4ecff'); P.p(101, hy - 9, '#c8c0e8'); }
+  if (!sem) {
+    P.ball(98, hy, 6, 6, Pe); P.ball(92, hy + 2, 5, 4, Pe);
+    P.rect(98, hy - 2, 3, 1, '#2a2418'); P.p(102, hy + 2, '#2a2418');
+    if (f) { P.p(103, hy - 6, '#f4ecff'); P.p(101, hy - 9, '#c8c0e8'); }
+  } else { P.ball(93, 76, 4, 3, ramp('#3a3a2a')); for (let i = 0; i < 5; i++) P.p(90 + i * 2, 70 - (i % 2), '#ffe066'); }   // casco vazio: o buraco da cabeça, com luzinha de varal
   // coreto: piso
   P.ball(50, 56, 34, 7, ramp('#c8b898'), { amb: 0.5 });
   P.rect(18, 56, 64, 4, '#8a7a5a');
