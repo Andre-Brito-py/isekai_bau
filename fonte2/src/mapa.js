@@ -396,7 +396,7 @@ function desenhaMundo(AX, AY, AW, AH, L, sel, t) {
   for (let k = 0; k < RIO.length - 1; k++) { const [ax, ay] = RIO[k], [b2x, b2y] = RIO[k + 1], n = Math.ceil(Math.hypot(b2x - ax, b2y - ay) / 2); for (let q = 0; q < n; q++) if (((q + k * 7 - (t >> 2)) % 9 + 9) % 9 === 0) { bx.fillStyle = noite ? 'rgba(160,190,255,0.6)' : 'rgba(220,240,255,0.85)'; bx.fillRect(Math.round(AX + ax + (b2x - ax) * q / n), Math.round(AY + ay + (b2y - ay) * q / n), 1, 1); } }
   // sombras de nuvens passando
   for (let k = 0; k < 3; k++) { const cx = ((t * 0.12 + k * 97) % (AW + 80)) - 40, cy = 18 + k * 33; bx.globalAlpha = noite ? 0.1 : 0.16; bx.fillStyle = '#000'; bx.beginPath(); bx.ellipse(AX + cx, AY + cy, 22, 7, 0, 0, Math.PI * 2); bx.fill(); bx.beginPath(); bx.ellipse(AX + cx + 12, AY + cy - 3, 12, 5, 0, 0, Math.PI * 2); bx.fill(); bx.globalAlpha = 1; }
-  const aqui = W2.id === 'interior' ? REGIAO_DE[(G.baseVolta || {}).map] : REGIAO_DE[W2.id];
+  const aqui = (typeof ehBase === 'function' ? ehBase(W2.id) : W2.id === 'interior') ? REGIAO_DE[(G.baseVolta || {}).map] : REGIAO_DE[W2.id];
   const lista = REGIOES.slice().sort((a, b) => a.y - b.y);
   for (const r of lista) {
     const on = vis(r), conhecida = on || ESTRADAS.some(([a, b]) => (a === r.id && vis(R[b])) || (b === r.id && vis(R[a])));
@@ -424,7 +424,7 @@ function desenhaMundo(AX, AY, AW, AH, L, sel, t) {
   bx.restore();
   bx.strokeStyle = 'rgba(232,210,160,0.45)'; bx.lineWidth = 1; bx.strokeRect(AX + 2.5, AY + 2.5, AW - 5, AH - 5);
   for (const [cx, cy] of [[AX + 2, AY + 2], [AX + AW - 5, AY + 2], [AX + 2, AY + AH - 5], [AX + AW - 5, AY + AH - 5]]) { bx.fillStyle = '#e8d2a0'; bx.fillRect(cx, cy, 3, 3); bx.fillStyle = '#6a5a3a'; bx.fillRect(cx + 1, cy + 1, 1, 1); }
-  if (W2.id === 'interior') placa('Você está dentro do baú', AX + 6, AY + AH - 16, '#c8c0d8', 'left');
+  if ((typeof ehBase === 'function' ? ehBase(W2.id) : W2.id === 'interior')) placa('Você está dentro do baú', AX + 6, AY + AH - 16, '#c8c0d8', 'left');
 }
 
 // ----- a primeira vez: o mapa é a magia espacial do baú se manifestando -----

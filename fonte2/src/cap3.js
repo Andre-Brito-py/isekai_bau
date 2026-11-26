@@ -362,7 +362,7 @@ async function cenaVao() {
   await say('[A Runa do Vão está ligada aos Marcos: em qualquer Marco, dá para ENTRAR NO BAÚ. A estante guarda o Grimório. A cama, descanso. O resto, a gente arruma.]', 'cat');
   await say('A gente tem casa. Zero cobres, mas tem casa.', 'lume');
   await say('Eu sou a casa. Isso é muito estranho de dizer em voz alta.', 'me');
-  await say('* (BASE: num Marco, escolha "Entrar no Baú". Aqui dentro: estante = Grimório, cama = descansar até de manhã ou à noite. Saia pela porta de baixo.)');
+  await say('* (BASE: num Marco, escolha "Entrar no Baú". Aqui dentro: estante = Grimório; as camas ficam no Dormitório (rasgo da esquerda) e servem para descansar até de manhã ou à noite; o rasgo da direita leva à Ala Nova. Saia pela porta de baixo.)');
   save2();
 }
 async function sairDaBase() {
