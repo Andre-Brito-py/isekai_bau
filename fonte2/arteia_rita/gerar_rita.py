@@ -68,8 +68,8 @@ def enc(a):
     return {'w':w,'h':h,'p':''.join(pal),'d':base64.b64encode(bytes(data)).decode()}
 M=celulas('rita_mapa.jpg',4,4); B=celulas('rita_batalha.jpg',4,5)
 print('mapa',sorted(M.keys())); print('batalha',sorted(B.keys()))
-HM=50; HB=52
-mapa={'down':[reduz(M[(0,c)],HM) for c in range(4)], 'up':[reduz(M[(1,c)],HM) for c in range(4)], 'right':[reduz(M[(2,c)],HM) for c in (1,2,3)]}
+HM=42; HB=52
+mapa={'down':[reduz(M[(0,c)],HM) for c in range(4)], 'up':[reduz(M[(1,c)],HM) for c in range(4)], 'right':[reduz(M[(3,c)],HM) for c in (1,2,3)]}
 bat={}
 nomes={'idle':[(0,0),(0,1),(0,2),(0,3)],'pronta':[(1,0)],'recua':[(1,1)],'estoca':[(1,2)],'segue':[(1,3)],'guarda':[(2,0)],'varre':[(2,1)],'corre':[(2,2),(2,3)],'dor':[(3,0),(3,1)],'caida':[(3,2),(3,3)],'vitoria':[(4,2),(4,3)]}
 for k,L in nomes.items():
