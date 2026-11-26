@@ -1343,6 +1343,8 @@ v105 — RETRATO GRANDE DA RITA (o usuário decidiu que 32 px perde detalhe): WH
   v109c: bíblia: LUME x MOÇA DE ÂMBAR, a briga cômica de 'quem é mais especial' para o baú (modelo de diálogo na seção ROMANCE).
   v109d: bíblia: o casal adulto (vida a dois, intimidade implícita) e a briga Lume x moça de âmbar são da T3; na T2 eles só viram casal no beijo do fim.
   v109e: bíblia T3: evoluções ARCA DO TESOURO DO DRAGÃO (arco dos dragões, não necessariamente final) e CAIXA DE PANDORA (uma das últimas).
+  v110: Rita no mapa 'deslizava' (os passos da folha dela quase não mexem as pernas): andando, agora usa o gerador de passo
+   do anda.js (o mesmo da Lume e do baú) em cima da pose mais firme da folha, no ritmo da distância andada.
 =====================================================================
 -->
 <style>
@@ -23210,7 +23212,12 @@ if (WHO.rita) Object.assign(WHO.rita, {
   if (f.k !== 'rita' || !ritaNovaPronta()) return _fsR(f);
   const t = W2.t + 13, M = RITA2.mapa;
   const v = f.dir === 'up' ? M.up : f.dir === 'down' ? M.down : M.right;
-  if (f.mv || W2.mv) { const fr = v[Math.floor(t / 7) % v.length]; return f.dir === 'left' ? flipC(fr) : fr; }
+  if (f.mv || W2.mv) {
+    // a folha tem passos quase iguais (parecia deslizar): o passo vem do mesmo gerador da Lume e do baú (anda.js),
+    // em cima da pose mais firme da folha, no ritmo da distância andada
+    const p0 = v === M.right ? v[1] : v[0], base = f.dir === 'left' ? flipC(p0) : p0;
+    return andaQuadro(base, f.dir === 'left' || f.dir === 'right', f.px + f.py + 8, correndo());
+  }
   // parada: mesmo balanço de cabelo/roupa da Lume e do protagonista (anda.js), mais respiração
   const p0 = v === M.right ? v[1] : v[0], base = f.dir === 'left' ? flipC(p0) : p0; // de lado: o passo mais fechado da folha
   return ritaParada(base, f.dir === 'left' || f.dir === 'right', W2.t + 30);

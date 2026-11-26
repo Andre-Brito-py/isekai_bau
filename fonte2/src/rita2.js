@@ -36,7 +36,12 @@ if (WHO.rita) Object.assign(WHO.rita, {
   if (f.k !== 'rita' || !ritaNovaPronta()) return _fsR(f);
   const t = W2.t + 13, M = RITA2.mapa;
   const v = f.dir === 'up' ? M.up : f.dir === 'down' ? M.down : M.right;
-  if (f.mv || W2.mv) { const fr = v[Math.floor(t / 7) % v.length]; return f.dir === 'left' ? flipC(fr) : fr; }
+  if (f.mv || W2.mv) {
+    // a folha tem passos quase iguais (parecia deslizar): o passo vem do mesmo gerador da Lume e do baú (anda.js),
+    // em cima da pose mais firme da folha, no ritmo da distância andada
+    const p0 = v === M.right ? v[1] : v[0], base = f.dir === 'left' ? flipC(p0) : p0;
+    return andaQuadro(base, f.dir === 'left' || f.dir === 'right', f.px + f.py + 8, correndo());
+  }
   // parada: mesmo balanço de cabelo/roupa da Lume e do protagonista (anda.js), mais respiração
   const p0 = v === M.right ? v[1] : v[0], base = f.dir === 'left' ? flipC(p0) : p0; // de lado: o passo mais fechado da folha
   return ritaParada(base, f.dir === 'left' || f.dir === 'right', W2.t + 30);
