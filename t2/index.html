@@ -42,6 +42,39 @@
  - RITA DO JOGO 2 (feito na v104 com as folhas mandadas aqui): rabo de cavalo ruivo longo, armadura prateada, capa e
    cachecol vermelhos, LANÇA (sem escudo). Retrato GRANDE nas falas (32 px perdia detalhe; v105).
 =====================================================================
+ >>> TÉCNICAS DE MELHORIA GRÁFICA DA T3 (decididas pelo usuário em 2026-11-26; prioridade: 1 iluminação 2D,
+     2 partículas + clima, 3 impacto nas lutas). Aplicar em TODA tela nova da T3: <<<
+  1. ILUMINAÇÃO 2D: camada de luz sobre o mapa; ciclo dia/noite, tochas e lanternas com brilho, janelas acesas à noite,
+     cavernas escuras onde só a luz do grupo ilumina, feixes de luz diagonais.
+  2. PALETA POR REGIÃO + COLOR GRADING: paleta pequena própria e filtro de tom por região (festival quente, neve fria e
+     azulada, masmorra escura e saturada). Paleta ÚNICA entre os quadros de um personagem (para não "piscar").
+  3. COLOR CYCLING: animar trocando cores da paleta (água, lava, cachoeiras, runas, magia).
+  4. PARALLAX: camadas de fundo em velocidades diferentes (nuvens, montanhas, névoa colorida, céu).
+  5. TILES ANIMADOS: poucos quadros em loop (grama, flores, bandeiras, chamas, água ondulando).
+  6. PARTÍCULAS: poeira ao andar, folhas e pétalas, vaga-lumes, faíscas, brasas, respingos, fumaça.
+  7. CLIMA por mapa: chuva com poças, neve acumulando, vento balançando a grama, neblina em faixas.
+  8. SOMBRAS E LUZ DE CONTORNO: sombra sob personagens e objetos; rim light para destacar chefes do fundo.
+  9. VINHETA: bordas da tela levemente escurecidas.
+  10. TRANSPARÊNCIA DE OBSTÁCULO: árvore, pilar ou telhado translúcido quando há alguém atrás.
+  11. ESQUELETO 2D (recorte): partes presas a ossos (respiração, cabelo e capa, tronco no golpe, tampa do baú abrindo de
+      verdade, chefes grandes por partes). CUIDADO: rotação livre serrilha pixel art; partes que giram pouco, e quadros
+      desenhados nos movimentos grandes.
+  12. PRINCÍPIOS DE ANIMAÇÃO: antecipação, esticar e amassar, smear frames no golpe rápido, movimento secundário
+      (cabelo e roupa com atraso). RETORNO SECO, SEM EFEITO DE MOLA (regra).
+  13. IDLE VIVO: respiração, piscadas e pequenos gestos de personalidade.
+  14. MOVIMENTO SUBPIXEL: arte nítida em escala inteira, deslocamento suave entre os pixels grandes (celular).
+  15. RASTRO (afterimage): investidas, golpes, teletransporte.
+  16. HIT-STOP: congela uma fração de segundo no impacto.
+  17. TREMOR + FLASH + ZOOM: tela treme nos impactos fortes, alvo pisca em branco, zoom rápido da câmera.
+  18. NÚMEROS DE DANO ANIMADOS: saltam e somem; crítico maior e colorido.
+  19. SHADERS (WebGL): distorção de calor, ondulação d'água, brilho mágico, dissolver inimigos derrotados, distorção do Vão.
+  20. TRANSIÇÕES DE TELA: página dobrando, círculo de runas, fade com cor (entre mapas e batalhas).
+  21. INTERFACE COM MOVIMENTO: menus que deslizam suaves, cursor animado, retratos animados (parado, falando, piscando).
+  22. ARTE POR IA + TRATAMENTO: a IA do usuário gera personagens e cenários; Claude converte para pixel art real (grade,
+      paleta, escala), separa camadas (copas na frente), desenha a colisão por cima e anima a vida em código.
+  (Na T2 já existem: partículas, clima em alguns mapas, sombras, hit-stop, tremor/flash, números animados, rastros,
+   retratos falando/piscando da Rita e da moça; a T3 aplica TODAS de forma sistemática, com 1-3 primeiro.)
+=====================================================================
  !!! PRIORIDADE MÁXIMA PARA A TEMPORADA 3 (pedido do usuário: "deixe isso bem prioridade, para não ser esquecido") !!!
  Antes de escrever QUALQUER coisa da T3, ler estas seções (mais abaixo nesta bíblia) e pagar cada uma na história:
   1. SEGREDO: POR QUE O BAÚ EVOLUI + POR QUE O CATÁLOGO SE LIGOU A ELE (a ficha que nunca fechou; quem fez dele um baú;
