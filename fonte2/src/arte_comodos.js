@@ -311,3 +311,47 @@ function bgTreino() {
   P.rect(0, 80, 240, 2, '#3a2420');
   return BG_TREINO = P.canvas();
 }
+
+// ---------- O CORETO DO SEU VALDIR (v108) ----------
+// O jabuti dormindo com o coreto da praça de Velhágua nas costas: casco de placas, cabeça para fora que respira,
+// e em cima o coreto de oito lados (piso, grade, colunas brancas, telhado vermelho, varal de luzinhas).
+function jabutiCoretoArt() {
+  const f = Math.floor(W2.t / 40) % 2, luz = Math.floor(W2.t / 12) % 3, k = 'jabuti' + f + luz; if (CMD_C[k]) return CMD_C[k];
+  const P = new Pix(104, 92), Cs = ramp('#6a7a3a'), Cp = ramp('#8a9a4a'), Pe = ramp('#8a8a5a'), Br = ramp('#e8e0d0'), Tl = ramp('#b84a3a');
+  // patas
+  for (const [x, y] of [[14, 80], [32, 84], [66, 84], [84, 80]]) { P.ball(x, y, 7, 5, Pe); P.rect(x - 5, y + 2, 10, 3, Pe[1]); }
+  // casco (domo largo)
+  P.ball(50, 72, 44, 18, Cs, { amb: 0.3 });
+  for (let i = 0; i < 7; i++) { const cx = 14 + i * 12, cy = 70 + (i % 2) * 6; for (let a = 0; a < 6; a++) { const an = a / 6 * Math.PI * 2; P.p(cx + Math.cos(an) * 5, cy + Math.sin(an) * 3, Cs[0]); } P.p(cx, cy, Cp[3]); }
+  P.rect(8, 86, 84, 2, Cs[0]);
+  // cabeça (para fora, à direita), respira e dorme
+  const hy = 74 + f;
+  P.ball(98, hy, 6, 6, Pe); P.ball(92, hy + 2, 5, 4, Pe);
+  P.rect(98, hy - 2, 3, 1, '#2a2418'); P.p(102, hy + 2, '#2a2418');
+  if (f) { P.p(103, hy - 6, '#f4ecff'); P.p(101, hy - 9, '#c8c0e8'); }
+  // coreto: piso
+  P.ball(50, 56, 34, 7, ramp('#c8b898'), { amb: 0.5 });
+  P.rect(18, 56, 64, 4, '#8a7a5a');
+  // grade
+  for (let x = 20; x <= 80; x += 3) P.rect(x, 48, 1, 8, Br[1]);
+  P.rect(18, 47, 64, 2, Br[3]);
+  // colunas
+  for (const x of [20, 36, 50, 64, 80]) { P.cyl(x - 1, 24, 3, 32, Br); }
+  // telhado
+  P.poly([[14, 26], [50, 2], [86, 26]], (x, y) => P.tone(Tl, 0.75 - (y / 30) + (x < 50 ? 0.1 : -0.1), x, y));
+  P.rect(14, 25, 72, 3, Tl[0]); for (let x = 16; x < 86; x += 4) P.p(x, 28, Tl[1]);
+  P.rect(49, 0, 2, 4, '#d8b050'); P.p(50, 0, '#ffe680');
+  // luzinhas no varal da beirada
+  const cs = ['#ffe066', '#ff8aa8', '#8fe3ff'];
+  for (let i = 0; i < 12; i++) { const x = 16 + i * 6, y = 30 + Math.round(Math.sin(i / 11 * Math.PI) * 4); P.p(x, y, cs[(i + luz) % 3]); }
+  // estante de partitura e uma cadeira de banda, lá em cima
+  P.rect(30, 40, 1, 8, '#3a3440'); P.rect(27, 38, 7, 3, '#f2ecdc'); P.rect(60, 42, 6, 2, '#7a5a3a'); P.rect(60, 44, 1, 4, '#5a3a2a'); P.rect(65, 44, 1, 4, '#5a3a2a');
+  return CMD_C[k] = cmdPronto(P);
+}
+function lampiaoPracaArt() {
+  const f = Math.floor(W2.t / 14) % 2, k = 'lampP' + f; if (CMD_C[k]) return CMD_C[k];
+  const P = new Pix(14, 44); P.cyl(5, 10, 3, 32, ramp('#3a3a48')); P.rect(3, 41, 8, 3, '#2a2a34');
+  P.rect(2, 2, 10, 9, '#2a2a34'); P.rect(4, 4, 6, 6, f ? '#fff0a0' : '#ffd060'); P.p(5, 5, '#ffffff'); P.poly([[1, 3], [7, -1], [13, 3]], '#3a3a48');
+  return CMD_C[k] = cmdPronto(P);
+}
+const canteiroCmd = cmdMemo('canteiroC', () => { const P = new Pix(20, 14); for (let i = 0; i < 10; i++) { const x = 2 + i * 2; P.rect(x, 5 + (i % 3), 1, 8 - (i % 3), '#4a8a4a'); P.p(x, 4 + (i % 3), ['#ff8aa8', '#ffe066', '#c8a0ff'][i % 3]); } P.rect(0, 12, 20, 2, '#6a5a44'); return cmdPronto(P); });

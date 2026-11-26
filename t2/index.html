@@ -1276,6 +1276,14 @@ v105 — RETRATO GRANDE DA RITA (o usuário decidiu que 32 px perde detalhe): WH
   v107: BAÚ MÁGICO / ESCRIBA (escriba_pm.js; pedido: "fica sem PM... a mordida não dá dano"): PM do baú no caminho mágico
    cresce +5 por poder (+12 no Escriba): nível 18 Escriba 56 -> 94 PM. MORDIDA DE TINTA: bate com max(ATQ, 85% MAG) e devolve
    6 PM por acerto (ritmo feitiço, feitiço, mordida). O caminho físico não mudou.
+  v108: O SEU VALDIR E O CORETO (comodos.js, fim; pedido do usuário: "a Dona Marlene tinha um marido... pode adicionar
+   ele?"). T1: Valdir Souza (banco 4), 52 anos de casado com a Marlene, virou o JABUTI DO CORETO na masmorra (é o lugar
+   onde dançaram; não sai dali). Agora: a Lume toca a VALSA DO CORETO dentro do baú e o Vão traz o coreto inteiro, com o
+   jabuti dormindo embaixo (proeza do Vão; o Catálogo "não entende"). Gatilho: 'conosco' = Marlene na Sala de Treino
+   ("Perguntar do Seu Valdir"); 'junto' = retrato em branco da Ala Nova (os dois chegam juntos). Porta lilás na Ala Nova
+   -> mapa 'coreto' (praça de bolso no Vão, música 'valsa'). Marlene: treino de dia, coreto de noite ('junto': sempre no
+   coreto). BAILE NO CORETO 1x/dia (falar com o Valdir): G.valsa = 3 lutas começando adiantado na vez (+35 na barra).
+   Flags: coretoVeio, valsaDia. O Valdir fala devagar e dorme no meio da frase; risco no banco "V + M, 1972".
 =====================================================================
 -->
 <style>
@@ -23508,6 +23516,50 @@ function bgTreino() {
   return BG_TREINO = P.canvas();
 }
 
+// ---------- O CORETO DO SEU VALDIR (v108) ----------
+// O jabuti dormindo com o coreto da praça de Velhágua nas costas: casco de placas, cabeça para fora que respira,
+// e em cima o coreto de oito lados (piso, grade, colunas brancas, telhado vermelho, varal de luzinhas).
+function jabutiCoretoArt() {
+  const f = Math.floor(W2.t / 40) % 2, luz = Math.floor(W2.t / 12) % 3, k = 'jabuti' + f + luz; if (CMD_C[k]) return CMD_C[k];
+  const P = new Pix(104, 92), Cs = ramp('#6a7a3a'), Cp = ramp('#8a9a4a'), Pe = ramp('#8a8a5a'), Br = ramp('#e8e0d0'), Tl = ramp('#b84a3a');
+  // patas
+  for (const [x, y] of [[14, 80], [32, 84], [66, 84], [84, 80]]) { P.ball(x, y, 7, 5, Pe); P.rect(x - 5, y + 2, 10, 3, Pe[1]); }
+  // casco (domo largo)
+  P.ball(50, 72, 44, 18, Cs, { amb: 0.3 });
+  for (let i = 0; i < 7; i++) { const cx = 14 + i * 12, cy = 70 + (i % 2) * 6; for (let a = 0; a < 6; a++) { const an = a / 6 * Math.PI * 2; P.p(cx + Math.cos(an) * 5, cy + Math.sin(an) * 3, Cs[0]); } P.p(cx, cy, Cp[3]); }
+  P.rect(8, 86, 84, 2, Cs[0]);
+  // cabeça (para fora, à direita), respira e dorme
+  const hy = 74 + f;
+  P.ball(98, hy, 6, 6, Pe); P.ball(92, hy + 2, 5, 4, Pe);
+  P.rect(98, hy - 2, 3, 1, '#2a2418'); P.p(102, hy + 2, '#2a2418');
+  if (f) { P.p(103, hy - 6, '#f4ecff'); P.p(101, hy - 9, '#c8c0e8'); }
+  // coreto: piso
+  P.ball(50, 56, 34, 7, ramp('#c8b898'), { amb: 0.5 });
+  P.rect(18, 56, 64, 4, '#8a7a5a');
+  // grade
+  for (let x = 20; x <= 80; x += 3) P.rect(x, 48, 1, 8, Br[1]);
+  P.rect(18, 47, 64, 2, Br[3]);
+  // colunas
+  for (const x of [20, 36, 50, 64, 80]) { P.cyl(x - 1, 24, 3, 32, Br); }
+  // telhado
+  P.poly([[14, 26], [50, 2], [86, 26]], (x, y) => P.tone(Tl, 0.75 - (y / 30) + (x < 50 ? 0.1 : -0.1), x, y));
+  P.rect(14, 25, 72, 3, Tl[0]); for (let x = 16; x < 86; x += 4) P.p(x, 28, Tl[1]);
+  P.rect(49, 0, 2, 4, '#d8b050'); P.p(50, 0, '#ffe680');
+  // luzinhas no varal da beirada
+  const cs = ['#ffe066', '#ff8aa8', '#8fe3ff'];
+  for (let i = 0; i < 12; i++) { const x = 16 + i * 6, y = 30 + Math.round(Math.sin(i / 11 * Math.PI) * 4); P.p(x, y, cs[(i + luz) % 3]); }
+  // estante de partitura e uma cadeira de banda, lá em cima
+  P.rect(30, 40, 1, 8, '#3a3440'); P.rect(27, 38, 7, 3, '#f2ecdc'); P.rect(60, 42, 6, 2, '#7a5a3a'); P.rect(60, 44, 1, 4, '#5a3a2a'); P.rect(65, 44, 1, 4, '#5a3a2a');
+  return CMD_C[k] = cmdPronto(P);
+}
+function lampiaoPracaArt() {
+  const f = Math.floor(W2.t / 14) % 2, k = 'lampP' + f; if (CMD_C[k]) return CMD_C[k];
+  const P = new Pix(14, 44); P.cyl(5, 10, 3, 32, ramp('#3a3a48')); P.rect(3, 41, 8, 3, '#2a2a34');
+  P.rect(2, 2, 10, 9, '#2a2a34'); P.rect(4, 4, 6, 6, f ? '#fff0a0' : '#ffd060'); P.p(5, 5, '#ffffff'); P.poly([[1, 3], [7, -1], [13, 3]], '#3a3a48');
+  return CMD_C[k] = cmdPronto(P);
+}
+const canteiroCmd = cmdMemo('canteiroC', () => { const P = new Pix(20, 14); for (let i = 0; i < 10; i++) { const x = 2 + i * 2; P.rect(x, 5 + (i % 3), 1, 8 - (i % 3), '#4a8a4a'); P.p(x, 4 + (i % 3), ['#ff8aa8', '#ffe066', '#c8a0ff'][i % 3]); } P.rect(0, 12, 20, 2, '#6a5a44'); return cmdPronto(P); });
+
 // ================= OS CÔMODOS DA BASE + O 31 COMO CASA (v107) =================
 // Pedidos do usuário: "gostaria que os novos cômodos dentro do baú fossem realmente cenários que desse pra andar por
 // eles... não somente esses dois espaços, mas todos, como a forja, a sala de treinamento, etc, inclusive, adicionar mais
@@ -23554,7 +23606,8 @@ Object.assign(WHO, {
   marlene: { name: () => 'Dona Marlene', portrait: () => PT('marlene'), voice: () => sfx('blip', 640), col: '#f8d8e8' }
 });
 const herEsc = () => ((G.her || {}).esc || {});
-const marleneEmCasa = () => herEsc().marlene === 'conosco';
+const coretoVeio = () => !!(G.flags && G.flags.coretoVeio);
+const marleneEmCasa = () => herEsc().marlene === 'conosco' || (herEsc().marlene === 'junto' && coretoVeio());
 const cmdDia = () => G.dia || 0;
 
 // sprite de personagem da T1 (frente com 4 quadros; de lado com 2)
@@ -23594,7 +23647,7 @@ const ROWS_CMD = {
   alaNova: [
     'wwwwwwwwwwwwwwwwwwwwwwww',
     'wwwwwwwwwwwwwwwwwwwwwwww',
-    'wwwwowwwwwowwwwwowwwwwww',
+    'wwwwowwwwwowwwwwowwwwoww',
     'woooooooooooooooooooooooo'.slice(0, 24),
     'orrrrrrrrrrrrrrrrrrrrrro',
     'wooooooooooooooooooooooo',
@@ -23699,17 +23752,19 @@ function montarComodos() {
     pr(() => quadroRetratoArt('#5a7aa8'), 6.4, 2.4, null, { by: 0 }),
     pr(() => quadroRetratoArt('#a85a6a'), 12.4, 2.4, null, { by: 0 }),
     pr(() => quadroRetratoArt('#6aa87a'), 18.6, 2.4, null, { by: 0 }),
-    pr(vasoArtCmd, 1.05, 4, [1, 3, 1, 1]), pr(vasoArtCmd, 21.05, 4, [21, 3, 1, 1]),
+    pr(vasoArtCmd, 1.05, 4, [1, 3, 1, 1]), pr(vasoArtCmd, 22.05, 4, [22, 3, 1, 1]),
+    pr(() => portaCmdArt('#c8a0ff', !coretoVeio()), 20.6, 3, null, { by: 1 }),
     pr(() => aberto4() ? portaoGaragemArt() : portaCmdArt('#8a8a9a', true), 22.9, 6, null, { by: 3 })
   ], [
     portaCmd(0, 4, 'interior', 12, 5, 'left'),
     portaCmd(4, 2, 'forja', 5, 7, 'up'), portaCmd(10, 2, 'treino', 6, 8, 'up'),
     portaCmd(16, 2, 'enfermaria', 5, 7, 'up', () => !aberto4()), lacreCmd(16, 2, aberto4, '* Uma porta pregada com tábuas. Atrás dela, cheiro de sabão e de nada. [O Vão ainda não abriu este cômodo.]'),
+    portaCmd(21, 2, 'coreto', 7, 10, 'up', () => !coretoVeio()), lacreCmd(21, 2, coretoVeio, '* Uma porta que não estava aqui. Sem placa, sem maçaneta. Encostando a tampa, dá para ouvir, bem baixinho, uma valsa.'),
     ...[3, 4, 5].map(y => portaCmd(23, y, 'garagem', 1, 6, 'right', () => !aberto4())),
     ...[3, 4, 5].map(y => lacreCmd(23, y, aberto4, '* Um portão de enrolar, fechado. Do outro lado, um silêncio grande, do tamanho de um ônibus.')),
     { t: 'sign', x: 6, y: 2, h: 20, passa: true, talk: () => say('* Um retrato pintado à mão: um ônibus de lado, com gente acenando de todas as janelas. Alguém escreveu embaixo: "linha 31, a última viagem".') },
     { t: 'sign', x: 12, y: 2, h: 20, passa: true, talk: () => say('* Um retrato de uma cidade que afunda e de um sino que voltou para a torre. A tinta ainda cheira.') },
-    { t: 'sign', x: 18, y: 2, h: 20, passa: true, talk: () => say('* Um retrato em branco, com a moldura pronta. A Rita diz que é "pra próxima".') }
+    { t: 'sign', x: 18, y: 2, h: 20, passa: true, talk: () => falaRetratoBranco() }
   ], { onEnter: async () => { if (!G.flags.cmdAla) { G.flags.cmdAla = true; await say('* Do outro lado do rasgo, um corredor. Um CORREDOR. Dentro de um baú. Com tapete.'); await say('Forja, treino... e essas aí pregadas. Ele vai abrindo conforme a gente precisa.', 'rita'); await say('[Registro: o interior passou de "quartinho" a "casa". Recomendo não contar isso para ninguém que estude magia espacial.]', 'cat'); } } });
 
   // ===== FORJA =====
@@ -23745,7 +23800,7 @@ function montarComodos() {
     { t: 'sign', x: 12, y: 3, h: 30, talk: () => say('* Um alvo de palha. Tem flecha nele, mas ninguém aqui usa arco. A Rita diz que "veio assim".') },
     { t: 'sign', x: 6, y: 2, h: 20, passa: true, talk: () => say('* Uma lousa de tática: três bolinhas (vocês), dois X (eles) e uma seta escrita "QUEBRA O ESCUDO PRIMEIRO" sublinhada três vezes.') },
     { t: 'sign', x: 11, y: 7, h: 40, talk: () => say('* Um saco de pancada. Você dá uma mordidinha de teste. Areia. Muita areia.') },
-    npcT1('marlene', 'marlene', 8, 7, { alt: 'neide', dir: 'left', gone: () => !marleneEmCasa(), talk: () => menuTreino(true), spr: marleneSpr }),
+    npcT1('marlene', 'marlene', 8, 7, { alt: 'neide', dir: 'left', gone: () => !marleneEmCasa() || (coretoVeio() && ehNoite()), talk: () => falaMarleneTreino(), spr: marleneSpr }),
     portaCmd(6, 9, 'alaNova', 10, 3, 'down'), portaCmd(7, 9, 'alaNova', 10, 3, 'down')
   ], { batBg: bgTreino, onEnter: async () => { if (!G.flags.cmdTreino) { G.flags.cmdTreino = true; await say('* Tatame, bonecos de palha, um alvo e uma lousa de tática. A sala tem cheiro de suor velho, que não é de ninguém daqui.'); await say('Aqui a gente treina contra o que já enfrentou. Perdeu, levanta. Não custa nada além de orgulho.', 'rita'); if (marleneEmCasa()) await say('E eu dou aula! Setenta e oito anos, bobes no cabelo e espada na mão. Ninguém sai daqui sem saber guardar.', 'marlene'); } } });
 
@@ -23808,6 +23863,33 @@ function montarComodos() {
     { t: 'sign', x: 1, y: 2, h: 30, talk: () => say(G.flags.c7Jorge ? '* O banco do fundo. Era onde a Lume cantava, na outra vida. Alguém deixou ali um caderninho de música, aberto na página do 31.' : '* O banco do fundo. Era onde a Lume cantava, na outra vida. A Lume senta um segundo, fecha os olhos e levanta rápido, como quem encostou numa lembrança quente.') },
     portaCmd(22, 6, 'garagem', 14, 9, 'down')
   ], { onEnter: chegaOnibus31 });
+
+  // ===== O CORETO (v108): o coreto de Velhágua, nas costas do Seu Valdir, atravessou o Vão atrás da valsa =====
+  mapa('coreto', [
+    pr(() => jabutiCoretoArt(), 4.25, 7.1, [5, 5, 6, 2]),
+    pr(() => lampiaoPracaArt(), 2.55, 5, [3, 4, 1, 1]), pr(() => lampiaoPracaArt(), 11.55, 5, [12, 4, 1, 1]),
+    pr(bancoArt, 1.9, 10, [2, 9, 2, 1]), pr(bancoArt, 10.9, 10, [11, 9, 2, 1]),
+    pr(canteiroCmd, 3.4, 8.1, null), pr(canteiroCmd, 10.2, 8.1, null)
+  ], [
+    ...[5, 6, 7, 8, 9, 10].map(x => ({ t: 'sign', x, y: 6, h: 60, talk: falaValdir })),
+    npcT1('marleneC', 'marlene', 3, 7, { dir: 'right', gone: () => !(herEsc().marlene === 'junto' || ehNoite()), talk: () => falaMarleneCoreto(), spr: marleneSpr }),
+    { t: 'sign', x: 2, y: 9, h: 20, talk: () => say('* Um banco de praça de Velhágua, com uma plaquinha: "Doação da Banda Municipal". Ainda tem o risco de canivete: V + M, 1972.') },
+    { t: 'sign', x: 3, y: 4, h: 44, talk: () => say('* Um lampião de praça. Ele acende sozinho quando alguém começa a valsa.') },
+    portaCmd(7, 11, 'alaNova', 21, 3, 'down')
+  ], { music: 'valsa', key: { ' ': { t: 'escuro', solid: true }, ';': { t: 'grama' }, ',': { t: 'pedra' } }, rows: [
+    '               ',
+    ' ;;;;;;;;;;;;; ',
+    ' ;;;;;;;;;;;;; ',
+    ' ;;;,,,,,,,;;; ',
+    ' ;;,,,,,,,,,;; ',
+    ' ;;,,,,,,,,,;; ',
+    ' ;;,,,,,,,,,;; ',
+    ' ;;;,,,,,,,;;; ',
+    ' ;;;;;,,,;;;;; ',
+    ' ;;;;;,,,;;;;; ',
+    ' ;;;;;;,;;;;;; ',
+    '       ,       '], name: 'O Coreto', bg: '#1a0c30' });
+  if (!CMD_BASES.includes('coreto')) CMD_BASES.push('coreto');
 
   for (const id of CMD_BASES.slice(1)) { const m = MAPS2[id]; m.baked = null; for (const p of m.props) { if (p._hld) continue; const f = p.img; p._hld = true; p.img = () => { let c; PINTA_CHAPADO++; try { c = f(); } finally { PINTA_CHAPADO--; } return c ? gradeHLD(c) : EMPTY_C; }; } }
 
@@ -24068,6 +24150,88 @@ async function falaNeide() {
 { const _rp = rotaPara; rotaPara = function (de, para) { return _rp(ehBase(de) && de !== 'interior' ? 'interior' : de, para); }; }
 for (const id of CMD_BASES.slice(1)) if (typeof REGIAO_DE === 'object') { /* sem região: o mapa mostra "dentro do baú" */ }
 { const _mz = missoes; missoes = function () { const L = _mz(); for (const M of L) { if (M.map === 'interior' && M.at && M.at[0] === 13 && M.at[1] === 6) { M.map = 'garagem'; M.at = [14, 9]; } if (M.map === 'interior' && M.at && M.at[0] === 12 && M.at[1] === 4) { M.map = 'enfermaria'; M.at = [7, 5]; } } return L; }; }
+
+
+// ================= O SEU VALDIR E O CORETO (v108) =================
+// Pedido do usuário: "a Dona Marlene tinha um marido, certo? onde ele está? pode adicionar ele?"
+// T1: Seu Valdir Souza (banco 4), casado com a Marlene há 52 anos, virou o JABUTI DO CORETO na masmorra (ele É o lugar
+// onde os dois dançaram; não sai dali). marleneFate 'conosco' = ela veio, ele ficou em paz; 'junto' = os dois ficaram.
+// Agora: a Lume toca a VALSA DO CORETO (aprendida na T1) dentro do baú; o Vão "escuta" um lugar que responde à mesma
+// música, e o coreto inteiro atravessa, com o Seu Valdir dormindo embaixo. Ninguém sabe explicar (proeza do Vão).
+//  - 'conosco': a Marlene (Sala de Treino) tem a opção "O Seu Valdir..." -> cena.
+//  - 'junto': o retrato em branco da Ala Nova vira o gatilho (a Lume cantarola a valsa); os dois chegam juntos.
+//  - Depois: porta lilás na Ala Nova -> O CORETO (praça de bolso no Vão). A Marlene fica no treino de dia e no coreto de
+//    noite (se 'junto', sempre no coreto). Função: BAILE NO CORETO, 1x por dia: o grupo começa as 3 próximas lutas
+//    adiantado na vez (G.valsa). O Valdir fala devagar, dorme no meio da frase.
+Object.assign(WHO, { valdir: { name: () => 'Seu Valdir', portrait: () => PT('valdir'), voice: () => sfx('blipLow', 110), col: '#d8e8c0' } });
+Object.assign(TRACKS, { valsa: { bpm: 88, bars: 8, chords: 'C G Am F C Dm G C', bass: 'root5', bassVol: 0.08,
+  lead: 'E6:8 G6:4 E6:4 | D6:8 B5:4 D6:4 | C6:8 E6:4 A6:4 | A6:8 G6:4 F6:4 | E6:8 G6:4 C7:4 | B6:6 A6:2 F6:8 | D6:8 G6:4 B6:4 | C7:16',
+  leadWave: 'triangle', leadVol: 0.075, arp: { rate: 4, vol: 0.014, pat: [0, 2, 1, 2] }, drums: '', hatVol: 0 } });
+
+async function falaMarleneTreino() {
+  if (coretoVeio() || herEsc().marlene !== 'conosco') return menuTreino(true);
+  const c = await choose('Aula? Ou veio fofocar com a velha?', ['Treinar', 'Perguntar do Seu Valdir', 'Nada'], 'marlene', 2);
+  if (c === 0) return menuTreino(true);
+  if (c === 1) return cenaValdir('conosco');
+}
+async function falaRetratoBranco() {
+  if (herEsc().marlene === 'junto' && G.flags.c4Fim && !coretoVeio()) return cenaValdir('junto');
+  await say(coretoVeio() ? '* O retrato agora tem pintura: um coreto de noite, com luzinhas, e dois velhinhos dançando. Ninguém pintou.' : '* Um retrato em branco, com a moldura pronta. A Rita diz que é "pra próxima".');
+}
+async function cenaValdir(modo) {
+  if (modo === 'conosco') {
+    await say('O Valdir? ...Ficou. Lá embaixo. Ele não podia sair, ele É o coreto, o lugar onde a gente dançou cinquenta e dois anos de sábado.', 'marlene');
+    await say('Ele mandou eu ir. "Vai, Marlene, eu fico, eu sou praça agora." Teimoso. Eu fui. Eu sou mais teimosa, mas fui.', 'marlene');
+    await say('Eu sei a valsa dele. A Valsa do Coreto. Eu aprendi lá embaixo, lembra? A banda tocou uma última vez.', 'lume');
+  } else {
+    await say('* O retrato em branco. A Lume para na frente dele e, sem perceber, começa a cantarolar uma valsa. A Valsa do Coreto, que ela aprendeu lá embaixo.');
+    await say('...Engraçado. Eu sempre lembro do Seu Valdir e da Dona Marlene quando passo aqui. Eles ficaram juntos, lá no coreto. Eu espero que eles estejam dançando.', 'lume');
+  }
+  await say('[Leitura: o Vão está... respondendo. Há um lugar, longe, que conhece esta mesma música. Ele está do outro lado da dobra.]', 'cat');
+  const c = await choose('* A tampa vibra no ritmo. Deixar a Lume tocar a valsa inteira?', ['Tocar a valsa', 'Agora não'], 'n', 1);
+  if (c !== 0) { await say(modo === 'conosco' ? 'Tudo bem, menina. Eu esperei cinquenta e dois anos. Espero mais um pouco.' : '* A Lume para no meio do compasso. O corredor fica quieto de novo.', modo === 'conosco' ? 'marlene' : 'n'); return; }
+  playMusic('valsa'); await fadeOut(30);
+  await cartao(['A Valsa do Coreto', 'um, dois, três; um, dois, três']);
+  await say('* A Lume toca. A valsa enche o corredor, a sala, as camas, o 31 lá na garagem. O Seu Ozório para de mexer a panela. A Ofélia fecha o livro.');
+  await say('* No fim do corredor, entre a enfermaria e a garagem, a parede ondula como água. Uma porta aparece. Do outro lado, um lampião de praça acende sozinho.');
+  await say('[Registro: um LUGAR inteiro atravessou o Vão atrás de uma música. Um coreto. Com um jabuti embaixo. Anotado. Não entendido. Nunca vou entender.]', 'cat');
+  G.flags.coretoVeio = true; save2();
+  V.scene = 'world'; loadMap2('coreto', 7, 10, 'up'); await fadeIn(30);
+  await say('* Uma praça de bolso, flutuando no violeta. No meio, um jabuti enorme dormindo, com o coreto de Velhágua inteiro nas costas: grade, colunas, telhado vermelho e um varal de luzinhas que pisca no tempo da valsa.');
+  if (modo === 'conosco') {
+    await say('VALDIR! Seu velho teimoso! Você veio! De casco e tudo!', 'marlene');
+    await say('...Marlene... ...você... demorou...', 'valdir');
+    await say('EU demorei?! Você virou uma PRAÇA!', 'marlene');
+    await say('...Eu ouvi... a nossa música... e vim... atrás... Lugar também... sente saudade...', 'valdir');
+    await say('* A Dona Marlene sobe os degraus do coreto, senta na grade, encosta a cabeça no casco dele. Ninguém fala nada por um tempo bom.');
+  } else {
+    await say('Ora, se não é a mala! A gente ouviu a valsa lá de baixo e o teimoso aqui levantou. Cinquenta e dois anos sem levantar pra nada, e levantou pra isso.', 'marlene');
+    await say('...Era... a nossa música... Quem toca a nossa música... é de casa...', 'valdir');
+  }
+  await say('Ele vai morar aqui? Dentro do baú? Um coreto dentro de um baú?', 'rita');
+  await say('...Eu sou... um coreto... dentro de um jabuti... dentro de um baú... Tá tudo... certo...', 'valdir');
+  await say('[O CORETO: uma vez por dia, um baile. O grupo dança a valsa e começa as próximas 3 lutas adiantado na vez.]', 'cat');
+  save2();
+}
+async function falaValdir() {
+  if ((G.flags.valsaDia ?? -1) === cmdDia()) { await say(pickOne(['...Zzz... ...um, dois, três... ...zzz...', '...Amanhã... tem baile... de novo... Hoje eu... descanso o casco...', '...A Marlene... ainda pisa no meu pé... cinquenta e dois anos... e eu nunca... reclamei...']), 'valdir'); return; }
+  const c = await choose('...Baile...? ...Sábado... é todo dia... agora...', ['Dançar a valsa', 'Conversar', 'Deixar ele dormir'], 'valdir', 2);
+  if (c === 1) { await say(pickOne(['...Banco quatro... do 31... Eu sentava... do lado da janela... Ela... do corredor... Pra me ver... olhando a rua...', '...A banda... tocou até o fim... O maestro... ia gostar... de saber...', '...Eu não lembro... da minha casa... Mas lembro... de onde ela gostava... de sentar... Isso basta...']), 'valdir'); return; }
+  if (c !== 0) return;
+  G.flags.valsaDia = cmdDia(); G.valsa = { n: 3 };
+  playMusic('valsa'); await fadeOut(16);
+  await say('* As luzinhas do coreto acendem no tempo. A Rita dança com a lança encostada, sem graça e sem errar o passo. A Lume dança com a tampa do baú, rindo. ' + (marleneEmCasa() ? 'A Dona Marlene puxa a Rita pela mão: "Assim não, menina. Ombro pra baixo."' : ''));
+  await fadeIn(16); sfx('heal');
+  await say('[Valsa do Coreto: nas próximas 3 lutas, o grupo começa adiantado na vez.]', 'cat');
+}
+async function falaMarleneCoreto() {
+  await say(pickOne(['Ele dorme mais do que fala. Sempre foi assim. Eu falo pelos dois.', 'Sábado agora é todo dia. Vem dançar, mala. Ninguém aqui repara em quem não tem pé.', 'Cinquenta e dois anos e ele ainda dorme no meio do baile. Tá vendo? Amor é isso.']), 'marlene');
+}
+{ const _b2V = battle2; battle2 = function (cfg) {
+  const p = _b2V.apply(this, arguments);
+  try { const V3 = G.valsa; if (V3 && V3.n > 0 && cfg && !cfg.treino) { for (const m of BT.party) m.ct = Math.min(95, (m.ct || 0) + 35); V3.n--; if (V3.n <= 0) G.valsa = null; } } catch (e) { console.error(e); }
+  return p;
+}; }
 
 // ================= BAÚ MÁGICO: PM QUE ACOMPANHA E MORDIDA DE TINTA (v107) =================
 // Pedido do usuário: "estou sentindo o baú escriba meio fraquinho demais, ele mal aguenta as magias que usa e já fica
