@@ -86,7 +86,7 @@ function quadroCercoArt() { return o9('qc' + nAliados9(), () => { const P = new 
 // ---------- IOLANDA (de dia) e a página da Ofélia ----------
 { const _fI9 = falaIolanda; falaIolanda = async function () {
   if (c9Ativo() && !aliado9('iolanda')) {
-    if (ehNoite()) { await say('* A Papelaria Pena & Fuligem, fechada. Um bilhete na porta: "De dia. Papel dorme de noite. Eu também."'); return; }
+    if (ehNoite() && W2.id !== 'papelaria') { await say('* A Papelaria Pena & Fuligem, fechada. Um bilhete na porta: "De dia. Papel dorme de noite. Eu também."'); return; }
     playMusic('cha');
     await say('O Farol? Vocês vão subir no Farol?', 'iolanda');
     await say('* A Dona Iolanda some atrás do balcão. Volta com um canudo de papel amarelado, amarrado com barbante vermelho.');

@@ -127,7 +127,7 @@ const arvC = v => memo(() => arvoreArt(v));
     props: [{ img: memo(() => estanteArt(2)), x: 1, y: 4, solid: [[1, 3, 2, 1]] }, { img: memo(() => estanteArt(2)), x: 9, y: 4, solid: [[9, 3, 2, 1]] }, { img: memo(() => balcaoArt(6)), x: 3, y: 5, solid: [[3, 4, 6, 1]] }, { img: memo(mesaArt), x: 1.8, y: 6, solid: [[2, 5, 2, 1]] }],
     ents: [...portas(PA.door, 'auren', ...AUR.papOut, 'down'),
       morador('iolanda', ...PA.iolanda, { rotina: rot([6, 3, 'limpar', 400, 'down'], [4, 3, 'olhar', 300, 'up']), talk: falaIolanda }),
-      { t: 'sign', x: PA.balcao[0], y: PA.balcao[1], h: 30, talk: () => G.flags.c3Grim ? lojaPapelaria() : falaIolanda() },
+      { t: 'sign', x: PA.balcao[0], y: PA.balcao[1], h: 30, talk: balcaoIolanda },
       { t: 'sign', x: PA.mesa[0], y: PA.mesa[1], h: 26, talk: mesaEscrita }]
   };
   // ===== AVENIDA DO FESTIVAL =====
@@ -262,6 +262,17 @@ async function falaTico() {
   await say('...Ele vai lembrar de mim. Na festa. Todo mundo fica feliz na festa.', 'tico');
   await say('Ele vai, Tico. A gente dá um jeito.', 'me');
   save2();
+}
+// v111: o balcão abria direto a loja e a Dona Iolanda (atrás dele) ficava inalcançável: as entregas da história
+// (a página do Cap. 5, a página seca do Cap. 7, o mapa do Cap. 9) passam pelo balcão quando houver assunto pendente.
+function iolandaTemAssunto() {
+  const f = G.flags;
+  return (f.c5Init && !f.c5Iolanda) || (f.c7Pagina && !f.c7PaginaFeita) || (typeof c9Ativo === 'function' && c9Ativo() && typeof aliado9 === 'function' && !aliado9('iolanda'));
+}
+async function balcaoIolanda() {
+  if (!G.flags.c3Grim || iolandaTemAssunto()) return falaIolanda();
+  if (typeof c8Ativo === 'function' && c8Ativo() && !ehNoite()) { const c = await choose('* A Dona Iolanda, atrás do balcão, com cera de vela nos dedos.', ['Velas', 'Loja', 'Sair'], 'n', 2); if (c === 0) return falaIolanda(); if (c === 1) return lojaPapelaria(); return; }
+  return lojaPapelaria();
 }
 async function falaIolanda() {
   if (!G.flags.c3Iolanda) {
