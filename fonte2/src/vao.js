@@ -5,17 +5,17 @@
 //  Dardo/Corrente/Lança-base: tira 1 de escudo mesmo sem fraqueza · Onda/Coro: PUXA todos (a vez atrasa 30) ·
 //  Âncora: PRENDE no espaço (cancela o golpe preparado e atrasa 40) · Mina: abre uma FENDA que engole o próximo golpe do
 //  alvo · Chave: -2 de escudo a mais · Véu: GUARDA o aliado no Vão (o próximo golpe erra e a vez adianta 35).
-// Custa caro: +6 PM e +2 de tinta. Fusões: Vão+Âmbar = BOLSO DO TEMPO (atrasa 60), Vão+Sombra = PORTA ESCURA (ignora
-// toda a defesa, enfraquece). VISUAL: fendas de espaço com céu estrelado dentro, anel de runas girando, arcos de lente,
+// Custa caro: +6 PM e +2 de tinta. Fusões: Vão+Âmbar = BOLSO DO TEMPO (atrasa 60), Vão+Sombra = ESTRELA NEGRA (um buraco
+// negro: ignora toda a defesa, enfraquece e puxa os outros). VISUAL: fendas de espaço com céu estrelado dentro, anel de runas girando, arcos de lente,
 // a mordida saindo da fenda, rachaduras de vidro no ar e estilhaços.
 Object.assign(EL3, { vao: { nm: 'Vão', el: null, col: '#b890ff', cols: ['#b890ff', '#ffffff', '#2a1050'], d: 'espaço dobrado (lendário, só o baú): ignora 60% da defesa; o efeito muda com a forma' } });
 ORD_EL.push('vao');
 Object.assign(SIG3, { vao: ['...###...', '..#...#..', '..#.#.#..', '..#...#..', '...#.#...', '...#.#...', '..##.##..', '..#...#..', '..#####..'] });
 Object.assign(FUS3, {
   'ambar+vao': { nm: 'Bolso do Tempo', col: '#e0b0ff', cols: ['#ffd890', '#b890ff', '#ffffff'], hits: [[null, 0.6]], tempo: 60, d: 'o alvo cai num bolso onde o tempo anda devagar: a vez dele atrasa MUITO', veu: 'bolso', nota: '"Vão + Âmbar = Bolso do Tempo. Eu não sei explicar isso. Eu só sei que é lindo." (O Catálogo)' },
-  'sombra+vao': { nm: 'Porta Escura', col: '#7a5ab8', cols: ['#1a0a30', '#b890ff', '#5a3a8a'], hits: [[null, 1.1]], fraco: true, pierceTotal: true, d: 'uma porta que abre DENTRO do inimigo: ignora toda a defesa e enfraquece o próximo golpe', veu: 'porta', nota: '"Vão + Sombra = Porta Escura. Nunca abra isso dentro de casa." (O Catálogo)' }
+  'sombra+vao': { nm: 'Estrela Negra', col: '#ff9a40', cols: ['#000000', '#ff9a40', '#ffe0a0'], hits: [[null, 1.1]], fraco: true, pierceTotal: true, puxaTodos: 0.35, d: 'um BURACO NEGRO no alvo: ignora toda a defesa, enfraquece o próximo golpe e puxa os outros inimigos (35%, a vez atrasa)', veu: 'porta', nota: '"Vão + Sombra = Estrela Negra. Uma estrela que caiu para dentro de si mesma. Nem a luz escapa. Eu também não chegaria perto." (O Catálogo)' }
 });
-Object.assign(VEU3, { vao: { nm: 'Guardado no Vão', d: 'o aliado some dentro do baú: o próximo golpe erra e a vez dele adianta' }, bolso: { nm: 'Bolso do Tempo', d: 'a vez do aliado chega quase na hora' }, porta: { nm: 'Porta Escura', d: 'some na porta: o próximo golpe erra, e ele volta com Manto (+30% por 3)' } });
+Object.assign(VEU3, { vao: { nm: 'Guardado no Vão', d: 'o aliado some dentro do baú: o próximo golpe erra e a vez dele adianta' }, bolso: { nm: 'Bolso do Tempo', d: 'a vez do aliado chega quase na hora' }, porta: { nm: 'Horizonte', d: 'o aliado se esconde atrás do horizonte da estrela negra: o próximo golpe erra, e ele volta com Manto (+30% por 3)' } });
 const temVao = s => !!(s && s.e && s.e.includes('vao'));
 { const _pgV = pagina3; pagina3 = function (s) { const P = _pgV(s); if (temVao(s)) { P.mp += 6; } return P; }; }
 { const _ctV = custoTinta; custoTinta = function (s) { return _ctV(s) + (temVao(s) ? 2 : 0); }; }
@@ -58,8 +58,38 @@ function dentesNaFenda(x, y, rx, ry, fecha) {   // a mordida do baú saindo do v
   const g = Math.round(ry * (1 - fecha) * 0.9);
   for (const lado of [-1, 1]) for (let i = -3; i <= 3; i++) { const tx = x + i * rx * 0.28, ty = y + lado * g; bx.fillStyle = '#f2ecdc'; bx.beginPath(); bx.moveTo(tx - 3, ty); bx.lineTo(tx + 3, ty); bx.lineTo(tx, ty - lado * 5); bx.closePath(); bx.fill(); bx.fillStyle = '#b8a888'; bx.fillRect(Math.round(tx), Math.round(ty - lado * 1), 1, 1); }
 }
+// ---------- a Estrela Negra (Vão + Sombra): um buraco negro ----------
+function buracoNegro(x, y, r, p, o = {}) {
+  if (p <= 0.01) return;
+  const R = Math.max(1, r * p), T = FRAME;
+  // lente gravitacional: anéis tortos de luz em volta
+  bx.globalAlpha = 0.25 * p; bx.strokeStyle = '#ffe0a0'; bx.lineWidth = 1;
+  for (let i = 0; i < 3; i++) { bx.beginPath(); bx.ellipse(x, y, R * (1.9 + i * 0.35), R * (1.5 + i * 0.3), 0.2, 0, Math.PI * 2); bx.stroke(); }
+  // disco de acreção (parte de trás)
+  const disco = (frente) => { for (let i = 0; i < 70; i++) { const a = (i / 70) * Math.PI * 2 + T * 0.09, ehFrente = Math.sin(a) > 0; if (ehFrente !== frente) continue; const rr = R * (1.35 + ((i * 7) % 5) * 0.12), px = x + Math.cos(a) * rr * 1.6, py = y + Math.sin(a) * rr * 0.38; bx.globalAlpha = p * (0.55 + ((i * 3) % 4) * 0.12); bx.fillStyle = i % 9 === 0 ? '#ffffff' : i % 3 === 0 ? '#ffe0a0' : i % 2 ? '#ff9a40' : '#d0502a'; bx.fillRect(Math.round(px), Math.round(py), i % 5 === 0 ? 2 : 1, 1); } };
+  disco(false);
+  // o anel de fóton e o horizonte (o preto mais preto)
+  bx.globalAlpha = p; bx.fillStyle = '#ffe0a0'; bx.beginPath(); bx.arc(x, y, R + 1.5, 0, Math.PI * 2); bx.fill();
+  bx.fillStyle = '#000000'; bx.beginPath(); bx.arc(x, y, R, 0, Math.PI * 2); bx.fill();
+  disco(true);
+  // a matéria caindo em espiral
+  if (o.puxa && FRAME % 2 === 0) for (let i = 0; i < 3; i++) { const a = Math.random() * 6.28, d = R * rand(3, 5); part({ x: x + Math.cos(a) * d, y: y + Math.sin(a) * d * 0.6, vx: -Math.cos(a) * 1.6 + Math.sin(a) * 0.9, vy: -Math.sin(a) * 1.0 - Math.cos(a) * 0.5, life: 16, col: pickOne(['#ff9a40', '#ffe0a0', '#ffffff']) }); }
+  bx.globalAlpha = 1;
+}
+async function estrelaNegra(alvos, forte) {
+  const vs = alive(BT.foes); if (!alvos.length) return;
+  const [cx, cy] = alvos.length > 1 ? [alvos.reduce((a, e) => a + unitCenter(e)[0], 0) / alvos.length, alvos.reduce((a, e) => a + unitCenter(e)[1], 0) / alvos.length] : unitCenter(alvos[0]);
+  sfx('geada'); callout('ESTRELA NEGRA', '#ff9a40', 60);
+  await tw(40, p => {
+    escurecerVao(0.65 * Math.min(1, p * 2)); buracoNegro(cx, cy, forte ? 14 : 10, ease.out(Math.min(1, p * 1.4)), { puxa: true });
+    for (const e of vs) { const [ex] = unitCenter(e); e.ox = (cx - ex) * 0.3 * ease.in(p); }
+  });
+  sfx('crit'); hitstop(8); bshake(12, 3); flashW(3);
+  for (const e of vs) { const [ex, ey] = unitCenter(e); estilhacos(ex, ey, 8); }
+  tw(24, p => { escurecerVao(0.65 * (1 - p)); buracoNegro(cx, cy, (forte ? 14 : 10) * (1 + p * 0.4), 1 - p); if (p > 0.6) { bx.globalAlpha = (1 - p) * 2; bx.fillStyle = '#ffffff'; bx.beginPath(); bx.arc(cx, cy, 3 + (p - 0.6) * 60, 0, Math.PI * 2); bx.fill(); bx.globalAlpha = 1; } for (const e of vs) e.ox = e.ox * (1 - p); }).then(() => { for (const e of vs) e.ox = 0; });
+}
 // ---------- as animações do Vão (as normais continuam para os outros elementos) ----------
-{ const _tdV = tipoDe; tipoDe = function (s) { return temVao(s) ? 'vao' : _tdV(s); }; }
+{ const _tdV = tipoDe; tipoDe = function (s) { if (temVao(s) && s.e.includes('sombra') && s.e[0] !== s.e[1]) return 'estrela'; return temVao(s) ? 'vao' : _tdV(s); }; }
 { const _bcV = bauConjura; bauConjura = async function (m, col, n) {
   if (col !== EL3.vao.col && !(BT._vaoCast)) return _bcV(m, col, n);
   const [x, y] = unitCenter(m); sfx('rune');
@@ -67,6 +97,7 @@ function dentesNaFenda(x, y, rx, ry, fecha) {   // a mordida do baú saindo do v
   return _bcV(m, col, Math.max(4, (n || 14) - 10));
 }; }
 { const _pmV = projetilMagia; projetilMagia = async function (de, alvo, tipo, n) {
+  if (tipo === 'estrela') { const [x0, y0] = de._pt || unitCenter(de), [x1, y1] = unitCenter(alvo); sfx('rune'); await tw(20, p => { const e = ease.in(p); buracoNegro(x0 + (x1 - x0) * e, y0 + (y1 - y0) * e - Math.sin(p * Math.PI) * 10, 3, 1); }); return; }
   if (tipo !== 'vao') return _pmV(de, alvo, tipo, n);
   const [x0, y0] = de._pt || unitCenter(de), [x1, y1] = unitCenter(alvo);
   sfx('geada');
@@ -74,6 +105,7 @@ function dentesNaFenda(x, y, rx, ry, fecha) {   // a mordida do baú saindo do v
   await tw(10, p => { escurecerVao(0.5); fendaVao(x0 + 6, y0, 9, 12, 1 - p); fendaVao(x1, y1, 14, 18, 1, { puxa: true }); dentesNaFenda(x1, y1, 14, 18, 0); });
 }; }
 { const _imV = impactoMagia; impactoMagia = async function (alvo, tipo, forte) {
+  if (tipo === 'estrela') { if (!BT._estrelaFeita) await estrelaNegra([alvo], forte); return; }
   if (tipo !== 'vao') return _imV(alvo, tipo, forte);
   const [x, y] = unitCenter(alvo);
   await tw(8, p => { escurecerVao(0.5 * (1 - p * 0.3)); fendaVao(x, y, 14, 18, 1, { puxa: true }); dentesNaFenda(x, y, 14, 18, ease.in(p)); });
@@ -82,6 +114,7 @@ function dentesNaFenda(x, y, rx, ry, fecha) {   // a mordida do baú saindo do v
   tw(16, p => { fendaVao(x, y, 14, 18, 1 - p); rachaduras(x, y, 26, p, x * 0.1); });
 }; }
 { const _omV = ondaMagia; ondaMagia = async function (de, tipo) {
+  if (tipo === 'estrela') { await estrelaNegra(alive(BT.foes), true); BT._estrelaFeita = true; setTimeout(() => { BT._estrelaFeita = false; }, 50); return; }
   if (tipo !== 'vao') return _omV(de, tipo);
   const vs = alive(BT.foes); if (!vs.length) return;
   const cx = vs.reduce((a, e) => a + unitCenter(e)[0], 0) / vs.length, cy = vs.reduce((a, e) => a + unitCenter(e)[1], 0) / vs.length;
@@ -115,6 +148,7 @@ function dentesNaFenda(x, y, rx, ry, fecha) {   // a mordida do baú saindo do v
   BT._vaoPierce = fus && fus.pierceTotal ? 'total' : true; BT._vaoDentro = true;
   if (!fus) k *= 1.3;   // lendário: bate mais forte que um sigilo comum
   try { await _g3V(m, alvos, P, F, s, k); } finally { BT._vaoPierce = false; BT._vaoDentro = false; }
+  if (fus && fus.puxaTodos) for (const o of alive(BT.foes).filter(f => !alvos.includes(f))) { hitFoe(m, o, F.pow * fus.puxaTodos * k, { mag: true, ranged: true }); o.ct = Math.max(0, (o.ct || 0) - 20); const [ox2, oy2] = unitCenter(o); popNum(ox2, oy2 - 34, 'PUXADO', '#ff9a40'); }
   for (const t of alvos) {
     if (t.hp <= 0) continue; const [x, y] = unitCenter(t);
     const tiraEsc = n => { const tinha = t.shield > 0 && !t.broken; t.shield = Math.max(0, (t.shield || 0) - n); if (tinha && t.shield === 0) breakFoe(t); };
@@ -131,7 +165,7 @@ function dentesNaFenda(x, y, rx, ry, fecha) {   // a mordida do baú saindo do v
   const [x, y] = unitCenter(t);
   if (K === 'vao') { t.st.sumido = 1; t.ct = Math.min(99, (t.ct || 0) + 35); popNum(x, y - 26, 'GUARDADO NO VÃO', '#d8c0ff'); }
   else if (K === 'bolso') { t.ct = Math.min(99, (t.ct || 0) + 70); popNum(x, y - 26, 'BOLSO DO TEMPO', '#ffd890'); }
-  else { t.st.sumido = 1; t.st.manto = 3; popNum(x, y - 26, 'PORTA ESCURA', '#b890ff'); }
+  else { t.st.sumido = 1; t.st.manto = 3; popNum(x, y - 26, 'HORIZONTE', '#ff9a40'); }
 }; }
 // a fenda da Mina engole o próximo golpe do alvo
 { const _fsV = foeStrike; foeStrike = async function (e, t, pow, o = {}) {
@@ -189,7 +223,7 @@ async function cenaSigiloVao() {
   await say('* Na página, no meio do círculo, uma fechadura vista do lado de dentro. Dentro dela, um céu que não é o daqui.');
   sfx('catalog'); await say('[Sigilo novo: VÃO. Classificação: LENDÁRIO. Registro de pessoas que já traçaram isso: menos de dez. Registro de baús: um.]', 'cat');
   await say('[O golpe de Vão atravessa o espaço: a defesa do alvo quase não conta. A forma decide o resto: o Dardo tira escudo, a Onda puxa todos, a Âncora prende, a Mina engole o próximo golpe, o Véu guarda um aliado dentro de você.]', 'cat');
-  await say('[Caro: mais PM e mais tinta. Selos anotados de graça, porque ninguém vende isso: Vão + Âmbar = Bolso do Tempo. Vão + Sombra = Porta Escura.]', 'cat');
+  await say('[Caro: mais PM e mais tinta. Selos anotados de graça, porque ninguém vende isso: Vão + Âmbar = Bolso do Tempo. Vão + Sombra = Estrela Negra.]', 'cat');
   await say('Você acabou de... dobrar uma página? O Catálogo disse "menos de dez". Na HISTÓRIA.', 'lume');
   await say('Ninguém conta isso pra ninguém. Ninguém. Nem pro Jorge. Principalmente pro Jorge.', 'rita');
   await say(r && r.firme ? 'a mão não tremeu. eu sabia.' : 'tremeu um pouco. eu segurei o resto.', 'eco8');
