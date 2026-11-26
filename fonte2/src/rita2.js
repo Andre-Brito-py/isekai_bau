@@ -36,9 +36,24 @@ if (WHO.rita) Object.assign(WHO.rita, {
   if (f.k !== 'rita' || !ritaNovaPronta()) return _fsR(f);
   const t = W2.t + 13, M = RITA2.mapa;
   const v = f.dir === 'up' ? M.up : f.dir === 'down' ? M.down : M.right;
-  const fr = f.mv ? v[Math.floor(t / 7) % v.length] : v[0];
-  return f.dir === 'left' ? flipC(fr) : fr;
+  if (f.mv || W2.mv) { const fr = v[Math.floor(t / 7) % v.length]; return f.dir === 'left' ? flipC(fr) : fr; }
+  // parada: mesmo balanço de cabelo/roupa da Lume e do protagonista (anda.js), mais respiração
+  const p0 = v === M.right ? v[1] : v[0], base = f.dir === 'left' ? flipC(p0) : p0; // de lado: o passo mais fechado da folha
+  return ritaParada(base, f.dir === 'left' || f.dir === 'right', W2.t + 30);
 }; }
+const RITA_PAR = new WeakMap();
+function ritaParada(src, lado, t) {
+  const fr = paradoQuadro(src, lado, t);
+  const resp = Math.floor(t / 22) % 4 === 1; // peito sobe 1 px num compasso lento
+  if (!resp) return fr;
+  let c = RITA_PAR.get(fr);
+  if (!c) { c = mk(fr.width, fr.height); const x = c.getContext('2d'), cut = Math.round(fr.height * 0.62);
+    x.drawImage(fr, 0, cut, fr.width, fr.height - cut, 0, cut, fr.width, fr.height - cut);
+    x.drawImage(fr, 0, 0, fr.width, cut, 0, -1, fr.width, cut);
+    x.drawImage(fr, 0, cut - 1, fr.width, 1, 0, cut - 1, fr.width, 1);
+    RITA_PAR.set(fr, c); }
+  return c;
+}
 // batalha: quadro desenhado escolhido pela pose
 function ritaQuadro(u) {
   const B = RITA2.bat, P = u.P || {}, T = BT.t || 0, alt = (L, n) => L[Math.floor(T / n) % L.length];
