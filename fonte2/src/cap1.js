@@ -735,7 +735,7 @@ function frame(ts) {
   if (!FT_LAST) FT_LAST = ts;
   FT_ACC += Math.min(100, ts - FT_LAST); FT_LAST = ts;
   let n = 0;
-  while (FT_ACC >= 1000 / 60 - 1 && n < 4) { FT_ACC -= 1000 / 60; for (let z = 0; z < (window.TURBO || 1); z++) tick(); n++; }
+  while (FT_ACC >= 1000 / 60 - 1 && n < 4) { FT_ACC -= 1000 / 60; for (let z = 0; z < (window.TURBO || 1); z++) { try { tick(); } catch (e) { console.error('tick', e); if (!window.__errTick) { window.__errTick = 1; try { W2.toast = { s: 'Ops: um erro foi ignorado.', t: 0 }; } catch (e2) { } } } } n++; }   // v121: um erro num quadro não congela mais o jogo
   if (FT_ACC < 0) FT_ACC = 0;
   requestAnimationFrame(frame);
 }

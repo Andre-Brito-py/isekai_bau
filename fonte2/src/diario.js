@@ -54,7 +54,7 @@ function diarioPedidos() {
     passos: [[`${p.mat ? 'Juntar' : 'Derrotar'} ${p.n} (${pedProgresso(p)}/${p.n})`, () => pedProgresso(p) >= p.n], ['Receber o pagamento no quadro da taverna', () => pedEstado(p) === 'feito']] }));
 }
 function diarioTodas() { return [...DIARIO, ...diarioPedidos()].filter(m => m.vis()); }
-function andamento(m) { const ps = m.passos, f = ps.filter(p => p[1]()).length; return { f, n: ps.length, atual: ps.find(p => !p[1]()) }; }
+function andamento(m) { const ps = m.passos || [['Concluir', () => m.feita()]], f = ps.filter(p => p[1]()).length; return { f, n: ps.length, atual: ps.find(p => !p[1]()) }; }
 // onde fica a etapa atual (a principal usa o alvo do mapa)
 function ondeMissao(m) {
   if (m.feita()) return null;
@@ -68,7 +68,7 @@ function telaDiario() {
   const lista = () => { const T = diarioTodas(); const A = T.filter(m => aba === 0 ? !m.feita() : m.feita()); return aba === 0 ? A.sort((a, b) => (a.tipo === 'main' ? 0 : 1) - (b.tipo === 'main' ? 0 : 1)) : A.reverse(); };
   let L = lista();
   const w = {
-    type: 'diario',
+    type: 'diario', _abre: Math.random(),
     update() {
       t++;
       if (btnp('left') || btnp('right')) { aba = 1 - aba; sel = 0; L = lista(); mud = t; sfx('select'); }
@@ -76,20 +76,22 @@ function telaDiario() {
       if (L.length && navp('down')) { sel = (sel + 1) % L.length; mud = t; sfx('move'); }
       if (btnp('b') || btnp('a') || btnp('menu')) { sfx('cancel'); closeWin(this); }
     },
-    draw() {
+    draw() { try { this._draw(); } catch (e) { console.error('diario', e); bx.globalAlpha = 1; } },   // v121: um erro aqui não derruba o jogo
+    _draw() {
       const X = 4, Y = 4, Wd = 232, Hd = 232;
       TQ.length = 0;
       bx.globalAlpha = 0.75; bx.fillStyle = '#05030a'; bx.fillRect(-400, -10, 1200, 300); bx.globalAlpha = 1;
       bx.fillStyle = '#0e0a1a'; bx.fillRect(X + 2, Y + 2, Wd - 4, Hd - 4); box(X, Y, Wd, Hd);
       // abas
-      const T = diarioTodas(), nA = T.filter(m => !m.feita()).length, nC = T.length - nA;
+      if (!this._cnt || this._cntT !== mud) { const T0 = diarioTodas(), n0 = T0.filter(m => !m.feita()).length; this._cnt = [n0, T0.length - n0]; this._cntT = mud; }   // v121: contagem só quando muda (antes: a cada quadro)
+      const nA = this._cnt[0], nC = this._cnt[1];
       [['EM ANDAMENTO', nA], ['CONCLUÍDAS', nC]].forEach(([nm, n], j) => { const x = X + 8 + j * 104, on = j === aba; bx.fillStyle = on ? UIC.accent : 'rgba(143,227,216,0.18)'; bx.fillRect(x, Y + 6, 100, 14); if (!on) { bx.fillStyle = '#0e0a1a'; bx.fillRect(x + 1, Y + 7, 98, 12); } txt(nm + ' ' + n, x + 50, Y + 7, { align: 'center', col: on ? '#ffffff' : '#8fe3d8' }); });
       // lista
       const LY = Y + 26, VIS = 5;
       if (!L.length) { txt(aba === 0 ? 'Nenhuma missão em andamento.' : 'Nenhuma missão concluída ainda.', X + 10, LY + 4, { col: '#8a8099' }); return; }
       const sc = Math.max(0, Math.min(sel - 2, L.length - VIS));
       for (let i = 0; i < VIS && i + sc < L.length; i++) {
-        const k = i + sc, m = L[k], yy = LY + i * 12, on = k === sel, a = andamento(m), feita = m.feita();
+        const k = i + sc, m = L[k], yy = LY + i * 12, on = k === sel; if (!m._cache || m._cacheT !== this._abre) { m._cache = { a: andamento(m), f: m.feita() }; m._cacheT = this._abre; } const a = m._cache.a, feita = m._cache.f;
         if (on) { bx.fillStyle = UIC.sel; bx.fillRect(X + 4, yy - 1, Wd - 8, 12); setaSel(X + 5, yy); }
         // ícone
         bx.fillStyle = feita ? '#5aa870' : m.tipo === 'main' ? '#ffd060' : '#7ad8ff'; bx.fillRect(X + 14, yy + 1, 7, 9); bx.fillStyle = '#0e0a1a';
@@ -111,7 +113,7 @@ function telaDiario() {
       txt((m.tipo === 'main' ? 'PRINCIPAL' : m.repete ? 'REPETÍVEL' : 'OPCIONAL') + ' · ' + (m.tipo === 'main' ? m.cap : 'pedido de ' + m.quem), X + 8, y, { col: cor }); y += 12;
       y += txt(m.desc, X + 8, y, { w: Math.floor((Wd - 16) / 6), col: '#d8d0e0', lh: 10 }) * 10 + 4;
       // etapas: a última feita (com visto) e a atual (com seta); as futuras ficam escondidas
-      const feitas = m.passos.filter(p => p[1]());
+      const feitas = (m.passos || []).filter(p => p[1]());
       const visto = (yy) => { bx.fillStyle = '#5aa870'; bx.fillRect(X + 10, yy + 2, 6, 6); bx.fillStyle = '#0e0a1a'; bx.fillRect(X + 11, yy + 5, 1, 1); bx.fillRect(X + 12, yy + 6, 1, 1); bx.fillRect(X + 13, yy + 5, 1, 1); bx.fillRect(X + 14, yy + 4, 1, 1); };
       if (feitas.length && (!m.repete || feitas.length)) for (const [s2] of (feita && !m.repete ? feitas.slice(-2) : feitas.slice(-1))) { visto(y); y += txt(s2, X + 20, y, { w: Math.floor((Wd - 28) / 6), col: '#7a9a82', lh: 10 }) * 10; }
       if (a.atual && !feita) {
@@ -119,7 +121,8 @@ function telaDiario() {
         y += txt(a.atual[0], X + 20, y, { w: Math.floor((Wd - 28) / 6), col: '#ffffff', lh: 10 }) * 10;
       }
       // rodapé: onde e quando, recompensa, barra de andamento
-      const FY = Y + Hd - 24, onde = ondeMissao(m), q = m.quando || (onde && onde.quando);
+      if (this._ondeK !== sel + '/' + aba) { this._ondeK = sel + '/' + aba; try { this._onde = ondeMissao(m); } catch (e) { console.error(e); this._onde = null; } }
+      const FY = Y + Hd - 24, onde = this._onde, q = m.quando || (onde && onde.quando);
       if (!feita || m.repete) {
         let sl = '', sc2 = '#6a6078';
         if (q) { const [s2, c] = SELO[q], ok = seloOk(q); sl = s2 + (ok ? ' (agora!)' : ''); if (ok) sc2 = c; }

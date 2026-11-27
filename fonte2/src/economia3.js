@@ -350,4 +350,5 @@ const BAU_EXTRA = {
   await say('Bom negócio. A pedra eu não ia comer mesmo.', 'ze');
   save2();
 }; }
-DIARIO.push({ tipo: 'side', cap: 'Velhágua', quem: 'o Zé do cais', tit: 'A pedra da salina', vis: () => !!G.flags.c5Fim && grim().ativo, feita: () => temElem('sal'), recompensa: 'elemento Sal e um selo', desc: 'O Zé troca a pedra do meio da salina velha por 3 Lodos de Rua (Lambe-Lodo, Bairro Afogado).' });
+DIARIO.push({ tipo: 'side', cap: 'Velhágua', quem: 'o Zé do cais', tit: 'A pedra da salina', vis: () => !!G.flags.c5Fim && grim().ativo, feita: () => temElem('sal'), recompensa: 'elemento Sal e um selo', desc: 'O Zé troca a pedra do meio da salina velha por 3 Lodos de Rua (Lambe-Lodo, Bairro Afogado).',
+  passos: [['Juntar 3 Lodos de Rua (Lambe-Lodo, Bairro Afogado)', () => temElem('sal') || ((G.mat || {}).lodo || 0) >= 3], ['Trocar com o Zé do cais, em Velhágua', () => temElem('sal')]] });   // v121: faltava 'passos' e o diário travava o jogo
