@@ -266,3 +266,18 @@ function holofoteBossArt(f, fase, carga) {
   P.line(cx + 34, 62, cx + 26, 54 + b * 2, '#c89a30', 2);
   return INI5[key] = P.outline().canvas();
 }
+// v113: as velas COM NOME se confundiam com as mil velas pintadas nas estantes (o jogador não achava as do enigma).
+// Agora cada uma tem uma ETIQUETA de papel pendurada e, apagada, um brilhinho âmbar que pisca devagar.
+{ const _vnA = velaNomeArt; velaNomeArt = function (acesa) {
+  const f = acesa ? 0 : Math.floor((typeof W2 === 'object' ? W2.t : 0) / 18) % 3, key = 'vnE' + (acesa ? 1 : 0) + f; if (OBJ5[key]) return OBJ5[key];
+  const base = _vnA(acesa);
+  const out = mk(18, 30), x = out.getContext('2d');
+  x.drawImage(base, 4, 0);
+  // etiqueta: barbante + papel com rabisco de nome
+  x.fillStyle = '#c8b890'; x.fillRect(12, 12, 1, 5);
+  x.fillStyle = '#2a2020'; x.fillRect(10, 16, 8, 7);
+  x.fillStyle = '#f4ecd8'; x.fillRect(11, 17, 6, 5);
+  x.fillStyle = '#5a4a3a'; x.fillRect(12, 18, 4, 1); x.fillRect(12, 20, 3, 1);
+  if (!acesa) { x.fillStyle = f === 0 ? '#ffe066' : f === 1 ? '#ffb040' : '#fff6c8'; x.fillRect(8, 3 - f, 1, 1); x.fillRect(2, 6 + f, 1, 1); if (f === 2) { x.fillRect(7, 2, 3, 1); x.fillRect(8, 1, 1, 3); } }
+  return OBJ5[key] = out;
+}; }
