@@ -1352,6 +1352,8 @@ v105 — RETRATO GRANDE DA RITA (o usuário decidiu que 32 px perde detalhe): WH
   v113: Arquivo das Velas (Cap. 5): as velas com nome ganharam etiqueta de papel e brilho piscando (ninguém achava as do enigma).
   v114: BUG Arquivo das Velas: a mesa do bilhete era desenhada atrás da última estante (invisível). Mesa movida para o corredor
    de baixo, perto da entrada (5-6,20), com o bilhete piscando.
+  v115: BUG Arquivo: com a escadinha colada embaixo da vela alta, não sobrava lugar para ficar de frente para a vela. Agora a
+   escadinha vale embaixo ou na diagonal de baixo, e falar com a escadinha ali sobe até a vela.
 =====================================================================
 -->
 <style>
@@ -14116,9 +14118,9 @@ async function falaVelaNome(nm, x, y) {
   const lista = G.flags.c5VelasAcesas || [];
   if (lista.includes(nm)) { await say('* A vela de "' + nm + '" está acesa.'); return; }
   const alta = nm === AR5.alta;
-  if (alta && !W2.ents.some(e => e.t === 'movel' && e.k === 'escadinha' && Math.abs(e.x - x) + Math.abs(e.y - y) === 1)) {
+  if (alta && !escadaPerto5(x, y)) {
     await say('* "' + nm + '", lá na prateleira mais alta. A Lume estica o braço. Não alcança. Nem a Rita na ponta do pé.');
-    await say('[Uma ESCADINHA encostada do lado da vela resolveria. Tem uma no canto do arquivo.]', 'cat'); return;
+    await say('[Uma ESCADINHA encostada embaixo da vela (no corredor, logo abaixo ou na diagonal) resolveria. Tem uma no canto do arquivo. Com ela ali, fale com a vela ou com a escadinha.]', 'cat'); return;
   }
   const c = await choose('* "' + nm + '". ' + (alta ? 'A Lume sobe na escadinha.' : '') + ' Acender esta vela?', ['A Lume acende', 'Deixar'], 'n', 1); if (c !== 0) return;
   const certo = AR5.ordem[lista.length] === nm;
@@ -14217,6 +14219,18 @@ async function vesperCha() {
 }
 
 function bilheteMesaArt() { const f = Math.floor(W2.t / 16) % 3, k = 'bilM' + f; if (OBJ5[k]) return OBJ5[k]; const c = mk(16, 12), x = c.getContext('2d'); x.fillStyle = '#2a2020'; x.fillRect(2, 4, 11, 7); x.fillStyle = '#f8f2e0'; x.fillRect(3, 5, 9, 5); x.fillStyle = '#5a4a3a'; x.fillRect(4, 6, 6, 1); x.fillRect(4, 8, 5, 1); if (!G.flags.c5Velas) { x.fillStyle = f === 1 ? '#fff6c8' : '#ffe066'; x.fillRect(13, 1 + f, 1, 1); if (f === 2) { x.fillRect(12, 2, 3, 1); x.fillRect(13, 1, 1, 3); } } return OBJ5[k] = c; }
+
+// v115: a escadinha só valia colada na vela (o único lugar livre ao lado dela era o corredor logo abaixo, onde a própria
+// escadinha ficava, e aí ninguém conseguia ficar de frente para a vela). Agora vale embaixo ou na diagonal de baixo, e
+// falar com a ESCADINHA posta ali também sobe até a vela.
+function escadaPerto5(x, y) { return W2.ents.some(e => e.t === 'movel' && e.k === 'escadinha' && Math.abs(e.x - x) <= 1 && e.y - y >= 0 && e.y - y <= 1); }
+{ const _fmE = falaMovel; falaMovel = async function (e) {
+  if (W2.id === 'arquivo' && e && e.k === 'escadinha' && !G.flags.c5Velas) {
+    const v = AR5.velas.find(([x, y, nm]) => nm === AR5.alta);
+    if (v && escadaPerto5(v[0], v[1])) { const c = await choose('* A escadinha está embaixo da vela de "' + v[2] + '".', ['Subir até a vela', 'Mexer na escadinha'], 'n', 1); if (c === 0) return falaVelaNome(v[2], v[0], v[1]); if (c !== 1) return; }
+  }
+  return _fmE.apply(this, arguments);
+}; }
 
 // ================= CAPÍTULO 5 — Parte 2: OS TELHADOS DE AUREN =================
 // Do terraço da Acendedoria, à noite, a fuga por cima da cidade: telhados ligados por cumeeiras; cinco VÃOS onde a
