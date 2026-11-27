@@ -25,3 +25,11 @@ function escondidasNoBau() {
 { const _lmE = loadMap2; loadMap2 = function () { const r = _lmE.apply(this, arguments); W2._esc = undefined; return r; }; }
 // na luta vinda da luz, as duas saem da tampa
 { const _pnE = pegoNaLuz; pegoNaLuz = async function (m, como, e) { if (escondidasNoBau() && !G.flags.tutEscondidasLuta) { G.flags.tutEscondidasLuta = true; W2.toast = { s: 'A tampa abre: elas pulam para a luta!', t: 0 }; } return _pnE.apply(this, arguments); }; }
+
+// v117: a Rita nova (rita2.js) desenhava o próprio quadro por fora do disfarce (disfarce6.js aplicava o figurino só no
+// quadro antigo). Agora o figurino da Lavadeira/Pavio/Trupe também veste a Rita nova, no mapa.
+{ const _fsD = folSprite; folSprite = function (f) {
+  const fr = _fsD.apply(this, arguments);
+  if (!fr || !f || f.k !== 'rita' || typeof disf !== 'function' || typeof RITA2 !== 'object') return fr;
+  const d = disf(); return d ? figurino(fr, d, 'rita2') : fr;
+}; }

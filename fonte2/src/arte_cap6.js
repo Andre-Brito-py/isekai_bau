@@ -233,7 +233,7 @@ function figurino(fr, tipo, quem) {
   const d = x.getImageData(0, 0, w, h + 6), D = d.data, pal = FIG6[tipo].pal;
   // a "cabeça" ocupa ~ o terço de cima do corpo desenhado
   let top = h + 6, bot = 0; for (let yy = 0; yy < h + 6; yy++) for (let xx = 0; xx < w; xx++) if (D[(yy * w + xx) * 4 + 3] > 0) { top = Math.min(top, yy); bot = Math.max(bot, yy); }
-  const neck = top + Math.round((bot - top) * (quem === 'lume' ? 0.42 : 0.34));
+  const neck = top + Math.round((bot - top) * (quem === 'lume' ? 0.42 : quem === 'rita2' ? 0.30 : 0.34));
   for (let yy = neck; yy < h + 6; yy++) for (let xx = 0; xx < w; xx++) {
     const i = (yy * w + xx) * 4; if (D[i + 3] === 0) continue;
     const r = D[i], g = D[i + 1], bb = D[i + 2], lum = (r * 0.3 + g * 0.59 + bb * 0.11) / 255;
