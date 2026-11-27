@@ -7,6 +7,7 @@
 // grupo inteiro sai e luta normal (a luta não muda).
 function escondidasNoBau() {
   const m = W2.map; if (!m || !m.stealth || V.scene !== 'world') return false;
+  if (W2.id !== 'telhados') return false;   // v120: o usuário quer só nos Telhados (na Trupe/Lavanderia elas andam disfarçadas)
   if (typeof rostoSt === 'function' && rostoSt().on) return false;
   if (m.holofotes && !m.holofotesSempre && typeof holofotesAtivos === 'function' && !holofotesAtivos(m) && !W2.ents.some(e => e.t === 'ronda' && !(e.gone && e.gone()))) return false;
   return true;

@@ -1368,6 +1368,7 @@ v105 — RETRATO GRANDE DA RITA (o usuário decidiu que 32 px perde detalhe): WH
    gatilho (Ek' na frente). Ex.: Vultrak, Hielveis, Vuldortrak, Noxaekantreth, Urvultrak, Ek'virelin. O nome antigo vira a
    tradução entre aspas na descrição, com a etimologia. Na T3: a mesma língua (NPCs magos podem reconhecer palavras;
    inimigos com feitiços nomeados nessa língua; livro de etimologia como colecionável).
+  v120: ESCONDIDAS NO BAÚ só nos TELHADOS (pedido do usuário); nos outros trechos furtivos elas andam normais/disfarçadas.
 =====================================================================
 -->
 <style>
@@ -24730,6 +24731,7 @@ Object.assign(ST_NAME, { valsa: 'VALSA' });
 // grupo inteiro sai e luta normal (a luta não muda).
 function escondidasNoBau() {
   const m = W2.map; if (!m || !m.stealth || V.scene !== 'world') return false;
+  if (W2.id !== 'telhados') return false;   // v120: o usuário quer só nos Telhados (na Trupe/Lavanderia elas andam disfarçadas)
   if (typeof rostoSt === 'function' && rostoSt().on) return false;
   if (m.holofotes && !m.holofotesSempre && typeof holofotesAtivos === 'function' && !holofotesAtivos(m) && !W2.ents.some(e => e.t === 'ronda' && !(e.gone && e.gone()))) return false;
   return true;
