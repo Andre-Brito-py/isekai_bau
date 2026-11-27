@@ -128,12 +128,15 @@ const guardaSpr = (t, d) => { const f = guardaRealArt(Math.floor(t / 14) % 2); r
       ...est.map(([x, y, w]) => ({ img: () => estanteVelasArt(w), x, y: y + 1 })),
       ...AR5.velas.map(([x, y, nm]) => ({ img: () => velaNomeArt(velaAcesa(nm)), x: x + 0.2, y: y + 0.3, by: (y + 1) * TS + 1 })),
       ...portaVidro(AR5.porta, 'c5Velas'),
-      { img: memo(mesaArt), x: AR5.nota[0] - 1, y: AR5.nota[1] + 0.2, by: (AR5.nota[1] - 0.5) * TS }
+      // v114: a mesa ficava desenhada ATRÁS da última estante (invisível) e o bilhete era "falado" de dentro da estante.
+      // Agora a mesa fica no corredor de baixo, à vista, com o bilhete branco piscando em cima.
+      { img: memo(mesaArt), x: 4.8, y: 21, solid: [[5, 20, 2, 1]] },
+      { img: () => bilheteMesaArt(), x: 5.55, y: 20.15, by: 21 * TS + 2 }
     ],
     ents: [
       ...AR5.descida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { W2.mv = null; sfx('door'); await fadeOut(10); loadMap2('lentes', LE5.subida[0][0], LE5.subida[0][1] + 2, 'down'); await fadeIn(10); } })),
       ...AR5.velas.map(([x, y, nm]) => ({ t: 'sign', x, y, h: 10, talk: () => falaVelaNome(nm, x, y) })),
-      { t: 'sign', x: AR5.nota[0], y: AR5.nota[1] - 1, h: 20, talk: notaArquivo },
+      { t: 'sign', x: 5, y: 20, h: 24, talk: notaArquivo }, { t: 'sign', x: 6, y: 20, h: 24, talk: notaArquivo },
       ...AR5.vitral.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: lutaVitral })),
       ...AR5.subida.map(([x, y]) => ({ t: 'trig', x, y, w: 1, h: 1, passa: true, run: async () => { if (!G.flags.c5Vitral) return; W2.mv = null; sfx('door'); await fadeOut(12); loadMap2('escritorio', ...EC5.entra, 'up'); await fadeIn(12); if (MAPS2.escritorio.onEnter) await MAPS2.escritorio.onEnter(); } }))
     ],
@@ -475,3 +478,5 @@ async function vesperCha() {
   save2();
   await say('[Objetivo: sair pela porta e fugir pelos TELHADOS.]', 'cat');
 }
+
+function bilheteMesaArt() { const f = Math.floor(W2.t / 16) % 3, k = 'bilM' + f; if (OBJ5[k]) return OBJ5[k]; const c = mk(16, 12), x = c.getContext('2d'); x.fillStyle = '#2a2020'; x.fillRect(2, 4, 11, 7); x.fillStyle = '#f8f2e0'; x.fillRect(3, 5, 9, 5); x.fillStyle = '#5a4a3a'; x.fillRect(4, 6, 6, 1); x.fillRect(4, 8, 5, 1); if (!G.flags.c5Velas) { x.fillStyle = f === 1 ? '#fff6c8' : '#ffe066'; x.fillRect(13, 1 + f, 1, 1); if (f === 2) { x.fillRect(12, 2, 3, 1); x.fillRect(13, 1, 1, 3); } } return OBJ5[k] = c; }

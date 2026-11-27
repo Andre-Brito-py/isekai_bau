@@ -34,7 +34,7 @@ let PIPA_C = null; const pipaSpr = () => PIPA_C || (PIPA_C = (() => { const P = 
   else if (f.c5Cha) M = { tit: 'Fugir', desc: 'Saia do escritório. A Guarda Real está subindo.', map: 'escritorio', at: EC5.saida[0] };
   else if (f.c5Vitral) M = { tit: 'O caderno preto', desc: 'Suba ao escritório e abra o caderno de capa preta.', map: 'escritorio', at: EC5.caderno };
   else if (f.c5Velas) M = { tit: 'O vitral', desc: 'Suba a escada do arquivo. Algo guarda o patamar.', map: 'arquivo', at: AR5.vitralPos };
-  else if (f.c5Porta1) M = { tit: 'As velas com nome', desc: 'No Arquivo das Velas, acenda na ordem: quem consertava as horas, quem as tocava, quem limpava a fumaça delas.', map: 'arquivo', at: AR5.nota };
+  else if (f.c5Porta1) M = { tit: 'As velas com nome', desc: 'No Arquivo das Velas, acenda na ordem: quem consertava as horas, quem as tocava, quem limpava a fumaça delas.', map: 'arquivo', at: [6, 19] };
   else if (f.c5Lentes) M = { tit: 'A luz no cristal', desc: 'Leve o feixe de luz até o cristal AZUL, sem passar pelo vermelho. Gire e mude espelhos de lugar; o caixote bloqueia.', map: 'lentes', at: LE5.alvo };
   else if (f.c5Alcapao) M = { tit: 'Descer à Acendedoria', desc: 'O alçapão da estufa está aberto. Desça DE NOITE (de dia é expediente).', map: 'estufa', at: ES5.alcapao, quando: 'noite' };
   else if (f.c5Chave) M = { tit: 'O alçapão', desc: 'Na estufa, ponha peso nas três placas (os vasos, guardados no Vão) para destravar o alçapão.', map: 'estufa', at: ES5.placas[1] };
