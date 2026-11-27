@@ -66,7 +66,7 @@ function updateWorld2() {
   }
   if (worldBusy2()) { W2.idle = 0; return; }
   if (btnp('menu')) { run2(menuGrupo); return; }
-  if (btnp('a')) { const [dx, dy] = DIR2[W2.dir], e = entAt2(W2.x + dx, W2.y + dy) || W2.ents.find(q => q.big && q.x <= W2.x + dx && W2.x + dx < q.x + q.big[0] && q.y - q.big[1] < W2.y + dy && W2.y + dy <= q.y); if (e && e.talk) { if (e.t === 'npc') e.dir = ({ up: 'down', down: 'up', left: 'right', right: 'left' })[W2.dir]; run2(() => e.talk(e)); return; } if (W2.dir === 'up' && portaTrancada(W2.x + dx, W2.y + dy, true)) return; }
+  if (btnp('a')) { const [dx, dy] = DIR2[W2.dir], e = entAt2(W2.x + dx, W2.y + dy) || W2.ents.find(q => q.big && q.x <= W2.x + dx && W2.x + dx < q.x + q.big[0] && q.y - q.big[1] < W2.y + dy && W2.y + dy <= q.y); if (e && e.talk) { if (e.t === 'npc') e.dir = ({ up: 'down', down: 'up', left: 'right', right: 'left' })[W2.dir]; run2(async () => { await e.talk(e); limparSumidos2(); }); return; } if (W2.dir === 'up' && portaTrancada(W2.x + dx, W2.y + dy, true)) return; }
   const d = ['up', 'down', 'left', 'right'].find(k => KEYS[k]);
   if (!d) { W2.idle++; return; }
   W2.idle = 0;
@@ -449,3 +449,7 @@ function portaTrancada(nx, ny, apertou) {
   }
   return false;
 }
+
+// v112: uma entidade que "some" depois de uma conversa (a tesoura do labirinto, a pipa do Quinzinho...) só saía da lista
+// no próximo carregamento do mapa: ficava uma parede invisível ou o objeto continuava lá. Agora some na hora.
+function limparSumidos2() { if (W2 && W2.ents) W2.ents = W2.ents.filter(q => !(q.gone && q.gone())); }
