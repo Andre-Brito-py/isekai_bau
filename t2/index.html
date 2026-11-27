@@ -1359,6 +1359,15 @@ v105 — RETRATO GRANDE DA RITA (o usuário decidiu que 32 px perde detalhe): WH
   v117: BUG: a Rita nova (rita2) ficava sem o disfarce (Lavadeira/Pavio/Trupe) no mapa; o figurino agora veste o quadro novo.
   v118: figurinos do Cap. 6: o vestido rosa da Lume era lido como 'pele' e nunca trocava de cor (Trupe parecia não existir);
    corrigido. A Trupe ganhou losangos de arlequim (vermelho/amarelo + azul) para se distinguir.
+  v119: PALAVRAS DE PODER (palavras.js; pedido do usuário: o nome da magia nasce de como ela foi construída, cada peça do
+   círculo é um pedaço da palavra, estilo palavra mágica). Língua do Grimório: RAIZ do 1º elemento (Brasa Vul, Geada Hiel,
+   Seiva Vire, Fuligem Mor, Areia Sab, Âmbar Amb, Sal Hal, Faísca Zir, Sombra Nox, Vento Aer, Pólvora Bra, Canto Lir, Céu Cel,
+   Vão Vo) + LIGAÇÃO do 2º (ra, dor, via, mo, sa, bel, ha, zi, nu, ae, bak, li, ce, vo; dobrado = 'raiz) + FIM da forma
+   (Dardo trak, Onda veis, Véu lin, Corrente kett, Âncora gorn, Mina tep, Coro kant, Chave kles) + MARCA (Foco ix, Eco reth,
+   Selo um, Dreno sug, Maré on, Bandeira fan, Bilhete tik, Nome ae) + tamanho (grande = Ur- na frente, pequeno = -in) +
+   gatilho (Ek' na frente). Ex.: Vultrak, Hielveis, Vuldortrak, Noxaekantreth, Urvultrak, Ek'virelin. O nome antigo vira a
+   tradução entre aspas na descrição, com a etimologia. Na T3: a mesma língua (NPCs magos podem reconhecer palavras;
+   inimigos com feitiços nomeados nessa língua; livro de etimologia como colecionável).
 =====================================================================
 -->
 <style>
@@ -24746,6 +24755,51 @@ function escondidasNoBau() {
   const fr = _fsD.apply(this, arguments);
   if (!fr || !f || f.k !== 'rita' || typeof disf !== 'function' || typeof RITA2 !== 'object') return fr;
   const d = disf(); return d ? figurino(fr, d, 'rita2') : fr;
+}; }
+
+// ================= PALAVRAS DE PODER: O NOME DA MAGIA VEM DO CÍRCULO (v119) =================
+// Pedido do usuário: "nomear as magias... que o nome da magia viesse com base em como ela foi construída, e não que o
+// jogador desse o nome, que cada elemento do círculo fosse um pedaço do nome da magia, para criar nomes bem cara de
+// palavras mágicas". Cada peça do círculo é uma sílaba da língua do Grimório:
+//   [Ur (círculo grande)] + RAIZ do 1º elemento + [ligação do 2º elemento | raiz repetida (dobrado)] + FIM da forma
+//   + [sílaba da marca] + [in (círculo pequeno)]; gatilho põe "Ek'" na frente.
+//   Ex.: Brasa+Dardo = VULTRAK. Geada+Onda = HIELVEIS. Brasa+Geada+Dardo = VULDORTRAK. Sombra+Vento+Coro+Eco =
+//   NOXAEKANTRETH. Brasa dobrada+Dardo = VUL'VULTRAK. Grande = URVULTRAK. Gatilho = EK'VULTRAK.
+// O nome antigo (Brasa · Dardo) vira a "tradução", entre aspas, no começo da descrição, junto da etimologia.
+const RAIZ3 = { brasa: 'Vul', geada: 'Hiel', seiva: 'Vire', fuligem: 'Mor', areia: 'Sab', ambar: 'Amb', sal: 'Hal', faisca: 'Zir', sombra: 'Nox', vento: 'Aer', polvora: 'Bra', canto: 'Lir', ceu: 'Cel', vao: 'Vo' };
+const LIGA3 = { brasa: 'ra', geada: 'dor', seiva: 'via', fuligem: 'mo', areia: 'sa', ambar: 'bel', sal: 'ha', faisca: 'zi', sombra: 'nu', vento: 'ae', polvora: 'bak', canto: 'li', ceu: 'ce', vao: 'vo' };
+const FIM3 = { dardo: 'trak', onda: 'veis', veu: 'lin', corrente: 'kett', ancora: 'gorn', mina: 'tep', coro: 'kant', chave: 'kles' };
+const MARCA3 = { foco: 'ix', eco: 'reth', selo: 'um', dreno: 'sug', mare: 'on', bandeira: 'fan', bilhete: 'tik', nome: 'ae' };
+function palavraMagica(s) {
+  if (!s || !s.e || !s.e[0]) return null;
+  const e1 = s.e[0], e2 = s.e[1], f = s.f, pecas = [];
+  let w = RAIZ3[e1] || 'Ar'; pecas.push(w + ' (' + (EL3[e1] ? EL3[e1].nm : e1) + ')');
+  if (e2 && e2 === e1) { const r = (RAIZ3[e1] || 'ar').toLowerCase(); w += "'" + r; pecas.push("'" + r + ' (dobrado)'); }
+  else if (e2) { w += LIGA3[e2] || 'a'; pecas.push((LIGA3[e2] || 'a') + ' (' + (EL3[e2] ? EL3[e2].nm : e2) + ')'); }
+  const fim = FIM3[f] || 'is'; w += fim; pecas.push(fim + ' (' + (FORMA3[f] ? FORMA3[f].nm : f) + ')');
+  if (s.m && MARCA3[s.m]) { w += MARCA3[s.m]; pecas.push(MARCA3[s.m] + ' (' + (MOD3[s.m] ? MOD3[s.m].nm : s.m) + ')'); }
+  if (s.tam === 'p') { w += 'in'; pecas.push('in (pequeno)'); }
+  if (s.tam === 'g') { w = 'Ur' + w.toLowerCase(); pecas.unshift('Ur (grande)'); }
+  if (s.g) { w = "Ek'" + w.toLowerCase(); pecas.unshift("Ek' (gatilho)"); }
+  w = w.charAt(0).toUpperCase() + w.slice(1);
+  return { w, pecas };
+}
+{ const _pgW = pagina3; pagina3 = function (s) {
+  const P = _pgW(s);
+  try {
+    const pm = palavraMagica(s);
+    if (pm) { P.trad = P.nm; P.palavra = pm.w; P.d = '"' + P.nm + '" · ' + pm.pecas.join(' + ') + ' · ' + P.d; P.nm = pm.w; }
+  } catch (e) { console.error('palavra', e); }
+  return P;
+}; }
+// no primeiro feitiço lançado com nome, o Catálogo explica uma vez
+{ const _feW = feitico3; feitico3 = function (s) {
+  const F = _feW(s), run0 = F.run;
+  F.run = async function (m, t) {
+    if (!G.flags.tutPalavra) { G.flags.tutPalavra = true; try { callout(F.nm.toUpperCase() + '!', '#ffe066', 60); } catch (e) { } }
+    return run0.apply(this, arguments);
+  };
+  return F;
 }; }
 
 boot2();
